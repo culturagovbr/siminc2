@@ -125,6 +125,7 @@ class Proposta_Model_Proposta extends Modelo
                 aca.acaid,
                 aca.acacod,
                 aca.loccod,
+                aca.locquantidadeproposta,
                 ptr.plocod,
                 ndp.ndpcod,
                 fr.foncod,
@@ -140,7 +141,10 @@ class Proposta_Model_Proposta extends Modelo
                 tpd.tpdcod,
                 prd.prdvalorexpansao
             FROM proposta.proposta pro
-                JOIN proposta.propostadetalhe prd ON prd.proid = pro.proid
+                JOIN proposta.propostadetalhe prd ON(
+                    prd.prdstatus = 'A'
+                    AND prd.proid = pro.proid
+                )
                 JOIN public.naturezadespesa ndp ON ndp.ndpid = prd.ndpid
                 JOIN public.idoc ON idoc.idoid = prd.idoid
                 JOIN monitora.ptres ptr ON ptr.ptrid = pro.ptrid
@@ -165,7 +169,7 @@ class Proposta_Model_Proposta extends Modelo
                 pro.prsano = '". (int)$exercicio. "'
                 AND pro.prostatus = 'A'
         ";
-
+//ver($sql, d);
         return $sql;
     }
     
@@ -186,7 +190,7 @@ class Proposta_Model_Proposta extends Modelo
 //            $aEnvio[$agrupador][] = $dado;
 
             // Cálculos auxiliares
-            $aEnvio[$agrupador]['valorFisico'] += $dado['prdvalor'];
+            $aEnvio[$agrupador]['valorFisico'] += $dado['locquantidadeproposta'];
             $aEnvio[$agrupador]['quantidadeFisico'][$dado['proid']] = 0;
             $aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']][$dado['proid']] = $dado['proquantidade'];
             $aEnvio[$agrupador]['expansaoFisicaSolicitada'][$dado['proid']] = 0;
@@ -280,21 +284,21 @@ class Proposta_Model_Proposta extends Modelo
 
 
         $aPadrao = [
-            'Momento'=>'codigoMomento',
-            'Tipo de detalhamento'=>'codigoTipoDetalhamento',
-            'Esfera'=>'codigoEsfera',
-            'Unidade'=>'codigoOrgao',
-            'SubUO'=>'',
-            'Programa'=>'codigoPrograma',
-            'Função'=>'codigoFuncao',
-            'SubFunção'=>'codigoSubFuncao',
-            'Ação'=>'codigoAcao',
-            'Localizador'=>'codigoLocalizador',
+            'Momento' => 'codigoMomento',
+            'Tipo de detalhamento' => 'codigoTipoDetalhamento',
+            'Esfera' => 'codigoEsfera',
+            'Unidade' => 'codigoOrgao',
+            'SubUO' => '',
+            'Programa' => 'codigoPrograma',
+            'Função' => 'codigoFuncao',
+            'SubFunção' => 'codigoSubFuncao',
+            'Ação' => 'codigoAcao',
+            'Localizador' => 'codigoLocalizador',
         ];
 
-        $aFinanceiro = ['PO'=>'PO', 'Natureza'=>'naturezaDespesa', 'Fonte'=>'fonte', 'Iduso'=>'idUso', 'Idoc'=>'idOC', 'Valor financeiro'=>'valor'];
-        $aLocalizador = ['Físico'=>'valorFisico', 'Justificativa'=>'justificativa'];
-        $aPo = ['PO'=>'PO', 'Físico PO'=>'quantidadeFisico'];
+        $aFinanceiro = ['PO' => 'PO', 'Natureza' => 'naturezaDespesa', 'Fonte' => 'fonte', 'Iduso' => 'idUso', 'Idoc' => 'idOC', 'Valor financeiro' => 'valor'];
+        $aLocalizador = ['Físico' => 'valorFisico', 'Justificativa' => 'justificativa'];
+        $aPo = ['PO' => 'PO', 'Físico PO' => 'quantidadeFisico'];
 
         # Criando cabeçalhos
         $coluna = 0;
