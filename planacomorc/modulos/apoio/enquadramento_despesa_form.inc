@@ -37,8 +37,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <?php
                           echo $simec->input('eqdcod', 'Código', $mEnquadramento->eqdcod, ['required', 'maxlength' => 2]);
                           echo $simec->input('eqddsc', 'Descrição', $mEnquadramento->eqddsc, ['required', 'maxlength' => 250]);
-                          echo $simec->radio('eqdstreduzido', 'Reduzido', $mEnquadramento->eqdstreduzido, ['S'=>'Sim', 'N'=>'Não']);
+                          echo $simec->radio('eqdstreduzido', 'Reduzido', $mEnquadramento->eqdstreduzido, ['S'=>'Sim', 'N'=>'Não'], ['required']);
                           echo $simec->select('lista_rp', 'Resultado Primario', $lista_rp, (new Public_Model_IdentResultPrimario())->recuperarSqlCombo("irpcod, irpcod || ' - ' || irpdsc", ["irpstatus = 'A'"], 'descricao'), array('multiple' => 'true'));
+                          echo $simec->select('tpdid', 'Tipo de Detalhamento/Grupo', $mEnquadramento->tpdid, (new Proposta_Model_TipoDetalhamento())->recuperarSqlCombo("tpdcod || ' - ' || tpdnome", ["tpdstatus = 'A'"], "tpdcod"));
                         ?>
 
                         <div class="form-group">

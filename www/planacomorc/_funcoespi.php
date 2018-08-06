@@ -2153,7 +2153,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
             pli.pliid,
             pli.mdeid,
             suo.unonome || '(' || suo.unosigla || ')' AS unidade,
-            suo.suonome || '(' || suo.suosigla || ')' AS sub_unidade,
+            suodel.unosigla || ' - ' || suodel.suonome || '' AS sub_unidade,
             mde.mdecod,
             pli.eqdid,
             eqd.eqddsc,
@@ -2199,28 +2199,26 @@ function carregarPiComDetalhes(stdclass $filtros) {
                 WHEN 'H' THEN 'Homologado'
                 WHEN 'T' THEN '<span style="color:red">Cadastrado no SIAFI</span>'
             ELSE 'Tendencioso'
-            END AS plisituacao,
-            sba.sbaid,
-            sba.sbasigla || ' - ' AS sbasigla,
-            sba.sbacod
+            END AS plisituacao
         FROM monitora.pi_planointerno pli
-            LEFT JOIN monitora.pi_planointernoptres pip ON pli.pliid = pip.pliid
-            LEFT JOIN monitora.vw_ptres ptr ON pip.ptrid = ptr.ptrid
-            LEFT JOIN planacomorc.pi_complemento pc ON pc.pliid = pli.pliid
-            LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
+            LEFT JOIN monitora.pi_planointernoptres pip ON (pli.pliid = pip.pliid)
+            LEFT JOIN monitora.vw_ptres ptr ON (pip.ptrid = ptr.ptrid)
+            LEFT JOIN planacomorc.pi_complemento pc ON (pc.pliid = pli.pliid)
             LEFT JOIN monitora.pi_enquadramentodespesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
             LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
             LEFT JOIN monitora.pi_categoriaapropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
             LEFT JOIN monitora.pi_modalidadeensino mde ON (pli.mdeid = mde.mdeid)
-            LEFT JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod AND suo.prsano = pli.pliano
-            LEFT JOIN public.objetivoppa opp ON pc.oppid = opp.oppid
-            LEFT JOIN public.metappa m ON pc.mppid = m.mppid AND m.prsano = pli.pliano
-            LEFT JOIN public.iniciativappa i ON pc.ippid = i.ippid AND i.prsano = pli.pliano
-            LEFT JOIN public.metapnc mpn ON pc.mpnid = mpn.mpnid
-            LEFT JOIN public.indicadorpnc ipn ON pc.ipnid = ipn.ipnid
-            LEFT JOIN monitora.pi_produto ppr ON pc.pprid = ppr.pprid AND ppr.prsano = pli.pliano
-            LEFT JOIN monitora.pi_unidade_medida pum ON pc.pumid = pum.pumid
-            LEFT JOIN territorios.esfera esf ON pc.esfid = esf.esfid
+            LEFT JOIN public.vw_subunidadeorcamentaria suo ON (suo.suocod = pli.ungcod AND suo.prsano = pli.pliano)
+            LEFT JOIN public.objetivoppa opp ON (pc.oppid = opp.oppid)
+            LEFT JOIN public.metappa m ON (pc.mppid = m.mppid AND m.prsano = pli.pliano)
+            LEFT JOIN public.iniciativappa i ON (pc.ippid = i.ippid AND i.prsano = pli.pliano)
+            LEFT JOIN public.metapnc mpn ON (pc.mpnid = mpn.mpnid)
+            LEFT JOIN public.indicadorpnc ipn ON (pc.ipnid = ipn.ipnid)
+            LEFT JOIN monitora.pi_produto ppr ON (pc.pprid = ppr.pprid AND ppr.prsano = pli.pliano)
+            LEFT JOIN monitora.pi_unidade_medida pum ON (pc.pumid = pum.pumid)
+            LEFT JOIN territorios.esfera esf ON (pc.esfid = esf.esfid)
+            LEFT JOIN planacomorc.pi_delegacao del ON (del.pliid = pli.pliid)
+            LEFT JOIN public.vw_subunidadeorcamentaria suodel ON (suodel.suoid = del.suoid AND suodel.prsano = pli.pliano)
         WHERE
             pli.pliid = %d
 DML;

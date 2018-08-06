@@ -58,4 +58,5 @@ class Proposta_Controller_Proposta
     {
         include_once APPRAIZ . 'proposta/modulos/principal/propostadetalhe.inc';
     }
-}            
+
+}

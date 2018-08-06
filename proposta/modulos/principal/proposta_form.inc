@@ -71,7 +71,7 @@ switch ($_REQUEST['req']) {
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
 
-<script src="js/principal/proposta_form.js"></script>
+<script src="js/principal/proposta_form.js?v=1"></script>
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -137,7 +137,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <thead>
                                         <tr class="text-center">
                                             <th width="20%">Nível</th>
-                                            <th width="20%">Quantidade</th>
+                                            <th width="20%">Quantidade Física</th>
                                             <th>Produto</th>
                                             <th width="20%">Unidade</th>
 
@@ -145,7 +145,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td>Localizador</td>
+                                            <td>Ação</td>
                                             <td>
                                                 <input name="locquantidadeproposta" id="locquantidadeproposta" type="text" value="" class="form-control inteiro " required="required">
                                             </td>
