@@ -225,7 +225,7 @@ class Proposta_Model_Proposta extends Modelo
             // Montando no loop o array de FinanceiroDTO
             $aEnvio[$agrupador]['MetaPlanoOrcamentarioDTO'][$dado['plocod']] = [
                 'identificadorUnicoPlanoOrcamentario' => $dado['identificadorunicopo'],
-                'quantidadeFisico' => array_sum($aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']]),
+                'quantidadeFisico' => (array_sum($aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']]) == 0? NULL: array_sum($aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']])),
                 'expansaoFisicaSolicitada' => ($aEnvio[$agrupador]['expansaoFisicaSolicitadaPo'][$dado['plocod']] > 0 ? array_sum($aEnvio[$agrupador]['expansaoFisicaSolicitadaPo'][$dado['plocod']]) : null),
                 'expansaoFisicaConcedida' => null
             ];
@@ -244,8 +244,8 @@ class Proposta_Model_Proposta extends Modelo
                 'codigoTipoInclusaoLocalizador'   => '1',                                                       // Valores válidos: 1 - PLOA, 2 - Emenda, 4 - PPA, 5 - Crédito Especial, 6 - Crédito Extraordinário
                 'codigoMomento'                   => $momento,                                                  // São os momentos (etapas) do processo no SIOP: 1000 (UO), 2000 (OS), 5000 (PLOA) e 8000 (LOA).
                 'codigoTipoDetalhamento'          => $dado['tpdcod'],
-                'quantidadeFisico'                => array_sum($aEnvio[$agrupador]['quantidadeFisico']),        // aceita nulo
-                'valorFisico'                     => $aEnvio[$agrupador]['valorFisico'],                        // aceita nulo
+                'quantidadeFisico'                => (array_sum($aEnvio[$agrupador]['quantidadeFisico']) == 0? NULL: array_sum($aEnvio[$agrupador]['quantidadeFisico'])),        // aceita nulo
+                'valorFisico'                     => ($aEnvio[$agrupador]['valorFisico'] == 0? NULL: $aEnvio[$agrupador]['valorFisico']),                        // aceita nulo
                 'financeiros'                     => $aEnvio[$agrupador]['FinanceiroDTO'],                        // lista de FinanceiroDTO
                 // 'receitas'                        => null,                                                   // aceita nulo e lista de ReceitaDTO ?????????????????????????????
                 'metaPlanoOrcamentario'           => array_values($aEnvio[$agrupador]['MetaPlanoOrcamentarioDTO']),
