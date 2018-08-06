@@ -168,6 +168,12 @@ class Proposta_Model_Proposta extends Modelo
             WHERE
                 pro.prsano = '". (int)$exercicio. "'
                 AND pro.prostatus = 'A'
+            ORDER BY
+                aca.prgcod,
+                aca.unicod,
+                aca.acacod,
+                aca.loccod,
+                ptr.plocod
         ";
 //ver($sql, d);
         return $sql;
@@ -187,29 +193,34 @@ class Proposta_Model_Proposta extends Modelo
         $aEnvioWS = [];
         foreach ($dados as $dado) {
             $agrupador = $dado['tpdcod']. '_'. $dado['unicod']. '_'. $dado['acacod']. '_'. $dado['loccod']. '_'. $dado['prgcod']. '_'. $dado['identificadorunicoacao'];
-//            $aEnvio[$agrupador][] = $dado;
 
-            // Cálculos auxiliares
+            # Cálculos auxiliares
             $aEnvio[$agrupador]['valorFisico'] += $dado['locquantidadeproposta'];
             $aEnvio[$agrupador]['quantidadeFisico'][$dado['proid']] = 0;
             $aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']][$dado['proid']] = $dado['proquantidade'];
             $aEnvio[$agrupador]['expansaoFisicaSolicitada'][$dado['proid']] = 0;
             $aEnvio[$agrupador]['expansaoFisicaSolicitadaPo'][$dado['plocod']][$dado['proid']] = $dado['proquantidadeexpansao'];
-            $aEnvio[$agrupador]['justificativa'][$dado['proid']] = $dado['projustificativa'];
+            
+            # Incrementando cada Justificativa dentro dos POs do registro agrupado(Funcional do SIOP até o nível de localizador)
+            if(!empty($dado['projustificativa'])){
+                $aEnvio[$agrupador]['lista_po_justificativa'][$dado['plocod']]['justificativa'] = $dado['projustificativa'];
+            }
             $aEnvio[$agrupador]['propostas'][] = $dado['proid'];
 
-            // @TODO Verificar se pode passar a justificativa. Por enquanto não está passando
+            /**
+             * @TODO Verificar se pode passar a justificativa. Por enquanto não está passando
+             */
             if($dado['proquantidadeexpansao']){
                 $aEnvio[$agrupador]['justificativaExpansaoSolicitada'][$dado['proid']] = $dado['projustificativaexpansao'];
             }
 
-            // fix para limpar idOC cadastrados errados
+            # Fix para limpar idOC cadastrados errados
             $idOCvalidos = array('0001', '0002', '0003', '0004', '0005', '9999');
             if (!in_array($dado['idocod'], $idOCvalidos)) {
                 $dado['idocod'] = '9999';
             }
 
-            // Montando no loop o array de FinanceiroDTO
+            # Montando no loop o array de FinanceiroDTO
             $aEnvio[$agrupador]['FinanceiroDTO'][] = [
                 'idUso'                          => $dado['iducod'],
                 'idOC'                           => $dado['idocod'],
@@ -222,7 +233,7 @@ class Proposta_Model_Proposta extends Modelo
                 'expansaoSolicitada'             => ($dado['prdvalorexpansao'] > 0 ? $dado['prdvalorexpansao'] : null),
             ];
 
-            // Montando no loop o array de FinanceiroDTO
+            # Montando no loop o array de FinanceiroDTO
             $aEnvio[$agrupador]['MetaPlanoOrcamentarioDTO'][$dado['plocod']] = [
                 'identificadorUnicoPlanoOrcamentario' => $dado['identificadorunicopo'],
                 'quantidadeFisico' => (array_sum($aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']]) == 0? NULL: array_sum($aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']])),
@@ -230,7 +241,16 @@ class Proposta_Model_Proposta extends Modelo
                 'expansaoFisicaConcedida' => null
             ];
 
-            // Motagem do Array de PropostaDTO
+            if(count($aEnvio[$agrupador]['lista_po_justificativa']) > 1){
+                $justificativa = '';
+                foreach($aEnvio[$agrupador]['lista_po_justificativa'] as $plocod => $po){
+                    $justificativa .= 'Justificativa do PO '. $plocod. ': '. $po['justificativa']. "\n";
+                }
+            } else {
+                $justificativa = substr($dado['projustificativa'], 0, 4999);
+            }
+            
+            # Motagem do Array de PropostaDTO
             $aEnvioWS[$agrupador] = [
                 'exercicio'                       => $exercicio,
                 'codigoEsfera'                    => $dado['codigoesfera'],
@@ -249,7 +269,7 @@ class Proposta_Model_Proposta extends Modelo
                 'financeiros'                     => $aEnvio[$agrupador]['FinanceiroDTO'],                        // lista de FinanceiroDTO
                 // 'receitas'                        => null,                                                   // aceita nulo e lista de ReceitaDTO ?????????????????????????????
                 'metaPlanoOrcamentario'           => array_values($aEnvio[$agrupador]['MetaPlanoOrcamentarioDTO']),
-                'justificativa'                   => substr($dado['projustificativa'], 0, 4999),   // aceita nulo
+                'justificativa'                   => $justificativa,// substr($dado['projustificativa'], 0, 4999),   // aceita nulo
                 'identificadorUnicoAcao'          => $dado['identificadorunicoacao'],                             // aceita nulo ?????????????????????????????
                 'expansaoFisicaSolicitada'        => array_sum($aEnvio[$agrupador]['expansaoFisicaSolicitada']),
                 'justificativaExpansaoSolicitada' => ($aEnvio[$agrupador]['justificativaExpansaoSolicitada'] ? implode('. ', $aEnvio[$agrupador]['justificativaExpansaoSolicitada']) : null),
