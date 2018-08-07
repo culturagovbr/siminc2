@@ -3,11 +3,21 @@ version: '3'
 services:
   db:
     container_name: siminc2-db
-    image: culturagovbr/salic-db:latest
+    build: ./docker-siminc-db
+    image: docker-siminc-db
+    volumes:
+      - ./sql/restore/users.sql:/var/www/db-init/users.sql
+      - ./sql/restore/bkp_prod_dbsiminc.backup:/var/www/db-init/bkp_prod_dbsiminc.backup
+      - ./sql/restore/create_auditoria.sql:/var/www/db-init/create_auditoria.sql
+      - ./sql/restore/grants.sql:/var/www/db-init/grants.sql
     ports:
       - 5432:5432
+    environment: 
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: siminc2_desenvolvimento
+    
   web:
-    image: culturagovbr/siminc2-web:1.0
+    image: culturagovbr/siminc2:latest
     container_name: siminc2-web
     ports:
       - 8082:80 
