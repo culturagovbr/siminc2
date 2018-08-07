@@ -76,6 +76,8 @@ class Monitora_Model_Ptres extends Modelo
         'ptrdotacaocapital' => null,
         'ptrdotacaocusteio' => null,
         'plodsc' => null,
+        'ptrnomeprodutopo' => null,
+        'ptrnomeunidadepo' => null,
     );
 
     public function importarSiop($exercicio, $momento) {
@@ -538,5 +540,4 @@ class Monitora_Model_Ptres extends Modelo
 
         return $this->carregar($sql);
     }
-}//end Class
-?>
+}

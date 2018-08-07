@@ -179,6 +179,8 @@ class Monitora_Model_Acao extends Modelo
         'codtipoinclusaolocalizador' => null,
         'metalocalizador' => null,
         'financeirolocalizador' => null,
+        'acanomeproduto' => null,
+        'acanomeunidade' => null,
     );
 
     public function recuperarSqlCombo($descricao = null, $where = []) {
@@ -238,5 +240,4 @@ class Monitora_Model_Acao extends Modelo
       return $dados;
     }
 
-}//end Class
-?>
+}
