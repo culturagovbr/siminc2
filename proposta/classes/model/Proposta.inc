@@ -119,6 +119,10 @@ class Proposta_Model_Proposta extends Modelo
                 a.identificadorunico identificadorunicoacao,
                 a.codigoesfera,
                 aca.unicod,
+                suo.suocod,
+                suo.unosigla,
+                suo.suonome,
+                suo.suosigla,
                 aca.prgcod,
                 a.codigofuncao,
                 a.codigosubfuncao,
@@ -141,6 +145,7 @@ class Proposta_Model_Proposta extends Modelo
                 tpd.tpdcod,
                 prd.prdvalorexpansao
             FROM proposta.proposta pro
+                JOIN public.vw_subunidadeorcamentaria suo ON(pro.suoid = suo.suoid)
                 JOIN proposta.propostadetalhe prd ON(
                     prd.prdstatus = 'A'
                     AND prd.proid = pro.proid
@@ -255,6 +260,7 @@ class Proposta_Model_Proposta extends Modelo
                 'exercicio'                       => $exercicio,
                 'codigoEsfera'                    => $dado['codigoesfera'],
                 'codigoOrgao'                     => $dado['unicod'],
+                'subUnidade'                      => $dado['unosigla']. ' - '. $dado['suonome']. ($dado['suosigla']?' - '. $dado['suosigla']: NULL). ' ('. $dado['suocod']. ')',
                 'codigoFuncao'                    => $dado['codigofuncao'],
                 'codigoSubFuncao'                 => $dado['codigosubfuncao'],
                 'codigoPrograma'                  => $dado['prgcod'],
@@ -308,7 +314,7 @@ class Proposta_Model_Proposta extends Modelo
             'Tipo de detalhamento' => 'codigoTipoDetalhamento',
             'Esfera' => 'codigoEsfera',
             'Unidade' => 'codigoOrgao',
-            'SubUO' => '',
+            'SubUO' => 'subUnidade',
             'Programa' => 'codigoPrograma',
             'Função' => 'codigoFuncao',
             'SubFunção' => 'codigoSubFuncao',
