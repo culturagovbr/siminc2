@@ -91,10 +91,13 @@ class Monitora_Model_PiEnquadramentoDespesa extends Modelo
         // -- Faz join com as tabelas mapeadas nas foreing keys
         $opcoes['join'] = isset($opcoes['join']) ? $opcoes['join'] : false;
 
-        $sql = "SELECT DISTINCT $stCampos
-                FROM $this->stNomeTabela t1
-                  LEFT JOIN planacomorc.resultadoprimario as rp ON ( t1.eqdrp = rp.rpcod )
-                ";
+        $sql = "
+            SELECT DISTINCT
+                $stCampos
+            FROM $this->stNomeTabela t1
+                LEFT JOIN monitora.enquadramentorp AS erp ON(t1.eqdid = erp.eqdid)
+                LEFT JOIN planacomorc.resultadoprimario as rp ON(erp.irpcod = rp.rpcod)
+        ";
 
         $contagemTabelas = 2;
         if ($opcoes['join']) {
