@@ -48,8 +48,8 @@
                             echo $simec->input('irpcod', 'RP', $mPtres->irpcod, ['required', 'maxlength' => 1]);
 //                            echo $simec->valor('ptrdotacaocusteio', 'Custeio', $mPtres->ptrdotacaocusteio, ['required']);
 //                            echo $simec->valor('ptrdotacaocapital', 'Capital', $mPtres->ptrdotacaocapital, ['required']);
-                            echo $simec->textarea('ptrnomeprodutopo', 'Nome do Produto PO', $mPtres->ptrnomeprodutopo, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
-                            echo $simec->textarea('ptrnomeunidadepo', 'Nome da Unidade PO', $mPtres->ptrnomeunidadepo, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
+                            echo $simec->textarea('ptrnomeprodutopo', 'Nome do Produto do PO', $mPtres->ptrnomeprodutopo, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
+                            echo $simec->textarea('ptrnomeunidadepo', 'Nome da Unidade de Medida do PO', $mPtres->ptrnomeunidadepo, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
                         ?>
                         
                         <div class="form-group">

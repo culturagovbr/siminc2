@@ -45,7 +45,7 @@
                             echo $simec->select('loccod', 'Localizador', $mAcao->loccod, $mLocalizador->recuperarSqlCombo(['codigolocalizador', 'descricao'], ["exercicio = '". (int)$_SESSION['exercicio']. "'"], 'codigolocalizador'), ['required']);
                             echo $simec->select('acaobjetivocod', 'Objetivo', $mAcao->acaobjetivocod, $mObjetivo->recuperarSqlComboPorOppcod());
                             echo $simec->textarea('acanomeproduto', 'Nome do Produto', $mAcao->acanomeproduto, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
-                            echo $simec->textarea('acanomeunidade', 'Nome da Unidade', $mAcao->acanomeunidade, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
+                            echo $simec->textarea('acanomeunidade', 'Nome da Unidade de Medida', $mAcao->acanomeunidade, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
                         ?>
 
                         <div class="form-group">

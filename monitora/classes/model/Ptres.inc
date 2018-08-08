@@ -348,34 +348,17 @@ class Monitora_Model_Ptres extends Modelo
         
         $sql = "
             SELECT DISTINCT
-                ptr.ptrid,
-                aca.ididentificadorunicosiop,
-                pac.descricao produto_acao,
-                ppo.descricao produto_po,
-                upo.descricao unidade_po,
-                uac.descricao unidade_acao,
                 aca.acaid,
+                aca.ididentificadorunicosiop,
                 aca.acacod,
-                aca.locquantidadeproposta
+                aca.locquantidadeproposta,
+                ptr.ptrid,
+                aca.acanomeproduto produto_acao,
+                aca.acanomeunidade unidade_acao,
+                ptr.ptrnomeprodutopo produto_po,
+                ptr.ptrnomeunidadepo unidade_po
             FROM monitora.ptres ptr
                 JOIN monitora.acao aca ON aca.acaid = ptr.acaid
-                JOIN wssof.ws_acoesdto a ON(
-                    a.identificadorunico = aca.ididentificadorunicosiop::int
-                    AND a.exercicio = '".(int)$this->ptrano. "'
-                )
-                JOIN wssof.ws_localizadoresdto l ON(
-                    l.identificadorunicoacao = a.identificadorunico
-                    AND l.exercicio = '".(int)$this->ptrano. "'
-                )
-                JOIN wssof.ws_planosorcamentariosdto po ON(
-                    po.identificadorunicoacao = a.identificadorunico
-                    AND po.exercicio = '".(int)$this->ptrano. "'
-                    AND ptr.plocod = po.planoorcamentario
-                )
-                LEFT JOIN wssof.ws_produtosdto ppo ON ppo.codigoproduto::text = po.codigoproduto
-                LEFT JOIN wssof.ws_produtosdto pac ON pac.codigoproduto::text = a.codigoproduto
-                LEFT JOIN wssof.ws_unidadesmedidadto upo ON trim(upo.codigounidademedida)::text = po.codigounidademedida
-                LEFT JOIN wssof.ws_unidadesmedidadto uac ON trim(uac.codigounidademedida)::text = a.codigounidademedida
             WHERE
                 ptr.ptrid = ". (int)$this->ptrid. "
             ORDER BY
