@@ -29,7 +29,7 @@
                                 <tr class="text-center">
                                     <th width="10%">Ações</th>
                                     <th>Unidade Orçamentária</th>
-                                    <th>Cod. Ação</th>
+                                    <th>Cód. Ação</th>
                                     <th>Ação</th>
                                     <th>PTRES</th>
                                     <th>funcional</th>
