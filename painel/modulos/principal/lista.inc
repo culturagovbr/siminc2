@@ -1,4 +1,5 @@
-<?
+<?php
+
 if($_GET['acaid']){
 	$_POST['evento'] = "P";
 	$_POST['acaid'] = $_GET['acaid'];	
@@ -538,6 +539,7 @@ array_unique($filtroprocesso);
 			regid AS codigo
 		FROM 
 			painel.regionalizacao
+                where regid in (1,6,4,16)
 		order by
 			 descricao	 
 		";

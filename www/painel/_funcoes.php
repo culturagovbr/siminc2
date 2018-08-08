@@ -1129,7 +1129,7 @@ function editarDetalheSH($indid,$sehid,$dshid){
 					<? montaCampoFormulario($titulo,$arrValor[$k],$indid) ?>
 				</td>
 				
-			<? 
+			<?php 
 			$k++;
 		endforeach;
 	
@@ -1274,6 +1274,18 @@ function verificaPerfilPainel() {
 				$permissoes['menu'][2] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=novoIndicador");
 				//$permissoes['menu'][3] = array("descricao" => "Tabela de Indicadores", "link"=> "/painel/painel.php?modulo=principal/tabela&acao=A");
 				break;
+			case GESTOR_PDE:
+				$permissoes['condicaolista']		  = "'<img style=\"cursor: pointer;\" src=\"/imagens/excluir_01.gif \" border=\"0\" title=\"Excluir\">'";
+				$permissoes['verindicadores'] 		  = "vertodos";
+				$permissoes['bloquearseriehistorica'] = true;
+				$permissoes['removerseriehistorica'] = true;
+				$permissoes['sou_solicitante']        = (($db->pegaUm("SELECT usucpf FROM seguranca.perfilusuario WHERE usucpf='".$_SESSION['usucpf']."' AND pflcod='".PAINEL_PERFIL_SOLICITANTE."'"))?true:false);
+				
+				$permissoes['menu'][0] = array("descricao" => "Lista de Indicadores", "link"=> ($enderecosweb[$_SERVER['REQUEST_URI']])?$_SERVER['REQUEST_URI']:key($enderecosweb));
+				$permissoes['menu'][1] = array("descricao" => "Meus indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A&evento=M");
+				$permissoes['menu'][2] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=novoIndicador");
+				//$permissoes['menu'][3] = array("descricao" => "Tabela de Indicadores", "link"=> "/painel/painel.php?modulo=principal/tabela&acao=A");
+				break;                            
 			default:
 				$permissoes['condicaolista']		 = "'<img style=\"cursor: pointer;\" src=\"/imagens/excluir_01.gif \" border=\"0\" title=\"Excluir\">'";
 				$permissoes['verindicadores'] 		 = array();

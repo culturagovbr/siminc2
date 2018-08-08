@@ -1,4 +1,5 @@
-<?
+<?php
+
 if ($_REQUEST['requisicao']) {
 	$_REQUEST['requisicao']();
 }
@@ -1078,6 +1079,7 @@ else
 			regid AS codigo
 		FROM 		
 			painel.regionalizacao
+                where regid in (1,6,4,16)
 		order by
 			 descricao		 
 		";

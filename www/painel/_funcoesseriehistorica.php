@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Função que carrega os detalhes dos indicadores
  * 
@@ -19,7 +19,7 @@ function carregarDetalhesTipoIndicador($dados) {
 	
 	// verificando se possui permissão para gerenciar detalhe indicador
 	if($acesso) {
-		$acoes = "<img src=\"../imagens/gif_inclui.gif\" align=\"absmiddle\" onclick=\"inserirDetalheTipoDadosIndicador('||tdiid||', this);\"> <img src=\"/imagens/alterar.gif\" align=\"absmiddle\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"editarDetalheTipoIndicador('||tdiid||', this);\"> <img src=\"/imagens/excluir.gif\" align=\"absmiddle\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"excluirDetalheTipoIndicador('||tdiid||');\">";
+		$acoes = "<img src=\"../imagens/gif_inclui.gif\" align=\"absmiddle\" onclick=\"inserirDetalheTipoDadosIndicador('||tdiid||', this);\"> <img src=\"/imagens/alterar.gif\" align=\"absmiddle\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"editarDetalheTipoIndicador('||tdiid||', this);\"> <img src=\"/imagens/excluir.gif\" align=\"absmiddle\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirDetalheTipoIndicador('||tdiid||');\">";
 	} else {
 		$acoes = "&nbsp;";
 	}
