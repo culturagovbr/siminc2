@@ -5,12 +5,11 @@ services:
     container_name: siminc2-db
     image: postgres:9.3
     volumes:
-    build: ./docker-siminc-db
       - ./sql/restore/desenvolvimento.sh:/docker-entrypoint-initdb.d/desenvolvimento.sh
       - ./sql/restore/users.sql:/var/www/db-init/users.sql
       - ./sql/restore/bkp_prod_dbsiminc.backup:/var/www/db-init/bkp_prod_dbsiminc.backup
     ports:
-      - 5432:5432
+      - 5452:5432
     environment: 
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: siminc2_desenvolvimento
@@ -20,11 +19,13 @@ services:
     image: culturagovbr/siminc2:latest
     container_name: siminc2
     ports:
-      - 8082:80 
+      - 8082:80
       - 9002:9000
     volumes:
       - .:/var/www/siminc2
+      - ./global/config-exemplo.inc:/var/www/siminc2/global/config.inc
+      - ./global/database-exemplo.php:/var/www/siminc2/global/database.php
     environment:
       - APPLICATION_ENV=development
     depends_on:
-      - siminc2-db
+      - db
