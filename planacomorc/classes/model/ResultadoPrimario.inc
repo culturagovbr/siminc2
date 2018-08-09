@@ -25,6 +25,18 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  */
 class Planacomorc_Model_ResultadoPrimario extends Modelo
 {
+    const FINANCEIRA = 0;
+    
+    const PRIMARIA_OBRIGATORIA = 1;
+    
+    const PRIMARIA_DISCRICIONARIA = 2;
+    
+    const PAC = 3;
+    
+    const EMENDA = 6;
+    
+    const NAO_IMPACTA = 9;
+    
     /**
      * Nome da tabela especificada
      * @var string

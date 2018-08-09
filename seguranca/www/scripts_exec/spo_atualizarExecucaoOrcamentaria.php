@@ -30,7 +30,7 @@ require_once(APPRAIZ. 'spo/ws/sof/Quantitativo.php');
 $db = new cls_banco();
 $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
 echo '1)Atualizando, dados! | ';
-//$cImportaDadosSiop->AtualizarDados();
+$cImportaDadosSiop->AtualizarDados();
 echo '2)Montando email para ser enviado! | ';
 $cImportaDadosSiop->AtualizarDotacao();
 echo '3)Rotina Finalizada! | ';

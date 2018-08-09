@@ -113,7 +113,78 @@ class Proposta_Model_Proposta extends Modelo
         return $this->carregar($sql);
     }
 
-    public function recuperarDadosProposta($exercicio, $momento, $unoid = null)
+    public static function montarSqlEnvioSiop($exercicio, $momento){
+        $sql = "
+            SELECT DISTINCT
+                a.identificadorunico identificadorunicoacao,
+                a.codigoesfera,
+                aca.unicod,
+                suo.suocod,
+                suo.unosigla,
+                suo.suonome,
+                suo.suosigla,
+                aca.prgcod,
+                a.codigofuncao,
+                a.codigosubfuncao,
+                aca.acaid,
+                aca.acacod,
+                aca.loccod,
+                aca.locquantidadeproposta,
+                ptr.plocod,
+                ndp.ndpcod,
+                fr.foncod,
+                idu.iducod,
+                idoc.idocod,
+                prdvalor,
+                pro.proquantidade,
+                po.identificadorunico identificadorunicopo,
+                pro.projustificativa,
+                pro.proquantidadeexpansao,
+                pro.projustificativaexpansao,
+                pro.eqdid,
+                tpd.tpdcod,
+                prd.prdvalorexpansao
+            FROM proposta.proposta pro
+                JOIN public.vw_subunidadeorcamentaria suo ON(pro.suoid = suo.suoid)
+                JOIN proposta.propostadetalhe prd ON(
+                    prd.prdstatus = 'A'
+                    AND prd.proid = pro.proid
+                )
+                JOIN public.naturezadespesa ndp ON ndp.ndpid = prd.ndpid
+                JOIN public.idoc ON idoc.idoid = prd.idoid
+                JOIN monitora.ptres ptr ON ptr.ptrid = pro.ptrid
+                JOIN monitora.acao aca ON aca.acaid = ptr.acaid
+                JOIN wssof.ws_acoesdto a ON(
+                    a.exercicio = pro.prsano::int
+                    AND a.codigomomento = ". (int)$momento. "
+                    AND a.codigoorgao = aca.unicod
+                    AND a.codigoacao = aca.acacod
+                    AND a.codigoprograma = aca.prgcod
+                )
+                JOIN monitora.pi_enquadramentodespesa eqd ON(pro.eqdid = eqd.eqdid)
+                JOIN proposta.tipodetalhamento tpd ON(eqd.tpdid = tpd.tpdid)
+                LEFT JOIN wssof.ws_planosorcamentariosdto po ON(
+                    po.identificadorunicoacao = a.identificadorunico
+                    AND po.exercicio = pro.prsano::int
+                    AND po.planoorcamentario = ptr.plocod
+                )
+                LEFT JOIN public.fonterecurso fr ON prd.fonid = fr.fonid
+                LEFT JOIN public.identifuso idu ON prd.iduid = idu.iduid
+            WHERE
+                pro.prsano = '". (int)$exercicio. "'
+                AND pro.prostatus = 'A'
+            ORDER BY
+                aca.prgcod,
+                aca.unicod,
+                aca.acacod,
+                aca.loccod,
+                ptr.plocod
+        ";
+//ver($sql, d);
+        return $sql;
+    }
+    
+    public function recuperarDadosProposta($exercicio, $momento)
     {
         /********************************************************************************************************************************************************
          *                                                                                                                                                       *
@@ -121,80 +192,40 @@ class Proposta_Model_Proposta extends Modelo
          *                                                                                                                                                       *
          ********************************************************************************************************************************************************/
 
-        $where = $unoid ? " AND uno.unoid IN('". join($unoid, "','"). "') ": '' ;
-
-//        $sql = "SELECT  distinct pro.proid, pro.prodtcadastro, tdp.tdpid, tdp.tpdcodigo, pro.proidentificadoracao, uno.unocod, aca.acacod, loc.loccod, prg.prgcod, a.codigoesfera, a.codigofuncao, a.codigosubfuncao,
-//                        pro.proqtdpo, pro.proqtdexpansao, plf.plfvalor, plf.plfvalorexpansao, a.identificadorunico identificadorunicoacao, po.planoorcamentario ,plo.plocod, po.identificadorunico identificadorunicopo,
-//                        plf.iducod, ido.idocod, ndp.ndpcod, plf.foncod, eqd.eqdcodigorp, pro.projustificativa, pro.projustificativaexp
-//                FROM planointerno.propostaloa pro
-//                        INNER JOIN planointerno.ppamomentounidade AS pmu ON pmu.pmuid = pro.pmuid AND pmu.prsano = '$exercicio'
-//                        INNER JOIN planointerno.momento AS mom ON mom.momid = pmu.momid
-//                        INNER JOIN planointerno.subunidadeorcamentaria AS suo ON suo.suoid = pmu.suoid
-//                        INNER JOIN planointerno.unidadeorcamentaria AS uno ON uno.unoid = suo.unoid
-//                        INNER JOIN planointerno.vw_funcional_2016 AS vwf ON vwf.pmuid = pmu.pmuid
-//                        INNER JOIN planointerno.ppaacao aca ON aca.acaid = vwf.acaid
-//                        INNER JOIN planointerno.ppalocalizador loc ON loc.locid = vwf.locid
-//                        INNER JOIN planointerno.ppaprograma prg ON prg.prgid = vwf.prgid
-//                        INNER JOIN planointerno.ppaplanoorcamentario plo ON plo.ploid = pmu.ploid
-//                        LEFT JOIN planointerno.produtopo prp ON prp.prpid = plo.prpid
-//                        LEFT JOIN planointerno.unidademedidapo upo ON upo.upoid = plo.upoid
-//                        inner JOIN planointerno.enquadramentodespesa eqd ON eqd.eqdid = pro.eqdid
-//                        inner JOIN planointerno.tipodetalhamentoploa tdp ON tdp.tdpid = eqd.tdpid
-//                        left JOIN planointerno.propostaloafinanceiro plf ON plf.proid = pro.proid AND plf.plfstatus = 'A'
-//                        INNER JOIN idoc ido ON ido.idoid = plf.idoid
-//                        INNER JOIN naturezadespesa ndp ON ndp.ndpid = plf.ndpid
-//                        inner join wssof.ws_acoesdto a on a.exercicio = '$exercicio' and a.codigomomento = '$momento' and a.codigoorgao = uno.unocod and a.codigoacao = aca.acacod and a.codigoprograma = prg.prgcod
-//                        left join wssof.ws_planosorcamentariosdto po on po.identificadorunicoacao = a.identificadorunico and po.exercicio = '$exercicio' and po.planoorcamentario = plo.plocod
-//                WHERE pmu.momid = (select momid from planointerno.momento where prsano = '{$exercicio}' and momstatus = 'A' order by momid limit 1)
-//                AND  pro.prostatus = 'A'
-//                $where
-//                and eqd.eqdcodigorp in ('2', '3')
-//                ";
-
-        $sql = "select  distinct a.identificadorunico identificadorunicoacao, 0 tpdcodigo, a.codigoesfera, aca.unicod, aca.prgcod, a.codigofuncao, a.codigosubfuncao, aca.acaid, aca.acacod, aca.loccod, 
-                        ptr.plocod, ndp.ndpcod, fr.foncod, idu.iducod, idoc.idocod, prdvalor, pro.proquantidade, po.identificadorunico identificadorunicopo,
-                        pro.projustificativa, pro.proquantidadeexpansao, pro.projustificativaexpansao, prd.prdvalorexpansao
-                from proposta.proposta pro
-                        inner join proposta.propostadetalhe prd on prd.proid = pro.proid
-                        inner join public.naturezadespesa ndp on ndp.ndpid = prd.ndpid
-                        inner join public.idoc on idoc.idoid = prd.idoid
-                        inner join monitora.ptres ptr on ptr.ptrid = pro.ptrid
-                        inner join monitora.acao aca on aca.acaid = ptr.acaid
-                        inner join wssof.ws_acoesdto a on a.exercicio = pro.prsano::int  and a.codigomomento = $momento and a.codigoorgao = aca.unicod and a.codigoacao = aca.acacod and a.codigoprograma = aca.prgcod
-                        left join wssof.ws_planosorcamentariosdto po on po.identificadorunicoacao = a.identificadorunico and po.exercicio = pro.prsano::int and po.planoorcamentario = ptr.plocod
-                        left join public.fonterecurso fr on prd.fonid = fr.fonid
-                        left join public.identifuso idu on prd.iduid = idu.iduid
-                where pro.prsano = '$exercicio'
-                and pro.prostatus = 'A'";
-
+        $sql = self::montarSqlEnvioSiop($exercicio, $momento);
         $dados = $this->carregar($sql);
 
         $aEnvioWS = [];
         foreach ($dados as $dado) {
-            $agrupador = $dado['tpdcodigo'] . '_' . $dado['unicod'] . '_' . $dado['acacod'] . '_' . $dado['loccod'] . '_' . $dado['prgcod'] . '_' . $dado['identificadorunico'];
-//            $aEnvio[$agrupador][] = $dado;
+            $agrupador = $dado['tpdcod']. '_'. $dado['unicod']. '_'. $dado['acacod']. '_'. $dado['loccod']. '_'. $dado['prgcod']. '_'. $dado['identificadorunicoacao'];
 
-            // Cálculos auxiliares
-            $aEnvio[$agrupador]['valorFisico'] += $dado['prdvalor'];
+            # Cálculos auxiliares
+            $aEnvio[$agrupador]['valorFisico'] += $dado['locquantidadeproposta'];
             $aEnvio[$agrupador]['quantidadeFisico'][$dado['proid']] = 0;
             $aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']][$dado['proid']] = $dado['proquantidade'];
             $aEnvio[$agrupador]['expansaoFisicaSolicitada'][$dado['proid']] = 0;
             $aEnvio[$agrupador]['expansaoFisicaSolicitadaPo'][$dado['plocod']][$dado['proid']] = $dado['proquantidadeexpansao'];
-            $aEnvio[$agrupador]['justificativa'][$dado['proid']] = $dado['projustificativa'];
+            
+            # Incrementando cada Justificativa dentro dos POs do registro agrupado(Funcional do SIOP até o nível de localizador)
+            if(!empty($dado['projustificativa'])){
+                $aEnvio[$agrupador]['lista_po_justificativa'][$dado['plocod']]['justificativa'] = $dado['projustificativa'];
+            }
             $aEnvio[$agrupador]['propostas'][] = $dado['proid'];
 
-            // @TODO Verificar se pode passar a justificativa. Por enquanto não está passando
+            /**
+             * @TODO Verificar se pode passar a justificativa. Por enquanto não está passando
+             */
             if($dado['proquantidadeexpansao']){
                 $aEnvio[$agrupador]['justificativaExpansaoSolicitada'][$dado['proid']] = $dado['projustificativaexpansao'];
             }
 
-            // fix para limpar idOC cadastrados errados
+            # Fix para limpar idOC cadastrados errados
             $idOCvalidos = array('0001', '0002', '0003', '0004', '0005', '9999');
             if (!in_array($dado['idocod'], $idOCvalidos)) {
                 $dado['idocod'] = '9999';
             }
 
-            // Montando no loop o array de FinanceiroDTO
+            # Montando no loop o array de FinanceiroDTO
             $aEnvio[$agrupador]['FinanceiroDTO'][] = [
                 'idUso'                          => $dado['iducod'],
                 'idOC'                           => $dado['idocod'],
@@ -207,19 +238,29 @@ class Proposta_Model_Proposta extends Modelo
                 'expansaoSolicitada'             => ($dado['prdvalorexpansao'] > 0 ? $dado['prdvalorexpansao'] : null),
             ];
 
-            // Montando no loop o array de FinanceiroDTO
+            # Montando no loop o array de FinanceiroDTO
             $aEnvio[$agrupador]['MetaPlanoOrcamentarioDTO'][$dado['plocod']] = [
                 'identificadorUnicoPlanoOrcamentario' => $dado['identificadorunicopo'],
-                'quantidadeFisico' => array_sum($aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']]),
+                'quantidadeFisico' => (array_sum($aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']]) == 0? NULL: array_sum($aEnvio[$agrupador]['quantidadeFisicoPo'][$dado['plocod']])),
                 'expansaoFisicaSolicitada' => ($aEnvio[$agrupador]['expansaoFisicaSolicitadaPo'][$dado['plocod']] > 0 ? array_sum($aEnvio[$agrupador]['expansaoFisicaSolicitadaPo'][$dado['plocod']]) : null),
                 'expansaoFisicaConcedida' => null
             ];
 
-            // Motagem do Array de PropostaDTO
+            if(count($aEnvio[$agrupador]['lista_po_justificativa']) > 1){
+                $justificativa = '';
+                foreach($aEnvio[$agrupador]['lista_po_justificativa'] as $plocod => $po){
+                    $justificativa .= 'Justificativa do PO '. $plocod. ': '. $po['justificativa']. "\n";
+                }
+            } else {
+                $justificativa = substr($dado['projustificativa'], 0, 4999);
+            }
+            
+            # Motagem do Array de PropostaDTO
             $aEnvioWS[$agrupador] = [
                 'exercicio'                       => $exercicio,
                 'codigoEsfera'                    => $dado['codigoesfera'],
                 'codigoOrgao'                     => $dado['unicod'],
+                'subUnidade'                      => $dado['unosigla']. ' - '. $dado['suonome']. ($dado['suosigla']?' - '. $dado['suosigla']: NULL). ' ('. $dado['suocod']. ')',
                 'codigoFuncao'                    => $dado['codigofuncao'],
                 'codigoSubFuncao'                 => $dado['codigosubfuncao'],
                 'codigoPrograma'                  => $dado['prgcod'],
@@ -228,13 +269,13 @@ class Proposta_Model_Proposta extends Modelo
                 'codigoLocalizador'               => $dado['loccod'],
                 'codigoTipoInclusaoLocalizador'   => '1',                                                       // Valores válidos: 1 - PLOA, 2 - Emenda, 4 - PPA, 5 - Crédito Especial, 6 - Crédito Extraordinário
                 'codigoMomento'                   => $momento,                                                  // São os momentos (etapas) do processo no SIOP: 1000 (UO), 2000 (OS), 5000 (PLOA) e 8000 (LOA).
-                'codigoTipoDetalhamento'          => $dado['tpdcodigo'],
-                'quantidadeFisico'                => array_sum($aEnvio[$agrupador]['quantidadeFisico']),        // aceita nulo
-                'valorFisico'                     => $aEnvio[$agrupador]['valorFisico'],                        // aceita nulo
+                'codigoTipoDetalhamento'          => $dado['tpdcod'],
+                'quantidadeFisico'                => (array_sum($aEnvio[$agrupador]['quantidadeFisico']) == 0? NULL: array_sum($aEnvio[$agrupador]['quantidadeFisico'])),        // aceita nulo
+                'valorFisico'                     => ($aEnvio[$agrupador]['valorFisico'] == 0? NULL: $aEnvio[$agrupador]['valorFisico']),                        // aceita nulo
                 'financeiros'                     => $aEnvio[$agrupador]['FinanceiroDTO'],                        // lista de FinanceiroDTO
                 // 'receitas'                        => null,                                                   // aceita nulo e lista de ReceitaDTO ?????????????????????????????
                 'metaPlanoOrcamentario'           => array_values($aEnvio[$agrupador]['MetaPlanoOrcamentarioDTO']),
-                'justificativa'                   => substr($dado['projustificativa'], 0, 4999),   // aceita nulo
+                'justificativa'                   => $justificativa,// substr($dado['projustificativa'], 0, 4999),   // aceita nulo
                 'identificadorUnicoAcao'          => $dado['identificadorunicoacao'],                             // aceita nulo ?????????????????????????????
                 'expansaoFisicaSolicitada'        => array_sum($aEnvio[$agrupador]['expansaoFisicaSolicitada']),
                 'justificativaExpansaoSolicitada' => ($aEnvio[$agrupador]['justificativaExpansaoSolicitada'] ? implode('. ', $aEnvio[$agrupador]['justificativaExpansaoSolicitada']) : null),
@@ -252,40 +293,40 @@ class Proposta_Model_Proposta extends Modelo
         $exercicio = $_SESSION['exercicio'];
 
         $aEnvioWS = simec_utf8_encode_recursive($this->recuperarDadosProposta($exercicio, $momento, $unoid));
-        
+//ver($aEnvioWS, d);
         $PHPExcel = new PHPExcel();
 
-        // Criando Planilha "Financeiro"
+        # Criando Planilha "Financeiro"
         $planilhaFinanceiro = $PHPExcel->getActiveSheet();
         $planilhaFinanceiro->setTitle("Financeiro");
 
-        // Criando Planilha "Físico Localizador"
+        # Criando Planilha "Físico Localizador"
         $planilhaFisicoLocalizador = $PHPExcel->createSheet();
         $planilhaFisicoLocalizador->setTitle(utf8_encode("Físico Localizador"));
 
-        // Criando Planilha "Físico PO"
+        # Criando Planilha "Físico PO"
         $planilhaFisicoPo = $PHPExcel->createSheet();
         $planilhaFisicoPo->setTitle(utf8_encode("Físico PO"));
 
 
         $aPadrao = [
-            'Momento'=>'codigoMomento',
-            'Tipo de detalhamento'=>'codigoTipoDetalhamento',
-            'Esfera'=>'codigoEsfera',
-            'Unidade'=>'codigoOrgao',
-            'SubUO'=>'',
-            'Programa'=>'codigoPrograma',
-            'Função'=>'codigoFuncao',
-            'SubFunção'=>'codigoSubFuncao',
-            'Ação'=>'codigoAcao',
-            'Localizador'=>'codigoLocalizador',
+            'Momento' => 'codigoMomento',
+            'Tipo de detalhamento' => 'codigoTipoDetalhamento',
+            'Esfera' => 'codigoEsfera',
+            'Unidade' => 'codigoOrgao',
+            'SubUO' => 'subUnidade',
+            'Programa' => 'codigoPrograma',
+            'Função' => 'codigoFuncao',
+            'SubFunção' => 'codigoSubFuncao',
+            'Ação' => 'codigoAcao',
+            'Localizador' => 'codigoLocalizador',
         ];
 
-        $aFinanceiro = ['PO'=>'PO', 'Natureza'=>'naturezaDespesa', 'Fonte'=>'fonte', 'Iduso'=>'idUso', 'Idoc'=>'idOC', 'Valor financeiro'=>'valor'];
-        $aLocalizador = ['Físico'=>'valorFisico', 'Justificativa'=>'justificativa'];
-        $aPo = ['PO'=>'PO', 'Físico PO'=>'quantidadeFisico'];
+        $aFinanceiro = ['PO' => 'PO', 'Natureza' => 'naturezaDespesa', 'Fonte' => 'fonte', 'Iduso' => 'idUso', 'Idoc' => 'idOC', 'Valor financeiro' => 'valor'];
+        $aLocalizador = ['Físico' => 'valorFisico', 'Justificativa' => 'justificativa'];
+        $aPo = ['PO' => 'PO', 'Físico PO' => 'quantidadeFisico'];
 
-        // Criando cabeçalhos
+        # Criando cabeçalhos
         $coluna = 0;
         foreach($aPadrao as $titulo => $campo){
             $planilhaFinanceiro->setCellValueByColumnAndRow($coluna,1,utf8_encode($titulo));
@@ -293,18 +334,18 @@ class Proposta_Model_Proposta extends Modelo
             $planilhaFisicoPo->setCellValueByColumnAndRow($coluna,1,utf8_encode($titulo));
             $coluna++;
         }
-        // Cabeçalho Planilha "Financeiro"
+        # Cabeçalho Planilha "Financeiro"
         $coluna = 10;
         foreach($aFinanceiro as $titulo => $campo){
             $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,1,utf8_encode($titulo));
         }
 
-        // Cabeçalho Planilha "Físico Localizador"
+        # Cabeçalho Planilha "Físico Localizador"
         $coluna = 10;
         foreach($aLocalizador as $titulo => $campo){
             $planilhaFisicoLocalizador->setCellValueByColumnAndRow($coluna++,1,utf8_encode($titulo));
         }
-        // Cabeçalho Planilha "Físico PO"
+        # Cabeçalho Planilha "Físico PO"
         $coluna = 10;
         foreach($aPo as $titulo => $campo){
             $planilhaFisicoPo->setCellValueByColumnAndRow($coluna++,1,utf8_encode($titulo));
@@ -319,7 +360,7 @@ class Proposta_Model_Proposta extends Modelo
         $linhaFinanceiro = $linhaLocalizador = $linhaPo = 2;
         foreach($aEnvioWS as $chave => $dadosPloa){
 
-            // Dados da Planilha "Financeiro"
+            # Dados da Planilha "Financeiro"
             foreach($dadosPloa['financeiros'] as $aCampo){
                 $coluna = 0;
                 foreach($aPadrao as $campo){
@@ -333,7 +374,7 @@ class Proposta_Model_Proposta extends Modelo
                 $linhaFinanceiro++;
             }
 
-            // Dados da Planilha "Físico Localizador"
+            # Dados da Planilha "Físico Localizador"
             $coluna = 0;
             foreach(($aPadrao+$aLocalizador) as $campo){
                 $dado = $campo == 'codigoMomento' ? utf8_encode('Órgão Setorial') : $dadosPloa[$campo];
@@ -342,7 +383,7 @@ class Proposta_Model_Proposta extends Modelo
 
             $linhaLocalizador++;
 
-            // Dados da Planilha "Físico PO"
+            # Dados da Planilha "Físico PO"
             foreach($dadosPloa['metaPlanoOrcamentario'] as $aCampo){
                 $coluna = 0;
                 foreach($aPadrao as $campo){
@@ -357,10 +398,10 @@ class Proposta_Model_Proposta extends Modelo
             }
         }
 
-        // Indicação da criação do ficheiro
+        # Indicação da criação do ficheiro
         $objWriter = PHPExcel_IOFactory::createWriter($PHPExcel, 'Excel5');
 
-        // Encaminhar o ficheiro resultante para abrir no browser ou fazer download
+        # Encaminhar o ficheiro resultante para abrir no browser ou fazer download
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="PlanilhaImportacao.xls"');
         header('Cache-Control: max-age=0');
