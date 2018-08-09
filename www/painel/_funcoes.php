@@ -123,7 +123,7 @@ function cabecalhoIndicador($indid){
 		</td>
 	</tr>
 	</table>
-	<?
+	<?php
 	endif;
 }
 

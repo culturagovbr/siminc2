@@ -1,4 +1,4 @@
-<?
+<?php
 //Funções
 include_once (APPRAIZ.'www/painel/_funcoes_painel_controle.php');
 include_once (APPRAIZ.'www/painel/_funcoesdetalhamentoindicador.php');

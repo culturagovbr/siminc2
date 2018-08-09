@@ -320,7 +320,7 @@ if($_SESSION['painel']['exoid']) {
 if($_SESSION['painel']['perid']) {
 	$filtroprocesso[] = "i.perid=".$_SESSION['painel']['perid']."";
 }
-if(!$_SESSION['painel']['indpublicado']) $_SESSION['painel']['indpublicado'] = 'true';
+if(!$_SESSION['painel']['indpublicado']) $_SESSION['painel']['indpublicado'] = 'ambos';
 if($_SESSION['painel']['indpublicado'] && $_SESSION['painel']['indpublicado'] != 'ambos') {
 	$filtroprocesso[] = "i.indpublicado=".$_SESSION['painel']['indpublicado']."";
 }
@@ -555,6 +555,7 @@ array_unique($filtroprocesso);
 		FROM 
 			painel.periodicidade
 		WHERE perstatus = 'A'
+                  and perid in (1,2,3)
 		order by
 			 descricao	 
 		";
