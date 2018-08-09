@@ -11,7 +11,7 @@ class Monitora_Controller_PiEnquadramentoDespesa
             $mEnquadramento->popularDadosObjeto($dados);
             $mEnquadramento->eqdano = $mEnquadramento->eqdano ? $mEnquadramento->eqdano : $_SESSION['exercicio'];
 
-            $mEnquadramento->salvar(null, null, ['eqdcod', 'eqddsc', 'eqdano', 'eqdstatus', 'mpneid', 'eqdstreduzido', 'edqrp' ]);
+            $mEnquadramento->salvar(null, null, ['eqdcod', 'eqddsc', 'eqdano', 'eqdstatus', 'mpneid', 'eqdstreduzido', 'tpdid' ]);
 
             $mEnquadramentoRp = new Monitora_Model_EnquadramentoRp();
             $mEnquadramentoRp->excluirPorExercicio($_SESSION['exercicio'], $mEnquadramento->eqdid);

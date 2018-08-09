@@ -1430,7 +1430,8 @@ class Pi_PlanoInterno extends Modelo
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod AND suo.unocod = pli.unicod AND suo.prsano = pli.pliano
                 JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
-                LEFT JOIN planacomorc.resultadoprimario rp ON rp.rpcod = eqd.eqdrp
+                LEFT JOIN monitora.enquadramentorp AS erp ON(eqd.eqdid = erp.eqdid)
+                LEFT JOIN planacomorc.resultadoprimario AS rp ON(erp.irpcod::INTEGER = rp.rpcod)
                 LEFT JOIN planacomorc.manutencaoitem mai ON mai.maiid = pic.maiid
                 LEFT JOIN planacomorc.manutencaosubitem mas ON mas.masid = pic.masid
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
@@ -1608,7 +1609,7 @@ class Pi_PlanoInterno extends Modelo
                 ptr.acatitulo,
                 ptr.ptrdotacao,
                 eqd.eqddsc,
-                eqd.eqdrp
+                rp.irpcod
             FROM
                 monitora.pi_planointerno pli
                 INNER JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
@@ -1620,6 +1621,7 @@ class Pi_PlanoInterno extends Modelo
                 INNER JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
                 LEFT JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
+                LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
                 LEFT JOIN spo.siopexecucao ex ON ptr.ptres = ex.ptres AND ex.exercicio = ptr.ptrano and ex.plicod = pli.plicod
             WHERE
                 pli.plistatus = 'A'
@@ -1643,7 +1645,7 @@ class Pi_PlanoInterno extends Modelo
                 ptr.acatitulo,
                 ptr.ptrdotacao,
                 eqd.eqddsc,
-                eqd.eqdrp
+                rp.irpcod
             ";
 //ver($sql,d);
         $dados = $this->carregar($sql);
