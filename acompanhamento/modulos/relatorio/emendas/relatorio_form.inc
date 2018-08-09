@@ -2,7 +2,7 @@
 
 
 <div class="ibox-title">
-    <h5>Relatório Geral</h5><br>
+    <h5>Relatório Geral de Emendas</h5><br>
 </div>
 <div class="ibox-content">
     <?php

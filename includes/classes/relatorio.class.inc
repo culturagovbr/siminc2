@@ -289,7 +289,7 @@ class montaRelatorio {
             } else {
                 ?>
                 <script type="text/javascript">
-                <?include($_SERVER['DOCUMENT_ROOT'] . "/includes/relatorio.class.js"); ?>
+                <?include($_SERVER['DOCUMENT_ROOT'] . "/includes/relatorio.class.bootstrap.js"); ?>
                 </script>
                 <?php
 
@@ -534,6 +534,7 @@ class montaRelatorio {
 
         $agrupadores = $this->ctrlAgp;
         $agrupaColuna = is_array($this->agrupador['agrupadoColuna']) ? $this->agrupador['agrupadoColuna'] : array();
+//        ver($agrupaColuna,d);
         $lista = $this->dados;
         $existeProximo = count($agrupadores) > 0;
 
@@ -544,8 +545,6 @@ class montaRelatorio {
         $novo = array();
 
         foreach ($lista as $item):
-
-
             $chave = $item[$campo];
             if (array_key_exists($chave, $novo) == false) {
                 foreach ($agrupaColuna as $agrupa):
@@ -570,7 +569,6 @@ class montaRelatorio {
             }
 
             $novo[$chave]['totalAgrupador'] ++;
-
             if ($existeProximo)
                 array_push($novo[$chave]["sub_itens"], $item);
 
@@ -583,6 +581,7 @@ class montaRelatorio {
                 $novo[$chave]["sub_itens"] = $this->agrupar();
             }
         endif;
+//ver($novo);
         return $novo;
     }
 
@@ -781,6 +780,7 @@ class montaRelatorio {
         static $associaAgp = array();
 
         $lista = $lista ? $lista : $this->agrupar();
+//        ver($lista,d);
         $coluna = (array) $this->coluna;
         $agrupaColuna = $this->agrupador['agrupadoColuna'] ? $this->agrupador['agrupadoColuna'] : array();
 

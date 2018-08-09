@@ -6,7 +6,7 @@
         </div>
         <div class="col-sm-2 col-md-2 col-lg-2 control-label"><br></div>
         <div class="col-sm-4 col-md-4 col-lg-4 ">
-            <select class="form-control" style="width:450px;" id="{NOME_ORIGEM}" name="{NOME_ORIGEM}[]" multiple="multiple" size="7"  onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'envia', this , '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );"></select>
+            <select class="form-control" style="width:450px; height:250px;" id="{NOME_ORIGEM}" name="{NOME_ORIGEM}[]" multiple="multiple" size="7"  onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'envia', this , '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );"></select>
         </div>                
         <div class="col-sm-1 col-md-1 col-lg-1 ">                
             <img src="../imagens/rarrow_one.gif" style="padding: 2px" onClick="moveSelectedOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );"/><br/>
@@ -15,7 +15,7 @@
             <img src="../imagens/larrow_one.gif" style="padding: 2px" onClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );"/><br/>
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4 ">
-            <select class="form-control" style="width:450px;" id="{NOME_DESTINO}" name="{NOME_DESTINO}[]" multiple="multiple" size="7" onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'retorna', this ,  '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );"></select>
+            <select class="form-control" style="width:450px; height:250px;" id="{NOME_DESTINO}" name="{NOME_DESTINO}[]" multiple="multiple" size="7" onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'retorna', this ,  '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );"></select>
         </div>                
         <div class="col-sm-1 col-md-1 col-lg-1 ">
             <img src="../imagens/uarrow.gif" style="padding: 5px" onClick="subir( document.getElementById( '{NOME_DESTINO}' ) );"/><br/>
