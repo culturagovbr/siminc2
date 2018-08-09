@@ -21,7 +21,7 @@ function montarSqlRelatorioGeralProposta(stdClass $filtros){
             pro.proquantidadeexpansao,
             pro.projustificativa,
 	    pro.projustificativaexpansao,
-	    prd.ndpid,
+	    ndp.ndpcod,
 	    idu.iducod,
 	    fr.foncod,
 	    prd.idoid,
@@ -32,7 +32,11 @@ function montarSqlRelatorioGeralProposta(stdClass $filtros){
 	    JOIN monitora.acao aca ON ptr.acaid = aca.acaid
             JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pro.suoid
             JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pro.eqdid
-            LEFT JOIN proposta.propostadetalhe prd ON prd.proid = pro.proid
+            LEFT JOIN proposta.propostadetalhe prd ON(
+		prd.proid = pro.proid
+		AND prd.prdstatus = 'A'
+	    )
+            LEFT JOIN public.naturezadespesa ndp ON(prd.ndpid = ndp.ndpid)
             left join public.fonterecurso fr on prd.fonid = fr.fonid
             left join public.identifuso idu on prd.iduid = idu.iduid
         WHERE

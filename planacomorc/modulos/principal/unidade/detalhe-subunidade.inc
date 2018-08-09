@@ -58,7 +58,7 @@
                                             <?php echo $dado['plititulo']; ?>
                                         </a>
                                     </td>
-                                    <td class="text-center"><?php echo $dado['eqdrp']; ?></td>
+                                    <td class="text-center"><?php echo $dado['irpcod']; ?></td>
                                     <td class="text-right"><?php echo number_format($dado['picvalorcusteio'], 0, ',', '.'); ?></td>
                                     <td class="text-right"><?php echo number_format($dado['picvalorcapital'], 0, ',', '.'); ?></td>
                                     <td class="text-right"><?php echo marcarVermelhoValorSuperior($dado['autorizado'], $dado['picvalorcusteio']+ $dado['picvalorcapital']); ?></td>
