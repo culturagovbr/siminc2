@@ -1,5 +1,6 @@
 <?php
 
+    $estado = new Territorios_Model_Estado();
     $atividade = new Acompanhamento_Model_Atividadepnc((int)$_REQUEST['atvid']);
     if($atividade->atvid){
         $acompanhamentoPnc = new Acompanhamento_Model_Acompanhamentopnc($atividade->acpid);
@@ -20,10 +21,13 @@
         echo $simec->input('atvtitulo', 'Título da atividade', $atividade->atvtitulo, ['required']);
         echo $simec->input('atvproduto', 'Produto ou serviço resultante', $atividade->atvproduto, ['required']);
         echo $simec->valor('atvprodutoqtd', 'Quantidade', $atividade->atvprodutoqtd, ['required']);
+        echo $simec->select('estuf', 'UF', NULL, $estado->recuperarSqlCombo(['estuf', 'estdescricao']));
+        echo '<div id="municipio">';
         echo $simec->select('muncod', 'Município', $atividade->muncod, (new Territorios_Model_Municipio())->recuperarSqlCombo(['estuf', 'mundescricao']));
+        echo '</div>';
         echo $simec->input('atvfonteinformacao', 'Fonte de verificação da informação', $atividade->atvfonteinformacao, ['required']);
     ?>
-    
+
 </form>
 
 <script>
@@ -44,6 +48,20 @@
 
             e.preventDefault(); // avoid to execute the actual submit of the form.
         });
+
+        $('#uf').change(function){
+
+            $.ajax({
+                type: "GET",
+                url: '?modulo=principal/monitorar-pnc&acao=A',
+                data: $("#formulario-acompanhamento-atividade").serialize(),
+                dataType: "json",
+                success: function(response){
+                    $('#div_modal_acompanhamento_atividade').modal('hide');
+                    carregarListaAtividadePnc(response.acpid);
+                }
+            });
+        }
 
     });
 
