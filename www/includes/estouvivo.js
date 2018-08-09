@@ -43,7 +43,7 @@ function evCriaHttpRequest()
  * @param void
  * @return void
  */
-function evIniciarProcesso()
+/*function evIniciarProcesso()
 {
 	if ( evXmlHttp != null )
 	{
@@ -56,7 +56,7 @@ function evIniciarProcesso()
 		evXmlHttp.send( null );
 	}
 	catch (e) {}
-};
+};*/
 
 var evOuvirResposta = function () 
 {
