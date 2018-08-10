@@ -49,19 +49,16 @@
             e.preventDefault(); // avoid to execute the actual submit of the form.
         });
 
-        $('#uf').change(function){
-
+        $('#estuf').change(function(){
             $.ajax({
                 type: "GET",
-                url: '?modulo=principal/monitorar-pnc&acao=A',
-                data: $("#formulario-acompanhamento-atividade").serialize(),
-                dataType: "json",
+                url: '?modulo=principal/monitorar-pnc&acao=A&req=carregar-municipio&estuf=' + $(this).val(),
+                dataType: "HTML",
                 success: function(response){
-                    $('#div_modal_acompanhamento_atividade').modal('hide');
-                    carregarListaAtividadePnc(response.acpid);
+                    $('#municipio').html(response);
                 }
             });
-        }
+        });
 
     });
 

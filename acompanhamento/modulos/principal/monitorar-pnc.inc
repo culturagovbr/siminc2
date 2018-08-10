@@ -85,6 +85,9 @@
                 ));
             }
         die;
+        case'carregar-municipio':
+            echo $simec->select('muncod', 'Município', $atividade->muncod, (new Territorios_Model_Municipio())->recuperarSqlCombo(['estuf', 'mundescricao'], ["estuf='". $_REQUEST['estuf']."'"]));
+        die;
     }
     
     if($mpnid){
