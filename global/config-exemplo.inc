@@ -66,7 +66,7 @@
     define('WEB_SERVICE_SIOP_URL', 'https://www.siop.gov.br/services/');
     define('WEB_SERVICE_SIOP_USUARIO', '[PREENCHER]');
     define('WEB_SERVICE_SIOP_SENHA', '[PREENCHER]');
-    define('WEB_SERVICE_SIOP_PERFIL', [PREENCHER]);
+    define('WEB_SERVICE_SIOP_PERFIL', '[PREENCHER]');
     
     # SICONV
     define('WEB_SERVICE_SICONV_URL', 'https://ws.convenios.gov.br/siconv-siconv-interfaceSiconv-1.0/InterfaceSiconvHandlerBeanImpl?wsdl');
