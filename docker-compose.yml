@@ -10,10 +10,10 @@ services:
       - ./sql/restore/bkp_prod_dbsiminc.backup:/var/www/db-init/bkp_prod_dbsiminc.backup
     ports:
       - 5452:5432
+    restart: always
     environment: 
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: siminc2_desenvolvimento
-    # restart: 'always'
     
   web:
     image: culturagovbr/siminc2:latest
