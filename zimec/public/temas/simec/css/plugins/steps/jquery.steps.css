@@ -22,6 +22,7 @@
     list-style: none !important;
     padding: 0;
     margin: 0;
+    position: relative;
 }
 
 .wizard ul > li,
@@ -52,11 +53,15 @@
     Wizard
 */
 
-.wizard > .steps
-{
+.wizard > .steps{
     position: relative;
     display: block;
+    margin: 0;
+    padding: 0;
+    border-radius: .25rem!important;
     width: 100%;
+    border-radius: 4px;
+    background: #ededee;
 }
 
 .wizard.vertical > .steps
@@ -75,6 +80,7 @@
 .wizard > .actions > ul > li
 {
     float: left;
+    position: relative;
 }
 
 .wizard.vertical > .steps > ul > li
@@ -89,13 +95,15 @@
 {
     display: block;
     width: auto;
-    margin: 0 0.5em 0.5em;
+    margin: 0 -6px 0;
     padding: 8px;
     text-decoration: none;
 
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border-radius: 5px;
+    border-radius: 0;
+    padding-left: 28px;
+
 }
 
 .wizard > .steps .disabled a,
@@ -114,6 +122,8 @@
     background: #1AB394;
     color: #fff;
     cursor: default;
+    margin-left: 0px;
+    border-radius: 5px !important;
 }
 
 .wizard > .steps .done a,
@@ -136,7 +146,7 @@
 {
     background: #eee;
     display: block;
-    margin: 5px 5px 10px 5px;
+    margin: 5px 0;
     min-height: 350px;
     overflow: hidden;
     position: relative;
@@ -377,4 +387,40 @@
 .tabcontrol > .content > .body ul > li
 {
     display: list-item;
+}
+
+.wizard > .steps > ul > li:before {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 13px solid #d1d1d1;
+    position: absolute;
+    top: 15%;
+    margin-top: -5px;
+    margin-left: -5px;
+    left: 100%;
+    z-index: 1;
+}
+
+.wizard > .steps > ul > li.current:after{
+    border-left: 13px solid #00b495;
+}
+
+.wizard > .steps > ul > li:after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 13px solid #ededee;
+    position: absolute;
+    top: 15%;
+    margin-top: -5px;
+    margin-left: -6px;
+    left: 100%;
+    z-index: 2;
 }
