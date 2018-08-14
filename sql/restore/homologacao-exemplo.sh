@@ -39,3 +39,11 @@ WHERE
 ALTER DATABASE siminc2_homologacao RENAME TO siminc2_homologacao_bkp;
 ALTER DATABASE siminc2_hom_new RENAME TO siminc2_homologacao;
 "
+
+# Apagando tabelas de logs que não são necessárias
+psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_homologacao" -c "
+TRUNCATE TABLE acomporc.mensagensretorno;
+DELETE FROM spo.logws;
+VACUUM FULL VERBOSE acomporc.mensagensretorno;
+VACUUM FULL VERBOSE spo.logws;"
+
