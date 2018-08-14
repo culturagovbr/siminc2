@@ -39,3 +39,13 @@ WHERE
 ALTER DATABASE siminc2_treinamento RENAME TO siminc2_treinamento_bkp;
 ALTER DATABASE siminc2_tr_new RENAME TO siminc2_treinamento;
 "
+
+# Apagando tabelas de logs que não são necessárias
+psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_treinamento" -c "
+TRUNCATE TABLE acomporc.mensagensretorno;
+DELETE FROM spo.logws;
+VACUUM FULL VERBOSE acomporc.mensagensretorno;
+VACUUM FULL VERBOSE spo.logws;"
+
+# Criando arquivo de dump pra o ambiente de desenvolvimento atualizado com permissões pra o usuário usr_simec e tabela de auditoria vazia
+pg_dump -v -h [IP_SERVIDOR_BANCO] -p 5432 -W -Fc -U postgres siminc2_treinamento > siminc2_desenvolvimento.bkp
