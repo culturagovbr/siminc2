@@ -2884,8 +2884,7 @@ function verificarPiFnc($pliid){
                 AND suo.prsano = pli.pliano
             )
         WHERE
-            pli.pliano = '". (int)$_SESSION['exercicio']. "'
-            AND pli.pliid = ". (int)$pliid;
+            pli.pliid = ". (int)$pliid;
     $unofundo = $db->pegaUm($sql);
 //ver($unofundo, d);
     return $unofundo == 't'? TRUE: FALSE;
