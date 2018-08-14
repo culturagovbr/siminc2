@@ -6202,7 +6202,7 @@ function geraGraficoHighCharts($dados)
 {
 	global $db;
 	/* INÍCIO - Recupera os parametros via $_GET e cria variáveis com os nomes e valores */
-	//dbg($dados);
+//	dbg($dados);
 	$arrPar = explode(";",$dados['dados']);
 	foreach($arrPar as $dado){
 		$d = explode("=",$dado);
@@ -6211,7 +6211,7 @@ function geraGraficoHighCharts($dados)
 	
 	extract($arrparametros);
 	/* FIM - Recupera os parametros via $_GET e cria variáveis com os nomes e valores */
-	
+        
 	if($tipo){
 		
 		/* ********* *  INICIO QUERY PARA PEGAR OS DADOS DO INDICADOR * ********* */
@@ -6236,7 +6236,7 @@ function geraGraficoHighCharts($dados)
 					inner join
 						painel.regionalizacao reg ON reg.regid = ind.regid
 					where
-						ind.indid = $indid
+						ind.indid = ".$arrparametros['indid']."
 					and
 						ind.indstatus = 'A'";
 			$arrDadosIndicador = $db->pegaLinha($sql);
@@ -6682,7 +6682,7 @@ function geraGraficoHighCharts($dados)
 						dpedatainicio
 						".( in_array("d.tidid1",$arrCampos) ? ",tidid1" : "" )."
 						".( in_array("d.tidid2",$arrCampos) ? ",tidid2" : "" )."";
-			
+//			ver($sql,d);
 			/* Fim SQL Novo */
 
 			if($tidid && $tidid != "todos"){

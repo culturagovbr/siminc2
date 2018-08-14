@@ -4761,7 +4761,6 @@ function verificaExibeGrafico($indid,$estuf,$muncod,$gtmid = null,$tpmid = null,
 		
 	/* ********* *  INÍCIO - REGRA PARA PROCENTAGEM E ÍNDICE * ********* */
 	if($dados['indshformula'] != "t" && ($dados['unmid'] == UNIDADEMEDICAO_PERCENTUAL || $dados['unmid'] == UNIDADEMEDICAO_NUM_INDICE) && $dados['regid'] != REGIONALIZACAO_BRASIL){
-		
 		if($dados['regid'] == REGIONALIZACAO_MUN && (!$muncod || $muncod == "todos" || $muncod == "")){
 			echo "<center><span style=\"color:#990000\" >Favor selecionar o Municípo.</span></center>";
 			die;
@@ -4775,6 +4774,7 @@ function verificaExibeGrafico($indid,$estuf,$muncod,$gtmid = null,$tpmid = null,
 		echo "true";
 		
 	}else{
+//		ver(123,d);
 		echo "true";
 	}
 	/* ********* *  FIM - REGRA PARA PROCENTAGEM E ÍNDICE * ********* */
@@ -5081,7 +5081,6 @@ function testaDatasDpeid($dpeid1,$dpeid2){
 		$dtDpeid2 = $db->pegaUm($sql);
 		$dtDpeid2 = $dtDpeid2 ? strtotime($dtDpeid2) : false;
 	}
-	
 	if($dtDpeid2 < $dtDpeid1){
 		echo "true";
 	}else{
