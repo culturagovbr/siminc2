@@ -103,6 +103,7 @@
     -moz-border-radius: 5px;
     border-radius: 0;
     padding-left: 28px;
+    height: 29px;
 
 }
 
@@ -122,8 +123,8 @@
     background: #1AB394;
     color: #fff;
     cursor: default;
-    margin-left: 0px;
-    border-radius: 5px !important;
+    margin-left: -5px;
+    font-weight: bold;
 }
 
 .wizard > .steps .done a,
@@ -132,6 +133,21 @@
 {
     background: #6fd1bd;
     color: #fff;
+}
+
+.wizard > .steps li:first-child a,
+.wizard > .steps li:first-child a:hover,
+.wizard > .steps li:first-child a:active
+{
+   border-radius: 4px;
+   margin-left: 0;
+}
+
+.wizard > .steps li:last-child a,
+.wizard > .steps li:last-child a:hover,
+.wizard > .steps li:last-child a:active
+{
+    margin-right: 5px;
 }
 
 .wizard > .steps .error a,
@@ -396,7 +412,7 @@
     height: 0;
     border-top: 15px solid transparent;
     border-bottom: 15px solid transparent;
-    border-left: 13px solid #d1d1d1;
+    border-left: 13px solid #00000015;
     position: absolute;
     top: 15%;
     margin-top: -5px;
@@ -407,6 +423,14 @@
 
 .wizard > .steps > ul > li.current:after{
     border-left: 13px solid #00b495;
+}
+
+.wizard > .steps > ul > li.error:after{
+    border-left: 13px solid #ED5565;
+}
+
+.wizard > .steps > ul > li.done:after{
+    border-left: 13px solid #6fd1bd;
 }
 
 .wizard > .steps > ul > li:after {
