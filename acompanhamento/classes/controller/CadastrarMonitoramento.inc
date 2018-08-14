@@ -42,7 +42,7 @@ class Acompanhamento_Controller_CadastrarMonitoramento
     public function validarmonitora()
     {
         $resposta = array();
-        $mdMonitoramento = new Public_Model_Idoc();
+        $mdMonitoramento = new Acompanhamento_Model_Tipo();
         $mdMonitoramento->tipdsc = $_REQUEST['tipdsc'];
         $mdMonitoramento->tipid = $_REQUEST['tipid'];
         $verifica = $mdMonitoramento->carregarPorCodigo();

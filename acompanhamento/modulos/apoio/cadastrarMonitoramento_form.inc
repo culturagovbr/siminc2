@@ -36,9 +36,11 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <form id="formulario" name="formulario" method="post" class="form-horizontal">
                         <input type="hidden" name="req" id="req" value="salvar-monitora" />
                         <input name="tipid" id="tipid" type="hidden" value="<?php echo $mMonitoramento->tipid; ?>">
+                        <div id="codigo-monitoramento">
                         <?php
                         echo $simec->input('tipdsc', 'Descrição', $mMonitoramento->tipdsc, ['required', 'maxlength' => 200]);
                         ?>
+                        </div>
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
