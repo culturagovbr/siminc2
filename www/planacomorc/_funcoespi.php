@@ -2208,7 +2208,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
             LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
             LEFT JOIN monitora.pi_categoriaapropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
             LEFT JOIN monitora.pi_modalidadeensino mde ON (pli.mdeid = mde.mdeid)
-            LEFT JOIN public.vw_subunidadeorcamentaria suo ON (suo.suocod = pli.ungcod AND suo.prsano = pli.pliano)
+            LEFT JOIN public.vw_subunidadeorcamentaria suo ON ( pli.unicod = suo.unocod AND suo.suocod = pli.ungcod AND suo.prsano = pli.pliano)
             LEFT JOIN public.objetivoppa opp ON (pc.oppid = opp.oppid)
             LEFT JOIN public.metappa m ON (pc.mppid = m.mppid AND m.prsano = pli.pliano)
             LEFT JOIN public.iniciativappa i ON (pc.ippid = i.ippid AND i.prsano = pli.pliano)
