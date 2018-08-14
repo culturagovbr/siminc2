@@ -29,6 +29,32 @@ switch($_REQUEST['req']){
             echo json_encode(array('msg' => utf8_encode('Erro ao salvar!')));
         }
     die;
+    case 'salvar-limite-rp-fnc':
+        # Exclui(Exclusão lógica) o registro de limite atual
+        $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
+        $modelSubunidaderplimite->suoid = $_REQUEST['suoid'];
+        $modelSubunidaderplimite->irpcod = $_REQUEST['irpcod'];
+        $modelSubunidaderplimite->buscarPorSuoidIrpcod();
+        if($modelSubunidaderplimite->srlid){
+            $modelSubunidaderplimite->srlstatus = 'I';
+            $modelSubunidaderplimite->salvar();
+        }
+        
+        # Salva o novo limite pra unidade
+        $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
+        $modelSubunidaderplimite->popularDadosObjeto($_REQUEST);
+        $resultado = $modelSubunidaderplimite->salvar();
+        if($resultado){
+            $modelSubunidaderplimite->commit();
+            echo json_encode(array(
+                'msg' => utf8_encode('Operação realizada com sucesso!'),
+                'irpcod' => $modelSubunidaderplimite->irpcod,
+                'suoid' => $modelSubunidaderplimite->suoid
+            ));
+        } else {
+            echo json_encode(array('msg' => utf8_encode('Erro ao salvar!')));
+        }
+    die;
 }
 
 $filtros = array(
