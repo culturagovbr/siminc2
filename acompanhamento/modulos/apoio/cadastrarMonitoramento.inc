@@ -36,7 +36,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <td class="text-center">
                                             <a title="Alterar" href="?modulo=apoio/cadastrarMonitoramento_form&acao=A&tipid=<?= $dados['tipid']; ?>"><i class="fa fa-pencil"></i></a>
                                         </td>
-                                        <td><?= $dados['tipdsc']?></td>
+                                        <td><?php echo $dados['tipdsc']?></td>
                                     </tr>
                                 <?php }  ?>
                             <?php }  ?>
