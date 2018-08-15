@@ -316,7 +316,7 @@ $paginic = $db->pegaUm($sql);
     <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/ion.rangeSlider.skinHTML5.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/normalize.css" rel="stylesheet">
     <!-- Steps -->
-    <link href="/zimec/public/temas/simec/css/plugins/steps/jquery.steps.css" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/steps/jquery.steps.css?v=1" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/switchery/switchery.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/bootstrap-tour/bootstrap-tour.min.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/summernote/summernote.css" rel="stylesheet">
