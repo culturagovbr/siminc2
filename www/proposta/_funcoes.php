@@ -7,6 +7,9 @@
  * @return string
  */
 function montarSqlRelatorioGeralProposta(stdClass $filtros){
+    if($filtros->suocod){
+        $filtro = "AND suo.suocod in ('".$filtros->suocod. "')";    
+    }
     $sql = "
         SELECT
             pro.proid,
@@ -41,6 +44,7 @@ function montarSqlRelatorioGeralProposta(stdClass $filtros){
             left join public.identifuso idu on prd.iduid = idu.iduid
         WHERE
             pro.prsano = '". (int)$filtros->exercicio. "'
+            $filtro
             AND prostatus = 'A'
         ORDER BY
             pro.proid,
@@ -61,6 +65,9 @@ function montarSqlRelatorioGeralProposta(stdClass $filtros){
  * @return string
  */
 function montarSqlRelatorioGeralPrePi(stdClass $filtros){
+    if($filtros->suocod){
+        $filtro = "AND suo.suocod in ('".$filtros->suocod. "')";    
+    }
     $sql = "
         SELECT
             pli.pliid,
@@ -132,6 +139,7 @@ function montarSqlRelatorioGeralPrePi(stdClass $filtros){
             LEFT JOIN territorios.municipio mun ON plo.muncod = mun.muncod
         WHERE
             pli.prsano = '". (int)$filtros->exercicio. "'
+            $filtro
             AND plistatus = 'A'
     ";
     return $sql;
