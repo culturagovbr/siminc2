@@ -50,6 +50,7 @@ class Acompanhamento_Model_Tipo extends Modelo
      * @var array
      */
     protected $arChaveEstrangeira = array(
+        'usucpf' => array('tabela' => 'seguranca.usuario', 'pk' => 'usucpf'),
     );
 
     /**
@@ -60,7 +61,9 @@ class Acompanhamento_Model_Tipo extends Modelo
     protected $arAtributos = array(
         'tipid' => null,
         'tipdsc' => null,
+        'tipstatus' => null,
+        'usucpf' => null,
+        'tipdata' => null,
     );
 
-}//end Class
-?>
+}

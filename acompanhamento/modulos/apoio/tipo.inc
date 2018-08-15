@@ -1,13 +1,13 @@
 <?php
 
-$listaTipo = (new Acompanhamento_Model_Tipo())->recuperarTodos( 'tipdsc');
+$listaTipo = (new Acompanhamento_Model_Tipo())->recuperarTodos( '*', ["tipstatus ='A'"], 'tipdsc');
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2><?php echo $titulo_modulo; ?></h2>
+        <h2><?= $titulo_modulo; ?></h2>
     </div>
 </div>
 
@@ -19,27 +19,26 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/cadastrarMonitoramento_form&acao=A">Novo</a>
+                    <a class="btn btn-small btn-warning" href="?modulo=apoio/tipo_form&acao=A">Novo</a>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables">
                             <thead>
                             <tr class="text-center">
-                                <th style="10%">Ações</th>
+                                <th style=" width: 10%">Ações</th>
                                 <th>Descrição</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <?php
-                            if($listaTipo){
-                                foreach($listaTipo as $dados){ ?>
+                            <?php if ($listaTipo):
+                                foreach ($listaTipo as $dados): ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="?modulo=apoio/cadastrarMonitoramento_form&acao=A&tipid=<?= $dados['tipid']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="?modulo=apoio/tipo_form&acao=A&tipid=<?= $dados['tipid']; ?>"><i class="fa fa-pencil"></i></a>
                                         </td>
-                                        <td><?php echo $dados['tipdsc']?></td>
+                                        <td><?= $dados['tipdsc'] ?></td>
                                     </tr>
-                                <?php }  ?>
-                            <?php }  ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
