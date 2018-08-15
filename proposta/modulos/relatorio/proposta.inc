@@ -31,9 +31,19 @@
         'prdvalor',
         'prdvalorexpansao'
     );
-
-    $sql = montarSqlRelatorioGeralProposta((object) array('exercicio' => $_SESSION['exercicio']));
-//ver($sql, d);
+    $listaPerfil = pegaPerfilGeral();
+    $listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf']));
+    $listaSubUnidadeUsuario = implode("', '", $listaSubUnidadeUsuario);
+    if((in_array(PFL_CONSULTA_UNIDADE, $listaPerfil)) || in_array(PFL_SUBUNIDADE, $listaPerfil) && ($listaSubUnidadeUsuario)){
+        $filtro = array('exercicio' => $_SESSION['exercicio']);
+        if($listaSubUnidadeUsuario){
+            $filtro['suocod']=$listaSubUnidadeUsuario;
+        }
+        $sql = montarSqlRelatorioGeralProposta((object) $filtro);
+    }else if (in_array(PFL_ADMINISTRADOR, $listaPerfil) || in_array(PFL_SUPERUSUARIO, $listaPerfil)){
+        $filtro = array('exercicio' => $_SESSION['exercicio']);
+        $sql = montarSqlRelatorioGeralProposta((object) $filtro);
+    }
     $lista = $db->carregar($sql);
 ?>
 

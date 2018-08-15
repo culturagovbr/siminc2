@@ -236,7 +236,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <b>Unidade:</b>
+                                            <b>Unidade delegada:</b>
                                         </td>
                                         <td align="left">
                                             <span><?php echo $dadosPI['sub_unidade']; ?></span>

@@ -96,7 +96,7 @@ class Monitora_Model_PiEnquadramentoDespesa extends Modelo
                 $stCampos
             FROM $this->stNomeTabela t1
                 LEFT JOIN monitora.enquadramentorp AS erp ON(t1.eqdid = erp.eqdid)
-                LEFT JOIN planacomorc.resultadoprimario as rp ON(erp.irpcod = rp.rpcod)
+                LEFT JOIN planacomorc.resultadoprimario as rp ON(erp.irpcod::INTEGER = rp.rpcod)
         ";
 
         $contagemTabelas = 2;

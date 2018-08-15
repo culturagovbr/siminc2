@@ -39,3 +39,50 @@ WHERE
 ALTER DATABASE siminc2_homologacao RENAME TO siminc2_homologacao_bkp;
 ALTER DATABASE siminc2_hom_new RENAME TO siminc2_homologacao;
 "
+
+# Configurando usuário inicial/padrão pra acesso ao sistema
+psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_homologacao" -c "
+DELETE FROM seguranca.usuario_sistema WHERE usucpf = '86274565426';
+DELETE FROM seguranca.perfilusuario WHERE usucpf = '86274565426';
+UPDATE seguranca.usuario SET suscod = 'A' WHERE usucpf = '86274565426';
+INSERT INTO seguranca.usuario_sistema(
+    usucpf,
+    sisid,
+    susstatus,
+    pflcod,
+    susdataultacesso,
+    suscod
+)
+SELECT
+    '86274565426',
+    sisid,
+    susstatus,
+    pflcod,
+    susdataultacesso,
+    suscod
+FROM seguranca.usuario_sistema
+WHERE
+    usucpf = '00764786105'
+    AND suscod = 'A'
+    AND susstatus = 'A'
+;
+INSERT INTO seguranca.perfilusuario(
+    usucpf,
+    pflcod
+)
+SELECT
+    '86274565426',
+    pflcod
+FROM seguranca.perfilusuario
+WHERE
+    usucpf = '00764786105'
+;
+"
+
+# Apagando tabelas de logs que não são necessárias
+psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_homologacao" -c "
+TRUNCATE TABLE acomporc.mensagensretorno;
+DELETE FROM spo.logws;
+VACUUM FULL VERBOSE acomporc.mensagensretorno;
+VACUUM FULL VERBOSE spo.logws;"
+
