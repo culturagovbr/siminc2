@@ -50,7 +50,7 @@ switch ($_REQUEST['req']) {
         die;
     case 'carregarSegmento':
         $mBeneficiario = new Emendas_Model_Beneficiario($_REQUEST['benid']);
-        echo $simec->select('neeid', 'Segmento Cultural', $mBeneficiario->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$_REQUEST['mdeid']]));
+        echo $simec->select('neeid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$_REQUEST['mdeid']]));
         die;
     case 'verificarPactuacaoConvenio':
         echo verificarPactuacaoConvenio($_REQUEST['capid']);
@@ -218,7 +218,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             echo $simec->select('proid', 'Proponente', $mBeneficiario->proid, (new Emendas_Model_Proponente())->recuperarSqlCombo(["replace(to_char(procnpj::numeric, '00:000:000/0000-00'), ':', '.')", 'pronome'], null,'pronome'), ['required'], $configPodeEditar);
 
                                             $aLocalizacoes = (new Emendas_Model_BeneficiarioLocalizacao())->recuperarPorBeneficiario($mBeneficiario->benid);
-                                            echo $simec->select('esfid', 'Localização <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mBeneficiario->esfid, (new Territorios_Model_Esfera())->recuperarSqlCombo());
+                                            echo $simec->select('esfid', 'Localização <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->esfid, (new Territorios_Model_Esfera())->recuperarSqlCombo());
                                         ?>
                                         <div class="select-localizacao"  id="div-localizacao_<?php echo Territorios_Model_Esfera::K_EXTERIOR ?>">
                                             <?php echo $simec->select('paiid[]', 'País', $aLocalizacoes['paiid'], (new Territorios_Model_Pais())->recuperarSqlCombo()); ?>
@@ -248,8 +248,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     </div>
                                     <div class="ibox-content">
                                         <?php
-                                            echo $simec->select('mdeid', 'Área Cultural <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mBeneficiario->mdeid, (new Monitora_Model_PiModalidadeEnsino())->recuperarSqlCombo(null, ["mdestatus = 'A'"]));
-                                            echo '<span id="span-segmento">' . $simec->select('neeid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mBeneficiario->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$mBeneficiario->mdeid])) . '</span>';
+                                            echo $simec->select('mdeid', 'Área Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->mdeid, (new Monitora_Model_PiModalidadeEnsino())->recuperarSqlCombo(null, ["mdestatus = 'A'"]));
+                                            echo '<span id="span-segmento">' . $simec->select('neeid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$mBeneficiario->mdeid])) . '</span>';
                                             echo $simec->select("alteracao[]", 'Alterações', $mBeneficiario->recuperarAlteracao(), (new Emendas_Model_AlteracaoOrcamentaria())->recuperarSqlCombo(), [], $configPodeEditar);
                                             # Setar os campos para "não" por padrão.
                                             $benparecertecnico = $mBeneficiario->benparecertecnico ? $mBeneficiario->benparecertecnico : 0;
@@ -390,10 +390,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <input name="aba" id="aba" type="hidden" value="<?php echo $aba; ?>">
 
                                         <?php
-                                            echo $simec->input('plititulo', 'Título do PI/Projeto <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mBeneficiario->plititulo, ['maxlength' => 230]);
+                                            echo $simec->input('plititulo', 'Título do PI/Projeto <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->plititulo, ['maxlength' => 230]);
 
                                             $descricaoDinamica = $mBeneficiario->benpropostaobjeto? $mBeneficiario->benpropostaobjeto: NULL;
-                                            echo $simec->textarea('plidsc', 'Descrição / Finalidade <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mBeneficiario->plidsc? $mBeneficiario->plidsc: $descricaoDinamica, ['maxlength' => 1000]);
+                                            echo $simec->textarea('plidsc', 'Descrição / Finalidade <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->plidsc? $mBeneficiario->plidsc: $descricaoDinamica, ['maxlength' => 1000]);
 //condicaoGerarPi($benid);
                                         ?>
 
@@ -501,9 +501,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     </div>
                                     <div class="ibox-content">
                                         <?php
-                                            echo $simec->select('pprid', 'Produto <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mBeneficiario->pprid, (new Monitora_Model_PiProduto())->recuperarSqlCombo(null, ["pprstatus = 'A'"]));
-                                            echo $simec->select('pumid', 'Unidade de Medida <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mBeneficiario->pumid, (new Monitora_Model_PiUnidadeMedida())->recuperarSqlCombo(null, ["pumstatus = 'A'"]));
-                                            echo $simec->input('picquantidade', 'Quantidade <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mBeneficiario->picquantidade, ['class'=>'inteiro']);
+                                            echo $simec->select('pprid', 'Produto <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->pprid, (new Monitora_Model_PiProduto())->recuperarSqlCombo(null, ["pprstatus = 'A'"]));
+                                            echo $simec->select('pumid', 'Unidade de Medida <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->pumid, (new Monitora_Model_PiUnidadeMedida())->recuperarSqlCombo(null, ["pumstatus = 'A'"]));
+                                            echo $simec->input('picquantidade', 'Quantidade <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->picquantidade, ['class'=>'inteiro']);
                                         ?>
 
                                         <div class="clearfix"></div>
