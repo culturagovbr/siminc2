@@ -261,10 +261,13 @@
     display: inline-block;
     text-align: right;
 }
-
+.wizard > .actions > ul > li:last-child 
+{
+    margin-right: 0;
+}
 .wizard > .actions > ul > li
 {
-    margin: 0 0.5em;
+    margin: 5px 5px;
 }
 
 .wizard.vertical > .actions > ul > li
@@ -279,14 +282,18 @@
     background: #1AB394;
     color: #fff;
     display: block;
-    padding: 0.5em 1em;
+    padding: 10px 10px;
     text-decoration: none;
-
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border-radius: 5px;
+    border-radius: 4px;
+    height: 40px;
+    width: 100px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
 }
-
 .wizard > .actions .disabled a,
 .wizard > .actions .disabled a:hover,
 .wizard > .actions .disabled a:active
