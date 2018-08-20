@@ -4,4 +4,4 @@ psql --port 5432 --username "postgres" --dbname "siminc2_desenvolvimento" -f /va
 
 psql --port 5432 --username "postgres" -c "ALTER DATABASE siminc2_desenvolvimento SET datestyle TO European;"
 
-pg_restore --port 5432 --username "postgres" --dbname "siminc2_desenvolvimento" --disable-triggers -O -x --verbose /var/www/db-init/bkp_prod_dbsiminc.backup
+pg_restore --port 5432 --username "postgres" --dbname "siminc2_desenvolvimento" --disable-triggers --verbose /var/www/db-init/siminc2_desenvolvimento.bkp
