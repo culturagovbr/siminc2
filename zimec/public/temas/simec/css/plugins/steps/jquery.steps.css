@@ -96,15 +96,14 @@
     display: block;
     width: auto;
     margin: 0 -6px 0;
-    padding: 8px;
+    padding: 16px;
     text-decoration: none;
-
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 0;
     padding-left: 28px;
-    height: 29px;
-
+    height: 50px;
+    font-size: 14px;
 }
 
 .wizard > .steps .disabled a,
@@ -170,7 +169,7 @@
 
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 .wizard-big.wizard > .content {
@@ -409,17 +408,18 @@
     content: " ";
     display: block;
     width: 0;
-    height: 0;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
+    height: 50px;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
     border-left: 13px solid #00000015;
     position: absolute;
     top: 15%;
-    margin-top: -5px;
+    margin-top: -8px;
     margin-left: -5px;
     left: 100%;
     z-index: 1;
 }
+
 
 .wizard > .steps > ul > li.current:after{
     border-left: 13px solid #00b495;
@@ -437,13 +437,13 @@
     content: " ";
     display: block;
     width: 0;
-    height: 0;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
+    height: 50px;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
     border-left: 13px solid #ededee;
     position: absolute;
     top: 15%;
-    margin-top: -5px;
+    margin-top: -8px;
     margin-left: -6px;
     left: 100%;
     z-index: 2;
