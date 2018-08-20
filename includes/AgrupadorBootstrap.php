@@ -1,25 +1,37 @@
 <?php
 	$html_agrupador =
 <<<EOF
-        <div class="col-sm-9 col-md-9 col-lg-9 ">
-            <input id="busca{NOME_ORIGEM}" style="width:450px;" name="busca{NOME_ORIGEM}" class="form-control" onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, '', this ,'{NOME_ORIGEM}', '{NOME_DESTINO}');" onkeyup="limitaConteudoAgrupador{NOME_ORIGEM}(this,'{NOME_ORIGEM}', event,'{NOME_DESTINO}' );" onfocus="this.value = '';"  type="text" title=""  value="Pesquisar campo..." style="width: 200px;" />
+        <div class="col-sm-9 col-md-9 col-lg-9" style="margin: 0 0 12px 0">
+            <input id="busca{NOME_ORIGEM}" style="width:100%;" name="busca{NOME_ORIGEM}" class="form-control" onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, '', this ,'{NOME_ORIGEM}', '{NOME_DESTINO}');" onkeyup="limitaConteudoAgrupador{NOME_ORIGEM}(this,'{NOME_ORIGEM}', event,'{NOME_DESTINO}' );" onfocus="this.value = '';"  type="text" title=""  value="Pesquisar campo..." style="width: 200px;" />
         </div>
         <div class="col-sm-2 col-md-2 col-lg-2 control-label"><br></div>
-        <div class="col-sm-4 col-md-4 col-lg-4 ">
-            <select class="form-control" style="width:450px; height:250px;" id="{NOME_ORIGEM}" name="{NOME_ORIGEM}[]" multiple="multiple" size="7"  onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'envia', this , '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );"></select>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <select class="form-control" style="width:100%; height:250px;" id="{NOME_ORIGEM}" name="{NOME_ORIGEM}[]" multiple="multiple" size="7"  onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'envia', this , '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );"></select>
         </div>                
-        <div class="col-sm-1 col-md-1 col-lg-1 ">                
-            <img src="../imagens/rarrow_one.gif" style="padding: 2px" onClick="moveSelectedOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );"/><br/>
-            <img src="../imagens/rarrow_all.gif" style="padding: 2px" onClick="moveAllOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );"/><br/>
-            <img src="../imagens/larrow_all.gif" style="padding: 2px" onClick="moveAllOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, ''); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );"/><br/>
-            <img src="../imagens/larrow_one.gif" style="padding: 2px" onClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );"/><br/>
+        <div class="col-sm-1 col-md-1 col-lg-1 " style="margin: 0 0 12px 0">
+            <button class="btn btn-primary dim" style="padding: 6px 13.5px" onClick="moveSelectedOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );" type="button">
+                <i class="fa fa-angle-right"> </i>
+            </button><br/>
+            <button class="btn btn-primary dim" onClick="moveAllOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );" type="button">
+                <i class="fa fa-angle-double-right"></i>
+            </button><br/>
+            <button class="btn btn-primary dim" onClick="moveAllOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, ''); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );" type="button">
+                <i class="fa fa-angle-double-left"></i>
+            </button><br/>
+            <button class="btn btn-primary dim" style="padding: 6px 13.5px" onClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );" type="button">
+                <i class="fa fa-angle-left"> </i>
+            </button><br/>
         </div>
-        <div class="col-sm-4 col-md-4 col-lg-4 ">
-            <select class="form-control" style="width:450px; height:250px;" id="{NOME_DESTINO}" name="{NOME_DESTINO}[]" multiple="multiple" size="7" onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'retorna', this ,  '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );"></select>
+        <div class="col-sm-4 col-md-4 col-lg-4 " style="margin: 0 0 12px 0">
+            <select class="form-control" style="width:100%; height:250px;" id="{NOME_DESTINO}" name="{NOME_DESTINO}[]" multiple="multiple" size="7" onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'retorna', this ,  '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );"></select>
         </div>                
-        <div class="col-sm-1 col-md-1 col-lg-1 ">
-            <img src="../imagens/uarrow.gif" style="padding: 5px" onClick="subir( document.getElementById( '{NOME_DESTINO}' ) );"/><br/>
-            <img src="../imagens/darrow.gif" style="padding: 5px" onClick="descer( document.getElementById( '{NOME_DESTINO}' ) );"/><br/>
+        <div class="col-sm-1 col-md-1 col-lg-1 " style="margin: 0 0 12px 0">
+            <button class="btn btn-primary dim" style="padding: 6px 13.5px" onClick="subir( document.getElementById( '{NOME_DESTINO}' ) );" type="button">
+                <i class="fa fa-angle-up"> </i>
+            </button><br/>
+            <button class="btn btn-primary dim" style="padding: 6px 13.5px" onClick="descer( document.getElementById( '{NOME_DESTINO}' ) );" type="button">
+                <i class="fa fa-angle-down"> </i>
+            </button><br/>
         </div>
 	<script type="text/javascript" language="javascript">
 		

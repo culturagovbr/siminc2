@@ -97,8 +97,10 @@ table.tabela {
             document.filtro.target = "";
             $("#req").val("");
             document.filtro.submit();
+
         });
         $("#filtro-prsano").change(function(){
+            document.filtro.target = "";
             $("#req").val("");
             document.filtro.submit();
         });
