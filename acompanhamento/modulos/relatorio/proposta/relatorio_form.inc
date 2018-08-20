@@ -7,7 +7,7 @@
     $stSql = "SELECT prsano AS codigo, prsano AS descricao FROM proposta.proposta WHERE prostatus = 'A' ORDER BY 1;";
     $preenchidos = null;
     if (!$_REQUEST['filtro']['prsano']) {
-        $preenchidos = $_SESSION['exercicio'];
+        $_REQUEST['filtro']['prsano'] = $preenchidos = $_SESSION['exercicio'];
     } else {
         $preenchidos = $_REQUEST['filtro']['prsano'];
     }
@@ -76,7 +76,7 @@
     echo $simec->select("filtro[tpdid][]", 'Tipo de Detalhamento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
     ?>    
     <div class="text-center">
-        <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');">Visualizar</a>
-        <a class="btn-info btn btn-md" href="javascript:exibeRelatorioGeral('xls');">Visualizar XLS</a>
+        <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
+        <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
     </div>
 </div>
