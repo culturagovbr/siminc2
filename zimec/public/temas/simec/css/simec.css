@@ -1,3 +1,15 @@
+.table-bordered {
+    font-size: 14px;
+}
+
+tbody#tabela_indicador, td:first-child {
+    text-align: justify;
+}
+
+tbody#tabela_indicador, td {
+    text-align: center;
+}
+
 *{
     /*font-size: 98% !important;*/
 }

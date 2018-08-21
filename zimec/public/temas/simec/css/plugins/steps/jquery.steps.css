@@ -186,8 +186,8 @@
 .wizard > .content > .body
 {
     float: left;
-    position: absolute;
-    width: 95%;
+    position: relative;
+    width: 100%;
     height: 95%;
     padding: 2.5%;
 }
