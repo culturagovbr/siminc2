@@ -12,6 +12,7 @@ class Acompanhamento_Controller_Acompanhamentopnc
                 $acompanhamentoHistoricoIdicadorPnc = new Acompanhamento_Model_Historicoindicadorpnc();
                 $acompanhamentoHistoricoIdicadorPnc->idpid = $acompanhamentoIndicadorPnc->idpid;
                 $acompanhamentoHistoricoIdicadorPnc->usucpf = $_SESSION['usucpf'];
+                $acompanhamentoHistoricoIdicadorPnc->hipdata = 'NOW()';
                 $acompanhamentoHistoricoIdicadorPnc->hipquantidadeantigo = $acompanhamentoIndicadorPnc->idpquantidade;
                 $acompanhamentoHistoricoIdicadorPnc->hipquantidadenovo = desformata_valor($dados['idpquantidade']);
                 $acompanhamentoHistoricoIdicadorPnc->salvar();
