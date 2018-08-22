@@ -1,13 +1,14 @@
-.table-bordered {
+.indicadores_table{
     font-size: 14px;
 }
-
-tbody#tabela_indicador, td:first-child {
-    text-align: justify;
+.indicadores_table td {
+    text-align: center;
+    vertical-align: middle !important;
+ 
 }
 
-tbody#tabela_indicador, td {
-    text-align: center;
+.indicadores_table td:first-child{
+    text-align: justify;
 }
 
 *{

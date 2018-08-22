@@ -12,7 +12,7 @@
     $indicadoresPreenchidos = $acompanhamentopnc->verificarPreenchimentoIndicadoresAnoAtual();
 ?>
 
-<table class="table table-bordered">
+<table class="indicadores_table table table-bordered">
     <thead>
         <tr>
             <th>DESCRIÇÃO DO INDICADOR</th>
