@@ -5,7 +5,7 @@
 
     <?php
     echo $simec->data('behdata', 'Data', $mBeneficiarioHistorico->behdata, ['required']);
-    echo $simec->textarea('behdsc', 'Histórico', $mBeneficiarioHistorico->behdsc, ['required']);
+    echo $simec->textarea('behdsc', 'Observações', $mBeneficiarioHistorico->behdsc, ['required']);
     ?>
 
     <div class="form-group">
