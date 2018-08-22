@@ -8,7 +8,8 @@ if( ! isset($_SESSION['usucpf']) )
     exit();
 }
 
-include_once APPRAIZ . 'includes/library/simec/Crud/Listing.php';
+include_once APPRAIZ. 'includes/library/simec/Crud/Listing.php';
+include_once APPRAIZ. 'includes/funcoesspo_componentes.php';
 
 if ($_POST['carregarSituacaoPainel']):
 

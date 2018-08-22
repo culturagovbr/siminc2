@@ -39,3 +39,52 @@ WHERE
 ALTER DATABASE siminc2_treinamento RENAME TO siminc2_treinamento_bkp;
 ALTER DATABASE siminc2_tr_new RENAME TO siminc2_treinamento;
 "
+
+# Configurando usuário inicial/padrão pra acesso ao sistema
+psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_treinamento" -c "
+DELETE FROM seguranca.usuario_sistema WHERE usucpf = '86274565426';
+DELETE FROM seguranca.perfilusuario WHERE usucpf = '86274565426';
+UPDATE seguranca.usuario SET suscod = 'A' WHERE usucpf = '86274565426';
+INSERT INTO seguranca.usuario_sistema(
+    usucpf,
+    sisid,
+    susstatus,
+    pflcod,
+    susdataultacesso,
+    suscod
+)
+SELECT
+    '86274565426',
+    sisid,
+    susstatus,
+    pflcod,
+    susdataultacesso,
+    suscod
+FROM seguranca.usuario_sistema
+WHERE
+    usucpf = '00764786105'
+    AND suscod = 'A'
+    AND susstatus = 'A'
+;
+INSERT INTO seguranca.perfilusuario(
+    usucpf,
+    pflcod
+)
+SELECT
+    '86274565426',
+    pflcod
+FROM seguranca.perfilusuario
+WHERE
+    usucpf = '00764786105'
+;
+"
+
+# Apagando tabelas de logs que não são necessárias
+psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_treinamento" -c "
+TRUNCATE TABLE acomporc.mensagensretorno;
+DELETE FROM spo.logws;
+VACUUM FULL VERBOSE acomporc.mensagensretorno;
+VACUUM FULL VERBOSE spo.logws;"
+
+# Criando arquivo de dump pra o ambiente de desenvolvimento atualizado com permissões pra o usuário usr_simec e tabela de auditoria vazia
+pg_dump -v -h [IP_SERVIDOR_BANCO] -p 5432 -W -Fc -U postgres siminc2_treinamento > siminc2_desenvolvimento.bkp
