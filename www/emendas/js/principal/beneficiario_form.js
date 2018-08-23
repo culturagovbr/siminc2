@@ -7,7 +7,6 @@
 function beneficiario_form_init(){
 
     $('#modal-historico-beneficiario').click(function(){
-        $('#historico-beneficiario .modal-body').load(/*urlPagina+'&req=historico-beneficiario&pliid='+ $('#pliid').val()*/);
         $('#historico-beneficiario').modal();
     });
 
