@@ -13,97 +13,87 @@ if(isset($_REQUEST['req'])){
     }
 }
 
+include APPRAIZ . 'includes/AgrupadorBootstrap.php';
+
 /**
  * Cabeçalho padrão do sistema.
  */
 include APPRAIZ . "includes/cabecalho.inc";
-
-include APPRAIZ . 'includes/AgrupadorBootstrap.php';
-
 ?>
-
-<style>
-.tabela tr:hover {
-    background: #fff9b2;
-}
-
-.tabela tr {
-    line-height: 30px;
-}
-table.tabela {
-    font-size: 12px;
-}
-.table-responsive {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-}
-#page-wrapper.gray-bg {
-    position: inherit;
-    margin: 0 0 0 240px;
-    min-height: inherit;
-}
-</style>
 
 <script language="javascript" type="text/javascript" src="../includes/agrupadorBootstrap.js"></script>
 
-<form action="" method="post" name="filtro">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2><?php echo $titulo_modulo; ?></h2>
+    </div>
+</div>
+
+<form action="" method="post" name="filtro" class="form-horizontal">
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-md-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5><?php echo $titulo_modulo; ?></h5>
-                    </div>
-                    <div class="ibox-content noprint">
-                        <?php
-                            $preenchidos = $_REQUEST['tipo_relatorio']? $_REQUEST['tipo_relatorio']: array();
-                            $base = array(
-                                'proposta' => 'Relatório de Propostas',
-                                'emendas'=> 'Relatório de Beneficiários/Emenda',
-                                'pre-pi' => 'Relatório de Pré-PI',
-                                'pi' => 'Relatório de PI',
-                                'pi-fnc' => 'Relatório de PI do FNC',
-                                'funcional' => 'Relatório de Funcionais',
-                            );
-                            echo $simec->select('tipo_relatorio', 'Relatório', $preenchidos, $base, null, ['input-size'=>9, 'label-size'=>2]);
-                            switch ($_REQUEST['tipo_relatorio']) {
-                                case 'emendas':
-                                    include_once APPRAIZ.'acompanhamento/modulos/relatorio/emendas/relatorio_form.inc';
-                                    break;
-                                case 'proposta':
-                                    include_once APPRAIZ.'acompanhamento/modulos/relatorio/proposta/relatorio_form.inc';
-                                    break;        
-                                default:
-                                    break;
-                            }
-                        ?>
-                    </div>
-                    <div class="ibox-content">
-
+                        <h5 style="margin: 8px 0 7px;">Relatório:</h5>
+                            <?php
+                                $preenchidos = $_REQUEST['tipo_relatorio']? $_REQUEST['tipo_relatorio']: array();
+                                $base = array(
+                                    'proposta' => 'Relatório de Propostas',
+                                    'emendas'=> 'Relatório de Beneficiários/Emenda',
+                                    'pre-pi' => 'Relatório de Pré-PI',
+                                    'pi' => 'Relatório de PI',
+                                    'pi-fnc' => 'Relatório de PI do FNC',
+                                    'funcional' => 'Relatório de Funcionais',
+                                );
+                                echo $simec->select('tipo_relatorio', '', $preenchidos, $base);
+                            ?>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ibox float-e-margins">
+
+                    <?php
+                        switch ($_REQUEST['tipo_relatorio']) {
+                            case 'emendas':
+                                include_once APPRAIZ. 'acompanhamento/modulos/relatorio/emendas/relatorio_form.inc';
+                                break;
+                            case 'proposta':
+                                include_once APPRAIZ. 'acompanhamento/modulos/relatorio/proposta/relatorio_form.inc';
+                                break;        
+                            default:
+                                break;
+                        }
+                    ?>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 </form>
 
 <script>
 
     $(document).ready(function(){
+
         $("#tipo_relatorio").change(function(){
             document.filtro.target = "";
             $("#req").val("");
             document.filtro.submit();
 
         });
+
         $("#filtro-prsano").change(function(){
             document.filtro.target = "";
             $("#req").val("");
             document.filtro.submit();
         });
+
     });
     
     function exibeRelatorioGeral(tipo) {
