@@ -1,4 +1,4 @@
-<?php if(count($aBeneficiarioHistorico)){ ?>
+<?php if(count($aBeneficiarioObservacao)){ ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover" >
             <thead>
@@ -9,18 +9,18 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach($aBeneficiarioHistorico as $dados){?>
+            <?php foreach($aBeneficiarioObservacao as $dados):?>
                 <tr>
                     <td class="text-center">
-                        <?php if($dados['usucpf'] === $_SESSION['usucpf']) { ?>
-                            <a title="Alterar" class="editar-historico" href="?modulo=principal/beneficiario_form&acao=A&req=formulario-historico&behid=<?php echo $dados['behid']; ?>"><i class="fa fa-pencil"></i></a>
-                            <a title="Excluir" class="excluir-historico" href="?modulo=principal/beneficiario_form&acao=A&req=excluir-historico&behid=<?php echo $dados['behid']; ?>" style="margin-left: 5px;"><i class="fa fa-close"></i></a>
-                        <?php } ?>
+                        <?php if($dados['usucpf'] === $_SESSION['usucpf']) : ?>
+                            <a title="Alterar" class="editar-observacao" href="?modulo=principal/beneficiario_form&acao=A&req=formulario-observacao&bobid=<?= $dados['bobid']; ?>"><i class="fa fa-pencil"></i></a>
+                            <a title="Excluir" class="excluir-observacao" href="?modulo=principal/beneficiario_form&acao=A&req=excluir-observacao&bobid=<?= $dados['bobid']; ?>" style="margin-left: 5px;"><i class="fa fa-close"></i></a>
+                        <?php endif; ?>
                     </td>
-                    <td><?php echo substr($dados['behdsc'], 0, 100); ?></td>
-                    <td><?php echo formata_data($dados['behdata']); ?></td>
+                    <td><?= substr($dados['bobdsc'], 0, 100); ?></td>
+                    <td><?= formata_data($dados['bobdata']); ?></td>
                 </tr>
-            <?php } ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>
@@ -30,12 +30,12 @@
 
 <script>
     $(function(){
-        $('.editar-historico').click(function(){
-            jQuery("#div_formulario_historico").load(jQuery(this).attr('href'));
+        $('.editar-observacao').click(function(){
+            jQuery("#div_formulario_observacao").load(jQuery(this).attr('href'));
             return false;
         });
 
-        $('.excluir-historico').click(function(){
+        $('.excluir-observacao').click(function(){
             href = $(this).attr('href');
 
             swal({
@@ -51,7 +51,7 @@
                     $.ajax({
                         url: href,
                         success: function (benid) {
-                            jQuery("#div_listagem_historico").load('?modulo=principal/beneficiario_form&acao=A&req=listar-historico&benid=' + benid);
+                            jQuery("#div_listagem_observacao").load('?modulo=principal/beneficiario_form&acao=A&req=listar-observacao&benid=' + benid);
                         }
                     });
                 });
