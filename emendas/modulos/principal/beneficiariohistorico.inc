@@ -1,4 +1,4 @@
-<?php if(count($aBeneficiarioHistorico)){ ?>
+<?php if(count($aBeneficiarioObservacao)){ ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover" >
             <thead>
@@ -9,18 +9,18 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach($aBeneficiarioHistorico as $dados){?>
+            <?php foreach($aBeneficiarioObservacao as $dados):?>
                 <tr>
                     <td class="text-center">
-                        <?php if($dados['usucpf'] === $_SESSION['usucpf']) { ?>
-                            <a title="Alterar" class="editar-historico" href="?modulo=principal/beneficiario_form&acao=A&req=formulario-historico&behid=<?php echo $dados['behid']; ?>"><i class="fa fa-pencil"></i></a>
-                            <a title="Excluir" class="excluir-historico" href="?modulo=principal/beneficiario_form&acao=A&req=excluir-historico&behid=<?php echo $dados['behid']; ?>" style="margin-left: 5px;"><i class="fa fa-close"></i></a>
-                        <?php } ?>
+                        <?php if($dados['usucpf'] === $_SESSION['usucpf']) : ?>
+                            <a title="Alterar" class="editar-historico" href="?modulo=principal/beneficiario_form&acao=A&req=formulario-historico&bobid=<?= $dados['bobid']; ?>"><i class="fa fa-pencil"></i></a>
+                            <a title="Excluir" class="excluir-historico" href="?modulo=principal/beneficiario_form&acao=A&req=excluir-historico&bobid=<?= $dados['bobid']; ?>" style="margin-left: 5px;"><i class="fa fa-close"></i></a>
+                        <?php endif; ?>
                     </td>
-                    <td><?php echo substr($dados['behdsc'], 0, 100); ?></td>
-                    <td><?php echo formata_data($dados['behdata']); ?></td>
+                    <td><?= substr($dados['bobdsc'], 0, 100); ?></td>
+                    <td><?= formata_data($dados['bobdata']); ?></td>
                 </tr>
-            <?php } ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>

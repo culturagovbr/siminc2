@@ -21,18 +21,18 @@ switch ($_REQUEST['req']) {
         $cBeneficiario->excluir($_REQUEST['benid']);
         die;
     case 'formulario-historico':
-        $cBeneficiario->montarFormularioHistorico($_REQUEST['benid'], $_REQUEST['behid']);
+        $cBeneficiario->montarFormularioHistorico($_REQUEST['benid'], $_REQUEST['bobid']);
         die;
     case 'listar-historico':
         $cBeneficiario->montarListagemHistorico($_REQUEST['benid'], $podeEditar);
         die;
     case 'salvar-historico':
-        $cBeneficiarioHistorico = new Emendas_Controller_BeneficiarioHistorico();
+        $cBeneficiarioHistorico = new Emendas_Controller_BeneficiarioObservacao();
         $cBeneficiarioHistorico->salvar($_POST);
         die;
     case 'excluir-historico':
-        $cBeneficiarioHistorico = new Emendas_Controller_BeneficiarioHistorico();
-        echo $cBeneficiarioHistorico->excluir($_REQUEST['behid']);
+        $cBeneficiarioHistorico = new Emendas_Controller_BeneficiarioObservacao();
+        echo $cBeneficiarioHistorico->excluir($_REQUEST['bobid']);
         die;
     case 'formulario-detalhe':
         $cBeneficiario->montarFormularioDetalhe($_REQUEST['emeid'], $_REQUEST['benid'], $_REQUEST['bedid']);

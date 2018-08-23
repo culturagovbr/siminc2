@@ -1,16 +1,16 @@
 <?php
 
-class Emendas_Controller_BeneficiarioHistorico
+class Emendas_Controller_BeneficiarioObservacao
 {
     public function salvar($dados)
     {
         try {
-            $mBeneficiarioHistorico = new Emendas_Model_BeneficiarioHistorico($dados['behid']);
+            $mBeneficiarioHistorico = new Emendas_Model_BeneficiarioObservacao($dados['bobid']);
 
             $mBeneficiarioHistorico->usucpf = $_SESSION['usucpf'];
             $mBeneficiarioHistorico->benid = $dados['benid'];
-            $mBeneficiarioHistorico->behdata = $dados['behdata'] ? formata_data_sql($dados['behdata']) : null;
-            $mBeneficiarioHistorico->behdsc = $dados['behdsc']? utf8_decode($dados['behdsc']): null;
+            $mBeneficiarioHistorico->bobdata = $dados['bobdata'] ? formata_data_sql($dados['bobdata']) : null;
+            $mBeneficiarioHistorico->bobdsc = $dados['bobdsc']? utf8_decode($dados['bobdsc']): null;
 
             $mBeneficiarioHistorico->salvar(null, null, []);
             $mBeneficiarioHistorico->commit();
@@ -21,12 +21,12 @@ class Emendas_Controller_BeneficiarioHistorico
         }
     } //end salvar()
     
-    public function excluir($behid)
+    public function excluir($bobid)
     {
         try {
-            $mBeneficiarioHistorico = new Emendas_Model_BeneficiarioHistorico($behid);
+            $mBeneficiarioHistorico = new Emendas_Model_BeneficiarioObservacao($bobid);
 
-            $mBeneficiarioHistorico->behstatus = 'I';
+            $mBeneficiarioHistorico->bobstatus = 'I';
             $mBeneficiarioHistorico->usucpf = $_SESSION['usucpforigem'];
 
             $mBeneficiarioHistorico->salvar();
@@ -37,4 +37,4 @@ class Emendas_Controller_BeneficiarioHistorico
             return false;
         }
     } //end salvar()
-}            
+}

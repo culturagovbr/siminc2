@@ -1,11 +1,11 @@
 <form id="formulario-historico" name="formulario-historico" method="post" class="form-horizontal">
     <input type="hidden" name="req" id="req" value="salvar-historico"/>
-    <input name="behid" id="behid" type="hidden" value="<?php echo $mBeneficiarioHistorico->behid; ?>">
-    <input name="benid" type="hidden" value="<?php echo $mBeneficiarioHistorico->benid; ?>">
+    <input name="bobid" id="bobid" type="hidden" value="<?= $mBeneficiarioObservacao->bobid; ?>">
+    <input name="benid" type="hidden" value="<?= $mBeneficiarioObservacao->benid; ?>">
 
     <?php
-    echo $simec->data('behdata', 'Data', $mBeneficiarioHistorico->behdata, ['required']);
-    echo $simec->textarea('behdsc', 'Observações', $mBeneficiarioHistorico->behdsc, ['required']);
+        echo $simec->data('bobdata', 'Data', $mBeneficiarioObservacao->bobdata, ['required']);
+        echo $simec->textarea('bobdsc', 'Observações', $mBeneficiarioObservacao->bobdsc, ['required']);
     ?>
 
     <div class="form-group">
