@@ -1,5 +1,5 @@
-<form id="formulario-historico" name="formulario-historico" method="post" class="form-horizontal">
-    <input type="hidden" name="req" id="req" value="salvar-historico"/>
+<form id="formulario-observacao" name="formulario-observacao" method="post" class="form-horizontal">
+    <input type="hidden" name="req" id="req" value="salvar-observacao"/>
     <input name="bobid" id="bobid" type="hidden" value="<?= $mBeneficiarioObservacao->bobid; ?>">
     <input name="benid" type="hidden" value="<?= $mBeneficiarioObservacao->benid; ?>">
 
@@ -10,7 +10,7 @@
 
     <div class="form-group">
         <div class="text-center">
-            <button class="btn btn-primary" type="button" id="btn-salvar-historico"><i class="fa fa-check"></i>&nbsp;Salvar
+            <button class="btn btn-primary" type="button" id="btn-salvar-observacao"><i class="fa fa-check"></i>&nbsp;Salvar
             </button>
         </div>
     </div>
@@ -19,18 +19,18 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#btn-salvar-historico').click(function () {
+        $('#btn-salvar-observacao').click(function () {
             options = {
                 success: function () {
                     // Carregar a listagem
-                    jQuery("#div_listagem_historico").load('?modulo=principal/beneficiario_form&acao=A&req=listar-historico&benid=' + $('#benid').val());
+                    jQuery("#div_listagem_observacao").load('?modulo=principal/beneficiario_form&acao=A&req=listar-observacao&benid=' + $('#benid').val());
 
                     // Zerar o formulário
-                    jQuery("#div_formulario_historico").load('?modulo=principal/beneficiario_form&acao=A&req=formulario-historico&benid=' + $('#benid').val());
+                    jQuery("#div_formulario_observacao").load('?modulo=principal/beneficiario_form&acao=A&req=formulario-observacao&benid=' + $('#benid').val());
                 }
             }
 
-            jQuery("#formulario-historico").ajaxForm(options).submit();
+            jQuery("#formulario-observacao").ajaxForm(options).submit();
         });
     });
 </script>

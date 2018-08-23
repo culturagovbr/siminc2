@@ -63,19 +63,19 @@ class Emendas_Controller_Beneficiario
         }
     } //end salvar()
 
-    public function montarFormularioHistorico($benid = null, $bobid = null)
+    public function montarFormularioObservacao($benid = null, $bobid = null)
     {
         global $simec;
         $mBeneficiarioObservacao = new Emendas_Model_BeneficiarioObservacao($bobid);
         if(!$mBeneficiarioObservacao->benid){ $mBeneficiarioObservacao->benid = $benid; }
         $mBeneficiarioObservacao->bobdata = $mBeneficiarioObservacao->bobdata ? $mBeneficiarioObservacao->bobdata : date('d/m/Y');
-        include_once APPRAIZ . 'emendas/modulos/principal/beneficiariohistorico_form.inc';
+        include_once APPRAIZ . 'emendas/modulos/principal/beneficiarioobservacao_form.inc';
     }
 
-    public function montarListagemHistorico($benid, $podeEditar)
+    public function montarListagemObservacao($benid, $podeEditar)
     {
         $aBeneficiarioObservacao = (new Emendas_Model_BeneficiarioObservacao)->recuperarPorUnidade($benid);
-        include_once APPRAIZ . 'emendas/modulos/principal/beneficiariohistorico.inc';
+        include_once APPRAIZ . 'emendas/modulos/principal/beneficiario_observacao.inc';
     }
 
     public function montarFormularioDetalhe($emeid, $benid = null, $bedid = null)
