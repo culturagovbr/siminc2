@@ -7,14 +7,11 @@
 
 <div class="row">
     <div class="col-sm-12">
-       <h2>Anexos</h2>
-    </div>
-    <div class="col-sm-12">
         <h3>Inclua novos anexos que tenham um papel importante para a verificação dos indicadores e atividades cadastradas.</h3>
     </div>
 </div>
 
-<table cellpadding="5" border="0" align="center" class="table_anexos table table-striped table-hover table-bordered table-hover">
+<table cellpadding="5" border="0" align="center" class="table_anexos table table-striped table-hover table-bordered table-hover atividades_table">
     <thead>
         <tr>
             <td style="text-align: left;"><b>Nome do arquivo</b></td>
@@ -42,36 +39,24 @@
                 </tr>
             <?php endforeach; ?>
         </tbody>
-            <?php if(Acompanhamento_Controller_Acompanhamentopnc::verificarPermissaoEditar($acpid)): ?>
-                <tfoot>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td style="text-align: right;">
-                            <button class="btn btn-success inserir_anexo" data-acpid="<?php echo $acpid; ?>" type="button">
-                                <i class="fa fa-plus-circle"></i>&nbsp;Inserir Anexos
-                            </button>
-                        </td>
-                    </tr>
-                </tfoot>
-            <?php endif; ?>
     <?php else: ?>
         <tfoot>
             <tr>
                 <td colspan="3">Não existem anexos cadastrados pra essa Meta PNC.</td>
             </tr>
-                <?php if(Acompanhamento_Controller_Acompanhamentopnc::verificarPermissaoEditar($acpid)): ?>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td style="text-align: right;">
-                            <button class="btn btn-success inserir_anexo" data-acpid="<?php echo $acpid; ?>" type="button">
-                                <i class="fa fa-plus-circle"></i>&nbsp;Inserir Anexos
-                            </button>
-                        </td>
-                    </tr>
-                <?php endif; ?>
         </tfoot>
     <?php endif; ?>
 </table>
+
+<?php if(Acompanhamento_Controller_Acompanhamentopnc::verificarPermissaoEditar($acpid)): ?>
+    <div>
+            <ul style="text-align: right;">
+                <button class="btn btn-success inserir_anexo" data-acpid="<?php echo $acpid; ?>" type="button">
+                    <i class="fa fa-plus-circle"></i>&nbsp;Inserir Anexos
+                </button>
+            </ul>
+    </div>
+<?php endif; ?>
 
 <script>
     $(function(){

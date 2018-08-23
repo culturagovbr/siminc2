@@ -1,13 +1,32 @@
-.indicadores_table{
-    font-size: 14px;
-}
-.indicadores_table td {
-    text-align: center;
-    vertical-align: middle !important;
- 
+th.tabela__header--acao
+{
+  width: 89px;
 }
 
-.indicadores_table td:first-child{
+.editar_atividade:last-of-type,
+.inserir_anexo:last-of-type
+{
+    text-transform: uppercase;
+    font-weight: 600;
+    height: 40px;
+}
+
+.atividades_table,
+.indicadores_table
+{
+    font-size: 14px;
+}
+.atividades_table td:first-child,
+.indicadores_table th,
+.indicadores_table td
+{
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.indicadores_table th:first-child,
+.indicadores_table td:first-child
+{
     text-align: justify;
 }
 
