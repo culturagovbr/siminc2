@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade emendas.beneficiariohistorico
+ * Classe de mapeamento da entidade emendas.beneficiario_observacao
  *
  * @category Class
  * @package  A1
@@ -15,7 +15,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 
 /**
- * Emendas_Model_BeneficiarioHistorico
+ * Emendas_Model_BeneficiarioObservacao
  *
  * @category Class
  * @package  A1
@@ -24,14 +24,14 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release:
  * @link     no link
  */
-class Emendas_Model_BeneficiarioHistorico extends Modelo
+class Emendas_Model_BeneficiarioObservacao extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'emendas.beneficiariohistorico';
+    protected $stNomeTabela = 'emendas.beneficiario_observacao';
 
     /**
      * Chave primaria.
@@ -39,7 +39,7 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
      * @access protected
      */
     protected $arChavePrimaria = array(
-        'behid',
+        'bobid',
     );
     /**
      * Chaves estrangeiras.
@@ -55,11 +55,11 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
      * @access protected
      */
     protected $arAtributos = array(
-        'behid' => null,
-        'behdsc' => null,
-        'behdata' => null,
+        'bobid' => null,
+        'bobdsc' => null,
+        'bobdata' => null,
         'usucpf' => null,
-        'behstatus' => null,
+        'bobstatus' => null,
         'benid' => null,
     );
 
@@ -67,13 +67,13 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
         $sql = "
             SELECT DISTINCT
                 bh.*
-            FROM emendas.beneficiariohistorico bh
+            FROM emendas.beneficiario_observacao bh
                 LEFT JOIN emendas.usuarioresponsabilidade ur ON bh.usucpf = ur.usucpf
             WHERE
-                bh.behstatus = 'A'
+                bh.bobstatus = 'A'
                 AND bh.benid = " . (int)$benid . " 
             ORDER BY
-                behdata desc
+                bobdata desc
         ";
 
         return $sql;
@@ -84,5 +84,4 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
         return $this->carregar($sql);
     }
 
-}//end Class
-?>
+}
