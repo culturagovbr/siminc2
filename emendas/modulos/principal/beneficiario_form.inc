@@ -4,6 +4,7 @@ include_once '../planacomorc/_funcoespi.php';
 require_once APPRAIZ . 'includes/workflow.php';
 
 $cBeneficiario = new Emendas_Controller_Beneficiario();
+$cBeneficiarioObservacao = new Emendas_Controller_BeneficiarioObservacao();
 
 $perfis = pegaPerfilGeral();
 $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
@@ -20,19 +21,17 @@ switch ($_REQUEST['req']) {
     case 'excluir':
         $cBeneficiario->excluir($_REQUEST['benid']);
         die;
-    case 'formulario-historico':
-        $cBeneficiario->montarFormularioHistorico($_REQUEST['benid'], $_REQUEST['behid']);
+    case 'formulario-observacao':
+        $cBeneficiario->montarFormularioObservacao($_REQUEST['benid'], $_REQUEST['bobid']);
         die;
-    case 'listar-historico':
-        $cBeneficiario->montarListagemHistorico($_REQUEST['benid'], $podeEditar);
+    case 'listar-observacao':
+        $cBeneficiario->montarListagemObservacao($_REQUEST['benid'], $podeEditar);
         die;
-    case 'salvar-historico':
-        $cBeneficiarioHistorico = new Emendas_Controller_BeneficiarioHistorico();
-        $cBeneficiarioHistorico->salvar($_POST);
+    case 'salvar-observacao':
+        $cBeneficiarioObservacao->salvar($_POST);
         die;
-    case 'excluir-historico':
-        $cBeneficiarioHistorico = new Emendas_Controller_BeneficiarioHistorico();
-        echo $cBeneficiarioHistorico->excluir($_REQUEST['behid']);
+    case 'excluir-observacao':
+        echo $cBeneficiarioObservacao->excluir($_REQUEST['bobid']);
         die;
     case 'formulario-detalhe':
         $cBeneficiario->montarFormularioDetalhe($_REQUEST['emeid'], $_REQUEST['benid'], $_REQUEST['bedid']);
@@ -320,15 +319,15 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <h5>Observações</h5>
                                 </div>
                                 <div class="ibox-content">
-                                    <div id="div_formulario_historico">
+                                    <div id="div_formulario_observacao">
                                         <?php if($mBeneficiario->benid){
-                                          $cBeneficiario->montarFormularioHistorico($mBeneficiario->benid);
+                                          $cBeneficiario->montarFormularioObservacao($mBeneficiario->benid);
                                         } ?>
                                     </div>
-                                    <div id="div_listagem_historico">
+                                    <div id="div_listagem_observacao">
                                         <?php
                                         # Busca perfis do usuário logado
-                                        $cBeneficiario->montarListagemHistorico($mBeneficiario->benid, $podeEditar);
+                                        $cBeneficiario->montarListagemObservacao($mBeneficiario->benid, $podeEditar);
                                          ?>
                                     </div>
                                 </div>
