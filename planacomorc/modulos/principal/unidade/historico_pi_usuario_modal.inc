@@ -24,7 +24,7 @@ $listaHistoricoUsuario = (new Planacomorc_Model_HistoricoPiUsuario())->recuperar
                                 <td><?= $dados['hpudata'] ?></td>
                                 <td><?= $dados['usunome'] ?></td>
                                 <td><?= $dados['usuemail'] ?></td>
-                                <td><?= $dados['usutelefone'] ?></td>
+                                <td><?= $dados['telefone'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
