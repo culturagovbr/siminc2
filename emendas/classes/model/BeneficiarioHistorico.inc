@@ -47,6 +47,7 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
      */
     protected $arChaveEstrangeira = array(
         'usucpf' => array('tabela' => 'seguranca.usuario', 'pk' => 'usucpf'),
+        'benid' => array('tabela' => 'emendas.beneficiario', 'pk' => 'benid'),
     );
 
     /**
@@ -56,6 +57,7 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
      */
     protected $arAtributos = array(
         'behid' => null,
+        'benid' => null,
         'usucpf' => null,
         'behdata' => null,
     );
