@@ -392,7 +392,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             echo $simec->input('plititulo', 'Título do PI/Projeto <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->plititulo, ['maxlength' => 230]);
 
                                             $descricaoDinamica = $mBeneficiario->benpropostaobjeto? $mBeneficiario->benpropostaobjeto: NULL;
-                                            echo $simec->textarea('plidsc', 'Descrição / Finalidade <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->plidsc? $mBeneficiario->plidsc: $descricaoDinamica, ['maxlength' => 1000]);
+                                            echo $simec->textarea('plidsc', 'Descrição / Finalidade <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->plidsc? $mBeneficiario->plidsc: $descricaoDinamica, ['maxlength' => 250]);
 //condicaoGerarPi($benid);
                                         ?>
 
