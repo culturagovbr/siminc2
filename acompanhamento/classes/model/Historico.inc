@@ -64,14 +64,20 @@ class Acompanhamento_Model_Historico extends Modelo
 
     public function recuperarHistorico($acoid)
     {
-        $sql = "select his.*, usu.usunome, to_char(hisdata, 'DD/MM/YYYY HH24:MI:SS') hisdata
-                from acompanhamento.historico his
-                        inner join seguranca.usuario usu on usu.usucpf = his.usucpf
-                where his.acoid = " . (int)$acoid . "
-                order by his.hisdata desc";
+        $sql = "SELECT
+                    to_char(hisdata, 'DD/MM/YYYY HH24:MI:SS') AS hisdata,
+                    usu.usunome,
+                    usu.usuemail,
+                    '(' || usu.usufoneddd ||') '|| usu.usufonenum as telefone
+                FROM acompanhamento.historico his
+                JOIN seguranca.usuario usu ON (usu.usucpf = his.usucpf)
+                WHERE
+                    his.acoid = " . (int)$acoid . "
+                ORDER BY
+                    his.hisdata DESC
+                ";
 
         return $this->carregar($sql);
     }
 
-}//end Class
-?>
+}

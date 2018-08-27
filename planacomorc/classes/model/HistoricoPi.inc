@@ -79,6 +79,8 @@ class Planacomorc_Model_HistoricoPi extends Modelo
             SELECT
                 to_char(hpi.hisdata, 'DD/MM/YYYY HH24:MI:SS') AS hisdata,
                 usu.usunome,
+                usu.usuemail,
+                '(' || usu.usufoneddd ||') '|| usu.usufonenum as telefone,
                 hpi.hpidscantigo,
                 hpi.hpidscnovo
             FROM
@@ -95,5 +97,4 @@ class Planacomorc_Model_HistoricoPi extends Modelo
         return $db->carregar($sql);
     }
 
-}//end Class
-?>
+}

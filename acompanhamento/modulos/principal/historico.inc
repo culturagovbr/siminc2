@@ -5,15 +5,19 @@
             <tr class="text-center">
                 <th>Data</th>
                 <th>Usuário</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
             </tr>
             </thead>
             <tbody>
-            <?php foreach($aHistorico as $dados){ ?>
+            <?php foreach($aHistorico as $dados):?>
                 <tr>
-                    <td><?php echo $dados['hisdata']; ?></td>
-                    <td><?php echo $dados['usunome']; ?></td>
+                    <td><?= $dados['hisdata']; ?></td>
+                    <td><?= $dados['usunome']; ?></td>
+                    <td><?= $dados['usuemail']; ?></td>
+                    <td><?= $dados['telefone']; ?></td>
                 </tr>
-            <?php } ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>

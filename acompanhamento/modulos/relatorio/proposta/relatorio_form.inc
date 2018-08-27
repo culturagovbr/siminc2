@@ -54,23 +54,23 @@
     echo $simec->select("filtro[suoid][]", 'Unidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
     $stSql = "  SELECT DISTINCT eqd.eqdid AS codigo,
                        eqd.eqddsc AS descricao
-                  from monitora.pi_enquadramentodespesa eqd
-                 where eqd.eqdano='".$_REQUEST['filtro']['prsano']."'
+                  FROM monitora.pi_enquadramentodespesa eqd
+                 WHERE eqd.eqdano='".$_REQUEST['filtro']['prsano']."'
                    and eqdstatus = 'A'
                  ORDER BY 2,1";
 
     echo $simec->select("filtro[eqdid][]", 'Enquadramento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
     $stSql = "  SELECT DISTINCT irp.irpcod AS codigo,
-                       irp.irpdsc AS descricao
-                  from public.identresultprimario irp
-                 where irp.irpstatus = 'A'
+                       irp.irpcod || ' - ' || irp.irpdsc AS descricao
+                  FROM public.identresultprimario irp
+                 WHERE irp.irpstatus = 'A'
                  ORDER BY 2,1";
 
     echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
     $stSql = "  SELECT DISTINCT tpd.tpdid AS codigo,
-                       tpd.tpdnome AS descricao
-                  from proposta.tipodetalhamento tpd
-                 where tpd.tpdstatus = 'A'
+                       tpd.tpdcod || ' - ' || tpd.tpdnome AS descricao 
+                  FROM proposta.tipodetalhamento tpd
+                 WHERE tpd.tpdstatus = 'A'
                  ORDER BY 2,1";
 
     echo $simec->select("filtro[tpdid][]", 'Tipo de Detalhamento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
