@@ -23,11 +23,7 @@ class Acompanhamento_Controller_Acompanhamento
             $mAcompanhamento->salvar(null, null, [
                 'acoanalise',
                 'acoprovidencias',
-                'acojustificativa',
-                'claid',
-                'unocod',
-                'suocod',
-                'ipncod'
+                'claid'
             ]);
 
             $mAcompanhamento->associarAnexo($dados);
@@ -41,53 +37,6 @@ class Acompanhamento_Controller_Acompanhamento
             simec_redirecionar($url, 'error');
         }
     } //end salvar()
-    
-    public function salvarIndicadorPnc($dados)
-    {
-//ver($dados, d);
-        try {
-            $mAcompanhamento = new Acompanhamento_Model_Acompanhamento($dados['acoid']);
-            $mAcompanhamento->popularDadosObjeto($dados);
-
-            $mAcompanhamento->acoquantidade = $mAcompanhamento->acoquantidade? desformata_valor($mAcompanhamento->acoquantidade) : null;
-            $mAcompanhamento->acodata = $mAcompanhamento->acodata?formata_data_sql($mAcompanhamento->acodata): null;
-
-//            $mAcompanhamento->prsano = $mAcompanhamento->prsano? $mAcompanhamento->prsano: $_SESSION['exercicio'];
-
-            $mAcompanhamento->salvar(null, null, [
-                'acoanalise',
-                'acoprovidencias',
-                'acojustificativa',
-                'claid',
-                'suoid'
-            ]);
-
-//            $this->_gravarHistorico($mAcompanhamento->acoid);
-
-            $mAcompanhamento->commit();
-//ver($mAcompanhamento->acoid, d);
-            return array(
-                'success' => utf8_encode('Operação realizada com sucesso!'),
-                'acoid' => $mAcompanhamento->acoid
-            );
-        } catch (Exception $e){
-            $mAcompanhamento->rollback();
-            return array('error' => utf8_encode('Ocorreu um erro ao executar operação!'));
-        }
-    }
-
-    /**
-     * Lista os indicadores PNC do ano atual e anos anteriores
-     * 
-     * @param int $janid
-     * @param int $suoid
-     * @param int $mpnid
-     * @param int $exercicio
-     */
-    public function listarIndicadoresPNC($janid = NULL, $suoid = NULL, $mpnid = NULL, $exercicio = NULL){
-        
-        include APPRAIZ. 'acompanhamento/modulos/principal/listar-indicadores-pnc.inc';
-    }
     
     public function excluir($acoid)
     {
