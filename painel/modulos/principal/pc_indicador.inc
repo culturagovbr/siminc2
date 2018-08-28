@@ -78,7 +78,6 @@ if($_SESSION['indid']){
 	$dadosInd = $db->pegaLinha($sql);
 	$indqtdevalor = $dadosInd['indqtdevalor'];
 } 
-
 ?>
 <script language="javascript" type="text/javascript" src="/includes/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="/includes/open_flash_chart/swfobject.js"></script>
@@ -126,10 +125,14 @@ $local= explode("/",curPageURL());
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxRzjpIxsx3o6RYEdxEmCzeJMTc4zBSMifny_dJtMKLfrwCcYh5B01Pq_g" type="text/javascript"></script>
 	<? $Gkey = "ABQIAAAAwN0kvNsueYw8CBs704pusxRzjpIxsx3o6RYEdxEmCzeJMTc4zBSMifny_dJtMKLfrwCcYh5B01Pq_g"; ?> 	
 <?php  } ?>
+<?php if ($local[2]=="local.siminc2:8082"){ ?>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxTPkFYZwQy2nvpGvFj08HQmPOt9ZBT2EJmQsTms0WQqU_5GvEj7bMZd7g" type="text/javascript"></script>
+	<? $GKey = "ABQIAAAAwN0kvNsueYw8CBs704pusxTPkFYZwQy2nvpGvFj08HQmPOt9ZBT2EJmQsTms0WQqU_5GvEj7bMZd7g"; ?> 
+<?php  } ?>        
 <?php if ($local[2]=="painel.mec.gov.br"){ ?>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxTPkFYZwQy2nvpGvFj08HQmPOt9ZBT2EJmQsTms0WQqU_5GvEj7bMZd7g" type="text/javascript"></script>
 	<? $GKey = "ABQIAAAAwN0kvNsueYw8CBs704pusxTPkFYZwQy2nvpGvFj08HQmPOt9ZBT2EJmQsTms0WQqU_5GvEj7bMZd7g"; ?> 	
-<?php  } ?>
+<?php  }?>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript" src="/includes/maps/markerclusterer.js"></script>
 <script type="text/javascript">

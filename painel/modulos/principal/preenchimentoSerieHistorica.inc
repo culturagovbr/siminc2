@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * VALIDANDO SE EXISTE O ID DO INDICADOR NA SESSÃO
  * É OBRIGATÓRIO A EXISTÊNCIA DESTA VARIAVEL NA SESSÃO
@@ -514,7 +514,7 @@ if($tabeladefiltros) {
 </table>
 <div id="gridinfo"></div>
 <script>
-<?
+<?php
 /*
  * Carregando permissões do perfil
  */

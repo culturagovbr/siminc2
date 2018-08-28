@@ -79,21 +79,21 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 						
 				$indid = $_REQUEST['indid']; 			
 				
-				$exoid 				= $_REQUEST['exoid'];
-				$unmid 				= $_REQUEST['unmid']; 
-				$cliid 				= $_REQUEST['cliid'];
-				$tpiid 				= $_REQUEST['tpiid'];  
-				$secid  			= $_REQUEST['secid'];  
+				$exoid 			= $_REQUEST['exoid'];
+				$unmid 			= $_REQUEST['unmid']; 
+				$cliid 			= $_REQUEST['cliid'];
+				$tpiid 			= $_REQUEST['tpiid'];  
+				$secid  		= $_REQUEST['secid'];  
 				$secidgestora		= $_REQUEST['secidgestora'];
-				$acaid   			= $_REQUEST['acaid']; 
-				$perid  			= $_REQUEST['perid'];  
-				$peridatual			= $_REQUEST['peridatual'];
-				$estid  			= $_REQUEST['estid'];
-				$regid				= $_REQUEST['regid'];
-				$umeid				= $_REQUEST['umeid'];
-				$colid  			= $_REQUEST['colid'];  
-				$usucpf  			= $_REQUEST['usucpf'];  
-				$indnome  			= $_REQUEST['indnome'];  
+				$acaid   		= $_REQUEST['acaid']; 
+				$perid  		= $_REQUEST['perid'];  
+				$peridatual		= $_REQUEST['peridatual'];
+				$estid  		= $_REQUEST['estid'];
+				$regid			= $_REQUEST['regid'];
+				$umeid			= $_REQUEST['umeid'];
+				$colid  		= $_REQUEST['colid'];  
+				$usucpf  		= $_REQUEST['usucpf'];  
+				$indnome  		= $_REQUEST['indnome'];  
 				$indobjetivo  		= $_REQUEST['indobjetivo']; 
 				$indformula  		= $_REQUEST['indformula'];  
 				$indtermos  		= $_REQUEST['indtermos'];  
@@ -191,7 +191,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				
 			//caso exista o indicador altera os dados do mesmo	
 			} else {
-			
+                            $sql = "select perid from painel.indicador where indid = ".$indid;
+                            $peridAtual = $db->pegaUm($sql);
 			
 				$sql_U = "
 					UPDATE painel.indicador
@@ -258,6 +259,14 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 						$db->executar($sql);
 					}
 				}
+
+                                
+                                //Remove Série Histórica se a periodicidade for diferente
+                                if ($peridAtual!=$perid){
+                                    $sql = "update painel.seriehistorica set sehstatus = 'I' where indid = ".$indid;
+                                    $db->executar($sql);
+                                }
+
 			}
 			$db->commit();
 			echo "<script>
@@ -1055,7 +1064,7 @@ else
 		";
 	?>
     <td width="25%" align='right' class="SubTituloDireita">Periodicidade do Indicador:</td>
-    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<? echo $perid; ?>"></td>
+    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<? echo $perid; ?>"></td>
 </tr>
 <tr>
 	<?php 
@@ -1190,6 +1199,11 @@ else
 </form>
 <script type="text/javascript" src="/includes/prototype.js"></script>	
 <script type="text/javascript">
+function verificaSH(){   
+    if (document.formulario.perid.value!==document.formulario.perid_conf.value){
+        alert('Se alterar a periodicidade pode apagar a série histórica!'); 
+    }
+}
 
 function submeter(evento, indid){	
 	if(validar()){
@@ -1318,5 +1332,4 @@ function mostraindpublico(tr){
 	}
 }
 
-exibeValorAcumulado();
 </script>
