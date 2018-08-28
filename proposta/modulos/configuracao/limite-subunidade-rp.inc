@@ -1,6 +1,7 @@
 <?php
 
 $modelSubunidade = new Public_Model_SubUnidadeOrcamentaria();
+$modelUo = new Public_Model_UnidadeOrcamentaria();
 
 switch($_REQUEST['req']){
     case 'salvar-limite-rp':
@@ -64,9 +65,22 @@ $filtros = array(
 
 $listaSubunidadeTotais = $modelSubunidade->buscarPropostaTotaisLimites((object)array(
     'exercicio' => $_SESSION['exercicio'],
-    'fundo' => false
+    'fundo' => FALSE
 ));
 
+$listaUoFnc = $modelUo->buscarPropostaTotaisLimitesFnc((object)array(
+    'exercicio' => $_SESSION['exercicio'],
+    'fundo' => FALSE,
+    'unocod' => UNOCOD_FNC
+));
+$UofncComTotais = current($listaUoFnc);
+
+$listaSubunidadeFncTotais = $modelSubunidade->buscarPropostaTotaisLimites((object)array(
+    'exercicio' => $_SESSION['exercicio'],
+    'fundo' => TRUE
+));
+$subUnidadeFncComTotais = current($listaSubunidadeFncTotais);
+//ver($subUnidadeFncComTotais, d);
 /**
  * Cabeçalho padrão do sistema.
  * @see cabecalho.inc
@@ -113,7 +127,41 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tr>
                             </thead>
                             <?php if($listaSubunidadeTotais): ?>
+                                <?php
+                                    $listaRpTotaisPrePi = $modelSubunidade->buscarPropostaRpTotaisLimitesFnc((object)array(
+                                        'exercicio' => $_SESSION['exercicio'],
+                                        'suoid' => $subUnidadeFncComTotais['suoid']));
+                                ?>
                                 <tbody>
+                                    <tr class="linha_subunidade" style="background-color: #ffe6e1 !important;">
+                                        <td style="border-right: 1px black solid;">
+                                            <i class="fa fa-plus detalhar-linha link" data-unoid="<?php echo $UofncComTotais['unoid']; ?>"></i>&nbsp;&nbsp;
+                                            <span class="detalhe-subunidade" data-unoid="<?php echo $dado['unoid']; ?>">
+                                                <?php echo $UofncComTotais['unosigla'] . ' - ' . $UofncComTotais['unonome'] . ' (' . $UofncComTotais['unocod'] . ')'; ?>
+                                            </span>
+                                        </td>
+                                        <td style="border-right: 1px black solid;" class="text-right">
+                                            <?php echo number_format($UofncComTotais['total_pre_pi'], 0, ',', '.'); ?>
+                                        </td>
+                                        <td id='total_<?php echo $UofncComTotais['suoid']; ?>' style="border-right: 1px black solid;" class="text-right">
+                                            <?php echo number_format($UofncComTotais['total_limite_rp'], 0, ',', '.'); ?>
+                                        </td>
+                                    </tr>
+                                    <?php foreach($listaRpTotaisPrePi as $Rp): ?>
+                                        <tr class="tr_<?php echo $subunidade['suoid']; ?> tr_detalhe" style="display: none;">
+                                            <td style="padding-left: 30px; border-right: 1px black solid;" >
+                                                <span>
+                                                    <?php echo '(RP '. $Rp['irpcod']. ') - '. $Rp['irpdsc']; ?>
+                                                </span>
+                                            </td>
+                                            <td style="border-right: 1px black solid;" class="text-right">
+                                                <?php echo number_format($Rp['total_pre_pi'], 0, ',', '.'); ?>
+                                            </td>
+                                            <td class="text-right" style="border-right: 1px black solid;">
+                                                <input name="limites[]" type="text" class="input_valor salvar-limite-rp" value="<?php echo number_format($Rp['total_limite_rp'], 0, '.', ''); ?>" data-suoid="<?php echo $subunidade['suoid']; ?>" data-irpcod="<?php echo $Rp['irpcod']; ?>" >
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
                                     <?php foreach($listaSubunidadeTotais as $subunidade): ?>
                                         <?php
                                             $listaRpTotaisPrePi = $modelSubunidade->buscarPropostaRpTotaisLimites((object)array(
