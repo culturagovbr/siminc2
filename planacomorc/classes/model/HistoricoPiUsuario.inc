@@ -67,7 +67,7 @@ class Planacomorc_Model_HistoricoPiUsuario extends Modelo
             SELECT
                 to_char(hpu.hpudata, 'DD/MM/YYYY HH24:MI:SS') AS hpudata,
                 usu.usunome,
-                usu.usufoneddd||'-'||usu.usufonenum as usutelefone,
+                '(' || usu.usufoneddd ||') '|| usu.usufonenum AS telefone,
                 usu.usuemail
             FROM
                 planacomorc.historico_pi_usuario AS hpu
