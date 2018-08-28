@@ -191,8 +191,10 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				
 			//caso exista o indicador altera os dados do mesmo	
 			} else {
-                            $sql = "select perid from painel.indicador where indid = ".$indid;
-                            $peridAtual = $db->pegaUm($sql);
+                            $sql = "select perid, regid from painel.indicador where indid = ".$indid;
+                            $registro = $db->pegalinha($sql);
+                            $peridAtual = $registro->perid;
+                            $regidAtual = $registro->regid;
 			
 				$sql_U = "
 					UPDATE painel.indicador
@@ -261,11 +263,11 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				}
 
                                 
-                                //Remove Série Histórica se a periodicidade for diferente
-                                if ($peridAtual!=$perid){
+                                //Remove Série Histórica se a periodicidade ou a Regionalização for diferente.
+                                if (($peridAtual!=$perid) || ($regidAtual!=$regid)){
                                     $sql = "update painel.seriehistorica set sehstatus = 'I' where indid = ".$indid;
                                     $db->executar($sql);
-                                }
+                                }         
 
 			}
 			$db->commit();
@@ -1093,7 +1095,7 @@ else
 		";
 	?>
     <td align='right' class="SubTituloDireita">Regionalização:</td>
-    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<? echo $regid; ?>"></td>
+    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<? echo $regid; ?>"></td>
 </tr>
 <tr style="display: none" >
 	<td align='right' class="SubTituloDireita">Objetivo Estratégico:</td>
@@ -1201,8 +1203,13 @@ else
 <script type="text/javascript">
 function verificaSH(){   
     if (document.formulario.perid.value!==document.formulario.perid_conf.value){
-        alert('Se alterar a periodicidade pode apagar a série histórica!'); 
+        alert('Se alterar a periodicidade a série histórica será apagada!'); 
+        return;
     }
+    if (document.formulario.regid.value!==document.formulario.regid_conf.value){
+        alert('Se alterar a regionalização a série histórica será apagada!'); 
+        return;
+    }    
 }
 
 function submeter(evento, indid){	
