@@ -253,14 +253,14 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				}
 				
 				//AGENDA DE GOVERNO
-				$sql = "DELETE FROM painel.agendaindicador WHERE indid =  ". $indid ."";			
-				$db->executar($sql);
-				foreach($_POST['aggid'] as $aggid) {
-					if($aggid){
-						$sql = "INSERT INTO painel.agendaindicador(aggid, indid) VALUES (". $aggid .", ". $indid .")";			
-						$db->executar($sql);
-					}
-				}
+//				$sql = "DELETE FROM painel.agendaindicador WHERE indid =  ". $indid ."";			
+//				$db->executar($sql);
+//				foreach($_POST['aggid'] as $aggid) {
+//					if($aggid){
+//						$sql = "INSERT INTO painel.agendaindicador(aggid, indid) VALUES (". $aggid .", ". $indid .")";			
+//						$db->executar($sql);
+//					}
+//				}
 
                                 
                                 //Remove Série Histórica se a periodicidade ou a Regionalização for diferente.
