@@ -57,9 +57,9 @@ class Emendas_Model_BeneficiarioHistoricoAlteracao extends Modelo
     protected $arAtributos = array(
         'bahid' => null,
         'behid' => null,
-        'behcampo' => null,
-        'behanterior' => null,
-        'behanovo' => null,
+        'bahcampo' => null,
+        'bahanterior' => null,
+        'bahnovo' => null,
     );
 
 }
