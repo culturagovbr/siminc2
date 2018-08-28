@@ -113,6 +113,9 @@ switch ($_REQUEST['req']) {
     case 'espelho-pi':
         include APPRAIZ. 'planacomorc/modulos/principal/unidade/espelho-pi.inc';
         die;
+    case 'historico-alteracao':
+        include APPRAIZ. 'emendas/modulos/principal/beneficiario_historico_modal.inc';
+        die;
 }
 //ver('ok', d);
 $mBeneficiario = new Emendas_Model_Beneficiario($_REQUEST['benid']);
@@ -183,7 +186,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title">
                                         <h5>Dados Gerais</h5>
-                                        <a style="font-size: 2.4em; margin-left: 10px;" class="fa fa-history" id="modal-historico-beneficiario" title="Histórico de alterações"></a>
+                                        <a style="font-size: 2.4em; margin-left: 10px;" class="fa fa-history" id="modal-historico-beneficiario" data-benid="<?= $mBeneficiario->benid; ?>" title="Histórico de alterações"></a>
                                     </div>
                                     <div class="ibox-content">
                                         <input type="hidden" name="req" id="req" value="salvar" />
@@ -604,7 +607,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     </div>
 </div>
 
-<?php bootstrapPopup("Histórico de Alterações",'historico-beneficiario',APPRAIZ. 'emendas/modulos/principal/beneficiario_historico_modal.inc', array('fechar'), array('tamanho' => 'lg')); ?>
+<?php bootstrapPopup("Histórico de Alterações",'historico-beneficiario',null, array('fechar'), array('tamanho' => 'lg')); ?>
 
 <script src="js/principal/beneficiario_form.js?v=5"></script>
 

@@ -1,6 +1,6 @@
 <?php
 
-$listaHistorico = (new Emendas_Model_BeneficiarioHistorico())->recuperarAlteracoes();
+$listaHistorico = (new Emendas_Model_BeneficiarioHistorico())->recuperarAlteracoes($_REQUEST['benid']);
 
 ?>
 
@@ -21,10 +21,10 @@ $listaHistorico = (new Emendas_Model_BeneficiarioHistorico())->recuperarAlteraco
                         <tbody>
                         <?php foreach ($listaHistorico as $dados) : ?>
                             <tr>
-                                <td><?= $dados['hisdata'] ?></td>
+                                <td><?= $dados['behdata'] ?></td>
                                 <td><?= $dados['usunome'] ?></td>
                                 <td><?= $dados['usuemail'] ?></td>
-                                <td><?= $dados['usufonenum'] ?></td>
+                                <td><?= $dados['telefone'] ?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

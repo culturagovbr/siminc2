@@ -7,6 +7,7 @@
 function beneficiario_form_init(){
 
     $('#modal-historico-beneficiario').click(function(){
+        $('#historico-beneficiario .modal-body').load('?modulo=principal/beneficiario_form&acao=A&req=historico-alteracao&benid='+ $(this).data('benid'));
         $('#historico-beneficiario').modal();
     });
 

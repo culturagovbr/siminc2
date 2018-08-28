@@ -67,15 +67,22 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
      *
      * @return mixed
      */
-    public function recuperarAlteracoes()
+    public function recuperarAlteracoes($benid)
     {
         global $db;
+
         $sql = "SELECT
-                    beh.*,
-                    seg.*
+                    beh.behid,
+                    to_char(beh.behdata, 'DD/MM/YYYY HH24:MI:SS') as behdata,
+                    seg.usucpf,
+                    seg.usunome,
+                    seg.usuemail,
+                    '(' || seg.usufoneddd || ') ' || seg.usufonenum as telefone
                 FROM emendas.beneficiario_historico beh
                 JOIN seguranca.usuario seg ON ( seg.usucpf = beh.usucpf )
-               ";
+                WHERE
+                    beh.benid = '".$benid ."'
+        ";
 
         return $db->carregar($sql);
     }
