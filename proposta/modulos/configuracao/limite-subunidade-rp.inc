@@ -31,25 +31,31 @@ switch($_REQUEST['req']){
         }
     die;
     case 'salvar-limite-rp-fnc':
-        # Exclui(Exclusão lógica) o registro de limite atual
-        $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
-        $modelSubunidaderplimite->suoid = $_REQUEST['suoid'];
-        $modelSubunidaderplimite->irpcod = $_REQUEST['irpcod'];
-        $modelSubunidaderplimite->buscarPorSuoidIrpcod();
-        if($modelSubunidaderplimite->srlid){
-            $modelSubunidaderplimite->srlstatus = 'I';
-            $modelSubunidaderplimite->salvar();
+        $listaSubunidadeFnc = (new Public_Model_SubUnidadeOrcamentaria)->recuperarTodos('*', ['unoid = ' . (int)$_REQUEST['unoid'], "suostatus = 'A'"]);
+        foreach($listaSubunidadeFnc as $contador => $subUnidade){
+            # Exclui(Exclusão lógica) o registro de limite atual
+            $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
+            $modelSubunidaderplimite->suoid = $subUnidade['suoid'];
+            $modelSubunidaderplimite->irpcod = $_REQUEST['irpcod'];
+            $modelSubunidaderplimite->buscarPorSuoidIrpcod();
+            if($modelSubunidaderplimite->srlid){
+                $modelSubunidaderplimite->srlstatus = 'I';
+                $modelSubunidaderplimite->salvar();
+            }
+
+            # Salva o novo limite pra unidade
+            $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
+            $modelSubunidaderplimite->popularDadosObjeto($_REQUEST);
+            $modelSubunidaderplimite->suoid = $subUnidade['suoid'];
+            $resultado = $modelSubunidaderplimite->salvar();
         }
-        
-        # Salva o novo limite pra unidade
-        $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
-        $modelSubunidaderplimite->popularDadosObjeto($_REQUEST);
-        $resultado = $modelSubunidaderplimite->salvar();
+
         if($resultado){
             $modelSubunidaderplimite->commit();
             echo json_encode(array(
                 'msg' => utf8_encode('Operação realizada com sucesso!'),
                 'irpcod' => $modelSubunidaderplimite->irpcod,
+                'unoid' => $_REQUEST['unoid'],
                 'suoid' => $modelSubunidaderplimite->suoid
             ));
         } else {
@@ -136,7 +142,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <tr class="linha_fnc" style="background-color: #ffe6e1 !important;">
                                         <td style="border-right: 1px black solid;">
                                             <i class="fa fa-plus detalhar-linha-fnc link" data-unoid="<?php echo $UofncComTotais['unoid']; ?>"></i>&nbsp;&nbsp;
-                                            <span class="detalhe-fnc" data-unoid="<?php echo $dado['unoid']; ?>">
+                                            <span class="detalhe-fnc" data-unoid="<?php echo $UofncComTotais['unoid']; ?>">
                                                 <?php echo $UofncComTotais['unosigla'] . ' - ' . $UofncComTotais['unonome'] . ' (' . $UofncComTotais['unocod'] . ')'; ?>
                                             </span>
                                         </td>
@@ -158,7 +164,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                 <?php echo number_format($Rp['total_pre_pi'], 0, ',', '.'); ?>
                                             </td>
                                             <td class="text-right" style="border-right: 1px black solid;">
-                                                <input name="limites[]" type="text" class="input_valor salvar-limite-rp" value="<?php echo number_format($Rp['total_limite_rp'], 0, '.', ''); ?>" data-suoid="<?php echo $subunidade['suoid']; ?>" data-irpcod="<?php echo $Rp['irpcod']; ?>" >
+                                                <input name="limites[]" type="text" class="input_valor salvar-limite-rp-fnc" value="<?php echo number_format($Rp['total_limite_rp'], 0, '.', ''); ?>" data-unoid="<?php echo $UofncComTotais['unoid']; ?>" data-suoid="<?php echo $subUnidadeFncComTotais['suoid']; ?>" data-irpcod="<?php echo $Rp['irpcod']; ?>" >
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -262,8 +268,34 @@ include APPRAIZ . "includes/cabecalho.inc";
 
             $.ajax({
                 url: '?modulo=configuracao/limite-subunidade-rp&acao=A&req=salvar-limite-rp',
-                type: "POST",
+                type: 'POST',
                 data: {
+                    'suoid': suoid,
+                    'irpcod': irpcod,
+                    'srllimite': srllimite
+                },
+                dataType: 'json',
+                success: function(dataResponse){
+                    console.log(dataResponse.suoid);
+                    limiteTotal = calcularLimiteTotalUnidade(parseInt(dataResponse.suoid));
+                    console.log(limiteTotal);
+                    
+                    $("#total_"+ dataResponse.suoid).html(number_format(limiteTotal.toFixed(0), 0, ',', '.'));
+                }
+            });
+        });
+        
+        $('.salvar-limite-rp-fnc').change(function(){
+            var srllimite = $(this).val()? str_replace(['.'], [''], $(this).val()): 0;
+            var unoid = $(this).data('unoid');
+            var suoid = $(this).data('suoid');
+            var irpcod = $(this).data('irpcod');
+
+            $.ajax({
+                url: '?modulo=configuracao/limite-subunidade-rp&acao=A&req=salvar-limite-rp-fnc',
+                type: 'POST',
+                data: {
+                    'unoid': unoid,
                     'suoid': suoid,
                     'irpcod': irpcod,
                     'srllimite': srllimite
