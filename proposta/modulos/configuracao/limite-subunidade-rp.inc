@@ -93,7 +93,7 @@ include APPRAIZ . "includes/cabecalho.inc";
         cursor: help;
     }
 
-    .linha_subunidade {
+    .linha_subunidade, .linha_fnc {
         background-color: rgba(241, 246, 215, 0.3) !important;
         font-weight: bold;
     }
@@ -133,10 +133,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         'suoid' => $subUnidadeFncComTotais['suoid']));
                                 ?>
                                 <tbody>
-                                    <tr class="linha_subunidade" style="background-color: #ffe6e1 !important;">
+                                    <tr class="linha_fnc" style="background-color: #ffe6e1 !important;">
                                         <td style="border-right: 1px black solid;">
-                                            <i class="fa fa-plus detalhar-linha link" data-unoid="<?php echo $UofncComTotais['unoid']; ?>"></i>&nbsp;&nbsp;
-                                            <span class="detalhe-subunidade" data-unoid="<?php echo $dado['unoid']; ?>">
+                                            <i class="fa fa-plus detalhar-linha-fnc link" data-unoid="<?php echo $UofncComTotais['unoid']; ?>"></i>&nbsp;&nbsp;
+                                            <span class="detalhe-fnc" data-unoid="<?php echo $dado['unoid']; ?>">
                                                 <?php echo $UofncComTotais['unosigla'] . ' - ' . $UofncComTotais['unonome'] . ' (' . $UofncComTotais['unocod'] . ')'; ?>
                                             </span>
                                         </td>
@@ -148,7 +148,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         </td>
                                     </tr>
                                     <?php foreach($listaRpTotaisPrePi as $Rp): ?>
-                                        <tr class="tr_<?php echo $subunidade['suoid']; ?> tr_detalhe" style="display: none;">
+                                        <tr class="tr_<?php echo $UofncComTotais['unoid']; ?> tr_detalhe" style="display: none;">
                                             <td style="padding-left: 30px; border-right: 1px black solid;" >
                                                 <span>
                                                     <?php echo '(RP '. $Rp['irpcod']. ') - '. $Rp['irpdsc']; ?>
@@ -226,6 +226,19 @@ include APPRAIZ . "includes/cabecalho.inc";
             } else {
                 $(this).removeClass('fa-plus').addClass('fa-minus');
                 $('.tr_' + suoid).show('slow');
+            }
+        });
+        
+        $('.detalhar-linha-fnc').click(function(){
+
+            var unoid = $(this).data('unoid');
+
+            if($(this).hasClass('fa-minus')){
+                $(this).removeClass('fa-minus').addClass('fa-plus');
+                $('.tr_' + unoid).hide();
+            } else {
+                $(this).removeClass('fa-plus').addClass('fa-minus');
+                $('.tr_' + unoid).show('slow');
             }
         });
 
