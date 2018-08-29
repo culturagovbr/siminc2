@@ -31,12 +31,16 @@ switch($_REQUEST['req']){
         }
     die;
     case 'salvar-limite-rp-fnc':
-        $listaSubunidadeFnc = (new Public_Model_SubUnidadeOrcamentaria)->recuperarTodos('*', ['unoid = ' . (int)$_REQUEST['unoid'], "suostatus = 'A'"]);
+        $unoid = $_REQUEST['unoid'];
+        $suoid = $_REQUEST['suoid'];
+        $irpcod = $_REQUEST['irpcod'];
+        
+        $listaSubunidadeFnc = (new Public_Model_SubUnidadeOrcamentaria)->recuperarTodos('*', ['unoid = ' . (int)$unoid, "suostatus = 'A'"]);
         foreach($listaSubunidadeFnc as $contador => $subUnidade){
             # Exclui(Exclusão lógica) o registro de limite atual
             $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
             $modelSubunidaderplimite->suoid = $subUnidade['suoid'];
-            $modelSubunidaderplimite->irpcod = $_REQUEST['irpcod'];
+            $modelSubunidaderplimite->irpcod = $irpcod;
             $modelSubunidaderplimite->buscarPorSuoidIrpcod();
             if($modelSubunidaderplimite->srlid){
                 $modelSubunidaderplimite->srlstatus = 'I';
@@ -54,9 +58,9 @@ switch($_REQUEST['req']){
             $modelSubunidaderplimite->commit();
             echo json_encode(array(
                 'msg' => utf8_encode('Operação realizada com sucesso!'),
-                'irpcod' => $modelSubunidaderplimite->irpcod,
-                'unoid' => $_REQUEST['unoid'],
-                'suoid' => $modelSubunidaderplimite->suoid
+                'irpcod' => $irpcod,
+                'unoid' => $unoid,
+                'suoid' => $suoid
             ));
         } else {
             echo json_encode(array('msg' => utf8_encode('Erro ao salvar!')));
@@ -149,7 +153,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <td style="border-right: 1px black solid;" class="text-right">
                                             <?php echo number_format($UofncComTotais['total_pre_pi'], 0, ',', '.'); ?>
                                         </td>
-                                        <td id='total_<?php echo $UofncComTotais['suoid']; ?>' style="border-right: 1px black solid;" class="text-right">
+                                        <td id='total_<?php echo $subUnidadeFncComTotais['suoid']; ?>' style="border-right: 1px black solid;" class="text-right">
                                             <?php echo number_format($UofncComTotais['total_limite_rp'], 0, ',', '.'); ?>
                                         </td>
                                     </tr>
@@ -276,10 +280,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                 },
                 dataType: 'json',
                 success: function(dataResponse){
-                    console.log(dataResponse.suoid);
                     limiteTotal = calcularLimiteTotalUnidade(parseInt(dataResponse.suoid));
-                    console.log(limiteTotal);
-                    
                     $("#total_"+ dataResponse.suoid).html(number_format(limiteTotal.toFixed(0), 0, ',', '.'));
                 }
             });
@@ -302,10 +303,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                 },
                 dataType: 'json',
                 success: function(dataResponse){
-                    console.log(dataResponse.suoid);
-                    limiteTotal = calcularLimiteTotalUnidade(parseInt(dataResponse.suoid));
-                    console.log(limiteTotal);
-                    
+                    limiteTotal = calcularLimiteTotalFnc(parseInt(dataResponse.suoid));
                     $("#total_"+ dataResponse.suoid).html(number_format(limiteTotal.toFixed(0), 0, ',', '.'));
                 }
             });
@@ -317,6 +315,19 @@ include APPRAIZ . "includes/cabecalho.inc";
         limiteTotal = parseInt(0);
         
         $(".salvar-limite-rp").each(function(){
+            if($(this).data("suoid") === suoid){
+                var limiteRp = $(this).val()? str_replace('.', '', $(this).val()): 0;
+                limiteTotal += parseInt(limiteRp);
+            }
+        });
+        
+        return limiteTotal;
+    }
+    
+    function calcularLimiteTotalFnc(suoid){
+        limiteTotal = parseInt(0);
+        
+        $(".salvar-limite-rp-fnc").each(function(){
             if($(this).data("suoid") === suoid){
                 var limiteRp = $(this).val()? str_replace('.', '', $(this).val()): 0;
                 limiteTotal += parseInt(limiteRp);
