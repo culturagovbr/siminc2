@@ -67,7 +67,7 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
      *
      * @return mixed
      */
-    public function recuperarAlteracoes($benid)
+    public function recuperarHistorico($benid)
     {
         global $db;
 
@@ -82,6 +82,8 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
                 JOIN seguranca.usuario seg ON ( seg.usucpf = beh.usucpf )
                 WHERE
                     beh.benid = '".$benid ."'
+                ORDER BY
+                    beh.behdata desc
         ";
 
         return $db->carregar($sql);
