@@ -62,4 +62,30 @@ class Emendas_Model_BeneficiarioHistoricoAlteracao extends Modelo
         'bahnovo' => null,
     );
 
+    /**
+     * Retorna todas as alterações que o usuário fez no cadastro de beneficiário.
+     *
+     * @param $benid
+     * @return array|string
+     */
+    public function recuperarAlteracoes($benid)
+    {
+        global $db;
+
+        $sql = "SELECT
+                    alt.behid,
+                    alt.bahcampo,
+                    alt.bahanterior,
+                    alt.bahnovo
+                FROM emendas.beneficiario_historico_alteracao AS alt
+                JOIN emendas.beneficiario_historico AS his ON (alt.behid = his.behid)
+                WHERE
+                    his.benid = '". $benid ."'
+                ORDER BY
+                    alt.behid DESC
+	    ";
+
+        return $db->carregar($sql);
+    }
+
 }
