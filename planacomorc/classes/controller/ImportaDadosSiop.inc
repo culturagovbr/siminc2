@@ -13,7 +13,6 @@ class Planacomorc_Controller_ImportaDadosSiop{
     public $boAlteracaoCompartilhada = false;
     public $boAlteracaoProvisionado = false;
     public $boDivergenciaPlanejada = false;
-    public $corpoEmailV3 = '';
     public $sqls = [];
     public $destinatarios = '';
     
@@ -80,10 +79,10 @@ class Planacomorc_Controller_ImportaDadosSiop{
         
         $listaDivergenciaPlanejada = $mImportaDadosSiop->RetornaDivergenciaPlanejado($this->exercicio);
         $this->GeraTabelaDivergenciaPlanejado($listaDivergenciaPlanejada);
-        if($this->boAlteracao){$this->corpoEmailV3 .= $this->htmlTabela1;}
-        if($this->boAlteracaoCompartilhada){$this->corpoEmailV3 .= $this->htmlTabela2;}
-        if($this->boAlteracaoProvisionado){$this->corpoEmailV3 .= $this->htmlTabela3;}
-        if($this->boDivergenciaPlanejada){$this->corpoEmailV3 .= $this->htmlTabela4;}
+        if($this->boAlteracao){$corpoEmailV3 .= $this->htmlTabela1;}
+        if($this->boAlteracaoCompartilhada){$corpoEmailV3 .= $this->htmlTabela2;}
+        if($this->boAlteracaoProvisionado){$corpoEmailV3 .= $this->htmlTabela3;}
+        if($this->boDivergenciaPlanejada){$corpoEmailV3 .= $this->htmlTabela4;}
 
         $this->destinatarios = $mImportaDadosSiop->RetornaEmailsSuperUsuarios();
         $this->EnviaEmail();
@@ -288,8 +287,8 @@ class Planacomorc_Controller_ImportaDadosSiop{
     
     private function EnviaEmail(){
         $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-        if($this->corpoEmailV3){
-            $this->corpoEmailV3 = "<h2 style='color: red; text-align: center'>Relatório de Alterações e Divergências</h2>" . $this->corpoEmailV3;
+        if($corpoEmailV3){
+            $corpoEmailV3 = "<h2 style='color: red; text-align: center'>Relatório de Alterações e Divergências</h2>" . $corpoEmailV3;
             if(count($this->sqls)){
                 $this->sqls = implode('; ', $this->sqls);
 
