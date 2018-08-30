@@ -118,8 +118,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                     </div>
                     <div class="ibox-content">
                         <?php
-                        echo $simec->input('plititulo', 'Título', $mPrePlanoInterno->plititulo, ['required', 'maxlength' => 250]);
-                        echo $simec->textarea('plidsc', 'Descrição / Finalidade', $mPrePlanoInterno->plidsc, ['required', 'maxlength' => 1000, 'cols'=>60, 'rows'=>6]);
+                            echo $simec->input('plititulo', 'Título', $mPrePlanoInterno->plititulo, ['required', 'maxlength' => 250]);
+                            echo $simec->textarea('plidsc', 'Descrição / Finalidade', $mPrePlanoInterno->plidsc, ['required', 'maxlength' => 1000, 'cols'=>60, 'rows'=>6]);
                         ?>
                     </div>
                 </div>
@@ -212,7 +212,6 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 'SubUnidade',
                                 $mPrePlanoInterno->suoid,
                                 (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array(
-                                    'unofundo' => 'FALSE',
                                     'exercicio' => $_SESSION['exercicio'],
                                     'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)),
                                 ['required']

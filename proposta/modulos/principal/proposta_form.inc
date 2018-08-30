@@ -92,7 +92,6 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <input name="proid" id="proid" type="hidden" value="<?php echo $mProposta->proid; ?>">
                         <?php
                             echo $simec->select('suoid', 'SubUnidade', $mProposta->suoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array(
-                                'unofundo' => 'FALSE',
                                 'exercicio' => $_SESSION['exercicio'],
                                 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), ['required']);
                             echo $simec->select('eqdid', 'Enquadramento da Despesa', $mProposta->eqdid, (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo(), ['required']);
