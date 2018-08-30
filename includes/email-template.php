@@ -278,7 +278,7 @@ $textoEmailV3 = "
                                                                                                                     <div class='left'>";
                                                                                                                     
                                                                                                                     # Insere Corpo do texto de e-mail
-                                                                                                                    $textoEmailV3 .= $this->corpoEmailV3;
+                                                                                                                    $textoEmailV3 .= $corpoEmailV3;
                                                                                                                     
                                                                                                                     $textoEmailV3 .= "
                                                                                                                     </div>
