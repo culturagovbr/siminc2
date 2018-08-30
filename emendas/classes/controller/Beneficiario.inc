@@ -14,6 +14,7 @@ class Emendas_Controller_Beneficiario
             $mBeneficiario->benconveniado = $dados['benconveniado'] == 't' ? 't' : 'f';
             $mBeneficiario->benpago = $dados['benpago'] == 't' ? 't' : 'f';
             $mBeneficiario->bented = $dados['bented'] == 't' ? 't' : 'f';
+            $mBeneficiario->plititulo = substr($dados['plititulo'], 0, 230);
 
             $aCamposNulos = [
                 # Cadastro Inicial
