@@ -30,16 +30,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <form id="filtropi" name="filtropi" method="POST" role="form" class="form-horizontal">
                         <input name="requisicao" id="requisicao" value="" type="hidden">
 
-                        <?php
-                            echo $simec->select(
-                                'suoid',
-                                'SubUnidade',
-                                $filtroprepi['suoid'],
-                                (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array(
-                                    'exercicio' => $_SESSION['exercicio'],
-                                    'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)));
-                            echo $simec->select('eqdid', 'Enquadramento da Despesa', $filtroprepi['eqdid'], (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo());
-                            echo $simec->select('esdid', 'Situação', $filtroprepi['esdid'], Spo_Model_Unidade::queryComboEstados((object) array('tpdid' => 268)), array('multiple' => 'true'));
+                        <?php 
+                        echo $simec->select('suoid','SubUnidade',$filtroprepi['suoid'],(new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('unofundo' => 'FALSE','exercicio' => $_SESSION['exercicio'],'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)));
+                        echo $simec->select('eqdid', 'Enquadramento da Despesa', $filtroprepi['eqdid'], (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo());
+                        echo $simec->select('esdid', 'Situação', $filtroprepi['esdid'], Spo_Model_Unidade::queryComboEstados((object) array('tpdid' => 268)), array('multiple' => 'true'));
                         ?>
 
                         <div class="form-group">
