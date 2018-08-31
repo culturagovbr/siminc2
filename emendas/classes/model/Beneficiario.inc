@@ -499,6 +499,8 @@ class Emendas_Model_Beneficiario extends Modelo
         $beneficiarioHistorico->gravarHistoricoSubUnidade($post, $this);
         $beneficiarioHistorico->gravarHistoricoDelegacao($post, $this);
         $beneficiarioHistorico->gravarHistoricoProponente($post, $this);
+        $beneficiarioHistorico->gravarHistoricoLocalizacao($post, $this);
+//        $beneficiarioHistorico->gravarHistoricoLocalizacao($post, $this);
     }
 
 }

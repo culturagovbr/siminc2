@@ -5541,3 +5541,18 @@ function controlarAcessoSemAutenticacao(){
     }
 }
 
+/**
+ * Retira valores vazios do array. Correção de bug de envio do elemento do formulário pelo componente chosen
+ * 
+ * @param array $lista
+ */
+function retirarValorVazioArray($lista){
+    $listaResultado = array();
+    foreach($lista as $valor){
+        if($valor && $valor !== '0' && $valor !== 0){
+            $listaResultado[] = $valor;
+        }
+    }
+    
+    return $listaResultado;
+}

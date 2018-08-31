@@ -144,6 +144,25 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
     }
     
     /**
+     * Grava historico de alteração da opção Localização
+     * 
+     * @param array $post
+     * @param Emendas_Model_Beneficiario $beneficiario
+     */
+    public function gravarHistoricoLocalizacao(array $post, Emendas_Model_Beneficiario $beneficiario){
+        if($post['esfid'] != $beneficiario->esfid){
+            $localizacaoAnterior = new Territorios_Model_Esfera($beneficiario->esfid);
+            $localizacaoNova = new Territorios_Model_Esfera($post['esfid']);
+
+            $this->gravarHistoricoCampo(
+                'Localização',
+                $localizacaoAnterior->esfdsc,
+                $localizacaoNova->esfdsc
+            );
+        }
+    }
+    
+    /**
      * Grava historico de alteração da opção Delegação(SubUnidade Delegada)
      * 
      * @param array $post
@@ -151,9 +170,7 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
      */
     public function gravarHistoricoDelegacao(array $post, Emendas_Model_Beneficiario $beneficiario){
         $listaSubUnidadesDelegadasBeneficiario = $beneficiario->recuperarDelegacao();
-
-        $listaSubUnidadesDelegadasPost = $post['delegacao']? $post['delegacao']: array();
-        
+        $listaSubUnidadesDelegadasPost = retirarValorVazioArray($post['delegacao']);
         if(
             array_diff($listaSubUnidadesDelegadasPost, $listaSubUnidadesDelegadasBeneficiario)
             ||
