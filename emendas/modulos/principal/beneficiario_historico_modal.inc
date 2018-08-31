@@ -19,17 +19,17 @@ $listaAlteracoes = (new Emendas_Model_BeneficiarioHistoricoAlteracao())->recuper
                 <tbody>
                 <?php foreach($listaHistorico as $lista): ?>
                     <tr class="lista_alteracoes">
-                        <td id="alteracao_<?= $lista['benid']; ?>" style="border-right: 1px black solid; width: 20%; text-align: left" class="text-right">
+                        <td id="alteracao_<?= $lista['benid']; ?>" style="border-right: 1px black solid; width: 20%; text-align: left;" class="text-right">
                             <i class="fa fa-plus detalhar-linha link" data-behid="<?= $lista['behid']; ?>"></i>&nbsp;&nbsp;
                             <?= $lista['behdata']; ?>
                         </td>
-                        <td id="alteracao_<?= $lista['benid']; ?>" style="border-right: 1px black solid; width: 30%; text-align: left" class="text-right">
+                        <td id="alteracao_<?= $lista['benid']; ?>" style="border-right: 1px black solid; width: 30%; text-align: left;" class="text-right">
                             <?= $lista['usunome']; ?>
                         </td>
-                        <td id="alteracao_<?= $lista['benid']; ?>" style="border-right: 1px black solid; width: 30%; text-align: left" class="text-right">
+                        <td id="alteracao_<?= $lista['benid']; ?>" style="border-right: 1px black solid; width: 30%; text-align: left;" class="text-right">
                             <?= $lista['usuemail']; ?>
                         </td>
-                        <td id="alteracao_<?= $lista['benid']; ?>" style="border-right: 1px black solid; width: 20%; text-align: left" class="text-right">
+                        <td id="alteracao_<?= $lista['benid']; ?>" style="border-right: 1px black solid; width: 20%; text-align: left;" class="text-right">
                             <?= $lista['telefone']; ?>
                         </td>
                     </tr>
@@ -38,22 +38,22 @@ $listaAlteracoes = (new Emendas_Model_BeneficiarioHistoricoAlteracao())->recuper
                             <table class="table table-bordered table-hover" >
                                 <thead>
                                     <tr class="text-center">
-                                        <th width="5px" style="border-right: 1px black solid;">Campo</th>
-                                        <th width="50px" style="border-right: 1px black solid;">Valor Anterior</th>
-                                        <th width="50px" style="border-right: 1px black solid;">Valor Novo</th>
+                                        <th style="border-right: 1px black solid;">Informação alterada</th>
+                                        <th style="border-right: 1px black solid;">de</th>
+                                        <th style="border-right: 1px black solid;">para</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                             <?php foreach($listaAlteracoes as $alteracoes) :
                                 if( $alteracoes['behid'] == $lista['behid']) : ?>
                                 <tr>
-                                    <td style="padding-left: 30px; border-right: 1px black solid;" >
+                                    <td style="border-right: 1px black solid; text-align: center;" >
                                         <?= $alteracoes['bahcampo']; ?>
                                     </td>
-                                    <td style="border-right: 1px black solid;" class="text-right">
+                                    <td style="border-right: 1px black solid; text-align: left;" class="text-right">
                                         <?= $alteracoes['bahanterior']; ?>
                                     </td>
-                                    <td class="text-right" style="border-right: 1px black solid;">
+                                    <td class="text-right" style="border-right: 1px black solid; text-align: left;">
                                         <?= $alteracoes['bahnovo']; ?>
                                     </td>
                                 </tr>

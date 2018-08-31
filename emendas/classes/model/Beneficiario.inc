@@ -275,6 +275,20 @@ class Emendas_Model_Beneficiario extends Modelo
         return $resultado ? $resultado : array();
     }
 
+    /**
+     * Remove valores vazios da lista. Obs: Correção de bug do compontente chosen.
+     * 
+     * @param type $lista
+     * @return array
+     */
+    public function limparLista($lista){
+        $listaLimpa = array();
+        foreach($lista as $valor){
+            
+        }
+        return $listaLimpa;
+    }
+    
     public function associarDelegacao($dados)
     {
         if($benid = $this->benid){
@@ -287,7 +301,7 @@ class Emendas_Model_Beneficiario extends Modelo
                     $mDelegacao->benid = $benid;
 
                     foreach($dados['delegacao'] as $suoid){
-                        if ($suoid!=''){
+                        if ($suoid != ''){
                             $mDelegacao->suoid = $suoid;
                             $mDelegacao->salvar();
 
@@ -471,6 +485,20 @@ class Emendas_Model_Beneficiario extends Modelo
         return $dadosSiconv;
     }
 
+    /**
+     * Grava informações do usuário que está alterando o beneficiário.
+     * 
+     * @param array $post
+     */
+    public function gravarHistorico(array $post) {
+        $beneficiarioHistorico = new Emendas_Model_BeneficiarioHistorico();
+        $beneficiarioHistorico->benid = $this->benid;
+        $beneficiarioHistorico->usucpf = $_SESSION['usucpf'];
+        $beneficiarioHistorico->behdata = 'NOW()';
+        $beneficiarioHistorico->salvar();
+        $beneficiarioHistorico->gravarHistoricoSubUnidade($post, $this);
+        $beneficiarioHistorico->gravarHistoricoDelegacao($post, $this);
+        $beneficiarioHistorico->gravarHistoricoProponente($post, $this);
+    }
 
-}//end Class
-?>
+}

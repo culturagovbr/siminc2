@@ -88,5 +88,104 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
 
         return $db->carregar($sql);
     }
+    
+    /**
+     * Grava histórico de alteração de um campo especifico do formulário.
+     * 
+     * @param string $campo
+     * @param string $valorAnterior
+     * @param string $valorNovo
+     */
+    public function gravarHistoricoCampo($campo, $valorAnterior, $valorNovo){
+        $beneficiarioHistoricoAlteracao = new Emendas_Model_BeneficiarioHistoricoAlteracao();
+        $beneficiarioHistoricoAlteracao->behid = $this->behid;
+        $beneficiarioHistoricoAlteracao->bahcampo = $campo;
+        $beneficiarioHistoricoAlteracao->bahanterior = $valorAnterior? $valorAnterior: 'Nenhuma';
+        $beneficiarioHistoricoAlteracao->bahnovo = $valorNovo? $valorNovo: 'Nenhuma';
+        $beneficiarioHistoricoAlteracao->salvar();
+    }
+    
+    /**
+     * Grava historico de alteração da opção SubUnidade
+     * 
+     * @param array $post
+     * @param Emendas_Model_Beneficiario $beneficiario
+     */
+    public function gravarHistoricoSubUnidade(array $post, Emendas_Model_Beneficiario $beneficiario){
+        if($post['suoid'] != $beneficiario->suoid){
+            $subunidadeAnterior = new Public_Model_SubUnidadeOrcamentaria($beneficiario->suoid);
+            $subunidadeNova = new Public_Model_SubUnidadeOrcamentaria($post['suoid']);
+            
+            $this->gravarHistoricoCampo(
+                'SubUnidade',
+                $subunidadeAnterior->suocod. '-'. $subunidadeAnterior->suonome,
+                $subunidadeNova->suocod. '-'. $subunidadeNova->suonome
+            );
+        }
+    }
+    
+    /**
+     * Grava historico de alteração da opção Proponente
+     * 
+     * @param array $post
+     * @param Emendas_Model_Beneficiario $beneficiario
+     */
+    public function gravarHistoricoProponente(array $post, Emendas_Model_Beneficiario $beneficiario){
+        if($post['proid'] != $beneficiario->proid){
+            $proponenteAnterior = new Emendas_Model_Proponente($beneficiario->proid);
+            $proponenteNova = new Emendas_Model_Proponente($post['proid']);
+            
+            $this->gravarHistoricoCampo(
+                'Proponente',
+                formatar_cnpj($proponenteAnterior->procnpj). '-'. $proponenteAnterior->pronome,
+                formatar_cnpj($proponenteNova->procnpj). '-'. $proponenteNova->pronome
+            );
+        }
+    }
+    
+    /**
+     * Grava historico de alteração da opção Delegação(SubUnidade Delegada)
+     * 
+     * @param array $post
+     * @param Emendas_Model_Beneficiario $beneficiario
+     */
+    public function gravarHistoricoDelegacao(array $post, Emendas_Model_Beneficiario $beneficiario){
+        $listaSubUnidadesDelegadasBeneficiario = $beneficiario->recuperarDelegacao();
 
+        $listaSubUnidadesDelegadasPost = $post['delegacao']? $post['delegacao']: array();
+        
+        if(
+            array_diff($listaSubUnidadesDelegadasPost, $listaSubUnidadesDelegadasBeneficiario)
+            ||
+            array_diff($listaSubUnidadesDelegadasBeneficiario, $listaSubUnidadesDelegadasPost)
+        ){
+            $listaSubunidadesAnteriores = self::formatarListaSubunidade($listaSubUnidadesDelegadasBeneficiario);
+            $listaSubunidadesNovas = self::formatarListaSubunidade($listaSubUnidadesDelegadasPost);
+            $this->gravarHistoricoCampo(
+                'Delegação(Subunidade Delegada)',
+                join($listaSubunidadesAnteriores, '<br />'),
+                join($listaSubunidadesNovas, '<br />')
+            );
+        }
+    }
+    
+    /**
+     * Formata a lista de códigos de Subunidade pra retornar uma lista com a 
+     * descrição contendo Número SIOP e nome da Subunidade pra ser exibido ao usuário.
+     * 
+     * @param array $listaCodigoSubunidade
+     * @return array
+     */
+    public static function formatarListaSubunidade($listaCodigoSubunidade = array()){
+        $listaSubunidade = array();
+        foreach($listaCodigoSubunidade as $codigo){
+            $subunidade = new Public_Model_SubUnidadeOrcamentaria($codigo);
+            if($subunidade->suoid){
+                $listaSubunidade[] = $subunidade->suocod. '-'. $subunidade->suonome;
+            }
+        }
+        
+        return $listaSubunidade;
+    }
+    
 }

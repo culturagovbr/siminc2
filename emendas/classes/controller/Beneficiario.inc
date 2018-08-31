@@ -2,12 +2,18 @@
 
 class Emendas_Controller_Beneficiario
 {
-    public function salvar($dados_post)
+    public function salvar($dados)
     {
         $url = '?modulo=principal/beneficiario_form&acao=A';
 
         try {
             $mBeneficiario = new Emendas_Model_Beneficiario($dados['benid']);
+            
+            # Verifica se é alteração(update) pra gerar histórico de alterações
+            if($mBeneficiario->benid){
+                $mBeneficiario->gravarHistorico($dados);
+            }
+            
             $mBeneficiario->popularDadosObjeto($dados);
 
             $mBeneficiario->benempenhado = $dados['benempenhado'] == 't' ? 't' : 'f';
@@ -24,24 +30,24 @@ class Emendas_Controller_Beneficiario
             ];
             $mBeneficiario->salvar(null, null, $aCamposNulos);
 
-            if($dados_post['req'] == 'salvar-complemento'){
-                $mBeneficiario->associarSniic($dados_post);
-                $mBeneficiario->associarPronac($dados_post);
-                $mBeneficiario->associarAnexo($dados_post);
+            if($dados['req'] == 'salvar-complemento'){
+                $mBeneficiario->associarSniic($dados);
+                $mBeneficiario->associarPronac($dados);
+                $mBeneficiario->associarAnexo($dados);
             } else {
-                $mBeneficiario->associarDelegacao($dados_post);
-                $mBeneficiario->associarAlteracao($dados_post);
+                $mBeneficiario->associarDelegacao($dados);
+                $mBeneficiario->associarAlteracao($dados);
 
                 // Salvando dados da Localização
-                $dados_post['benid'] = $mBeneficiario->benid;
-                (new Emendas_Controller_BeneficiarioLocalizacao())->salvar($dados_post);
+                $dados['benid'] = $mBeneficiario->benid;
+                (new Emendas_Controller_BeneficiarioLocalizacao())->salvar($dados);
             }
 
             $mBeneficiario->commit();
-            simec_redirecionar($url. '&benid='. $mBeneficiario->benid. ($dados_post['req'] == 'salvar-complemento'? '&aba=1': NULL), 'success');
+            simec_redirecionar($url. '&benid='. $mBeneficiario->benid. ($dados['req'] == 'salvar-complemento'? '&aba=1': NULL), 'success');
         } catch (Exception $e){
             $mBeneficiario->rollback();
-            simec_redirecionar($url. ($dados_post['req'] == 'salvar-complemento'? '&aba=1': NULL), 'error');
+            simec_redirecionar($url. ($dados['req'] == 'salvar-complemento'? '&aba=1': NULL), 'error');
         }
     }
 
