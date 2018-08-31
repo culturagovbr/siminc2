@@ -1,6 +1,7 @@
 <?php
 
 $modelSubunidade = new Public_Model_SubUnidadeOrcamentaria();
+$modelUo = new Public_Model_UnidadeOrcamentaria();
 
 switch($_REQUEST['req']){
     case 'salvar-limite-rp':
@@ -29,6 +30,42 @@ switch($_REQUEST['req']){
             echo json_encode(array('msg' => utf8_encode('Erro ao salvar!')));
         }
     die;
+    case 'salvar-limite-rp-fnc':
+        $unoid = $_REQUEST['unoid'];
+        $suoid = $_REQUEST['suoid'];
+        $irpcod = $_REQUEST['irpcod'];
+        
+        $listaSubunidadeFnc = (new Public_Model_SubUnidadeOrcamentaria)->recuperarTodos('*', ['unoid = ' . (int)$unoid, "suostatus = 'A'"]);
+        foreach($listaSubunidadeFnc as $contador => $subUnidade){
+            # Exclui(Exclusão lógica) o registro de limite atual
+            $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
+            $modelSubunidaderplimite->suoid = $subUnidade['suoid'];
+            $modelSubunidaderplimite->irpcod = $irpcod;
+            $modelSubunidaderplimite->buscarPorSuoidIrpcod();
+            if($modelSubunidaderplimite->srlid){
+                $modelSubunidaderplimite->srlstatus = 'I';
+                $modelSubunidaderplimite->salvar();
+            }
+
+            # Salva o novo limite pra unidade
+            $modelSubunidaderplimite = new Proposta_Model_Subunidaderplimite();
+            $modelSubunidaderplimite->popularDadosObjeto($_REQUEST);
+            $modelSubunidaderplimite->suoid = $subUnidade['suoid'];
+            $resultado = $modelSubunidaderplimite->salvar();
+        }
+
+        if($resultado){
+            $modelSubunidaderplimite->commit();
+            echo json_encode(array(
+                'msg' => utf8_encode('Operação realizada com sucesso!'),
+                'irpcod' => $irpcod,
+                'unoid' => $unoid,
+                'suoid' => $suoid
+            ));
+        } else {
+            echo json_encode(array('msg' => utf8_encode('Erro ao salvar!')));
+        }
+    die;
 }
 
 $filtros = array(
@@ -38,9 +75,22 @@ $filtros = array(
 
 $listaSubunidadeTotais = $modelSubunidade->buscarPropostaTotaisLimites((object)array(
     'exercicio' => $_SESSION['exercicio'],
-    'fundo' => false
+    'fundo' => FALSE
 ));
 
+$listaUoFnc = $modelUo->buscarPropostaTotaisLimitesFnc((object)array(
+    'exercicio' => $_SESSION['exercicio'],
+    'fundo' => FALSE,
+    'unocod' => UNOCOD_FNC
+));
+$UofncComTotais = current($listaUoFnc);
+
+$listaSubunidadeFncTotais = $modelSubunidade->buscarPropostaTotaisLimites((object)array(
+    'exercicio' => $_SESSION['exercicio'],
+    'fundo' => TRUE
+));
+$subUnidadeFncComTotais = current($listaSubunidadeFncTotais);
+//ver($subUnidadeFncComTotais, d);
 /**
  * Cabeçalho padrão do sistema.
  * @see cabecalho.inc
@@ -53,7 +103,7 @@ include APPRAIZ . "includes/cabecalho.inc";
         cursor: help;
     }
 
-    .linha_subunidade {
+    .linha_subunidade, .linha_fnc {
         background-color: rgba(241, 246, 215, 0.3) !important;
         font-weight: bold;
     }
@@ -87,7 +137,41 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tr>
                             </thead>
                             <?php if($listaSubunidadeTotais): ?>
+                                <?php
+                                    $listaRpTotaisPrePi = $modelSubunidade->buscarPropostaRpTotaisLimitesFnc((object)array(
+                                        'exercicio' => $_SESSION['exercicio'],
+                                        'suoid' => $subUnidadeFncComTotais['suoid']));
+                                ?>
                                 <tbody>
+                                    <tr class="linha_fnc" style="background-color: #ffe6e1 !important;">
+                                        <td style="border-right: 1px black solid;">
+                                            <i class="fa fa-plus detalhar-linha-fnc link" data-unoid="<?php echo $UofncComTotais['unoid']; ?>"></i>&nbsp;&nbsp;
+                                            <span class="detalhe-fnc" data-unoid="<?php echo $UofncComTotais['unoid']; ?>">
+                                                <?php echo $UofncComTotais['unosigla'] . ' - ' . $UofncComTotais['unonome'] . ' (' . $UofncComTotais['unocod'] . ')'; ?>
+                                            </span>
+                                        </td>
+                                        <td style="border-right: 1px black solid;" class="text-right">
+                                            <?php echo number_format($UofncComTotais['total_pre_pi'], 0, ',', '.'); ?>
+                                        </td>
+                                        <td id='total_<?php echo $subUnidadeFncComTotais['suoid']; ?>' style="border-right: 1px black solid;" class="text-right">
+                                            <?php echo number_format($UofncComTotais['total_limite_rp'], 0, ',', '.'); ?>
+                                        </td>
+                                    </tr>
+                                    <?php foreach($listaRpTotaisPrePi as $Rp): ?>
+                                        <tr class="tr_<?php echo $UofncComTotais['unoid']; ?> tr_detalhe" style="display: none;">
+                                            <td style="padding-left: 30px; border-right: 1px black solid;" >
+                                                <span>
+                                                    <?php echo '(RP '. $Rp['irpcod']. ') - '. $Rp['irpdsc']; ?>
+                                                </span>
+                                            </td>
+                                            <td style="border-right: 1px black solid;" class="text-right">
+                                                <?php echo number_format($Rp['total_pre_pi'], 0, ',', '.'); ?>
+                                            </td>
+                                            <td class="text-right" style="border-right: 1px black solid;">
+                                                <input name="limites[]" type="text" class="input_valor salvar-limite-rp-fnc" value="<?php echo number_format($Rp['total_limite_rp'], 0, '.', ''); ?>" data-unoid="<?php echo $UofncComTotais['unoid']; ?>" data-suoid="<?php echo $subUnidadeFncComTotais['suoid']; ?>" data-irpcod="<?php echo $Rp['irpcod']; ?>" >
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
                                     <?php foreach($listaSubunidadeTotais as $subunidade): ?>
                                         <?php
                                             $listaRpTotaisPrePi = $modelSubunidade->buscarPropostaRpTotaisLimites((object)array(
@@ -154,6 +238,19 @@ include APPRAIZ . "includes/cabecalho.inc";
                 $('.tr_' + suoid).show('slow');
             }
         });
+        
+        $('.detalhar-linha-fnc').click(function(){
+
+            var unoid = $(this).data('unoid');
+
+            if($(this).hasClass('fa-minus')){
+                $(this).removeClass('fa-minus').addClass('fa-plus');
+                $('.tr_' + unoid).hide();
+            } else {
+                $(this).removeClass('fa-plus').addClass('fa-minus');
+                $('.tr_' + unoid).show('slow');
+            }
+        });
 
         $('.detalhar-todos').click(function(){
 
@@ -175,7 +272,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
             $.ajax({
                 url: '?modulo=configuracao/limite-subunidade-rp&acao=A&req=salvar-limite-rp',
-                type: "POST",
+                type: 'POST',
                 data: {
                     'suoid': suoid,
                     'irpcod': irpcod,
@@ -183,10 +280,30 @@ include APPRAIZ . "includes/cabecalho.inc";
                 },
                 dataType: 'json',
                 success: function(dataResponse){
-                    console.log(dataResponse.suoid);
                     limiteTotal = calcularLimiteTotalUnidade(parseInt(dataResponse.suoid));
-                    console.log(limiteTotal);
-                    
+                    $("#total_"+ dataResponse.suoid).html(number_format(limiteTotal.toFixed(0), 0, ',', '.'));
+                }
+            });
+        });
+        
+        $('.salvar-limite-rp-fnc').change(function(){
+            var srllimite = $(this).val()? str_replace(['.'], [''], $(this).val()): 0;
+            var unoid = $(this).data('unoid');
+            var suoid = $(this).data('suoid');
+            var irpcod = $(this).data('irpcod');
+
+            $.ajax({
+                url: '?modulo=configuracao/limite-subunidade-rp&acao=A&req=salvar-limite-rp-fnc',
+                type: 'POST',
+                data: {
+                    'unoid': unoid,
+                    'suoid': suoid,
+                    'irpcod': irpcod,
+                    'srllimite': srllimite
+                },
+                dataType: 'json',
+                success: function(dataResponse){
+                    limiteTotal = calcularLimiteTotalFnc(parseInt(dataResponse.suoid));
                     $("#total_"+ dataResponse.suoid).html(number_format(limiteTotal.toFixed(0), 0, ',', '.'));
                 }
             });
@@ -198,6 +315,19 @@ include APPRAIZ . "includes/cabecalho.inc";
         limiteTotal = parseInt(0);
         
         $(".salvar-limite-rp").each(function(){
+            if($(this).data("suoid") === suoid){
+                var limiteRp = $(this).val()? str_replace('.', '', $(this).val()): 0;
+                limiteTotal += parseInt(limiteRp);
+            }
+        });
+        
+        return limiteTotal;
+    }
+    
+    function calcularLimiteTotalFnc(suoid){
+        limiteTotal = parseInt(0);
+        
+        $(".salvar-limite-rp-fnc").each(function(){
             if($(this).data("suoid") === suoid){
                 var limiteRp = $(this).val()? str_replace('.', '', $(this).val()): 0;
                 limiteTotal += parseInt(limiteRp);
