@@ -7,133 +7,14 @@ class Emendas_Controller_Beneficiario
         $url = '?modulo=principal/beneficiario_form&acao=A';
 
         try {
-            $mBeneficiario = new Emendas_Model_Beneficiario($dados_post['benid']);
+            $mBeneficiario = new Emendas_Model_Beneficiario($dados['benid']);
+            $mBeneficiario->popularDadosObjeto($dados);
 
-            # Verifica se está sendo feita alteração.
-            if ($dados_post['benid']):
-                $mBeneficiarioHistorico = new Emendas_Model_BeneficiarioHistorico();
-
-                $mBeneficiarioHistorico->benid = $mBeneficiario->benid;
-                $mBeneficiarioHistorico->usucpf = $_SESSION['usucpf'];
-                $mBeneficiarioHistorico->behdata = 'NOW()';
-                $behid = $mBeneficiarioHistorico->salvar();
-
-                $banco = $mBeneficiario->buscarBeneficiario($dados_post['benid']);
-                $mBeneficiarioHistoricoAlteracao = new Emendas_Model_BeneficiarioHistoricoAlteracao();
-
-                if ($banco['suoid'] != $dados_post['suoid']):
-
-//                    $suoid[] = array();
-//                    $suoid['behid'] = $behid;
-//                    $suoid['bahcampo'] = 'SubUnidade';
-//                    $suoid['bahanterior'] = $banco['suoid'];
-//                    $suoid['bahnovo'] = $dados_post['suoid'];
-//                    $mBeneficiarioHistorico->popularDadosObjeto($suoid);
-                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
-                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'SubUnidade';
-                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['suoid'];
-                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['suoid'];
-                    $mBeneficiarioHistoricoAlteracao->salvar();
-                endif;
-                if ($banco['delegacao'] != $dados_post['delegacao'] && $banco['delegacao'] != NULL):
-
-//                    $delegacao[] = array();
-//                    $delegacao['behid'] = $behid;
-//                    $delegacao['bahcampo'] = 'Delegacao';
-//                    $delegacao['bahanterior'] = $banco['delegacao'];
-//                    $delegacao['bahnovo'] = $dados_post['delegacao'];
-//                    $mBeneficiarioHistorico->popularDadosObjeto($delegacao);
-                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
-                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Delegacao';
-                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['delegacao'];
-                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['delegacao'];
-                    $mBeneficiarioHistoricoAlteracao->salvar();
-
-                endif;
-                if ($banco['proid'] != $dados_post['proid']):
-
-//                    $proid[] = array();
-//                    $proid['behid'] = $behid;
-//                    $proid['bahcampo'] = 'Proponente';
-//                    $proid['bahanterior'] = $banco['proid'];
-//                    $proid['bahnovo'] = $dados_post['proid'];
-//                    $mBeneficiarioHistorico->popularDadosObjeto($proid);
-                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
-                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Proponente';
-                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['proid'];
-                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['proid'];
-                    $mBeneficiarioHistoricoAlteracao->salvar();
-                endif;
-                if ($banco['esfid'] != $dados_post['esfid']):
-
-//                    $esfid[] = array();
-//                    $esfid['behid'] = $behid;
-//                    $esfid['bahcampo'] = 'Localização';
-//                    $esfid['bahanterior'] = $banco['esfid'];
-//                    $esfid['bahnovo'] = $dados_post['esfid'];
-//                    $mBeneficiarioHistorico->popularDadosObjeto($esfid);
-                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
-                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Localização';
-                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['esfid'];
-                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['esfid'];
-                    $mBeneficiarioHistoricoAlteracao->salvar();
-
-                endif;
-                if ($banco['bennumeroprocesso'] != $dados_post['bennumeroprocesso']):
-
-//                    $bennumeroprocesso[] = array();
-//                    $bennumeroprocesso['behid'] = $behid;
-//                    $bennumeroprocesso['bahcampo'] = 'Nº do Processo';
-//                    $bennumeroprocesso['bahanterior'] = $banco['bennumeroprocesso'];
-//                    $bennumeroprocesso['bahnovo'] = $dados_post['bennumeroprocesso'];
-//                    $mBeneficiarioHistorico->popularDadosObjeto($bennumeroprocesso);
-                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
-                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Nº do Processo';
-                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['bennumeroprocesso'];
-                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['bennumeroprocesso'];
-                    $mBeneficiarioHistoricoAlteracao->salvar();
-
-                endif;
-                $banco['beninicio'] = formata_data($banco['beninicio'], '%d/%m/%Y');
-
-                if ($banco['beninicio'] != $dados_post['beninicio']):
-
-//                    $beninicio[] = array();
-//                    $beninicio['behid'] = $behid;
-//                    $beninicio['bahcampo'] = 'Data de Início';
-//                    $beninicio['bahanterior'] = $banco['beninicio'];
-//                    $beninicio['bahnovo'] = $dados_post['beninicio'];
-//                    $mBeneficiarioHistorico->popularDadosObjeto($beninicio);
-                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
-                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Data de Início';
-                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['beninicio'];
-                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['beninicio'];
-                    $mBeneficiarioHistoricoAlteracao->salvar();
-
-                endif;
-                if ($banco['capid'] != $dados_post['capid']):
-
-//                    $capid[] = array();
-//                    $capid['behid'] = $behid;
-//                    $capid['bahcampo'] = 'Modalidade de Pactuação';
-//                    $capid['bahanterior'] = $banco['capid'];
-//                    $capid['bahnovo'] = $dados_post['capid'];
-//                    $mBeneficiarioHistorico->popularDadosObjeto($capid);
-                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
-                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Modalidade de Pactuação';
-                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['capid'];
-                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['capid'];
-                    $mBeneficiarioHistoricoAlteracao->salvar();
-                endif;
-            endif;
-
-            $mBeneficiarioHistoricoAlteracao->commit();
-            $mBeneficiario->popularDadosObjeto($dados_post);
-
-            $mBeneficiario->benempenhado = $dados_post['benempenhado'] == 't' ? 't' : 'f';
-            $mBeneficiario->benconveniado = $dados_post['benconveniado'] == 't' ? 't' : 'f';
-            $mBeneficiario->benpago = $dados_post['benpago'] == 't' ? 't' : 'f';
-            $mBeneficiario->bented = $dados_post['bented'] == 't' ? 't' : 'f';
+            $mBeneficiario->benempenhado = $dados['benempenhado'] == 't' ? 't' : 'f';
+            $mBeneficiario->benconveniado = $dados['benconveniado'] == 't' ? 't' : 'f';
+            $mBeneficiario->benpago = $dados['benpago'] == 't' ? 't' : 'f';
+            $mBeneficiario->bented = $dados['bented'] == 't' ? 't' : 'f';
+            $mBeneficiario->plititulo = substr($dados['plititulo'], 0, 230);
 
             $aCamposNulos = [
                 # Cadastro Inicial
