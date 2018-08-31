@@ -2,18 +2,138 @@
 
 class Emendas_Controller_Beneficiario
 {
-    public function salvar($dados)
+    public function salvar($dados_post)
     {
         $url = '?modulo=principal/beneficiario_form&acao=A';
 
         try {
-            $mBeneficiario = new Emendas_Model_Beneficiario($dados['benid']);
-            $mBeneficiario->popularDadosObjeto($dados);
+            $mBeneficiario = new Emendas_Model_Beneficiario($dados_post['benid']);
 
-            $mBeneficiario->benempenhado = $dados['benempenhado'] == 't' ? 't' : 'f';
-            $mBeneficiario->benconveniado = $dados['benconveniado'] == 't' ? 't' : 'f';
-            $mBeneficiario->benpago = $dados['benpago'] == 't' ? 't' : 'f';
-            $mBeneficiario->bented = $dados['bented'] == 't' ? 't' : 'f';
+            # Verifica se está sendo feita alteração.
+            if ($dados_post['benid']):
+                $mBeneficiarioHistorico = new Emendas_Model_BeneficiarioHistorico();
+
+                $mBeneficiarioHistorico->benid = $mBeneficiario->benid;
+                $mBeneficiarioHistorico->usucpf = $_SESSION['usucpf'];
+                $mBeneficiarioHistorico->behdata = 'NOW()';
+                $behid = $mBeneficiarioHistorico->salvar();
+
+                $banco = $mBeneficiario->buscarBeneficiario($dados_post['benid']);
+                $mBeneficiarioHistoricoAlteracao = new Emendas_Model_BeneficiarioHistoricoAlteracao();
+
+                if ($banco['suoid'] != $dados_post['suoid']):
+
+//                    $suoid[] = array();
+//                    $suoid['behid'] = $behid;
+//                    $suoid['bahcampo'] = 'SubUnidade';
+//                    $suoid['bahanterior'] = $banco['suoid'];
+//                    $suoid['bahnovo'] = $dados_post['suoid'];
+//                    $mBeneficiarioHistorico->popularDadosObjeto($suoid);
+                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
+                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'SubUnidade';
+                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['suoid'];
+                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['suoid'];
+                    $mBeneficiarioHistoricoAlteracao->salvar();
+                endif;
+                if ($banco['delegacao'] != $dados_post['delegacao'] && $banco['delegacao'] != NULL):
+
+//                    $delegacao[] = array();
+//                    $delegacao['behid'] = $behid;
+//                    $delegacao['bahcampo'] = 'Delegacao';
+//                    $delegacao['bahanterior'] = $banco['delegacao'];
+//                    $delegacao['bahnovo'] = $dados_post['delegacao'];
+//                    $mBeneficiarioHistorico->popularDadosObjeto($delegacao);
+                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
+                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Delegacao';
+                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['delegacao'];
+                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['delegacao'];
+                    $mBeneficiarioHistoricoAlteracao->salvar();
+
+                endif;
+                if ($banco['proid'] != $dados_post['proid']):
+
+//                    $proid[] = array();
+//                    $proid['behid'] = $behid;
+//                    $proid['bahcampo'] = 'Proponente';
+//                    $proid['bahanterior'] = $banco['proid'];
+//                    $proid['bahnovo'] = $dados_post['proid'];
+//                    $mBeneficiarioHistorico->popularDadosObjeto($proid);
+                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
+                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Proponente';
+                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['proid'];
+                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['proid'];
+                    $mBeneficiarioHistoricoAlteracao->salvar();
+                endif;
+                if ($banco['esfid'] != $dados_post['esfid']):
+
+//                    $esfid[] = array();
+//                    $esfid['behid'] = $behid;
+//                    $esfid['bahcampo'] = 'Localização';
+//                    $esfid['bahanterior'] = $banco['esfid'];
+//                    $esfid['bahnovo'] = $dados_post['esfid'];
+//                    $mBeneficiarioHistorico->popularDadosObjeto($esfid);
+                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
+                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Localização';
+                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['esfid'];
+                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['esfid'];
+                    $mBeneficiarioHistoricoAlteracao->salvar();
+
+                endif;
+                if ($banco['bennumeroprocesso'] != $dados_post['bennumeroprocesso']):
+
+//                    $bennumeroprocesso[] = array();
+//                    $bennumeroprocesso['behid'] = $behid;
+//                    $bennumeroprocesso['bahcampo'] = 'Nº do Processo';
+//                    $bennumeroprocesso['bahanterior'] = $banco['bennumeroprocesso'];
+//                    $bennumeroprocesso['bahnovo'] = $dados_post['bennumeroprocesso'];
+//                    $mBeneficiarioHistorico->popularDadosObjeto($bennumeroprocesso);
+                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
+                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Nº do Processo';
+                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['bennumeroprocesso'];
+                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['bennumeroprocesso'];
+                    $mBeneficiarioHistoricoAlteracao->salvar();
+
+                endif;
+                $banco['beninicio'] = formata_data($banco['beninicio'], '%d/%m/%Y');
+
+                if ($banco['beninicio'] != $dados_post['beninicio']):
+
+//                    $beninicio[] = array();
+//                    $beninicio['behid'] = $behid;
+//                    $beninicio['bahcampo'] = 'Data de Início';
+//                    $beninicio['bahanterior'] = $banco['beninicio'];
+//                    $beninicio['bahnovo'] = $dados_post['beninicio'];
+//                    $mBeneficiarioHistorico->popularDadosObjeto($beninicio);
+                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
+                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Data de Início';
+                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['beninicio'];
+                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['beninicio'];
+                    $mBeneficiarioHistoricoAlteracao->salvar();
+
+                endif;
+                if ($banco['capid'] != $dados_post['capid']):
+
+//                    $capid[] = array();
+//                    $capid['behid'] = $behid;
+//                    $capid['bahcampo'] = 'Modalidade de Pactuação';
+//                    $capid['bahanterior'] = $banco['capid'];
+//                    $capid['bahnovo'] = $dados_post['capid'];
+//                    $mBeneficiarioHistorico->popularDadosObjeto($capid);
+                    $mBeneficiarioHistoricoAlteracao->behid = $behid;
+                    $mBeneficiarioHistoricoAlteracao->bahcampo = 'Modalidade de Pactuação';
+                    $mBeneficiarioHistoricoAlteracao->bahanterior = $banco['capid'];
+                    $mBeneficiarioHistoricoAlteracao->bahnovo = $dados_post['capid'];
+                    $mBeneficiarioHistoricoAlteracao->salvar();
+                endif;
+            endif;
+
+            $mBeneficiarioHistoricoAlteracao->commit();
+            $mBeneficiario->popularDadosObjeto($dados_post);
+
+            $mBeneficiario->benempenhado = $dados_post['benempenhado'] == 't' ? 't' : 'f';
+            $mBeneficiario->benconveniado = $dados_post['benconveniado'] == 't' ? 't' : 'f';
+            $mBeneficiario->benpago = $dados_post['benpago'] == 't' ? 't' : 'f';
+            $mBeneficiario->bented = $dados_post['bented'] == 't' ? 't' : 'f';
 
             $aCamposNulos = [
                 # Cadastro Inicial
@@ -23,26 +143,26 @@ class Emendas_Controller_Beneficiario
             ];
             $mBeneficiario->salvar(null, null, $aCamposNulos);
 
-            if($dados['req'] == 'salvar-complemento'){
-                $mBeneficiario->associarSniic($dados);
-                $mBeneficiario->associarPronac($dados);
-                $mBeneficiario->associarAnexo($dados);
+            if($dados_post['req'] == 'salvar-complemento'){
+                $mBeneficiario->associarSniic($dados_post);
+                $mBeneficiario->associarPronac($dados_post);
+                $mBeneficiario->associarAnexo($dados_post);
             } else {
-                $mBeneficiario->associarDelegacao($dados);
-                $mBeneficiario->associarAlteracao($dados);
+                $mBeneficiario->associarDelegacao($dados_post);
+                $mBeneficiario->associarAlteracao($dados_post);
 
                 // Salvando dados da Localização
-                $dados['benid'] = $mBeneficiario->benid;
-                (new Emendas_Controller_BeneficiarioLocalizacao())->salvar($dados);
+                $dados_post['benid'] = $mBeneficiario->benid;
+                (new Emendas_Controller_BeneficiarioLocalizacao())->salvar($dados_post);
             }
 
             $mBeneficiario->commit();
-            simec_redirecionar($url. '&benid='. $mBeneficiario->benid. ($dados['req'] == 'salvar-complemento'? '&aba=1': NULL), 'success');
+            simec_redirecionar($url. '&benid='. $mBeneficiario->benid. ($dados_post['req'] == 'salvar-complemento'? '&aba=1': NULL), 'success');
         } catch (Exception $e){
             $mBeneficiario->rollback();
-            simec_redirecionar($url. ($dados['req'] == 'salvar-complemento'? '&aba=1': NULL), 'error');
+            simec_redirecionar($url. ($dados_post['req'] == 'salvar-complemento'? '&aba=1': NULL), 'error');
         }
-    } //end salvar()
+    }
 
     public function excluir($benid)
     {
@@ -61,7 +181,7 @@ class Emendas_Controller_Beneficiario
             $mBeneficiario->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 
     public function montarFormularioObservacao($benid = null, $bobid = null)
     {
@@ -119,6 +239,6 @@ class Emendas_Controller_Beneficiario
     {
         $mEmenda = new Emendas_Model_Emenda($emeid);
         $mEmenda->atualizarPrograma();
-        ver($benid, $mEmenda, d);
+//        ver($benid, $mEmenda, d);
     }
 }
