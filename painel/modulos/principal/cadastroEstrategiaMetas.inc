@@ -27,12 +27,14 @@ switch ($requisicao) {
      */
     case 'consultar':
         $arrEstrategias = $mEstrategiaMeta->carregarPorIndid($_SESSION['indid']);
-        $table = '<table>';
-        foreach($arrEstrategias as $value){
-            $table .= '<tr><td>'.$value['emidsc'].'</td></tr>';
+        if ($arrEstrategias){
+            $table = '<table>';
+            foreach($arrEstrategias as $value){
+                $table .= '<tr><td>'.$value['emidsc'].'</td></tr>';
+            }
+            $table .= '</table>';
+            echo $table;
         }
-        $table .= '</table>';
-        echo $table;
         die;       
     default:
         break;

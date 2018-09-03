@@ -130,11 +130,13 @@ function cabecalhoIndicador($indid){
         <?php
             $sql = 'select emidsc from painel.estrategia_meta_indicador where indid = '.$indid;
             $dados = $db->carregar($sql);
-            echo '<table>';
-            foreach($dados as $value){
-                echo '<tr><td>'.$value['emidsc'].'</td></tr>';
+            if ($dados){
+                echo '<table>';
+                foreach($dados as $value){
+                    echo '<tr><td>'.$value['emidsc'].'</td></tr>';
+                }
+                echo '</table>';
             }
-            echo '</table>';
         ?>
             </td>
         </tr>
