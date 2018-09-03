@@ -3768,12 +3768,12 @@ function somar_dias_uteis($str_data, $int_qtd_dias_somar = 7) {
 
 /**
  * Retorna uma lista de perfis com descrição e código do usuário no módulo 
- * especificado pelo parametro sisid
+ * especificado pelo parametro. sisid
  * 
  * @global cls_banco $db
  * @param string $usucpf
  * @param string $sisid
- * @return array/boolean
+ * @return array/boolean Retorna lista de códigos de perfis do usuário logado.
  */
 function pegaPerfilGeral($usucpf = null, $sisid = null){
 	global $db;

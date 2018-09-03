@@ -68,25 +68,38 @@ class Acompanhamento_Model_Janela extends Modelo
     {
         $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
 
-        $sql = "select  *, to_char(janinicio, 'DD/MM/YYYY') janinicio, to_char(janfim, 'DD/MM/YYYY') janfim, 
-                        to_char(now(), 'YYYYMMDD') between to_char(janinicio, 'YYYYMMDD') and coalesce(to_char(janfim, 'YYYYMMDD'), '2018-12-31') atual
-                from acompanhamento.janela 
-                where prsano = '$exercicio'
-                and janela.janstatus = 'A'
-                and to_char(now(), 'YYYYMMDD') between to_char(janinicio, 'YYYYMMDD') and to_char(now(), 'YYYYMMDD')
-                and tipid = $tipid
-                order by janela.janinicio desc, janela.janfim desc
-                limit 1";
+        $sql = "
+            SELECT
+                *,
+                to_char(janinicio, 'DD/MM/YYYY') janinicio,
+                to_char(janfim, 'DD/MM/YYYY') janfim,
+                to_char(now(), 'YYYYMMDD') BETWEEN to_char(janinicio, 'YYYYMMDD')
+                AND coalesce(to_char(janfim, 'YYYYMMDD'), '". (int)date('Y'). "-12-31') atual
+            FROM acompanhamento.janela
+            WHERE
+                prsano = '". (int)$exercicio. "'
+                AND janela.janstatus = 'A'
+                AND to_char(now(), 'YYYYMMDD') BETWEEN to_char(janinicio, 'YYYYMMDD')
+                AND to_char(now(), 'YYYYMMDD')
+                AND tipid = ". (int)$tipid. "
+            ORDER BY
+                janela.janinicio DESC,
+                janela.janfim DESC
+            LIMIT 1
+        ";
 
         return $this->pegaLinha($sql);
     }
 
     public function isAtual()
     {
-        $sql = "select  to_char(now(), 'YYYYMMDD') between to_char(janinicio, 'YYYYMMDD') and coalesce(to_char(janfim, 'YYYYMMDD'), '2018-12-31') atual
-                from acompanhamento.janela 
-                where janela.janstatus = 'A'
-                and janid = " . (int) $this->janid;
+        $sql = "
+            SELECT
+                to_char(now(), 'YYYYMMDD') BETWEEN to_char(janinicio, 'YYYYMMDD') AND coalesce(to_char(janfim, 'YYYYMMDD'), '". (int)date('Y'). "-12-31') atual
+            FROM acompanhamento.janela
+            WHERE
+                janela.janstatus = 'A'
+                AND janid = ". (int)$this->janid;
 
         return $this->pegaUm($sql);
     }

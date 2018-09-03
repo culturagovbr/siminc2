@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Classe de mapeamento da entidade acompanhamento.acompanhamento
  *
@@ -9,7 +10,6 @@
  * @version  Release: 23-01-2018
  * @link     no link
  */
-
 
 require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
@@ -49,7 +49,6 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         'prsano' => array('tabela' => 'acompanhamento.programacaoexercicio', 'pk' => 'prsano'),
         'janid' => array('tabela' => 'acompanhamento.janela', 'pk' => 'janid'),
         'pliid' => array('tabela' => 'pi_planointerno', 'pk' => 'pliid'),
-        'ipnid' => array('tabela' => 'indicadorpnc', 'pk' => 'ipnid'),
         'mppid' => array('tabela' => 'metappa', 'pk' => 'mppid'),
         'claid' => array('tabela' => 'acompanhamento.classificacao', 'pk' => 'claid'),
     );
@@ -68,7 +67,6 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         'acoprovidencias' => null,
         'suoid' => null,
         'mppid' => null,
-        'ipnid' => null,
         'pliid' => null,
         'janid' => null,
         'prsano' => null,
@@ -197,73 +195,169 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         return [];
     }
 
-    public function getIndicadoresPnc($suoid, $exercicio = null)
+    public function getIndicadoresPnc(stdClass $filtro)
     {
-        $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
+        $listaIndicadoresPnc = array();
+        if($filtro->suoid){
+            $sql = "
+                SELECT
+                    ipn.*,
+                    aco.acoid,
+                    sic.suoid,
+                    aco.acoquantidade,
+                    mpn.mpncod::int,
+                    mpn.mpndsc
+                FROM public.indicadorpnc ipn
+                    JOIN public.metapnc mpn ON mpn.mpnid = ipn.mpnid
+                    JOIN spo.subunidadeindicadorpnc sic ON sic.ipnid = ipn.ipnid
+                    JOIN public.vw_subunidadeorcamentaria suo ON sic.suoid = suo.suoid
+                    LEFT JOIN acompanhamento.acompanhamento aco ON(
+                        ipn.ipncod = aco.ipncod
+                        AND suo.unocod = aco.unocod
+                        AND suo.suocod = aco.suocod
+                        AND ipn.prsano = aco.prsano
+                        AND aco.acostatus = 'A'
+                    )
+                WHERE
+                    ipn.prsano = '". (int)$filtro->exercicio. "'
+                    AND ipn.ipnstatus = 'A'
+                    AND sic.suoid = ". (int)$filtro->suoid. "
+                    AND mpn.mpnid = ". (int)$filtro->mpnid. "
+                UNION
+                SELECT
+                    ipn.*,
+                    aco.acoid,
+                    sic.suoid,
+                    aco.acoquantidade,
+                    mpn.mpncod::int,
+                    mpn.mpndsc
+                FROM public.indicadorpnc ipn
+                    JOIN public.metapnc mpn ON mpn.mpnid = ipn.mpnid
+                    LEFT JOIN spo.subunidadeindicadorpnc sic ON sic.ipnid = ipn.ipnid
+                    LEFT JOIN public.vw_subunidadeorcamentaria suo ON sic.suoid = suo.suoid
+                    LEFT JOIN acompanhamento.acompanhamento aco ON(
+                        ipn.ipncod = aco.ipncod
+                        AND suo.unocod = aco.unocod
+                        AND suo.suocod = aco.suocod
+                        AND ipn.prsano = aco.prsano
+                        AND acostatus = 'A'
+                    )
+                WHERE
+                    ipn.prsano = '". (int)$filtro->exercicio. "'
+                    AND ipn.ipnstatus = 'A'
+                    AND sic.suoid IS NULL
+                    AND ipn.ipncod != '0'
+                    AND mpn.mpnid = ". (int)$filtro->mpnid. "
+                ORDER BY
+                    mpncod,
+                    ipncod,
+                    ipndsc
+            ";
 
-        if($suoid){
-            $sql = "select ipn.*, aco.acoid, sic.suoid, aco.acoquantidade, mpn.mpncod::int, mpn.mpndsc
-                    from public.indicadorpnc ipn
-                        inner join public.metapnc mpn on mpn.mpnid = ipn.mpnid      
-                        inner join spo.subunidadeindicadorpnc sic on sic.ipnid = ipn.ipnid
-                        left join acompanhamento.acompanhamento aco on aco.ipnid = ipn.ipnid and aco.suoid = sic.suoid and acostatus = 'A'
-                    where ipn.prsano = '$exercicio'
-                    and ipn.ipnstatus = 'A'
-                    and sic.suoid = " . (int) $suoid . "
-                    union
-                    select ipn.*, aco.acoid, sic.suoid, aco.acoquantidade, mpn.mpncod::int, mpn.mpndsc
-                    from public.indicadorpnc ipn
-                        inner join public.metapnc mpn on mpn.mpnid = ipn.mpnid
-                        left join spo.subunidadeindicadorpnc sic on sic.ipnid = ipn.ipnid
-                        left join acompanhamento.acompanhamento aco on aco.ipnid = ipn.ipnid and aco.suoid = $suoid and acostatus = 'A'
-                    where ipn.prsano = '$exercicio'
-                    and ipn.ipnstatus = 'A'
-                    and sic.suoid is null
-                    and ipn.ipncod != '0'
-                    order by mpncod, ipncod, ipndsc";
-
-            return $this->carregar($sql);
+            $listaIndicadoresPnc = $this->carregar($sql);
         }
 
-        return [];
+        return $listaIndicadoresPnc;
     }
 
-    public function getMetasPncComPi($suoid, $janid = null, $exercicio = null)
-    {
-        $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
+    /**
+     * Busca Metas PNC
+     * 
+     * @param stdClass $filtro
+     * @return array
+     */
+    public function getMetasPncComPi(stdClass $filtro){
+        include_once APPRAIZ. 'public/classes/Model/SubUnidadeOrcamentaria.inc';
+        $listaMetas = array();
+        $subunidade = new Public_Model_SubUnidadeOrcamentaria($filtro->suoid);
+        $uo = new Public_Model_UnidadeOrcamentaria($subunidade->unoid);
+        $sql = "
+            SELECT DISTINCT
+                ac.prsano,
+                ac.suoid,
+                mpn.mpncod::int,
+                mpn.mpndsc,
+                mpn.mpnid,
+                count(pic.pliid) pis,
+                count(ac.acoid) acompanhamento
+            FROM (
+                SELECT
+                    ipn.ipncod,
+                    ipn.mpnid,
+                    ipn.ipndsc,
+                    ipn.ipnstatus,
+                    ipn.prsano,
+                    ipn.ipncod,
+                    aco.acoid,
+                    sic.suoid,
+                    suo.unocod,
+                    suo.suocod,
+                    aco.acoquantidade
+                FROM public.indicadorpnc ipn
+                    JOIN spo.subunidadeindicadorpnc sic ON sic.ipnid = ipn.ipnid
+                    JOIN public.vw_subunidadeorcamentaria suo ON sic.suoid = suo.suoid
+                    LEFT JOIN acompanhamento.acompanhamento aco ON(
+                        ipn.ipncod = aco.ipncod
+                        AND suo.unocod = aco.unocod
+                        AND suo.suocod = aco.suocod
+                        AND acostatus = 'A'
+                        AND aco.janid = ". (int)$filtro->janid. "
+                    )
+                WHERE
+                    ipn.prsano = '". (int)$filtro->exercicio. "'
+                    AND ipn.ipnstatus = 'A'
+                    AND suo.suoid = ". (int)$filtro->suoid. "
+                UNION
+                SELECT
+                    ipn.ipncod,
+                    ipn.mpnid,
+                    ipn.ipndsc,
+                    ipn.ipnstatus,
+                    ipn.prsano,
+                    ipn.ipncod,
+                    aco.acoid,
+                    sic.suoid,
+                    '". (int)$uo->unocod. "',
+                    '". (int)$subunidade->suocod. "',
+                    aco.acoquantidade
+                FROM public.indicadorpnc ipn
+                    LEFT JOIN spo.subunidadeindicadorpnc sic ON sic.ipnid = ipn.ipnid
+                    LEFT JOIN public.vw_subunidadeorcamentaria suo ON sic.suoid = suo.suoid
+                    LEFT JOIN acompanhamento.acompanhamento aco ON(
+                        ipn.ipncod = aco.ipncod
+                        AND sic.suoid = ". (int)$filtro->suoid. "
+                        AND acostatus = 'A'
+                        AND aco.janid = ". (int)$filtro->janid. "
+                    )
+                WHERE
+                    ipn.prsano = '". (int)$filtro->exercicio. "'
+                    AND ipn.ipnstatus = 'A'
+                    AND suo.suoid IS NULL
+                    AND ipn.ipncod != '0'
+            ) ac
+            JOIN public.metapnc mpn ON mpn.mpnid = ac.mpnid
+            LEFT JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = ac.suoid
+            LEFT JOIN monitora.pi_planointerno pli ON(
+                pli.ungcod = suo.suocod
+                AND pli.unicod = suo.unocod
+            )
+            LEFT JOIN planacomorc.pi_complemento pic ON(
+                pli.pliid = pic.pliid
+                AND ac.mpnid = pic.mpnid
+            )
+            GROUP BY
+                ac.prsano,
+                ac.suoid,
+                mpn.mpncod,
+                mpn.mpndsc,
+                mpn.mpnid
+            ORDER BY
+                mpncod
+        ";
+//ver($sql, d);
+        $listaMetas = $this->carregar($sql);
 
-        if($suoid){
-            $sql = "select distinct ac.prsano, ac.suoid, mpn.mpncod::int, mpn.mpndsc, mpn.mpnid, count(pic.pliid) pis, count(ac.acoid) acompanhamento
-                    from (
-                        select ipn.ipnid, ipn.mpnid, ipn.ipndsc, ipn.ipnstatus, ipn.prsano, ipn.ipncod, aco.acoid, sic.suoid, aco.acoquantidade
-                        from public.indicadorpnc ipn
-                            inner join spo.subunidadeindicadorpnc sic on sic.ipnid = ipn.ipnid
-                            left join acompanhamento.acompanhamento aco on aco.ipnid = ipn.ipnid and aco.suoid = sic.suoid and acostatus = 'A' and aco.janid = " . (int) $janid . "
-                        where ipn.prsano = '$exercicio'
-                        and ipn.ipnstatus = 'A'
-                        and sic.suoid = $suoid
-                        union
-                        select ipn.ipnid, ipn.mpnid, ipn.ipndsc, ipn.ipnstatus, ipn.prsano, ipn.ipncod, aco.acoid, $suoid, aco.acoquantidade
-                        from public.indicadorpnc ipn
-                            left join spo.subunidadeindicadorpnc sic on sic.ipnid = ipn.ipnid
-                            left join acompanhamento.acompanhamento aco on aco.ipnid = ipn.ipnid and aco.suoid = $suoid and acostatus = 'A' and aco.janid = " . (int) $janid . "
-                        where ipn.prsano = '$exercicio'
-                        and ipn.ipnstatus = 'A'
-                        and sic.suoid is null
-                        and ipn.ipncod != '0'
-                    ) ac
-                        inner join public.metapnc mpn on mpn.mpnid = ac.mpnid
-                        left join public.vw_subunidadeorcamentaria suo on suo.suoid = ac.suoid
-                        left join monitora.pi_planointerno pli on pli.ungcod = suo.suocod and pli.unicod = suo.unocod        
-                        left join planacomorc.pi_complemento pic on pic.pliid = pli.pliid and pic.ipnid = ac.ipnid        
-                    group by ac.prsano, ac.suoid, mpn.mpncod, mpn.mpndsc, mpn.mpnid
-                    order by mpncod;
-                    ";
-
-            return $this->carregar($sql);
-        }
-
-        return [];
+        return $listaMetas? $listaMetas: array();
     }
 
     public function getIndicadoresPncComPi($suoid, $exercicio = null)

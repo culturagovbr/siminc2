@@ -747,7 +747,7 @@ HTML;
  * @param string $id
  * @param string $content Conteúdo HTML do arquivou ou caminho absoluto do arquivo de template Ex: /var/www/html/siminc2/modulo/principal/modal-x.inc
  * @param array $botoes Ex: array('cancelar', 'confirmar', 'salvar', 'fechar')
- * @param array $opcoes Configurações extras do visual da janela. Por enquanto apenas é suportado alterar o tamanho. Ex: array('tamanho' => 'lg')
+ * @param array $opcoes Configurações extras do visual da janela. Por enquanto apenas é suportado alterar o tamanho. Ex: array('tamanho' => 'lg') Tamanhos: xs, sm, md, lg, xl
  */
 function bootstrapPopup($titulo, $id, $content, array $botoes = array(), array $opcoes = array())
 {
@@ -757,6 +757,7 @@ function bootstrapPopup($titulo, $id, $content, array $botoes = array(), array $
         echo <<<CSS
 <style type="text/css">
 .modal-lg{width:70%!important}
+.modal-xl{width:100%!important}
 </style>
 CSS;
     }
@@ -796,9 +797,13 @@ HTML;
                 break;
             case 'confirmar':
             case 'salvar':
+                $idSalvar = "";
+                if($opcoes['id-salvar']){
+                    $idSalvar = 'id="'. $opcoes['id-salvar']. '"';
+                }
                 $label = ucfirst($botao);
                 echo <<<HTML
-                <button type="button" class="btn btn-primary btn-{$botao}">{$label}</button>
+                <button type="button" class="btn btn-primary btn-{$botao}" $idSalvar >{$label}</button>
 HTML;
                 break;
             case 'fechar':

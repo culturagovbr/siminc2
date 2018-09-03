@@ -1,4 +1,4 @@
-<?
+<?php
 
 include_once APPRAIZ."/www/painel/_funcoes.php";
 
@@ -1355,7 +1355,7 @@ function exibeInformacoesMapa($dados) {
 	WHERE qtde!=0 OR valor!=0 
 	GROUP BY muncod, mundescricao, estuf, indqtdevalor, unmid 
 	ORDER BY estuf, mundescricao";
-	
+//	ver($sql,d);
 	// Inclui componente de relatórios
 	include APPRAIZ. 'includes/classes/relatorio.class.inc';
 	

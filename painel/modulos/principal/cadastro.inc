@@ -1,4 +1,5 @@
-<?
+<?php
+
 if ($_REQUEST['requisicao']) {
 	$_REQUEST['requisicao']();
 }
@@ -78,21 +79,21 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 						
 				$indid = $_REQUEST['indid']; 			
 				
-				$exoid 				= $_REQUEST['exoid'];
-				$unmid 				= $_REQUEST['unmid']; 
-				$cliid 				= $_REQUEST['cliid'];
-				$tpiid 				= $_REQUEST['tpiid'];  
-				$secid  			= $_REQUEST['secid'];  
+				$exoid 			= $_REQUEST['exoid'];
+				$unmid 			= $_REQUEST['unmid']; 
+				$cliid 			= $_REQUEST['cliid'];
+				$tpiid 			= $_REQUEST['tpiid'];  
+				$secid  		= $_REQUEST['secid'];  
 				$secidgestora		= $_REQUEST['secidgestora'];
-				$acaid   			= $_REQUEST['acaid']; 
-				$perid  			= $_REQUEST['perid'];  
-				$peridatual			= $_REQUEST['peridatual'];
-				$estid  			= $_REQUEST['estid'];
-				$regid				= $_REQUEST['regid'];
-				$umeid				= $_REQUEST['umeid'];
-				$colid  			= $_REQUEST['colid'];  
-				$usucpf  			= $_REQUEST['usucpf'];  
-				$indnome  			= $_REQUEST['indnome'];  
+				$acaid   		= $_REQUEST['acaid']; 
+				$perid  		= $_REQUEST['perid'];  
+				$peridatual		= $_REQUEST['peridatual'];
+				$estid  		= $_REQUEST['estid'];
+				$regid			= $_REQUEST['regid'];
+				$umeid			= $_REQUEST['umeid'];
+				$colid  		= $_REQUEST['colid'];  
+				$usucpf  		= $_REQUEST['usucpf'];  
+				$indnome  		= $_REQUEST['indnome'];  
 				$indobjetivo  		= $_REQUEST['indobjetivo']; 
 				$indformula  		= $_REQUEST['indformula'];  
 				$indtermos  		= $_REQUEST['indtermos'];  
@@ -190,7 +191,10 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				
 			//caso exista o indicador altera os dados do mesmo	
 			} else {
-			
+                            $sql = "select perid, regid from painel.indicador where indid = ".$indid;
+                            $registro = $db->pegalinha($sql);
+                            $peridAtual = $registro->perid;
+                            $regidAtual = $registro->regid;
 			
 				$sql_U = "
 					UPDATE painel.indicador
@@ -249,14 +253,22 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				}
 				
 				//AGENDA DE GOVERNO
-				$sql = "DELETE FROM painel.agendaindicador WHERE indid =  ". $indid ."";			
-				$db->executar($sql);
-				foreach($_POST['aggid'] as $aggid) {
-					if($aggid){
-						$sql = "INSERT INTO painel.agendaindicador(aggid, indid) VALUES (". $aggid .", ". $indid .")";			
-						$db->executar($sql);
-					}
-				}
+//				$sql = "DELETE FROM painel.agendaindicador WHERE indid =  ". $indid ."";			
+//				$db->executar($sql);
+//				foreach($_POST['aggid'] as $aggid) {
+//					if($aggid){
+//						$sql = "INSERT INTO painel.agendaindicador(aggid, indid) VALUES (". $aggid .", ". $indid .")";			
+//						$db->executar($sql);
+//					}
+//				}
+
+                                
+                                //Remove Série Histórica se a periodicidade ou a Regionalização for diferente.
+                                if (($peridAtual!=$perid) || ($regidAtual!=$regid)){
+                                    $sql = "update painel.seriehistorica set sehstatus = 'I' where indid = ".$indid;
+                                    $db->executar($sql);
+                                }         
+
 			}
 			$db->commit();
 			echo "<script>
@@ -1048,14 +1060,13 @@ else
 			painel.periodicidade
 		WHERE
 			perstatus = 'A'	
-		AND
-			perid <> 5
+		and perid in (1,2,3)
 		order by
 			 descricao		 
 		";
 	?>
     <td width="25%" align='right' class="SubTituloDireita">Periodicidade do Indicador:</td>
-    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<? echo $perid; ?>"></td>
+    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<? echo $perid; ?>"></td>
 </tr>
 <tr>
 	<?php 
@@ -1078,12 +1089,13 @@ else
 			regid AS codigo
 		FROM 		
 			painel.regionalizacao
+                where regid in (1,6,4,16)
 		order by
 			 descricao		 
 		";
 	?>
     <td align='right' class="SubTituloDireita">Regionalização:</td>
-    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<? echo $regid; ?>"></td>
+    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<? echo $regid; ?>"></td>
 </tr>
 <tr style="display: none" >
 	<td align='right' class="SubTituloDireita">Objetivo Estratégico:</td>
@@ -1116,6 +1128,7 @@ else
 			painel.periodicidade
 		WHERE
 			perstatus = 'A'	
+                    and perid in (1,2,3)
 		order by
 			 descricao		 
 		";
@@ -1188,6 +1201,16 @@ else
 </form>
 <script type="text/javascript" src="/includes/prototype.js"></script>	
 <script type="text/javascript">
+function verificaSH(){   
+    if (document.formulario.perid.value!==document.formulario.perid_conf.value){
+        alert('Se alterar a periodicidade a série histórica será apagada!'); 
+        return;
+    }
+    if (document.formulario.regid.value!==document.formulario.regid_conf.value){
+        alert('Se alterar a regionalização a série histórica será apagada!'); 
+        return;
+    }    
+}
 
 function submeter(evento, indid){	
 	if(validar()){
@@ -1316,5 +1339,4 @@ function mostraindpublico(tr){
 	}
 }
 
-exibeValorAcumulado();
 </script>
