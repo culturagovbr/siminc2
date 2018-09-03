@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Função que carrega os detalhes dos indicadores
  * 
@@ -435,6 +435,7 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 				if($seriehistorica) {
 					$sql = "SELECT trim(to_char(dshqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) as dshqtde FROM painel.detalheseriehistorica WHERE sehid='".$seriehistorica['sehid']."'";
 					$valor = $db->pegaUm($sql);
+                                        $valor = str_replace('.',',',str_replace(',', '', $valor));
 				}
 				
 				if($formatoinput['campovalor']) {
@@ -446,10 +447,15 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 					$html .= "<br />&nbsp;&nbsp;&nbsp;<font size=1>Valor (R$):</font> <input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='valor_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='valor[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$dinheiro."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" onKeyUp=\"this.value=mascaraglobal('".$formatoinput['campovalor']['mascara']."',this.value);somarcoluna(this);\" size=\"".$formatoinput['campovalor']['size']."\" maxlength=\"".$formatoinput['campovalor']['maxlength']."\">";
 					$html .="</td>";
 				} else {
-					$html .="<td align='center'><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='item_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='item[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" onKeyUp=\"this.value=mascaraglobal('".$formatoinput['mascara']."',this.value);somarcoluna(this);\" size=\"".$formatoinput['size']."\" maxlength=\"".$formatoinput['maxlength']."\"></td>";
+					$html .="<td align='left'><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='item_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='item[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" onKeyUp=\"this.value=mascaraglobal('".$formatoinput['mascara']."',this.value);somarcoluna(this);\" size=\"".$formatoinput['size']."\" maxlength=\"".$formatoinput['maxlength']."\"></td>";
 				}
 
 			}
+                        if($seriehistorica) {
+                                $sql = "SELECT dshobs FROM painel.detalheseriehistorica WHERE sehid='".$seriehistorica['sehid']."'";
+                                $valor = $db->pegaUm($sql);
+                        }                        
+                        $html .= "<td><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='obs_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='obs[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" size=\"100\" maxlength=\"255\"></td>";                        
 			$html .= "</tr>";
 		}
 	} else {
@@ -1478,8 +1484,9 @@ function carregarGridBrasil($dados) {
 		$rowspancabecalho = 3;
 		$colspancabecalho = count($detalhes['nivel1'])*count($detalhes['nivel2']);
 	}
-	$html .= "<td class='SubTituloCentro' ".(($rowspancabecalho)?"rowspan='".$rowspancabecalho."'":"").">Períodos</td>";
-	$html .= "<td class='SubTituloCentro' ".(($colspancabecalho)?"colspan='".$colspancabecalho."'":"").">Valor / Quantidade ".($linhasperiodos[0]['unmid'] == 1 ? " (%)" : "")."</td>";
+	$html .= "<td class='SubTituloEsquerda' ".(($rowspancabecalho)?"rowspan='".$rowspancabecalho."'":"").">Períodos</td>";
+	$html .= "<td class='SubTituloEsquerda' ".(($colspancabecalho)?"colspan='".$colspancabecalho."'":"").">Valor / Quantidade ".($linhasperiodos[0]['unmid'] == 1 ? " (%)" : "")."</td>";
+	$html .= "<td class='SubTituloEsquerda' ".(($rowspancabecalho)?"rowspan='".$rowspancabecalho."'":"").">Observação</td>";
 	$html .= "</tr>";
 
 	
@@ -1981,8 +1988,8 @@ function gravarGridDadosSemFiltros($dados) {
 												 	 	   		   	  INNER JOIN painel.detalhetipodadosindicador tid ON tid.tdiid = tdi.tdiid 
 									 				 	   		   	  WHERE tidid='".$tdiidnivel2."'");
 								if(is_numeric(str_replace(array(".",","), array("","."), $dados4))) {
-									$sql = "INSERT INTO painel.detalheseriehistorica(sehid, dshqtde, ".$tdinumnivel1.", ".$tdinumnivel2." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", dshvalor":"").")
-								    		VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados4)."', '".$tdiidnivel1."', '".$tdiidnivel2."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])."'":"").");";
+									$sql = "INSERT INTO painel.detalheseriehistorica(sehid, dshqtde, dshobs, ".$tdinumnivel1.", ".$tdinumnivel2." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", dshvalor":"").")
+								    		VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados4)."', '".$dados['obs'][$indice1][$indice2]."','".$tdiidnivel1."', '".$tdiidnivel2."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])."'":"").");";
 									$db->executar($sql, false);
 									$possuiregistro = true;
 								}
@@ -1990,8 +1997,8 @@ function gravarGridDadosSemFiltros($dados) {
 						} else {
 							if(is_numeric(str_replace(array(".",","), array("","."), $dados3))) {
 								$db->executar("INSERT INTO painel.detalheseriehistorica(
-	            							   sehid, dshqtde, ".$tdinumnivel1." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", dshvalor":"").")
-	    									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados3)."', '".$tdiidnivel1."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1])."'":"").");", false);
+	            							   sehid, dshqtde, dshobs, ".$tdinumnivel1." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", dshvalor":"").")
+	    									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados3)."', '".$dados['obs'][$indice1][$indice2]."', '".$tdiidnivel1."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1])."'":"").");", false);
 								$possuiregistro = true;
 							}
 						}
@@ -1999,9 +2006,11 @@ function gravarGridDadosSemFiltros($dados) {
 				} else {
 					// adicionando a quantidade quando não houve detalhamento
 					if(is_numeric(str_replace(array(".",","), array("","."), $dados2))) {
-						$db->executar("INSERT INTO painel.detalheseriehistorica(
-           							   sehid, dshqtde ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", dshvalor":"").")
-   									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados2)."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2])."'":"").");", false);
+                                                $sql = "INSERT INTO painel.detalheseriehistorica(
+           							   sehid, dshqtde, dshobs ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", dshvalor":"").")
+   									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados2)."', '".$dados['obs'][$indice1][$indice2]."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2])."'":"").");";
+//                                                ver($sql,d);
+						$db->executar($sql, false);
 						$possuiregistro = true;
 					}
 				}

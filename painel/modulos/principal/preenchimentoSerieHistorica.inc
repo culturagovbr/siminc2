@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * VALIDANDO SE EXISTE O ID DO INDICADOR NA SESSÃO
  * É OBRIGATÓRIO A EXISTÊNCIA DESTA VARIAVEL NA SESSÃO
@@ -18,6 +18,7 @@ set_time_limit(300);
 
 
 /* Segurança : Validando os acessos as funções autorizadas */
+//ver($_REQUEST['requisicao'],d);
 switch($_REQUEST['acao']) {
 	case 'A';
 		$_FUNCOESAUTORIZADAS = array('carregarComboMunicipioPorUF'=>true,
@@ -44,7 +45,8 @@ switch($_REQUEST['acao']) {
 	break;
 }
 /* Fim Segurança : Validando os acessos as funções autorizadas */
-
+carregarGridBrasil();
+//gravarGridDadosSemFiltros();
 if($_REQUEST['requisicao']) {
 	if($_FUNCOESAUTORIZADAS[$_REQUEST['requisicao']]) {
 		$_REQUEST['requisicao']($_REQUEST);
@@ -497,7 +499,7 @@ switch($dadosindicador['regid']) {
 	<td class='SubTituloCentro' colspan='<? echo (count($tabeladefiltros)*2); ?>'>Filtros</td>
 </tr>
 <tr>
-<?
+<?php
 if($tabeladefiltros) {
 	foreach($tabeladefiltros as $tbl) {
 		echo "<td class='SubTituloDireita' style='width:150px;'>".$tbl['descricao']."</td>";
@@ -514,7 +516,7 @@ if($tabeladefiltros) {
 </table>
 <div id="gridinfo"></div>
 <script>
-<?
+<?php
 /*
  * Carregando permissões do perfil
  */
