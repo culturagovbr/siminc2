@@ -122,6 +122,22 @@ function cabecalhoIndicador($indid){
 			<?=$dados['atualizacao'];?>
 		</td>
 	</tr>
+        <tr>
+            <td valign="middle" class="SubTituloDireita">
+                Legenda:
+            </td>
+            <td>
+        <?php
+            $sql = 'select emidsc from painel.estrategia_meta_indicador where indid = '.$indid;
+            $dados = $db->carregar($sql);
+            echo '<table>';
+            foreach($dados as $value){
+                echo '<tr><td>'.$value['emidsc'].'</td></tr>';
+            }
+            echo '</table>';
+        ?>
+            </td>
+        </tr>
 	</table>
 	<?php
 	endif;
