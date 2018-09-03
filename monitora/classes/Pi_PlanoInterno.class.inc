@@ -715,7 +715,7 @@ class Pi_PlanoInterno extends Modelo
             ORDER BY
                 suo.unonome
         ";
-
+//ver($sql,d);
         $dados = $this->carregar($sql);
         $dados = $dados ? $dados : [];
         $dadosAgrupados = [];

@@ -1,4 +1,4 @@
-<?
+<?php
 //Funções
 include_once (APPRAIZ.'www/painel/_funcoes_painel_controle.php');
 include_once (APPRAIZ.'www/painel/_funcoesdetalhamentoindicador.php');
@@ -78,7 +78,6 @@ if($_SESSION['indid']){
 	$dadosInd = $db->pegaLinha($sql);
 	$indqtdevalor = $dadosInd['indqtdevalor'];
 } 
-
 ?>
 <script language="javascript" type="text/javascript" src="/includes/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="/includes/open_flash_chart/swfobject.js"></script>
@@ -91,7 +90,7 @@ if($_SESSION['indid']){
 
 <script language="JavaScript" src="./js/painel.js"></script>
 <script language="JavaScript" src="./js/detalhamentoindicador.js"></script>
-<?
+<?php
 function curPageURL() {
 	$pageURL = 'http';
 	if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
@@ -106,30 +105,34 @@ function curPageURL() {
 
 $local= explode("/",curPageURL());
 ?>
-<?if ($local[2]=="simec.mec.gov.br" ){ ?>
+<?php if ($local[2]=="simec.mec.gov.br" ){ ?>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxQhVwj8ALbvbyVgNcB-R-H_S2MIRxTIdhrqjcwTK3xxl_Nu_YMC5SdLWg" type="text/javascript"></script>
 	<? $Gkey = "ABQIAAAAwN0kvNsueYw8CBs704pusxQhVwj8ALbvbyVgNcB-R-H_S2MIRxTIdhrqjcwTK3xxl_Nu_YMC5SdLWg"; ?>
-<? } ?>
-<?if ($local[2]=="simec-d.mec.gov.br"){ ?>
+<?php  } ?>
+<?php if ($local[2]=="simec-d.mec.gov.br"){ ?>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxRYtD8tuHxswJ_J7IRZlgTxP-EUtxT_Cz5IMSBe6d3M1dq-XAJNIvMcpg" type="text/javascript"></script>
 	<? $Gkey = "ABQIAAAAwN0kvNsueYw8CBs704pusxRYtD8tuHxswJ_J7IRZlgTxP-EUtxT_Cz5IMSBe6d3M1dq-XAJNIvMcpg"; ?> 
-<? } ?>
-<?if ($local[2]=="simec" ){ ?>
+<?php } ?>
+<?php if ($local[2]=="simec" ){ ?>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxTNzTBk8zukZFuO3BxF29LAEN1D1xSIcGWxF7HCjMwks0HURg6MTfdk1A" type="text/javascript"></script>
 	<? $Gkey = "ABQIAAAAwN0kvNsueYw8CBs704pusxTNzTBk8zukZFuO3BxF29LAEN1D1xSIcGWxF7HCjMwks0HURg6MTfdk1A"; ?>
-<? } ?>
-<?if ($local[2]=="simec-d"){ ?>
+<?php } ?>
+<?php if ($local[2]=="simec-d"){ ?>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxTFm3qU4CVFuo3gZaqihEzC-0jfaRTY9Fe8UfzYeoYDxtThvI3nGbbZEw" type="text/javascript"></script>
 	<? $Gkey = "ABQIAAAAwN0kvNsueYw8CBs704pusxTFm3qU4CVFuo3gZaqihEzC-0jfaRTY9Fe8UfzYeoYDxtThvI3nGbbZEw"; ?> 
-<? } ?>
-<?if ($local[2]=="simec-local"){ ?>
+<?php  } ?>
+<?php if ($local[2]=="simec-local"){ ?>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxRzjpIxsx3o6RYEdxEmCzeJMTc4zBSMifny_dJtMKLfrwCcYh5B01Pq_g" type="text/javascript"></script>
 	<? $Gkey = "ABQIAAAAwN0kvNsueYw8CBs704pusxRzjpIxsx3o6RYEdxEmCzeJMTc4zBSMifny_dJtMKLfrwCcYh5B01Pq_g"; ?> 	
-<? } ?>
-<?if ($local[2]=="painel.mec.gov.br"){ ?>
+<?php  } ?>
+<?php if ($local[2]=="local.siminc2:8082"){ ?>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxTPkFYZwQy2nvpGvFj08HQmPOt9ZBT2EJmQsTms0WQqU_5GvEj7bMZd7g" type="text/javascript"></script>
+	<? $GKey = "ABQIAAAAwN0kvNsueYw8CBs704pusxTPkFYZwQy2nvpGvFj08HQmPOt9ZBT2EJmQsTms0WQqU_5GvEj7bMZd7g"; ?> 
+<?php  } ?>        
+<?php if ($local[2]=="painel.mec.gov.br"){ ?>
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAwN0kvNsueYw8CBs704pusxTPkFYZwQy2nvpGvFj08HQmPOt9ZBT2EJmQsTms0WQqU_5GvEj7bMZd7g" type="text/javascript"></script>
 	<? $GKey = "ABQIAAAAwN0kvNsueYw8CBs704pusxTPkFYZwQy2nvpGvFj08HQmPOt9ZBT2EJmQsTms0WQqU_5GvEj7bMZd7g"; ?> 	
-<? } ?>
+<?php  }?>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript" src="/includes/maps/markerclusterer.js"></script>
 <script type="text/javascript">
@@ -418,7 +421,7 @@ if(!$db->pegaUm($sql)){ ?>
 	</script>
 <?php }  ?>
 
-<?
+<?php 
 $indid = !$_REQUEST['indid'] ? $_SESSION['indid'] : $_REQUEST['indid'];
 
 ?>
@@ -428,7 +431,8 @@ $indid = !$_REQUEST['indid'] ? $_SESSION['indid'] : $_REQUEST['indid'];
 
 <table style="border-bottom:0px"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
 <tr>
-    <td><? exibedashBoard($indid);?></td>
+    <td><?php exibedashBoard($indid);?></td>
+
 </tr>
 </table>
 
@@ -780,7 +784,7 @@ function mudaTipoGrafico(tipografico,indid,divMapa,carregaGrafico){
 			var setid = "";
 		}
 		var erro = "false";
-									
+		
 		if(tipografico == "barra"){
 			var myAjax = new Ajax.Request(
 								'painel.php?modulo=principal/painel_controle&acao=A',
@@ -1037,7 +1041,7 @@ function mudaTipoGrafico(tipografico,indid,divMapa,carregaGrafico){
 										 ";regvalue="   + regvalue
 			
 		}
-		if(erro.search("false") > 0){
+		if(erro=="false"){
 			if(tipografico != "null"){
 				//Verifica se o grafico pode ser exibido
 				var myAjax = new Ajax.Request(
@@ -1048,7 +1052,7 @@ function mudaTipoGrafico(tipografico,indid,divMapa,carregaGrafico){
 							asynchronous: false,
 							onComplete: function(resp){
 								var exibe = resp.responseText;
-								if(exibe.search("true") > 0){
+								if(exibe=="true"){
 									<?php if(TIPO_GRAFICO == "highcharts"):?>
 										geraGraficoHighCharts(geraGrafico);									
 									<?php elseif(TIPO_GRAFICO == "flash"):?>
@@ -2020,6 +2024,7 @@ function filtraSetor(disid)
 
 function geraGraficoHighCharts(dados)
 {
+
 	dados = dados.replace("geraGrafico.php?","");
 	document.getElementById('grafico_indicador').innerHTML = "<center>Carregando...</center>";
 	

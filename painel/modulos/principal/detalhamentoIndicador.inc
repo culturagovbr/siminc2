@@ -1,4 +1,4 @@
-<?
+<?php
 include_once "_funcoesdetalhamentoindicador.php";
 
 /* configurações */
@@ -24,7 +24,7 @@ set_time_limit(0);
 <script language="javascript" src="../includes/Highcharts-3.0.0/js/highcharts.js"></script>
 <script language="javascript" src="../includes/Highcharts-3.0.0/js/modules/exporting.js"></script>
 
-<?
+<?php
 function curPageURL() {
 	$pageURL = 'http';
 	if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
@@ -285,7 +285,7 @@ function exportarIndicadorExcel(indid, params) {
 	display:none;
 }
 </style>
-<?
+<?php
 if($_REQUEST['requisicao']) {
 	$_REQUEST['requisicao']($_REQUEST);
 	exit;
