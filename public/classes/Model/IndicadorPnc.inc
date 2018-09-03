@@ -63,6 +63,36 @@ class Public_Model_IndicadorPnc extends Modelo
         'ipncod' => null,
     );
     
+    /**
+     * Busca por código do indicador(ipncod) e ano.
+     * 
+     * @param stdClass $filtros
+     * @return sdtClass
+     */
+    public function buscarPorCodigo(stdClass $filtros){
+        # Filtros
+        $where = '';
+        $where .= $filtros->ipncod? "\n AND ipncod = '". $filtros->ipncod. "'": NULL;
+        $where .= $filtros->prsano? "\n AND prsano = '". $filtros->prsano. "'": NULL;
+        
+        $sql = "
+            SELECT
+                ipnid,
+                mpnid,
+                ipndsc,
+                ipnstatus,
+                prsano,
+                ipncod
+            FROM public.indicadorpnc
+            WHERE
+                ipnstatus = 'A'
+                $where
+        ";
+        $resultado = $this->pegaLinha($sql);
+        $indicador = $resultado? (object)$resultado: new stdClass();
+        return $indicador;
+    }
+    
     public function recuperarSqlCombo($descricao = null, $where = [], $order = '')
     {
         $where['exercicio'] = !empty($where['exercicio']) ? $where['exercicio'] : $_SESSION['exercicio'];

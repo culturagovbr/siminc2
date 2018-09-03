@@ -1,31 +1,37 @@
-<?php if(count($aPis)){ ?>
+<?php
+    $mpnid = $_REQUEST['mpnid'];
+    $suoid = $_REQUEST['suoid'];
+    $mPi = new Pi_PlanoInterno();
+    $aPis = $mPi->recuperarPiPorMetaPncESubunidade($mpnid, $suoid);
+    if(count($aPis)):
+?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover bedidTables" >
             <thead>
-            <tr class="text-center">
-                <th>Ações</th>
-                <th>Código</th>
-                <th>Título</th>
-                <th>Vl. Previsto (R$)</th>
-                <th>Vl. Provisionado (R$)</th>
-                <th>Vl. Empenhado (R$)</th>
-                <th>Vl. Liquidado (R$)</th>
-                <th>Vl. Pago (R$)</th>
-            </tr>
+                <tr class="text-center">
+                    <th>Ações</th>
+                    <th>Código</th>
+                    <th>Título</th>
+                    <th>Vl. Previsto (R$)</th>
+                    <th>Vl. Provisionado (R$)</th>
+                    <th>Vl. Empenhado (R$)</th>
+                    <th>Vl. Liquidado (R$)</th>
+                    <th>Vl. Pago (R$)</th>
+                </tr>
             </thead>
             <tbody>
             <?php
-            $aTotal = [];
-            foreach($aPis as $dados){
-                $aTotal['previsto'] += $dados['previsto'];
-                $aTotal['autorizado'] += $dados['autorizado'];
-                $aTotal['empenhado'] += $dados['empenhado'];
-                $aTotal['liquidado'] += $dados['liquidado'];
-                $aTotal['pago'] += $dados['pago'];
+                $aTotal = [];
+                foreach($aPis as $dados){
+                    $aTotal['previsto'] += $dados['previsto'];
+                    $aTotal['autorizado'] += $dados['autorizado'];
+                    $aTotal['empenhado'] += $dados['empenhado'];
+                    $aTotal['liquidado'] += $dados['liquidado'];
+                    $aTotal['pago'] += $dados['pago'];
                 ?>
                 <tr>
                     <td>
-                        <a target="_blank" href="javascript: exibirEspelhoPi('<?php echo $dados['pliid']; ?>')" class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></a>
+                        <a href="#" class="a_espelho btn btn-primary btn-sm glyphicon glyphicon-eye-open" data-pi="<?php echo $dados['pliid']; ?>"></a>
                     </td>
                     <td><?php echo $dados['plicod']; ?></td>
                     <td><?php echo $dados['plititulo']; ?></td>
@@ -49,6 +55,14 @@
             </tfoot>
         </table>
     </div>
-<?php } else {
-    echo '<div class="alert alert-danger">Nenhum PI vinculado</div>';
-} ?>
+<?php
+    else:
+        echo '<div class="alert alert-danger">Nenhum PI vinculado</div>';
+    endif;
+?>
+
+<script>
+    $(function(){
+        initLinkEspelho();
+    });
+</script>

@@ -1,8 +1,23 @@
+<?php
+    $suoid = $suoid? $suoid: $_REQUEST['suoid'];
+    $janid = $janid? $janid: $_REQUEST['janid'];
+
+    $mJanela = new Acompanhamento_Model_Janela();
+    $janelaAtiva = $mJanela->recuperarJanelaAtiva(Acompanhamento_Model_Tipo::K_TIPO_INDICADOR_PNC);
+    $aJanelas = $mJanela->recuperarTodos('*', [
+        "prsano = '{$_SESSION['exercicio']}'",
+        "janstatus = 'A'",
+        "tipid = " . Acompanhamento_Model_Tipo::K_TIPO_INDICADOR_PNC], 'janinicio DESC');
+
+?>
 <div class="ibox float-e-margins">
     <div class="ibox-title">
         <?php
-        $janid = $janid ? $janid : $janelaAtiva['janid'];
-        $aMetasPnc = $mAcompanhamento->getMetasPncComPi($suoid, $janid);
+            $janid = $janid ? $janid : $janelaAtiva['janid'];
+            $aMetasPnc = Acompanhamento_Model_Acompanhamentopnc::getMetasPnc((object)array(
+                'exercicio' => $_SESSION['exercicio'],
+                'suoid' => $suoid,
+                'janid' => $janid));
         ?>
         <h5 style="margin-right: 30px;">Minhas Metas PNC <span style="color: red;">(<?php echo count($aMetasPnc); ?>)</span></h5>
         Janela:
@@ -14,6 +29,7 @@
             <?php } ?>
         </select>
     </div>
+
     <div class="ibox-content">
         <?php if(count($aMetasPnc)){ ?>
             <div class="table-responsive">
@@ -27,14 +43,14 @@
                     </thead>
                     <tbody>
                     <?php foreach($aMetasPnc as $dados){
-                        $status = $dados['acompanhamento'] ?
-                            '<a href="?modulo=principal/monitorar-pnc&acao=A&mpnid=' . $dados['mpnid'] . '&suoid=' . $dados['suoid'] . '&janid=' . $janid . '"><span class="label label-primary">Preenchida</span></a>' : 
-                            '<a href="?modulo=principal/monitorar-pnc&acao=A&mpnid=' . $dados['mpnid'] . '&suoid=' . $dados['suoid'] . '&janid=' . $janid . '"><span class="label label-danger">Pendente</span></a>';
+                        $status = $dados['acompanhamento']?
+                            '<a href="?modulo=principal/monitorar-pnc&acao=A&mpnid=' . $dados['mpnid'] . '&suoid=' . $suoid . '&janid=' . $janid . '"><span class="label label-primary">Preenchida</span></a>':
+                            '<a href="?modulo=principal/monitorar-pnc&acao=A&mpnid=' . $dados['mpnid'] . '&suoid=' . $suoid . '&janid=' . $janid . '"><span class="label label-danger">Pendente</span></a>';
                         ?>
 
                         <tr>
                             <td class="text-center"><?php echo $status; ?></td>
-                            <td><?php echo $dados['mpncod'] . " - " . $dados['mpndsc']; ?></td>
+                            <td><?php echo $dados['mpncod']. " - ". $dados['mpndsc']; ?></td>
                             <td class="text-center">
                                 <a class="detalhe-pi" href="?modulo=principal/monitorar-pnc&acao=A&req=detalhe-pi&mpnid=<?php echo $dados['mpnid']; ?>&suoid=<?php echo $dados['suoid']; ?>"><?php echo $dados['pis']; ?></a>
                             </td>
