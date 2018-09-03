@@ -500,7 +500,13 @@ class Emendas_Model_Beneficiario extends Modelo
         $beneficiarioHistorico->gravarHistoricoDelegacao($post, $this);
         $beneficiarioHistorico->gravarHistoricoProponente($post, $this);
         $beneficiarioHistorico->gravarHistoricoLocalizacao($post, $this);
-//        $beneficiarioHistorico->gravarHistoricoLocalizacao($post, $this);
+        $beneficiarioHistorico->gravarHistoricoPais($post, $this);
+        $beneficiarioHistorico->gravarHistoricoUf($post, $this);
+        $beneficiarioHistorico->gravarHistoricoMunicipio($post, $this);
+        $beneficiarioHistorico->gravarHistoricoProcesso($post, $this);
+        $beneficiarioHistorico->gravarHistoricoVigencia($post, $this);
+        $beneficiarioHistorico->gravarHistoricoModalidade($post, $this);
+        $beneficiarioHistorico->gravarHistoricoTed($post, $this);
     }
 
 }

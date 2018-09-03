@@ -5548,9 +5548,11 @@ function controlarAcessoSemAutenticacao(){
  */
 function retirarValorVazioArray($lista){
     $listaResultado = array();
-    foreach($lista as $valor){
-        if($valor && $valor !== '0' && $valor !== 0){
-            $listaResultado[] = $valor;
+    if($lista){
+        foreach($lista as $valor){
+            if($valor && $valor !== '0' && $valor !== 0){
+                $listaResultado[] = $valor;
+            }
         }
     }
     
