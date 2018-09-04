@@ -7,11 +7,14 @@ require_once APPRAIZ . 'includes/workflow.php';
 # Lista de perfis vinculados ao usuário logado
 $perfis = pegaPerfilGeral();
 
+# Filtro por Subunidades do perfil do usuário logado.
+$listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf']));
+
 # Filtro de Situação na sessão do usuário
 $filtroPainelProposta = $_SESSION['filtroPainelProposta'] = (isset($_REQUEST['esdid'])? $_REQUEST: $_SESSION['filtroPainelProposta']);
 
-if(count(array_intersect($perfis, [PFL_SUBUNIDADE]))){
-    # Perfil unidade são redirecionados para a tela de lista de Pré-Pis
+if(count(array_intersect($perfis, [PFL_SUBUNIDADE])) && !$listaSubUnidadeUsuario){
+    # Perfil unidade s<E3>o redirecionados para a tela de lista de Pr<E9>-Pis
     $urlPainel = 'proposta.php?modulo=principal/preplanointerno&acao=A';
     if($_REQUEST['exercicio']){
         $urlPainel .= '&exercicio='. $_REQUEST['exercicio'];
@@ -25,6 +28,7 @@ if(count(array_intersect($perfis, [PFL_SUBUNIDADE]))){
     simec_redirecionar($urlPainel);
 }
 
+
 $mPrePlanoInterno = new Proposta_Model_PrePlanoInterno();
 
 # Filtros padrões da consulta
@@ -32,8 +36,8 @@ $filtros = array(
     "suo.prsano = '". $_SESSION['exercicio']. "'",
     'suo.unofundo = FALSE',
 );
-# Filtro por Subunidades do perfil do usuário logado.
-$listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf']));
+
+//ver($listaSubUnidadeUsuario);
 if($listaSubUnidadeUsuario){
     $filtros[] = "suo.suocod IN('". join("','", $listaSubUnidadeUsuario). "')";
 }
@@ -44,7 +48,6 @@ switch ($_REQUEST['req']) {
     case 'lista-inicio-xls':
         $sql = $mPrePlanoInterno->montarSqlExecucaoOrcamentaria($filtros, $tipo, $filtroPainelProposta['esdid']);
         $listaFuncional = $db->carregar($sql);
-//ver($listaFuncional, d);
         include_once APPRAIZ. "proposta/modulos/lista-inicio-xls.inc";
     case 'carregarGraficoUnidade':
         $mPrePlanoInterno->carregarGrafico($_REQUEST['tipo'], null, true, $filtroPainelProposta['esdid']);
