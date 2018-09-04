@@ -869,15 +869,15 @@ if($permite>0 && (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod) || in_array(G
 			<input type="radio" value="false" <?=$checkNaoPub?> name="indpublicado" onclick="mostraindpublico(0)"/>Não 
 			<input type="radio" value="true"  <?=$checkSimPub?> name="indpublicado" onclick="mostraindpublico(1)"/>Sim
 		</td>
-	</tr>
-		<tr>	
-		<td align='right' class="SubTituloDireita">Homologado?</td>
-		<td>
-			<input type="radio" value="false" name="indhomologado" id="indhomologado0" <?= ($indhomologado == 'f') ? 'checked="checked"' : '' ?>/>Não 
-			<input type="radio" value="true"  name="indhomologado" id="indhomologado1" <?= ($indhomologado == 't') ? 'checked="checked"' : '' ?>/>Sim
-		</td>
-	</tr>
-	<tr id="trPublico" style="display: <?=($indpublicado == 't') ? 'table-row' : 'none'; ?> ">	
+<!--	</tr>-->
+<!--		<tr>	-->
+<!--		<td align='right' class="SubTituloDireita">Homologado?</td>-->
+<!--		<td>-->
+<!--			<input type="radio" value="false" name="indhomologado" id="indhomologado0" --><?//= ($indhomologado == 'f') ? 'checked="checked"' : '' ?><!--/>Não -->
+			<input type="hidden" value="true"  name="indhomologado" id="indhomologado1" <?= ($indhomologado = 't') ?>/>
+<!--		</td>-->
+<!--	</tr>-->
+	<tr style="display: <?=($indpublicado == 't') ? 'table-row' : 'none'; ?> ">
 		<td align='right' class="SubTituloDireita">Módulo Público?</td>
 		<td>
 			<input type="radio" value="false" name="indpublico" id="indpublico0" <?= ($indpublico == 'f') ? 'checked="checked"' : '' ?>/>Não 
