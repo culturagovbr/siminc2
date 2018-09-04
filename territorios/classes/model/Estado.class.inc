@@ -64,18 +64,19 @@ class Territorios_Model_Estado extends Modelo
 
         if ($arrPost['regcod'][0] != '') $where = "WHERE e.regcod IN ('".implode("', '", $arrPost['regcod'])."')";
 
-        $sql = "SELECT
-                    e.estuf as codigo,
-                    e.estdescricao as descricao
-                FROM territorios.estado e
-                $where
-                ORDER BY e.estdescricao ASC";
+        $sql = "
+            SELECT
+                e.estuf as codigo,
+                e.estdescricao as descricao
+            FROM territorios.estado e
+            $where
+            ORDER BY
+                e.estdescricao ASC
+        ";
 
         return $sql;
 
-    }//end pegarSQLSelect()
+    }
 
 
-}//end class
-
-?>
+}

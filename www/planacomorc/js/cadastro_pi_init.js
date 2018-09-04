@@ -381,22 +381,18 @@
         
         $('.input_orcamentario.custeio').keyup(function(){
             mudarCorCronogramaOrcamentarioCusteio();
-            avisarCronogramaOrcamentarioSuperiorCusteio();
         });
         
         $('.input_orcamentario.capital').keyup(function(){
             mudarCorCronogramaOrcamentarioCapital();
-            avisarCronogramaOrcamentarioSuperiorCapital();
         });
         
         $('.input_financeiro.custeio').keyup(function(){
             mudarCorCronogramaFinanceiroCusteio();
-            avisarCronogramaFinanceiroSuperiorCusteio();
         });
         
         $('.input_financeiro.capital').keyup(function(){
             mudarCorCronogramaFinanceiroCapital();
-            avisarCronogramaFinanceiroSuperiorCapital();
         });
 
         $('.input_financeiro').keyup(function(){

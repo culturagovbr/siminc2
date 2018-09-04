@@ -164,7 +164,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
                                         'exercicio' => $_SESSION['exercicio'],
                                         'unofundo' => 'FALSE',
-                                        'unidades'=>"suocod IN(". $codigoUnidadesWhere. ")"));
+                                        'unidades' => "suocod IN(". $codigoUnidadesWhere. ")"));
                                     $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
                                     $grafico
                                         ->setWidth('85%')

@@ -4,6 +4,7 @@ include_once '../planacomorc/_funcoespi.php';
 require_once APPRAIZ . 'includes/workflow.php';
 
 $cBeneficiario = new Emendas_Controller_Beneficiario();
+$cBeneficiarioObservacao = new Emendas_Controller_BeneficiarioObservacao();
 
 $perfis = pegaPerfilGeral();
 $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
@@ -20,19 +21,17 @@ switch ($_REQUEST['req']) {
     case 'excluir':
         $cBeneficiario->excluir($_REQUEST['benid']);
         die;
-    case 'formulario-historico':
-        $cBeneficiario->montarFormularioHistorico($_REQUEST['benid'], $_REQUEST['behid']);
+    case 'formulario-observacao':
+        $cBeneficiario->montarFormularioObservacao($_REQUEST['benid'], $_REQUEST['bobid']);
         die;
-    case 'listar-historico':
-        $cBeneficiario->montarListagemHistorico($_REQUEST['benid'], $podeEditar);
+    case 'listar-observacao':
+        $cBeneficiario->montarListagemObservacao($_REQUEST['benid'], $podeEditar);
         die;
-    case 'salvar-historico':
-        $cBeneficiarioHistorico = new Emendas_Controller_BeneficiarioHistorico();
-        $cBeneficiarioHistorico->salvar($_POST);
+    case 'salvar-observacao':
+        $cBeneficiarioObservacao->salvar($_POST);
         die;
-    case 'excluir-historico':
-        $cBeneficiarioHistorico = new Emendas_Controller_BeneficiarioHistorico();
-        echo $cBeneficiarioHistorico->excluir($_REQUEST['behid']);
+    case 'excluir-observacao':
+        echo $cBeneficiarioObservacao->excluir($_REQUEST['bobid']);
         die;
     case 'formulario-detalhe':
         $cBeneficiario->montarFormularioDetalhe($_REQUEST['emeid'], $_REQUEST['benid'], $_REQUEST['bedid']);
@@ -114,6 +113,9 @@ switch ($_REQUEST['req']) {
     case 'espelho-pi':
         include APPRAIZ. 'planacomorc/modulos/principal/unidade/espelho-pi.inc';
         die;
+    case 'historico-alteracao':
+        include APPRAIZ. 'emendas/modulos/principal/beneficiario_historico_modal.inc';
+        die;
 }
 //ver('ok', d);
 $mBeneficiario = new Emendas_Model_Beneficiario($_REQUEST['benid']);
@@ -184,6 +186,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title">
                                         <h5>Dados Gerais</h5>
+                                        <a style="font-size: 2.4em; margin-left: 10px;" class="fa fa-history" id="modal-historico-beneficiario" data-benid="<?= $mBeneficiario->benid; ?>" title="Histórico de alterações"></a>
                                     </div>
                                     <div class="ibox-content">
                                         <input type="hidden" name="req" id="req" value="salvar" />
@@ -217,8 +220,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <?php
                                             echo $simec->select('proid', 'Proponente', $mBeneficiario->proid, (new Emendas_Model_Proponente())->recuperarSqlCombo(["replace(to_char(procnpj::numeric, '00:000:000/0000-00'), ':', '.')", 'pronome'], null,'pronome'), ['required'], $configPodeEditar);
 
-                                            $aLocalizacoes = (new Emendas_Model_BeneficiarioLocalizacao())->recuperarPorBeneficiario($mBeneficiario->benid);
                                             echo $simec->select('esfid', 'Localização <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->esfid, (new Territorios_Model_Esfera())->recuperarSqlCombo());
+                                            $aLocalizacoes = (new Emendas_Model_BeneficiarioLocalizacao())->recuperarPorBeneficiario($mBeneficiario->benid);
                                         ?>
                                         <div class="select-localizacao"  id="div-localizacao_<?php echo Territorios_Model_Esfera::K_EXTERIOR ?>">
                                             <?php echo $simec->select('paiid[]', 'País', $aLocalizacoes['paiid'], (new Territorios_Model_Pais())->recuperarSqlCombo()); ?>
@@ -319,15 +322,15 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <h5>Observações</h5>
                                 </div>
                                 <div class="ibox-content">
-                                    <div id="div_formulario_historico">
+                                    <div id="div_formulario_observacao">
                                         <?php if($mBeneficiario->benid){
-                                          $cBeneficiario->montarFormularioHistorico($mBeneficiario->benid);
+                                          $cBeneficiario->montarFormularioObservacao($mBeneficiario->benid);
                                         } ?>
                                     </div>
-                                    <div id="div_listagem_historico">
+                                    <div id="div_listagem_observacao">
                                         <?php
                                         # Busca perfis do usuário logado
-                                        $cBeneficiario->montarListagemHistorico($mBeneficiario->benid, $podeEditar);
+                                        $cBeneficiario->montarListagemObservacao($mBeneficiario->benid, $podeEditar);
                                          ?>
                                     </div>
                                 </div>
@@ -603,7 +606,10 @@ include APPRAIZ . "includes/cabecalho.inc";
         </div>
     </div>
 </div>
-<script src="js/principal/beneficiario_form.js?v=4"></script>
+
+<?php bootstrapPopup("Histórico de Alterações",'historico-beneficiario',null, array('fechar'), array('tamanho' => 'lg')); ?>
+
+<script src="js/principal/beneficiario_form.js?v=5"></script>
 
 <script>
     $(function(){

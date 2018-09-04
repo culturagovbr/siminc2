@@ -265,6 +265,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             WHERE
                 suo.prsano = '{$_SESSION['exercicio']}'
                 AND suo.suostatus = 'A'
+                AND suo.unofundo = FALSE
                 $filtro
             GROUP BY
                 ordem,
@@ -285,6 +286,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             WHERE
                 suo.prsano = '{$_SESSION['exercicio']}'
                 AND suo.suostatus = 'A'
+                AND suo.unofundo = FALSE
                 $filtro
             GROUP BY
                 ordem,
@@ -307,6 +309,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             WHERE
                 suo.prsano = '{$_SESSION['exercicio']}'
                 AND suo.suostatus = 'A'
+                AND suo.unofundo = FALSE
                 $filtro
             GROUP BY
                 ordem,

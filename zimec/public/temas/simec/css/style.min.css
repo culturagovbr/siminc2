@@ -1780,10 +1780,11 @@ table.dataTable thead .sorting:after {
 }
 /* WIDGETS */
 .widget {
-  border-radius: 5px;
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+    border-radius: 4px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
 }
 .widget.style1 h2 {
   font-size: 30px;

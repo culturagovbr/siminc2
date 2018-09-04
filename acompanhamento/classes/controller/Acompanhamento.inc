@@ -20,7 +20,11 @@ class Acompanhamento_Controller_Acompanhamento
 
             $mAcompanhamento->prsano = $mAcompanhamento->prsano ? $mAcompanhamento->prsano : $_SESSION['exercicio'];
 
-            $mAcompanhamento->salvar(null, null, ['acoanalise', 'acoprovidencias', 'claid']);
+            $mAcompanhamento->salvar(null, null, [
+                'acoanalise',
+                'acoprovidencias',
+                'claid'
+            ]);
 
             $mAcompanhamento->associarAnexo($dados);
             $this->_vincularMedidas($mAcompanhamento->acoid, $dados);
@@ -98,6 +102,14 @@ class Acompanhamento_Controller_Acompanhamento
 
         include_once APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi.inc';
     }
+    
+    public function recuperarPiPorMetaPncESubunidade($mpnid, $suoid)
+    {
+        $mPi = new Pi_PlanoInterno();
+        $aPis = $mPi->recuperarPiPorMetaPncESubunidade($mpnid, $suoid);
+
+        include_once APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi.inc';
+    }
 
     public function recuperarHistorico($acoid)
     {
@@ -118,14 +130,4 @@ class Acompanhamento_Controller_Acompanhamento
         include_once APPRAIZ . 'acompanhamento/modulos/principal/listar-metas-ppa.inc';
     }
 
-    public function listarMetasPnc($suoid, $janid = null)
-    {
-        $mAcompanhamento = new Acompanhamento_Model_Acompanhamento();
-
-        $mJanela = new Acompanhamento_Model_Janela();
-        $janelaAtiva = $mJanela->recuperarJanelaAtiva(Acompanhamento_Model_Tipo::K_TIPO_INDICADOR_PNC);
-        $aJanelas = $mJanela->recuperarTodos('*', ["prsano = '{$_SESSION['exercicio']}'", "janstatus = 'A'", "tipid = " . Acompanhamento_Model_Tipo::K_TIPO_INDICADOR_PNC], 'janinicio desc');
-
-        include_once APPRAIZ . 'acompanhamento/modulos/principal/listar-metas-pnc.inc';
-    }
 }
