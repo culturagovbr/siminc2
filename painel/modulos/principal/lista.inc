@@ -621,7 +621,7 @@ if(PAINEL_PERFIL_CONSULTA == $arrPerfil[0]){
 $sql = "SELECT DISTINCT '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&indid='||i.indid||'&evento=A\"><img src=\"/imagens/alterar.gif \" border=0 title=\"Visualizar\"></a> '||".$permissoes['condicaolista']."||'</center>',
 				(SELECT 
 					(CASE WHEN count(*)>0 THEN 
-						'<center><a href=\"painel.php?modulo=principal/pc_indicador&acao=A&indid='||i.indid||'\"><img src=\"/imagens/seriehistorica_ativa.gif\" border=\"0\" title=\"Painel do Indicador\"></a></center>' 
+						'<center><a href=\"painel.php?modulo=principal/metaIndicador&acao=A&indid='||i.indid||'\"><img src=\"/imagens/seriehistorica_ativa.gif\" border=\"0\" title=\"Painel do Indicador\"></a></center>' 
 					ELSE 
 						'<center><img src=\"/imagens/seriehistorica_inativa.gif\" title=\"Não possui Série Histórica\"></center>' 
 					END)
@@ -661,7 +661,7 @@ $sql = "SELECT DISTINCT '<center><a href=\"painel.php?modulo=principal/cadastro&
 				WHERE sh.sehdtcoleta is not null and sh.sehstatus <> 'I' GROUP BY sh.indid) dt on dt.indid = i.indid
 	    ".(($filtroprocesso)?"WHERE ".implode(" AND ", $filtroprocesso):"")." 
 	    ORDER BY i.indid";
-$cabecalho = array("&nbsp;Ações&nbsp;&nbsp;&nbsp;&nbsp;", "Painel do Indicador", "Identificador do Indicador", "Nome", "Homologado", "Publicado", "Coleta", "Regionalização", "Detalhe", "Autarquia / Secretaria Executora" , "Ação", "Unidade de Medição", "Objetivo", "Última Atualização");
+$cabecalho = array("&nbsp;Ações&nbsp;&nbsp;&nbsp;&nbsp;", "Metas do Indicador", "Identificador do Indicador", "Nome", "Homologado", "Publicado", "Coleta", "Regionalização", "Detalhe", "Autarquia / Secretaria Executora" , "Ação", "Unidade de Medição", "Objetivo", "Última Atualização");
 
 $db->monta_lista($sql,$cabecalho,100,5,'N','center',$par2);
 

@@ -255,7 +255,7 @@ function cadastrarNovaMetaMeta()
 							per.perstatus = 'A'
 						order by
 							per.pernivel";
-				$db->monta_combo('perid',$sql,"S",'Selecione a Periodicidade','','','','','','','');
+				$db->monta_combo('perid',$sql,"S",'Selecione a Periodicidade','','','','','','','',1);
 			 ?>
 		</td>
 	</tr>
@@ -283,7 +283,8 @@ function cadastrarNovaMetaMeta()
 							sehstatus <> 'I'
 						order by
 							dpe.dpedatainicio asc";
-				$db->monta_combo('dpeidinicio',$sql,"S",'Selecione o Período','','','','','','','');
+                                $dados = $db->pegaUm($sql);
+				$db->monta_combo('dpeidinicio',$sql,"S",'Selecione o Período','','','','','','','', $dados);
 			 ?>
 		</td>
 	</tr>
@@ -331,7 +332,8 @@ function cadastrarNovaMetaMeta()
 											  )
 						order by
 							dpe.dpedatainicio asc";
-				$db->monta_combo('projecao',$sql,"S",'Selecione o Período','','','','','','','');?> até
+                                $dados = $db->pegaUm($sql);
+				$db->monta_combo('projecao',$sql,"S",'Selecione o Período','','','','','','','', $dados);?> até
 				<span id="span_dpeidfim"> 
 				<?php 
 				$sql = "select  
@@ -357,8 +359,9 @@ function cadastrarNovaMetaMeta()
 											  )
 						order by
 							dpe.dpedatainicio asc";
-				
-				$db->monta_combo('dpeidfim',$sql,"S",'Selecione o Período','','','','','','','');?>
+				$dados = $db->carregar($sql);
+                                $dados = $dados[count($dados)-1]['codigo'];
+				$db->monta_combo('dpeidfim',$sql,"S",'Selecione o Período','','','','','','','',$dados);?>
 				</span>
 		</td>
 	</tr>
@@ -417,3 +420,6 @@ function cadastrarNovaMetaMeta()
 <?php endif; ?>
 </table>
 </form>
+<script>
+    exibirGraficoMeta();
+</script>
