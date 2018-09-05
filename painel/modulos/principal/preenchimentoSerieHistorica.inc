@@ -45,8 +45,6 @@ switch($_REQUEST['acao']) {
 	break;
 }
 /* Fim Segurança : Validando os acessos as funções autorizadas */
-carregarGridBrasil();
-//gravarGridDadosSemFiltros();
 if($_REQUEST['requisicao']) {
 	if($_FUNCOESAUTORIZADAS[$_REQUEST['requisicao']]) {
 		$_REQUEST['requisicao']($_REQUEST);
