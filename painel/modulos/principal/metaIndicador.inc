@@ -138,12 +138,26 @@ function geraGraficoHighCharts(dados)
 	  data: "&geraGraficoJpGraph=true&dados=" + dados,
 	  success: function(msg){
 	   		 jQuery("#grafico_meta").html(msg);
+                         exibeLegenda();
 	   		 jQuery("#grafico_meta").find("script").each(function(i) {
                     eval(jQuery(this).text());
                 });
 	   }
 	});
 	
+}
+
+function exibeLegenda(){	
+	jQuery.ajax({
+	  type: "POST",
+	  url: 'painel.php?modulo=principal/cadastroEstrategiaMetas&acao=A',
+	  cache: false,
+	  data: "&req=consultar&indid=" + $("[name=indid]").val(),
+	  success: function(msg){
+                jQuery("#legenda_indicador").html(msg);
+                jQuery("#Titulo_legenda").html("Legenda:");
+	   }
+	});  
 }
 
 function testaDataPorDpeid(dpeid1,dpeid2){
@@ -241,7 +255,7 @@ function cadastrarNovaMetaMeta()
 							per.perstatus = 'A'
 						order by
 							per.pernivel";
-				$db->monta_combo('perid',$sql,"S",'Selecione a Periodicidade','','','','','','','');
+				$db->monta_combo('perid',$sql,"S",'Selecione a Periodicidade','','','','','','','',1);
 			 ?>
 		</td>
 	</tr>
@@ -269,7 +283,8 @@ function cadastrarNovaMetaMeta()
 							sehstatus <> 'I'
 						order by
 							dpe.dpedatainicio asc";
-				$db->monta_combo('dpeidinicio',$sql,"S",'Selecione o Período','','','','','','','');
+                                $dados = $db->pegaUm($sql);
+				$db->monta_combo('dpeidinicio',$sql,"S",'Selecione o Período','','','','','','','', $dados);
 			 ?>
 		</td>
 	</tr>
@@ -317,7 +332,8 @@ function cadastrarNovaMetaMeta()
 											  )
 						order by
 							dpe.dpedatainicio asc";
-				$db->monta_combo('projecao',$sql,"S",'Selecione o Período','','','','','','','');?> até
+                                $dados = $db->pegaUm($sql);
+				$db->monta_combo('projecao',$sql,"S",'Selecione o Período','','','','','','','', $dados);?> até
 				<span id="span_dpeidfim"> 
 				<?php 
 				$sql = "select  
@@ -343,8 +359,9 @@ function cadastrarNovaMetaMeta()
 											  )
 						order by
 							dpe.dpedatainicio asc";
-				
-				$db->monta_combo('dpeidfim',$sql,"S",'Selecione o Período','','','','','','','');?>
+				$dados = $db->carregar($sql);
+                                $dados = $dados[count($dados)-1]['codigo'];
+				$db->monta_combo('dpeidfim',$sql,"S",'Selecione o Período','','','','','','','',$dados);?>
 				</span>
 		</td>
 	</tr>
@@ -385,6 +402,14 @@ function cadastrarNovaMetaMeta()
 			</div>
 		</td>
 	</tr>
+	<tr>
+		<td width="30%" class="SubTituloDireita" id="Titulo_legenda" ></td>
+		<td>
+			<div style="vertical-align: middle; width:100%;height:100%;background-color:#FFF" id="legenda_indicador" >
+				<div id="legenda_indicador" ></div>
+			</div>
+		</td>
+	</tr>        
 <?php else: ?>
 	<tr>
 		<td class="SubtituloTabela bold center"><input type="button" name="btn_cadastrar_meta" value="Cadastrar Nova Meta" onclick="cadastrarNovaMetaMeta()" /></td>
@@ -395,3 +420,6 @@ function cadastrarNovaMetaMeta()
 <?php endif; ?>
 </table>
 </form>
+<script>
+    exibirGraficoMeta();
+</script>
