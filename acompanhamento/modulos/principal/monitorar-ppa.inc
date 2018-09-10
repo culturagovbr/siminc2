@@ -65,6 +65,7 @@
 
     include APPRAIZ . "includes/cabecalho.inc";
 ?>
+<script src="js/principal/acompanhamento.js?v=1"></script>
 
 <script src="../library/liquify/snap.svg.js"></script>
 <script src="../library/liquify/liquid.meter.js"></script>

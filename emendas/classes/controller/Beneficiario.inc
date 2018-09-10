@@ -8,6 +8,12 @@ class Emendas_Controller_Beneficiario
 
         try {
             $mBeneficiario = new Emendas_Model_Beneficiario($dados['benid']);
+            
+            # Verifica se é alteração(update) pra gerar histórico de alterações
+            if($mBeneficiario->benid){
+                $mBeneficiario->gravarHistorico($dados);
+            }
+            
             $mBeneficiario->popularDadosObjeto($dados);
 
             $mBeneficiario->benempenhado = $dados['benempenhado'] == 't' ? 't' : 'f';
@@ -43,7 +49,7 @@ class Emendas_Controller_Beneficiario
             $mBeneficiario->rollback();
             simec_redirecionar($url. ($dados['req'] == 'salvar-complemento'? '&aba=1': NULL), 'error');
         }
-    } //end salvar()
+    }
 
     public function excluir($benid)
     {
@@ -62,7 +68,7 @@ class Emendas_Controller_Beneficiario
             $mBeneficiario->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 
     public function montarFormularioObservacao($benid = null, $bobid = null)
     {
@@ -120,6 +126,6 @@ class Emendas_Controller_Beneficiario
     {
         $mEmenda = new Emendas_Model_Emenda($emeid);
         $mEmenda->atualizarPrograma();
-        ver($benid, $mEmenda, d);
+//        ver($benid, $mEmenda, d);
     }
 }

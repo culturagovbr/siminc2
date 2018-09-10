@@ -287,6 +287,9 @@ $paginic = $db->pegaUm($sql);
 
     <!-- Ion Range Slider -->
     <script src="/zimec/public/temas/simec/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+    
+    <!-- Steps -->
+    <script src="/zimec/public/temas/simec/js/plugins/steps/jquery.steps.min.js"></script>
 
     <!-- Textext JS -->
     <script src="/zimec/public/temas/simec/js/plugins/textext/js/textext.core.js"></script>
@@ -313,6 +316,8 @@ $paginic = $db->pegaUm($sql);
     <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/ion.rangeSlider.skinHTML5.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/normalize.css" rel="stylesheet">
+    <!-- Steps -->
+    <link href="/zimec/public/temas/simec/css/plugins/steps/jquery.steps.css?v=1.2.1" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/switchery/switchery.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/bootstrap-tour/bootstrap-tour.min.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/summernote/summernote.css" rel="stylesheet">
@@ -338,8 +343,8 @@ $paginic = $db->pegaUm($sql);
     <!-- Toastr style -->
     <link href="/zimec/public/temas/simec/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
-    <link href="/zimec/public/temas/simec/css/style.min.css?t=1.0" rel="stylesheet" media="all">
-    <link href="/zimec/public/temas/simec/css/simec.css?t=2.1" rel="stylesheet" media="all">
+    <link href="/zimec/public/temas/simec/css/style.min.css?t=1.1.1" rel="stylesheet" media="all">
+    <link href="/zimec/public/temas/simec/css/simec.css?t=2.2.4" rel="stylesheet" media="all">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

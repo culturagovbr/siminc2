@@ -65,9 +65,12 @@ class Emendas_Model_BeneficiarioLocalizacao extends Modelo
     );
 
     public function recuperarPorBeneficiario($benid){
-        $sql = "select * 
-                from  emendas.beneficiariolocalizacao
-                where benid = " . (int) $benid;
+        $sql = "
+            SELECT
+                *
+            FROM emendas.beneficiariolocalizacao
+            WHERE
+                benid = ". (int)$benid;
 
         $dados = $this->carregar($sql);
         $dados = $dados ? $dados : [];

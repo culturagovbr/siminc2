@@ -6,6 +6,7 @@ include_once "controleInicio.inc";
 include_once '_constantes.php';
 include_once '_funcoes.php';
 include_once '_componentes.php';
+require_once APPRAIZ . 'includes/funcoesspo.php';
 
 $simec = new Simec_View_Helper();
 $_SESSION['sislayoutbootstrap'] = 'zimec';

@@ -9,8 +9,10 @@ class Acompanhamento_Controller_Janela
         try {
             $mJanela = new Acompanhamento_Model_Janela($dados['janid']);
             $mJanela->popularDadosObjeto($dados);
+            $mJanela->janinicio = $mJanela->janinicio? formata_data_sql($mJanela->janinicio): NULL;
+            $mJanela->janfim = $mJanela->janfim? formata_data_sql($mJanela->janfim): NULL;
             $mJanela->prsano = $mJanela->prsano ? $mJanela->prsano : $_SESSION['exercicio'];
-                
+
             $mJanela->salvar(null, null, ['janfim', ]);
             $mJanela->commit();
             simec_redirecionar($url, 'success');

@@ -1,3 +1,35 @@
+th.tabela__header--acao
+{
+  width: 89px;
+}
+
+.editar_atividade:last-of-type,
+.inserir_anexo:last-of-type
+{
+    text-transform: uppercase;
+    font-weight: 600;
+    height: 40px;
+}
+
+.atividades_table,
+.indicadores_table
+{
+    font-size: 14px;
+}
+.atividades_table td:first-child,
+.indicadores_table th,
+.indicadores_table td
+{
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.indicadores_table th:first-child,
+.indicadores_table td:first-child
+{
+    text-align: justify;
+}
+
 *{
     /*font-size: 98% !important;*/
 }
@@ -665,7 +697,7 @@ tr.text-right th, tr.text-right td{
 }
 
 .box-legenda{
-    border-radius: 5px;
+    border-radius: 4px;
     padding: 3px 20px;
     float: left;
     margin-left: 10px;

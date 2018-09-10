@@ -122,8 +122,26 @@ function cabecalhoIndicador($indid){
 			<?=$dados['atualizacao'];?>
 		</td>
 	</tr>
+        <tr>
+            <td valign="middle" class="SubTituloDireita">
+                Legenda:
+            </td>
+            <td>
+        <?php
+            $sql = 'select emidsc from painel.estrategia_meta_indicador where indid = '.$indid;
+            $dados = $db->carregar($sql);
+            if ($dados){
+                echo '<table>';
+                foreach($dados as $value){
+                    echo '<tr><td>'.$value['emidsc'].'</td></tr>';
+                }
+                echo '</table>';
+            }
+        ?>
+            </td>
+        </tr>
 	</table>
-	<?
+	<?php
 	endif;
 }
 
@@ -1129,7 +1147,7 @@ function editarDetalheSH($indid,$sehid,$dshid){
 					<? montaCampoFormulario($titulo,$arrValor[$k],$indid) ?>
 				</td>
 				
-			<? 
+			<?php 
 			$k++;
 		endforeach;
 	
@@ -1274,6 +1292,18 @@ function verificaPerfilPainel() {
 				$permissoes['menu'][2] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=novoIndicador");
 				//$permissoes['menu'][3] = array("descricao" => "Tabela de Indicadores", "link"=> "/painel/painel.php?modulo=principal/tabela&acao=A");
 				break;
+			case GESTOR_PDE:
+				$permissoes['condicaolista']		  = "'<img style=\"cursor: pointer;\" src=\"/imagens/excluir_01.gif \" border=\"0\" title=\"Excluir\">'";
+				$permissoes['verindicadores'] 		  = "vertodos";
+				$permissoes['bloquearseriehistorica'] = true;
+				$permissoes['removerseriehistorica'] = true;
+				$permissoes['sou_solicitante']        = (($db->pegaUm("SELECT usucpf FROM seguranca.perfilusuario WHERE usucpf='".$_SESSION['usucpf']."' AND pflcod='".PAINEL_PERFIL_SOLICITANTE."'"))?true:false);
+				
+				$permissoes['menu'][0] = array("descricao" => "Lista de Indicadores", "link"=> ($enderecosweb[$_SERVER['REQUEST_URI']])?$_SERVER['REQUEST_URI']:key($enderecosweb));
+				$permissoes['menu'][1] = array("descricao" => "Meus indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A&evento=M");
+				$permissoes['menu'][2] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=novoIndicador");
+				//$permissoes['menu'][3] = array("descricao" => "Tabela de Indicadores", "link"=> "/painel/painel.php?modulo=principal/tabela&acao=A");
+				break;                            
 			default:
 				$permissoes['condicaolista']		 = "'<img style=\"cursor: pointer;\" src=\"/imagens/excluir_01.gif \" border=\"0\" title=\"Excluir\">'";
 				$permissoes['verindicadores'] 		 = array();
@@ -6190,7 +6220,7 @@ function geraGraficoHighCharts($dados)
 {
 	global $db;
 	/* INÍCIO - Recupera os parametros via $_GET e cria variáveis com os nomes e valores */
-	//dbg($dados);
+//	dbg($dados);
 	$arrPar = explode(";",$dados['dados']);
 	foreach($arrPar as $dado){
 		$d = explode("=",$dado);
@@ -6199,7 +6229,7 @@ function geraGraficoHighCharts($dados)
 	
 	extract($arrparametros);
 	/* FIM - Recupera os parametros via $_GET e cria variáveis com os nomes e valores */
-	
+        
 	if($tipo){
 		
 		/* ********* *  INICIO QUERY PARA PEGAR OS DADOS DO INDICADOR * ********* */
@@ -6224,7 +6254,7 @@ function geraGraficoHighCharts($dados)
 					inner join
 						painel.regionalizacao reg ON reg.regid = ind.regid
 					where
-						ind.indid = $indid
+						ind.indid = ".$arrparametros['indid']."
 					and
 						ind.indstatus = 'A'";
 			$arrDadosIndicador = $db->pegaLinha($sql);
@@ -6670,7 +6700,7 @@ function geraGraficoHighCharts($dados)
 						dpedatainicio
 						".( in_array("d.tidid1",$arrCampos) ? ",tidid1" : "" )."
 						".( in_array("d.tidid2",$arrCampos) ? ",tidid2" : "" )."";
-			
+//			ver($sql,d);
 			/* Fim SQL Novo */
 
 			if($tidid && $tidid != "todos"){

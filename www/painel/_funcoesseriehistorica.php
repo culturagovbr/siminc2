@@ -19,7 +19,7 @@ function carregarDetalhesTipoIndicador($dados) {
 	
 	// verificando se possui permissão para gerenciar detalhe indicador
 	if($acesso) {
-		$acoes = "<img src=\"../imagens/gif_inclui.gif\" align=\"absmiddle\" onclick=\"inserirDetalheTipoDadosIndicador('||tdiid||', this);\"> <img src=\"/imagens/alterar.gif\" align=\"absmiddle\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"editarDetalheTipoIndicador('||tdiid||', this);\"> <img src=\"/imagens/excluir.gif\" align=\"absmiddle\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"excluirDetalheTipoIndicador('||tdiid||');\">";
+		$acoes = "<img src=\"../imagens/gif_inclui.gif\" align=\"absmiddle\" onclick=\"inserirDetalheTipoDadosIndicador('||tdiid||', this);\"> <img src=\"/imagens/alterar.gif\" align=\"absmiddle\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"editarDetalheTipoIndicador('||tdiid||', this);\"> <img src=\"/imagens/excluir.gif\" align=\"absmiddle\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirDetalheTipoIndicador('||tdiid||');\">";
 	} else {
 		$acoes = "&nbsp;";
 	}
@@ -382,7 +382,6 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 	
 	// pegando o formato do campo
 	$formatoinput = pegarFormatoInput();
-	
 	if($registros[0]) {
 		foreach($registros as $key => $reg) {
 			// pegando a serie historica
@@ -433,7 +432,7 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 			} else {
 				unset($valor,$dinheiro);
 				if($seriehistorica) {
-					$sql = "SELECT trim(to_char(dshqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) as dshqtde FROM painel.detalheseriehistorica WHERE sehid='".$seriehistorica['sehid']."'";
+					$sql = "SELECT replace(trim(to_char(dshqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')),'.',',') as dshqtde FROM painel.detalheseriehistorica WHERE sehid='".$seriehistorica['sehid']."'";
 					$valor = $db->pegaUm($sql);
                                         $valor = str_replace('.',',',str_replace(',', '', $valor));
 				}
@@ -441,7 +440,7 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 				if($formatoinput['campovalor']) {
 					$html .="<td><font size=1>Quantidade:</font> <input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='item_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='item[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" onKeyUp=\"this.value=mascaraglobal('".$formatoinput['mascara']."',this.value);somarcoluna(this);\" size=\"".$formatoinput['size']."\" maxlength=\"".$formatoinput['maxlength']."\">";
 					if($seriehistorica) {
-						$sql = "SELECT trim(to_char(dshvalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) as dshvalor FROM painel.detalheseriehistorica WHERE sehid='".$variaveis['seriehistorica']."'";
+						$sql = "SELECT replace(trim(to_char(dshvalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')),'.',',') as dshvalor FROM painel.detalheseriehistorica WHERE sehid='".$variaveis['seriehistorica']."'";
 						$dinheiro = $db->pegaUm($sql);
 					}
 					$html .= "<br />&nbsp;&nbsp;&nbsp;<font size=1>Valor (R$):</font> <input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='valor_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='valor[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$dinheiro."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" onKeyUp=\"this.value=mascaraglobal('".$formatoinput['campovalor']['mascara']."',this.value);somarcoluna(this);\" size=\"".$formatoinput['campovalor']['size']."\" maxlength=\"".$formatoinput['campovalor']['maxlength']."\">";
@@ -1461,7 +1460,6 @@ function carregarGridBrasil($dados) {
 			INNER JOIN painel.indicador ind ON ind.perid = dpe.perid   
 			WHERE dpestatus='A' AND indid='".$_SESSION['indid']."' ORDER BY dpe.dpedatainicio";
 	$linhasperiodos = $db->carregar($sql);
-	
 	// carregando os detalhes do indicador
 	$detalhes = detalhetipoindicador();
 

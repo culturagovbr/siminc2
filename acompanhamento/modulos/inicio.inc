@@ -2,6 +2,7 @@
 
 //simec_redirecionar('emendas.php?modulo=principal/emenda&acao=A');
 $cAcompanhamento = new Acompanhamento_Controller_Acompanhamento();
+$cAcompanhamentopnc = new Acompanhamento_Controller_Acompanhamentopnc();
 switch ($_REQUEST['req']) {
     case 'espelho-pi':
         include APPRAIZ. 'planacomorc/modulos/principal/unidade/espelho-pi.inc';
@@ -10,7 +11,7 @@ switch ($_REQUEST['req']) {
         $cAcompanhamento->listarMetasPpa($_REQUEST['suoid'], $_REQUEST['janid']);
         die;
     case 'listar-metas-pnc':
-        $cAcompanhamento->listarMetasPnc($_REQUEST['suoid'], $_REQUEST['janid']);
+        include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc';
         die;
 }
 
@@ -23,6 +24,8 @@ include_once APPRAIZ . "includes/library/simec/Grafico.php";
 include APPRAIZ . "includes/cabecalho.inc";
 include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 ?>
+
+<script src="js/principal/acompanhamento.js?v=1"></script>
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-4">
@@ -198,7 +201,7 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
             <?php $cAcompanhamento->listarMetasPpa($suoid); ?>
         </div>
         <div class="col-md-12" id="box-metas-pnc">
-            <?php $cAcompanhamento->listarMetasPnc($suoid); ?>
+            <?php include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc'; ?>
         </div>
     </div>
 </div>
@@ -233,7 +236,7 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
             $('#detalhe-pi').modal();
             return false;
         });
-    })
+    });
 
     /**
      * Exibe popup com Detalhes do pi. Tela de Espelho de PI.
