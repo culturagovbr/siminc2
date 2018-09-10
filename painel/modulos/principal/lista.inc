@@ -576,7 +576,7 @@ if(PAINEL_PERFIL_CONSULTA == $arrPerfil[0]){
             <input type="radio" name="indpublicado" value="true" <? echo (($_SESSION['painel']['indpublicado']=='true')?'checked':''); ?> > Sim
             <input type="radio" name="indpublicado" value="false" <? echo (($_SESSION['painel']['indpublicado']=='false')?'checked':''); ?> > Não</td>
 	</tr>
-	<tr>
+	<tr style="display: none;">
 	    <td align='right' class="SubTituloDireita">Indicador Homologado:</td>
 	    <td>
 	    	<input type="radio" name="indhomologado" value="ambos" <? echo (($_SESSION['painel']['indhomologado']!='true') && ($_SESSION['painel']['indhomologado']!='false')?'checked':''); ?> > Todos 
@@ -584,7 +584,8 @@ if(PAINEL_PERFIL_CONSULTA == $arrPerfil[0]){
 	    	<input type="radio" name="indhomologado" value="false" <? echo (($_SESSION['painel']['indhomologado']=='false')?'checked':''); ?> > Não
 	    </td>
 	</tr>
-	<tr>
+    <input type="hidden" name="indhomologado" value="true">
+    <tr>
 	    <td align='right' class="SubTituloDireita">Módulo Público:</td>
 	    <td>
 	    	<input type="radio" name="indpublico" value="ambos" <? echo (($_SESSION['painel']['indpublico']!='true') && ($_SESSION['painel']['indpublico']!='false')?'checked':''); ?> > Todos 

@@ -299,7 +299,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				FROM  painel.indicador i
 				WHERE 
 				i.indid = ".$indid."
-				";	
+				";
 			$dados = $db->pegaLinha($sql);
 			
 			//OBJETIVO
@@ -883,7 +883,7 @@ if($permite>0 && (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod) || in_array(G
 		</td>
 	</tr>
 
-<tr>
+<tr style="display: none;">
 <?php
 }else{
 	if($indpublicado=='')
@@ -902,6 +902,7 @@ if($permite>0 && (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod) || in_array(G
 		<input type="radio" value="true"  onclick="exibeSHFormula()"   name="indshformula" id="indshformula1" <?= ($indshformula == 't') ? 'checked="checked"' : '' ?>/>Sim
 	</td>
 </tr>
+    <input type="hidden" name="indshformula" value="false">
 <?php 
 if (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod))
 {
@@ -1038,11 +1039,11 @@ else
     <td align='right' class="SubTituloDireita">Fórmula:</td>
     <td><?=campo_textarea( 'indformula', 'N', (($acesso)?'S':'N'), '', 98, 5, 1000 );?></td>
 </tr> 
-<tr>
+<tr style="display: none;">
     <td align='right' class="SubTituloDireita">Termos:</td>
     <td><?= campo_textarea( 'indtermos', 'N', (($acesso)?'S':'N'), '', 98, 5, 1000 );?></td>
 </tr>
-<tr>
+<tr style="display: none;">
     <td align='right' class="SubTituloDireita">Fontes por Termo:</td>
     <td><?= campo_textarea( 'indfontetermo', 'N', (($acesso)?'S':'N'), '', 98, 5, 1000 );?></td>
 </tr>
