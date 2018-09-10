@@ -39,7 +39,7 @@ if($_REQUEST['indid'] == 'novoIndicador') {
 	echo montarAbasArray($menu, "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=".$_REQUEST['indid']."&evento=".$_REQUEST['evento']."");
 	$acesso = true;
 	unset($_SESSION['indid']);
-	$indhomologado = 'f';
+	$indhomologado = 't';
 }
 
 if($_SESSION['indid']):
@@ -514,9 +514,9 @@ function validaUnidadeMedicao(valor) {
 	<?php
 	//Verifica se o usuário é do tipo Super Usuário, se não for, só exibe o Eixo que possui permissão.
 	$arrPflcod = pegaPerfil();
-			
+
 	if(!in_array(PAINEL_PERFIL_ADM_EIXO,$arrPflcod) || $db->testa_superuser() || in_array(PAINEL_PERFIL_ATUALIZA_SH,$arrPflcod) || in_array(PAINEL_PERFIL_CONSULTA,$arrPflcod)){
-	
+
 		$sql= "SELECT 
 			exodsc AS descricao, 
 			exoid AS codigo
@@ -544,15 +544,15 @@ function validaUnidadeMedicao(valor) {
 		order by
 			 descricao";
 	}
-	
+
 	$arrEixos = $db->carregar($sql);
-	
+
 	!$arrEixos? $arrEixos = array() : $arrEixos = $arrEixos;
-	
+
 	foreach($arrEixos as $eixos){
 		$arrExoid[] = $eixos['codigo'];
 	}
-	
+
 	if($arrEixos && $exoid && in_array(PAINEL_PERFIL_ADM_EIXO,$arrPflcod) && !in_array($exoid,$arrExoid)){
 		$sql= "SELECT 
 			exodsc AS descricao, 
@@ -564,10 +564,8 @@ function validaUnidadeMedicao(valor) {
 		";
 		
 		$display_botoes = "none";
-		
 	}
-	
-	
+
 	?>
     <td align='right' class="SubTituloDireita">Eixo:</td>
     <td><?=$db->monta_combo('exoid',$sql,(($acesso)?'S':'N'),'Selecione...',"",'','','','S','','',$exoid);?></td>
@@ -869,15 +867,15 @@ if($permite>0 && (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod) || in_array(G
 			<input type="radio" value="false" <?=$checkNaoPub?> name="indpublicado" onclick="mostraindpublico(0)"/>Não 
 			<input type="radio" value="true"  <?=$checkSimPub?> name="indpublicado" onclick="mostraindpublico(1)"/>Sim
 		</td>
-<!--	</tr>-->
-<!--		<tr>	-->
-<!--		<td align='right' class="SubTituloDireita">Homologado?</td>-->
-<!--		<td>-->
-<!--			<input type="radio" value="false" name="indhomologado" id="indhomologado0" --><?//= ($indhomologado == 'f') ? 'checked="checked"' : '' ?><!--/>Não -->
-			<input type="hidden" value="true"  name="indhomologado" id="indhomologado1" <?= ($indhomologado = 't') ?>/>
-<!--		</td>-->
-<!--	</tr>-->
-	<tr style="display: <?=($indpublicado == 't') ? 'table-row' : 'none'; ?> ">
+	</tr>
+    <tr style="display: none;">
+		<td align='right' class="SubTituloDireita">Homologado?</td>
+		<td>
+			<input type="radio" value="false" name="indhomologado" id="indhomologado0" <?= ($indhomologado == 'f') ? 'checked="checked"' : '' ?>/>Não
+            <input type="radio" value="true"  name="indhomologado" id="indhomologado1" <?= ($indhomologado == 't') ? 'checked="checked"' : '' ?>/>Sim
+		</td>
+	</tr>
+	<tr style="display: none;" id="mod-publico">
 		<td align='right' class="SubTituloDireita">Módulo Público?</td>
 		<td>
 			<input type="radio" value="false" name="indpublico" id="indpublico0" <?= ($indpublico == 'f') ? 'checked="checked"' : '' ?>/>Não 
@@ -895,10 +893,7 @@ if($permite>0 && (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod) || in_array(G
 	if($indpublico=='')
 		$indpublico = 'false';
 	echo "<input type='hidden' name='indpublico' value='$indpublico'>";
-	
-	if($indhomologado=='')
-		$indhomologado = 'false';
-	echo "<input type='hidden' name='indhomologado' value='$indhomologado'>";
+
 }
 ?>
 	<td align='right' class="SubTituloDireita">Série Histórica com Fórmula?</td>
@@ -1326,10 +1321,10 @@ function validar(){
 }
 
 function mostraindpublico(tr){
-	var trPublico   = document.getElementById('trPublico');
+	var trPublico   = document.getElementById('mod-publico');
 	var indpublico0 = document.getElementById('indpublico0');
 	var indpublico1 = document.getElementById('indpublico1');
-	if( tr == 1 ){	
+	if( tr == 1 ){
 		trPublico.style.display = 'table-row';
 		document.formulario.indhomologado[1].checked=true;
 	}else{
