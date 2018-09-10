@@ -1507,7 +1507,7 @@ function carregarGridBrasil($dados) {
 	$html .= montarSubRodapeDetalhes($detalhes);
 	// Botão para gravar o formulario de estado
 	$html .= "<tr>";
-	$html .= "<td colspan='".($colspancabecalho+1)."' class='SubTituloDireita'><input type='submit' value='Gravar'> <input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
+	$html .= "<td colspan='".($colspancabecalho+2)."' class='SubTituloDireita'><input type='submit' value='Gravar'> <input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
 	$html .= "</tr>";
 	
 	$html .= "</tfoot>";
@@ -2094,16 +2094,18 @@ function listaSerieHistorica() {
 	}
 	
 	// fim permissao
-	$sql = "SELECT '<center>'|| CASE WHEN (sehbloqueado = true) THEN '<img src=../imagens/cadiado".$caddetalhe.".png ".$actsim."> <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');>' ELSE '<img src=\"/imagens/alterar.gif\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"window.location=\'?modulo=principal/preenchimentoSerieHistorica&acao=A&dpeid='||seh.dpeid||'\'\"> ".(($permissoes['removerseriehistorica'])?"<img src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('||sehid||');\">":"")." <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');> <img src=../imagens/cadeadoAberto".$caddetalhe.".png ".$actnao.">' END ||'</center>' as acoes,
+	$sql = "SELECT '<center>'|| CASE WHEN (sehbloqueado = true) THEN '<img src=../imagens/cadiado".$caddetalhe.".png ".$actsim."> <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');>' ELSE '<img src=\"/imagens/alterar.gif\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"window.location=\'?modulo=principal/preenchimentoSerieHistorica&acao=A&dpeid='||seh.dpeid||'\'\"> ".(($permissoes['removerseriehistorica'])?"<img src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('||seh.sehid||');\">":"")." <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');> <img src=../imagens/cadeadoAberto".$caddetalhe.".png ".$actnao.">' END ||'</center>' as acoes,
 				   to_char(seh.sehdtcoleta,'DD/MM/YYYY') as data, 
 				   dpe.dpedsc,
-				   $qtde
+				   $qtde,
+                                   dsh.dshobs
 			FROM painel.seriehistorica seh 
 			LEFT JOIN painel.detalheperiodicidade dpe ON dpe.dpeid = seh.dpeid 
+                        LEFT JOIN painel.detalheseriehistorica dsh on seh.sehid = dsh.sehid
 			WHERE seh.indid = '".$_SESSION['indid']."' AND (sehstatus='A' OR sehstatus='H') 
 			ORDER BY dpedatainicio";
 	
-	$cabecalho = array("Ações", "Data de Coleta","Referência", $formatoinput['label']);
+	$cabecalho = array("Ações", "Data de Coleta","Referência", $formatoinput['label'], 'Observação');
 	if($formatoinput['campovalor'])$cabecalho[] = $formatoinput['campovalor']['label'];
 	//dbg(simec_htmlentities($sql));
 	$db->monta_lista($sql,$cabecalho,100,5,'N','center',$par2);
