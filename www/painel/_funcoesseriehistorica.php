@@ -434,7 +434,6 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 				if($seriehistorica) {
 					$sql = "SELECT replace(trim(to_char(dshqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')),'.',',') as dshqtde FROM painel.detalheseriehistorica WHERE sehid='".$seriehistorica['sehid']."'";
 					$valor = $db->pegaUm($sql);
-                                        $valor = str_replace('.',',',str_replace(',', '', $valor));
 				}
 				
 				if($formatoinput['campovalor']) {
