@@ -492,6 +492,7 @@ switch($dadosindicador['regid']) {
 ?>
 <script type="text/javascript" src="/includes/prototype.js"></script>
 <script type="text/javascript" src="./js/painel.js"></script>
+<form name="preenchimentoSerie" method="POST">
 <table class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3"	align="center">
 <tr>
 	<td class='SubTituloCentro' colspan='<? echo (count($tabeladefiltros)*2); ?>'>Filtros</td>
@@ -511,7 +512,7 @@ $nroAnoReferencia = $_REQUEST['nroAnoReferencia'];
 $tabeladefiltros[] = array("descricao"	       => "Ano Referência:",
                             "nome"  	       => "nroAnoReferencia",
                             "editavel"	       => "S",
-                            "funcaojavascript" => "montargrid_brasil",
+                            "funcaojavascript" => "submeter",
                             "td_id"	       => "tdAnos",
                             "sql"	       => $listaAnos);
 if($tabeladefiltros) {
@@ -528,8 +529,19 @@ if($tabeladefiltros) {
 ?>
 </tr>
 </table>
+    <input type="hidden" name="nroAnoReferencia" id="nroAno" value="<?= $nroAnoReferencia?>">
+</form>
 <div id="gridinfo"></div>
 <script>
+    <?php
+        if ($nroAnoReferencia){
+            echo "montargrid_brasil();";
+        }    
+    ?>
+    function submeter(nroAno){
+        document.getElementById("nroAno").value = nroAno;
+        document.preenchimentoSerie.submit();
+    }
 <?php
 /*
  * Carregando permissões do perfil
@@ -544,10 +556,6 @@ if($permissoes['verindicadores'] == 'vertodos') {
 
 if($acesso) {
 	if($tabeladefiltros) {
-		if($_REQUEST['dpeid']) {
-			echo "document.getElementById('dpeid').value='".$_REQUEST['dpeid']."';";
-			echo "document.getElementById('dpeid').onchange();";
-		}
 		if($_REQUEST['estuf']) {
 			echo "document.getElementById('estuf').value='".$_REQUEST['estuf']."';";
 			echo "document.getElementById('estuf').onchange();";
