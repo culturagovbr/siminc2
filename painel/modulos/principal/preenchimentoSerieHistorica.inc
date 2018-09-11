@@ -497,7 +497,23 @@ switch($dadosindicador['regid']) {
 	<td class='SubTituloCentro' colspan='<? echo (count($tabeladefiltros)*2); ?>'>Filtros</td>
 </tr>
 <tr>
-<?
+<?php
+
+$anoInicial = date("Y")-7;
+$anoFinal = date("Y")+5;
+$j=0;
+for ($i=$anoInicial;$i<=$anoFinal;$i++){
+    $listaAnos[$j]['codigo']=$i;
+    $listaAnos[$j]['descricao']=$i;
+    $j++;
+}
+$nroAnoReferencia = $_REQUEST['nroAnoReferencia'];
+$tabeladefiltros[] = array("descricao"	       => "Ano Referência:",
+                            "nome"  	       => "nroAnoReferencia",
+                            "editavel"	       => "S",
+                            "funcaojavascript" => "montargrid_brasil",
+                            "td_id"	       => "tdAnos",
+                            "sql"	       => $listaAnos);
 if($tabeladefiltros) {
 	foreach($tabeladefiltros as $tbl) {
 		echo "<td class='SubTituloDireita' style='width:150px;'>".$tbl['descricao']."</td>";

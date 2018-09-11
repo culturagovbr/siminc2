@@ -17,7 +17,7 @@ if(!$_SESSION['indid']){
 // monta cabeçalho 
 include APPRAIZ . 'includes/cabecalho.inc';
 print '<br/>';
-
+$abacod_tela = 57279;
 $db->cria_aba($abacod_tela,$url,'');
 
 $titulo = "Metas do Indicador";

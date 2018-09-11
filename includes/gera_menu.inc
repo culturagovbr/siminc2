@@ -1,7 +1,7 @@
 <!-- MENU -->
 <!-- INCLUSÃO DO CSS PARA O MENU DO NOVO LAYOUT DO SIMEC - 15/05/10 -->
 <script type="text/javascript" language="javascript" src="../includes/layout/<? echo $theme ?>/js/menu.js"></script>
-<?
+<?php
  /*
    Sistema Sistema Simec
    Setor responsável: SPO/MEC
@@ -15,7 +15,7 @@
 if (!$_SESSION['menu'][$_SESSION['usucpf']][$_SESSION['sisid']] || $db->testa_superuser()) {
 	$premenu = '<script>function DoPopup(url,name,width,height){ args = "width=" + width + "," + "height=" + height + "," + "location=0," + "menubar=0," + "resizable=0," + "scrollbars=1"; popupWin = window.open(url, name, args);} isNS4 = (document.layers) ? true : false;NS4 = (document.layers);IE4 = (document.all);ver4 = (NS4 || IE4);isMac = (navigator.appVersion.indexOf("Mac") != -1);isMenu = (NS4 || (IE4 && !isMac));function popUp(){return};function popDown(){return};function startIt(){return};var platform = navigator.appVersion;isUNIX = (platform.indexOf("X11") != -1) ||  (platform.indexOf("Linux") != -1) ||  (platform.indexOf("SunOS") != -1) ||  (platform.indexOf("IRIX") != -1) ||   (platform.indexOf("HP-UX") != -1);if (!ver4) event = null;browser = (((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) >= 3 )) || ((navigator.appName == "Microsoft Internet Explorer") && (parseInt(navigator.appVersion) >= 4 )));function countries(){var location = document.country_dropdown.select1.options[document.country_dropdown.select1.selectedIndex].value;document.location = location;}if (NS4) {document.write(\'<layer name="searchBox2" left="20px" top="59px" width="117px" height="20px" visibility="hidden" id="searchBox2" z-index="0"><table cellpadding="0" cellspacing="0" border="0"><tr><td><a href="#" onMouseOver="javascript:restoreSearch();"><img src="stylesheet/ns4search.gif" vspace="0" border="0" alt=""><\/a><\/td><\/tr><\/table><\/layer>\');}menunum=0;menus=new Array();_d=document;function addmenu(){menunum++;menus[menunum]=menu;}function dumpmenus(){mt="<script language=javascript>";for(a=1;a<menus.length;a++){mt+=" menu"+a+"=menus["+a+"];"}mt+="<\/script>";_d.write(mt)}timegap=1000;followspeed=2;followrate=5;suboffset_top=0;suboffset_left=0;if(navigator.appVersion.indexOf("MSIE 6.0")>0){	effect = ""}else{effect = ""}';
 	// Primeiro campo numerico é a distancia do top
-    $premenu .= 'addmenu(menu=["mainmenu",85,10,120,0,,style2,1,"left",,1,1,1,,1,,0,,,,,';
+    $premenu .= 'addmenu(menu=["mainmenu",85,10,140,0,,style2,1,"left",,1,1,1,,1,,0,,,,,';
 
 	$lista_cpf="'".$_SESSION['usucpf']."'";
 	$sql = "select usucpf_delegante as usu_superior from seguranca.delegacao_competencia where sisid=".$_SESSION['sisid']." and usucpf_delegado='".$_SESSION['usucpf']."' and dcpstatus='A' and dcpdata_ini <='".date('Y-m-d')."' and dcpdata_fim >='".date('Y-m-d')."'";
@@ -79,8 +79,8 @@ if (!$_SESSION['menu'][$_SESSION['usucpf']][$_SESSION['sisid']] || $db->testa_su
 			$i++;
 		}
 	}
-
 	$premenu .= ',"&nbsp;&nbsp;<img src=../imagens/menu/bt_menu_close.png align=top border=0>&nbsp;&nbsp;Sair&nbsp;&nbsp;","../logout.php", " ", ,1]);';
+
 
 
 	//ZSub-Menus Verticais
@@ -138,6 +138,6 @@ if (!$_SESSION['menu'][$_SESSION['usucpf']][$_SESSION['sisid']] || $db->testa_su
 print $_SESSION['menu'][$_SESSION['usucpf']][$_SESSION['sisid']];
 ?>
 <script type="text/javascript" language="javascript" src="../includes/mmenu.js"></script>
-<?
+<? 
 unset($mnucod , $mnucodpai , $mnudsc , $mnustatus , $mnulink , $mnutipo , $mnustile , $mnuhtml , $mnusnsubmenu , $mnutransacao , $mnushow , $abacod , $mnudscpai, $premenu);
 ?>

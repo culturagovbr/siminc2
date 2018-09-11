@@ -1198,11 +1198,6 @@ function verificaPerfilPainel() {
 		$permissoes['menu'][0] = array("descricao" => "Lista de Indicadores", "link"=> ($enderecosweb[$_SERVER['REQUEST_URI']])?$_SERVER['REQUEST_URI']:key($enderecosweb));
 		$permissoes['menu'][1] = array("descricao" => "Meus indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A&evento=M");
 		$permissoes['menu'][2] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=novoIndicador");
-		$permissoes['menu'][3] = array("descricao" => "Relatório de Indicadores", "link"=> "/painel/painel.php?modulo=principal/tabela&acao=A");
-		$permissoes['menu'][4] = array("descricao" => "Relatório de Viagem PR", "link"=> "/painel/painel.php?modulo=principal/relatorioViagemPR&acao=A");
-		$permissoes['menu'][5] = array("descricao" => "Relatório Pronatec", "link"=> "/painel/painel.php?modulo=principal/relatorioPronatec&acao=A");
-		$permissoes['menu'][6] = array("descricao" => "Vincular Temas e Etapas", "link"=> "/painel/painel.php?modulo=principal/vincularTemas&acao=A");
-
 	} else {
 		// selecionando o perfil de maior nivel
 		$sql = "SELECT p.pflcod FROM seguranca.perfil p 

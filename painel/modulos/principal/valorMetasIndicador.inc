@@ -49,8 +49,7 @@ print '<br/>';
 
 $menu[0] = array("descricao" => "Metas do Indicador", 		 "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
 $menu[1] = array("descricao" => "Editar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
-$menu[2] = array("descricao" => "Estratégias de Meta", 		 "link"=> "/painel/painel.php?modulo=principal/estrategiaMetasIndicador&acao=A");
-$menu[3] = array("descricao" => "Valores de Meta", 		 	 "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
+$menu[2] = array("descricao" => "Valores de Meta", 		 	 "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
 echo montarAbasArray($menu, "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
 
 $titulo = "Valores de Meta";

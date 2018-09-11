@@ -1452,7 +1452,9 @@ function carregarGridBrasil($dados) {
 	global $db;
 	$sql = "SELECT ind.unmid, dpe.dpeid as codigo, dpe.dpedsc as descricao FROM painel.detalheperiodicidade dpe 
 			INNER JOIN painel.indicador ind ON ind.perid = dpe.perid   
-			WHERE dpestatus='A' AND indid='".$_SESSION['indid']."' ORDER BY dpe.dpedatainicio";
+			WHERE dpestatus='A' AND indid='".$_SESSION['indid']."' 
+                          and dpeanoref = '".$_REQUEST['nroAnoReferencia']."'
+                        ORDER BY dpe.dpedatainicio";
 	$linhasperiodos = $db->carregar($sql);
 	// carregando os detalhes do indicador
 	$detalhes = detalhetipoindicador();

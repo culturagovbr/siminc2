@@ -15,7 +15,7 @@ if($_POST['requisicao']){
 // monta cabeçalho 
 include APPRAIZ . 'includes/cabecalho.inc';
 print '<br/>';
-
+$abacod_tela = 57279;
 $db->cria_aba($abacod_tela,$url,'');
 $titulo = "Metas do Indicador";
 monta_titulo( $titulo, '&nbsp' );
