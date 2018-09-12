@@ -193,9 +193,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 			} else {
                             $sql = "select perid, regid from painel.indicador where indid = ".$indid;
                             $registro = $db->pegalinha($sql);
-                            $peridAtual = $registro->perid;
-                            $regidAtual = $registro->regid;
-			
+                            $peridAtual = $registro['perid'];
+                            $regidAtual = $registro['regid'];
 				$sql_U = "
 					UPDATE painel.indicador
 					SET

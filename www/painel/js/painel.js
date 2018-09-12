@@ -225,7 +225,8 @@ function executar_estadomunicipio(valor) {
 // montar grid por escola (montar+redimensionar+totalizar)
 function montargrid_brasil() {
 	document.getElementById('gridinfo').innerHTML='<p align="center">Carregando...</p>';
-	ajaxatualizar('requisicao=carregarGridBrasil','gridinfo');
+        var nroAnoReferencia = document.getElementById('nroAnoReferencia').value;
+	ajaxatualizar('requisicao=carregarGridBrasil&nroAnoReferencia='+nroAnoReferencia,'gridinfo');
 	somarTodasColunas();
 }
 // montar grid por escola (montar+redimensionar+totalizar)

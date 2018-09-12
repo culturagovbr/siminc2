@@ -1457,7 +1457,9 @@ function carregarGridBrasil($dados) {
 	global $db;
 	$sql = "SELECT ind.unmid, dpe.dpeid as codigo, dpe.dpedsc as descricao FROM painel.detalheperiodicidade dpe 
 			INNER JOIN painel.indicador ind ON ind.perid = dpe.perid   
-			WHERE dpestatus='A' AND indid='".$_SESSION['indid']."' ORDER BY dpe.dpedatainicio";
+			WHERE dpestatus='A' AND indid='".$_SESSION['indid']."' 
+                          and dpeanoref = '".$_REQUEST['nroAnoReferencia']."'
+                        ORDER BY dpe.dpedatainicio";
 	$linhasperiodos = $db->carregar($sql);
 	// carregando os detalhes do indicador
 	$detalhes = detalhetipoindicador();
@@ -1465,6 +1467,7 @@ function carregarGridBrasil($dados) {
 	// iniciando o o código html (abrindo o formulario e tabela) 
 	$html .= "<form method='post'>";
 	$html .= "<input type='hidden' name='requisicao' value='gravarGridDadosSemFiltros'>";
+        $html .= "<input type='hidden' name='nroAnoReferencia' value='".$_REQUEST['nroAnoReferencia']."'>";
 	$html .= "<table class=\"tabela\" style=\"color:333333;\" cellSpacing=\"1\" cellPadding=\"3\" align=\"center\">";
 	$html .= "<thead>";
 	// imprimindo o cabeçalho
@@ -1963,7 +1966,10 @@ function gravarGridDadosSemFiltros($dados) {
 	global $db, $_CONFIGS;
 	
 	// limpando todas series historicas
-	$db->executar("UPDATE painel.seriehistorica SET sehstatus='I' WHERE sehbloqueado != true and indid='".$_SESSION['indid']."'", false);
+	$db->executar("UPDATE painel.seriehistorica SET sehstatus='I' 
+                        WHERE sehbloqueado != true 
+                          and indid='".$_SESSION['indid']."' 
+                          and dpeid in (select dpeid from painel.detalheperiodicidade where dpeanoref='".$_REQUEST['nroAnoReferencia']."')", false);
 	$formatoinput = pegarFormatoInput();
 	// verificando se existe item
 	if($dados['item']) {
@@ -2091,7 +2097,8 @@ function listaSerieHistorica() {
 	}
 	
 	// fim permissao
-	$sql = "SELECT '<center>'|| CASE WHEN (sehbloqueado = true) THEN '<img src=../imagens/cadiado".$caddetalhe.".png ".$actsim."> <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');>' ELSE '<img src=\"/imagens/alterar.gif\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"window.location=\'?modulo=principal/preenchimentoSerieHistorica&acao=A&dpeid='||seh.dpeid||'\'\"> ".(($permissoes['removerseriehistorica'])?"<img src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('||seh.sehid||');\">":"")." <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');> <img src=../imagens/cadeadoAberto".$caddetalhe.".png ".$actnao.">' END ||'</center>' as acoes,
+	$sql = "SELECT '<center>'|| CASE WHEN (sehbloqueado = true) THEN '<img src=../imagens/cadiado".$caddetalhe.".png ".$actsim."> <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');>' ELSE '<img src=\"/imagens/alterar.gif\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"window.location=\'?modulo=principal/preenchimentoSerieHistorica&acao=A&dpeid='||seh.dpeid||'&nroAnoReferencia='||dpe.dpeanoref||'\'\"> ".(($permissoes['removerseriehistorica'])?"<img src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('||seh.sehid||');\">":"")." <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');> <img src=../imagens/cadeadoAberto".$caddetalhe.".png ".$actnao.">' END ||'</center>' as acoes,
+
 				   to_char(seh.sehdtcoleta,'DD/MM/YYYY') as data, 
 				   dpe.dpedsc,
 				   $qtde,
