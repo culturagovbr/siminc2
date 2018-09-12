@@ -69,7 +69,8 @@ include APPRAIZ . "includes/cabecalho.inc";
 
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5 class="col-lg-3">Acompanhamento Geral FNC - Por Unidade</h5> <a class="btn btn-success" href="planacomorc.php?modulo=inicio&acao=C&req=exportar_xls_unidade"><i class="fa fa-area-chart"></i> Exportar XLS</a>
+                    <h5 class="col-lg-3">Acompanhamento Geral FNC - Por Unidade</h5>
+                    <a class="btn btn-primary" href="planacomorc.php?modulo=inicio&acao=C&req=exportar_xls_unidade"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
@@ -102,61 +103,61 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 }
                                 ?>
                                 <tr class="text-right" <?php echo $style; ?>>
-                                    <td style="text-align: left"><?php echo $dados['unocod'] . ' - ' . $dados['suosigla'] . ' - ' . $dados['suonome']; ?></td>
-                                    <?php
-                                    // VALOR APRESENTADO
-                                    $valor = $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_EM_ANALISE] +
-                                             $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_BANCO_PROJETOS] +
-                                             $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_DELIBERACAO_CFNC] +
-                                             $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_AGUARDANDO_CORRECAO] +
-                                             $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_SELECIONADO_CFNC] +
-                                             $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_APROVADO];
-                                    $total['APRESENTADO'] += $valor;
-                                    ?>
+                                    <td style="text-align: left"><?php echo $dados['suocod'] . ' - ' . $dados['suosigla'] . ' - ' . $dados['suonome']; ?></td>
+                                        <?php
+                                            # VALOR APRESENTADO
+                                            $valor = $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_EM_ANALISE] +
+                                                     $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_BANCO_PROJETOS] +
+                                                     $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_DELIBERACAO_CFNC] +
+                                                     $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_AGUARDANDO_CORRECAO] +
+                                                     $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_SELECIONADO_CFNC] +
+                                                     $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_APROVADO];
+                                            $total['APRESENTADO'] += $valor;
+                                        ?>
                                     <td>
                                         <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
                                     </td>
-                                    <?php
-                                    // VALOR SELECIONADO
-                                    $valor = $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_SELECIONADO_CFNC] +
-                                             $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_APROVADO];
+                                        <?php
+                                            # VALOR SELECIONADO
+                                            $valor = $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_SELECIONADO_CFNC] +
+                                                     $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_APROVADO];
 
-                                    $total[ESD_FNC_PI_SELECIONADO_CFNC] += $valor;
-                                    ?>
+                                            $total[ESD_FNC_PI_SELECIONADO_CFNC] += $valor;
+                                        ?>
                                     <td>
                                         <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
                                     </td>
-                                    <?php
-                                    // VALOR APRESENTADO
-                                    $valor = !empty($aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_APROVADO]) ? $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_APROVADO] : '0';
-                                    $total[ESD_FNC_PI_APROVADO] += $valor;
-                                    ?>
+                                        <?php
+                                            # VALOR APRESENTADO
+                                            $valor = !empty($aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_APROVADO]) ? $aValoresUnidadeEstado[$dados['suoid']][ESD_FNC_PI_APROVADO] : '0';
+                                            $total[ESD_FNC_PI_APROVADO] += $valor;
+                                        ?>
                                     <td>
                                         <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
                                     </td>
                                     <td> - </td>
                                     <td>
                                         <?php
-                                        // VALOR EMPENHADO
-                                        $valor = !empty($aValoresUnidadeExecucao[$dados['suoid']]['vlrempenhado']) ? $aValoresUnidadeEstado[$dados['suoid']]['vlrempenhado'] : '0';
-                                        $total['vlrempenhado'] += $valor;
-                                        echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                            # VALOR EMPENHADO
+                                            $valor = !empty($aValoresUnidadeExecucao[$dados['suoid']]['vlrempenhado']) ? $aValoresUnidadeEstado[$dados['suoid']]['vlrempenhado'] : '0';
+                                            $total['vlrempenhado'] += $valor;
+                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
                                         ?>
                                     </td>
                                     <td>
                                         <?php
-                                        // VALOR LIQUIDADO
-                                        $valor = !empty($aValoresUnidadeExecucao[$dados['suoid']]['vlrliquidado']) ? $aValoresUnidadeEstado[$dados['suoid']]['vlrliquidado'] : '0';
-                                        $total['vlrliquidado'] += $valor;
-                                        echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                            # VALOR LIQUIDADO
+                                            $valor = !empty($aValoresUnidadeExecucao[$dados['suoid']]['vlrliquidado']) ? $aValoresUnidadeEstado[$dados['suoid']]['vlrliquidado'] : '0';
+                                            $total['vlrliquidado'] += $valor;
+                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
                                         ?>
                                     </td>
                                     <td>
                                         <?php
-                                        // VALOR PAGO
-                                        $valor = !empty($aValoresUnidadeExecucao[$dados['suoid']]['vlrpago']) ? $aValoresUnidadeEstado[$dados['suoid']]['vlrpago'] : '0';
-                                        $total['vlrpago'] += $valor;
-                                        echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                            # VALOR PAGO
+                                            $valor = !empty($aValoresUnidadeExecucao[$dados['suoid']]['vlrpago']) ? $aValoresUnidadeEstado[$dados['suoid']]['vlrpago'] : '0';
+                                            $total['vlrpago'] += $valor;
+                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
                                         ?>
                                     </td>
                                 </tr>
@@ -184,102 +185,102 @@ include APPRAIZ . "includes/cabecalho.inc";
 
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5 class="col-lg-3">Acompanhamento Geral FNC - Por Ação</h5> <a class="btn btn-success" href="planacomorc.php?modulo=inicio&acao=C&req=exportar_xls_acao"><i class="fa fa-area-chart"></i> Exportar XLS</a>
+                    <h5 class="col-lg-3">Acompanhamento Geral FNC - Por Ação</h5>
+                    <a class="btn btn-primary" href="planacomorc.php?modulo=inicio&acao=C&req=exportar_xls_acao"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" >
                             <thead>
-                            <tr class="text-center">
-                                <th>Ação</th>
-                                <th>Dotação</th>
-                                <th>Apresentado</th>
-                                <th>Selecionado</th>
-                                <th>Aprovado</th>
-                                <th>Provisionado</th>
-                                <th>Limite</th>
-                                <th>Empenhado</th>
-                                <th>Liquidado</th>
-                                <th>Pago</th>
-                            </tr>
+                                <tr class="text-center">
+                                    <th>Ação</th>
+                                    <th>Dotação</th>
+                                    <th>Apresentado</th>
+                                    <th>Selecionado</th>
+                                    <th>Aprovado</th>
+                                    <th>Provisionado</th>
+                                    <th>Limite</th>
+                                    <th>Empenhado</th>
+                                    <th>Liquidado</th>
+                                    <th>Pago</th>
+                                </tr>
                             </thead>
                             <tbody>
                             <?php
-                            $total = null;
-                            $funcionalAtual = '';
-                            foreach($aDadosPorAcao as $dados){
+                                $total = null;
+                                $funcionalAtual = '';
+                                foreach($aDadosPorAcao as $dados){
 
-                                $total['dotacao'][$dados['tipo']] += $dados['dotacao'];
+                                    $total['dotacao'][$dados['tipo']] += $dados['dotacao'];
 
-                                $style = '';
-                                if($funcionalAtual != $dados['funcional']){
-                                    $style = 'style="border-top: 2px #acacac solid"';
-                                    $funcionalAtual = $dados['funcional'];
-                                }
-                                ?>
+                                    $style = '';
+                                    if($funcionalAtual != $dados['funcional']){
+                                        $style = 'style="border-top: 2px #acacac solid"';
+                                        $funcionalAtual = $dados['funcional'];
+                                    }
+                            ?>
                                 <tr class="text-right" <?php echo $style; ?>>
                                     <td style="text-align: left"><?php echo $dados['funcional'] . ' (' . $dados['tipo'] . ') - ' . $dados['acatitulo'] . ': ' . $dados['plodsc'] . ' (RP ' . $dados['irpcod'] . ')'; ?></td>
 
                                     <td><?php echo number_format($dados['dotacao'], 2, ',', '.'); ?></td>
                                     <?php
-                                    // VALOR APRESENTADO
-                                    $valor = $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_EM_ANALISE][$dados['tipo']] +
-                                             $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_BANCO_PROJETOS][$dados['tipo']] +
-                                             $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_DELIBERACAO_CFNC][$dados['tipo']] +
-                                             $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_AGUARDANDO_CORRECAO][$dados['tipo']] +
-                                             $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] +
-                                             $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']];
-                                    $total['APRESENTADO'][$dados['tipo']] += $valor;
-                                    $disponivel = $dados['dotacao'] - $valor;
+                                        # VALOR APRESENTADO
+                                        $valor = $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_EM_ANALISE][$dados['tipo']] +
+                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_BANCO_PROJETOS][$dados['tipo']] +
+                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_DELIBERACAO_CFNC][$dados['tipo']] +
+                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_AGUARDANDO_CORRECAO][$dados['tipo']] +
+                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] +
+                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']];
+                                        $total['APRESENTADO'][$dados['tipo']] += $valor;
+                                        $disponivel = $dados['dotacao'] - $valor;
                                     ?>
                                     <td style="color: <?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>;">
                                         <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
                                     </td>
                                     <?php
-                                    // VALOR SELECIONADO
-                                    $valor = $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] +
-                                             $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']];
+                                        # VALOR SELECIONADO
+                                        $valor = $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] +
+                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']];
 
-                                    $total[ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] += $valor;
-                                    $disponivel = $dados['dotacao'] - $valor;
+                                        $total[ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] += $valor;
+                                        $disponivel = $dados['dotacao'] - $valor;
                                     ?>
                                     <td style="color: <?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>;">
                                         <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
                                     </td>
                                     <?php
-                                    // VALOR APROVADO
-                                    $valor = !empty($aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']]) ? $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']] : '0';
-                                    $total[ESD_FNC_PI_APROVADO][$dados['tipo']] += $valor;
-                                    $disponivel = $dados['dotacao'] - $valor;
+                                        # VALOR APROVADO
+                                        $valor = !empty($aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']]) ? $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']] : '0';
+                                        $total[ESD_FNC_PI_APROVADO][$dados['tipo']] += $valor;
+                                        $disponivel = $dados['dotacao'] - $valor;
                                     ?>
                                     <td style="color: <?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>;">
                                         <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
                                     </td>
                                     <td> - </td>
                                     <td> - </td>
-
                                     <td>
                                         <?php
-                                        // VALOR EMPENHADO
-                                        $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrempenhado']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrempenhado'] : '0';
-                                        $total['vlrempenhado'][$dados['tipo']] += $valor;
-                                        echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                            # VALOR EMPENHADO
+                                            $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrempenhado']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrempenhado'] : '0';
+                                            $total['vlrempenhado'][$dados['tipo']] += $valor;
+                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
                                         ?>
                                     </td>
                                     <td>
                                         <?php
-                                        // VALOR LIQUIDADO
-                                        $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrliquidado']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrliquidado'] : '0';
-                                        $total['vlrliquidado'][$dados['tipo']] += $valor;
-                                        echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                            # VALOR LIQUIDADO
+                                            $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrliquidado']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrliquidado'] : '0';
+                                            $total['vlrliquidado'][$dados['tipo']] += $valor;
+                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
                                         ?>
                                     </td>
                                     <td>
                                         <?php
-                                        // VALOR PAGO
-                                        $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrpago']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrpago'] : '0';
-                                        $total['vlrpago'][$dados['tipo']] += $valor;
-                                        echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                            # VALOR PAGO
+                                            $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrpago']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrpago'] : '0';
+                                            $total['vlrpago'][$dados['tipo']] += $valor;
+                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
                                         ?>
                                     </td>
                                 </tr>
@@ -331,12 +332,13 @@ include APPRAIZ . "includes/cabecalho.inc";
     </div>
 </div>
 <script>
+
     function AtualizarSIOP(){
         divCarregando();
         $.post("planacomorc.php?modulo=inicio&acao=C&req=atualizarSIOP",
             function(data){
                  divCarregado();
-                 if (data==''){
+                 if(data == ''){
                     swal({
                         title: "",
                         text: "Dados Atualizados!",
@@ -353,5 +355,6 @@ include APPRAIZ . "includes/cabecalho.inc";
                 }
             }
         );
-    }    
+    }
+
 </script>
