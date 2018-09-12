@@ -18,6 +18,7 @@ set_time_limit(300);
 
 
 /* Segurança : Validando os acessos as funções autorizadas */
+//ver($_REQUEST['requisicao'],d);
 switch($_REQUEST['acao']) {
 	case 'A';
 		$_FUNCOESAUTORIZADAS = array('carregarComboMunicipioPorUF'=>true,
@@ -44,7 +45,6 @@ switch($_REQUEST['acao']) {
 	break;
 }
 /* Fim Segurança : Validando os acessos as funções autorizadas */
-
 if($_REQUEST['requisicao']) {
 	if($_FUNCOESAUTORIZADAS[$_REQUEST['requisicao']]) {
 		$_REQUEST['requisicao']($_REQUEST);
@@ -515,6 +515,7 @@ $tabeladefiltros[] = array("descricao"	       => "Ano Referência:",
                             "funcaojavascript" => "submeter",
                             "td_id"	       => "tdAnos",
                             "sql"	       => $listaAnos);
+
 if($tabeladefiltros) {
 	foreach($tabeladefiltros as $tbl) {
 		echo "<td class='SubTituloDireita' style='width:150px;'>".$tbl['descricao']."</td>";

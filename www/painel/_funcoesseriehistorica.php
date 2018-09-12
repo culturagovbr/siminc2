@@ -445,10 +445,15 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 					$html .= "<br />&nbsp;&nbsp;&nbsp;<font size=1>Valor (R$):</font> <input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='valor_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='valor[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$dinheiro."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" onKeyUp=\"this.value=mascaraglobal('".$formatoinput['campovalor']['mascara']."',this.value);somarcoluna(this);\" size=\"".$formatoinput['campovalor']['size']."\" maxlength=\"".$formatoinput['campovalor']['maxlength']."\">";
 					$html .="</td>";
 				} else {
-					$html .="<td align='center'><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='item_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='item[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" onKeyUp=\"this.value=mascaraglobal('".$formatoinput['mascara']."',this.value);somarcoluna(this);\" size=\"".$formatoinput['size']."\" maxlength=\"".$formatoinput['maxlength']."\"></td>";
+					$html .="<td align='left'><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='item_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='item[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" onKeyUp=\"this.value=mascaraglobal('".$formatoinput['mascara']."',this.value);somarcoluna(this);\" size=\"".$formatoinput['size']."\" maxlength=\"".$formatoinput['maxlength']."\"></td>";
 				}
 
 			}
+                        if($seriehistorica) {
+                                $sql = "SELECT dshobs FROM painel.detalheseriehistorica WHERE sehid='".$seriehistorica['sehid']."'";
+                                $valor = $db->pegaUm($sql);
+                        }                        
+                        $html .= "<td><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='obs_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='obs[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" size=\"100\" maxlength=\"255\"></td>";                        
 			$html .= "</tr>";
 		}
 	} else {
@@ -1479,8 +1484,9 @@ function carregarGridBrasil($dados) {
 		$rowspancabecalho = 3;
 		$colspancabecalho = count($detalhes['nivel1'])*count($detalhes['nivel2']);
 	}
-	$html .= "<td class='SubTituloCentro' ".(($rowspancabecalho)?"rowspan='".$rowspancabecalho."'":"").">Períodos</td>";
-	$html .= "<td class='SubTituloCentro' ".(($colspancabecalho)?"colspan='".$colspancabecalho."'":"").">Valor / Quantidade ".($linhasperiodos[0]['unmid'] == 1 ? " (%)" : "")."</td>";
+	$html .= "<td class='SubTituloEsquerda' ".(($rowspancabecalho)?"rowspan='".$rowspancabecalho."'":"").">Períodos</td>";
+	$html .= "<td class='SubTituloEsquerda' ".(($colspancabecalho)?"colspan='".$colspancabecalho."'":"").">Valor / Quantidade ".($linhasperiodos[0]['unmid'] == 1 ? " (%)" : "")."</td>";
+	$html .= "<td class='SubTituloEsquerda' ".(($rowspancabecalho)?"rowspan='".$rowspancabecalho."'":"").">Observação</td>";
 	$html .= "</tr>";
 
 	
@@ -1501,7 +1507,7 @@ function carregarGridBrasil($dados) {
 	$html .= montarSubRodapeDetalhes($detalhes);
 	// Botão para gravar o formulario de estado
 	$html .= "<tr>";
-	$html .= "<td colspan='".($colspancabecalho+1)."' class='SubTituloDireita'><input type='submit' value='Gravar'> <input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
+	$html .= "<td colspan='".($colspancabecalho+2)."' class='SubTituloDireita'><input type='submit' value='Gravar'> <input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
 	$html .= "</tr>";
 	
 	$html .= "</tfoot>";
@@ -1985,8 +1991,8 @@ function gravarGridDadosSemFiltros($dados) {
 												 	 	   		   	  INNER JOIN painel.detalhetipodadosindicador tid ON tid.tdiid = tdi.tdiid 
 									 				 	   		   	  WHERE tidid='".$tdiidnivel2."'");
 								if(is_numeric(str_replace(array(".",","), array("","."), $dados4))) {
-									$sql = "INSERT INTO painel.detalheseriehistorica(sehid, dshqtde, ".$tdinumnivel1.", ".$tdinumnivel2." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", dshvalor":"").")
-								    		VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados4)."', '".$tdiidnivel1."', '".$tdiidnivel2."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])."'":"").");";
+									$sql = "INSERT INTO painel.detalheseriehistorica(sehid, dshqtde, dshobs, ".$tdinumnivel1.", ".$tdinumnivel2." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", dshvalor":"").")
+								    		VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados4)."', '".$dados['obs'][$indice1][$indice2]."','".$tdiidnivel1."', '".$tdiidnivel2."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])."'":"").");";
 									$db->executar($sql, false);
 									$possuiregistro = true;
 								}
@@ -1994,8 +2000,8 @@ function gravarGridDadosSemFiltros($dados) {
 						} else {
 							if(is_numeric(str_replace(array(".",","), array("","."), $dados3))) {
 								$db->executar("INSERT INTO painel.detalheseriehistorica(
-	            							   sehid, dshqtde, ".$tdinumnivel1." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", dshvalor":"").")
-	    									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados3)."', '".$tdiidnivel1."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1])."'":"").");", false);
+	            							   sehid, dshqtde, dshobs, ".$tdinumnivel1." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", dshvalor":"").")
+	    									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados3)."', '".$dados['obs'][$indice1][$indice2]."', '".$tdiidnivel1."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1])."'":"").");", false);
 								$possuiregistro = true;
 							}
 						}
@@ -2003,9 +2009,11 @@ function gravarGridDadosSemFiltros($dados) {
 				} else {
 					// adicionando a quantidade quando não houve detalhamento
 					if(is_numeric(str_replace(array(".",","), array("","."), $dados2))) {
-						$db->executar("INSERT INTO painel.detalheseriehistorica(
-           							   sehid, dshqtde ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", dshvalor":"").")
-   									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados2)."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2])."'":"").");", false);
+                                                $sql = "INSERT INTO painel.detalheseriehistorica(
+           							   sehid, dshqtde, dshobs ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", dshvalor":"").")
+   									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados2)."', '".$dados['obs'][$indice1][$indice2]."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2])."'":"").");";
+//                                                ver($sql,d);
+						$db->executar($sql, false);
 						$possuiregistro = true;
 					}
 				}
@@ -2090,15 +2098,18 @@ function listaSerieHistorica() {
 	
 	// fim permissao
 	$sql = "SELECT '<center>'|| CASE WHEN (sehbloqueado = true) THEN '<img src=../imagens/cadiado".$caddetalhe.".png ".$actsim."> <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');>' ELSE '<img src=\"/imagens/alterar.gif\" border=0 title=\"Editar\" style=\"cursor:pointer;\" onclick=\"window.location=\'?modulo=principal/preenchimentoSerieHistorica&acao=A&dpeid='||seh.dpeid||'&nroAnoReferencia='||dpe.dpeanoref||'\'\"> ".(($permissoes['removerseriehistorica'])?"<img src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('||seh.sehid||');\">":"")." <img src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('|| seh.sehid ||');> <img src=../imagens/cadeadoAberto".$caddetalhe.".png ".$actnao.">' END ||'</center>' as acoes,
+
 				   to_char(seh.sehdtcoleta,'DD/MM/YYYY') as data, 
 				   dpe.dpedsc,
-				   $qtde
+				   $qtde,
+                                   dsh.dshobs
 			FROM painel.seriehistorica seh 
 			LEFT JOIN painel.detalheperiodicidade dpe ON dpe.dpeid = seh.dpeid 
+                        LEFT JOIN painel.detalheseriehistorica dsh on seh.sehid = dsh.sehid
 			WHERE seh.indid = '".$_SESSION['indid']."' AND (sehstatus='A' OR sehstatus='H') 
 			ORDER BY dpedatainicio";
 	
-	$cabecalho = array("Ações", "Data de Coleta","Referência", $formatoinput['label']);
+	$cabecalho = array("Ações", "Data de Coleta","Referência", $formatoinput['label'], 'Observação');
 	if($formatoinput['campovalor'])$cabecalho[] = $formatoinput['campovalor']['label'];
 	//dbg(simec_htmlentities($sql));
 	$db->monta_lista($sql,$cabecalho,100,5,'N','center',$par2);

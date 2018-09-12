@@ -143,7 +143,6 @@ class Pi_PlanoInterno extends Modelo
         // Carregando dados da base de dados do SIMINC antigo
         $dadosProposta = adapterConnection::oldSiminc()->pegaLinha($sql);
 
-//        ver($dadosProposta, $sql, d);
 
         $dadosPI = [
             'plititulo' => $dadosProposta['ppinome'],
@@ -267,7 +266,6 @@ class Pi_PlanoInterno extends Modelo
     public function montarSqlRelFuncionais($filtro = []){
         $filtro[] = "suo.suostatus = 'A'";
         $where = $this->montarFiltros($filtro);
-//ver($filtro, d);
         $sql = "
             SELECT
                 suo.suoid,
@@ -363,7 +361,6 @@ class Pi_PlanoInterno extends Modelo
                 suo.suocod,
                 ptr.funcional
         ";
-//ver($sql, d);
         return $sql;
     }
 
@@ -378,7 +375,6 @@ class Pi_PlanoInterno extends Modelo
     public function recuperarExecucaoOrcamentaria($aFiltro = [])
     {
         $sql = $this->montarSqlExecucaoOrcamentaria($aFiltro);
-//ver($sql, d);
         $dados = $this->carregar($sql);
         $dados = $dados ? $dados : [];
         $dadosAgrupados = [];
@@ -626,7 +622,7 @@ class Pi_PlanoInterno extends Modelo
         ";
 
         $dados = $this->carregar($sql);
-        $dados = $dados ? $dados : [];
+        $dados = $dados? $dados: [];
 
         $aValores = [];
 
@@ -715,7 +711,7 @@ class Pi_PlanoInterno extends Modelo
             ORDER BY
                 suo.unonome
         ";
-//ver($sql,d);
+
         $dados = $this->carregar($sql);
         $dados = $dados ? $dados : [];
         $dadosAgrupados = [];
@@ -907,7 +903,7 @@ class Pi_PlanoInterno extends Modelo
                 ordem,
                 categoria
         ";
-//ver($sql, d);
+
         $dados = $this->carregar($sql);
         return $dados ? $dados : [];
     }
@@ -1470,7 +1466,7 @@ class Pi_PlanoInterno extends Modelo
             WHERE
                 $where
         ";
-//ver($sql, d);
+
         $dados = $this->carregar($sql);
         return $dados? $dados: [];
     }
@@ -1542,7 +1538,7 @@ class Pi_PlanoInterno extends Modelo
             GROUP BY
                 ptr.irpcod
         ";
-//ver($sql);
+
         return $sql;
     }
 
@@ -1566,7 +1562,7 @@ class Pi_PlanoInterno extends Modelo
             GROUP BY
                 eqd.eqddsc
         ";
-//ver($sql);
+
         return $sql;
     }
 
@@ -1647,7 +1643,7 @@ class Pi_PlanoInterno extends Modelo
                 eqd.eqddsc,
                 rp.irpcod
             ";
-//ver($sql,d);
+
         $dados = $this->carregar($sql);
         return $dados ? $dados : [];
     }
@@ -1686,7 +1682,7 @@ class Pi_PlanoInterno extends Modelo
                 ptr.ptrano = '". (int)$parametros->exercicio. "'
                 $where
             ";
-//ver($sql,d);
+
         $resultado = $this->pegaLinha($sql);
         return $resultado;
     }
@@ -1769,7 +1765,7 @@ class Pi_PlanoInterno extends Modelo
                     AND pli.pliano = '$exercicio'
                     AND mppid = " . (int)$mppid . "
                     AND suo.suoid = " . (int)$suoid;
-//ver($sql, d);
+
         return $this->pegaLinha($sql);
     }
     
@@ -1815,7 +1811,7 @@ class Pi_PlanoInterno extends Modelo
                     AND pli.pliano = '$exercicio'
                     AND mpnid = " . (int)$mpnid . "
                     AND suo.suoid = " . (int)$suoid;
-//ver($sql, d);
+
         return $this->pegaLinha($sql);
     }
 

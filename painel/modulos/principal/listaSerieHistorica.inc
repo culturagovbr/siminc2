@@ -27,7 +27,7 @@ switch($_REQUEST['acao']) {
 	break;
 }
 /* Fim Segurança : Validando os acessos as funções autorizadas */
-
+//listaSerieHistorica();
 if($_REQUEST['requisicao']) {
 	if($_FUNCOESAUTORIZADAS[$_REQUEST['requisicao']]) {
 		$_REQUEST['requisicao']($_REQUEST);
@@ -88,7 +88,7 @@ function atualizardatacoleta() {
 	}*/
 }
 </script>
-<?
+<?php
 /*
  * Carregando permissões do perfil
  */
@@ -218,14 +218,15 @@ if($permissoes['verindicadores'] == 'vertodos') {
 </table>
 <?php listaJustificativasPorIndicador($_SESSION['indid']) ?>
 
-<?
+<?php
 unset($_POST['requisicao']);
 if($_POST) {
 	foreach($_POST as $indice => $valor) $param[] = "$indice=$valor";
 }
 ?>
 <script>
-function ordena(ordem, direcao) {document.formlista.requisicao.value='';document.formlista.ordemlista.value=ordem;document.formlista.ordemlistadir.value=direcao;document.formlista.submit();} function pagina(numero) {document.formlista.requisicao.value='';document.formlista.numero.value=numero;document.formlista.submit();}
+function ordena(ordem, direcao) {document.formlista.requisicao.value='';document.formlista.ordemlista.value=ordem;document.formlista.ordemlistadir.value=direcao;document.formlista.submit();} 
+function pagina(numero) {document.formlista.requisicao.value='';document.formlista.numero.value=numero;document.formlista.submit();}
 
 document.observe("dom:loaded", function() {
   // initially hide all containers for tab content
