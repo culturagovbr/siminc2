@@ -7149,7 +7149,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 			            }
 			            <?php if($indice_moeda && $arrDadosIndicador['unmid'] == UNIDADEMEDICAO_MOEDA): ?>
 			            ,{
-			                name: '<?php echo $arrDadosIndicador['umedesc'].$EscalaTooltip." ".$tooltipIndice ?>',
+			                name: '<?= "Realizado".$EscalaTooltip." ".$tooltipIndice ?>',
 			                data: [<?php echo implode(",",$arrQtdeIndiceIndicador) ?>],
 			                /*tooltip: {
 			                    formatter: function() {
@@ -7160,7 +7160,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 			            <?php endif; ?>
 			            <?php if($arrDadosIndicador['indcumulativo'] == "S" || $arrDadosIndicador['indcumulativo'] == "A"): ?>
 			            ,{
-			                name: '<?php echo $arrDadosIndicador['umedesc']." Acumulado(s)".$EscalaTooltip ?>',
+			                name: '<?= "Previsto"." Acumulado(s)".$EscalaTooltip ?>',
 			                data: [<?php echo implode(",",$arrQtdeAcumuladoIndicador) ?>],
 			                /*tooltip: {
 			                    formatter: function() {
@@ -7819,7 +7819,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 		            series: [
 		            <?php if($finac_qtde): ?>
 			            {
-			                name: '<?php echo $arrDadosIndicador['umedesc'].$EscalaTooltip ?>',
+                            name: '<?= "Realizado".$EscalaTooltip ?>',
 			                data: [<?php echo implode(",",$arrQtdeIndicador) ?>],
 			                /*tooltip: {
 		                   		 formatter: function() {
@@ -7834,7 +7834,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 		                	}*/
 			            },
 			            {
-			            	name: '<?php echo "Meta - ".$arrDadosIndicador['umedesc'].$EscalaTooltip ?>',
+                            name: '<?= "Previsto". $EscalaTooltip ?>',
 			                data: [<?php echo implode(",",$arrMetasQtdeIndicador) ?>],
 			            }
 			            <?php if($indice_moeda && $arrDadosIndicador['unmid'] == UNIDADEMEDICAO_MOEDA): ?>
@@ -7850,7 +7850,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 			            <?php endif; ?>
 			            <?php if($arrDadosIndicador['indcumulativo'] == "S" || $arrDadosIndicador['indcumulativo'] == "A"): ?>
 			            ,{
-			                name: '<?php echo $arrDadosIndicador['umedesc']." Acumulado(s)".$EscalaTooltip ?>',
+                            name: '<?= "Realizado".$EscalaTooltip ?>',
 			                data: [<?php echo implode(",",$arrQtdeAcumuladoIndicador) ?>],
 			                /*tooltip: {
 			                    formatter: function() {
