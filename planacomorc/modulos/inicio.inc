@@ -48,9 +48,21 @@ switch ($_REQUEST['req']) {
         $oPlanoInterno->exportarXlsAcao();
         die;         
     case 'atualizarSIOP':
-        $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
-        $cImportaDadosSiop->AtualizarDados();
-        $cImportaDadosSiop->AtualizarDotacao();
+        try{
+            $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
+            $cImportaDadosSiop->AtualizarDados();
+            $cImportaDadosSiop->AtualizarDotacao();
+            
+            echo simec_json_encode(array(
+                'success' => 1,
+                'message' => 'As informações de execução orçamentária(Aprovisionado, Empenhado, liquidado e Pago) foram Atualizadas com sucesso!'
+            ));
+        } catch (Exception $e){
+            echo simec_json_encode(array(
+                'success' => 0,
+                'message' => 'Não foi possível atualizar as informações de execução orçamentária(Aprovisionado, Empenhado, liquidado e Pago). O sistema não conseguiu acessar o SIOP-Sistema Integrado de Planejamento e Orçamento do Governo Federal. https://www.siop.planejamento.gov.br'
+            ));
+        }
         die;
 }
 
@@ -95,7 +107,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     <div class="col-lg-8">
         <div style="padding-top: 10px;" class="text-right">
             <?php if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
-            <a class="btn btn-success" href="javascript:AtualizarSIOP();">
+            <a id="btn-atualizar-siop" class="btn btn-success">
                 <i class="fa fa-cloud-download"></i> Atualizar SIOP
             </a>
             <?php } ?>
@@ -296,6 +308,10 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
 <script>
     $(document).ready(function(){
 
+        $('#btn-atualizar-siop').click(function(){
+            atualizarSIOP();
+        });
+
         $('.tabs').on('click', '.tablink, .prodTabs a',function (e) {
             e.preventDefault();
             var url = $(this).attr("data-url");
@@ -362,28 +378,41 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
         }
     }
     
-    function AtualizarSIOP(){
+    function atualizarSIOP(){
         divCarregando();
-        $.post("planacomorc.php?modulo=inicio&acao=C&req=atualizarSIOP",
-            function(data){
-                 divCarregado();
-                 if (data==''){
+        $.ajax({
+            type: 'POST',
+            url: window.location.href,
+            data: 'req=atualizarSIOP',
+            dataType: 'json',
+            success: function(resp){
+                if(resp.success){
                     swal({
-                        title: "",
-                        text: "Dados Atualizados!",
-                        type: "success",
-                        showCancelButton: false,
-                        confirmButtonText: "OK",
-                        closeOnConfirm: true
-                    },
-                    function(){
-                        window.location.href = "planacomorc.php?modulo=inicio&acao=C";
-                    });
-                }else{
-                    swal('Erro!', 'Houve algum erro na importação de dados do SIOP!', 'warning');
+                            title: '',
+                            text: resp.message,
+                            type: 'success',
+                            showCancelButton: false,
+                            confirmButtonText: 'OK',
+                            closeOnConfirm: true
+                        },
+                        function(){
+                            window.location.href = window.location.href;
+                        });
+                } else {
+                    swal({
+                            title: 'Erro!',
+                            text: resp.message,
+                            type: 'error',
+                            showCancelButton: false,
+                            confirmButtonText: 'OK',
+                            closeOnConfirm: true
+                        },
+                        function(){
+                            window.location.href = window.location.href;
+                        });
                 }
             }
-        );
+        });
     }
 
 </script>
