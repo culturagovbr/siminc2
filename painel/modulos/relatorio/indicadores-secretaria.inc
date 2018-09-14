@@ -195,7 +195,7 @@
                             <?=$indicadores['realizado']; ?>
                         </td>
                         <td>
-                            <?=$indicadores['orcamento']; ?>
+                            <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                             <br/>
                             <div class="progress" style="height: 2px;">
                                 <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
