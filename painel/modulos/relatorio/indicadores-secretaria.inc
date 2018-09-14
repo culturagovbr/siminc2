@@ -152,7 +152,7 @@
         Indicadores por Secretarias
     </h1>
     <hr/>
-    <h2 id="h2_secid">
+    <h2 id="h2_secid" title="Clique aqui para escolher uma Secretaria">
         <?=($secdsc? $secdsc: 'Todas Secretarias');?>
     </h2>
     <span class="span_secid noprint">
