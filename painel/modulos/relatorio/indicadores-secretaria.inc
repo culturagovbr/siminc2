@@ -12,6 +12,7 @@
         ORDER BY
             secordem
     ";
+    $listaSecretarias = $db->carregar($sqlConsultaSecretarias);
 
     # Filtro(s)
     $parametros = (object)$_REQUEST;
@@ -151,7 +152,9 @@
     <h1>
         Indicadores por Secretarias
     </h1>
+    
     <hr/>
+    
     <h2 id="h2_secid" title="Clique aqui para escolher uma Secretaria">
         <?=($secdsc? $secdsc: 'Todas Secretarias');?>
     </h2>
@@ -160,58 +163,125 @@
     </span>
 
     <a href="javascript:window.history.go(-1)" class="voltar" >  <i class="material-icons">arrow_back</i> </a>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Nome</th>
-                <th scope="col"style="text-align: left;">Unidade </th>
-                <th scope="col"style="text-align: left;">Produto</th>
-                <th scope="col"style="text-align: left;">Observações</th>
-                <th scope="col"style="text-align: left;">Meta atual</th>
-                <th scope="col"style="text-align: left;">Realizado</th>
-                <th scope="col">Orçamento</th>
-            </tr>
-        </thead>
-        <?php if($listaIndicadores): ?>
-            <tbody>
-                <?php foreach($listaIndicadores as $indicadores): ?>
-                    <tr>
-                        <td>
-                            <?=$indicadores['nome']; ?>
-                        </td>
-                        <td>
-                            <?=$indicadores['unidade']; ?>
-                        </td>
-                        <td>
-                            <?=$indicadores['produto']; ?>
-                        </td>
-                        <td>
-                            <?=$indicadores['parecer_gestor_a']; ?>
-                        </td>
-                        <td>
-                            <?=$indicadores['meta']; ?>
-                        </td>
-                        <td>
-                            <?=$indicadores['realizado']; ?>
-                        </td>
-                        <td>
-                            <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
-                            <br/>
-                            <div class="progress" style="height: 2px;">
-                                <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        <?php else: ?>
-            <tfoot>
+    <?php if($parametros->secid): ?>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td colspan="7">Não existem indicadores cadastrados</td>
+                    <th scope="col">Nome</th>
+                    <th scope="col"style="text-align: left;">Unidade </th>
+                    <th scope="col"style="text-align: left;">Produto</th>
+                    <th scope="col"style="text-align: left;">Observações</th>
+                    <th scope="col"style="text-align: left;">Meta atual</th>
+                    <th scope="col"style="text-align: left;">Realizado</th>
+                    <th scope="col">Orçamento</th>
                 </tr>
-            </tfoot>
-        <?php endif; ?>
-    </table>
+            </thead>
+            <?php if($listaIndicadores): ?>
+                <tbody>
+                    <?php foreach($listaIndicadores as $indicadores): ?>
+                        <tr>
+                            <td>
+                                <?=$indicadores['nome']; ?>
+                            </td>
+                            <td>
+                                <?=$indicadores['unidade']; ?>
+                            </td>
+                            <td>
+                                <?=$indicadores['produto']; ?>
+                            </td>
+                            <td>
+                                <?=$indicadores['parecer_gestor_a']; ?>
+                            </td>
+                            <td>
+                                <?=$indicadores['meta']; ?>
+                            </td>
+                            <td>
+                                <?=$indicadores['realizado']; ?>
+                            </td>
+                            <td>
+                                <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
+                                <br/>
+                                <div class="progress" style="height: 2px;">
+                                    <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            <?php else: ?>
+                <tfoot>
+                    <tr>
+                        <td colspan="7">Não existem indicadores cadastrados</td>
+                    </tr>
+                </tfoot>
+            <?php endif; ?>
+        </table>
+    <?php else: ?>
+        <hr />
+        <?php
+            foreach($listaSecretarias as $secretaria):
+            $sqlListaIndicadores = montarSqlRelIndicadoresSecretaria((object)array('secid' => $secretaria['codigo']));
+            $listaIndicadores = $db->carregar($sqlListaIndicadores);
+        ?>
+            <h2>
+                <?=$secretaria['descricao']?>
+            </h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col"style="text-align: left;">Unidade </th>
+                        <th scope="col"style="text-align: left;">Produto</th>
+                        <th scope="col"style="text-align: left;">Observações</th>
+                        <th scope="col"style="text-align: left;">Meta atual</th>
+                        <th scope="col"style="text-align: left;">Realizado</th>
+                        <th scope="col">Orçamento</th>
+                    </tr>
+                </thead>
+                <?php if($listaIndicadores): ?>
+                    <tbody>
+                        <?php foreach($listaIndicadores as $indicadores): ?>
+                            <tr>
+                                <td>
+                                    <?=$indicadores['nome']; ?>
+                                </td>
+                                <td>
+                                    <?=$indicadores['unidade']; ?>
+                                </td>
+                                <td>
+                                    <?=$indicadores['produto']; ?>
+                                </td>
+                                <td>
+                                    <?=$indicadores['parecer_gestor_a']; ?>
+                                </td>
+                                <td>
+                                    <?=$indicadores['meta']; ?>
+                                </td>
+                                <td>
+                                    <?=$indicadores['realizado']; ?>
+                                </td>
+                                <td>
+                                    <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
+                                    <br/>
+                                    <div class="progress" style="height: 2px;">
+                                        <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                <?php else: ?>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">Não existem indicadores cadastrados</td>
+                        </tr>
+                    </tfoot>
+                <?php endif; ?>
+            </table>
+            <!-- Quebra de pagina no documento impresso. -->
+            <br style='page-break-before:always' />
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>
 
 <script>
