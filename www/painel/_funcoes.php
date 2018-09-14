@@ -8940,4 +8940,39 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 		/* Fim - Gráfico Tipo = Pizza */
 	}
 }
-?>
+
+/**
+ * Monta consulta SQL para listar os dados do Relatório de Indicadores por 
+ * Secretarias.
+ * 
+ * @param stdClass $dto
+ * @return string
+ */
+function montarSqlRelIndicadoresSecretaria(stdClass $dto){
+    $where = '';
+    $where .= $dto->secid? "AND s.secid = ". (int)$dto->secid. "\n": NULL;
+    $sql = "
+        SELECT
+            i.indnome AS nome,
+            unm.unmdesc AS unidade,
+            ume.umedesc AS produto,
+            'Ícone'::TEXT AS parecer_gestor_a,
+            'Resposta Gestor do Indicador'::TEXT AS observacao_gestor_i,
+            '100' AS meta,
+            '50' AS realizado,
+            a.acaorcamento AS orcamento
+        FROM painel.indicador i
+            LEFT JOIN painel.unidademedicao unm ON unm.unmid = i.unmid
+            LEFT JOIN painel.acao a ON a.acaid = i.acaid
+            LEFT JOIN painel.secretaria s ON i.secid = s.secid
+            LEFT JOIN painel.unidademeta ume ON i.umeid = ume.umeid
+        WHERE
+            i.indstatus = 'A'
+            $where
+        ORDER BY
+            s.secordem ASC
+    ";
+    
+    return $sql;
+}
+
