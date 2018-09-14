@@ -8952,14 +8952,48 @@ function montarSqlRelIndicadoresSecretaria(stdClass $dto){
     $where = '';
     $where .= $dto->secid? "AND s.secid = ". (int)$dto->secid. "\n": NULL;
     $sql = "
-        SELECT
+        SELECT DISTINCT
+	    i.indid,
+	    s.secordem,
             i.indnome AS nome,
             unm.unmdesc AS unidade,
             ume.umedesc AS produto,
-            'Ícone'::TEXT AS parecer_gestor_a,
-            'Resposta Gestor do Indicador'::TEXT AS observacao_gestor_i,
-            '100' AS meta,
-            '50' AS realizado,
+            NULL AS parecer_gestor_a,
+            NULL AS observacao_gestor_i,
+            (
+		SELECT
+--		    TO_CHAR(NOW(), 'YYYY') ano,
+--		    TO_CHAR(NOW(), 'mm') mes,
+--		    dpe.dpedsc,
+		    dmi.dmiqtde
+		FROM painel.detalhemetaindicador dmi -- SELECT * FROM painel.detalhemetaindicador
+		    JOIN painel.detalheperiodicidade dpe ON(dmi.dpeid = dpe.dpeid AND dpestatus = 'A') -- SELECT * FROM painel.detalheperiodicidade
+		    JOIN painel.metaindicador mi ON(mi.metid = dmi.metid AND mi.metstatus = 'A') -- SELECT * FROM painel.metaindicador 
+		WHERE
+		    dmi.dmistatus = 'A'
+		    -- Ano igual ou menor
+		    AND dpe.dpeanoref::INTEGER <= TO_CHAR(NOW(), 'YYYY')::INTEGER
+		    AND dpe.dpemesref::INTEGER <= TO_CHAR(NOW(), 'mm')::INTEGER
+		    AND mi.indid = i.indid --3329
+		ORDER BY
+			dpe.dpeanoref DESC,
+			dpe.dpemesref DESC
+		LIMIT 1
+            )::INTEGER AS meta,
+            (
+                SELECT
+                    MAX(seh.sehqtde)
+                FROM painel.seriehistorica seh 
+                    LEFT JOIN painel.detalheperiodicidade dpe ON dpe.dpeid = seh.dpeid 
+                    LEFT JOIN painel.detalheseriehistorica dsh on seh.sehid = dsh.sehid
+                WHERE
+                    (
+                        sehstatus='A'
+                        OR
+                        sehstatus='H'
+                    )
+                    AND seh.indid = i.indid --3329
+            )::INTEGER AS realizado,
             a.acaorcamento AS orcamento
         FROM painel.indicador i
             LEFT JOIN painel.unidademedicao unm ON unm.unmid = i.unmid

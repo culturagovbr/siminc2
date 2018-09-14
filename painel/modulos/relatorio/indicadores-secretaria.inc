@@ -1,13 +1,29 @@
 <?php
 
+    # Consulta de Secretarias
+    $sqlConsultaSecretarias = "
+        SELECT
+            secordem,
+            secdsc AS descricao,
+            secid AS codigo
+        FROM painel.secretaria
+        WHERE
+            secstatus = 'A'
+        ORDER BY
+            secordem
+    ";
+
     # Filtro(s)
     $parametros = (object)$_REQUEST;
     # Monta SQL da consulta de indicadores
-    $sqlListaIndicadores = montarSqlRelIndicadoresSecretaria((object)array('secid' => 44));
+    $sqlListaIndicadores = montarSqlRelIndicadoresSecretaria($parametros);
     # Monta lista de Indicadores
     $listaIndicadores = $db->carregar($sqlListaIndicadores);
 //ver($listaIndicadores, d);
 
+    # Busca o nome da secretaria
+    $secdsc = $db->pegaUm('SELECT secdsc FROM painel.secretaria WHERE secid = '. (int)$parametros->secid);
+    
     include APPRAIZ . 'includes/cabecalho.inc';
 ?>
 <!--<link href="../painel/relatorio/css/indicadores-secretaria.css" rel="stylesheet" media="screen">-->
@@ -113,6 +129,22 @@
         -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
         box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
     }
+    #h2_secid, select {
+        cursor: hand;
+        cursor: pointer;
+    }
+    
+    @media print
+    {    
+        .noprint, .no-print, .no-print *
+        {
+            display: none !important;
+        }
+        #h2_secid {
+            display: block;
+        }
+    }
+
 </style>
 
 <div class="container-tabela">
@@ -120,20 +152,23 @@
         Indicadores por Secretarias
     </h1>
     <hr/>
-    <h2>
-        Ancine
+    <h2 id="h2_secid">
+        <?=($secdsc? $secdsc: 'Todas Secretarias');?>
     </h2>
+    <span class="span_secid noprint">
+        <?=$db->monta_combo('secid', $sqlConsultaSecretarias, 'S', 'Todas Secretarias', 'filtraSecretaria', '', '', '', 'S', '', '', $parametros->secid, '', '', 'noprint');?>
+    </span>
 
     <a href="javascript:window.history.go(-1)" class="voltar" >  <i class="material-icons">arrow_back</i> </a>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">Nome</th>
-                <th scope="col">Unidade </th>
-                <th scope="col">Produto</th>
-                <th scope="col">Observações</th>
-                <th scope="col">Meta atual</th>
-                <th scope="col">Realizado</th>
+                <th scope="col"style="text-align: left;">Unidade </th>
+                <th scope="col"style="text-align: left;">Produto</th>
+                <th scope="col"style="text-align: left;">Observações</th>
+                <th scope="col"style="text-align: left;">Meta atual</th>
+                <th scope="col"style="text-align: left;">Realizado</th>
                 <th scope="col">Orçamento</th>
             </tr>
         </thead>
@@ -160,9 +195,10 @@
                             <?=$indicadores['realizado']; ?>
                         </td>
                         <td>
-                            <?=$indicadores['orcamento']; ?> <br/> 
+                            <?=$indicadores['orcamento']; ?>
+                            <br/>
                             <div class="progress" style="height: 2px;">
-                                <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </td>
                     </tr>
@@ -177,3 +213,22 @@
         <?php endif; ?>
     </table>
 </div>
+
+<script>
+    
+    jQuery(document).ready(function(){
+        
+        jQuery('.span_secid').hide();
+        
+        jQuery('#h2_secid').click(function(){
+            jQuery(this).hide();
+            jQuery('.span_secid').show();
+        });
+        
+    });
+    
+    function filtraSecretaria(){
+        var secid = jQuery('select[name=secid]').val();
+        window.location.href = '?modulo=relatorio/indicadores-secretaria&acao=A&secid='+ secid;
+    }
+</script>
