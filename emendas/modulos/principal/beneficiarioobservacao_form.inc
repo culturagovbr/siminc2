@@ -20,17 +20,26 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#btn-salvar-observacao').click(function () {
-            options = {
-                success: function () {
-                    // Carregar a listagem
-                    jQuery("#div_listagem_observacao").load('?modulo=principal/beneficiario_form&acao=A&req=listar-observacao&benid=' + $('#benid').val());
+            var data = $('#bobdata').val();
+            var obs = $('#bobdsc').val();
 
-                    // Zerar o formulário
-                    jQuery("#div_formulario_observacao").load('?modulo=principal/beneficiario_form&acao=A&req=formulario-observacao&benid=' + $('#benid').val());
-                }
+            if (data != '' && obs != '') {
+
+                options = {
+                    success: function () {
+                        // Carregar a listagem
+                        jQuery("#div_listagem_observacao").load('?modulo=principal/beneficiario_form&acao=A&req=listar-observacao&benid=' + $('#benid').val());
+
+                        // Zerar o formulário
+                        jQuery("#div_formulario_observacao").load('?modulo=principal/beneficiario_form&acao=A&req=formulario-observacao&benid=' + $('#benid').val());
+                    }
+                };
+
+                jQuery("#formulario-observacao").ajaxForm(options).submit();
+                return true;
             }
-
-            jQuery("#formulario-observacao").ajaxForm(options).submit();
+            swal('Atenção!', 'Verificar a obrigatoriedade dos campos acima!', 'warning');
+            return false;
         });
     });
 </script>
