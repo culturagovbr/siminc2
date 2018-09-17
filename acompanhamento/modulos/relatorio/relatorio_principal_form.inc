@@ -65,6 +65,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                             case 'proposta':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/proposta/relatorio_form.inc';
                                 break;        
+                            case 'pi-fnc':
+                                include_once APPRAIZ. 'acompanhamento/modulos/relatorio/planejamento/pi-fnc/relatorio_form.inc';
+                                break;        
                             default:
                                 break;
                         }
