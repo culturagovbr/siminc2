@@ -144,7 +144,7 @@ else
 <html>
 	<head>
 		<meta name="description" content="<?php echo NOME_SISTEMA; ?>, Permite o Monitoramento Físico e Financeiro e a Avaliação das Ações e Programas do Ministério dentre outras atividades estratégicas">
-		<meta name="keywords" content="<?php echo SIGLA_SISTEMA; ?>, MEC, PDE, Ministério da Educação, Analistas: ,Cristiano Cabral, Adonias Malosso, Gilberto Xavier">
+		<meta name="keywords" content="<?php echo SIGLA_SISTEMA; ?>, <?=NOME_ORGAO_SISTEMA?>">
 		<META NAME="Author" CONTENT="Cristiano Cabral, cristiano.cabral@gmail.com">
 		<meta name="audience" content="all">
 		<meta http-equiv="Cache-Control" content="no-cache">
@@ -524,8 +524,7 @@ else
 					<td><img src="../imagens/brasao.gif" width="50" height="50" border="0"></td>
 					<td height="20" nowrap>
 						<?php echo NOME_SISTEMA; ?><br>
-						Ministério da Educação / SE - Secretaria Executiva<br>
-						DTI - Diretoria de Tecnologia da Informação<br>
+						<?=NOME_ORGAO_SISTEMA?> / SE - Secretaria Executiva<br>
 					</td>
 					<td height="20" align="right">
 						Impresso por: <strong><?= $_SESSION['usunome']; ?></strong><br>

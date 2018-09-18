@@ -27,10 +27,42 @@ include_once APPRAIZ. 'www/planacomorc/_constantes.php';
 include_once APPRAIZ. 'planacomorc/classes/controller/ImportaDadosSiop.inc';
 include_once APPRAIZ. 'planacomorc/classes/model/ImportaDadosSiop.inc';
 require_once(APPRAIZ. 'spo/ws/sof/Quantitativo.php');
-$db = new cls_banco();
-$cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
-echo '1)Atualizando, dados! | ';
-$cImportaDadosSiop->AtualizarDados();
-echo '2)Montando email para ser enviado! | ';
-$cImportaDadosSiop->AtualizarDotacao();
-echo '3)Rotina Finalizada! | ';
+
+try{
+    $db = new cls_banco();
+    $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
+    echo '1)Atualizando, dados! | ';
+    $cImportaDadosSiop->AtualizarDados();
+    echo '2)Montando email para ser enviado! | ';
+    $cImportaDadosSiop->AtualizarDotacao();
+    echo '3)Rotina Finalizada!';
+} catch (Exception $e){
+    # Buscando Destinatários
+    $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
+    $listaDestinatarios = $mImportaDadosSiop->RetornaEmailsSuperUsuarios();
+    echo '1)Buscando Destinatários! | ';
+    # Atribuindo mensagem de assunto do e-mail
+    $assunto = '[SIMINC2] Erro nas Alterações de Dotação';
+    
+    # Criando mensagem de e-mail
+    $corpoEmailV3 = "
+        <p style='text-aling: justify;'>
+            Prezados,
+            <br />
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp; Não foi possível atualizar as informações de execução orçamentária(Aprovisionado, Empenhado, liquidado e Pago).
+            O sistema não conseguiu acessar o 
+            <a style='color: #0000ff;' href='https://www.siop.planejamento.gov.br' title='Clique aqui para acessar o SIOP e obter mais informções'>
+                SIOP - Sistema Integrado de Planejamento e Orçamento do Governo Federal
+            </a>.
+        </p>
+    ";
+    include_once APPRAIZ. "includes/email-template.php";
+    $conteudo = $textoEmailV3;
+    echo '2)Criando mensagem de e-mail! | ';
+
+    # Enviando o e-mail com aviso de erro de execução
+    simec_email('', $listaDestinatarios, $assunto, $conteudo);
+    echo '3)Enviando o e-mail com aviso de erro de execução! | ';
+    echo '4)Rotina Finalizada!';
+}

@@ -157,12 +157,12 @@ class Spo_Ws_Sof_Quantitativo extends Spo_Ws_Sof
 	 * @throws Exception invalid function signature message
 	 */
 	public function consultarEmendasLocalizador($mixed = null) {
-		$validParameters = array(
-			"(consultarEmendasLocalizador)",
-		);
-		$args = func_get_args();
-		$this->_checkArguments($args, $validParameters);
-		return $this->getSoapClient()->call("consultarEmendasLocalizador", $args);
+            $validParameters = array(
+                "(consultarEmendasLocalizador)",
+            );
+            $args = func_get_args();
+            $this->_checkArguments($args, $validParameters);
+            return $this->getSoapClient()->call("consultarEmendasLocalizador", $args);
 	}
 
 	/**
@@ -175,7 +175,7 @@ class Spo_Ws_Sof_Quantitativo extends Spo_Ws_Sof
 	 * $ws->consultarExecucaoOrcamentaria($filtro, $retorno);
 	 * </pre>
 	 * A página inicial é a nº 1, o número padrão de registros por página é de 30k registros.
-     * @logger true
+         * @logger true
 	 * @name Consultar execução orçamentária
 	 * @param array $filtro Lista com pares nome do filtro e valor/lista de valores para selecionar dados da consulta.
 	 * @param array $selRetorno Lista com o nome dos campos que devem ser retornados na consulta.
@@ -188,50 +188,50 @@ class Spo_Ws_Sof_Quantitativo extends Spo_Ws_Sof
 	 */
 	function consultarExecucaoOrcamentaria(array $filtro, $selRetorno = null, $pagina = 1, $retornaArray = false)
 	{
-		// -- Filtros da consulta
-		$filtroExecucaoOrcamentaria = new filtroExecucaoOrcamentariaDTO();
-		foreach ($filtro as $campo => $valor) {
-			if (!property_exists($filtroExecucaoOrcamentaria, $campo)) {
-				throw new Exception("O filtro '{$campo}' não é válido para o método WSQuantitativo::consultarExecucaoOrcamentaria.");
-			}
+            // -- Filtros da consulta
+            $filtroExecucaoOrcamentaria = new filtroExecucaoOrcamentariaDTO();
+            foreach ($filtro as $campo => $valor) {
+                if (!property_exists($filtroExecucaoOrcamentaria, $campo)) {
+                    throw new Exception("O filtro '{$campo}' não é válido para o método WSQuantitativo::consultarExecucaoOrcamentaria.");
+                }
 
-            $filtroExecucaoOrcamentaria->$campo = $valor;
-		}
+                $filtroExecucaoOrcamentaria->$campo = $valor;
+            }
 
-		// -- Retorno da consulta
-		$selecaoRetornoExecucaoOrcamentaria = new selecaoRetornoExecucaoOrcamentariaDTO();
-        $selRetorno = $selRetorno ? $selRetorno : array_keys(get_class_vars('SelecaoRetornoExecucaoOrcamentariaDTO'));
-		foreach ($selRetorno as $ret) {
-			if (!property_exists($selecaoRetornoExecucaoOrcamentaria, $ret)) {
-				throw new Exception("O retorno '{$ret}' não é válido para o método WSQuantitaivo::consultarExecucaoOrcamentaria.");
-			}
-			$selecaoRetornoExecucaoOrcamentaria->$ret = true;
-		}
+            // -- Retorno da consulta
+            $selecaoRetornoExecucaoOrcamentaria = new selecaoRetornoExecucaoOrcamentariaDTO();
+            $selRetorno = $selRetorno ? $selRetorno : array_keys(get_class_vars('SelecaoRetornoExecucaoOrcamentariaDTO'));
+            foreach ($selRetorno as $ret) {
+                if (!property_exists($selecaoRetornoExecucaoOrcamentaria, $ret)) {
+                    throw new Exception("O retorno '{$ret}' não é válido para o método WSQuantitaivo::consultarExecucaoOrcamentaria.");
+                }
+                $selecaoRetornoExecucaoOrcamentaria->$ret = true;
+            }
 
-		// -- Execução da consulta
-		$consultarExecucaoOrcamentaria = new consultarExecucaoOrcamentaria();
-		$consultarExecucaoOrcamentaria->credencial = $this->credenciais;
-		$consultarExecucaoOrcamentaria->filtro = $filtroExecucaoOrcamentaria;
-		$consultarExecucaoOrcamentaria->selecaoRetorno = $selecaoRetornoExecucaoOrcamentaria;
+            // -- Execução da consulta
+            $consultarExecucaoOrcamentaria = new consultarExecucaoOrcamentaria();
+            $consultarExecucaoOrcamentaria->credencial = $this->credenciais;
+            $consultarExecucaoOrcamentaria->filtro = $filtroExecucaoOrcamentaria;
+            $consultarExecucaoOrcamentaria->selecaoRetorno = $selecaoRetornoExecucaoOrcamentaria;
 
-		// -- Controle de paginação das consultas
-		$consultarExecucaoOrcamentaria->paginacao = new paginacaoDTO();
-		$consultarExecucaoOrcamentaria->paginacao->pagina = $pagina;
-		$consultarExecucaoOrcamentaria->paginacao->registrosPorPagina = self::REGISTROS_POR_PAGINA;
-        
-		$consultarExecucaoOrcamentariaResponse = $this->getSoapClient()->call(
-				'consultarExecucaoOrcamentaria',
-				array($consultarExecucaoOrcamentaria)
-		);
+            // -- Controle de paginação das consultas
+            $consultarExecucaoOrcamentaria->paginacao = new paginacaoDTO();
+            $consultarExecucaoOrcamentaria->paginacao->pagina = $pagina;
+            $consultarExecucaoOrcamentaria->paginacao->registrosPorPagina = self::REGISTROS_POR_PAGINA;
 
-		if ($retornaArray) {
-			if (!$consultarExecucaoOrcamentariaResponse instanceof consultarExecucaoOrcamentariaResponse) {
-				throw new Exception('Instância de ' . get_class($consultarExecucaoOrcamentariaResponse) . ' não pode ser convertida para array.');
-			}
-			return $this->execucaoOrcamentariaComoArray($consultarExecucaoOrcamentariaResponse, $selRetorno);
-		} else {
-			return $consultarExecucaoOrcamentariaResponse;
-		}
+            $consultarExecucaoOrcamentariaResponse = $this->getSoapClient()->call(
+                'consultarExecucaoOrcamentaria',
+                array($consultarExecucaoOrcamentaria)
+            );
+
+            if ($retornaArray) {
+                if (!$consultarExecucaoOrcamentariaResponse instanceof consultarExecucaoOrcamentariaResponse) {
+                    throw new Exception('Instância de ' . get_class($consultarExecucaoOrcamentariaResponse) . ' não pode ser convertida para array.');
+                }
+                return $this->execucaoOrcamentariaComoArray($consultarExecucaoOrcamentariaResponse, $selRetorno);
+            } else {
+                return $consultarExecucaoOrcamentariaResponse;
+            }
 	}
 
 	/**
