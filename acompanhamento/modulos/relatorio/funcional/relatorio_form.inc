@@ -27,16 +27,20 @@
             array('codigo' => 'ptres',              'descricao' => 'PTRES'),
             array('codigo' => 'funcional',          'descricao' => 'Funcional'),
             array('codigo' => 'ptrdotacao_custeio', 'descricao' => 'Dotação Custeio'),
-            array('codigo' => 'picvalorcusteio',    'descricao' => 'Planejado Custeio'),
             array('codigo' => 'ptrdotacao_capital', 'descricao' => 'Dotação Capital'),
+            array('codigo' => 'picvalorcusteio',    'descricao' => 'Planejado Custeio'),
             array('codigo' => 'picvalorcapital',    'descricao' => 'Planejado Capital'),
             array('codigo' => 'ptrdotacao_total',   'descricao' => 'Dotação Total'), // criar campo na consulta, nao existe total no sql
-            array('codigo' => 'picvalorcapital',    'descricao' => 'Planejado Total'), // criar campo na consulta, nao existe total no sql 
+//            array('codigo' => 'picvalorcapital',    'descricao' => 'Planejado Total'), // criar campo na consulta, nao existe total no sql 
             array('codigo' => 'provisionado',       'descricao' => 'Provisionado'),
             array('codigo' => 'empenhado',          'descricao' => 'Empenhado'),
             array('codigo' => 'liquidado',          'descricao' => 'Liquidado'),
             array('codigo' => 'pago',               'descricao' => 'Pago'),
         );
+        
+        # Grava informações das colunas do relatorio especifico na sessao
+        $_SESSION['relatorio_gerencial_funcional']['listaTodasColunas'] = $origem;
+        
         // exibe agrupador
         $agrupador->setOrigem('naoColuna', null, $origem);
         $agrupador->setDestino('coluna', null, $destino);
