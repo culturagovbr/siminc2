@@ -2,6 +2,7 @@
 
     # Incluindo arquivo do Módulo que possui a implementação da busca
     include_once APPRAIZ. 'www/proposta/_funcoes.php';
+    include_once APPRAIZ. 'includes/relatorio-agrupador/tabela.php';
 
     /**
      * Busca a descricao da coluna pelo nome interno/Código
@@ -10,26 +11,23 @@
      * @param array $listaColunas
      * @return string
      */
-    function buscarDescricaoPorCodigo($codigo, $listaColunas){
-        $resultado = '';
-        if($listaColunas){
-            foreach($listaColunas as $coluna){
-                if($codigo == $coluna['codigo']){
-                    $resultado = $coluna['descricao'];
-                    break;
-                }
-            }
-        }
-        
-        return $resultado;
-    }
+//    function buscarDescricaoPorCodigo($codigo, $listaColunas){
+//        $resultado = '';
+//        if($listaColunas){
+//            foreach($listaColunas as $coluna){
+//                if($codigo == $coluna['codigo']){
+//                    $resultado = $coluna['descricao'];
+//                    break;
+//                }
+//            }
+//        }
+//        
+//        return $resultado;
+//    }
     
     # Filtros do relatório
     $listaFiltros = $_POST['filtro'];
     
-    # Colunas do relatorio
-    $colunasPadroes = $_SESSION['relatorio_gerencial_pre_pi']['colunas'];
-    $colunasSelecionadas = $_POST['coluna'];
 //ver($colunasPadroes, $colunasSelecionadas, d);
     # Busca lista de perfis do usuário
     $listaPerfil = pegaPerfilGeral();
@@ -55,14 +53,14 @@
     $listaRelatorio = $db->carregar($sql);
     
     # Gera o XLS do relatório
-    if($_REQUEST['req'] == 'xls'){
-        ob_clean();
-        $nomeDoArquivoXls = 'relatorio';
-    //    echo $rel->getRelatorioXls();
-        die();
-    }
+//    if($_REQUEST['req'] == 'xls'){
+//        ob_clean();
+//        $nomeDoArquivoXls = 'relatorio';
+//        echo $rel->getRelatorioXls();
+//        die();
+//    }
 
-    include APPRAIZ . "includes/cabecalho_bootstrap_v3_popup.inc";
+    include APPRAIZ. "includes/cabecalho_bootstrap_v3_popup.inc";
 ?>
 
 <div class="row" style="margin-top: 5px;">
@@ -72,41 +70,32 @@
                 <h5>Relatório Geral de Pré-PI</h5>
             </div>
             <div class="ibox-content">
-                <div class="table-responsive">
+                <div class="table-responsive" style="overflow-y: auto;">
 
-                    <table class="table table-bordered table-hover dataTablesSP">
-                        <thead>
-                            <tr class="text-center">
-                                <?php foreach($colunasSelecionadas as $colunaSelecionada): ?>
-                                    <th><?=buscarDescricaoPorCodigo($colunaSelecionada, $colunasPadroes)?></th>
-                                <?php endforeach; ?>
-                            </tr>
-                        </thead>
-                        <?php if($listaRelatorio): ?>
-                            <tbody>
-                                <?php foreach($listaRelatorio as $itemRelatorio): ?>
-                                    <tr>
-                                        <?php foreach($colunasSelecionadas as $colunaSelecionada): ?>
-                                            <td>
-                                                <?php echo $itemRelatorio[$colunaSelecionada]; ?>
-                                            </td>
-                                        <?php endforeach; ?>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        <?php else: ?>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="<?php echo count($colunasSelecionadas)-1; ?>">
-                                        Não existem dados para serem mostrados
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        <?php endif; ?>
-                    </table>
+                    <?php
+
+                        # Colunas do relatorio
+                        $listaTodasColunas = $_SESSION['relatorio_gerencial_pre_pi']['listaTodasColunas'];
+                        $listaColunasSelecionadas = $_POST['coluna'];
+                        $listaColunaFormatoMoeda = [
+                            'plivalorcusteio',
+                            'plivalorcapital',
+                            'plivalorcusteioadicional',
+                            'plivalorcapitaladicional'
+                        ];
+
+                        $tabela = new relatorio_agrupador_tabela();
+                        echo $tabela->setListaTodasColunas($listaTodasColunas)
+                            ->setListaColunasSelecionadas($listaColunasSelecionadas)
+                            ->setListaColunaFormatoMoeda($listaColunaFormatoMoeda)
+                            ->setListaRelatorio($listaRelatorio)
+                            ->montarTabela()
+                            ->getTabela();
+                    ?>
 
                 </div>
             </div>
         </div>
     </div>
 </div>
+

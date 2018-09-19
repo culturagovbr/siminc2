@@ -65,7 +65,7 @@
     );
     
     # Grava informações das colunas do relatorio especifico na sessao
-    $_SESSION['relatorio_gerencial_pre_pi']['colunas'] = $origem;
+    $_SESSION['relatorio_gerencial_pre_pi']['listaTodasColunas'] = $origem;
     
     // exibe agrupador
     $agrupador->setOrigem('naoColuna', null, $origem);
