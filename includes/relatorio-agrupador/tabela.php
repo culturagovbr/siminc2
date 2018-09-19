@@ -5,14 +5,13 @@
  *
  * @example
  * <code>
- * $listaResultado = connection::getInstance()
- *     ->setHost($config->host)
- *     ->setPort($config->port)
- *     ->setUser($config->user)
- *     ->setPassword($config->password)
- *     ->setDbname($config->dbname)
- *     ->connect()
- *     ->fetch("SELECT u.usunome FROM seguranca.usuario u WHERE u.usucpf = ''");
+ *   $tabela = new relatorio_agrupador_tabela();
+ *   echo $tabela->setListaTodasColunas($listaTodasColunas)
+ *       ->setListaColunasSelecionadas($listaColunasSelecionadas)
+ *       ->setListaColunaFormatoMoeda($listaColunaFormatoMoeda)
+ *       ->setListaRelatorio($listaRelatorio)
+ *       ->montarTabela()
+ *       ->getTabela();
  * </code>
  *
  */
@@ -118,19 +117,19 @@ class relatorio_agrupador_tabela {
      */
     public function montarTabelaCabecalho(){
         $this->tabela .= '
-                <thead>
-                    <tr class="text-center">
+            <thead>
+                <tr>
         ';
         
         foreach($this->listaColunasSelecionadas as $colunaSelecionada){
             $this->tabela .= '
-                    <th>'. self::buscarDescricaoPorCodigo($colunaSelecionada, $this->listaTodasColunas). '</th>
+                <th>'. self::buscarDescricaoPorCodigo($colunaSelecionada, $this->listaTodasColunas). '</th>
             ';
         }
                             
         $this->tabela .= '
-                    </tr>
-                </thead>
+                </tr>
+            </thead>
         ';
         
         return $this;
@@ -195,7 +194,7 @@ class relatorio_agrupador_tabela {
         if(!$this->listaRelatorio){
             $this->tabela .= '
                 <tfoot>
-                    <tr>
+                    <tr class="text-center validateRedText">
                         <td colspan="'. count($this->listaColunasSelecionadas). '">
                             Não existem dados para serem mostrados
                         </td>
@@ -216,10 +215,6 @@ class relatorio_agrupador_tabela {
         $this->tabela .= '
             <table class="table table-bordered table-hover table-striped">
         ';
-
-//        $this->montarTabelaCabecalho();
-//        $this->montarTabelaCorpo();        
-//ver($this->tabela. '</table>', d);
 
         $this->montarTabelaCabecalho()
             ->montarTabelaCorpo()
