@@ -114,7 +114,7 @@ include APPRAIZ . "includes/cabecalho.inc";
             formulario.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
         } else if (tipo == 'exibir') {
             formulario.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
-            window.open('', 'relatorio', 'width='+largura+',height=750,status=1,menubar=1,toolbar=0,scrollbars=no,resizable=1');
+            window.open('', 'relatorio', 'width='+largura+',height=750,status=1,menubar=1,toolbar=0,scrollbars=yes,resizable=1');
             formulario.target = 'relatorio';
 
         }
