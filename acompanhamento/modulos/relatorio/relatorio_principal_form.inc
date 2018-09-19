@@ -65,6 +65,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                             case 'proposta':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/proposta/relatorio_form.inc';
                                 break;        
+                            case 'funcional':
+                                include_once APPRAIZ. 'acompanhamento/modulos/relatorio/funcional/relatorio_form.inc';
+                                break;        
                             default:
                                 break;
                         }
