@@ -59,6 +59,34 @@ if(isset($_REQUEST['req'])){
                 ['input-size' => 9, 'label-size' => 2]
             );
             die();
+        case 'carregar-combo-funcional':
+            $where = $_REQUEST['unoid']? "\n AND suo.unoid IN(". join($_REQUEST['unoid'], ','). ")": NULL;
+            $stSql = "
+                SELECT DISTINCT
+                    ptr.ptrid codigo,
+                    coalesce(ptr.prgcod, '') || ' - ' || coalesce(ptr.acacod, '') || ' - ' || coalesce(ptr.loccod, '') || ' - ' || coalesce(ptr.acaobjetivocod, '') || ' - ' || coalesce(ptr.plocod, '') || ' - ' || ptr.acatitulo || ' - ' || ptr.plodsc descricao
+                FROM monitora.vw_ptres ptr
+                    JOIN public.vw_subunidadeorcamentaria suo ON(
+                        suostatus = 'A'
+                        AND ptr.unicod = suo.unocod
+                        AND suo.prsano = ptr.ptrano
+                    )
+                WHERE
+                    ptr.ptrstatus = 'A'
+                    AND ptr.ptrano = '". $_REQUEST['prsano']. "'
+                    $where
+                ORDER BY
+                    descricao
+            ";
+            echo $simec->select(
+                'filtro[ptrid][]',
+                'Funcional',
+                NULL,
+                $stSql,
+                NULL,
+                ['input-size' => 9, 'label-size' => 2]
+            );
+            die();
     }
 }
 
@@ -149,6 +177,7 @@ include APPRAIZ . "includes/cabecalho.inc";
         $('[name="filtro[unoid][]"]').change(function(){
             carregarComboSubunidade();
             carregarComboAcao();
+            carregarComboFuncional();
         });
         
 //        $('[name="filtro[acaid][]"]').change(function(){
@@ -206,7 +235,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     }
     
     /**
-     * Carrega novo conteúdo para a opções de Sub-Unidade via requisição ajax.
+     * Carrega novo conteúdo para a opções de Ações via requisição ajax.
      * 
      * @return VOID
      */
@@ -222,6 +251,28 @@ include APPRAIZ . "includes/cabecalho.inc";
             success: function(response) {
                 $('.div_acaid').remove('slow');
                 $('.div_acaid').html(response);
+                $(".chosen-select").chosen();
+            }
+        });
+    }
+    
+    /**
+     * Carrega novo conteúdo para a opções de Funcionais via requisição ajax.
+     * 
+     * @return VOID
+     */
+    function carregarComboFuncional() {
+        $.ajax({
+            dataType: "html",
+            url: '?modulo=relatorio/relatorio_principal_form&acao=A',
+            data: {
+                req: 'carregar-combo-funcional',
+                prsano: $('[name="filtro[prsano]"]').val(),
+                unoid: $('[name="filtro[unoid][]"]').val()
+            },
+            success: function(response) {
+                $('.div_ptrid').remove('slow');
+                $('.div_ptrid').html(response);
                 $(".chosen-select").chosen();
             }
         });

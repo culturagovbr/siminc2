@@ -75,16 +75,17 @@
         echo $simec->select("filtro[acaid][]", 'Ação', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
         echo "</div>";
         
+        echo "<div class='div_ptrid'>";
         $stSql = "
-            SELECT
+            SELECT DISTINCT
                 ptr.ptrid codigo,
                 coalesce(ptr.prgcod, '') || ' - ' || coalesce(ptr.acacod, '') || ' - ' || coalesce(ptr.loccod, '') || ' - ' || coalesce(ptr.acaobjetivocod, '') || ' - ' || coalesce(ptr.plocod, '') || ' - ' || ptr.acatitulo || ' - ' || ptr.plodsc descricao
             FROM monitora.vw_ptres ptr
-                JOIN monitora.acao ON ptr.acaid = acao.acaid
-                JOIN public.unidadeorcamentaria ON(
-                    acao.unicod = unidadeorcamentaria.unocod
-                    AND acao.prgano = unidadeorcamentaria.prsano
-                )
+		JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suostatus = 'A'
+                    AND ptr.unicod = suo.unocod
+                    AND suo.prsano = ptr.ptrano
+		)
             WHERE
                 ptr.ptrstatus = 'A'
                 AND ptr.ptrano = '". $_REQUEST['filtro']['prsano']."'
@@ -92,6 +93,7 @@
                 descricao
         ";
         echo $simec->select("filtro[ptrid][]", 'Funcional', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        echo "</div>";
 
         $stSql = "
             SELECT DISTINCT
