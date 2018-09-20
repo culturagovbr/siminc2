@@ -4,14 +4,14 @@
 </div>
 <div class="ibox-content">
     <?php
-    $stSql = "SELECT prsano AS codigo, prsano AS descricao FROM public.vw_subunidadeorcamentaria ORDER BY 1;";
-    $preenchidos = null;
-    if (!$_REQUEST['filtro']['prsano']) {
-        $_REQUEST['filtro']['prsano'] = $preenchidos = $_SESSION['exercicio'];
-    } else {
-        $preenchidos = $_REQUEST['filtro']['prsano'];
-    }
-    echo $simec->select('filtro[pliano]', 'Exercício', $preenchidos, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        $stSql = "SELECT prsano AS codigo, prsano AS descricao FROM public.vw_subunidadeorcamentaria ORDER BY 1;";
+        $preenchidos = null;
+        if (!$_REQUEST['filtro']['prsano']) {
+            $_REQUEST['filtro']['prsano'] = $preenchidos = $_SESSION['exercicio'];
+        } else {
+            $preenchidos = $_REQUEST['filtro']['prsano'];
+        }
+        echo $simec->select('filtro[prsano]', 'Exercício', $preenchidos, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
     ?>
     <label class="col-sm-2 col-md-2 col-lg-2 control-label">Colunas</label>
     <?php
@@ -21,25 +21,7 @@
         // Dados padrão de destino (nulo)
         $destino = isset($agrupador2) ? $agrupador2 : array();
         // Dados padrão de origem
-        $origem = array(
-            array('codigo' => 'unosigla',           'descricao' => 'Unidade'),
-            array('codigo' => 'suonome',            'descricao' => 'Subunidade'),
-            array('codigo' => 'ptres',              'descricao' => 'PTRES'),
-            array('codigo' => 'funcional',          'descricao' => 'Funcional'),
-            array('codigo' => 'ptrdotacao_custeio', 'descricao' => 'Dotação Custeio'),
-            array('codigo' => 'ptrdotacao_capital', 'descricao' => 'Dotação Capital'),
-            array('codigo' => 'picvalorcusteio',    'descricao' => 'Planejado Custeio'),
-            array('codigo' => 'picvalorcapital',    'descricao' => 'Planejado Capital'),
-            array('codigo' => 'ptrdotacao_total',   'descricao' => 'Dotação Total'), // criar campo na consulta, nao existe total no sql
-//            array('codigo' => 'picvalorcapital',    'descricao' => 'Planejado Total'), // criar campo na consulta, nao existe total no sql 
-            array('codigo' => 'provisionado',       'descricao' => 'Provisionado'),
-            array('codigo' => 'empenhado',          'descricao' => 'Empenhado'),
-            array('codigo' => 'liquidado',          'descricao' => 'Liquidado'),
-            array('codigo' => 'pago',               'descricao' => 'Pago'),
-        );
-        
-        # Grava informações das colunas do relatorio especifico na sessao
-        $_SESSION['relatorio_gerencial_funcional']['listaTodasColunas'] = $origem;
+        $origem = montarColunasRelatorioFuncional();
         
         // exibe agrupador
         $agrupador->setOrigem('naoColuna', null, $origem);
@@ -71,7 +53,16 @@
                 descricao";
         echo $simec->select("filtro[suoid][]", 'Subunidade', NULL, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
-        $stSql = (new Monitora_Model_Acao())->recuperarSqlCombo(['prgcod', 'acacod', 'acaobjetivocod', 'loccod', 'acatitulo']);
+        $stSql = "
+            SELECT DISTINCT
+                acao.acaid AS codigo,
+                prgcod || ' - ' || acacod || ' - ' || acaobjetivocod || ' - ' || loccod || ' - ' || acatitulo AS descricao
+            FROM monitora.acao acao
+                JOIN public.unidade uni ON uni.unicod = acao.unicod
+            WHERE
+                acastatus = 'A'
+                AND prgano = '". $_REQUEST['filtro']['prsano']."'
+        ";
         echo $simec->select("filtro[acaid][]", 'Ação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
         
         $stSql = "
