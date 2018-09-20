@@ -135,7 +135,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
         <div class="row">
             <div class="col-md-12">
-                <div class="ibox float-e-margins">
+                <div class="ibox float-e-margins div_form_rel">
 
                     <?php
                         switch ($_REQUEST['tipo_relatorio']) {
@@ -177,18 +177,18 @@ include APPRAIZ . "includes/cabecalho.inc";
             document.filtro.submit();
         });
   
-        $('[name="filtro[unoid][]"]').change(function(){
+        $('.div_form_rel').on('change', '[name="filtro[unoid][]"]', function(){
             carregarComboSubunidade();
             carregarComboAcao();
             carregarComboFuncional();
         });
         
-        $('[name="filtro[suoid][]"]').change(function(){
+        $('.div_form_rel').on('change', '[name="filtro[suoid][]"]', function(){
             carregarComboAcao();
             carregarComboFuncional();
         });
         
-        $('[name="filtro[acaid][]"]').change(function(){
+        $('.div_form_rel').on('change', '[name="filtro[acaid][]"]', function(){
             carregarComboFuncional();
         });
 
