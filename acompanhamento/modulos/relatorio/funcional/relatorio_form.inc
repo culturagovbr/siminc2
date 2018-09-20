@@ -55,17 +55,25 @@
         echo $simec->select("filtro[suoid][]", 'Subunidade', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
         echo "</div>";
         
+        echo "<div class='div_acaid'>";
         $stSql = "
             SELECT DISTINCT
                 acao.acaid AS codigo,
                 prgcod || ' - ' || acacod || ' - ' || acaobjetivocod || ' - ' || loccod || ' - ' || acatitulo AS descricao
             FROM monitora.acao acao
-                JOIN public.unidade uni ON uni.unicod = acao.unicod
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suostatus = 'A'
+                    AND acao.unicod = suo.unocod
+                    AND suo.prsano = prgano
+                )
             WHERE
                 acastatus = 'A'
                 AND prgano = '". $_REQUEST['filtro']['prsano']."'
+            ORDER BY
+                descricao
         ";
         echo $simec->select("filtro[acaid][]", 'Ação', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        echo "</div>";
         
         $stSql = "
             SELECT
@@ -93,7 +101,7 @@
             WHERE
                 irp.irpstatus = 'A'
             ORDER BY
-                2,1";
+                descricao";
         echo $simec->select("filtro[irpcod][]", 'RP', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
     ?>
     <div class="text-center">

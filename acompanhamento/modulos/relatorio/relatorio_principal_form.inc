@@ -31,6 +31,34 @@ if(isset($_REQUEST['req'])){
                 ['input-size' => 9, 'label-size' => 2]
             );
             die();
+        case 'carregar-combo-acao':
+            $where = $_REQUEST['unoid']? "\n AND suo.unoid IN(". join($_REQUEST['unoid'], ','). ")": NULL;
+            $stSql = "
+                SELECT DISTINCT
+                    acao.acaid AS codigo,
+                    prgcod || ' - ' || acacod || ' - ' || acaobjetivocod || ' - ' || loccod || ' - ' || acatitulo AS descricao
+                FROM monitora.acao acao
+                    JOIN public.vw_subunidadeorcamentaria suo ON(
+                        suostatus = 'A'
+                        AND acao.unicod = suo.unocod
+                        AND suo.prsano = prgano
+                    )
+                WHERE
+                    acastatus = 'A'
+                    AND prgano = '". $_REQUEST['prsano']. "'
+                    $where
+                ORDER BY
+                    descricao
+            ";
+            echo $simec->select(
+                'filtro[acaid][]',
+                'Ação',
+                NULL,
+                $stSql,
+                NULL,
+                ['input-size' => 9, 'label-size' => 2]
+            );
+            die();
     }
 }
 
@@ -120,7 +148,12 @@ include APPRAIZ . "includes/cabecalho.inc";
   
         $('[name="filtro[unoid][]"]').change(function(){
             carregarComboSubunidade();
+            carregarComboAcao();
         });
+        
+//        $('[name="filtro[acaid][]"]').change(function(){
+//            carregarComboFuncional();
+//        });
 
     });
     
@@ -152,7 +185,8 @@ include APPRAIZ . "includes/cabecalho.inc";
 
     /**
      * Carrega novo conteúdo para a opções de Sub-Unidade via requisição ajax.
-     *
+     * 
+     * @return VOID
      */
     function carregarComboSubunidade() {
         $.ajax({
@@ -166,6 +200,28 @@ include APPRAIZ . "includes/cabecalho.inc";
             success: function(response) {
                 $('.div_suoid').remove('slow');
                 $('.div_suoid').html(response);
+                $(".chosen-select").chosen();
+            }
+        });
+    }
+    
+    /**
+     * Carrega novo conteúdo para a opções de Sub-Unidade via requisição ajax.
+     * 
+     * @return VOID
+     */
+    function carregarComboAcao() {
+        $.ajax({
+            dataType: "html",
+            url: '?modulo=relatorio/relatorio_principal_form&acao=A',
+            data: {
+                req: 'carregar-combo-acao',
+                prsano: $('[name="filtro[prsano]"]').val(),
+                unoid: $('[name="filtro[unoid][]"]').val()
+            },
+            success: function(response) {
+                $('.div_acaid').remove('slow');
+                $('.div_acaid').html(response);
                 $(".chosen-select").chosen();
             }
         });
