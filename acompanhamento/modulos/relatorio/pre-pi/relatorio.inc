@@ -18,7 +18,7 @@
     $listaRelatorio = $db->carregar($sql);
     
     # Colunas do relatorio
-    $listaTodasColunas = $_SESSION['relatorio_gerencial_pre_pi']['listaTodasColunas'];
+    $listaTodasColunas = montarColunasRelatorioPrePI();
     $listaColunasSelecionadas = $_POST['coluna'];
     $listaColunaFormatoMoeda = [
         'plivalorcusteio',
