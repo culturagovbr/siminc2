@@ -8,8 +8,29 @@ if(isset($_REQUEST['req'])){
         case 'xls':
             include $_REQUEST['tipo_relatorio']."/relatorio.inc";
             die;            
-        default:
-            break;
+        case 'carregar-combo-subunidade':
+            $where = $_REQUEST['unoid']? "\n AND suo.unoid IN(". join($_REQUEST['unoid'], ','). ")": NULL;
+            $stSql = "
+                SELECT DISTINCT
+                    suo.suoid AS codigo,
+                    suo.suocod || ' - ' || suo.suonome AS descricao
+                FROM public.vw_subunidadeorcamentaria suo
+                WHERE
+                    suo.suostatus = 'A'
+                    AND suo.prsano = '". $_REQUEST['prsano']. "'
+                    $where
+                ORDER BY
+                    descricao
+            ";
+            echo $simec->select(
+                'filtro[suoid][]',
+                'Subunidade',
+                NULL,
+                $stSql,
+                NULL,
+                ['input-size' => 9, 'label-size' => 2]
+            );
+            die();
     }
 }
 
@@ -96,6 +117,10 @@ include APPRAIZ . "includes/cabecalho.inc";
             $("#req").val("");
             document.filtro.submit();
         });
+  
+        $('[name="filtro[unoid][]"]').change(function(){
+            carregarComboSubunidade();
+        });
 
     });
     
@@ -123,6 +148,27 @@ include APPRAIZ . "includes/cabecalho.inc";
         }
 
         formulario.submit();
+    }
+
+    /**
+     * Carrega novo conteúdo para a opções de Sub-Unidade via requisição ajax.
+     *
+     */
+    function carregarComboSubunidade() {
+        $.ajax({
+            dataType: "html",
+            url: '?modulo=relatorio/relatorio_principal_form&acao=A',
+            data: {
+                req: 'carregar-combo-subunidade',
+                prsano: $('[name="filtro[prsano]"]').val(),
+                unoid: $('[name="filtro[unoid][]"]').val()
+            },
+            success: function(response) {
+                $('.div_suoid').remove('slow');
+                $('.div_suoid').html(response);
+                $(".chosen-select").chosen();
+            }
+        });
     }
 
 </script>

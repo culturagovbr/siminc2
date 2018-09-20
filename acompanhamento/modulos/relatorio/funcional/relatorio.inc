@@ -7,7 +7,6 @@
     include_once APPRAIZ. 'includes/relatorio-agrupador/tabela.php';
 
     # Busca SQL com filtros pra realizar a consulta
-    $modelPlanoInterno = new Pi_PlanoInterno();
     $filtros = array(
         'suo.unofundo = FALSE',
         "suo.prsano = '". $_POST['filtro']['prsano']. "'"
@@ -28,7 +27,7 @@
     if($_POST['filtro']['irpcod']){
         $filtros[] = "ptr.irpcod::INTEGER IN(". join($_POST['filtro']['irpcod'], ','). ")";
     }
-
+    $modelPlanoInterno = new Pi_PlanoInterno();
     $sql = $modelPlanoInterno->montarSqlRelGerencialFuncionais($filtros, $_POST['filtro']['prsano']);
     
     # Busca lista pra montar a tabela do relatório
