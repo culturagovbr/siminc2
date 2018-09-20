@@ -37,12 +37,12 @@ $navBar = $_COOKIE['navbar']=='false' ? 'mini-navbar' : null;
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <!-- Fonts  -->
-        <link href="/zimec/public/temas/simec/fonts/awesome/font-awesome.css?t=1.0" rel="stylesheet">
+        <link href="/zimec/public/temas/simec/fonts/awesome/font-awesome.css?v=1.0" rel="stylesheet">
 
-        <link href="/zimec/public/temas/simec/fonts/glyphicons/glyphicons.css?t=1.0" rel="stylesheet">
-        <link href="/zimec/public/temas/simec/fonts/material/material.css?t=1.0" rel="stylesheet">
-        <link href="/zimec/public/temas/simec/fonts/inconsolata/inconsolata.css?t=1.0" rel="stylesheet">
-        <link href="/zimec/public/temas/simec/fonts/opensans/opensans.css?t=1.0" rel="stylesheet">
+        <link href="/zimec/public/temas/simec/fonts/glyphicons/glyphicons.css?v=1.0" rel="stylesheet">
+        <link href="/zimec/public/temas/simec/fonts/material/material.css?v=1.0" rel="stylesheet">
+        <link href="/zimec/public/temas/simec/fonts/inconsolata/inconsolata.css?v=1.0" rel="stylesheet">
+        <link href="/zimec/public/temas/simec/fonts/opensans/opensans.css?v=1.0" rel="stylesheet">
 
         <!-- Mainly scripts -->
         <script src="/zimec/public/temas/simec/js/jquery-1.11.3.js"></script>
@@ -130,8 +130,8 @@ $navBar = $_COOKIE['navbar']=='false' ? 'mini-navbar' : null;
         <!-- Toastr style -->
         <link href="/zimec/public/temas/simec/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
-        <link href="/zimec/public/temas/simec/css/style.min.css?t=1.0" rel="stylesheet" media="all">
-        <link href="/zimec/public/temas/simec/css/simec.css?t=2.0" rel="stylesheet" media="all">
+        <link href="/zimec/public/temas/simec/css/style.min.css?v=1.1.1" rel="stylesheet" media="all">
+        <link href="/zimec/public/temas/simec/css/simec.css?v=2.3.0" rel="stylesheet" media="all">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -139,7 +139,7 @@ $navBar = $_COOKIE['navbar']=='false' ? 'mini-navbar' : null;
         <!--<script src="js/respond.min.js"></script>-->
         <!--[endif]-->
 
-        <link href="/zimec/public/temas/simec/css/print.css?t=1.0" rel="stylesheet" media="print" />
+        <link href="/zimec/public/temas/simec/css/print.css?v=1.0" rel="stylesheet" media="print" />
 
         <script data-pace-options='{ "ajax": false }' src="/zimec/public/temas/simec/js/plugins/pace/pace.min.js"></script>
 
