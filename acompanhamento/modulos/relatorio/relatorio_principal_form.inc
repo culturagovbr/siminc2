@@ -33,6 +33,7 @@ if(isset($_REQUEST['req'])){
             die();
         case 'carregar-combo-acao':
             $where = $_REQUEST['unoid']? "\n AND suo.unoid IN(". join($_REQUEST['unoid'], ','). ")": NULL;
+            $where .= $_REQUEST['suoid']? "\n AND suo.suoid IN(". join($_REQUEST['suoid'], ','). ")": NULL;
             $stSql = "
                 SELECT DISTINCT
                     acao.acaid AS codigo,
@@ -61,6 +62,8 @@ if(isset($_REQUEST['req'])){
             die();
         case 'carregar-combo-funcional':
             $where = $_REQUEST['unoid']? "\n AND suo.unoid IN(". join($_REQUEST['unoid'], ','). ")": NULL;
+            $where .= $_REQUEST['suoid']? "\n AND suo.suoid IN(". join($_REQUEST['suoid'], ','). ")": NULL;
+            $where .= $_REQUEST['acaid']? "\n AND ptr.acaid IN(". join($_REQUEST['acaid'], ','). ")": NULL;
             $stSql = "
                 SELECT DISTINCT
                     ptr.ptrid codigo,
@@ -180,9 +183,14 @@ include APPRAIZ . "includes/cabecalho.inc";
             carregarComboFuncional();
         });
         
-//        $('[name="filtro[acaid][]"]').change(function(){
-//            carregarComboFuncional();
-//        });
+        $('[name="filtro[suoid][]"]').change(function(){
+            carregarComboAcao();
+            carregarComboFuncional();
+        });
+        
+        $('[name="filtro[acaid][]"]').change(function(){
+            carregarComboFuncional();
+        });
 
     });
     
@@ -246,7 +254,8 @@ include APPRAIZ . "includes/cabecalho.inc";
             data: {
                 req: 'carregar-combo-acao',
                 prsano: $('[name="filtro[prsano]"]').val(),
-                unoid: $('[name="filtro[unoid][]"]').val()
+                unoid: $('[name="filtro[unoid][]"]').val(),
+                suoid: $('[name="filtro[suoid][]"]').val()
             },
             success: function(response) {
                 $('.div_acaid').remove('slow');
@@ -268,7 +277,9 @@ include APPRAIZ . "includes/cabecalho.inc";
             data: {
                 req: 'carregar-combo-funcional',
                 prsano: $('[name="filtro[prsano]"]').val(),
-                unoid: $('[name="filtro[unoid][]"]').val()
+                unoid: $('[name="filtro[unoid][]"]').val(),
+                suoid: $('[name="filtro[suoid][]"]').val(),
+                acaid: $('[name="filtro[acaid][]"]').val()
             },
             success: function(response) {
                 $('.div_ptrid').remove('slow');
