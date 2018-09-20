@@ -32,14 +32,16 @@
     $stSql = "
         SELECT DISTINCT
             suo.suoid AS codigo,
-            suo.suonome AS descricao,
+            suo.suocod || ' - ' || suo.suonome AS descricao,
             suo.prsano
         FROM public.vw_subunidadeorcamentaria suo
-        WHERE suo.prsano='".$_REQUEST['filtro']['prsano']."' AND suo.suostatus = 'A'
+        WHERE
+	        suo.prsano = '".$_REQUEST['filtro']['prsano']."'
+	        AND suo.suostatus = 'A'
         ORDER BY
             3,2
     ";
-    echo $simec->select("filtro[suoid][]", 'Unidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
     
     $stSql = "
         SELECT DISTINCT
