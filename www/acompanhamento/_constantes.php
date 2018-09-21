@@ -11,3 +11,4 @@ define('PFL_PNC', 1509);
 define('PFL_UNIDADE', 1510);
 define('PFL_CONSULTA', 1511);
 define('TPDID_PROPOSTA', 268);
+define('TPDID_PLANO_INTERNO', 3);

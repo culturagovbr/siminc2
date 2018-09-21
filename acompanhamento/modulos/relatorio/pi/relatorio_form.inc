@@ -97,7 +97,6 @@
     ";
     echo $simec->select("filtro[oppnome][]", 'Objetivo', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
-
     $stSql = "SELECT
                 mdeid AS codigo,
                 mdedsc AS descricao
@@ -108,7 +107,44 @@
             ORDER BY
                 descricao ASC
     ";
-    echo $simec->select("filtro[]", 'Área Cultural', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[mdeid][]", 'Área Cultural', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+              SELECT DISTINCT
+                 capid AS codigo,
+                 capano as ano,
+                 capdsc AS descricao
+             FROM monitora.pi_categoriaapropriacao
+             WHERE
+                 capano = '".$_REQUEST['filtro']['prsano']."'
+                 AND capstatus = 'A'
+             ORDER BY
+                 3,2
+    ";
+    echo $simec->select("filtro[capid][]", 'Modalidade de Pactuação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+              SELECT
+                  mescod AS codigo,
+                  mesdsc AS descricao
+              FROM public.meses
+              ORDER BY
+                  codigo
+    ";
+    echo $simec->select("filtro[mescod][]", 'Edital', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+              SELECT
+                  claid AS codigo,
+                  cladsc AS descricao
+              FROM acompanhamento.classificacao
+              WHERE
+                  tipid = '".TPDID_PLANO_INTERNO."'
+                  AND clastatus = 'A'
+              ORDER BY
+                  2,1
+    ";
+    echo $simec->select("filtro[claid][]", 'Classificação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
     ?>
     <div class="text-center">
         <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
