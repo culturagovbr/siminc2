@@ -8,7 +8,10 @@
     include_once APPRAIZ . 'includes/relatorio-agrupador/tabela.php';
 
     # Busca SQL com filtros pra realizar a consulta
-    $listaRelatorio = $modelPlanoInterno->getDadosGerais($_POST['filtro']['prsano']);
+    $dto = (object)$_POST['filtro'];
+    $dto->fundo = FALSE;
+    $dto->exercicio = $_POST['filtro']['prsano'];
+    $listaRelatorio = $modelPlanoInterno->listarRelatorioGeralPi($dto);
 
     # Colunas do relatorio
     $listaTodasColunas = montarColunasRelatorioPI();

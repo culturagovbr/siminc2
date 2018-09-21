@@ -95,7 +95,7 @@
             ORDER BY
                 3
     ";
-    echo $simec->select("filtro[oppnome][]", 'Objetivo', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[oppid][]", 'Objetivo', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "SELECT
                 mdeid AS codigo,
