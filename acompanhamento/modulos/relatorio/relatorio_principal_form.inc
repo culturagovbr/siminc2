@@ -99,7 +99,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     function exibeRelatorioGeral(tipo) {
         
         if (document.filtro.coluna.length==0){
-            alert("Selecione pelo menos um campo para exibir o relatório!");
+            swal('Atenção!', 'Selecione pelo menos uma coluna para exibir o relatório!', 'warning');
             return;
         }
         var formulario = document.filtro;
