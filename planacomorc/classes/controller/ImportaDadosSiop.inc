@@ -37,14 +37,14 @@ class Planacomorc_Controller_ImportaDadosSiop{
     }
     
     private function ConsultaDadosWs(){
-        $continuar = true;
-        do {
+        $continuar = TRUE;
+        do{
             $ws = new Spo_Ws_Sof_Quantitativo('spo', Spo_Ws_Sof_Quantitativo::PRODUCTION);
-            $resultados = $ws->consultarExecucaoOrcamentaria($this->filtro, null, $this->pagina, true);
+            $resultados = $ws->consultarExecucaoOrcamentaria($this->filtro, NULL, $this->pagina, TRUE);
 
-            if ($resultados) {
+            if($resultados){
                 include_once  APPRAIZ . 'wssof/classes/Ws_ExecucaoOrcamentariaDto.inc';
-                foreach ($resultados as $resultado) {
+                foreach ($resultados as $resultado){
                     $model = new Wssof_Ws_ExecucaoOrcamentariaDto();
                     $model->realizarCarga($resultado);
                     unset($model);
@@ -52,13 +52,13 @@ class Planacomorc_Controller_ImportaDadosSiop{
             }
 
             $this->pagina++;
-            if (count($resultados) < 2000) {
-                $continuar = false;
+            if(count($resultados) < 2000){
+                $continuar = FALSE;
                 break;
             }
-        } while ($continuar);  
+        } while ($continuar);
     }
-    
+
     public function AtualizarDotacao(){
         $this->exercicio = date('Y');
         $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
@@ -89,8 +89,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
         $this->EnviaEmail();
     }
     
-    
-    private function GeraTabelasDivergentes($dadosSiminc, $dadosSiop){ 
+    private function GeraTabelasDivergentes($dadosSiminc, $dadosSiop){
         $this->sqls = [];
         $this->htmlTabela1 = "
         <h3>Foram realizadas alterações na Dotação das seguintes unidades:</h3>
@@ -304,4 +303,5 @@ class Planacomorc_Controller_ImportaDadosSiop{
             simec_email($remetente, $this->destinatarios, $assunto, $conteudo);
         }
     }
+
 }
