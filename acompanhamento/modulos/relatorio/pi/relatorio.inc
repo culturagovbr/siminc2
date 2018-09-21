@@ -8,10 +8,7 @@
     include_once APPRAIZ . 'includes/relatorio-agrupador/tabela.php';
 
     # Busca SQL com filtros pra realizar a consulta
-    $sql = $mPlanoInterno->getDadosGerais($_POST['filtro']['prsano']);
-
-    # Busca lista pra montar a tabela do relatório
-    $listaRelatorio = $db->carregar($sql);
+    $listaRelatorio = $mPlanoInterno->getDadosGerais($_POST['filtro']['prsano']);
 
     # Colunas do relatorio
     $listaTodasColunas = montarColunasRelatorioPI();

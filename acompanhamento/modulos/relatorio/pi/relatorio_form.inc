@@ -60,12 +60,16 @@
             eqd.eqdid AS codigo,
             eqd.eqddsc AS descricao
         FROM monitora.pi_enquadramentodespesa eqd
-        WHERE eqd.eqdano='".$_REQUEST['filtro']['prsano']."'
+        WHERE eqd.eqdano = '".$_REQUEST['filtro']['prsano']."'
             AND eqdstatus = 'A'
         ORDER BY
             2,1
     ";
     echo $simec->select("filtro[eqdid][]", 'Enquadramento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    # Traz o Todos por default
+    $picted = '';
+    echo $simec->radio("filtro[picted]", 'TED', $picted, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
         SELECT DISTINCT
@@ -78,6 +82,20 @@
             2,1
     ";
     echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+            SELECT DISTINCT
+                oppid as codigo,
+                oppcod || ' - ' || oppnome as descricao,
+                prsano as ano
+            FROM public.objetivoppa
+            WHERE
+                prsano = '".$_REQUEST['filtro']['prsano']."'
+                AND oppstatus = 'A'
+            ORDER BY
+                3
+    ";
+    echo $simec->select("filtro[oppnome][]", 'Objetivo', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
 
     $stSql = "SELECT
