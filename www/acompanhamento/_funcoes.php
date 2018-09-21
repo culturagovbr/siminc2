@@ -151,3 +151,71 @@
         );
         return $colunas;
     }
+    
+    /**
+     * Monta as Colunas que receberão formatação de moeda para o Relatório de PI do Módulo Planejamento Orçamentário.
+     * 
+     * @return array
+     */
+    function montarColunasFormatoMoeda(){
+        $colunas = [
+            'valortotal',
+            'picvalorcusteio',
+            'picvalorcapital',
+            'fin_capital_1',
+            'fin_capital_2',
+            'fin_capital_3',
+            'fin_capital_4',
+            'fin_capital_5',
+            'fin_capital_6',
+            'fin_capital_7',
+            'fin_capital_8',
+            'fin_capital_9',
+            'fin_capital_10',
+            'fin_capital_11',
+            'fin_capital_12',
+            'fin_custeio_1',
+            'fin_custeio_2',
+            'fin_custeio_3',
+            'fin_custeio_4',
+            'fin_custeio_5',
+            'fin_custeio_6',
+            'fin_custeio_7',
+            'fin_custeio_8',
+            'fin_custeio_9',
+            'fin_custeio_10',
+            'fin_custeio_11',
+            'fin_custeio_12',
+            'orc_capital_1',
+            'orc_capital_2',
+            'orc_capital_3',
+            'orc_capital_4',
+            'orc_capital_5',
+            'orc_capital_6',
+            'orc_capital_7',
+            'orc_capital_8',
+            'orc_capital_9',
+            'orc_capital_10',
+            'orc_capital_11',
+            'orc_capital_12',
+            'orc_custeio_1',
+            'orc_custeio_2',
+            'orc_custeio_3',
+            'orc_custeio_4',
+            'orc_custeio_5',
+            'orc_custeio_6',
+            'orc_custeio_7',
+            'orc_custeio_8',
+            'orc_custeio_9',
+            'orc_custeio_10',
+            'orc_custeio_11',
+            'orc_custeio_12',
+            'vlrautorizado',    
+            'vlrempenhado',
+            'vlrliquido',
+            'vlrpago',
+        ];
+        
+        return $colunas;
+    }
+

@@ -2,23 +2,18 @@
 
     # Incluindo arquivo do Módulo que possui a implementação da busca
     include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
-    $mPlanoInterno = new Pi_PlanoInterno();
+    $modelPlanoInterno = new Pi_PlanoInterno();
 
     # Incluindo o arquivo da classe de relatorio
     include_once APPRAIZ . 'includes/relatorio-agrupador/tabela.php';
 
     # Busca SQL com filtros pra realizar a consulta
-    $listaRelatorio = $mPlanoInterno->getDadosGerais($_POST['filtro']['prsano']);
+    $listaRelatorio = $modelPlanoInterno->getDadosGerais($_POST['filtro']['prsano']);
 
     # Colunas do relatorio
     $listaTodasColunas = montarColunasRelatorioPI();
     $listaColunasSelecionadas = $_POST['coluna'];
-    $listaColunaFormatoMoeda = [
-        'plivalorcusteio',
-        'plivalorcapital',
-        'plivalorcusteioadicional',
-        'plivalorcapitaladicional'
-    ];
+    $listaColunaFormatoMoeda = montarColunasFormatoMoeda();
 
     $relatorio = new relatorio_agrupador_tabela();
     $tabela = $relatorio->setListaTodasColunas($listaTodasColunas)
@@ -56,3 +51,4 @@
         </div>
     </div>
 </div>
+
