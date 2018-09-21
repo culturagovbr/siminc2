@@ -1,17 +1,18 @@
 <input type="hidden" name="req" id="req" value=""/>
 <div class="ibox-title">
-    <h5>Relatório PI - FNC</h5><br>
+    <h5>Relatório Geral de PI-FNC</h5><br>
 </div>
 <div class="ibox-content">
     <?php
-    $stSql = "SELECT pliano AS codigo, pliano AS descricao FROM monitora.pi_planointerno WHERE plistatus = 'A' ORDER BY 1;";
+    $stSql = "SELECT DISTINCT prsano AS codigo, prsano AS descricao FROM proposta.preplanointerno WHERE plistatus = 'A' ORDER BY 1";
+
     $preenchidos = null;
-    if (!$_REQUEST['filtro']['pliano']) {
-        $_REQUEST['filtro']['pliano'] = $preenchidos = $_SESSION['exercicio'];
+    if(!$_REQUEST['filtro']['prsano']) {
+        $_REQUEST['filtro']['prsano'] = $preenchidos = $_SESSION['exercicio'];
     } else {
-        $preenchidos = $_REQUEST['filtro']['pliano'];
+        $preenchidos = $_REQUEST['filtro']['prsano'];
     }
-    echo $simec->select('filtro[pliano]', 'Exercício', $preenchidos, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select('filtro[prsano]', 'Exercício', $preenchidos, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
     ?>
     <label class="col-sm-2 col-md-2 col-lg-2 control-label">Colunas</label>
     <?php
@@ -20,172 +21,132 @@
     $agrupador = new AgrupadorBootstrap('filtro', '');
     // Dados padrão de destino (nulo)
     $destino = isset($agrupador2) ? $agrupador2 : array();
-    // Dados padrão de origem
-    $origem = array(array('codigo' => 'pliid',              'descricao' => 'ID Planejamento'),
-                    array('codigo' => 'esddsc',             'descricao' => 'Situação'),
-                    array('codigo' => 'plicod',             'descricao' => 'Código PI'),
-                    array('codigo' => 'unocod',             'descricao' => 'Código da UO'),
-                    array('codigo' => 'unonome',            'descricao' => 'UO'),
-                    array('codigo' => 'suocod',             'descricao' => 'Código da Unidade'),
-                    array('codigo' => 'suonome',            'descricao' => 'Unidade'),
-                    array('codigo' => 'unodelegada',        'descricao' => 'Unidade Delegada'),
-                    array('codigo' => 'suodelegada',        'descricao' => 'Unidade Delegada'),
-                    array('codigo' => 'eqddsc',             'descricao' => 'Enquadramento'),
-                    array('codigo' => 'resultadoprimario',  'descricao' => 'RP - Resultado Primário'),
-                    array('codigo' => 'mainome',            'descricao' => 'Item de Manutenção'),
-                    array('codigo' => 'masnome',            'descricao' => 'Subitem de Manutenção'),
-                    array('codigo' => 'prgcod',             'descricao' => 'Código do Programa'),
-                    array('codigo' => 'prgdsc',             'descricao' => 'Programa'),
-                    array('codigo' => 'oppcod',             'descricao' => 'Código do Objetivo'),
-                    array('codigo' => 'oppnome',            'descricao' => 'Objetivo'),
-                    array('codigo' => 'ippcod',             'descricao' => 'Código da Iniciativa'),
-                    array('codigo' => 'ippnome',            'descricao' => 'Iniciativa'),
-                    array('codigo' => 'acacod',             'descricao' => 'Código da Ação'),
-                    array('codigo' => 'acatitulo',          'descricao' => 'Ação'),
-                    array('codigo' => 'loccod',             'descricao' => 'Código do Localizador'),
-                    array('codigo' => 'locdsc',             'descricao' => 'Localizador'),
-                    array('codigo' => 'plocod',             'descricao' => 'Código do PO'),
-                    array('codigo' => 'po',                 'descricao' => 'Plano Orçamentário'),
-                    array('codigo' => 'ptres',              'descricao' => 'PTRES'),
-                    array('codigo' => 'mdedsc',             'descricao' => 'Área'),
-                    array('codigo' => 'mpnnome',            'descricao' => 'Meta PNC'),
-                    array('codigo' => 'mppnome',            'descricao' => 'Meta PPA'),
-                    array('codigo' => 'plititulo',          'descricao' => 'Título'),
-                    array('codigo' => 'plidsc',             'descricao' => 'Descrição'),
-                    array('codigo' => 'needsc',             'descricao' => 'Segmento Cultural'),
-                    array('codigo' => 'capdsc',             'descricao' => 'Tipo de Instrumento / Modalidade de Pactuação'),
-                    array('codigo' => 'pliemenda',          'descricao' => 'Emenda parlamentar'),
-                    array('codigo' => 'picedital',          'descricao' => 'Forma de execução - Edital'),
-                    array('codigo' => 'esfdsc',             'descricao' => 'Localização da ação'),
-                    array('codigo' => 'pais',               'descricao' => 'País'),
-                    array('codigo' => 'estado',             'descricao' => 'Unidade Federativa'),
-                    array('codigo' => 'municipio',          'descricao' => 'Município'),
-                    array('codigo' => 'usuario',            'descricao' => 'Responsável'),
-                    array('codigo' => 'ted',                'descricao' => 'TED'),
 
-                    array('codigo' => 'edital',             'descricao' => 'Edital'),
-                    array('codigo' => 'mesdsc',             'descricao' => 'Previsão Edital'),
-                    array('codigo' => 'convenio',           'descricao' => 'Convênio'),
-                    array('codigo' => 'sniic',              'descricao' => 'SNIIC'),
-                    array('codigo' => 'sei',                'descricao' => 'Processo'),
-                    array('codigo' => 'pronac',             'descricao' => 'PRONAC'),
-                    array('codigo' => 'pprnome',            'descricao' => 'Produto PI'),
-                    array('codigo' => 'pumnome',            'descricao' => 'Unidade de Medida'),
-                    array('codigo' => 'picquantidade',      'descricao' => 'Meta Física'),
-                    array('codigo' => 'valortotal',         'descricao' => 'Valor Total'),
-                    array('codigo' => 'picvalorcusteio',    'descricao' => 'Valor Total Custeio'),
-                    array('codigo' => 'picvalorcapital',    'descricao' => 'Valor Total Capital'),
+    # Dados das colunas do Relatório
+    $origem = montarColunasRelatorioPI();
 
-                    array('codigo' => 'fisico_1',           'descricao' => 'Cronograma Físico / Capital Janeiro'),
-                    array('codigo' => 'fisico_2',           'descricao' => 'Cronograma Físico / Capital Fevereiro'),
-                    array('codigo' => 'fisico_3',           'descricao' => 'Cronograma Físico / Capital Março'),
-                    array('codigo' => 'fisico_4',           'descricao' => 'Cronograma Físico / Capital Abril'),
-                    array('codigo' => 'fisico_5',           'descricao' => 'Cronograma Físico / Capital Maio'),
-                    array('codigo' => 'fisico_6',           'descricao' => 'Cronograma Físico / Capital Junho'),
-                    array('codigo' => 'fisico_7',           'descricao' => 'Cronograma Físico / Capital Julho'),
-                    array('codigo' => 'fisico_8',           'descricao' => 'Cronograma Físico / Capital Agosto'),
-                    array('codigo' => 'fisico_9',           'descricao' => 'Cronograma Físico / Capital Setembro'),
-                    array('codigo' => 'fisico_10',          'descricao' => 'Cronograma Físico / Capital Outubro'),
-                    array('codigo' => 'fisico_11',          'descricao' => 'Cronograma Físico / Capital Novembro'),
-                    array('codigo' => 'fisico_12',          'descricao' => 'Cronograma Físico / Capital Dezembro'),
-
-                    array('codigo' => 'fin_capital_1',      'descricao' => 'Cronograma Financeiro / Capital Janeiro'),
-                    array('codigo' => 'fin_capital_2',      'descricao' => 'Cronograma Financeiro / Capital Fevereiro'),
-                    array('codigo' => 'fin_capital_3',      'descricao' => 'Cronograma Financeiro / Capital Março'),
-                    array('codigo' => 'fin_capital_4',      'descricao' => 'Cronograma Financeiro / Capital Abril'),
-                    array('codigo' => 'fin_capital_5',      'descricao' => 'Cronograma Financeiro / Capital Maio'),
-                    array('codigo' => 'fin_capital_6',      'descricao' => 'Cronograma Financeiro / Capital Junho'),
-                    array('codigo' => 'fin_capital_7',      'descricao' => 'Cronograma Financeiro / Capital Julho'),
-                    array('codigo' => 'fin_capital_8',      'descricao' => 'Cronograma Financeiro / Capital Agosto'),
-                    array('codigo' => 'fin_capital_9',      'descricao' => 'Cronograma Financeiro / Capital Setembro'),
-                    array('codigo' => 'fin_capital_10',     'descricao' => 'Cronograma Financeiro / Capital Outubro'),
-                    array('codigo' => 'fin_capital_11',     'descricao' => 'Cronograma Financeiro / Capital Novembro'),
-                    array('codigo' => 'fin_capital_12',     'descricao' => 'Cronograma Financeiro / Capital Dezembro'),
-
-                    array('codigo' => 'fin_custeio_1',      'descricao' => 'Cronograma Financeiro / Custeio Janeiro'),
-                    array('codigo' => 'fin_custeio_2',      'descricao' => 'Cronograma Financeiro / Custeio Fevereiro'),
-                    array('codigo' => 'fin_custeio_3',      'descricao' => 'Cronograma Financeiro / Custeio Março'),
-                    array('codigo' => 'fin_custeio_4',      'descricao' => 'Cronograma Financeiro / Custeio Abril'),
-                    array('codigo' => 'fin_custeio_5',      'descricao' => 'Cronograma Financeiro / Custeio Maio'),
-                    array('codigo' => 'fin_custeio_6',      'descricao' => 'Cronograma Financeiro / Custeio Junho'),
-                    array('codigo' => 'fin_custeio_7',      'descricao' => 'Cronograma Financeiro / Custeio Julho'),
-                    array('codigo' => 'fin_custeio_8',      'descricao' => 'Cronograma Financeiro / Custeio Agosto'),
-                    array('codigo' => 'fin_custeio_9',      'descricao' => 'Cronograma Financeiro / Custeio Setembro'),
-                    array('codigo' => 'fin_custeio_10',     'descricao' => 'Cronograma Financeiro / Custeio Outubro'),
-                    array('codigo' => 'fin_custeio_11',     'descricao' => 'Cronograma Financeiro / Custeio Novembro'),
-                    array('codigo' => 'fin_custeio_12',     'descricao' => 'Cronograma Financeiro / Custeio Dezembro'),
-
-                    array('codigo' => 'orc_capital_1',      'descricao' => 'Cronograma Orçamentario / Capital Janeiro'),
-                    array('codigo' => 'orc_capital_2',      'descricao' => 'Cronograma Orçamentario / Capital Fevereiro'),
-                    array('codigo' => 'orc_capital_3',      'descricao' => 'Cronograma Orçamentario / Capital Março'),
-                    array('codigo' => 'orc_capital_4',      'descricao' => 'Cronograma Orçamentario / Capital Abril'),
-                    array('codigo' => 'orc_capital_5',      'descricao' => 'Cronograma Orçamentario / Capital Maio'),
-                    array('codigo' => 'orc_capital_6',      'descricao' => 'Cronograma Orçamentario / Capital Junho'),
-                    array('codigo' => 'orc_capital_7',      'descricao' => 'Cronograma Orçamentario / Capital Julho'),
-                    array('codigo' => 'orc_capital_8',      'descricao' => 'Cronograma Orçamentario / Capital Agosto'),
-                    array('codigo' => 'orc_capital_9',      'descricao' => 'Cronograma Orçamentario / Capital Setembro'),
-                    array('codigo' => 'orc_capital_10',     'descricao' => 'Cronograma Orçamentario / Capital Outubro'),
-                    array('codigo' => 'orc_capital_11',     'descricao' => 'Cronograma Orçamentario / Capital Novembro'),
-                    array('codigo' => 'orc_capital_12',     'descricao' => 'Cronograma Orçamentario / Capital Dezembro'),
-
-                    array('codigo' => 'orc_custeio_1',      'descricao' => 'Cronograma Orçamentario / Custeio Janeiro'),
-                    array('codigo' => 'orc_custeio_2',      'descricao' => 'Cronograma Orçamentario / Custeio Fevereiro'),
-                    array('codigo' => 'orc_custeio_3',      'descricao' => 'Cronograma Orçamentario / Custeio Março'),
-                    array('codigo' => 'orc_custeio_4',      'descricao' => 'Cronograma Orçamentario / Custeio Abril'),
-                    array('codigo' => 'orc_custeio_5',      'descricao' => 'Cronograma Orçamentario / Custeio Maio'),
-                    array('codigo' => 'orc_custeio_6',      'descricao' => 'Cronograma Orçamentario / Custeio Junho'),
-                    array('codigo' => 'orc_custeio_7',      'descricao' => 'Cronograma Orçamentario / Custeio Julho'),
-                    array('codigo' => 'orc_custeio_8',      'descricao' => 'Cronograma Orçamentario / Custeio Agosto'),
-                    array('codigo' => 'orc_custeio_9',      'descricao' => 'Cronograma Orçamentario / Custeio Setembro'),
-                    array('codigo' => 'orc_custeio_10',     'descricao' => 'Cronograma Orçamentario / Custeio Outubro'),
-                    array('codigo' => 'orc_custeio_11',     'descricao' => 'Cronograma Orçamentario / Custeio Novembro'),
-                    array('codigo' => 'orc_custeio_12',     'descricao' => 'Cronograma Orçamentario / Custeio Dezembro'),
-
-                    array('codigo' => 'vlrautorizado',      'descricao' => 'Valor Provisionado'),
-                    array('codigo' => 'vlrempenhado',       'descricao' => 'Valor Empenhado'),
-                    array('codigo' => 'vlrliquido',         'descricao' => 'Valor Liquidado'),
-                    array('codigo' => 'vlrpago',            'descricao' => 'Valor Pago'),
-                    array('codigo' => 'executado',          'descricao' => 'Executado'),
-                    array('codigo' => 'analise',            'descricao' => 'Análise Situacional'),
-                    array('codigo' => 'classificacao',      'descricao' => 'Classificação'),
-                    array('codigo' => 'medidas',            'descricao' => 'Medidas a serem adotadas'),
-                    array('codigo' => 'providencias',       'descricao' => 'Detalhamento das providências a serem adotadas'),
-    );
     // exibe agrupador
     $agrupador->setOrigem('naoColuna', null, $origem);
     $agrupador->setDestino('coluna', null, $destino);
     $agrupador->exibir();
-    
-    $stSql = "  SELECT DISTINCT suo.suoid AS codigo,
-                       suo.suonome AS descricao,
-                       suo.prsano
-                  FROM public.vw_subunidadeorcamentaria suo
-                 WHERE suo.prsano='".$_REQUEST['filtro']['prsano']."' AND suo.unofundo IS TRUE AND suo.suostatus = 'A'
-                 ORDER BY 3,2";
-    echo $simec->select("filtro[suoid][]", 'Unidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
-    
-    $stSql = "  SELECT DISTINCT eqd.eqdid AS codigo,
-                       eqd.eqddsc AS descricao
-                  FROM monitora.pi_enquadramentodespesa eqd
-                 WHERE eqd.eqdano='".$_REQUEST['filtro']['prsano']."'
-                   and eqdstatus = 'A'
-                 ORDER BY 2,1";
-    echo $simec->select("filtro[eqdid][]", 'Enquadramento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
-    
-    $stSql = "  SELECT DISTINCT irp.irpcod AS codigo,
-                       irp.irpcod || ' - ' || irp.irpdsc AS descricao
-                  FROM public.identresultprimario irp
-                 WHERE irp.irpstatus = 'A'
-                 ORDER BY 2,1";
-    echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
-    // COMENTADO PARA SER FEITA A INVESTIGAÇÃO PARA TIPO DE DETALHAMENTO VOLTADO PARA PLANEJAMENTO
-//    $stSql = "  SELECT DISTINCT tpd.tpdid AS codigo,
-//                       tpd.tpdcod || ' - ' || tpd.tpdnome AS descricao 
-//                  FROM proposta.tipodetalhamento tpd
-//                 WHERE tpd.tpdstatus = 'A'
-//                 ORDER BY 2,1";
-    echo $simec->select("filtro[null]", 'Tipo de Detalhamento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
-    ?>    
+
+    $stSql = "
+        SELECT DISTINCT
+            suo.suoid AS codigo,
+            suo.suocod || ' - ' || suo.suonome AS descricao,
+            suo.prsano
+        FROM public.vw_subunidadeorcamentaria suo
+        WHERE
+	        suo.prsano = '".$_REQUEST['filtro']['prsano']."'
+	        AND suo.suostatus = 'A'
+        ORDER BY
+            3,2
+    ";
+    echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+        SELECT DISTINCT
+            esdid AS codigo,
+            esddsc AS descricao
+        FROM workflow.estadodocumento
+        WHERE
+            tpdid = '".TPDID_PROPOSTA."'
+        ORDER BY
+            1
+    ";
+    echo $simec->select("filtro[esdid][]", 'Situação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+        SELECT DISTINCT
+            eqd.eqdid AS codigo,
+            eqd.eqddsc AS descricao
+        FROM monitora.pi_enquadramentodespesa eqd
+        WHERE eqd.eqdano = '".$_REQUEST['filtro']['prsano']."'
+            AND eqdstatus = 'A'
+        ORDER BY
+            2,1
+    ";
+    echo $simec->select("filtro[eqdid][]", 'Enquadramento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    # Traz o Todos por default
+    $picted = '';
+    echo $simec->radio("filtro[picted]", 'TED', $picted, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+        SELECT DISTINCT
+            irp.irpcod AS codigo,
+            irp.irpcod || ' - ' || irp.irpdsc AS descricao
+        FROM public.identresultprimario irp
+        WHERE
+            irp.irpstatus = 'A'
+        ORDER BY
+            2,1
+    ";
+    echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+            SELECT DISTINCT
+                oppid as codigo,
+                oppcod || ' - ' || oppnome as descricao,
+                prsano as ano
+            FROM public.objetivoppa
+            WHERE
+                prsano = '".$_REQUEST['filtro']['prsano']."'
+                AND oppstatus = 'A'
+            ORDER BY
+                3
+    ";
+    echo $simec->select("filtro[oppnome][]", 'Objetivo', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "SELECT
+                mdeid AS codigo,
+                mdedsc AS descricao
+            FROM monitora.pi_modalidadeensino
+            WHERE
+                mdestatus = 'A'
+                AND mdeano = '".$_REQUEST['filtro']['prsano']."'
+            ORDER BY
+                descricao ASC
+    ";
+    echo $simec->select("filtro[mdeid][]", 'Área Cultural', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+              SELECT DISTINCT
+                 capid AS codigo,
+                 capano as ano,
+                 capdsc AS descricao
+             FROM monitora.pi_categoriaapropriacao
+             WHERE
+                 capano = '".$_REQUEST['filtro']['prsano']."'
+                 AND capstatus = 'A'
+             ORDER BY
+                 3,2
+    ";
+    echo $simec->select("filtro[capid][]", 'Modalidade de Pactuação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+              SELECT
+                  mescod AS codigo,
+                  mesdsc AS descricao
+              FROM public.meses
+              ORDER BY
+                  codigo
+    ";
+    echo $simec->select("filtro[mescod][]", 'Edital', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+              SELECT
+                  claid AS codigo,
+                  cladsc AS descricao
+              FROM acompanhamento.classificacao
+              WHERE
+                  tipid = '".TPDID_PLANO_INTERNO."'
+                  AND clastatus = 'A'
+              ORDER BY
+                  2,1
+    ";
+    echo $simec->select("filtro[claid][]", 'Classificação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    ?>
     <div class="text-center">
         <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
         <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
