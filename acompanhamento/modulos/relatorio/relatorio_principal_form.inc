@@ -7,7 +7,36 @@ if(isset($_REQUEST['req'])){
             die;
         case 'xls':
             include $_REQUEST['tipo_relatorio']."/relatorio.inc";
-            die;            
+            die;
+        case 'carregar-combo-acao':
+            $where = $_REQUEST['unoid']? "\n AND suo.unoid IN(". join($_REQUEST['unoid'], ','). ")": NULL;
+            $where .= $_REQUEST['suoid']? "\n AND suo.suoid IN(". join($_REQUEST['suoid'], ','). ")": NULL;
+            $stSql = "
+                SELECT DISTINCT
+                    acao.acaid AS codigo,
+                    prgcod || ' - ' || acacod || ' - ' || acaobjetivocod || ' - ' || loccod || ' - ' || acatitulo AS descricao
+                FROM monitora.acao acao
+                    JOIN public.vw_subunidadeorcamentaria suo ON(
+                        suostatus = 'A'
+                        AND acao.unicod = suo.unocod
+                        AND suo.prsano = prgano
+                    )
+                WHERE
+                    acastatus = 'A'
+                    AND prgano = '". $_REQUEST['prsano']. "'
+                    $where
+                ORDER BY
+                    descricao
+            ";
+            echo $simec->select(
+                'filtro[acaid][]',
+                'Ação',
+                NULL,
+                $stSql,
+                NULL,
+                ['input-size' => 9, 'label-size' => 2]
+            );
+        die();
         default:
             break;
     }
@@ -55,7 +84,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
         <div class="row">
             <div class="col-md-12">
-                <div class="ibox float-e-margins">
+                <div class="ibox float-e-margins div_form_rel">
 
                     <?php
                         switch ($_REQUEST['tipo_relatorio']) {
@@ -97,6 +126,10 @@ include APPRAIZ . "includes/cabecalho.inc";
             document.filtro.submit();
         });
 
+        $('.div_form_rel').on('change', '[name="filtro[suoid][]"]', function(){
+            carregarComboAcao();
+        });
+
     });
     
     function exibeRelatorioGeral(tipo) {
@@ -125,4 +158,27 @@ include APPRAIZ . "includes/cabecalho.inc";
         formulario.submit();
     }
 
+
+    /**
+     * Carrega novo conteúdo para a opções de Ações via requisição ajax.
+     *
+     * @return VOID
+     */
+    function carregarComboAcao() {
+        $.ajax({
+            dataType: "html",
+            url: '?modulo=relatorio/relatorio_principal_form&acao=A',
+            data: {
+                req: 'carregar-combo-acao',
+                prsano: $('[name="filtro[prsano]"]').val(),
+                unoid: $('[name="filtro[unoid][]"]').val(),
+                suoid: $('[name="filtro[suoid][]"]').val()
+            },
+            success: function(response) {
+                $('.div_acaid').empty();
+                $('.div_acaid').html(response);
+                $(".chosen-select").chosen();
+            }
+        });
+    }
 </script>

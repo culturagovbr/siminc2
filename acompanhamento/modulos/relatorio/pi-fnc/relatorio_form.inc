@@ -50,7 +50,7 @@
             esddsc AS descricao
         FROM workflow.estadodocumento
         WHERE
-            tpdid = '".TPDID_PROPOSTA."'
+            tpdid = '".WF_TPDID_PLANEJAMENTO_PI_FNC."'
             AND esdstatus = 'A'
         ORDER BY
             1
@@ -85,6 +85,7 @@
     ";
     echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
+    echo"<div class='div_acaid'>";
     $stSql = "
         SELECT DISTINCT
             acao.acaid AS codigo,
@@ -102,6 +103,7 @@
             descricao
     ";
     echo $simec->select("filtro[acaid][]", 'Ação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo"</div>";
 
     $stSql = "
             SELECT DISTINCT
