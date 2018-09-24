@@ -1241,6 +1241,7 @@ class Pi_PlanoInterno extends Modelo
         $where .= $dto->capid? "\n AND pli.capid IN(".join($dto->capid, ','). ")": NULL;
         $where .= $dto->mescod? "\n AND pic.mescod IN('".join($dto->mescod, "','"). "')": NULL;
         $where .= $dto->claid? "\n AND cl.claid IN(".join($dto->claid, ','). ")": NULL;
+        $where .= $dto->acaid? "\n AND ptr.acaid IN(".join($dto->acaid, ','). ")": NULL;
 //ver($dto, $where, d);
         $sql = "
             SELECT

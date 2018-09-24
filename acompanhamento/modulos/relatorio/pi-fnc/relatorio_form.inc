@@ -51,6 +51,7 @@
         FROM workflow.estadodocumento
         WHERE
             tpdid = '".TPDID_PROPOSTA."'
+            AND esdstatus = 'A'
         ORDER BY
             1
     ";
@@ -83,6 +84,24 @@
             2,1
     ";
     echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+
+    $stSql = "
+        SELECT DISTINCT
+            acao.acaid AS codigo,
+            prgcod || ' - ' || acacod || ' - ' || COALESCE(acaobjetivocod, '') || ' - ' || loccod || ' - ' || acatitulo AS descricao
+        FROM monitora.acao acao
+        JOIN public.vw_subunidadeorcamentaria suo ON(
+            suostatus = 'A'
+            AND acao.unicod = suo.unocod
+            AND suo.prsano = prgano
+        )
+        WHERE
+            acastatus = 'A'
+            AND prgano = '".$_REQUEST['filtro']['prsano']."'
+        ORDER BY
+            descricao
+    ";
+    echo $simec->select("filtro[acaid][]", 'Ação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
             SELECT DISTINCT
