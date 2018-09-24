@@ -1218,17 +1218,29 @@ class Pi_PlanoInterno extends Modelo
 
         return true;
     }
-    
+
     /**
      * Monta consulta do Relatório Geral de PI e PI FNC
      * 
      * @param stdClass $dto
+     * @return string
      */
     public function montarSqlRelatorioGeral(stdClass $dto){
         $where .= $dto->exercicio? "\n AND pli.pliano = '". (int)$dto->exercicio. "'": NULL;
         $where .= $dto->fundo === TRUE? "\n AND suo.unofundo IS TRUE": NULL;
         $where .= $dto->fundo === FALSE? "\n AND suo.unofundo IS FALSE": NULL;
         $where .= $dto->listaSubunidade? "\n AND suo.suocod IN('". join("','", $dto->listaSubunidade). "') ": NULL;
+        $where .= $dto->suoid? "\n AND suo.suoid IN(".join($dto->suoid, ','). ")": NULL;
+        $where .= $dto->esdid? "\n AND doc.esdid IN(".join($dto->esdid, ','). ")": NULL;
+        $where .= $dto->eqdid? "\n AND pli.eqdid IN(".join($dto->eqdid, ','). ")": NULL;
+        $where .= $dto->picted == 't'? "\n AND pic.picted IS TRUE": NULL;
+        $where .= $dto->picted == 'f'? "\n AND pic.picted IS FALSE": NULL;
+        $where .= $dto->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($dto->irpcod, ','). ")": NULL;
+        $where .= $dto->oppid? "\n AND pic.oppid IN(".join($dto->oppid, ','). ")": NULL;
+        $where .= $dto->mdeid? "\n AND pli.mdeid IN(".join($dto->mdeid, ','). ")": NULL;
+        $where .= $dto->capid? "\n AND pli.capid IN(".join($dto->capid, ','). ")": NULL;
+        $where .= $dto->mescod? "\n AND pic.mescod IN('".join($dto->mescod, "','"). "')": NULL;
+        $where .= $dto->claid? "\n AND cl.claid IN(".join($dto->claid, ','). ")": NULL;
 //ver($dto, $where, d);
         $sql = "
             SELECT
@@ -1419,14 +1431,21 @@ class Pi_PlanoInterno extends Modelo
 		ac.acoprovidencias AS providencias
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
-                JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod AND suo.unocod = pli.unicod AND suo.prsano = pli.pliano
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suo.suocod = pli.ungcod 
+                    AND suo.unocod = pli.unicod 
+                    AND suo.prsano = pli.pliano
+                )
                 JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN monitora.enquadramentorp AS erp ON(eqd.eqdid = erp.eqdid)
                 LEFT JOIN planacomorc.resultadoprimario AS rp ON(erp.irpcod::INTEGER = rp.rpcod)
                 LEFT JOIN planacomorc.manutencaoitem mai ON mai.maiid = pic.maiid
                 LEFT JOIN planacomorc.manutencaosubitem mas ON mas.masid = pic.masid
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
-                LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid AND ptr.ptrano = pli.pliano
+                LEFT JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = ppt.ptrid
+                    AND ptr.ptrano = pli.pliano
+                )
                 LEFT JOIN public.objetivoppa opp ON opp.oppid = pic.oppid
                 LEFT JOIN public.iniciativappa ipp ON ipp.ippid = pic.ippid
                 LEFT JOIN monitora.pi_modalidadeensino mde ON mde.mdeid = pli.mdeid
@@ -1454,7 +1473,10 @@ class Pi_PlanoInterno extends Modelo
                     GROUP BY
                         sex.exercicio,
                         sex.plicod
-                ) sex ON sex.plicod = pli.plicod AND sex.exercicio = pli.pliano
+                ) sex ON(
+                    sex.plicod = pli.plicod
+                    AND sex.exercicio = pli.pliano
+                )
 		-- DADOS DO MONITORAMENTO
 		LEFT JOIN acompanhamento.acompanhamento ac ON pli.pliid = ac.pliid
 		LEFT JOIN acompanhamento.classificacao cl ON ac.claid = cl.claid

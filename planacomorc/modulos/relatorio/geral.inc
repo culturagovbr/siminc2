@@ -133,9 +133,8 @@ $dados = (new Pi_PlanoInterno())->listarRelatorioGeralPi($dto);
 
 <?php
 
-header('Content-Type: application/vnd.ms-excel');
-header('Expires: 0');
-header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-header('Content-Disposition: attachment; filename="relatorio_geral_pi' . ($_REQUEST['fundo'] === 't'? '_fnc': NULL). '.xls"');
-
+header( 'Content-Type: application/vnd.ms-excel' );
+header( 'Expires: 0' );
+header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
+header( 'Content-Disposition: attachment; filename="relatorio_geral_pi' .($_REQUEST['fundo'] === 't'? '_fnc': NULL). '.xls"' );
 die;
