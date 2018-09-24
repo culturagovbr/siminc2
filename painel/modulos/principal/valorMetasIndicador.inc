@@ -4,6 +4,9 @@ if(!$_SESSION['painel']['metid']){
 }
 include (APPRAIZ.'www/painel/_funcoes_metas.php');
 
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
+
 if($_POST['requisicaoAjax']){
 	header('content-type: text/html; charset=ISO-8859-1');
 	if($_POST['requisicaoAjax'] == "getComboPeriodoPorPerid"){
@@ -134,7 +137,7 @@ function alteraPeriodo(perid)
 	</table>
 </form>
 <div id="lista_valor_meta">
-<?php listarValorMetas($_SESSION['painel']['metid']); ?>
+<?php listarValorMetas($_SESSION['painel']['metid'], $listaPerfis); ?>
 </div>
 <?php if($resultado['msg']): ?>
 <script>

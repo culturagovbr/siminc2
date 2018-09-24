@@ -16,6 +16,10 @@ include APPRAIZ . 'includes/cabecalho.inc';
 print '<br/>';
 // atribuindo as permissões
 $permissoes = verificaPerfilPainel();
+		$sql = "SELECT p.pflcod FROM seguranca.perfil p 
+				LEFT JOIN seguranca.perfilusuario pu ON pu.pflcod = p.pflcod 
+				WHERE pu.usucpf = '". $_SESSION['usucpf'] ."' and p.pflstatus = 'A' and p.sisid =  '". $_SESSION['sisid'] ."' 
+				ORDER BY pflnivel ASC LIMIT 1";
 echo montarAbasArray($permissoes['menu'], $_SERVER['REQUEST_URI']);
 
 // titulos da tela
@@ -619,6 +623,8 @@ if(PAINEL_PERFIL_CONSULTA == $arrPerfil[0]){
 </table>
 </form>
 <?php
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
 $sql = "SELECT  '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&indid='||i.indid||'&evento=A\"><img src=\"/imagens/alterar.gif \" border=0 title=\"Visualizar\"></a> '||".$permissoes['condicaolista']."||'</center>',
 				(SELECT 
 					(CASE WHEN count(*)>0 THEN 
@@ -643,12 +649,17 @@ $sql = "SELECT  '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&i
 			    unm.unmdesc, 
 			    i.indobjetivo,
 				'<span title=\"'||dtcoleta||'\"></span>' || to_char(dtcoleta, 'DD/MM/YYYY HH24:MI:SS') as datacoleta
-	    FROM painel.indicador i 
+	    FROM painel.indicador i
    		LEFT JOIN painel.detalhetipoindicador dt1 ON dt1.indid = i.indid AND dt1.tdinumero = 1
    		LEFT JOIN painel.detalhetipoindicador dt2 ON dt2.indid = i.indid AND dt2.tdinumero = 2
-	    LEFT JOIN painel.mapa m ON m.mapid = m.mapid 
-	    LEFT JOIN painel.secretaria s ON i.secid = s.secid 
-	    LEFT JOIN painel.acao a ON a.acaid = i.acaid 
+	    LEFT JOIN painel.mapa m ON m.mapid = m.mapid";
+        if (in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis) || in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){
+	    $sql .= " LEFT JOIN painel.secretaria s ON i.secid = s.secid ";
+        }else{ 
+            $sql .= " inner join painel.secretaria s on i.secid = s.secid
+                      inner join painel.usuarioresponsabilidade ur on s.secid = ur.secid and ur.usucpf = '".$_SESSION['usucpf']."'";
+        }
+	    $sql .= " LEFT JOIN painel.acao a ON a.acaid = i.acaid 
 	    LEFT JOIN painel.eixo ex ON ex.exoid = i.exoid 
 	    LEFT JOIN painel.unidademedicao unm ON unm.unmid = i.unmid 
 	    LEFT JOIN painel.regionalizacao reg ON reg.regid = i.regid 

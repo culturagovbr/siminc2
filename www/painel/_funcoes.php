@@ -1287,7 +1287,7 @@ function verificaPerfilPainel() {
 				$permissoes['menu'][2] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=novoIndicador");
 				//$permissoes['menu'][3] = array("descricao" => "Tabela de Indicadores", "link"=> "/painel/painel.php?modulo=principal/tabela&acao=A");
 				break;
-			case GESTOR_PDE:
+			case PAINEL_PERFIL_GESTOR_INDICADOR:
 				$permissoes['condicaolista']		  = "'<img style=\"cursor: pointer;\" src=\"/imagens/excluir_01.gif \" border=\"0\" title=\"Excluir\">'";
 				$permissoes['verindicadores'] 		  = "vertodos";
 				$permissoes['bloquearseriehistorica'] = true;

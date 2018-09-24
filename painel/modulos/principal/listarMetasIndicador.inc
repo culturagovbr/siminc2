@@ -11,7 +11,8 @@ if($_POST['requisicaoAjax']){
 if($_POST['requisicao']){
 	$_POST['requisicao']();
 }
-
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
 // monta cabeçalho 
 include APPRAIZ . 'includes/cabecalho.inc';
 print '<br/>';
@@ -132,10 +133,13 @@ if($_POST['indid']){
 if($_POST['metdesc']){
 	$arrWhere[] = "(removeacento(upper(met.metdesc)) like removeacento(('%".strtoupper($_POST['metdesc'])."%')) or removeacento(upper(ind.indnome)) like removeacento(('%".strtoupper($_POST['metdesc'])."%')) or ind.indid::text like removeacento(('%".strtoupper($_POST['metdesc'])."%')))";
 }
-
-$sql = "select
-			'<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarMeta(\'' || met.metid || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirMeta(\'' || met.metid || '\')\" />' as acao,
-			met.metdesc,
+$sql = "select ";
+                if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                    $sql .= "'<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarMeta(\'' || met.metid || '\')\" /> <img src=\"../imagens/excluir_01.gif\" class=\"link\" onclick=\"excluirMeta(\'' || met.metid || '\')\" />' as acao,    ";
+                }else{
+                    $sql .= "'<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarMeta(\'' || met.metid || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirMeta(\'' || met.metid || '\')\" />' as acao,    ";
+                }
+		$sql .= "met.metdesc,
 			ind.indid || ' - ' || ind.indnome as indnome,
 			(select secdsc from painel.secretaria sec where sec.secid = ind.secid) as secdsc,
 			(select acadsc from painel.acao aca where aca.acaid = ind.acaid) as acadsc,
@@ -148,10 +152,12 @@ $sql = "select
 			painel.indicador ind ON ind.indid = met.indid
 		inner join
 			painel.periodicidade per ON per.perid = met.perid
-		".($arrWhere ? " where ".implode(" and ",$arrWhere) : "")."
-		order by
-			metdesc,
-			indnome";
+";
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+            $sql .= " inner join painel.usuarioresponsabilidade ur on ind.secid = ur.secid and ur.usucpf = '".$_SESSION['usucpf']."'";
+        }
+	$sql .=	($arrWhere ? " where ".implode(" and ",$arrWhere) : "")."
+		order by (select s1.secordem from painel.secretaria s1 where s1.secid = ind.secid and s1.secstatus = 'A')";
 
 $arrDados = $db->carregar($sql);
 if($arrDados){
@@ -208,5 +214,6 @@ if($arrDados){
 	}
 }
 $cabecalho = array("Ações", "Meta", "Indicador", "Secretaria","Ação","Periodicidade da Meta","Estratégias","Ações Estratégicas");
-$db->monta_lista_array($dados_array,$cabecalho,100,5,'N','center',$par2);
+$db->monta_lista($dados_array,$cabecalho,100,5,'N','center',$par2);
+//$db->monta_lista($sql,$cabecalho,100,5,'N','center',$par2);
 ?>
