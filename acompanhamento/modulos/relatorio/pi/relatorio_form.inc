@@ -39,7 +39,7 @@
 	        suo.prsano = '".$_REQUEST['filtro']['prsano']."'
 	        AND suo.suostatus = 'A'
         ORDER BY
-            3,2
+            descricao
     ";
     echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
@@ -49,9 +49,9 @@
             esddsc AS descricao
         FROM workflow.estadodocumento
         WHERE
-            tpdid = '".TPDID_PROPOSTA."'
+            tpdid = '". (int)WF_TPDID_PLANEJAMENTO_PI. "'
         ORDER BY
-            1
+            descricao
     ";
     echo $simec->select("filtro[esdid][]", 'Situação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
@@ -63,7 +63,7 @@
         WHERE eqd.eqdano = '".$_REQUEST['filtro']['prsano']."'
             AND eqdstatus = 'A'
         ORDER BY
-            2,1
+            descricao
     ";
     echo $simec->select("filtro[eqdid][]", 'Enquadramento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
@@ -79,70 +79,71 @@
         WHERE
             irp.irpstatus = 'A'
         ORDER BY
-            2,1
+            descricao
     ";
     echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
-            SELECT DISTINCT
-                oppid as codigo,
-                oppcod || ' - ' || oppnome as descricao,
-                prsano as ano
-            FROM public.objetivoppa
-            WHERE
-                prsano = '".$_REQUEST['filtro']['prsano']."'
-                AND oppstatus = 'A'
-            ORDER BY
-                3
+        SELECT DISTINCT
+            oppid as codigo,
+            oppcod || ' - ' || oppnome as descricao,
+            prsano as ano
+        FROM public.objetivoppa
+        WHERE
+            prsano = '".$_REQUEST['filtro']['prsano']."'
+            AND oppstatus = 'A'
+        ORDER BY
+            descricao
     ";
     echo $simec->select("filtro[oppid][]", 'Objetivo', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
-    $stSql = "SELECT
-                mdeid AS codigo,
-                mdedsc AS descricao
-            FROM monitora.pi_modalidadeensino
-            WHERE
-                mdestatus = 'A'
-                AND mdeano = '".$_REQUEST['filtro']['prsano']."'
-            ORDER BY
-                descricao ASC
+    $stSql = "
+        SELECT
+            mdeid AS codigo,
+            mdedsc AS descricao
+        FROM monitora.pi_modalidadeensino
+        WHERE
+            mdestatus = 'A'
+            AND mdeano = '".$_REQUEST['filtro']['prsano']."'
+        ORDER BY
+            descricao ASC
     ";
     echo $simec->select("filtro[mdeid][]", 'Área Cultural', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
-              SELECT DISTINCT
-                 capid AS codigo,
-                 capano as ano,
-                 capdsc AS descricao
-             FROM monitora.pi_categoriaapropriacao
-             WHERE
-                 capano = '".$_REQUEST['filtro']['prsano']."'
-                 AND capstatus = 'A'
-             ORDER BY
-                 3,2
+        SELECT DISTINCT
+           capid AS codigo,
+           capano as ano,
+           capdsc AS descricao
+       FROM monitora.pi_categoriaapropriacao
+       WHERE
+           capano = '".$_REQUEST['filtro']['prsano']."'
+           AND capstatus = 'A'
+       ORDER BY
+          descricao
     ";
     echo $simec->select("filtro[capid][]", 'Modalidade de Pactuação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
-              SELECT
-                  mescod AS codigo,
-                  mesdsc AS descricao
-              FROM public.meses
-              ORDER BY
-                  codigo
+        SELECT
+            mescod AS codigo,
+            mesdsc AS descricao
+        FROM public.meses
+        ORDER BY
+            codigo
     ";
     echo $simec->select("filtro[mescod][]", 'Edital', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
-              SELECT
-                  claid AS codigo,
-                  cladsc AS descricao
-              FROM acompanhamento.classificacao
-              WHERE
-                  tipid = '".TPDID_PLANO_INTERNO."'
-                  AND clastatus = 'A'
-              ORDER BY
-                  2,1
+        SELECT
+            claid AS codigo,
+            cladsc AS descricao
+        FROM acompanhamento.classificacao
+        WHERE
+            tipid = '". (int)TPDID_PLANO_INTERNO. "'
+            AND clastatus = 'A'
+        ORDER BY
+            descricao
     ";
     echo $simec->select("filtro[claid][]", 'Classificação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
     ?>
