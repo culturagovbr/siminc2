@@ -101,7 +101,15 @@ function salvarMetas()
 	$indid = $_POST['indid'];
 	$metdesc = $_POST['metdesc'];
 	$metcumulativa = $_POST['metcumulativa'];
-
+        
+        $mIndicador = new Painel_Model_Indicador();
+        $listaPerfis = $mIndicador->RetornaPerfil();
+        if ($metid){
+            if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                return array("msg" => "Você não pode alterar os dados!", "erro" => true);
+            }
+        }
+        
 	if(!$perid || !$indid || !$metdesc || !$metcumulativa){
 		return array("msg" => "Favor preencher todos os campos obrigatórios!", "erro" => true);
 	}

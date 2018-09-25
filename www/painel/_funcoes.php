@@ -1291,7 +1291,7 @@ function verificaPerfilPainel() {
 				$permissoes['condicaolista']		  = "'<img style=\"cursor: pointer;\" src=\"/imagens/excluir_01.gif \" border=\"0\" title=\"Excluir\">'";
 				$permissoes['verindicadores'] 		  = "vertodos";
 				$permissoes['bloquearseriehistorica'] = true;
-				$permissoes['removerseriehistorica'] = true;
+				$permissoes['removerseriehistorica'] = false;
 				$permissoes['sou_solicitante']        = (($db->pegaUm("SELECT usucpf FROM seguranca.perfilusuario WHERE usucpf='".$_SESSION['usucpf']."' AND pflcod='".PAINEL_PERFIL_SOLICITANTE."'"))?true:false);
 				
 				$permissoes['menu'][0] = array("descricao" => "Lista de Indicadores", "link"=> ($enderecosweb[$_SERVER['REQUEST_URI']])?$_SERVER['REQUEST_URI']:key($enderecosweb));
