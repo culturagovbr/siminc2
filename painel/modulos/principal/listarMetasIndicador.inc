@@ -152,12 +152,10 @@ $sql = "select ";
 			painel.indicador ind ON ind.indid = met.indid
 		inner join
 			painel.periodicidade per ON per.perid = met.perid
-";
-        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
-            $sql .= " inner join painel.usuarioresponsabilidade ur on ind.secid = ur.secid and ur.usucpf = '".$_SESSION['usucpf']."'";
-        }
-	$sql .=	($arrWhere ? " where ".implode(" and ",$arrWhere) : "")."
-		order by (select s1.secordem from painel.secretaria s1 where s1.secid = ind.secid and s1.secstatus = 'A')";
+                ".($arrWhere ? " where ".implode(" and ",$arrWhere) : "")."
+		order by 
+			metdesc,
+			indnome";
 
 $arrDados = $db->carregar($sql);
 if($arrDados){
