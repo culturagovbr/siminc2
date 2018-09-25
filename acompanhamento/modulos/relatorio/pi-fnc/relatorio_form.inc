@@ -39,7 +39,7 @@
         WHERE
 	        suo.prsano = '".$_REQUEST['filtro']['prsano']."'
 	        AND suo.suostatus = 'A'
-	        AND suo.unosigla = 'FNC'
+	        AND suo.unofundo IS TRUE
         ORDER BY
             3,2
     ";
