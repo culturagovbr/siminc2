@@ -34,7 +34,7 @@
             array('codigo' => 'suocod',             'descricao' => 'Código da Unidade'),
             array('codigo' => 'suonome',            'descricao' => 'Unidade'),
             array('codigo' => 'unodelegada',        'descricao' => 'Unidade Delegada'),
-            array('codigo' => 'suodelegada',        'descricao' => 'Unidade Delegada'),
+            array('codigo' => 'suodelegada',        'descricao' => 'Subunidade Delegada'),
             array('codigo' => 'eqddsc',             'descricao' => 'Enquadramento'),
             array('codigo' => 'resultadoprimario',  'descricao' => 'RP - Resultado Primário'),
             array('codigo' => 'mainome',            'descricao' => 'Item de Manutenção'),
