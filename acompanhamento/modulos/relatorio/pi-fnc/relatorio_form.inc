@@ -39,6 +39,7 @@
         WHERE
 	        suo.prsano = '".$_REQUEST['filtro']['prsano']."'
 	        AND suo.suostatus = 'A'
+	        AND suo.unosigla = 'FNC'
         ORDER BY
             3,2
     ";
