@@ -243,7 +243,7 @@ include APPRAIZ."includes/cabecalho.inc";
 </table>
 <script language="JavaScript" type="text/javascript">
   function altera_aba(cod) {
-     location.href = 'planacomorc.php?modulo=sistema/menu/aba&acao=A&abacod_int='+cod;
+     location.href = '?modulo=sistema/menu/aba&acao=A&abacod_int='+cod;
   }
   
 
