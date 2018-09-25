@@ -1460,7 +1460,6 @@ class Pi_PlanoInterno extends Modelo
 		LEFT JOIN acompanhamento.classificacao cl ON ac.claid = cl.claid
             WHERE
                 pli.plistatus = 'A'
-                AND rp.rpcod <> 6
                 $where
         ";
 //ver($sql, d);
