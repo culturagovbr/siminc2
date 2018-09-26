@@ -149,7 +149,8 @@ class Emendas_Model_Emenda extends Modelo
                         JOIN emendas.siconv sic ON sic.sicid = sbe.sicid
                         JOIN emendas.siconvsituacao sit ON sit.sitid = sic.sitid
                     WHERE
-			sbe.benid = ben.benid
+			sit.sitstatus = 'A'
+			AND sbe.benid = ben.benid
                     ORDER BY
                         sicsequencial DESC
                     LIMIT 1

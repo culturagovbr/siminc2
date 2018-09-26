@@ -263,6 +263,7 @@ class Pi_PlanoInterno extends Modelo
 
         return $sql;
     }
+    
     public function montarSqlRelFuncionais($filtro = []){
         $filtro[] = "suo.suostatus = 'A'";
         $where = $this->montarFiltros($filtro);
@@ -364,6 +365,88 @@ class Pi_PlanoInterno extends Modelo
         return $sql;
     }
 
+    public function montarSqlRelGerencialFuncionais($filtro = [], $ano){
+        $filtro[] = "suo.suostatus = 'A'";
+        $where = $this->montarFiltros($filtro);
+        $sql = "
+            SELECT
+                suo.suoid,
+                suo.unonome || ' (' || suo.unocod || ')' AS unidade,
+                suo.suonome || ' (' || suo.suocod || ')' AS subunidade,
+                ptr.ptres,
+                ptr.funcional || ' - ' || ptr.acatitulo || ': ' || ptr.plodsc || ' (RP ' || ptr.irpcod || ')' AS funcional,
+                COALESCE(psu.ptrdotacaocusteio, 0) custeio_dotacao,
+                SUM(COALESCE(pic.picvalorcusteio, 0)) custeio_planejado,
+                COALESCE(psu.ptrdotacaocapital, 0) capital_dotacao,
+                SUM(COALESCE(pic.picvalorcapital, 0)) capital_planejado,
+                COALESCE(psu.ptrdotacaocusteio, 0) + COALESCE(psu.ptrdotacaocapital, 0) AS total_dotacao,
+                SUM(COALESCE(pic.picvalorcusteio, 0)) + SUM(COALESCE(pic.picvalorcapital, 0)) AS total_planejado,
+		COALESCE(sec.provisionado, 0.00) AS provisionado,
+		COALESCE(sec.empenhado, 0.00) AS empenhado,
+		COALESCE(sec.liquidado, 0.00) AS liquidado,
+		COALESCE(sec.pago, 0.00) AS pago,
+                (
+                    SELECT
+                        COUNT(1)
+                    FROM spo.ptressubunidade
+                    WHERE
+                        ptressubunidade.ptrid = ptr.ptrid
+                ) AS compartilhada
+            FROM public.vw_subunidadeorcamentaria suo
+                JOIN spo.ptressubunidade psu on psu.suoid = suo.suoid
+                JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano
+                LEFT JOIN monitora.pi_planointernoptres ppt on ppt.ptrid = ptr.ptrid
+                LEFT JOIN monitora.pi_planointerno pli on(pli.pliid = ppt.pliid AND pli.ungcod = suo.suocod AND pli.unicod = suo.unocod AND plistatus = 'A')
+                LEFT JOIN planacomorc.pi_complemento pic on pic.pliid = pli.pliid
+                LEFT JOIN planacomorc.unidadegestora_limite lmu on lmu.ungcod = suo.suocod AND lmu.lmustatus = 'A' AND lmu.prsano = suo.prsano
+                LEFT JOIN(
+                    SELECT
+                        siopexecucao.unicod,
+                        pi_planointerno.ungcod,
+                        siopexecucao.ptres,
+                        SUM(COALESCE(siopexecucao.vlrautorizado, 0.00))::NUMERIC AS provisionado,
+                        SUM(COALESCE(siopexecucao.vlrempenhado, 0.00))::NUMERIC AS empenhado,
+                        SUM(COALESCE(siopexecucao.vlrliquidado, 0.00))::NUMERIC AS liquidado,
+                        SUM(COALESCE(siopexecucao.vlrpago, 0.00))::NUMERIC AS pago
+                    FROM spo.siopexecucao
+                        LEFT JOIN monitora.pi_planointerno ON(siopexecucao.plicod = pi_planointerno.plicod AND siopexecucao.exercicio = pi_planointerno.pliano AND pi_planointerno.plistatus = 'A')
+                    WHERE
+                        pi_planointerno.ungcod IS NOT NULL
+                        AND siopexecucao.exercicio = '". (int)$ano. "' -- Inserindo o ano direto na subquery por motivo de performance da consulta.
+                    GROUP BY
+                        siopexecucao.ptres,
+                        siopexecucao.unicod,
+                        pi_planointerno.ungcod
+		) sec ON(ptr.ptres = sec.ptres AND suo.unocod = sec.unicod AND suo.suocod = sec.ungcod)
+            WHERE
+                {$where}
+            GROUP BY
+                suo.suoid,
+                unidade,
+                subunidade,
+                ptr.ptrid,
+                ptr.ptres,
+                ptr.funcional,
+                ptr.acatitulo,
+                ptr.plodsc,
+                ptr.irpcod,
+                custeio_dotacao,
+                capital_dotacao,
+		sec.provisionado,
+		sec.empenhado,
+		sec.liquidado,
+		sec.pago
+            ORDER BY
+                suo.suoid,
+                unidade,
+                subunidade,
+                ptres,
+                funcional
+        ";
+//ver($sql,d );
+        return $sql;
+    }
+    
     /**
      * Busca lista de PI.
      * @example array( 'suo.unocod' => UNIDADEORCAMENTARIA_SUOCOD_FNC, 'suo.unocod != '. UNIDADEORCAMENTARIA_SUOCOD_FNC, 'suo.unocod' => array(UNIDADEORCAMENTARIA_SUOCOD_FNC, 42101)
@@ -1483,7 +1566,6 @@ class Pi_PlanoInterno extends Modelo
 		LEFT JOIN acompanhamento.classificacao cl ON ac.claid = cl.claid
             WHERE
                 pli.plistatus = 'A'
-                AND rp.rpcod <> 6
                 $where
         ";
 //ver($sql, d);
