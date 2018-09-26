@@ -1,3 +1,3 @@
 <?
-	include APPRAIZ .'seguranca/modulos/sistema/perfil/associa_perfil.inc';
+	include APPRAIZ .'seguranca/modulos/sistema/perfil/associa_perfil_bootstrap.inc';
 ?>
