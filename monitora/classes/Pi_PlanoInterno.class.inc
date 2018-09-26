@@ -1325,7 +1325,7 @@ class Pi_PlanoInterno extends Modelo
         $where .= $dto->mescod? "\n AND pic.mescod IN('".join($dto->mescod, "','"). "')": NULL;
         $where .= $dto->claid? "\n AND cl.claid IN(".join($dto->claid, ','). ")": NULL;
         $where .= $dto->acaid? "\n AND ptr.acaid IN(".join($dto->acaid, ','). ")": NULL;
-//ver($dto, $where, d);
+
         $sql = "
             SELECT
                 pli.pliid,
@@ -1568,7 +1568,7 @@ class Pi_PlanoInterno extends Modelo
                 pli.plistatus = 'A'
                 $where
         ";
-//ver($sql, d);
+
         return $sql;
     }
 

@@ -96,7 +96,6 @@ $listaColunaMoeda = array(
 # Verifica se o usuário tem vinculo de Sub-Unidades no seu Perfil
 $listaSubunidade = buscarSubUnidadeUsuario((object)array('usucpf' => $_SESSION['usucpf']));
 
-
 $dto = (object) array(
     'exercicio' => $_SESSION['exercicio'],
     'listaSubunidade' => $listaSubunidade

@@ -150,11 +150,12 @@ include APPRAIZ . "includes/cabecalho.inc";
                             break;
                             case 'funcional':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/funcional/relatorio_form.inc';
-                                break;        
+                            break;
                             case 'pi-fnc':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/pi-fnc/relatorio_form.inc';
-                                break;        
-                            default:
+                            break;
+                            case 'pi':
+                                include_once APPRAIZ. 'acompanhamento/modulos/relatorio/pi/relatorio_form.inc';
                             break;
                         }
                     ?>
