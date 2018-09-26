@@ -1218,22 +1218,18 @@ class Pi_PlanoInterno extends Modelo
 
         return true;
     }
-
-    public function getDadosGerais($exercicio, $fundo = null)
-    {
-
-        $where = " pli.pliano = '$exercicio' AND pli.plistatus = 'A' and  rp.rpcod <> 6 ";
-
-        if($fundo){
-            $where .= " AND suo.unofundo = '{$fundo}' ";
-        }
-
-        # Verifica se o usuário tem vinculo de Sub-Unidades no seu Perfil
-        $listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object)array('usucpf' => $_SESSION['usucpf']));
-        if (count($listaSubUnidadeUsuario)) {
-            $where .= " AND suo.suocod IN('" . join("','", $listaSubUnidadeUsuario) . "') ";
-        }
-
+    
+    /**
+     * Monta consulta do Relatório Geral de PI e PI FNC
+     * 
+     * @param stdClass $dto
+     */
+    public function montarSqlRelatorioGeral(stdClass $dto){
+        $where .= $dto->exercicio? "\n AND pli.pliano = '". (int)$dto->exercicio. "'": NULL;
+        $where .= $dto->fundo === TRUE? "\n AND suo.unofundo IS TRUE": NULL;
+        $where .= $dto->fundo === FALSE? "\n AND suo.unofundo IS FALSE": NULL;
+        $where .= $dto->listaSubunidade? "\n AND suo.suocod IN('". join("','", $dto->listaSubunidade). "') ": NULL;
+//ver($dto, $where, d);
         $sql = "
             SELECT
                 pli.pliid,
@@ -1421,7 +1417,6 @@ class Pi_PlanoInterno extends Modelo
 				amd.acoid = ac.acoid
 		)::TEXT, '{', ''), '}', ''), '\"', '')) AS medidas,
 		ac.acoprovidencias AS providencias
-
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod AND suo.unocod = pli.unicod AND suo.prsano = pli.pliano
@@ -1464,8 +1459,22 @@ class Pi_PlanoInterno extends Modelo
 		LEFT JOIN acompanhamento.acompanhamento ac ON pli.pliid = ac.pliid
 		LEFT JOIN acompanhamento.classificacao cl ON ac.claid = cl.claid
             WHERE
+                pli.plistatus = 'A'
                 $where
         ";
+//ver($sql, d);
+        return $sql;
+    }
+
+    /**
+     * Lista consulta do Relatório Geral de PI e PI FNC
+     * 
+     * @param stdClass $dto
+     * @return array
+     */
+    public function listarRelatorioGeralPi(stdClass $dto)
+    {
+        $sql = $this->montarSqlRelatorioGeral($dto);
 
         $dados = $this->carregar($sql);
         return $dados? $dados: [];
