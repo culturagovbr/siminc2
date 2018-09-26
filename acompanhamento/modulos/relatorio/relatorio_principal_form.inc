@@ -141,15 +141,18 @@ include APPRAIZ . "includes/cabecalho.inc";
                         switch ($_REQUEST['tipo_relatorio']) {
                             case 'emendas':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/emendas/relatorio_form.inc';
-                                break;
+                            break;
                             case 'proposta':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/proposta/relatorio_form.inc';
-                                break;        
+                            break;
+                            case 'pre-pi':
+                                include_once APPRAIZ. 'acompanhamento/modulos/relatorio/pre-pi/relatorio_form.inc';
+                            break;
                             case 'funcional':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/funcional/relatorio_form.inc';
                                 break;        
                             default:
-                                break;
+                            break;
                         }
                     ?>
 
