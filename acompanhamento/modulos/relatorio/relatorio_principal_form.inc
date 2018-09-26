@@ -7,7 +7,7 @@ if(isset($_REQUEST['req'])){
             die;
         case 'xls':
             include $_REQUEST['tipo_relatorio']."/relatorio.inc";
-            die;            
+            die;
         case 'carregar-combo-subunidade':
             $where = $_REQUEST['unoid']? "\n AND suo.unoid IN(". join($_REQUEST['unoid'], ','). ")": NULL;
             $stSql = "
@@ -151,6 +151,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                             case 'funcional':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/funcional/relatorio_form.inc';
                                 break;        
+                            case 'pi-fnc':
+                                include_once APPRAIZ. 'acompanhamento/modulos/relatorio/pi-fnc/relatorio_form.inc';
+                                break;        
                             default:
                             break;
                         }
@@ -193,6 +196,10 @@ include APPRAIZ . "includes/cabecalho.inc";
         
         $('.div_form_rel').on('change', '[name="filtro[acaid][]"]', function(){
             carregarComboFuncional();
+        });
+
+        $('.div_form_rel').on('change', '[name="filtro[suoid][]"]', function(){
+            carregarComboAcao();
         });
 
     });
@@ -244,10 +251,10 @@ include APPRAIZ . "includes/cabecalho.inc";
             }
         });
     }
-    
+
     /**
      * Carrega novo conteúdo para a opções de Ações via requisição ajax.
-     * 
+     *
      * @return VOID
      */
     function carregarComboAcao() {
@@ -261,7 +268,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                 suoid: $('[name="filtro[suoid][]"]').val()
             },
             success: function(response) {
-                $('.div_acaid').remove('slow');
+                $('.div_acaid').empty();
                 $('.div_acaid').html(response);
                 $(".chosen-select").chosen();
             }
