@@ -716,3 +716,6 @@ tr.text-right th, tr.text-right td{
     background: #e6e6e6;
 }
 
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #f9f9f9;
+}
