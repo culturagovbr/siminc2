@@ -389,7 +389,7 @@ function cadastrarNovaMetaMeta()
 			?>
 				<input type="button" name="btn_salvar_view" value="Definir Visualização Padrão" onclick="salvarExibicaoGraficoMeta()" />
 				<input type="button" name="btn_cadastrar_meta" value="Cadastrar Nova Meta" onclick="cadastrarNovaMetaMeta()" />
-			<?
+			<?php
 			}
 			?>
 		</td>
