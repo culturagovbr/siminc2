@@ -7232,42 +7232,19 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 						painel.detalheperiodicidade
 					where
 						perid = {$arrparametros['periodicidade']}
-					and
-						dpedatainicio >= (
-									select 
-										dpedatainicio
-									from
-										painel.detalheperiodicidade
-									where
-										perid = {$arrparametros['periodicidade']}
-									and
-										(
-											select  
-												dpedatainicio
-											from
-												painel.detalheperiodicidade
-											where
-												dpeid = {$arrparametros['dpeid']}
-										) between dpedatainicio and dpedatafim limit 1
-								)
-					and
-						dpedatafim <= (
-								select 
-									dpedatafim
-								from
-									painel.detalheperiodicidade
-								where
-									perid = {$arrparametros['periodicidade']}
-								and
-									(
-										select  
-											dpedatafim
-										from
-											painel.detalheperiodicidade
-										where
-											dpeid = {$arrparametros['dpeid2']}
-									) between dpedatainicio and dpedatafim limit 1
-								)
+					and							dpeid in ( 	select  
+													dmi.dpeid
+												from 
+													painel.detalhemetaindicador dmi
+												inner join
+													painel.metaindicador met ON met.metid = dmi.metid
+												where
+													met.indid = $indid
+												and
+													met.metstatus = 'A'
+												and
+													dmi.dmistatus = 'A'
+											  )
 					order by
 						dpedatainicio";
 			
@@ -7504,13 +7481,9 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 				
 				if( ( ($dtproj >= $dtinicio) && ( $dtproj <= $dtfim) ) || $bool_exibe == true){
 					$bool_exibe = true;
-					if( ($dtproj >= $dtinicio) && ( $dtproj <= $dtfim) ){
-						$arrMetasQtdeIndicador[] = round((float)$valor['qtde'] / $escala ,2);
-						$arrMetasvalorIndicador[] = round((float)$valor['valor'] / $escala ,2);
-					}else{
 						$sql = "select
 									sum(dmivalor) as valor,
-									sum(dmiqtde) as qtde
+									sum(coalesce(dmiqtde,1)) as qtde
 								from
 									painel.detalhemetaindicador dmi
 								inner join
@@ -7530,11 +7503,12 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 								/*and
 									dpe.perid = {$arrparametros['periodicidade']}*/";
 						$arrMetaValor = $db->pegaLinha($sql);
-						
-						$arrMetasQtdeIndicador[]  = $arrMetaValor['qtde']  ? round((float)$arrMetaValor['qtde'] / $escala ,2)  : "num";
+						$qtde = $arrMetaValor['qtde']  ? round((float)$arrMetaValor['qtde'] / $escala ,2)  : "num";
+                                                if ($qtde<1){
+                                                    $qtde=0.0000001;
+                                                }
+                                                $arrMetasQtdeIndicador[] = $qtde;
 						$arrMetasvalorIndicador[] = $arrMetaValor['valor'] ? round((float)$arrMetaValor['valor'] / $escala ,2) : "num";
-						
-					}
 				}else{
 					$arrMetasQtdeIndicador[] = null;
 					$arrMetasvalorIndicador[] = null;
