@@ -122,6 +122,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid 				= $_REQUEST['mtiid'];
 				$indshformula		= $_REQUEST['indshformula'];
 				$formulash			= $_REQUEST['formulash'];
+				$indavalgestor			= $_REQUEST['indavalgestor'];
+				$indobsgestor			= $_REQUEST['indobsgestor'];
 				if($indpublicado=='true'){
 					$indhomologado = true;
 				}
@@ -164,11 +166,15 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 						  INTO painel.indicador
 							  (unmid, cliid, tpiid, secid, secidgestora,acaid, perid, estid, colid, usucpf, indnome, indobjetivo,
 							  indformula, indtermos, indfontetermo, indnormalinicio, indnormalfinal, indatencaoinicio,
-							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,indhomologado,mtiid,indshformula,formulash,indencerrado)
+							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,
+                                                          indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,
+                                                          indhomologado,mtiid,indshformula,formulash,indencerrado,indavalgestor, indobsgestor)
 						  VALUES 
 						  	   (".$unmid.", ".$cliid.", ".$tpiid.", ".$secid.", ".$secidgestora.", ".$acaid.", ".$perid.", ".$estid.", ".$colid.", '".$usucpf."', '".$indnome."', '".$indobjetivo."',
 							  '".$indformula."', '".$indtermos."', '".$indfontetermo."', ".$indnormalinicio.", ".$indnormalfinal.", ".$indatencaoinicio.",
-							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',$indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado)
+							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',"
+                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado,
+                                                          '$indavalgestor', '$indobsgestor')
 						  RETURNING	indid
 						  ";
 			
@@ -236,7 +242,9 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 					 indencerrado = 		".($indencerrado=='' ? 'indencerrado' : "'".$indencerrado."'").",
 					 mtiid = $mtiid,
 					 indshformula = $indshformula,
-					 formulash = '$formulash'
+					 formulash = '$formulash',
+                                         indavalgestor = '$indavalgestor',
+                                         indobsgestor = '$indobsgestor'
 					WHERE indid = 			".$indid."	
 				";
 				
@@ -294,7 +302,9 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 					indpublico,
 					indhomologado,
 					indencerrado,
-					mtiid		
+					mtiid,
+                                        indavalgestor,
+                                        indobsgestor
 				FROM  painel.indicador i
 				WHERE 
 				i.indid = ".$indid."
@@ -367,6 +377,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid				= $dados['mtiid'];
 				$indshformula		= $dados['indshformula'];
 				$formulash			= $dados['formulash'];
+				$indavalgestor			= $dados['indavalgestor'];
+				$indobsgestor			= $dados['indobsgestor'];
 			}		
 		break;	
 	}
@@ -1146,6 +1158,46 @@ else
     <td><?=$db->monta_combo('colid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S');?></td>
 </tr>
 </table>
+
+
+<table style="border-top:0px;border-top:0px;border-bottom:0px"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
+    <tr>
+        <td class="SubTituloEsquerda" colspan="2">Observações sobre o indicador</td>
+    </tr>
+    <tr>
+        <td align="right" width="25%" class="SubTituloDireita">Avaliação do Gestor:</td>
+        <?php
+        $classUp='fa-thumbs-o-up';
+        $classDown='fa-thumbs-o-down';        
+        $value = "";
+        if ($indavalgestor=='S'){
+            $classUp='fa-thumbs-up';
+            $classDown='fa-thumbs-o-down';
+            $value = "S";
+        }else if ($indavalgestor=='N'){
+            $classUp='fa-thumbs-o-up';
+            $classDown='fa-thumbs-down';
+            $value = "N";
+        }
+        ?>
+        <td><input type="hidden" name="indavalgestor" id="indavalgestor" value="<?=$value;?>">
+            <a href="javascript:alteraClasseThumbs('S');"><i style="font-size:2.5em" id="indthumbsup" class="fa <?php echo $classUp;?>"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:alteraClasseThumbs('N');"><i style="font-size:2.5em" id="indthumbsdown" class="fa <?php echo $classDown;?>"></i></a></td>
+    </tr>
+    <tr>
+        <?php
+        $mIndicador = new Painel_Model_Indicador();
+        $listaPerfis = $mIndicador->RetornaPerfil();
+        $acessoGestor='S';
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+            $acessoGestor='N';
+        }
+        ?>
+        <td align="right" width="25%" class="SubTituloDireita">Observação do Gestor:</td>
+        <td><?=campo_textarea( 'indobsgestor', 'N', (($acessoGestor)?'S':'N'), '', 98, 5, 125 );?></td>
+    </tr>    
+</table>
+
+
 <table style="display:none" style="border-top:0px;border-bottom:0px;"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
 <tr>
 	<td colspan="3" style="text-align: left;font-weight: bold;" bgcolor="#DCDCDC" >Informe as faixas para os níveis de medição abaixo:</td>
@@ -1196,6 +1248,30 @@ else
 </form>
 <script type="text/javascript" src="/includes/prototype.js"></script>	
 <script type="text/javascript">
+function alteraClasseThumbs(value){
+    if (document.getElementById('indavalgestor').value==value){
+        document.getElementById('indthumbsup').classList.add('fa-thumbs-o-up');
+        document.getElementById('indthumbsup').classList.remove('fa-thumbs-up');
+        document.getElementById('indthumbsdown').classList.add('fa-thumbs-o-down');        
+        document.getElementById('indthumbsdown').classList.remove('fa-thumbs-down');
+        document.getElementById('indavalgestor').value = '';
+    }else{
+        document.getElementById('indavalgestor').value = value;
+        if (value=='S'){
+            document.getElementById('indthumbsup').classList.remove("fa-thumbs-o-up");
+            document.getElementById('indthumbsup').classList.add('fa-thumbs-up');
+            document.getElementById('indthumbsdown').classList.remove('fa-thumbs-down');
+            document.getElementById('indthumbsdown').classList.add('fa-thumbs-o-down');        
+        }else{
+            document.getElementById('indthumbsup').classList.remove('fa-thumbs-up');
+            document.getElementById('indthumbsup').classList.add('fa-thumbs-o-up');
+            document.getElementById('indthumbsdown').classList.remove('fa-thumbs-o-down');
+            document.getElementById('indthumbsdown').classList.add('fa-thumbs-down');                
+        }
+    }
+    
+}                        
+
 function verificaSH(){   
     if (document.formulario.perid.value!==document.formulario.perid_conf.value){
         alert('Se alterar a periodicidade a série histórica será apagada!'); 

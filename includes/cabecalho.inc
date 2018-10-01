@@ -154,6 +154,7 @@ else
 
         <!-- Bootstrap CSS -->
         <link href="../library/bootstrap-3.0.0/css/bootstrap.min-simec.css" rel="stylesheet" media="screen">
+        <link href="/zimec/public/temas/simec/fonts/awesome/font-awesome.css?v=1.0" rel="stylesheet">
         <script src="../includes/JQuery/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="../library/chosen-1.0.0/chosen.jquery.js" type="text/javascript"></script>
         <script src="../library/chosen-1.0.0/docsupport/prism.js" type="text/javascript"></script>
