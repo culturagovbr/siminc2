@@ -1,12 +1,6 @@
 <?php
+
 include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
-
-header( 'Content-Type: application/vnd.ms-excel' );
-header( 'Expires: 0' );
-header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
-header( 'Content-Disposition: attachment; filename="relatorio_geral_pi' . '.xls"' );
-
-$fundo = !empty($_REQUEST['fundo']) ? $_REQUEST['fundo'] : null;
 
 $cabecalho = [
     'ID Planejamento', 'Situação', 'Código', 'Código da UO', 'UO', 'Código da Unidade', 'Unidade', 'Unidade Delegada', 'Unidade Delegada', 'Enquadramento', 'RP - Resultado Primário',
@@ -99,7 +93,21 @@ $listaColunaMoeda = array(
     'vlrpago'
 );
 
-$dados = (new Pi_PlanoInterno())->getDadosGerais($_SESSION['exercicio'], $fundo);
+# Verifica se o usuário tem vinculo de Sub-Unidades no seu Perfil
+$listaSubunidade = buscarSubUnidadeUsuario((object)array('usucpf' => $_SESSION['usucpf']));
+
+$dto = (object) array(
+    'exercicio' => $_SESSION['exercicio'],
+    'listaSubunidade' => $listaSubunidade
+);
+# Filtro do FNC
+if($_REQUEST['fundo'] === 't'){
+    $dto->fundo = TRUE;
+}
+else if($_REQUEST['fundo'] === 'f'){
+    $dto->fundo = FALSE;
+}
+$dados = (new Pi_PlanoInterno())->listarRelatorioGeralPi($dto);
 
 ?>
 
@@ -123,4 +131,9 @@ $dados = (new Pi_PlanoInterno())->getDadosGerais($_SESSION['exercicio'], $fundo)
 </table>
 
 <?php
+
+header( 'Content-Type: application/vnd.ms-excel' );
+header( 'Expires: 0' );
+header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
+header( 'Content-Disposition: attachment; filename="relatorio_geral_pi' .($_REQUEST['fundo'] === 't'? '_fnc': NULL). '.xls"' );
 die;

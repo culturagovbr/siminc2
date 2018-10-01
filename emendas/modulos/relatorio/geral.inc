@@ -1,10 +1,5 @@
 <?php
 
-    header( 'Content-Type: application/vnd.ms-excel' );
-    header( 'Expires: 0' );
-    header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
-    header( 'Content-Disposition: attachment; filename="relatorio_geral_pi' . '.xls"' );
-
     $cabecalho = [
         'ID Emenda',
         'Número',
@@ -20,9 +15,6 @@
         'Impositiva',
         'Justificativa',
         # DADOS FINANCEIROS
-        /*'GND',
-        'Mod. Aplicação',
-        'Fonte',*/
         'Valor Custeio',
         'Valor Capital',
         # BENEFICIARIOS
@@ -74,16 +66,14 @@
     ];
 
     # Lista de colunas que terão formatação de moeda.
-    $listaColunaMoeda = array(
-        'emdvalor',
-        'bedvalor',
-        'bedvalorpriorizado',
-        'contigenciado',
-        'empenhado',
-        'pago'
-    );
+    $listaColunaMoeda = Emendas_Model_Emenda::montarColunasFormatoMoedaRelatorioEmendas();
 
-    $sql = (new Emendas_Model_Emenda)->montarSqlRelatorioGeral($_SESSION['exercicio'],$listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf'])));
+    $listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf']));
+
+    $sql = (new Emendas_Model_Emenda)->montarSqlRelatorioGeral( (object) array(
+        'exercicio' => $_SESSION['exercicio'],
+        'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario
+    ));
 //ver($sql);
     $lista = $db->carregar($sql);
 //ver($lista, d);
@@ -109,4 +99,9 @@
 </table>
 
 <?php
-die;
+
+    header( 'Content-Type: application/vnd.ms-excel' );
+    header( 'Expires: 0' );
+    header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
+    header( 'Content-Disposition: attachment; filename="relatorio_geral_emendas_beneficiarios' . '.xls"' );
+    die;

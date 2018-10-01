@@ -1,4 +1,5 @@
-<?
+<?php
+
 //Recupera tudo que foi passado por REQUEST e instancia as variáveis correspondentes
 foreach($_REQUEST as $k=>$v) ${$k}=$v;
 //Montando a cláusula WHERE
@@ -13,9 +14,9 @@ if ($wh) $wh = " where ".substr($wh,4,strlen($wh)); else $wh = "";
 include APPRAIZ."includes/cabecalho.inc";
 ?>
 <br>
-<?
-$titul = 'Auditoria Interna do ' SIGLA_SISTEMA;
-monta_titulo($titulo_modulo,$titul);
+<?php
+$titul = 'Auditoria Interna do '. SIGLA_SISTEMA;
+monta_titulo($titulo_modulo, $titul);
 ?>
 <script language="JavaScript" src="../includes/calendario.js"></script>
 <form name="formulario" method="post">
@@ -31,13 +32,15 @@ monta_titulo($titulo_modulo,$titul);
   </tr>
   <tr>
     <td align='right' class="SubTituloDireita">Operação:</td>
-    <td><select name="audtipo" class="CampoEstilo">
-								<option value="">Todas</option>
-								<option value="I">Inclusão</option>
-								<option value="U">Alteração</option>
-								<option value="D">Exclusão</option>
-								<option value="X">Erros</option>
-		</select></td>
+    <td>
+        <select name="audtipo" class="CampoEstilo">
+            <option value="">Todas</option>
+            <option value="I">Inclusão</option>
+            <option value="U">Alteração</option>
+            <option value="D">Exclusão</option>
+            <option value="X">Erros</option>
+        </select>
+    </td>
   </tr>
   <tr>
     <td align='right' class="SubTituloDireita">Tabela:</td>
@@ -59,38 +62,38 @@ monta_titulo($titulo_modulo,$titul);
 </form>
 
 
-<?
+<?php
    $cabecalho = array("CPF", "NOME", "E.MAIL", "UF DE LOTAÇÃO", "DDD", "TELEFONE", "FUNÇÃO", "TIPO DE EVENTO", "DATA", "MENU UTILIZADO");
    
-	if ($wh){
-	//$sql = "select a.usucpf as CPF, u.usunome as NOME, a.audtipo as operacao, a.audtabela as tabela, '<text>'||a.audsql||'</text>' as query, m.mnucod||' - '||m.mnutransacao as transacao, to_char(a.auddata,'DD/MM/YYYY HH24:MI:SS') as data from auditoria a inner join usuario u on a.usucpf=u.usucpf inner join menu m on a.mnuid=m.mnuid " . $wh . " and m.sisid = " . $_SESSION['sisid'] . " order by m.sisid, auddata desc";
-	//$sql = "select ss.sisabrev, a.usucpf as CPF, u.usunome as NOME, a.audtipo as operacao, a.audtabela as tabela, '<text>'||a.audsql||'</text>' as query, m.mnucod||' - '||m.mnutransacao as transacao, to_char(a.auddata,'DD/MM/YYYY HH24:MI:SS') as data from auditoria a inner join usuario u on a.usucpf=u.usucpf inner join menu m on a.mnuid=m.mnuid inner join seguranca.sistema ss on ss.sisid=m.sisid " . $wh . "  order by m.sisid, auddata desc";
-	
-	$sql = "select usu.usucpf as CPF, usu.usunome as Nome, usu.usuemail as Email,
-					usu.regcod as UF, usu.usufoneddd as DDD, usu.usufonenum as Telefone,
-					usu.usufuncao as Função,
+    if ($wh){
+        //$sql = "select a.usucpf as CPF, u.usunome as NOME, a.audtipo as operacao, a.audtabela as tabela, '<text>'||a.audsql||'</text>' as query, m.mnucod||' - '||m.mnutransacao as transacao, to_char(a.auddata,'DD/MM/YYYY HH24:MI:SS') as data from auditoria a inner join usuario u on a.usucpf=u.usucpf inner join menu m on a.mnuid=m.mnuid " . $wh . " and m.sisid = " . $_SESSION['sisid'] . " order by m.sisid, auddata desc";
+        //$sql = "select ss.sisabrev, a.usucpf as CPF, u.usunome as NOME, a.audtipo as operacao, a.audtabela as tabela, '<text>'||a.audsql||'</text>' as query, m.mnucod||' - '||m.mnutransacao as transacao, to_char(a.auddata,'DD/MM/YYYY HH24:MI:SS') as data from auditoria a inner join usuario u on a.usucpf=u.usucpf inner join menu m on a.mnuid=m.mnuid inner join seguranca.sistema ss on ss.sisid=m.sisid " . $wh . "  order by m.sisid, auddata desc";
 
-					case  aud.audtipo        when 'I' then 'Inclução' 
-                	when 'U' then 'Alteração' 
-                	when 'D' then 'Exclusão' 
-                	when 'X' then 'Erro do Sistema' end as \"Tipo da Ação\",                	
-					to_char(aud.auddata ,'dd/MM/yyyy HH:MM:SS') as \"Data do Evento\",					
-					aba.abadsc as MenuUtilizado	
+        $sql = "select usu.usucpf as CPF, usu.usunome as Nome, usu.usuemail as Email,
+                                        usu.regcod as UF, usu.usufoneddd as DDD, usu.usufonenum as Telefone,
+                                        usu.usufuncao as Função,
 
-			from seguranca.usuario usu									
+                                        case  aud.audtipo        when 'I' then 'Inclução' 
+                        when 'U' then 'Alteração' 
+                        when 'D' then 'Exclusão' 
+                        when 'X' then 'Erro do Sistema' end as \"Tipo da Ação\",                	
+                                        to_char(aud.auddata ,'dd/MM/yyyy HH:MM:SS') as \"Data do Evento\",					
+                                        aba.abadsc as MenuUtilizado	
 
-			inner join auditoria aud on usu.usucpf = aud.usucpf
+                        from seguranca.usuario usu									
 
-			inner join seguranca.aba aba on aud.sisid = aba.sisid
-			
-			" . $wh . "
-			
-						
-	";		
-//	dbg($sql);
-	$db->monta_lista($sql,$cabecalho,50,20,'','','');
-	}
-	?>
+                        inner join auditoria aud on usu.usucpf = aud.usucpf
+
+                        inner join seguranca.aba aba on aud.sisid = aba.sisid
+
+                        " . $wh . "
+
+
+        ";		
+    //	dbg($sql);
+        $db->monta_lista($sql,$cabecalho,50,20,'','','');
+    }
+?>
 
 <script language="JavaScript">
 function Envia()

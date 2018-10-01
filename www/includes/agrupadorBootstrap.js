@@ -223,7 +223,7 @@ function copySelectedOptions(from,to) {
 			}
 		}
 	if ((arguments.length<3) || (arguments[2]==true)) {
-		sortSelect(to);
+//		sortSelect(to);
 		}
 	from.selectedIndex = -1;
 	to.selectedIndex = -1;
@@ -426,6 +426,6 @@ function limitarQuantidade( campo, quantidade ){
 }
 
 function inserirItem( formulario, campo, codigo, descricao ){
-	objeto = document.forms[formulario].elements[campo];
-	objeto.options[ objeto.options.length ] = new Option( descricao, codigo, false, false );
+    objeto = document.forms[formulario].elements[campo];
+    objeto.options[ objeto.options.length ] = new Option( descricao, codigo, false, false );
 }

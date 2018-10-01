@@ -65,9 +65,11 @@ function montarSqlRelatorioGeralProposta(stdClass $filtros){
  * @return string
  */
 function montarSqlRelatorioGeralPrePi(stdClass $filtros){
-    if($filtros->suocod){
-        $filtro = "AND suo.suocod in ('".$filtros->suocod. "')";    
-    }
+    $filtro = $filtros->suocod? "\n AND suo.suocod IN('". $filtros->suocod. "')": NULL;
+    $filtro .= $filtros->suoid? "\n AND suo.suoid IN(".join($filtros->suoid, ','). ")": NULL;
+    $filtro .= $filtros->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($filtros->irpcod, ','). ")": NULL;
+    $filtro .= $filtros->esdid? "\n AND esd.esdid IN(".join($filtros->esdid, ','). ")": NULL;
+    
     $sql = "
         SELECT
             pli.pliid,
@@ -138,10 +140,11 @@ function montarSqlRelatorioGeralPrePi(stdClass $filtros){
             LEFT JOIN territorios.estado est ON plo.estuf = est.estuf
             LEFT JOIN territorios.municipio mun ON plo.muncod = mun.muncod
         WHERE
-            pli.prsano = '". (int)$filtros->exercicio. "'
+            plistatus = 'A'
+            AND pli.prsano = '". (int)$filtros->exercicio. "'
             $filtro
-            AND plistatus = 'A'
     ";
+//ver($sql, d);
     return $sql;
 }
 

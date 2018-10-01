@@ -1,10 +1,18 @@
 <?php
 /**
+<<<<<<< HEAD
  * Classe de mapeamento da entidade public.gnd
  *
  * @category Class
  * @package  A1
  * @author   ORION TELES DE MESQUITA <orion.mesquita@cultura.gov.br>
+=======
+ * Classe de mapeamento da entidade painel.indicador
+ *
+ * @category Class
+ * @package  A1
+ * @author   <>
+>>>>>>> master
  * @license  GNU simec.mec.gov.br
  * @version  Release: 20-11-2017
  * @link     no link
@@ -15,7 +23,11 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 
 /**
+<<<<<<< HEAD
  * Public_Model_Gnd
+=======
+ * Painel_Model_Indicador
+>>>>>>> master
  *
  * @category Class
  * @package  A1
@@ -101,7 +113,7 @@ class Painel_Model_Indicador extends Modelo
         'indapelido' => null,
         'indshformula' => null,
         'formulash' => null,
-'indencerrado' => null,
+        'indencerrado' => null,
     );
 
     public function RetornaPerfil(){
@@ -113,5 +125,5 @@ class Painel_Model_Indicador extends Modelo
         }
         return $retorno;
     }
-}//end Class
-?>
+
+}
