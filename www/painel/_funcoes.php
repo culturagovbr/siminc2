@@ -6530,10 +6530,11 @@ function geraGraficoHighCharts($dados)
 				dpe.perid = $perid
 			and
 				dpe.dpestatus = 'A'
+                        and     dpe.dpeid in (select dpeid from painel.seriehistorica where sehstatus <> 'I' and indid = ".$_SESSION['indid'].")
 			order by
 				dpe.dpedatainicio asc";
 	/* Início - SQL para criação dos períodos*/
-	
+//	ver($sql,d);
 	//Array para armazenamento dos periodos
 	$arrPeriodos = $db->carregar($sql);
 	
@@ -6713,7 +6714,11 @@ function geraGraficoHighCharts($dados)
 						//Array para armazenamento dos períodos com chave no periodo
 						$arrPeriodo[ $arrDetPer['dpeid'] ] = $arrDetPer['dpedsc'];
 						//Array para armazenamento dos valores e quantidades para verificação
-						$arrVerificaQtde[] = $dados['dshqtde'];
+                                                if ((int)$dados['dshqtde']==0){
+                                                    $arrVerificaQtde[] = 0.001;
+                                                }else{
+                                                    $arrVerificaQtde[] = $dados['dshqtde'];
+                                                }
 						$arrVerificaValor[] = $dados['dshvalor'];
 					}
 					
@@ -6726,15 +6731,21 @@ function geraGraficoHighCharts($dados)
 				
 				//Se houver quantidade ou valor adicionamos os dados no array que irá compor o gráfico
 				if($arrDados['dshvalor'] || $arrDados['dshqtde']){
-				
+                                        if ((int)$arrDados['dshqtde']==0){
+                                            $qtde = 0.01;
+                                        }else{
+                                            $qtde = $arrDados['dshqtde'];
+                                        }
 					//Array para armazenamento dos valores e quantidades do indicador no período com chave no periodo
-					$arrValor[ $arrDetPer['dpeid'] ] = array( "dpedatainicio" => $arrDetPer['dpedatainicio'], "dpedatafim" => $arrDetPer['dpedatafim'] , "periodo" => $arrDetPer['dpedsc'] , "qtde" => $arrDados['dshqtde'], "valor" => $arrDados['dshvalor'] );
+					$arrValor[ $arrDetPer['dpeid'] ] = array( "dpedatainicio" => $arrDetPer['dpedatainicio'], "dpedatafim" => $arrDetPer['dpedatafim'] , "periodo" => $arrDetPer['dpedsc'] , "qtde" => $qtde, "valor" => $arrDados['dshvalor'] );
 					//Array para armazenamento dos períodos com chave no periodo
 					$arrPeriodo[ $arrDetPer['dpeid'] ] = $arrDetPer['dpedsc'];
 					//Array para armazenamento dos valores e quantidades para verificação
-					$arrVerificaQtde[] = $arrDados['dshqtde'];
+                                        $arrVerificaQtde[] = $qtde;
 					$arrVerificaValor[] = $arrDados['dshvalor'];
+                                        
 				}
+//ver($arrValor);
 			}
 		}
 	}
