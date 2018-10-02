@@ -3,7 +3,7 @@
 include_once APPRAIZ.'/painel/classes/controller/Indicador.inc';
 include_once APPRAIZ.'/painel/classes/model/Indicador.inc';
 $cIndicador = new Painel_Controller_Indicador();
-$mIndicador = new Painel_Model_Indicador($_SESSION['indid']);
+$mIndicador = new Painel_Model_Indicador();
 $listaPerfis = $mIndicador->RetornaPerfil();
 /**
  * Tratamento das requisições
@@ -21,8 +21,9 @@ switch ($requisicao) {
     default:
         break;
 }
-$indobsgestor = $mIndicador->indobsgestor;
-$indavalgestor = $mIndicador->indavalgestor;
+$dados = $mIndicador->RetornaRegistro($_SESSION['indid']);
+$indobsgestor = $dados['indobsgestor'];
+$indavalgestor = $dados['indavalgestor'];
 // monta cabeçalho 
 print '<br/>';
 $db->cria_aba(57105,$url,'');
