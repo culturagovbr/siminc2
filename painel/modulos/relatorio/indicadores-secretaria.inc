@@ -178,8 +178,17 @@
             </thead>
             <?php if($listaIndicadores): ?>
                 <tbody>
-                    <?php foreach($listaIndicadores as $indicadores): ?>
-                        <tr>
+                    <?php foreach($listaIndicadores as $indicadores):?>
+                        <?php
+                        if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado']){
+                            $bgColor = 'red';
+                        }else if (($indicadores['meta']-($indicadores['meta']*0.15))>=$indicadores['realizado']){
+                            $bgColor = 'blue';
+                        }else{
+                            $bgColor = 'green';                     
+                        }
+                        ?>   
+                        <tr bgcolor='<?=$bgColor;?>'>
                             <td>
                                 <?=$indicadores['nome']; ?>
                             </td>
@@ -195,14 +204,14 @@
                             <td>
                                 <?=$indicadores['meta']; ?>
                             </td>
-                            <td>
+                            <td style='color: <?= $bgColor;?>'>
                                 <?=$indicadores['realizado']; ?>
                             </td>
                             <td>
                                 <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                 <br/>
                                 <div class="progress" style="height: 2px;">
-                                    <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" background-color: <?= $bgColor;?>; aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </td>
                         </tr>
@@ -241,6 +250,15 @@
                 <?php if($listaIndicadores): ?>
                     <tbody>
                         <?php foreach($listaIndicadores as $indicadores): ?>
+                            <?php
+                            if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado']){
+                                $bgColor = 'red';
+                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>=$indicadores['realizado']){
+                                $bgColor = 'blue';
+                            }else{
+                                $bgColor = 'green';                     
+                            }
+                            ?>                        
                             <tr>
                                 <td>
                                     <?=$indicadores['nome']; ?>
@@ -257,14 +275,14 @@
                                 <td>
                                     <?=$indicadores['meta']; ?>
                                 </td>
-                                <td>
+                                <td style='color: <?= $bgColor;?>'>
                                     <?=$indicadores['realizado']; ?>
                                 </td>
                                 <td>
                                     <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                     <br/>
                                     <div class="progress" style="height: 2px;">
-                                        <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%; background-color: <?= $bgColor;?>; aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </td>
                             </tr>
