@@ -102,6 +102,8 @@ class Painel_Model_Indicador extends Modelo
         'indshformula' => null,
         'formulash' => null,
         'indencerrado' => null,
+        'indavalgestor' => null,
+        'indobsgestor' => null,
     );
 
     public function RetornaPerfil(){

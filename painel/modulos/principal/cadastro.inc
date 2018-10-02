@@ -849,7 +849,7 @@ $indescala != "t" ? $checkNaoEsc = "checked=checked" : $checkSimEsc = "checked=c
 </tr>
 
 <script>
-validaUnidadeMedicao('<? echo $unmid; ?>');
+validaUnidadeMedicao('<?php echo $unmid; ?>');
 </script>
 	<?php
 //Testa se é Super Usuário ou Gestor PDE ou Equipe de apoio ao Gestor PDE
@@ -926,7 +926,7 @@ if (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod))
 		<input type="radio" value="true"  name="indencerrado" id="indencerrado1" <?= ($indencerrado == 't') ? 'checked="checked"' : '' ?>/>Sim
 	</td>
 </tr>
-<? 
+<?php 
 }
 else 
 {
@@ -1074,7 +1074,7 @@ else
 		";
 	?>
     <td width="25%" align='right' class="SubTituloDireita">Periodicidade do Indicador:</td>
-    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<? echo $perid; ?>"></td>
+    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<?php echo $perid; ?>"></td>
 </tr>
 <tr>
 	<?php 
@@ -1103,7 +1103,7 @@ else
 		";
 	?>
     <td align='right' class="SubTituloDireita">Regionalização:</td>
-    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<? echo $regid; ?>"></td>
+    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<?php echo $regid; ?>"></td>
 </tr>
 <tr style="display: none" >
 	<td align='right' class="SubTituloDireita">Objetivo Estratégico:</td>
@@ -1161,50 +1161,6 @@ else
 </table>
 
 
-<table style="border-top:0px;border-top:0px;border-bottom:0px"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
-    <input type="hidden" name="indavalgestor" id="indavalgestor" value="<?=$value;?>">
-    <?php
-    if (in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){            
-    ?>    
-    <tr>
-        <td class="SubTituloEsquerda" colspan="2">Observações sobre o indicador</td>
-    </tr>
-    <tr>
-        <td align="right" width="25%" class="SubTituloDireita">Avaliação do Gestor:</td>
-        <?php
-        $classUp='fa-thumbs-o-up';
-        $classDown='fa-thumbs-o-down';        
-        $value = "";
-        if ($indavalgestor=='S'){
-            $classUp='fa-thumbs-up';
-            $classDown='fa-thumbs-o-down';
-            $value = "S";
-        }else if ($indavalgestor=='N'){
-            $classUp='fa-thumbs-o-up';
-            $classDown='fa-thumbs-down';
-            $value = "N";
-        }
-        ?>
-        <td>
-            <a href="javascript:alteraClasseThumbs('S');"><i style="font-size:2.5em" id="indthumbsup" class="fa <?php echo $classUp;?>"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:alteraClasseThumbs('N');"><i style="font-size:2.5em" id="indthumbsdown" class="fa <?php echo $classDown;?>"></i></a>
-        </td>
-    </tr>
-    <?php
-    }
-    ?>
-    <tr>
-        <?php
-        $acessoGestor='S';
-        if (!in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
-            $acessoGestor='N';
-        }
-        ?>
-        <td align="right" width="25%" class="SubTituloDireita">Observação do Gestor:</td>
-        <td><?=campo_textarea( 'indobsgestor', 'N', $acessoGestor, '', 98, 5, 125 );?></td>
-    </tr>    
-</table>
-
-
 <table style="display:none" style="border-top:0px;border-bottom:0px;"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
 <tr>
 	<td colspan="3" style="text-align: left;font-weight: bold;" bgcolor="#DCDCDC" >Informe as faixas para os níveis de medição abaixo:</td>
@@ -1238,47 +1194,22 @@ else
 </tr>
 </table>
 	<table style="border-top:0px;" class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
-	<tr bgcolor="#cccccc">
-		      <td style="text-align: center" >
-		      	<? if(!$acesso){ ?>
-		      		<input type="button" disabled="disabled" class="botao" name="btassociar" value="Gravar">
-				<? }else{ ?>
-					<input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter('I', '<?=$indid?>');">
-		  	  		<input type="button" class="botao" name="btassociar" value="Novo Indicador" onclick="novo();">	  	  
-		  	  		<input type="button" class="botao" name="btassociar" value="Limpar" onclick="limpar();">	  	  	
+            <tr bgcolor="#cccccc">
+                <td style="text-align: center" > 
+                    <?php if(!$acesso){ ?>
+                        <input type="button" disabled="disabled" class="botao" name="btassociar" value="Gravar">
+                    <?php }else{ ?>
+                        <input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter('I', '<?=$indid?>');">
+                        <input type="button" class="botao" name="btassociar" value="Novo Indicador" onclick="novo();">	  	  
+                        <input type="button" class="botao" name="btassociar" value="Limpar" onclick="limpar();">	  	  	
 
-				<? } ?>		      
-		  	  </td>
-		  	  
-		      </tr>
+                    <?php } ?>		      
+                </td>	  	  
+            </tr>
 	</table>
 </form>
 <script type="text/javascript" src="/includes/prototype.js"></script>	
 <script type="text/javascript">
-function alteraClasseThumbs(value){
-    if (document.getElementById('indavalgestor').value==value){
-        document.getElementById('indthumbsup').classList.add('fa-thumbs-o-up');
-        document.getElementById('indthumbsup').classList.remove('fa-thumbs-up');
-        document.getElementById('indthumbsdown').classList.add('fa-thumbs-o-down');        
-        document.getElementById('indthumbsdown').classList.remove('fa-thumbs-down');
-        document.getElementById('indavalgestor').value = '';
-    }else{
-        document.getElementById('indavalgestor').value = value;
-        if (value=='S'){
-            document.getElementById('indthumbsup').classList.remove("fa-thumbs-o-up");
-            document.getElementById('indthumbsup').classList.add('fa-thumbs-up');
-            document.getElementById('indthumbsdown').classList.remove('fa-thumbs-down');
-            document.getElementById('indthumbsdown').classList.add('fa-thumbs-o-down');        
-        }else{
-            document.getElementById('indthumbsup').classList.remove('fa-thumbs-up');
-            document.getElementById('indthumbsup').classList.add('fa-thumbs-o-up');
-            document.getElementById('indthumbsdown').classList.remove('fa-thumbs-o-down');
-            document.getElementById('indthumbsdown').classList.add('fa-thumbs-down');                
-        }
-    }
-    
-}                        
-
 function verificaSH(){   
     if (document.formulario.perid.value!==document.formulario.perid_conf.value){
         alert('Se alterar a periodicidade a série histórica será apagada!'); 
