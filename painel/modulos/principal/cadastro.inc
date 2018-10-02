@@ -1,5 +1,6 @@
 <?php
-
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
 if ($_REQUEST['requisicao']) {
 	$_REQUEST['requisicao']();
 }
@@ -1161,6 +1162,10 @@ else
 
 
 <table style="border-top:0px;border-top:0px;border-bottom:0px"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
+    <input type="hidden" name="indavalgestor" id="indavalgestor" value="<?=$value;?>">
+    <?php
+    if (in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){            
+    ?>    
     <tr>
         <td class="SubTituloEsquerda" colspan="2">Observações sobre o indicador</td>
     </tr>
@@ -1180,20 +1185,22 @@ else
             $value = "N";
         }
         ?>
-        <td><input type="hidden" name="indavalgestor" id="indavalgestor" value="<?=$value;?>">
-            <a href="javascript:alteraClasseThumbs('S');"><i style="font-size:2.5em" id="indthumbsup" class="fa <?php echo $classUp;?>"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:alteraClasseThumbs('N');"><i style="font-size:2.5em" id="indthumbsdown" class="fa <?php echo $classDown;?>"></i></a></td>
+        <td>
+            <a href="javascript:alteraClasseThumbs('S');"><i style="font-size:2.5em" id="indthumbsup" class="fa <?php echo $classUp;?>"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:alteraClasseThumbs('N');"><i style="font-size:2.5em" id="indthumbsdown" class="fa <?php echo $classDown;?>"></i></a>
+        </td>
     </tr>
+    <?php
+    }
+    ?>
     <tr>
         <?php
-        $mIndicador = new Painel_Model_Indicador();
-        $listaPerfis = $mIndicador->RetornaPerfil();
         $acessoGestor='S';
-        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+        if (!in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
             $acessoGestor='N';
         }
         ?>
         <td align="right" width="25%" class="SubTituloDireita">Observação do Gestor:</td>
-        <td><?=campo_textarea( 'indobsgestor', 'N', (($acessoGestor)?'S':'N'), '', 98, 5, 125 );?></td>
+        <td><?=campo_textarea( 'indobsgestor', 'N', $acessoGestor, '', 98, 5, 125 );?></td>
     </tr>    
 </table>
 
