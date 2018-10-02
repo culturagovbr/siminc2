@@ -104,7 +104,7 @@ function buscaAcoesAtribuido($usucpf, $pflcod){
     $db = new cls_banco();
 
     $sql = "
-        SELECT DISTINCT
+        SELECT 
             sec.secid AS codigo,
             sec.secdsc AS descricao
         FROM painel.usuarioresponsabilidade ur
@@ -114,7 +114,7 @@ function buscaAcoesAtribuido($usucpf, $pflcod){
             AND ur.usucpf = '$usucpf'
             AND ur.pflcod = $pflcod
         ORDER BY
-            sec.secordem ASC
+            (select secordem from painel.secretaria where secid = sec.secid) ASC
     ";
 
     $RS = @$db->carregar($sql);
