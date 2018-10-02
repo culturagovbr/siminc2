@@ -129,7 +129,7 @@ else {
                                     AND ur.usucpf = '%s'
                                     AND ur.pflcod = '%s'
                                 ORDER BY
-                                    (select secordem from painel.secretaria where secid = sec.secid) ASC
+                                    (select secordem from painel.secretaria where secid = s.secid) ASC
                             ";
                             break;
 			default:

@@ -37,11 +37,11 @@ function listaAcoes(){
     // SQL para buscar estados existentes
     $eixosExistentes = $db->carregar("
         SELECT
-            secid,
-            secdsc
-        FROM painel.secretaria
+            s.secid,
+            s.secdsc
+        FROM painel.secretaria s
         ORDER BY
-            secordem ASC
+            (select secordem from painel.secretaria where secid = s.secid) ASC
     ");
     $count = count($eixosExistentes);
 
