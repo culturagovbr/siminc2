@@ -59,7 +59,7 @@ $db->cria_aba(57105,$url,'');
         ?>    
         <input type="hidden" name="indavalgestor" id="indavalgestor" value="<?=$value;?>">
         <?php
-        if (in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){            
+        if (!in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){            
         ?>    
             <tr>
                 <td align="right" width="25%" class="SubTituloDireita">Avaliação do Gestor:</td>
@@ -78,7 +78,7 @@ $db->cria_aba(57105,$url,'');
         <tr>
             <?php
             $acessoGestor='S';
-            if (!in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+            if (in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){
                 $acessoGestor='N';
                 echo "<input type='hidden' name='ind'>";
             }
