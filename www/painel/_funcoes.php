@@ -6856,7 +6856,6 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 		}
 	}
 	/* Fim - Aplicação de índices */
-	
 	switch($tipoGrafico)
 	{
 		/* Início - Gráfico Tipo = Linha */
@@ -6911,8 +6910,8 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 				
 			}
 			/* Fim - Criação do tipo de linha e linha para valor monetário*/
-			
-			/* Início - cria as variáveis usadas no foreach com valor zero*/
+
+                        /* Início - cria as variáveis usadas no foreach com valor zero*/
 			$valorAcumulado = 0;
 			$valorMonetarioAcumulado = 0;
 			$valorIndiceAcumulado = 0;
@@ -7350,7 +7349,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 				
 			}
 			/* Fim - Criação do tipo de linha e linha para valor monetário*/
-			
+
 			/* Início - cria as variáveis usadas no foreach com valor zero*/
 			$valorAcumulado = 0;
 			$valorMonetarioAcumulado = 0;
@@ -7483,18 +7482,19 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 					where
 						dpeid = {$arrparametros['projecao']}";
 			$arrDataProjecao = $db->pegaLinha($sql);
-			
 			foreach($arrValor as $dpeid => $valor){
-				
+//				ver($valor,d);
 				$dtinicio = (int)str_replace("-","",$valor['dpedatainicio']);
 				$dtfim 	  = (int)str_replace("-","",$valor['dpedatafim']);
 				$dtproj   = (int)str_replace("-","",$arrDataProjecao['dpedatainicio']);
 				
 				if( ( ($dtproj >= $dtinicio) && ( $dtproj <= $dtfim) ) || $bool_exibe == true){
 					$bool_exibe = true;
+
 						$sql = "select
 									sum(dmivalor) as valor,
-									sum(coalesce(dmiqtde,1)) as qtde
+									sum(dmiqtde) as qtde,
+                                                                        dmi.dmiobs
 								from
 									painel.detalhemetaindicador dmi
 								inner join
@@ -7512,20 +7512,25 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 								and
 									dpedatafim <= '{$valor['dpedatafim']}'
 								/*and
-									dpe.perid = {$arrparametros['periodicidade']}*/";
+									dpe.perid = {$arrparametros['periodicidade']}*/
+                                                                group by dmi.dmiobs";
+//                                                ver($sql);
 						$arrMetaValor = $db->pegaLinha($sql);
+						
+
 						$qtde = $arrMetaValor['qtde']  ? round((float)$arrMetaValor['qtde'] / $escala ,2)  : "num";
                                                 if ($qtde<1){
                                                     $qtde=0.0000001;
                                                 }
                                                 $arrMetasQtdeIndicador[] = $qtde;
+                                                $arrMetasObsIndicador[]  = $arrMetaValor['dmiobs']  ? $arrMetaValor['dmiobs']: "";
 						$arrMetasvalorIndicador[] = $arrMetaValor['valor'] ? round((float)$arrMetaValor['valor'] / $escala ,2) : "num";
+						
 				}else{
 					$arrMetasQtdeIndicador[] = null;
 					$arrMetasvalorIndicador[] = null;
 				}
 			}
-			
 			if($arrMetasQtdeIndicador){
 				foreach($arrMetasQtdeIndicador as $chave => $qtde){
 					if($qtde != null){
@@ -7542,7 +7547,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 					}
 				}
 			}
-			
+
 			if($arrMetasvalorIndicador){
 				foreach($arrMetasvalorIndicador as $chave => $valor){
 					if($valor != null){
@@ -7607,7 +7612,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 					$arrMetasQtdeIndicador = $arrFinalMetaQtde;
 				}
 			}
-			
+
 			$x = 0;
 			if($arrChavesValor){
 				foreach($arrChavesValor as $key => $qtde){
@@ -7684,7 +7689,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 					}
 				}
 			}
-			
+                        
 			if($arrMetasvalorIndicador){
 				foreach($arrMetasvalorIndicador as $chave => $qtde){
 					if(!$qtde){
@@ -7695,6 +7700,12 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 			
 			?>
 			<script>
+                        var arrObservacoes = new Array();
+                        <?php
+                        for($i=0;$i<count($arrPeriodos);$i++){
+                            echo "arrObservacoes['".$arrPeriodos[$i]."']='".$arrMetasObsIndicador[$i]."';";
+                        }                            
+                        ?>
 			Highcharts.setOptions({
 				lang: {
 					numericSymbols: [' mil',' milhões',' bilhões',' trilhões'],
@@ -7725,14 +7736,22 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 		            tooltip: {
 	                    formatter: function() {
 	                        <?php if($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_PERCENTUAL): ?>
-					   			return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,2,',','.')+'%'
-							<?php elseif($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_RAZAO || $arrDadosIndicador['unmid'] == UNIDADEMEDICAO_NUM_INDICE): ?>
-					   			return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,2,',','.')
-					   		<?php elseif($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_MOEDA): ?>
-					   			return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> R$ '+ Highcharts.numberFormat(this.y,2,',','.')
-					   		<?php else: ?>
-					   			return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,0,',','.')
-					   		<?php endif; ?>
+                                        if (this.series.name=='Previsto'){
+                                            if (arrObservacoes[this.x]!=''){
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/>'+ Highcharts.numberFormat(this.y,2,',','.')+'%<br>Observação: '+arrObservacoes[this.x];
+                                            }else{
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/>'+ Highcharts.numberFormat(this.y,2,',','.')+'%';
+                                            }
+                                        }else{
+                                            return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/>'+ Highcharts.numberFormat(this.y,2,',','.')+'%';
+                                        }
+                                        <?php elseif($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_RAZAO || $arrDadosIndicador['unmid'] == UNIDADEMEDICAO_NUM_INDICE): ?>
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,2,',','.')
+                                        <?php elseif($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_MOEDA): ?>
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> R$ '+ Highcharts.numberFormat(this.y,2,',','.')
+                                        <?php else: ?>
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,0,',','.')
+                                        <?php endif; ?>
 	                    }
 	                },
 		            xAxis: {
