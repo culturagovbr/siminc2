@@ -85,13 +85,13 @@ function exibirGraficoMeta()
 	 	return false;
 	}
 	
-	if(projecao != dpeidinicio){
-		if(testaDataPorDpeid(projecao,dpeidinicio).responseText.search("false") >= 0){
-			erro = 1;
-			alert('A data inicial de meta deve ser menor ou igual a data inicial!');
-			return false;
-		}
-	}
+//	if(projecao != dpeidinicio){
+//		if(testaDataPorDpeid(projecao,dpeidinicio).responseText.search("false") >= 0){
+//			erro = 1;
+//			alert('A data inicial de meta deve ser menor ou igual a data inicial!');
+//			return false;
+//		}
+//	}
 	
 	if(dpeidfim != projecao){
 		if(testaDataPorDpeid(dpeidfim,projecao).responseText.search("false") >= 0){
@@ -299,36 +299,20 @@ function cadastrarNovaMetaMeta()
 						from 
 							painel.detalheperiodicidade dpe
 						where
-							dpe.perid in ( select perid from painel.indicador where indid = $indid)
-						and
-							dpedatainicio >= ( 	select  
-													dpe.dpedatainicio
-												from 
-													painel.seriehistorica seh
-												inner join
-													painel.detalheperiodicidade dpe ON dpe.dpeid = seh.dpeid
-												where
-													indid = $indid
-												and
-													sehstatus <> 'I'
-												order by
-													dpe.dpedatainicio asc
-												limit 1 
-											  )
-						and
-							dpedatafim <=    ( 	select  
-													dpe.dpedatafim
+							/*dpe.perid in ( select perid from painel.indicador where indid = $indid)
+						and*/
+							dpeid in ( 	select  
+													dmi.dpeid
 												from 
 													painel.detalhemetaindicador dmi
-												inner join
-													painel.detalheperiodicidade dpe ON dpe.dpeid = dmi.dpeid
 												inner join
 													painel.metaindicador met ON met.metid = dmi.metid
 												where
 													met.indid = $indid
-												order by
-													dpe.dpedatainicio desc
-												limit 1 
+												and
+													met.metstatus = 'A'
+												and
+													dmi.dmistatus = 'A'
 											  )
 						order by
 							dpe.dpedatainicio asc";

@@ -48,6 +48,9 @@ define("ESD_PI_APROVADO", 1771);
 define("ESD_PI_CANCELADO", 1772);
 
 //Tipo de Documento WORKFLOW PI FNC
+/**
+ * @todo Refatorar trocando o nome de WF_TPDID_FNC_PLANEJAMENTO_PI para WF_TPDID_PLANEJAMENTO_PI_FNC em todos os arquivos do sistema e deletar essa consntante "WF_TPDID_FNC_PLANEJAMENTO_PI"
+ */
 define("WF_TPDID_FNC_PLANEJAMENTO_PI", 266);
 
 define("ESD_FNC_PI_CADASTRAMENTO", 1774);
