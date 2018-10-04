@@ -198,17 +198,16 @@ if($arrDados){
 			}
 		}
 		
-		$dados_array[] = array(	"acao" 			=> 	$dado['acao'],   
-							 	"metdesc" 		=> 	$dado['metdesc'],   
-							 	"indnome" 		=> 	$dado['indnome'],  
-								"secdsc" 		=> 	$dado['secdsc'],
-								"acadsc" 		=> 	$dado['acadsc'],
-							 	"perdsc" 		=> 	$dado['perdsc'],  
-							 	"estrategia" 	=> 	(is_array($arrEstdesc) ? implode(",",$arrEstdesc) : "N/A"),  
-							 	"acoes" 		=> 	(is_array($arrAcadsc) ? implode(",",$arrAcadsc) : "N/A")
-			   		   );
+		$dados_array[] = array(
+            "acao" 		=> 	$dado['acao'],
+            "metdesc" 	=> 	$dado['metdesc'],
+            "indnome" 	=> 	$dado['indnome'],
+            "secdsc" 	=> 	$dado['secdsc'],
+            "acadsc" 	=> 	$dado['acadsc'],
+            "perdsc" 	=> 	$dado['perdsc']
+       );
 	}
 }
-$cabecalho = array("Ações", "Meta", "Indicador", "Secretaria","Ação","Periodicidade da Meta","Estratégias","Ações Estratégicas");
+$cabecalho = array("Ações", "Meta", "Indicador", "Secretaria","Ação","Periodicidade da Meta");
 $db->monta_lista_array($dados_array,$cabecalho,100,5,'N','center',$par2);
 ?>
