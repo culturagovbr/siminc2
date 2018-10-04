@@ -252,19 +252,50 @@ class Emendas_Model_Emenda extends Modelo
         return $dados ? $dados : [];
     }
 
-
     /**
      * Monta consulta pra buscar dados do relat?rio geral
      *
-     * @param integer $exercicio
-     * @param array $listaSubUnidadeUsuario
+     * @param stdClass $dto
      * @return string
      */
-    public function montarSqlRelatorioGeral($exercicio, $listaSubUnidadeUsuario = array()){
-        $where = '';
+    public function montarSqlRelatorioGeral(stdClass $dto){
 
-        # Sub-Unidade Orçamentária ou Sub-Unidade Orçamentária delegada.
-        $where .= $listaSubUnidadeUsuario? "\n AND (suo.suocod::INTEGER IN(". join(',', $listaSubUnidadeUsuario). ") OR suoed.suocod::INTEGER IN(". join(',', $listaSubUnidadeUsuario). ") ) ": NULL;
+        $where = '';
+        $where .= $dto->exercicio? "\n AND eme.prsano = '". (int)$dto->exercicio. "'": NULL;
+        $where .= $dto->listaSubUnidadeUsuario? "\n AND (suo.suocod::INTEGER IN(". join(',', $dto->listaSubUnidadeUsuario). ") OR suoed.suocod::INTEGER IN(". join(',', $dto->listaSubUnidadeUsuario). ") ) ": NULL;
+        $where .= $dto->suoid? "\n AND suo.suoid IN(".join($dto->suoid, ','). ")": NULL;
+        $where .= $dto->suoid_delegada? "\n AND suoed.suoid IN(".join($dto->suoid_delegada, ','). ")": NULL;
+        $where .= $dto->sitid? "\n AND sic.sitid IN(".join($dto->sitid, ','). ")": NULL;
+        $where .= $dto->sitid? "\n AND sic.sitid IN(".join($dto->sitid, ','). ")": NULL;
+        $where .= $dto->esdid? "\n AND doc.esdid IN(".join($dto->esdid, ','). ")": NULL;
+        $where .= $dto->autid? "\n AND eme.autid IN(".join($dto->autid, ','). ")": NULL;
+        $where .= $dto->estuf? "\n AND aut.estuf IN('".join($dto->estuf, "','"). "')": NULL;
+        $where .= $dto->parid? "\n AND aut.parid IN(".join($dto->parid, ','). ")": NULL;
+        $where .= $dto->capid? "\n AND ben.capid IN(".join($dto->capid, ','). ")": NULL;
+        $where .= $dto->mdeid? "\n AND ben.mdeid IN(".join($dto->mdeid, ','). ")": NULL;
+        $where .= $dto->aloid? "\n AND ben.benid IN(
+                SELECT DISTINCT
+                    ba.benid
+                FROM emendas.beneficiarioalteracao ba
+                    LEFT JOIN emendas.alteracaoorcamentaria alo ON ba.aloid = alo.aloid
+                WHERE
+                    alo.alodsc IS NOT NULL
+                    AND alo.aloid IN(". join($dto->aloid, ','). ")
+            )
+        ": NULL;
+        if($dto->benparecertecnico == 't'){
+            $where .= "\n AND ben.benparecertecnico = 1";
+        }
+        if($dto->benparecertecnico == 'f'){
+            $where .= "\n AND ben.benparecertecnico = 2";
+        }
+        if($dto->benparecerjuridico == 't'){
+            $where .= "\n AND ben.benparecerjuridico = 1";
+        }
+        if($dto->benparecerjuridico == 'f'){
+            $where .= "\n AND ben.benparecerjuridico = 2";
+        }
+        $where .= $dto->impid? "\n AND ben.impid IN(".join($dto->impid, ','). ")": NULL;
 
         $sql = "
            SELECT DISTINCT
@@ -274,8 +305,8 @@ class Emendas_Model_Emenda extends Modelo
                 -- AUTOR
                 aut.autcod,
                 aut.autnome,
-                case when aut.autsexo = 'M' then 'Homem' when aut.autsexo = 'F' then 'Mulher' else 'A Identificar' end genero,
-                autip.atpdsc as tipo_parlamentar,
+                CASE WHEN aut.autsexo = 'M' THEN 'Homem' when aut.autsexo = 'F' THEN 'Mulher' ELSE 'A Identificar' end genero,
+                autip.atpdsc AS tipo_parlamentar,
                 aut.estuf,
                 p.parsigla,
                 -- UNIDADE
@@ -285,8 +316,8 @@ class Emendas_Model_Emenda extends Modelo
                 CASE WHEN eme.emeimpositiva = 't' THEN 'Sim' ELSE 'Não' END AS impositiva,
                 eme.emejustificativa,
                 -- DADOS FINANCEIROS
-                coalesce((select sum(coalesce(emed.emdvalor,0)) from emendas.emendadetalhe emed where emed.emeid = eme.emeid and gndcod<=3),0) as custeio,
-                coalesce((select sum(coalesce(emed.emdvalor,0)) from emendas.emendadetalhe emed where emed.emeid = eme.emeid and gndcod>3),0) as capital,
+                COALESCE((SELECT SUM(COALESCE(emed.emdvalor,0)) FROM emendas.emendadetalhe emed WHERE emed.emeid = eme.emeid and gndcod<=3),0) AS custeio,
+                COALESCE((SELECT SUM(COALESCE(emed.emdvalor,0)) FROM emendas.emendadetalhe emed WHERE emed.emeid = eme.emeid and gndcod>3),0) AS capital,
                 -- BENEFICIARIOS
 		ben.benid,
                 suo.suocod AS cod_unidade,
@@ -297,30 +328,30 @@ class Emendas_Model_Emenda extends Modelo
                 pro.pronome,
 		esf.esfdsc AS localizacao,
                 REPLACE(REPLACE(ARRAY(
-			SELECT DISTINCT
-				p.paidescricao
-			FROM emendas.beneficiariolocalizacao bl
-				JOIN territorios.pais p ON bl.paiid = p.paiid
-			WHERE
-				p.paidescricao IS NOT NULL
-				AND bl.benid = ben.benid
+                    SELECT DISTINCT
+                        p.paidescricao
+                    FROM emendas.beneficiariolocalizacao bl
+                        JOIN territorios.pais p ON bl.paiid = p.paiid
+                    WHERE
+                        p.paidescricao IS NOT NULL
+                        AND bl.benid = ben.benid
                 )::TEXT, '{', ''), '}', '') AS lista_pais,
                 REPLACE(REPLACE(ARRAY(
-			SELECT DISTINCT
-				bl.estuf
-			FROM emendas.beneficiariolocalizacao bl
-			WHERE
-				bl.estuf IS NOT NULL
-				AND bl.benid = ben.benid
+                    SELECT DISTINCT
+                        bl.estuf
+                    FROM emendas.beneficiariolocalizacao bl
+                    WHERE
+                        bl.estuf IS NOT NULL
+                        AND bl.benid = ben.benid
                 )::TEXT, '{', ''), '}', '') AS lista_uf,
                 REPLACE(REPLACE(ARRAY(
-			SELECT DISTINCT
-				m.mundescricao || '-' || m.estuf
-			FROM emendas.beneficiariolocalizacao bl
-				JOIN territorios.municipio m ON bl.muncod = m.muncod
-			WHERE
-				m.mundescricao IS NOT NULL
-				AND bl.benid = ben.benid
+                    SELECT DISTINCT
+                        m.mundescricao || '-' || m.estuf
+                    FROM emendas.beneficiariolocalizacao bl
+                        JOIN territorios.municipio m ON bl.muncod = m.muncod
+                    WHERE
+                        m.mundescricao IS NOT NULL
+                        AND bl.benid = ben.benid
                 )::TEXT, '{', ''), '}', '') AS lista_municipio,
 		ben.bennumeroprocesso AS processo,
 		TO_CHAR(ben.beninicio,'dd/mm/YYYY') AS vigencia,
@@ -329,59 +360,108 @@ class Emendas_Model_Emenda extends Modelo
                 mde.mdedsc,
 		nee.needsc,
                 REPLACE(REPLACE(REPLACE(ARRAY(
-			SELECT DISTINCT
-				alo.alodsc
-			FROM emendas.beneficiarioalteracao ba
-				LEFT JOIN emendas.alteracaoorcamentaria alo ON ba.aloid = alo.aloid
-			WHERE
-				alo.alodsc IS NOT NULL
-				AND ba.benid = ben.benid
+                    SELECT DISTINCT
+                        alo.alodsc
+                    FROM emendas.beneficiarioalteracao ba
+                        LEFT JOIN emendas.alteracaoorcamentaria alo ON ba.aloid = alo.aloid
+                    WHERE
+                        alo.alodsc IS NOT NULL
+                        AND ba.benid = ben.benid
                 )::TEXT, '{', ''), '}', ''), '\"', '') AS lista_alteracoes,
 		CASE WHEN ben.benparecertecnico = 0 THEN 'Não' WHEN ben.benparecertecnico = 1 THEN 'Sim' WHEN ben.benparecertecnico = 2 THEN 'Não se aplica' END AS parecer_tecnico,
 		CASE WHEN ben.benparecerjuridico = 0 THEN 'Não' WHEN ben.benparecerjuridico = 1 THEN 'Sim' WHEN ben.benparecerjuridico = 2 THEN 'Não se aplica' END AS parecer_juridico,
 		CASE WHEN ben.benimpedimento IS NULL THEN 'Não' WHEN ben.benimpedimento = 0 THEN 'Não' WHEN ben.benimpedimento = 1 THEN 'Sim' WHEN ben.benimpedimento = 2 THEN 'Não se aplica' END AS empedimento,
-                CASE WHEN ben.benimpedimento = 1 THEN imp.impdsc END as motivo,
-                CASE WHEN ben.benimpedimento = 1 THEN benmotivoimpedimento END as justificativa,
+                CASE WHEN ben.benimpedimento = 1 THEN imp.impdsc END AS motivo,
+                CASE WHEN ben.benimpedimento = 1 THEN benmotivoimpedimento END AS justificativa,
                 
-        -- DADOS FINANCEIROS DO BENFICIÁRIO
-		coalesce((select sum(coalesce(case when eme.gndcod<=3 then bed.bedvalor else 0 end,0)) as bedvalor
-			  from emendas.beneficiariodetalhe bed
-			  left join emendas.emendadetalhe eme
-			    on bed.emdid = eme.emdid
-			 where bed.benid = ben.benid
-			   AND bed.bedstatus = 'A'),0) as bedvalorcusteio,
-		coalesce((select sum(coalesce(case when eme.gndcod>3 then bed.bedvalor else 0 end,0)) as bedvalor
-			  from emendas.beneficiariodetalhe bed
-			  left join emendas.emendadetalhe eme
-			    on bed.emdid = eme.emdid
-			 where bed.benid = ben.benid
-			   AND bed.bedstatus = 'A'),0) as bedvalorcapital,                           
-                (select sum(coalesce(case when eme.gndcod<=3 then bed.bedvalorpriorizado else 0 end,0))
-			  from emendas.beneficiariodetalhe bed
-			  left join emendas.emendadetalhe eme
-			    on bed.emdid = eme.emdid
-			 where bed.benid = ben.benid
-			   AND bed.bedstatus = 'A') as bedvalorpriorizadocusteio,
-                (select sum(coalesce(case when eme.gndcod>3 then bed.bedvalorpriorizado else 0 end,0))
-			  from emendas.beneficiariodetalhe bed
-			  left join emendas.emendadetalhe eme
-			    on bed.emdid = eme.emdid
-			 where bed.benid = ben.benid
-			   AND bed.bedstatus = 'A') as bedvalorpriorizadocapital,	
-		coalesce((select sum(case when eme.gndcod<=3 then coalesce(bed.bedvalor,0) - coalesce(bed.bedvalorpriorizado,0) else 0 end)
-			  from emendas.beneficiariodetalhe bed
-			  left join emendas.emendadetalhe eme
-			    on bed.emdid = eme.emdid
-			 where bed.benid = ben.benid
-			   AND bed.bedstatus = 'A'),0) as contigenciadocusteio,        	
-		coalesce((select sum(case when eme.gndcod>3 then coalesce(bed.bedvalor,0) - coalesce(bed.bedvalorpriorizado,0) else 0 end)
-			  from emendas.beneficiariodetalhe bed
-			  left join emendas.emendadetalhe eme
-			    on bed.emdid = eme.emdid
-			 where bed.benid = ben.benid
-			   AND bed.bedstatus = 'A'),0) as contigenciadocapital,
+                -- DADOS FINANCEIROS DO BENFICIÁRIO
+		COALESCE((
+                    SELECT
+                        SUM(COALESCE(
+                            CASE WHEN eme.gndcod <= 3 THEN
+                                bed.bedvalor
+                            ELSE
+                                0
+                            END, 0)) AS bedvalor
+                    FROM emendas.beneficiariodetalhe bed
+                        LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
+                    WHERE
+                        bed.benid = ben.benid
+                        AND bed.bedstatus = 'A'
+                ), 0) AS bedvalorcusteio,
+		COALESCE((
+                    SELECT
+                        SUM(COALESCE(
+                            CASE WHEN eme.gndcod > 3 THEN
+                                bed.bedvalor
+                            ELSE
+                                0
+                            END, 0)) AS bedvalor
+                    FROM emendas.beneficiariodetalhe bed
+                        LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
+                    WHERE
+                        bed.benid = ben.benid
+                        AND bed.bedstatus = 'A'
+                ), 0) AS bedvalorcapital,
+                (
+                    SELECT
+                        SUM(COALESCE(
+                            CASE WHEN eme.gndcod <= 3 THEN
+                                bed.bedvalorpriorizado
+                            ELSE
+                                0
+                            END, 0))
+                    FROM emendas.beneficiariodetalhe bed
+                        LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
+                    WHERE
+                        bed.benid = ben.benid
+                        AND bed.bedstatus = 'A'
+                ) AS bedvalorpriorizadocusteio,
+                (
+                    SELECT
+                        SUM(COALESCE(CASE WHEN eme.gndcod > 3 THEN
+                            bed.bedvalorpriorizado
+                        ELSE
+                            0
+                        END, 0))
+                    FROM emendas.beneficiariodetalhe bed
+                        LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
+                    WHERE
+                        bed.benid = ben.benid
+                        AND bed.bedstatus = 'A'
+                ) AS bedvalorpriorizadocapital,
+		COALESCE((
+                    SELECT
+                        SUM(CASE WHEN eme.gndcod <= 3 THEN
+                            COALESCE(bed.bedvalor, 0) - COALESCE(bed.bedvalorpriorizado, 0)
+                        ELSE
+                            0
+                        END)
+                    FROM emendas.beneficiariodetalhe bed
+                        LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
+                    WHERE
+                        bed.benid = ben.benid
+                        AND bed.bedstatus = 'A'
+                ), 0) AS contigenciadocusteio,
+		COALESCE((
+                    SELECT
+                        SUM(CASE WHEN eme.gndcod > 3 THEN
+                            COALESCE(bed.bedvalor, 0) - COALESCE(bed.bedvalorpriorizado, 0)
+                        ELSE
+                            0
+                        END)
+                    FROM emendas.beneficiariodetalhe bed
+                        LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
+                    WHERE
+                        bed.benid = ben.benid
+                        AND bed.bedstatus = 'A'
+                ), 0) AS contigenciadocapital,
 		-- DADOS SICONV
-		CASE WHEN prg.prgcodigo IS NOT NULL THEN substr(prg.prgcodigo::TEXT, 1, 6) || ' ' || substr(prg.prgcodigo::TEXT, 6, 4) || ' ' || substr(prg.prgcodigo::TEXT, 10, 4) ELSE NULL END AS numero_programa,
+		CASE WHEN prg.prgcodigo IS NOT NULL THEN
+                    substr(prg.prgcodigo::TEXT, 1, 6) || ' ' || substr(prg.prgcodigo::TEXT, 6, 4) || ' ' || substr(prg.prgcodigo::TEXT, 10, 4)
+                ELSE
+                    NULL
+                END AS numero_programa,
 		prg.prgtitulo AS titulo_programa,
 		ben.benprogramatitulo AS objeto_programa,
 		CASE WHEN bensic.sicsequencial IS NOT NULL THEN bensic.sicsequencial || '/' || bensic.prsano END AS numero_proposta,
@@ -418,9 +498,9 @@ class Emendas_Model_Emenda extends Modelo
 		-- DADOS SICONV
 		LEFT JOIN emendas.siconvbeneficiario sib ON(ben.benid = sib.benid)
 		LEFT JOIN emendas.siconvprograma sip ON(sib.sicid = sip.sicid)
-		LEFT JOIN emendas.programa prg on prg.prgid = sip.prgid
-                LEFT JOIN emendas.siconv bensic on bensic.sicid = sib.sicid
-                LEFT JOIN emendas.siconvsituacao bensit on bensic.sitid = bensit.sitid
+		LEFT JOIN emendas.programa prg ON prg.prgid = sip.prgid
+                LEFT JOIN emendas.siconv bensic ON bensic.sicid = sib.sicid
+                LEFT JOIN emendas.siconvsituacao bensit ON bensic.sitid = bensit.sitid
                 -- SITUAÇÃO
 		LEFT JOIN workflow.documento doc ON ben.docid = doc.docid
 		LEFT JOIN workflow.estadodocumento doce ON doc.esdid = doce.esdid
@@ -429,8 +509,6 @@ class Emendas_Model_Emenda extends Modelo
             WHERE
                 eme.emestatus = 'A'
                 AND ben.benstatus = 'A'
-                AND eme.prsano = '". (int)$exercicio. "'
-            -- Emenda completa
                 $where
             ORDER BY
                 1,
@@ -438,6 +516,102 @@ class Emendas_Model_Emenda extends Modelo
         ";
 //ver($sql, d);
         return $sql;
+    }
+    
+    /**
+     * Monta as Colunas que receberão formatação de moeda para o Relatório de PI e PI-FNC do Módulo Planejamento Orçamentário.
+     * 
+     * @return array
+     */
+    public static function montarColunasRelatorioEmendas()
+    {
+        $colunas = array(
+            array('codigo' => 'emeid',                      'descricao' => 'ID Emenda'),
+            array('codigo' => 'emenumero',                  'descricao' => 'Número'),
+            array('codigo' => 'autcod',                     'descricao' => 'Cod. Autor'),
+            array('codigo' => 'autnome',                    'descricao' => 'Autor'),
+            array('codigo' => 'genero',                     'descricao' => 'Gênero'),
+            array('codigo' => 'tipo_parlamentar',           'descricao' => 'Tipo Parlamentar'),
+            array('codigo' => 'estuf',                      'descricao' => 'UF Parlamentar'),
+            array('codigo' => 'parsigla',                   'descricao' => 'Partido'),
+            array('codigo' => 'unocod',                     'descricao' => 'Cod. Unidade'),
+            array('codigo' => 'unosigla',                   'descricao' => 'Unidade'),
+            array('codigo' => 'funcional',                  'descricao' => 'Funcional'),
+            array('codigo' => 'impositiva',                 'descricao' => 'Impositiva'),
+            array('codigo' => 'emejustificativa',           'descricao' => 'Justificativa'),
+            # DADOS FINANCEIROS
+            array('codigo' => 'custeio',                    'descricao' => 'Valor Custeio'),
+            array('codigo' => 'capital',                    'descricao' => 'Valor Capital'),
+            # BENEFICIARIOS
+            array('codigo' => 'benid',                      'descricao' => 'Id Beneficiario'),
+            array('codigo' => 'cod_unidade',                'descricao' => 'Código Subunidade'),
+            array('codigo' => 'unidade',                    'descricao' => 'Subunidade'),
+            array('codigo' => 'cod_unidade_delegada',       'descricao' => 'Código Subunidade delegada'),
+            array('codigo' => 'unidade_delegada',           'descricao' => 'Subunidade delegada'),
+            array('codigo' => 'procnpj',                    'descricao' => 'CNPJ'),
+            array('codigo' => 'pronome',                    'descricao' => 'Proponente'),
+            array('codigo' => 'localizacao',                'descricao' => 'Localização'),
+            array('codigo' => 'lista_pais',                 'descricao' => 'Países'),
+            array('codigo' => 'lista_uf',                   'descricao' => 'UFs'),
+            array('codigo' => 'lista_municipio',            'descricao' => 'Municipios'),
+            array('codigo' => 'processo',                   'descricao' => 'Número do Processo'),
+            array('codigo' => 'vigencia',                   'descricao' => 'Data de Início da Vigência'),
+            array('codigo' => 'capdsc',                     'descricao' => 'Modalidade de Pactuação'),
+            array('codigo' => 'ted',                        'descricao' => 'TED'),
+            array('codigo' => 'mdedsc',                     'descricao' => 'Área Cultural'),
+            array('codigo' => 'needsc',                     'descricao' => 'Segmento Cultural'),
+            array('codigo' => 'lista_alteracoes',           'descricao' => 'Alterações'),
+            array('codigo' => 'parecer_tecnico',            'descricao' => 'Parecer Técnico'),
+            array('codigo' => 'parecer_juridico',           'descricao' => 'Parecer Jurídico'),
+            array('codigo' => 'empedimento',                'descricao' => 'Impedimento'),
+            array('codigo' => 'motivo',                     'descricao' => 'Motivo'),
+            array('codigo' => 'justificativa',              'descricao' => 'Justivicativa'),
+            # DADOS FINANCEIROS DO BENFICIÁRIO
+            array('codigo' => 'bedvalorcusteio',            'descricao' => 'Vl. Beneficiário Custeio'),
+            array('codigo' => 'bedvalorcapital',            'descricao' => 'Vl. Beneficiário Capital'),
+            array('codigo' => 'bedvalorpriorizadocusteio',  'descricao' => 'Vl. Priorizado Custeio'),
+            array('codigo' => 'bedvalorpriorizadocapital',  'descricao' => 'Vl. Priorizado Capital'),
+            array('codigo' => 'contigenciadocusteio',       'descricao' => 'Vl. Contingenciado Custeio'),
+            array('codigo' => 'contigenciadocapital',       'descricao' => 'Vl. Contingenciado Capital'),
+            # DADOS SICONV
+            array('codigo' => 'numero_programa',            'descricao' => 'Número Programa - SICONV'),
+            array('codigo' => 'titulo_programa',            'descricao' => 'Título Programa - SICONV'),
+            array('codigo' => 'objeto_programa',            'descricao' => 'Objeto Programa'),
+            array('codigo' => 'numero_proposta',            'descricao' => 'Número Proposta - SICONV'),
+            array('codigo' => 'titulo_proposta',            'descricao' => 'Título Proposta - SICONV'),
+            array('codigo' => 'objeto_proposta',            'descricao' => 'Objeto Proposta'),
+            array('codigo' => 'situacao_proposta',          'descricao' => 'Situação Proposta'),
+            # SITUAÇÃO WORKFLOW
+            array('codigo' => 'esddsc',                     'descricao' => 'Situação'),
+            # PLANO INTERNO
+            array('codigo' => 'pliid',                      'descricao' => 'Id PI'),
+            array('codigo' => 'plicod',                     'descricao' => 'Código PI'),
+            array('codigo' => 'empenhado',                  'descricao' => 'Empenhado'),
+            array('codigo' => 'pago',                       'descricao' => 'Pago'));
+
+        return $colunas;
+    }
+    
+    /**
+     * Monta as Colunas que receberão formatação de moeda para o Relatório de PI e PI-FNC do Módulo Planejamento Orçamentário.
+     *
+     * @return array
+     */
+    public static function montarColunasFormatoMoedaRelatorioEmendas()
+    {
+        $colunas = [
+            'custeio',
+            'capital',
+            'bedvalorcusteio',
+            'bedvalorcapital',
+            'bedvalorpriorizadocusteio',
+            'bedvalorpriorizadocapital',
+            'contigenciadocusteio',
+            'contigenciadocapital',
+            'empenhado',
+            'pago'
+        ];
+        return $colunas;
     }
 
     public function importar($files)

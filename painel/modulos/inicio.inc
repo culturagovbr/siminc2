@@ -1,4 +1,4 @@
-<?
+<?php
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
@@ -12,7 +12,7 @@ $sql = "SELECT p.pflcod FROM seguranca.perfil p
 
 $perfilcod = $db->pegaUm($sql);
 
-header('Location: ?modulo=principal/eixostemas&acao=A');
+header('Location: ?modulo=principal/lista&acao=A');
 die;
 
 switch($perfilcod) {
