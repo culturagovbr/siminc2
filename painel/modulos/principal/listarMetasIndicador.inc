@@ -11,7 +11,8 @@ if($_POST['requisicaoAjax']){
 if($_POST['requisicao']){
 	$_POST['requisicao']();
 }
-
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
 // monta cabeçalho 
 include APPRAIZ . 'includes/cabecalho.inc';
 print '<br/>';
@@ -132,10 +133,13 @@ if($_POST['indid']){
 if($_POST['metdesc']){
 	$arrWhere[] = "(removeacento(upper(met.metdesc)) like removeacento(('%".strtoupper($_POST['metdesc'])."%')) or removeacento(upper(ind.indnome)) like removeacento(('%".strtoupper($_POST['metdesc'])."%')) or ind.indid::text like removeacento(('%".strtoupper($_POST['metdesc'])."%')))";
 }
-
-$sql = "select
-			'<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarMeta(\'' || met.metid || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirMeta(\'' || met.metid || '\')\" />' as acao,
-			met.metdesc,
+$sql = "select ";
+                if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                    $sql .= "'<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarMeta(\'' || met.metid || '\')\" /> <img src=\"../imagens/excluir_01.gif\" class=\"link\" onclick=\"excluirMeta(\'' || met.metid || '\')\" />' as acao,    ";
+                }else{
+                    $sql .= "'<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarMeta(\'' || met.metid || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirMeta(\'' || met.metid || '\')\" />' as acao,    ";
+                }
+		$sql .= "met.metdesc,
 			ind.indid || ' - ' || ind.indnome as indnome,
 			(select secdsc from painel.secretaria sec where sec.secid = ind.secid) as secdsc,
 			(select acadsc from painel.acao aca where aca.acaid = ind.acaid) as acadsc,

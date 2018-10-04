@@ -15,5 +15,5 @@ class Painel_Controller_Indicador
             return false;
         }
     } //end salvar()
-    
+
 }

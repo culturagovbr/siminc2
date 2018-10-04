@@ -115,7 +115,7 @@ class Painel_Model_Indicador extends Modelo
         }
         return $retorno;
     }
-    
+
     public function RetornaRegistro($indid){
         $sql = " SELECT * FROM $this->stNomeTabela WHERE {$this->arChavePrimaria[0]} = '$indid'; ";
         return $this->pegaLinha($sql);

@@ -16,6 +16,10 @@ include APPRAIZ . 'includes/cabecalho.inc';
 print '<br/>';
 // atribuindo as permissões
 $permissoes = verificaPerfilPainel();
+		$sql = "SELECT p.pflcod FROM seguranca.perfil p 
+				LEFT JOIN seguranca.perfilusuario pu ON pu.pflcod = p.pflcod 
+				WHERE pu.usucpf = '". $_SESSION['usucpf'] ."' and p.pflstatus = 'A' and p.sisid =  '". $_SESSION['sisid'] ."' 
+				ORDER BY pflnivel ASC LIMIT 1";
 echo montarAbasArray($permissoes['menu'], $_SERVER['REQUEST_URI']);
 
 // titulos da tela
@@ -596,105 +600,57 @@ if(PAINEL_PERFIL_CONSULTA == $arrPerfil[0]){
 </table>
 </form>
 <?php
-$sql = "
-    SELECT
-        '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&indid='||i.indid||'&evento=A\"><img src=\"/imagens/alterar.gif \" border=0 title=\"Visualizar\"></a> '||". $permissoes['condicaolista']. "||'</center>',
-        (
-            SELECT
-                (CASE WHEN count(*)>0 THEN
-                    '<center><a href=\"painel.php?modulo=principal/metaIndicador&acao=A&indid='||i.indid||'\"><img src=\"/imagens/seriehistorica_ativa.gif\" border=\"0\" title=\"Painel do Indicador\"></a></center>'
-                ELSE 
-                    '<center><img src=\"/imagens/seriehistorica_inativa.gif\" title=\"Não possui Série Histórica\"></center>' 
-                END)
-            FROM painel.seriehistorica 
-            WHERE
-                indid = i.indid 
-                AND sehstatus in ('A','H')
-        ) AS serie,
-        i.indid,
-        CASE WHEN indencerrado IS TRUE THEN
-            i.indnome || '<br><font color=red>Encerrado</font>'
-        ELSE
-            i.indnome
-        END AS indnome,
-        CASE WHEN indhomologado = TRUE THEN
-            'Sim'
-        ELSE
-            'Não'
-        END as indhomologado,
-        CASE WHEN indpublicado = TRUE THEN
-            'Sim'
-        ELSE
-            'Não'
-        END AS indpublicado,
-        col.coldsc,
-        reg.regdescricao,
-        CASE WHEN dt1.tdidsc IS NULL THEN
-            ''
-        ELSE
-            'Por ' || dt1.tdidsc
-        END
-        ||
-        CASE WHEN dt2.tdidsc IS NULL THEN
-            ' '
-        ELSE
-            ' / Por ' || dt2.tdidsc
-        END AS tdidsc,
-        s.secdsc,
-        a.acadsc,
-        unm.unmdesc,
-        i.indobjetivo,
-        '<span title=\"'||dtcoleta||'\"></span>' || to_char(dtcoleta, 'DD/MM/YYYY HH24:MI:SS') AS datacoleta
-    FROM painel.indicador i
-        LEFT JOIN painel.detalhetipoindicador dt1 ON(
-            dt1.indid = i.indid
-            AND dt1.tdinumero = 1
-        )
-        LEFT JOIN painel.detalhetipoindicador dt2 ON(
-            dt2.indid = i.indid
-            AND dt2.tdinumero = 2
-        )
-        LEFT JOIN painel.mapa m ON m.mapid = m.mapid
-        LEFT JOIN painel.secretaria s ON i.secid = s.secid
-        LEFT JOIN painel.acao a ON a.acaid = i.acaid
-        LEFT JOIN painel.eixo ex ON ex.exoid = i.exoid
-        LEFT JOIN painel.unidademedicao unm ON unm.unmid = i.unmid
-        LEFT JOIN painel.regionalizacao reg ON reg.regid = i.regid
-        LEFT JOIN painel.agendaindicador agi ON agi.indid = i.indid
-        LEFT JOIN painel.coleta col ON col.colid = i.colid
-        LEFT JOIN (
-            SELECT
-                MAX(sh.sehdtcoleta) AS dtcoleta,
-                sh.indid
-            FROM
-                painel.seriehistorica sh
-            WHERE
-                sh.sehdtcoleta IS NOT NULL
-                AND sh.sehstatus <> 'I'
-            GROUP BY
-                sh.indid
-        ) dt ON dt.indid = i.indid ". ($filtroprocesso? " WHERE ". implode(" AND ", $filtroprocesso): ""). "
-    GROUP BY
-        i.indid,
-        col.coldsc,
-        reg.regdescricao,
-        dt1.tdidsc,
-        dt2.tdidsc,
-        s.secdsc,
-        a.acadsc,
-        unm.unmdesc,
-        dt.dtcoleta
-    ORDER BY
-        (
-            SELECT
-                s1.secordem
-            FROM painel.secretaria s1
-            WHERE
-                s1.secid = i.secid
-                AND s1.secstatus = 'A'
-        )
-";
-//ver($sql, d);
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
+$sql = "SELECT  '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&indid='||i.indid||'&evento=A\"><img src=\"/imagens/alterar.gif \" border=0 title=\"Visualizar\"></a> '||".$permissoes['condicaolista']."||'</center>',
+				(SELECT 
+					(CASE WHEN count(*)>0 THEN 
+						'<center><a href=\"painel.php?modulo=principal/metaIndicador&acao=A&indid='||i.indid||'\"><img src=\"/imagens/seriehistorica_ativa.gif\" border=\"0\" title=\"Painel do Indicador\"></a></center>' 
+					ELSE 
+						'<center><img src=\"/imagens/seriehistorica_inativa.gif\" title=\"Não possui Série Histórica\"></center>' 
+					END)
+				from painel.seriehistorica 
+				where indid = i.indid and sehstatus in ('A','H')) as serie,		
+			    i.indid,
+			    CASE
+			        WHEN indencerrado IS TRUE THEN i.indnome || '<br><font color=red>Encerrado</font>'
+			        ELSE i.indnome
+			    END as indnome,
+			    CASE WHEN indhomologado = TRUE THEN 'Sim' ELSE 'Não' END as indhomologado,
+			    CASE WHEN indpublicado = TRUE THEN 'Sim' ELSE 'Não' END as indpublicado,
+				col.coldsc,
+			    reg.regdescricao,
+			    CASE WHEN dt1.tdidsc IS NULL THEN '' ELSE 'Por '||dt1.tdidsc END || CASE WHEN dt2.tdidsc IS NULL THEN ' ' ELSE ' / Por '||dt2.tdidsc END as tdidsc, 
+			    s.secdsc, 
+			    a.acadsc,
+			    unm.unmdesc, 
+			    i.indobjetivo,
+				'<span title=\"'||dtcoleta||'\"></span>' || to_char(dtcoleta, 'DD/MM/YYYY HH24:MI:SS') as datacoleta
+	    FROM painel.indicador i
+   		LEFT JOIN painel.detalhetipoindicador dt1 ON dt1.indid = i.indid AND dt1.tdinumero = 1
+   		LEFT JOIN painel.detalhetipoindicador dt2 ON dt2.indid = i.indid AND dt2.tdinumero = 2
+	    LEFT JOIN painel.mapa m ON m.mapid = m.mapid";
+        if (in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis) || in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){
+	    $sql .= " LEFT JOIN painel.secretaria s ON i.secid = s.secid ";
+        }else{ 
+            $sql .= " inner join painel.secretaria s on i.secid = s.secid
+                      inner join painel.usuarioresponsabilidade ur on s.secid = ur.secid and ur.usucpf = '".$_SESSION['usucpf']."'";
+        }
+	    $sql .= " LEFT JOIN painel.acao a ON a.acaid = i.acaid 
+	    LEFT JOIN painel.eixo ex ON ex.exoid = i.exoid 
+	    LEFT JOIN painel.unidademedicao unm ON unm.unmid = i.unmid 
+	    LEFT JOIN painel.regionalizacao reg ON reg.regid = i.regid 
+		LEFT JOIN painel.agendaindicador agi ON agi.indid = i.indid
+		LEFT JOIN painel.coleta col ON col.colid = i.colid
+		LEFT JOIN (
+				SELECT
+					MAX(sh.sehdtcoleta) AS dtcoleta, 
+					sh.indid
+				FROM painel.seriehistorica sh
+				WHERE sh.sehdtcoleta is not null and sh.sehstatus <> 'I' GROUP BY sh.indid) dt on dt.indid = i.indid
+	    ".(($filtroprocesso)?"WHERE ".implode(" AND ", $filtroprocesso):"")." 
+            group by i.indid, col.coldsc, reg.regdescricao, dt1.tdidsc, dt2.tdidsc, s.secdsc, a.acadsc, unm.unmdesc, dt.dtcoleta
+	    ORDER BY (select s1.secordem from painel.secretaria s1 where s1.secid = i.secid and s1.secstatus = 'A')";
 $cabecalho = array("&nbsp;Ações&nbsp;&nbsp;&nbsp;&nbsp;", "Metas do Indicador", "Identificador do Indicador", "Nome", "Homologado", "Publicado", "Coleta", "Regionalização", "Detalhe", "Autarquia / Secretaria Executora" , "Ação", "Unidade de Medição", "Objetivo", "Última Atualização");
 
 $db->monta_lista($sql,$cabecalho,100,5,'N','center',$par2);
