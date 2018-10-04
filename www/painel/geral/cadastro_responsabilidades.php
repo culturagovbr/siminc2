@@ -22,7 +22,7 @@ $usucpf = $_REQUEST["usucpf"];
 $pflcod = $_REQUEST["pflcod"];
 
 if(!$pflcod && !$usucpf) {
-	?><font color="red">Requisição inválida</font><?
+	?><font color="red">Requisição inválida</font><?php
 	eixt();
 }
 
@@ -115,6 +115,23 @@ else {
 					WHERE 
 						ur.usucpf = '%s' AND ur.pflcod = '%s' AND ur.rpustatus='A'";
 				break;
+			case "S": // Secretaria
+                            $aca_prg = "Secretarias Associadas";
+                            $sqlRespUsuario = "
+                                SELECT
+                                    s.secid AS codigo,
+                                    s.secdsc AS descricao
+                                FROM painel.secretaria s
+                                    JOIN painel.usuarioresponsabilidade AS ur ON(s.secid = ur.secid)
+                                WHERE
+                                    s.secstatus = 'A'
+                                    AND ur.rpustatus = 'A'
+                                    AND ur.usucpf = '%s'
+                                    AND ur.pflcod = '%s'
+                                ORDER BY
+                                    (select secordem from painel.secretaria where secid = s.secid) ASC
+                            ";
+                            break;
 			default:
 				break;
 		}
@@ -136,15 +153,15 @@ else {
 	  <td valign="top">Código</td>
 	  <td valign="top">Descrição</td>
     </tr>
-		<?
-			foreach ($respUsuario as $ru) {
+		<?php
+                    foreach ($respUsuario as $ru) {
 		?>
 	<tr onmouseover="this.bgColor='#ffffcc';" onmouseout="this.bgColor='F7F7F7';" bgcolor="F7F7F7">
       <td valign="top" width="12" style="padding:2px;"><img src="../imagens/seta_filho.gif" width="12" height="13" alt="" border="0"></td>
 	  <td valign="top" width="90" style="border-top: 1px solid #cccccc; padding:2px; color:#003366;" nowrap><?if ($rp["tprsigla"]=='A'){?><a href="simec_er.php?modulo=principal/acao/cadacao&acao=C&acaid=<?=$ru["acaid"]?>&prgid=<?=$ru["prgid"]?>"><?=$ru["codigo"]?></a><?} else {print $ru["codigo"];}?></td>
 	  <td valign="top" width="290" style="border-top: 1px solid #cccccc; padding:2px; color:#006600;"><?=$ru["descricao"]?></td>
 	</tr>
-		<?
+		<?php
 		}
 		?>
 	<tr>
@@ -153,7 +170,7 @@ else {
 	  </td>
 	</tr>
 </table>
-	<?
+	<?php
 		}
 	}
 	$teste = $db->carregar("SELECT DISTINCT * FROM painel.usuarioresponsabilidade WHERE usucpf = '{$usucpf}' AND pflcod = {$pflcod} AND rpustatus = 'A'");
@@ -163,4 +180,3 @@ else {
 }
 $db->close();
 exit();
-?>

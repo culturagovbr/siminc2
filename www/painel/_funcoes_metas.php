@@ -101,7 +101,15 @@ function salvarMetas()
 	$indid = $_POST['indid'];
 	$metdesc = $_POST['metdesc'];
 	$metcumulativa = $_POST['metcumulativa'];
-
+        
+        $mIndicador = new Painel_Model_Indicador();
+        $listaPerfis = $mIndicador->RetornaPerfil();
+        if ($metid){
+            if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                return array("msg" => "Você não pode alterar os dados!", "erro" => true);
+            }
+        }
+        
 	if(!$perid || !$indid || !$metdesc || !$metcumulativa){
 		return array("msg" => "Favor preencher todos os campos obrigatórios!", "erro" => true);
 	}
@@ -402,7 +410,7 @@ function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$
 	$db->monta_combo('dpeid',$sql,"S",'Selecione o Período','','','','','S','','',$dpeid);
 }
 
-function listarValorMetas($metid)
+function listarValorMetas($metid, $listaPerfis)
 {
 	global $db;
 
@@ -437,12 +445,16 @@ function listarValorMetas($metid)
 	$formatoinput['campovalor']['mascara'] = !$formatoinput['campovalor']['mascara'] ? "###.###.###.###.###,##" : $formatoinput['campovalor']['mascara'];
 
 	if($arrDados['unmid'] != UNIDADEMEDICAO_BOLEANA){
-		$sql = "select
-				CASE WHEN dmi.dmivalor is not null
+		$sql = "select";
+                    if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                        $sql .= "'<img src=\"../imagens/alterar_01.gif\" class=\"link\"/> <img src=\"../imagens/excluir_01.gif\" class=\"link\" />' as acao, ";
+                    }else{
+			$sql .= "	CASE WHEN dmi.dmivalor is not null
 					THEN '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\'".($indqtdevalor == "t" ? ",\'' || trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) || '\'" : "").")\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
 					ELSE '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
-				END as acao,
-				dpe.dpedsc,
+				END as acao, ";                        
+                    }
+                    $sql .= "	dpe.dpedsc,
 				CASE WHEN dmi.dmidatameta IS NOT NULL
 					THEN to_char(dmi.dmidatameta,'DD/MM/YYYY')
 					ELSE 'N/A'
