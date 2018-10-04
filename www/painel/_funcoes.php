@@ -6530,10 +6530,11 @@ function geraGraficoHighCharts($dados)
 				dpe.perid = $perid
 			and
 				dpe.dpestatus = 'A'
+                        and     dpe.dpeid in (select dpeid from painel.seriehistorica where sehstatus <> 'I' and indid = ".$_SESSION['indid'].")
 			order by
 				dpe.dpedatainicio asc";
 	/* Início - SQL para criação dos períodos*/
-	
+//	ver($sql,d);
 	//Array para armazenamento dos periodos
 	$arrPeriodos = $db->carregar($sql);
 	
@@ -6713,7 +6714,11 @@ function geraGraficoHighCharts($dados)
 						//Array para armazenamento dos períodos com chave no periodo
 						$arrPeriodo[ $arrDetPer['dpeid'] ] = $arrDetPer['dpedsc'];
 						//Array para armazenamento dos valores e quantidades para verificação
-						$arrVerificaQtde[] = $dados['dshqtde'];
+                                                if ((int)$dados['dshqtde']==0){
+                                                    $arrVerificaQtde[] = 0.001;
+                                                }else{
+                                                    $arrVerificaQtde[] = $dados['dshqtde'];
+                                                }
 						$arrVerificaValor[] = $dados['dshvalor'];
 					}
 					
@@ -6726,15 +6731,21 @@ function geraGraficoHighCharts($dados)
 				
 				//Se houver quantidade ou valor adicionamos os dados no array que irá compor o gráfico
 				if($arrDados['dshvalor'] || $arrDados['dshqtde']){
-				
+                                        if ((int)$arrDados['dshqtde']==0){
+                                            $qtde = 0.01;
+                                        }else{
+                                            $qtde = $arrDados['dshqtde'];
+                                        }
 					//Array para armazenamento dos valores e quantidades do indicador no período com chave no periodo
-					$arrValor[ $arrDetPer['dpeid'] ] = array( "dpedatainicio" => $arrDetPer['dpedatainicio'], "dpedatafim" => $arrDetPer['dpedatafim'] , "periodo" => $arrDetPer['dpedsc'] , "qtde" => $arrDados['dshqtde'], "valor" => $arrDados['dshvalor'] );
+					$arrValor[ $arrDetPer['dpeid'] ] = array( "dpedatainicio" => $arrDetPer['dpedatainicio'], "dpedatafim" => $arrDetPer['dpedatafim'] , "periodo" => $arrDetPer['dpedsc'] , "qtde" => $qtde, "valor" => $arrDados['dshvalor'] );
 					//Array para armazenamento dos períodos com chave no periodo
 					$arrPeriodo[ $arrDetPer['dpeid'] ] = $arrDetPer['dpedsc'];
 					//Array para armazenamento dos valores e quantidades para verificação
-					$arrVerificaQtde[] = $arrDados['dshqtde'];
+                                        $arrVerificaQtde[] = $qtde;
 					$arrVerificaValor[] = $arrDados['dshvalor'];
+                                        
 				}
+//ver($arrValor);
 			}
 		}
 	}
@@ -7232,42 +7243,19 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 						painel.detalheperiodicidade
 					where
 						perid = {$arrparametros['periodicidade']}
-					and
-						dpedatainicio >= (
-									select 
-										dpedatainicio
-									from
-										painel.detalheperiodicidade
-									where
-										perid = {$arrparametros['periodicidade']}
-									and
-										(
-											select  
-												dpedatainicio
-											from
-												painel.detalheperiodicidade
-											where
-												dpeid = {$arrparametros['dpeid']}
-										) between dpedatainicio and dpedatafim limit 1
-								)
-					and
-						dpedatafim <= (
-								select 
-									dpedatafim
-								from
-									painel.detalheperiodicidade
-								where
-									perid = {$arrparametros['periodicidade']}
-								and
-									(
-										select  
-											dpedatafim
-										from
-											painel.detalheperiodicidade
-										where
-											dpeid = {$arrparametros['dpeid2']}
-									) between dpedatainicio and dpedatafim limit 1
-								)
+					and							dpeid in ( 	select  
+													dmi.dpeid
+												from 
+													painel.detalhemetaindicador dmi
+												inner join
+													painel.metaindicador met ON met.metid = dmi.metid
+												where
+													met.indid = $indid
+												and
+													met.metstatus = 'A'
+												and
+													dmi.dmistatus = 'A'
+											  )
 					order by
 						dpedatainicio";
 			
@@ -7504,13 +7492,9 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 				
 				if( ( ($dtproj >= $dtinicio) && ( $dtproj <= $dtfim) ) || $bool_exibe == true){
 					$bool_exibe = true;
-					if( ($dtproj >= $dtinicio) && ( $dtproj <= $dtfim) ){
-						$arrMetasQtdeIndicador[] = round((float)$valor['qtde'] / $escala ,2);
-						$arrMetasvalorIndicador[] = round((float)$valor['valor'] / $escala ,2);
-					}else{
 						$sql = "select
 									sum(dmivalor) as valor,
-									sum(dmiqtde) as qtde
+									sum(coalesce(dmiqtde,1)) as qtde
 								from
 									painel.detalhemetaindicador dmi
 								inner join
@@ -7530,11 +7514,12 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 								/*and
 									dpe.perid = {$arrparametros['periodicidade']}*/";
 						$arrMetaValor = $db->pegaLinha($sql);
-						
-						$arrMetasQtdeIndicador[]  = $arrMetaValor['qtde']  ? round((float)$arrMetaValor['qtde'] / $escala ,2)  : "num";
+						$qtde = $arrMetaValor['qtde']  ? round((float)$arrMetaValor['qtde'] / $escala ,2)  : "num";
+                                                if ($qtde<1){
+                                                    $qtde=0.0000001;
+                                                }
+                                                $arrMetasQtdeIndicador[] = $qtde;
 						$arrMetasvalorIndicador[] = $arrMetaValor['valor'] ? round((float)$arrMetaValor['valor'] / $escala ,2) : "num";
-						
-					}
 				}else{
 					$arrMetasQtdeIndicador[] = null;
 					$arrMetasvalorIndicador[] = null;
