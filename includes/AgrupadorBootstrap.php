@@ -15,15 +15,15 @@
             <button class="btn btn-primary dim" onClick="moveAllOptions( document.getElementById( '{NOME_ORIGEM}' ), document.getElementById( '{NOME_DESTINO}' ), true, '' );" type="button">
                 <i class="fa fa-angle-double-right"></i>
             </button><br/>
-            <button class="btn btn-primary dim" onClick="moveAllOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, ''); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );" type="button">
+            <button class="btn btn-primary dim" onClick="moveAllOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '');" type="button">
                 <i class="fa fa-angle-double-left"></i>
             </button><br/>
-            <button class="btn btn-primary dim" style="padding: 6px 13.5px" onClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );" type="button">
+            <button class="btn btn-primary dim" style="padding: 6px 13.5px" onClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' );" type="button">
                 <i class="fa fa-angle-left"> </i>
             </button><br/>
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4 " style="margin: 0 0 12px 0">
-            <select class="form-control" style="width:100%; height:250px;" id="{NOME_DESTINO}" name="{NOME_DESTINO}[]" multiple="multiple" size="7" onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'retorna', this ,  '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' ); sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );"></select>
+            <select class="form-control" style="width:100%; height:250px;" id="{NOME_DESTINO}" name="{NOME_DESTINO}[]" multiple="multiple" size="7" onkeydown="return movimentoComtecla{NOME_ORIGEM}(event, 'retorna', this ,  '{NOME_ORIGEM}', '{NOME_DESTINO}');" onDblClick="moveSelectedOptions( document.getElementById( '{NOME_DESTINO}' ), document.getElementById( '{NOME_ORIGEM}' ), true, '' );"></select>
         </div>                
         <div class="col-sm-1 col-md-1 col-lg-1 " style="margin: 0 0 12px 0">
             <button class="btn btn-primary dim" style="padding: 6px 13.5px" onClick="subir( document.getElementById( '{NOME_DESTINO}' ) );" type="button">
@@ -39,9 +39,8 @@
 		limitarQuantidade( document.getElementById( '{NOME_ORIGEM}' ), {QUANTIDADE_ORIGEM} );
 		{POVOAR_ORIGEM}
 		{POVOAR_DESTINO}
-		sortSelect( document.getElementById( '{NOME_ORIGEM}' ) );
+                
 		// TECLAS : 13 - enter  |  38 - para cima   |  40 - para baixo
-		
 		function movimentoComtecla{NOME_ORIGEM}(tecla, tipo, local, campoOrigem, campoDestino){
 		
 			if(window.event){ // Se IE

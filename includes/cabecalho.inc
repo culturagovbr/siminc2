@@ -519,23 +519,26 @@ else
             </div>
             <div style="clear: both;"></div>
        </div>
-			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="notscreen"  style="border-bottom: 1px solid;" >
-				<tr bgcolor="#ffffff">
-					<td><img src="../imagens/brasao.gif" width="50" height="50" border="0"></td>
-					<td height="20" nowrap>
-						<?php echo NOME_SISTEMA; ?><br>
-						<?=NOME_ORGAO_SISTEMA?> / SE - Secretaria Executiva<br>
-					</td>
-					<td height="20" align="right">
-						Impresso por: <strong><?= $_SESSION['usunome']; ?></strong><br>
-						Órgão: <?= $_SESSION['usuorgao']; ?><br>
-						Hora da Impressão: <?= date("d/m/Y - H:i:s") ?>
-					</td>
-				</tr>
-				<tr bgcolor="#ffffff">
-					<td colspan="2">&nbsp;</td>
-				</tr>
-			</table>
+
+        <!--Cabeçalho de impressão-->
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="notscreen"  style="border-bottom: 1px solid;" >
+            <tr bgcolor="#ffffff">
+                <td><img src="../imagens/brasao.gif" width="50" height="50" border="0"></td>
+                <td height="20" nowrap>
+                    <?php echo NOME_SISTEMA; ?><br>
+                    <?= NOME_ORGAO_SISTEMA ?> / SE - Secretaria Executiva<br>
+                </td>
+                <td height="20" align="right">
+                    Impresso por: <strong><?= $_SESSION['usunome']; ?></strong><br>
+                    Hora da Impressão: <?= date("d/m/Y - H:i:s") ?>
+                </td>
+            </tr>
+            <tr bgcolor="#ffffff">
+                <td colspan="2">&nbsp;</td>
+            </tr>
+        </table>
+        <!--Cabeçalho de impressão-->
+
 			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="notprint" style="display: none">
 				<tr>
 					<td valign="bottom">
