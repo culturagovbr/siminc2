@@ -1,18 +1,10 @@
 <?php
 /**
-<<<<<<< HEAD
- * Classe de mapeamento da entidade public.gnd
- *
- * @category Class
- * @package  A1
- * @author   ORION TELES DE MESQUITA <orion.mesquita@cultura.gov.br>
-=======
  * Classe de mapeamento da entidade painel.indicador
  *
  * @category Class
  * @package  A1
  * @author   <>
->>>>>>> master
  * @license  GNU simec.mec.gov.br
  * @version  Release: 20-11-2017
  * @link     no link
