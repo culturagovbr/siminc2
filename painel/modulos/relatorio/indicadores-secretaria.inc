@@ -182,13 +182,13 @@
                         <?php
                         if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado']){
                             $bgColor = 'red';
-                        }else if (($indicadores['meta']-($indicadores['meta']*0.15))>=$indicadores['realizado']){
+                        }else if (($indicadores['meta']-($indicadores['meta']*0.15))<$indicadores['realizado'] || $indicadores['meta']<=$indicadores['realizado']){
                             $bgColor = 'blue';
                         }else{
                             $bgColor = 'green';                     
                         }
                         ?>   
-                        <tr bgcolor='<?=$bgColor;?>'>
+                        <tr>
                             <td>
                                 <?=$indicadores['nome']; ?>
                             </td>
@@ -211,7 +211,7 @@
                                 <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                 <br/>
                                 <div class="progress" style="height: 2px;">
-                                    <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" background-color: <?= $bgColor;?>; aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%; background-color: <?= $bgColor;?>;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </td>
                         </tr>
@@ -253,7 +253,7 @@
                             <?php
                             if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado']){
                                 $bgColor = 'red';
-                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>=$indicadores['realizado']){
+                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado'] || $indicadores['meta']>=$indicadores['realizado']){
                                 $bgColor = 'blue';
                             }else{
                                 $bgColor = 'green';                     
