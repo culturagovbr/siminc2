@@ -1,5 +1,6 @@
 <?php
-
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
 if ($_REQUEST['requisicao']) {
 	$_REQUEST['requisicao']();
 }
@@ -122,6 +123,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid 				= $_REQUEST['mtiid'];
 				$indshformula		= $_REQUEST['indshformula'];
 				$formulash			= $_REQUEST['formulash'];
+				$indavalgestor			= $_REQUEST['indavalgestor'];
+				$indobsgestor			= $_REQUEST['indobsgestor'];
 				if($indpublicado=='true'){
 					$indhomologado = true;
 				}
@@ -164,11 +167,15 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 						  INTO painel.indicador
 							  (unmid, cliid, tpiid, secid, secidgestora,acaid, perid, estid, colid, usucpf, indnome, indobjetivo,
 							  indformula, indtermos, indfontetermo, indnormalinicio, indnormalfinal, indatencaoinicio,
-							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,indhomologado,mtiid,indshformula,formulash,indencerrado)
+							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,
+                                                          indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,
+                                                          indhomologado,mtiid,indshformula,formulash,indencerrado,indavalgestor, indobsgestor)
 						  VALUES 
 						  	   (".$unmid.", ".$cliid.", ".$tpiid.", ".$secid.", ".$secidgestora.", ".$acaid.", ".$perid.", ".$estid.", ".$colid.", '".$usucpf."', '".$indnome."', '".$indobjetivo."',
 							  '".$indformula."', '".$indtermos."', '".$indfontetermo."', ".$indnormalinicio.", ".$indnormalfinal.", ".$indatencaoinicio.",
-							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',$indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado)
+							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',"
+                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado,
+                                                          '$indavalgestor', '$indobsgestor')
 						  RETURNING	indid
 						  ";
 			
@@ -236,7 +243,9 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 					 indencerrado = 		".($indencerrado=='' ? 'indencerrado' : "'".$indencerrado."'").",
 					 mtiid = $mtiid,
 					 indshformula = $indshformula,
-					 formulash = '$formulash'
+					 formulash = '$formulash',
+                                         indavalgestor = '$indavalgestor',
+                                         indobsgestor = '$indobsgestor'
 					WHERE indid = 			".$indid."	
 				";
 				
@@ -294,7 +303,9 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 					indpublico,
 					indhomologado,
 					indencerrado,
-					mtiid		
+					mtiid,
+                                        indavalgestor,
+                                        indobsgestor
 				FROM  painel.indicador i
 				WHERE 
 				i.indid = ".$indid."
@@ -367,6 +378,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid				= $dados['mtiid'];
 				$indshformula		= $dados['indshformula'];
 				$formulash			= $dados['formulash'];
+				$indavalgestor			= $dados['indavalgestor'];
+				$indobsgestor			= $dados['indobsgestor'];
 			}		
 		break;	
 	}
@@ -836,7 +849,7 @@ $indescala != "t" ? $checkNaoEsc = "checked=checked" : $checkSimEsc = "checked=c
 </tr>
 
 <script>
-validaUnidadeMedicao('<? echo $unmid; ?>');
+validaUnidadeMedicao('<?php echo $unmid; ?>');
 </script>
 	<?php
 //Testa se é Super Usuário ou Gestor PDE ou Equipe de apoio ao Gestor PDE
@@ -913,7 +926,7 @@ if (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod))
 		<input type="radio" value="true"  name="indencerrado" id="indencerrado1" <?= ($indencerrado == 't') ? 'checked="checked"' : '' ?>/>Sim
 	</td>
 </tr>
-<? 
+<?php 
 }
 else 
 {
@@ -1061,7 +1074,7 @@ else
 		";
 	?>
     <td width="25%" align='right' class="SubTituloDireita">Periodicidade do Indicador:</td>
-    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<? echo $perid; ?>"></td>
+    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<?php echo $perid; ?>"></td>
 </tr>
 <tr>
 	<?php 
@@ -1090,7 +1103,7 @@ else
 		";
 	?>
     <td align='right' class="SubTituloDireita">Regionalização:</td>
-    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<? echo $regid; ?>"></td>
+    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<?php echo $regid; ?>"></td>
 </tr>
 <tr style="display: none" >
 	<td align='right' class="SubTituloDireita">Objetivo Estratégico:</td>
@@ -1146,6 +1159,8 @@ else
     <td><?=$db->monta_combo('colid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S');?></td>
 </tr>
 </table>
+
+
 <table style="display:none" style="border-top:0px;border-bottom:0px;"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
 <tr>
 	<td colspan="3" style="text-align: left;font-weight: bold;" bgcolor="#DCDCDC" >Informe as faixas para os níveis de medição abaixo:</td>
@@ -1179,19 +1194,18 @@ else
 </tr>
 </table>
 	<table style="border-top:0px;" class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
-	<tr bgcolor="#cccccc">
-		      <td style="text-align: center" >
-		      	<? if(!$acesso){ ?>
-		      		<input type="button" disabled="disabled" class="botao" name="btassociar" value="Gravar">
-				<? }else{ ?>
-					<input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter('I', '<?=$indid?>');">
-		  	  		<input type="button" class="botao" name="btassociar" value="Novo Indicador" onclick="novo();">	  	  
-		  	  		<input type="button" class="botao" name="btassociar" value="Limpar" onclick="limpar();">	  	  	
+            <tr bgcolor="#cccccc">
+                <td style="text-align: center" > 
+                    <?php if(!$acesso){ ?>
+                        <input type="button" disabled="disabled" class="botao" name="btassociar" value="Gravar">
+                    <?php }else{ ?>
+                        <input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter('I', '<?=$indid?>');">
+                        <input type="button" class="botao" name="btassociar" value="Novo Indicador" onclick="novo();">	  	  
+                        <input type="button" class="botao" name="btassociar" value="Limpar" onclick="limpar();">	  	  	
 
-				<? } ?>		      
-		  	  </td>
-		  	  
-		      </tr>
+                    <?php } ?>		      
+                </td>	  	  
+            </tr>
 	</table>
 </form>
 <script type="text/javascript" src="/includes/prototype.js"></script>	
