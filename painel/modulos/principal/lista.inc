@@ -51,30 +51,7 @@ switch($_POST['evento']){
 			$sql_D = "UPDATE painel.indicador SET indstatus = 'I', indpublico = false, indhomologado = false, indencerrado = false where indid = ".$indid;	
 			$db->executar($sql_D);
 			$db->commit();
-			
-			if($_SESSION['baselogin'] == "simec_espelho_producao" || $_SESSION['baselogin'] == "simec_desenvolvimento"){
-				$dbPainelPublico = "dbname=
-									hostaddr=
-									user=
-									password=
-									port=";
-			}else{
-				$dbPainelPublico = "dbname=
-									hostaddr=
-									user=
-									password=
-									port=5432";
-			}
-			//CONECTANDO O DBLINK COM O PAINEL
-			$conexaoAberta = $db->carregar("SELECT dblink_connect('conexao','".$dbPainelPublico."')");
-			$sql_D = "UPDATE painel.indicador SET indstatus = ''I'', indpublico = false, indhomologado = false, indencerrado = false where indid = ".$indid;
-			$sql = "SELECT dblink_exec('conexao','".$sql_D."')";
-			$db->executar($sql);
-			$db->commit();
-			//DESCONECTANDO O DBLINK DO PAINEL
-			$conexaoFechada = $db->carregar("SELECT dblink_disconnect('conexao')");
-			
-			echo "<script>alert('Registro removido com sucesso.');window.location='?modulo=principal/lista&acao=A&1=1';</script>";
+			echo "<script>alert('Registro removido com sucesso.'); window.location='?modulo=principal/lista&acao=A&1=1';</script>";
 		}
 		exit;
 		break;

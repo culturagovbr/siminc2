@@ -23,11 +23,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 
 /**
-<<<<<<< HEAD
- * Public_Model_Gnd
-=======
  * Painel_Model_Indicador
->>>>>>> master
  *
  * @category Class
  * @package  A1
@@ -114,6 +110,8 @@ class Painel_Model_Indicador extends Modelo
         'indshformula' => null,
         'formulash' => null,
         'indencerrado' => null,
+        'indavalgestor' => null,
+        'indobsgestor' => null,
     );
 
     public function RetornaPerfil(){
@@ -126,4 +124,8 @@ class Painel_Model_Indicador extends Modelo
         return $retorno;
     }
 
+    public function RetornaRegistro($indid){
+        $sql = " SELECT * FROM $this->stNomeTabela WHERE {$this->arChavePrimaria[0]} = '$indid'; ";
+        return $this->pegaLinha($sql);
+    }
 }

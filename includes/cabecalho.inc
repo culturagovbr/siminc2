@@ -138,6 +138,10 @@ else
     <script src="../library/jquery/jquery-1.11.1.min.js" type="text/javascript" charset="ISO-8895-1"></script>
     <script src="../library/jquery/jquery-ui-1.10.3/jquery-ui.min.js"></script>
     <script src="../library/chosen-1.0.0/chosen.jquery.js"></script>
+    
+    <!--SWAL-->
+    <script src="/zimec/public/temas/simec/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <link href="/zimec/public/temas/simec/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     <script language="javascript">$1_11 = $.noConflict();</script>
 <?php 	endif  ?>
 <?php endif  ?>
@@ -154,9 +158,10 @@ else
 
         <!-- Bootstrap CSS -->
         <link href="../library/bootstrap-3.0.0/css/bootstrap.min-simec.css" rel="stylesheet" media="screen">
+        <link href="/zimec/public/temas/simec/fonts/awesome/font-awesome.css?v=1.0" rel="stylesheet">
         <script src="../includes/JQuery/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="../library/chosen-1.0.0/chosen.jquery.js" type="text/javascript"></script>
-        <script src="../library/chosen-1.0.0/docsupport/prism.js" type="text/javascript"></script>
+        <script src="../library/chosen-1.0.0/docsupport/prism.js" type="text/javascript"></script>        
         <link href="../library/chosen-1.0.0/chosen.css" rel="stylesheet" media="screen" >
 		<center>
 			<div id="aguarde" style="background-color:#ffffff;position:absolute;color:#000033;top:50%;left:30%;border:2px solid #cccccc; width:300;font-size:12px;z-index:0;">
