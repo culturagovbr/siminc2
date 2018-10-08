@@ -211,12 +211,6 @@ if($permissoes['verindicadores'] == 'vertodos') {
 </tr>
 </table>
 <div id="listaSerieHistorica"></div>
-<table class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3"	align="center">
-	<tr>
-		<td class="SubTituloCentro" >Justificativas</td>
-	</tr>
-</table>
-<?php listaJustificativasPorIndicador($_SESSION['indid']) ?>
 
 <?php
 unset($_POST['requisicao']);
