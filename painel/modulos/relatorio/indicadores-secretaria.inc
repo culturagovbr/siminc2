@@ -178,7 +178,19 @@
             </thead>
             <?php if($listaIndicadores): ?>
                 <tbody>
-                    <?php foreach($listaIndicadores as $indicadores): ?>
+                    <?php foreach($listaIndicadores as $indicadores):?>
+                        <?php
+                            if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado']){
+                                //vermelho
+                                $bgColor = '#E92922';
+                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado'] || $indicadores['meta']>=$indicadores['realizado']){
+                                //azul
+                                $bgColor = '#6572b1f5';
+                            }else{
+                                //verde
+                                $bgColor = '#1db954';                     
+                            }
+                        ?>   
                         <tr>
                             <td>
                                 <?=$indicadores['nome']; ?>
@@ -195,14 +207,14 @@
                             <td>
                                 <?=$indicadores['meta']; ?>
                             </td>
-                            <td>
+                            <td style='color: <?= $bgColor;?>'>
                                 <?=$indicadores['realizado']; ?>
                             </td>
                             <td>
                                 <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                 <br/>
-                                <div class="progress" style="height: 2px;">
-                                    <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%; background-color: <?= $bgColor;?>;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </td>
                         </tr>
@@ -241,6 +253,18 @@
                 <?php if($listaIndicadores): ?>
                     <tbody>
                         <?php foreach($listaIndicadores as $indicadores): ?>
+                            <?php
+                            if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado']){
+                                //vermelho
+                                $bgColor = '#E92922';
+                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado'] || $indicadores['meta']>=$indicadores['realizado']){
+                                //azul
+                                $bgColor = '#6572b1f5';
+                            }else{
+                                //verde
+                                $bgColor = '#1db954';                     
+                            }
+                            ?>                        
                             <tr>
                                 <td>
                                     <?=$indicadores['nome']; ?>
@@ -257,14 +281,14 @@
                                 <td>
                                     <?=$indicadores['meta']; ?>
                                 </td>
-                                <td>
+                                <td style='color: <?= $bgColor;?>'>
                                     <?=$indicadores['realizado']; ?>
                                 </td>
                                 <td>
                                     <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                     <br/>
-                                    <div class="progress" style="height: 2px;">
-                                        <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%; background-color: <?= $bgColor;?>; aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </td>
                             </tr>
