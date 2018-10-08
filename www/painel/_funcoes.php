@@ -1287,11 +1287,11 @@ function verificaPerfilPainel() {
 				$permissoes['menu'][2] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=novoIndicador");
 				//$permissoes['menu'][3] = array("descricao" => "Tabela de Indicadores", "link"=> "/painel/painel.php?modulo=principal/tabela&acao=A");
 				break;
-			case GESTOR_PDE:
+			case PAINEL_PERFIL_GESTOR_INDICADOR:
 				$permissoes['condicaolista']		  = "'<img style=\"cursor: pointer;\" src=\"/imagens/excluir_01.gif \" border=\"0\" title=\"Excluir\">'";
 				$permissoes['verindicadores'] 		  = "vertodos";
 				$permissoes['bloquearseriehistorica'] = true;
-				$permissoes['removerseriehistorica'] = true;
+				$permissoes['removerseriehistorica'] = false;
 				$permissoes['sou_solicitante']        = (($db->pegaUm("SELECT usucpf FROM seguranca.perfilusuario WHERE usucpf='".$_SESSION['usucpf']."' AND pflcod='".PAINEL_PERFIL_SOLICITANTE."'"))?true:false);
 				
 				$permissoes['menu'][0] = array("descricao" => "Lista de Indicadores", "link"=> ($enderecosweb[$_SERVER['REQUEST_URI']])?$_SERVER['REQUEST_URI']:key($enderecosweb));
@@ -6530,10 +6530,11 @@ function geraGraficoHighCharts($dados)
 				dpe.perid = $perid
 			and
 				dpe.dpestatus = 'A'
+                        and     dpe.dpeid in (select dpeid from painel.seriehistorica where sehstatus <> 'I' and indid = ".$_SESSION['indid'].")
 			order by
 				dpe.dpedatainicio asc";
 	/* Início - SQL para criação dos períodos*/
-	
+//	ver($sql,d);
 	//Array para armazenamento dos periodos
 	$arrPeriodos = $db->carregar($sql);
 	
@@ -6713,7 +6714,11 @@ function geraGraficoHighCharts($dados)
 						//Array para armazenamento dos períodos com chave no periodo
 						$arrPeriodo[ $arrDetPer['dpeid'] ] = $arrDetPer['dpedsc'];
 						//Array para armazenamento dos valores e quantidades para verificação
-						$arrVerificaQtde[] = $dados['dshqtde'];
+                                                if ((int)$dados['dshqtde']==0){
+                                                    $arrVerificaQtde[] = 0.001;
+                                                }else{
+                                                    $arrVerificaQtde[] = $dados['dshqtde'];
+                                                }
 						$arrVerificaValor[] = $dados['dshvalor'];
 					}
 					
@@ -6726,15 +6731,21 @@ function geraGraficoHighCharts($dados)
 				
 				//Se houver quantidade ou valor adicionamos os dados no array que irá compor o gráfico
 				if($arrDados['dshvalor'] || $arrDados['dshqtde']){
-				
+                                        if ((int)$arrDados['dshqtde']==0){
+                                            $qtde = 0.01;
+                                        }else{
+                                            $qtde = $arrDados['dshqtde'];
+                                        }
 					//Array para armazenamento dos valores e quantidades do indicador no período com chave no periodo
-					$arrValor[ $arrDetPer['dpeid'] ] = array( "dpedatainicio" => $arrDetPer['dpedatainicio'], "dpedatafim" => $arrDetPer['dpedatafim'] , "periodo" => $arrDetPer['dpedsc'] , "qtde" => $arrDados['dshqtde'], "valor" => $arrDados['dshvalor'] );
+					$arrValor[ $arrDetPer['dpeid'] ] = array( "dpedatainicio" => $arrDetPer['dpedatainicio'], "dpedatafim" => $arrDetPer['dpedatafim'] , "periodo" => $arrDetPer['dpedsc'] , "qtde" => $qtde, "valor" => $arrDados['dshvalor'] );
 					//Array para armazenamento dos períodos com chave no periodo
 					$arrPeriodo[ $arrDetPer['dpeid'] ] = $arrDetPer['dpedsc'];
 					//Array para armazenamento dos valores e quantidades para verificação
-					$arrVerificaQtde[] = $arrDados['dshqtde'];
+                                        $arrVerificaQtde[] = $qtde;
 					$arrVerificaValor[] = $arrDados['dshvalor'];
+                                        
 				}
+//ver($arrValor);
 			}
 		}
 	}
@@ -6845,7 +6856,6 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 		}
 	}
 	/* Fim - Aplicação de índices */
-	
 	switch($tipoGrafico)
 	{
 		/* Início - Gráfico Tipo = Linha */
@@ -6900,8 +6910,8 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 				
 			}
 			/* Fim - Criação do tipo de linha e linha para valor monetário*/
-			
-			/* Início - cria as variáveis usadas no foreach com valor zero*/
+
+                        /* Início - cria as variáveis usadas no foreach com valor zero*/
 			$valorAcumulado = 0;
 			$valorMonetarioAcumulado = 0;
 			$valorIndiceAcumulado = 0;
@@ -7232,42 +7242,19 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 						painel.detalheperiodicidade
 					where
 						perid = {$arrparametros['periodicidade']}
-					and
-						dpedatainicio >= (
-									select 
-										dpedatainicio
-									from
-										painel.detalheperiodicidade
-									where
-										perid = {$arrparametros['periodicidade']}
-									and
-										(
-											select  
-												dpedatainicio
-											from
-												painel.detalheperiodicidade
-											where
-												dpeid = {$arrparametros['dpeid']}
-										) between dpedatainicio and dpedatafim limit 1
-								)
-					and
-						dpedatafim <= (
-								select 
-									dpedatafim
-								from
-									painel.detalheperiodicidade
-								where
-									perid = {$arrparametros['periodicidade']}
-								and
-									(
-										select  
-											dpedatafim
-										from
-											painel.detalheperiodicidade
-										where
-											dpeid = {$arrparametros['dpeid2']}
-									) between dpedatainicio and dpedatafim limit 1
-								)
+					and							dpeid in ( 	select  
+													dmi.dpeid
+												from 
+													painel.detalhemetaindicador dmi
+												inner join
+													painel.metaindicador met ON met.metid = dmi.metid
+												where
+													met.indid = $indid
+												and
+													met.metstatus = 'A'
+												and
+													dmi.dmistatus = 'A'
+											  )
 					order by
 						dpedatainicio";
 			
@@ -7362,7 +7349,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 				
 			}
 			/* Fim - Criação do tipo de linha e linha para valor monetário*/
-			
+
 			/* Início - cria as variáveis usadas no foreach com valor zero*/
 			$valorAcumulado = 0;
 			$valorMonetarioAcumulado = 0;
@@ -7495,22 +7482,19 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 					where
 						dpeid = {$arrparametros['projecao']}";
 			$arrDataProjecao = $db->pegaLinha($sql);
-			
 			foreach($arrValor as $dpeid => $valor){
-				
+//				ver($valor,d);
 				$dtinicio = (int)str_replace("-","",$valor['dpedatainicio']);
 				$dtfim 	  = (int)str_replace("-","",$valor['dpedatafim']);
 				$dtproj   = (int)str_replace("-","",$arrDataProjecao['dpedatainicio']);
 				
 				if( ( ($dtproj >= $dtinicio) && ( $dtproj <= $dtfim) ) || $bool_exibe == true){
 					$bool_exibe = true;
-					if( ($dtproj >= $dtinicio) && ( $dtproj <= $dtfim) ){
-						$arrMetasQtdeIndicador[] = round((float)$valor['qtde'] / $escala ,2);
-						$arrMetasvalorIndicador[] = round((float)$valor['valor'] / $escala ,2);
-					}else{
+
 						$sql = "select
 									sum(dmivalor) as valor,
-									sum(dmiqtde) as qtde
+									sum(dmiqtde) as qtde,
+                                                                        dmi.dmiobs
 								from
 									painel.detalhemetaindicador dmi
 								inner join
@@ -7528,19 +7512,25 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 								and
 									dpedatafim <= '{$valor['dpedatafim']}'
 								/*and
-									dpe.perid = {$arrparametros['periodicidade']}*/";
+									dpe.perid = {$arrparametros['periodicidade']}*/
+                                                                group by dmi.dmiobs";
+//                                                ver($sql);
 						$arrMetaValor = $db->pegaLinha($sql);
 						
-						$arrMetasQtdeIndicador[]  = $arrMetaValor['qtde']  ? round((float)$arrMetaValor['qtde'] / $escala ,2)  : "num";
+
+						$qtde = $arrMetaValor['qtde']  ? round((float)$arrMetaValor['qtde'] / $escala ,2)  : "num";
+                                                if ($qtde<1){
+                                                    $qtde=0.0000001;
+                                                }
+                                                $arrMetasQtdeIndicador[] = $qtde;
+                                                $arrMetasObsIndicador[]  = $arrMetaValor['dmiobs']  ? $arrMetaValor['dmiobs']: "";
 						$arrMetasvalorIndicador[] = $arrMetaValor['valor'] ? round((float)$arrMetaValor['valor'] / $escala ,2) : "num";
 						
-					}
 				}else{
 					$arrMetasQtdeIndicador[] = null;
 					$arrMetasvalorIndicador[] = null;
 				}
 			}
-			
 			if($arrMetasQtdeIndicador){
 				foreach($arrMetasQtdeIndicador as $chave => $qtde){
 					if($qtde != null){
@@ -7557,7 +7547,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 					}
 				}
 			}
-			
+
 			if($arrMetasvalorIndicador){
 				foreach($arrMetasvalorIndicador as $chave => $valor){
 					if($valor != null){
@@ -7622,7 +7612,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 					$arrMetasQtdeIndicador = $arrFinalMetaQtde;
 				}
 			}
-			
+
 			$x = 0;
 			if($arrChavesValor){
 				foreach($arrChavesValor as $key => $qtde){
@@ -7699,7 +7689,7 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 					}
 				}
 			}
-			
+                        
 			if($arrMetasvalorIndicador){
 				foreach($arrMetasvalorIndicador as $chave => $qtde){
 					if(!$qtde){
@@ -7710,6 +7700,12 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 			
 			?>
 			<script>
+                        var arrObservacoes = new Array();
+                        <?php
+                        for($i=0;$i<count($arrPeriodos);$i++){
+                            echo "arrObservacoes['".$arrPeriodos[$i]."']='".$arrMetasObsIndicador[$i]."';";
+                        }                            
+                        ?>
 			Highcharts.setOptions({
 				lang: {
 					numericSymbols: [' mil',' milhões',' bilhões',' trilhões'],
@@ -7740,14 +7736,22 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
 		            tooltip: {
 	                    formatter: function() {
 	                        <?php if($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_PERCENTUAL): ?>
-					   			return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,2,',','.')+'%'
-							<?php elseif($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_RAZAO || $arrDadosIndicador['unmid'] == UNIDADEMEDICAO_NUM_INDICE): ?>
-					   			return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,2,',','.')
-					   		<?php elseif($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_MOEDA): ?>
-					   			return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> R$ '+ Highcharts.numberFormat(this.y,2,',','.')
-					   		<?php else: ?>
-					   			return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,0,',','.')
-					   		<?php endif; ?>
+                                        if (this.series.name=='Previsto'){
+                                            if (arrObservacoes[this.x]!=''){
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/>'+ Highcharts.numberFormat(this.y,2,',','.')+'%<br>Observação: '+arrObservacoes[this.x];
+                                            }else{
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/>'+ Highcharts.numberFormat(this.y,2,',','.')+'%';
+                                            }
+                                        }else{
+                                            return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/>'+ Highcharts.numberFormat(this.y,2,',','.')+'%';
+                                        }
+                                        <?php elseif($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_RAZAO || $arrDadosIndicador['unmid'] == UNIDADEMEDICAO_NUM_INDICE): ?>
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,2,',','.')
+                                        <?php elseif($arrDadosIndicador['unmid'] == UNIDADEMEDICAO_MOEDA): ?>
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> R$ '+ Highcharts.numberFormat(this.y,2,',','.')
+                                        <?php else: ?>
+                                                return '<b>'+ this.series.name +' / '+this.x +'</b>:<br/> '+ Highcharts.numberFormat(this.y,0,',','.')
+                                        <?php endif; ?>
 	                    }
 	                },
 		            xAxis: {

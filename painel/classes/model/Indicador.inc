@@ -102,6 +102,8 @@ class Painel_Model_Indicador extends Modelo
         'indshformula' => null,
         'formulash' => null,
         'indencerrado' => null,
+        'indavalgestor' => null,
+        'indobsgestor' => null,
     );
 
     public function RetornaPerfil(){
@@ -112,5 +114,10 @@ class Painel_Model_Indicador extends Modelo
             $retorno[]=$dado['pflcod'];
         }
         return $retorno;
+    }
+
+    public function RetornaRegistro($indid){
+        $sql = " SELECT * FROM $this->stNomeTabela WHERE {$this->arChavePrimaria[0]} = '$indid'; ";
+        return $this->pegaLinha($sql);
     }
 }

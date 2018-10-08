@@ -11,6 +11,9 @@ if($_GET['novameta']){
 	$arrDados = $db->pegaLinha($sql);
 }
 
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
+
 if($_SESSION['painel']['metid']){
 	$_REQUEST['metid'] = $_SESSION['painel']['metid'];
 }
@@ -26,7 +29,7 @@ if($_POST['requisicao']){
 	include (APPRAIZ.'www/painel/_funcoes_metas.php');
 	$resultado = $_POST['requisicao']();
 }
-
+$habilitado='S';
 if($_REQUEST['metid'] || $resultado['metid']){
 	$metid = $_REQUEST['metid'] ? $_REQUEST['metid'] : $resultado['metid'];
 	$sql = "select 
@@ -40,6 +43,9 @@ if($_REQUEST['metid'] || $resultado['metid']){
 			where 
 				metid = $metid";
 	$arrDados = $db->pegaLinha($sql);
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+            $habilitado='N';
+        }
 }
 
 // monta cabeçalho 
@@ -86,7 +92,7 @@ monta_titulo( $titulo, '&nbsp' );
 							painel.secretaria
 						where
 							secstatus = 'A'";
-				$db->monta_combo('secid',$sql,'S','Selecione a Secretaria','filtrarAcao','');
+				$db->monta_combo('secid',$sql,$habilitado,'Selecione a Secretaria','filtrarAcao','');
 				?>
 			</td>
 		</tr>
@@ -96,7 +102,6 @@ monta_titulo( $titulo, '&nbsp' );
 				<?php 
 				$acaid = $arrDados['acaid'];
 				if($secid){
-					$habilitado = "S";
 					$sql = "select 
 								acaid as codigo,
 								acadsc as descricao
@@ -120,7 +125,6 @@ monta_titulo( $titulo, '&nbsp' );
 				<?php 
 				$indid = $arrDados['indid'];
 				if($secid && $acaid){
-					$habilitado = "S";
 					$sql = "select 
 								indid as codigo,
 								indid || ' - ' || indnome as descricao
@@ -146,7 +150,6 @@ monta_titulo( $titulo, '&nbsp' );
 				<?php 
 				$perid = $arrDados['perid'];
 				if($indid){
-					$habilitado = "S";
 					$sql = "select 
 								perid as codigo,
 								perdsc as descricao
@@ -170,7 +173,7 @@ monta_titulo( $titulo, '&nbsp' );
 			<td class="SubTituloDireita" >Meta:</td>
 			<td>
 				<?php $metdesc = $arrDados['metdesc'] ?>
-				<?=campo_textarea( 'metdesc', 'S', 'S', '', 80, 4, 1000 );?>
+				<?=campo_textarea( 'metdesc', 'S', $habilitado, '', 80, 4, 1000 );?>
 			</td>
 		</tr>
 		<tr>

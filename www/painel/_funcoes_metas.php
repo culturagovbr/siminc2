@@ -101,7 +101,15 @@ function salvarMetas()
 	$indid = $_POST['indid'];
 	$metdesc = $_POST['metdesc'];
 	$metcumulativa = $_POST['metcumulativa'];
-
+        
+        $mIndicador = new Painel_Model_Indicador();
+        $listaPerfis = $mIndicador->RetornaPerfil();
+        if ($metid){
+            if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                return array("msg" => "Você não pode alterar os dados!", "erro" => true);
+            }
+        }
+        
 	if(!$perid || !$indid || !$metdesc || !$metcumulativa){
 		return array("msg" => "Favor preencher todos os campos obrigatórios!", "erro" => true);
 	}
@@ -402,7 +410,7 @@ function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$
 	$db->monta_combo('dpeid',$sql,"S",'Selecione o Período','','','','','S','','',$dpeid);
 }
 
-function listarValorMetas($metid)
+function listarValorMetas($metid, $listaPerfis)
 {
 	global $db;
 
@@ -411,6 +419,7 @@ function listarValorMetas($metid)
 			ind.indid,
 			ind.unmid,
 			ume.umedesc
+                        
 		from
 			painel.metaindicador met
 		inner join
@@ -437,12 +446,16 @@ function listarValorMetas($metid)
 	$formatoinput['campovalor']['mascara'] = !$formatoinput['campovalor']['mascara'] ? "###.###.###.###.###,##" : $formatoinput['campovalor']['mascara'];
 
 	if($arrDados['unmid'] != UNIDADEMEDICAO_BOLEANA){
-		$sql = "select
-				CASE WHEN dmi.dmivalor is not null
-					THEN '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\'".($indqtdevalor == "t" ? ",\'' || trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) || '\'" : "").")\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
-					ELSE '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
-				END as acao,
-				dpe.dpedsc,
+		$sql = "select";
+                    if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                        $sql .= "'<img src=\"../imagens/alterar_01.gif\" class=\"link\"/> <img src=\"../imagens/excluir_01.gif\" class=\"link\" />' as acao, ";
+                    }else{
+			$sql .= "	CASE WHEN dmi.dmivalor is not null
+					THEN '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || coalesce(dmi.dmiobs,'') || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\'".($indqtdevalor == "t" ? ",\'' || trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) || '\'" : "").")\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
+					ELSE '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || coalesce(dmi.dmiobs,'') || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
+				END as acao, ";                        
+                    }
+                    $sql .= "	dpe.dpedsc,
 				CASE WHEN dmi.dmidatameta IS NOT NULL
 					THEN to_char(dmi.dmidatameta,'DD/MM/YYYY')
 					ELSE 'N/A'
@@ -460,7 +473,8 @@ function listarValorMetas($metid)
 					ELSE 'N/A'
 				END as estado,
 				trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) as dmiqtde
-				".($indqtdevalor == "t" ? ",trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) as dmivalor" : "")."
+				".($indqtdevalor == "t" ? ",trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) as dmivalor" : "").",
+                                dmi.dmiobs
 			from
 				painel.detalhemetaindicador dmi
 			inner join
@@ -477,7 +491,7 @@ function listarValorMetas($metid)
 				dmi.dmidatameta";
 		$arrDados = $db->carregar($sql);
 
-		$cabecalho = array("Ações","Período","Data da Meta","Data de Execução","Data de Validação","Estado",$umedesc);
+		$cabecalho = array("Ações","Período","Data da Meta","Data de Execução","Data de Validação","Estado",$umedesc,'Observação');
 
 		if($indqtdevalor == "t"){
 			array_push($cabecalho,"Valor");
@@ -573,6 +587,7 @@ global $db;
 	$dmidatavalidacao = $_POST['dmidatavalidacao'] ? "'".formata_data_sql($_POST['dmidatavalidacao'])."'" : "NULL";
 	$dmdestavel = $_POST['dmdestavel'] ? $_POST['dmdestavel'] : "NULL";
 	$dmdcritico = $_POST['dmdcritico'] ? $_POST['dmdcritico'] : "NULL";
+        $dmiobs = $_POST['dmiobs'] ? "'".$_POST['dmiobs']."'" : "NULL";
 
 	if(!is_numeric($_POST['dpeid'])){
 		$dmidatameta = $_POST['dpeid'] ? "'".formata_data_sql($_POST['dpeid'])."'" : "NULL";
@@ -595,16 +610,17 @@ global $db;
 					dmidatavalidacao = $dmidatavalidacao,
 					dmidatameta = $dmidatameta,
 					dmdestavel = $dmdestavel,
-					dmdcritico = $dmdcritico
+					dmdcritico = $dmdcritico,
+                                        dmiobs = $dmiobs
 				where
 					dmiid = $dmiid";
 		$db->executar($sql);
 	}else{
 		$sql = "insert into
 					painel.detalhemetaindicador
-				(metid,dpeid,dmivalor,dmiqtde,dmistatus,dmidtcoleta,dmibloqueado,dmidataexecucao,dmidatavalidacao,dmidatameta,dmdestavel,dmdcritico)
+				(metid,dpeid,dmivalor,dmiqtde,dmistatus,dmidtcoleta,dmibloqueado,dmidataexecucao,dmidatavalidacao,dmidatameta,dmdestavel,dmdcritico, dmiobs)
 					values
-				($metid,$dpeid,$dmivalor,'$dmiqtde','A',now(),false,$dmidataexecucao,$dmidatavalidacao,$dmidatameta,$dmdestavel,$dmdcritico) returning dmiid";
+				($metid,$dpeid,$dmivalor,'$dmiqtde','A',now(),false,$dmidataexecucao,$dmidatavalidacao,$dmidatameta,$dmdestavel,$dmdcritico, $dmiobs) returning dmiid";
 		$dmiid = $db->pegaUm($sql);
 	}
 

@@ -386,6 +386,13 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 		foreach($registros as $key => $reg) {
 			// pegando a serie historica
 			$seriehistorica = $db->pegaLinha("SELECT sehid,sehbloqueado FROM painel.seriehistorica WHERE indid='".$_SESSION['indid']."' AND dpeid='".$reg['codigo']."' AND (sehstatus='A' OR sehstatus='H')");
+                        $mIndicador = new Painel_Model_Indicador();
+                        $listaPerfis = $mIndicador->RetornaPerfil();
+                        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                            if($seriehistorica) {
+                                $seriehistorica['sehbloqueado']="t";
+                            }
+                        }
 			$html .= "<tr bgcolor='".((fmod($key,2) == 0)?'#F7F7F7':'')."' onmouseover=\"this.bgColor='#ffffcc';\" onmouseout=\"this.bgColor='".((fmod($key,2) == 0)?'#F7F7F7':'')."';\">";
 			$html .= "<td nowrap>".$reg['descricao']."</td>";
 			if($detalhes['nivel2']) {
@@ -1964,89 +1971,124 @@ function gravarGridDados($dados) {
  */
 function gravarGridDadosSemFiltros($dados) {
 	global $db, $_CONFIGS;
-	
+        /**
+         * Lista de perfis por usuário
+         */
+        $mIndicador = new Painel_Model_Indicador();
+        $listaPerfis = $mIndicador->RetornaPerfil();
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+            $sql = "select dsh.dshid, dsh.dshqtde, dsh.dshobs, se.dpeid 
+                                        from painel.seriehistorica se 
+                                       inner join painel.detalheseriehistorica dsh
+                                          on se.sehid = dsh.sehid
+                                       where se.indid = '".$_SESSION['indid']."'
+                                         and se.dpeid in (select dpeid from painel.detalheperiodicidade where dpeanoref='".$_REQUEST['nroAnoReferencia']."') 
+                                         and se.sehstatus <> 'I'";
+            $dadosAnteriores = $db->carregar($sql);
+        }
 	// limpando todas series historicas
 	$db->executar("UPDATE painel.seriehistorica SET sehstatus='I' 
                         WHERE sehbloqueado != true 
                           and indid='".$_SESSION['indid']."' 
                           and dpeid in (select dpeid from painel.detalheperiodicidade where dpeanoref='".$_REQUEST['nroAnoReferencia']."')", false);
 	$formatoinput = pegarFormatoInput();
-	// verificando se existe item
+        
+        //Rotina para incluir os dados que não podem ser editados pelo perfil Gestor Indicador
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+            foreach($dadosAnteriores as $dadosAnt){
+                $sehid = $db->pegaUm("INSERT INTO painel.seriehistorica(indid, sehvalor, sehstatus, sehqtde, dpeid)
+                                      VALUES ('".$_SESSION['indid']."', NULL, 'H', '0', '".$dadosAnt['dpeid']."') RETURNING sehid;");
+                $qtd = $dadosAnt['dshqtde'];
+                $obs = $dadosAnt['dshobs'];
+                $sql = "INSERT INTO painel.detalheseriehistorica(
+                                sehid, dshqtde, dshobs)
+                        VALUES ('".$sehid."', '".$qtd."', '".$obs."');";
+                $db->executar($sql, false);                                
+            }
+            $db->executar("UPDATE painel.seriehistorica 
+                              SET sehqtde=COALESCE((SELECT sum(qtde) FROM painel.v_detalheindicadorsh WHERE sehid='".$sehid."'),0) 
+                                  ".(($formatoinput['campovalor'])?", sehvalor=(SELECT sum(valor) FROM painel.v_detalheindicadorsh WHERE sehid='".$sehid."')":"")." 
+                            WHERE sehid='".$sehid."'", false);            
+        }
+        
+        // verificando se existe item
 	if($dados['item']) {
-		// verificando de qual grid é o item ($indice1)
-		foreach($dados['item'] as $indice1 => $dados1) {
-			// verificando o dpeid ($indice2)
-			foreach($dados1 as $indice2 => $dados2) {
-				$sehid = $db->pegaUm("INSERT INTO painel.seriehistorica(indid, sehvalor, sehstatus, sehqtde, dpeid)
-    								  VALUES ('".$_SESSION['indid']."', NULL, 'H', '0', '".$indice2."') RETURNING sehid;");
-				$possuiregistro = false;
-				if(is_array($dados2)) {
-					foreach($dados2 as $tdiidnivel1 => $dados3) {
-						$tdinumnivel1 =  'tidid'.$db->pegaUm("SELECT tdinumero FROM painel.detalhetipoindicador tdi 
-										 	 	   		   	  INNER JOIN painel.detalhetipodadosindicador tid ON tid.tdiid = tdi.tdiid 
-									 		 	   		   	  WHERE tidid='".$tdiidnivel1."'");
-						if(is_array($dados3)) {
-							foreach($dados3 as $tdiidnivel2 => $dados4) {
-								$tdinumnivel2 =  'tidid'.$db->pegaUm("SELECT tdinumero FROM painel.detalhetipoindicador tdi 
-												 	 	   		   	  INNER JOIN painel.detalhetipodadosindicador tid ON tid.tdiid = tdi.tdiid 
-									 				 	   		   	  WHERE tidid='".$tdiidnivel2."'");
-								if(is_numeric(str_replace(array(".",","), array("","."), $dados4))) {
-									$sql = "INSERT INTO painel.detalheseriehistorica(sehid, dshqtde, dshobs, ".$tdinumnivel1.", ".$tdinumnivel2." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", dshvalor":"").")
-								    		VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados4)."', '".$dados['obs'][$indice1][$indice2]."','".$tdiidnivel1."', '".$tdiidnivel2."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])."'":"").");";
-									$db->executar($sql, false);
-									$possuiregistro = true;
-								}
-							}
-						} else {
-							if(is_numeric(str_replace(array(".",","), array("","."), $dados3))) {
-								$db->executar("INSERT INTO painel.detalheseriehistorica(
-	            							   sehid, dshqtde, dshobs, ".$tdinumnivel1." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", dshvalor":"").")
-	    									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados3)."', '".$dados['obs'][$indice1][$indice2]."', '".$tdiidnivel1."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1])."'":"").");", false);
-								$possuiregistro = true;
-							}
-						}
-					}
-				} else {
-					// adicionando a quantidade quando não houve detalhamento
-					if(is_numeric(str_replace(array(".",","), array("","."), $dados2))) {
-                                                $sql = "INSERT INTO painel.detalheseriehistorica(
-           							   sehid, dshqtde, dshobs ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", dshvalor":"").")
-   									   VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados2)."', '".$dados['obs'][$indice1][$indice2]."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2])."'":"").");";
-//                                                ver($sql,d);
-						$db->executar($sql, false);
-						$possuiregistro = true;
-					}
-				}
-				if($possuiregistro) {
-					$db->executar("UPDATE painel.seriehistorica 
-								   SET sehqtde=COALESCE((SELECT sum(qtde) FROM painel.v_detalheindicadorsh WHERE sehid='".$sehid."'),0) 
-						   		   ".(($formatoinput['campovalor'])?", sehvalor=(SELECT sum(valor) FROM painel.v_detalheindicadorsh WHERE sehid='".$sehid."')":"")." 
-						   		   WHERE sehid='".$sehid."'", false);
-				} else {
-					$db->executar("DELETE FROM painel.seriehistorica WHERE sehid='".$sehid."'", false);
-				}
-				
-			}
-			$sql = "UPDATE painel.seriehistorica SET sehstatus='A' WHERE sehstatus='H' AND sehid IN( SELECT sehid FROM painel.seriehistorica s
-																				 				   INNER JOIN painel.detalheperiodicidade d ON s.dpeid = d.dpeid 
-																				 				   WHERE indid='".$_SESSION['indid']."' ORDER BY dpedatainicio DESC LIMIT 1)";
-			$db->executar($sql, false);
-		}
+            // verificando de qual grid é o item ($indice1)
+            foreach($dados['item'] as $indice1 => $dados1) {
+                // verificando o dpeid ($indice2)
+                foreach($dados1 as $indice2 => $dados2) {
+                    $sehid = $db->pegaUm("INSERT INTO painel.seriehistorica(indid, sehvalor, sehstatus, sehqtde, dpeid)
+                                                        VALUES ('".$_SESSION['indid']."', NULL, 'H', '0', '".$indice2."') RETURNING sehid;");
+                    $possuiregistro = false;
+                    if(is_array($dados2)) {
+                        foreach($dados2 as $tdiidnivel1 => $dados3) {
+                            $tdinumnivel1 =  'tidid'.$db->pegaUm("SELECT tdinumero FROM painel.detalhetipoindicador tdi 
+                                                                    INNER JOIN painel.detalhetipodadosindicador tid ON tid.tdiid = tdi.tdiid 
+                                                                    WHERE tidid='".$tdiidnivel1."'");
+                            if(is_array($dados3)) {
+                                foreach($dados3 as $tdiidnivel2 => $dados4) {
+                                    $tdinumnivel2 =  'tidid'.$db->pegaUm("SELECT tdinumero FROM painel.detalhetipoindicador tdi 
+                                                                            INNER JOIN painel.detalhetipodadosindicador tid ON tid.tdiid = tdi.tdiid 
+                                                                            WHERE tidid='".$tdiidnivel2."'");
+                                    if(is_numeric(str_replace(array(".",","), array("","."), $dados4))) {
+                                        $sql = "INSERT INTO painel.detalheseriehistorica(sehid, dshqtde, dshobs, ".$tdinumnivel1.", ".$tdinumnivel2." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", dshvalor":"").")
+                                                VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados4)."', '".$dados['obs'][$indice1][$indice2]."','".$tdiidnivel1."', '".$tdiidnivel2."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1][$tdiidnivel2])."'":"").");";
+                                        $db->executar($sql, false);
+                                        $possuiregistro = true;
+                                    }
+                                }
+                            } else {
+                                if(is_numeric(str_replace(array(".",","), array("","."), $dados3))) {
+                                        $db->executar("INSERT INTO painel.detalheseriehistorica(
+                                                   sehid, dshqtde, dshobs, ".$tdinumnivel1." ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", dshvalor":"").")
+                                                           VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $dados3)."', '".$dados['obs'][$indice1][$indice2]."', '".$tdiidnivel1."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2][$tdiidnivel1])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2][$tdiidnivel1])."'":"").");", false);
+                                        $possuiregistro = true;
+                                }
+                            }
+                        }
+                    } else {
+                        $qtd = $dados2;
+                        $obs = $dados['obs'][$indice1][$indice2];                                        
+                        // adicionando a quantidade quando não houve detalhamento                     
+                        if(is_numeric(str_replace(array(".",","), array("","."), $dados2))) {
+                            $sql = "INSERT INTO painel.detalheseriehistorica(
+                                               sehid, dshqtde, dshobs ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", dshvalor":"").")
+                                                       VALUES ('".$sehid."', '".str_replace(array(".",","), array("","."), $qtd)."', '".$obs."' ".(($formatoinput['campovalor'] && $dados['valor'][$indice1][$indice2])?", '".str_replace(array(".",","), array("","."), $dados['valor'][$indice1][$indice2])."'":"").");";
+                            $db->executar($sql, false);
+                            $possuiregistro = true;
+                        }
+                    }
+                    
+                    if($possuiregistro) {
+                            $db->executar("UPDATE painel.seriehistorica 
+                                                       SET sehqtde=COALESCE((SELECT sum(qtde) FROM painel.v_detalheindicadorsh WHERE sehid='".$sehid."'),0) 
+                                                       ".(($formatoinput['campovalor'])?", sehvalor=(SELECT sum(valor) FROM painel.v_detalheindicadorsh WHERE sehid='".$sehid."')":"")." 
+                                                       WHERE sehid='".$sehid."'", false);
+                    } else {
+                            $db->executar("DELETE FROM painel.seriehistorica WHERE sehid='".$sehid."'", false);
+                    }
+
+                }
+                $sql = "UPDATE painel.seriehistorica SET sehstatus='A' WHERE sehstatus='H' AND sehid IN( SELECT sehid FROM painel.seriehistorica s
+                         INNER JOIN painel.detalheperiodicidade d ON s.dpeid = d.dpeid 
+                         WHERE indid='".$_SESSION['indid']."' ORDER BY dpedatainicio DESC LIMIT 1)";
+                $db->executar($sql, false);
+            }
 		
 	
-		switch($indice1) {
-			case 'brasil':
-				$enderecoredi = "?modulo=principal/preenchimentoSerieHistorica&acao=A";
-				break;
-		}
-		
-		$db->commit();
-		
-		echo "<script>
-				alert('Os dados foram salvos com sucesso');
-				window.location='".$enderecoredi."';
-		  	  </script>";
-		exit;
+            switch($indice1) {
+                case 'brasil':
+                    $enderecoredi = "?modulo=principal/preenchimentoSerieHistorica&acao=A&nroAnoReferencia=".$_REQUEST['nroAnoReferencia'];
+                    break;
+            }
+
+            $db->commit();
+
+            echo "<script>
+                            alert('Os dados foram salvos com sucesso');
+                            window.location='".$enderecoredi."';
+                      </script>";
+            exit;
 	}
 }
 

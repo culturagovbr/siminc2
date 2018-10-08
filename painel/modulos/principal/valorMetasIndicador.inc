@@ -4,6 +4,9 @@ if(!$_SESSION['painel']['metid']){
 }
 include (APPRAIZ.'www/painel/_funcoes_metas.php');
 
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
+
 if($_POST['requisicaoAjax']){
 	header('content-type: text/html; charset=ISO-8859-1');
 	if($_POST['requisicaoAjax'] == "getComboPeriodoPorPerid"){
@@ -74,10 +77,11 @@ monta_titulo( $titulo, $arrDados['indid']." - ".$arrDados['indnome'] );
 <?php $formatoinput = pegarFormatoInput($arrDados['indid']);
 	  $formatoinput['campovalor']['mascara'] = !$formatoinput['campovalor']['mascara'] ? "###.###.###.###.###,##" : $formatoinput['campovalor']['mascara']; ?>
 <script>
-function editarValorMeta(perid,dmiid,dpeid,dmiqtde,dmivalor)
+function editarValorMeta(perid,dmiid,dpeid, dmiobs,dmiqtde,dmivalor)
 {
 	$("[name=dmiid]").val(dmiid);
 	$("[name=perid]").val(perid);
+        $("[name=dmiobs]").val(dmiobs);
 	executarAjax("requisicaoAjax=getComboPeriodoPorPerid&dpeid=" + dpeid + "&dmiid=" + dmiid,$("#combo_dpeid"));
 	$("[name=dmiqtde]").val(mascaraglobal('[<?php echo $formatoinput['mascara'] ?>]',dmiqtde));
 	if($("[name=dmivalor]") && dmivalor){
@@ -116,6 +120,10 @@ function alteraPeriodo(perid)
 			<td width="25%" class="SubTituloDireita" ><?php echo $arrDados['umedesc']; ?>:</td>
 			<td><?php echo campo_texto('dmiqtde','S',"S",'',20,20,$formatoinput['mascara'],'');?></td>
 		</tr>
+		<tr>
+			<td width="25%" class="SubTituloDireita" >Observação:</td>
+			<td><?php echo campo_texto('dmiobs','S',"S",'',120,120,'','');?></td>
+		</tr>                
 		<?php if($arrDados['indqtdevalor'] == "t"): ?>
 			<tr>
 				<td width="25%" class="SubTituloDireita" >Valor:</td>
@@ -134,7 +142,7 @@ function alteraPeriodo(perid)
 	</table>
 </form>
 <div id="lista_valor_meta">
-<?php listarValorMetas($_SESSION['painel']['metid']); ?>
+<?php listarValorMetas($_SESSION['painel']['metid'], $listaPerfis); ?>
 </div>
 <?php if($resultado['msg']): ?>
 <script>

@@ -1,8 +1,15 @@
 <?php
-
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
 if ($_REQUEST['requisicao']) {
 	$_REQUEST['requisicao']();
 }
+
+/**
+ * Lista de perfis por usuário
+ */
+$mIndicador = new Painel_Model_Indicador();
+$listaPerfis = $mIndicador->RetornaPerfil();
 
 //Ajax
 if ($_REQUEST['filtraAcaoAjax'] && $_REQUEST['secid']) {
@@ -46,13 +53,16 @@ if($_SESSION['indid']):
 
 	$db->cria_aba($abacod_tela,$url,'');
 	!$_SESSION['indid']? $_SESSION['indid'] = $_REQUEST['indid']: $_SESSION['indid'] = $_SESSION['indid'];
-	
-	$permissoes = verificaPerfilPainel();
-	if($permissoes['verindicadores'] == 'vertodos') {
-		$acesso = true;
-	} else {
-		$acesso = validaAcessoIndicadores($permissoes['verindicadores'], $_SESSION['indid']);
-	}
+	if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR,$listaPerfis)){
+            $acesso=false;
+        }else{
+            $permissoes = verificaPerfilPainel();
+            if($permissoes['verindicadores'] == 'vertodos') {
+                    $acesso = true;
+            } else {
+                    $acesso = validaAcessoIndicadores($permissoes['verindicadores'], $_SESSION['indid']);
+            }
+        }
 	
 endif;
 
@@ -122,6 +132,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid 				= $_REQUEST['mtiid'];
 				$indshformula		= $_REQUEST['indshformula'];
 				$formulash			= $_REQUEST['formulash'];
+				$indavalgestor			= $_REQUEST['indavalgestor'];
+				$indobsgestor			= $_REQUEST['indobsgestor'];
 				if($indpublicado=='true'){
 					$indhomologado = true;
 				}
@@ -164,11 +176,15 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 						  INTO painel.indicador
 							  (unmid, cliid, tpiid, secid, secidgestora,acaid, perid, estid, colid, usucpf, indnome, indobjetivo,
 							  indformula, indtermos, indfontetermo, indnormalinicio, indnormalfinal, indatencaoinicio,
-							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,indhomologado,mtiid,indshformula,formulash,indencerrado)
+							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,
+                                                          indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,
+                                                          indhomologado,mtiid,indshformula,formulash,indencerrado,indavalgestor, indobsgestor)
 						  VALUES 
 						  	   (".$unmid.", ".$cliid.", ".$tpiid.", ".$secid.", ".$secidgestora.", ".$acaid.", ".$perid.", ".$estid.", ".$colid.", '".$usucpf."', '".$indnome."', '".$indobjetivo."',
 							  '".$indformula."', '".$indtermos."', '".$indfontetermo."', ".$indnormalinicio.", ".$indnormalfinal.", ".$indatencaoinicio.",
-							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',$indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado)
+							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',"
+                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado,
+                                                          '$indavalgestor', '$indobsgestor')
 						  RETURNING	indid
 						  ";
 			
@@ -188,92 +204,94 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 						$db->executar($sql);
 					}
 				}
-				
+                            $db->commit();
+                            echo "<script>
+                                            alert('Dados salvos com sucesso.');
+                                            window.location = '?modulo=principal/cadastro&acao=A&indid=$indid&evento=A';
+                                      </script>";				
 			//caso exista o indicador altera os dados do mesmo	
 			} else {
-                            $sql = "select perid, regid from painel.indicador where indid = ".$indid;
-                            $registro = $db->pegalinha($sql);
-                            $peridAtual = $registro['perid'];
-                            $regidAtual = $registro['regid'];
-				$sql_U = "
-					UPDATE painel.indicador
-					SET
-					 unmid = 				".$unmid.",
-					 exoid = 				".$exoid.",
-					 cliid = 				".$cliid.",
-					 tpiid = 				".$tpiid.",
-					 estid = 				".$estid.",
-					 secid = 				".$secid.",
-					 secidgestora =			".$secidgestora.",
-					 acaid = 				".$acaid.",
-					 perid = 				".$perid.",
-					 peridatual =			'".$peridatual."',
-					 colid = 				".$colid.",
-					 usucpf = 				'".$usucpf."',
-					 indnome = 				'".$indnome."',
-					 indobjetivo = 			'".$indobjetivo."',
-					 indformula = 			'".$indformula."',
-					 indtermos = 			'".$indtermos."',
-					 indfontetermo = 		'".$indfontetermo."',
-					 indnormalinicio = 		".$indnormalinicio.",
-					 indnormalfinal = 		".$indnormalfinal.",
-					 indatencaoinicio = 	".$indatencaoinicio.",
-					 indatencaofinal = 		 ".$indatencaofinal.",	
-					 indcriticoinicio = 	".$indcriticoinicio.",
-					 indcriticofinal = 		".$indcriticofinal.",
-					 indmetavalor = 		".$indmetavalor.",
-					 regid	= 				".$regid.",
-					 umeid	= 				".$umeid.",
-					 indmetadatalimite = 	'".$indmetadatalimite."',
-					 indqtdevalor = 		'".$indqtdevalor."',
-					 indcumulativo = 		'".($indcumulativo==''?'N' : $indcumulativo)."',	
-					 indpublicado = 		".($indpublicado=='' ? 'indpublicado' : "'".$indpublicado."'").",
-					 indescala = 			'".$indescala."',
-					 indobservacao = 		'".$indobservacao."',
-					 indcumulativovalor	=	'$indcumulativovalor',
-					 indpublico = 			".($indpublico=='' ? 'indpublico' : "'".$indpublico."'").",
-					 indhomologado = 		".($indhomologado=='' ? 'indhomologado' : "'".$indhomologado."'").",
-					 indencerrado = 		".($indencerrado=='' ? 'indencerrado' : "'".$indencerrado."'").",
-					 mtiid = $mtiid,
-					 indshformula = $indshformula,
-					 formulash = '$formulash'
-					WHERE indid = 			".$indid."	
-				";
-				
-				$db->executar($sql_U);
-				
-				//OBJETIVO
-				$sql = "DELETE FROM painel.indicadorobjetivo WHERE indid =  ". $indid ."";			
-				$db->executar($sql);		
-				$_POST['obeid'] = array();
-				foreach($_POST['obeid'] as $obeid) {
-					$sql = "INSERT INTO painel.indicadorobjetivo(obeid, indid) VALUES (". $obeid .", ". $indid .")";			
-					$db->executar($sql);
-				}
-				
-				//AGENDA DE GOVERNO
-//				$sql = "DELETE FROM painel.agendaindicador WHERE indid =  ". $indid ."";			
-//				$db->executar($sql);
-//				foreach($_POST['aggid'] as $aggid) {
-//					if($aggid){
-//						$sql = "INSERT INTO painel.agendaindicador(aggid, indid) VALUES (". $aggid .", ". $indid .")";			
-//						$db->executar($sql);
-//					}
-//				}
 
-                                
+                            if (!in_array(PAINEL_PERFIL_GESTOR_INDICADOR,$listaPerfis)){
+                                $sql = "select perid, regid from painel.indicador where indid = ".$indid;
+                                $registro = $db->pegalinha($sql);
+                                $peridAtual = $registro['perid'];
+                                $regidAtual = $registro['regid'];
+                                $sql_U = "
+                                        UPDATE painel.indicador
+                                        SET
+                                         unmid = 				".$unmid.",
+                                         exoid = 				".$exoid.",
+                                         cliid = 				".$cliid.",
+                                         tpiid = 				".$tpiid.",
+                                         estid = 				".$estid.",
+                                         secid = 				".$secid.",
+                                         secidgestora =			".$secidgestora.",
+                                         acaid = 				".$acaid.",
+                                         perid = 				".$perid.",
+                                         peridatual =			'".$peridatual."',
+                                         colid = 				".$colid.",
+                                         usucpf = 				'".$usucpf."',
+                                         indnome = 				'".$indnome."',
+                                         indobjetivo = 			'".$indobjetivo."',
+                                         indformula = 			'".$indformula."',
+                                         indtermos = 			'".$indtermos."',
+                                         indfontetermo = 		'".$indfontetermo."',
+                                         indnormalinicio = 		".$indnormalinicio.",
+                                         indnormalfinal = 		".$indnormalfinal.",
+                                         indatencaoinicio = 	".$indatencaoinicio.",
+                                         indatencaofinal = 		 ".$indatencaofinal.",	
+                                         indcriticoinicio = 	".$indcriticoinicio.",
+                                         indcriticofinal = 		".$indcriticofinal.",
+                                         indmetavalor = 		".$indmetavalor.",
+                                         regid	= 				".$regid.",
+                                         umeid	= 				".$umeid.",
+                                         indmetadatalimite = 	'".$indmetadatalimite."',
+                                         indqtdevalor = 		'".$indqtdevalor."',
+                                         indcumulativo = 		'".($indcumulativo==''?'N' : $indcumulativo)."',	
+                                         indpublicado = 		".($indpublicado=='' ? 'indpublicado' : "'".$indpublicado."'").",
+                                         indescala = 			'".$indescala."',
+                                         indobservacao = 		'".$indobservacao."',
+                                         indcumulativovalor	=	'$indcumulativovalor',
+                                         indpublico = 			".($indpublico=='' ? 'indpublico' : "'".$indpublico."'").",
+                                         indhomologado = 		".($indhomologado=='' ? 'indhomologado' : "'".$indhomologado."'").",
+                                         indencerrado = 		".($indencerrado=='' ? 'indencerrado' : "'".$indencerrado."'").",
+                                         mtiid = $mtiid,
+                                         indshformula = $indshformula,
+                                         formulash = '$formulash',
+                                         indavalgestor = '$indavalgestor',
+                                         indobsgestor = '$indobsgestor'
+                                        WHERE indid = 			".$indid."	
+                                ";
+
+                                $db->executar($sql_U);
+
+                                //OBJETIVO
+                                $sql = "DELETE FROM painel.indicadorobjetivo WHERE indid =  ". $indid ."";			
+                                $db->executar($sql);		
+                                $_POST['obeid'] = array();
+                                foreach($_POST['obeid'] as $obeid) {
+                                        $sql = "INSERT INTO painel.indicadorobjetivo(obeid, indid) VALUES (". $obeid .", ". $indid .")";			
+                                        $db->executar($sql);
+                                }
+
                                 //Remove Série Histórica se a periodicidade ou a Regionalização for diferente.
                                 if (($peridAtual!=$perid) || ($regidAtual!=$regid)){
                                     $sql = "update painel.seriehistorica set sehstatus = 'I' where indid = ".$indid;
                                     $db->executar($sql);
                                 }         
-
+                                $db->commit();
+                                echo "<script>
+                                                alert('Dados salvos com sucesso.');
+                                                window.location = '?modulo=principal/cadastro&acao=A&indid=$indid&evento=A';
+                                          </script>";                                
+                            }else{
+                                echo "<script>
+                                                alert('Você não tem permissão para alterar os dados do indicador');
+                                                window.location = '?modulo=principal/cadastro&acao=A&indid=$indid&evento=A';
+                                          </script>";                                 
+                            }
 			}
-			$db->commit();
-			echo "<script>
-					alert('Dados salvos com sucesso.');
-					window.location = '?modulo=principal/cadastro&acao=A&indid=$indid&evento=A';
-				  </script>";
 		exit;
 		break;
 		
@@ -294,7 +312,9 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 					indpublico,
 					indhomologado,
 					indencerrado,
-					mtiid		
+					mtiid,
+                                        indavalgestor,
+                                        indobsgestor
 				FROM  painel.indicador i
 				WHERE 
 				i.indid = ".$indid."
@@ -367,6 +387,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid				= $dados['mtiid'];
 				$indshformula		= $dados['indshformula'];
 				$formulash			= $dados['formulash'];
+				$indavalgestor			= $dados['indavalgestor'];
+				$indobsgestor			= $dados['indobsgestor'];
 			}		
 		break;	
 	}
@@ -836,7 +858,7 @@ $indescala != "t" ? $checkNaoEsc = "checked=checked" : $checkSimEsc = "checked=c
 </tr>
 
 <script>
-validaUnidadeMedicao('<? echo $unmid; ?>');
+validaUnidadeMedicao('<?php echo $unmid; ?>');
 </script>
 	<?php
 //Testa se é Super Usuário ou Gestor PDE ou Equipe de apoio ao Gestor PDE
@@ -913,7 +935,7 @@ if (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod))
 		<input type="radio" value="true"  name="indencerrado" id="indencerrado1" <?= ($indencerrado == 't') ? 'checked="checked"' : '' ?>/>Sim
 	</td>
 </tr>
-<? 
+<?php 
 }
 else 
 {
@@ -1061,7 +1083,7 @@ else
 		";
 	?>
     <td width="25%" align='right' class="SubTituloDireita">Periodicidade do Indicador:</td>
-    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<? echo $perid; ?>"></td>
+    <td><?=$db->monta_combo('perid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="perid_conf" id="perid_conf" value="<?php echo $perid; ?>"></td>
 </tr>
 <tr>
 	<?php 
@@ -1090,7 +1112,7 @@ else
 		";
 	?>
     <td align='right' class="SubTituloDireita">Regionalização:</td>
-    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<? echo $regid; ?>"></td>
+    <td><?=$db->monta_combo('regid',$sql,(($acesso)?'S':'N'),'Selecione...','verificaSH','','','','S');?> <input type="hidden" name="regid_conf" id="regid_conf" value="<?php echo $regid; ?>"></td>
 </tr>
 <tr style="display: none" >
 	<td align='right' class="SubTituloDireita">Objetivo Estratégico:</td>
@@ -1146,6 +1168,8 @@ else
     <td><?=$db->monta_combo('colid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S');?></td>
 </tr>
 </table>
+
+
 <table style="display:none" style="border-top:0px;border-bottom:0px;"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
 <tr>
 	<td colspan="3" style="text-align: left;font-weight: bold;" bgcolor="#DCDCDC" >Informe as faixas para os níveis de medição abaixo:</td>
@@ -1179,19 +1203,18 @@ else
 </tr>
 </table>
 	<table style="border-top:0px;" class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
-	<tr bgcolor="#cccccc">
-		      <td style="text-align: center" >
-		      	<? if(!$acesso){ ?>
-		      		<input type="button" disabled="disabled" class="botao" name="btassociar" value="Gravar">
-				<? }else{ ?>
-					<input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter('I', '<?=$indid?>');">
-		  	  		<input type="button" class="botao" name="btassociar" value="Novo Indicador" onclick="novo();">	  	  
-		  	  		<input type="button" class="botao" name="btassociar" value="Limpar" onclick="limpar();">	  	  	
+            <tr bgcolor="#cccccc">
+                <td style="text-align: center" > 
+                    <?php if(!$acesso){ ?>
+                        <input type="button" disabled="disabled" class="botao" name="btassociar" value="Gravar">
+                    <?php }else{ ?>
+                        <input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter('I', '<?=$indid?>');">
+                        <input type="button" class="botao" name="btassociar" value="Novo Indicador" onclick="novo();">	  	  
+                        <input type="button" class="botao" name="btassociar" value="Limpar" onclick="limpar();">	  	  	
 
-				<? } ?>		      
-		  	  </td>
-		  	  
-		      </tr>
+                    <?php } ?>		      
+                </td>	  	  
+            </tr>
 	</table>
 </form>
 <script type="text/javascript" src="/includes/prototype.js"></script>	
