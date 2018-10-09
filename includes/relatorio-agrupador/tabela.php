@@ -22,9 +22,11 @@ class relatorio_agrupador_tabela {
     protected $listaColunasSelecionadas = array();
     
     protected $listaColunaFormatoMoeda = array();
-    
+
+    protected $listaColunaTotalizador = array();
+
     protected $listaRelatorio = array();
-    
+
     protected $tabela = '';
 
     public function getListaTodasColunas() {
@@ -106,10 +108,10 @@ class relatorio_agrupador_tabela {
                 }
             }
         }
-        
+
         return $resultado;
     }
-    
+
     /**
      * Monta o código HTML do cabeçalho da tabela
      * 
@@ -120,21 +122,39 @@ class relatorio_agrupador_tabela {
             <thead>
                 <tr>
         ';
-        
+        foreach($this->listaColunasSelecionadas as $colunaSelecionada){
+            if (array_key_exists($colunaSelecionada, $this->listaColunaTotalizador)){
+                $this->tabela .= '
+                        <th>
+                            '.formata_valor($this->listaColunaTotalizador[$colunaSelecionada]). '
+                        </th>
+                ';
+            }else{
+                $this->tabela .= '
+                        <th>
+
+                        </th>
+                ';
+            }
+        }
+        $this->tabela .= '
+                </tr>
+                <tr>
+        ';
         foreach($this->listaColunasSelecionadas as $colunaSelecionada){
             $this->tabela .= '
                 <th>'. self::buscarDescricaoPorCodigo($colunaSelecionada, $this->listaTodasColunas). '</th>
             ';
         }
-                            
+
         $this->tabela .= '
                 </tr>
             </thead>
         ';
-        
+
         return $this;
     }
-    
+
     /**
      * Monta o código HTML do corpo da tabela onde ficam os registros da consulta
      * 
@@ -149,7 +169,7 @@ class relatorio_agrupador_tabela {
                     $this->tabela .= '
                         <tr>
                     ';
-                    
+
                     # Monta as linhas do corpo da tabela de acordo com o resultado da pesquisa
                     $this->montarTabelaCorpoLinhas($itemRelatorio);
 
@@ -161,10 +181,10 @@ class relatorio_agrupador_tabela {
                 </tbody>
             ';
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Monta as linhas do corpo da tabela de acordo com o resultado da pesquisa
      * 
@@ -183,6 +203,24 @@ class relatorio_agrupador_tabela {
         }
 
         return $this;
+    }
+
+    /**
+     * Totaliza colunas no formato moeda
+     *
+     * @param array $itemRelatorio
+     * @return $this
+     */
+    public function montarTabelaTotalizador(){
+        if($this->listaColunaFormatoMoeda){
+            $arrRetorno = array();
+            foreach($this->listaColunaFormatoMoeda as $colunaSelecionada){
+                foreach($this->listaRelatorio as $itemRelatorio) {
+                    $arrRetorno[$colunaSelecionada] += $itemRelatorio[$colunaSelecionada];
+                }
+            }
+        }
+        $this->listaColunaTotalizador = $arrRetorno;
     }
     
     /**
@@ -216,9 +254,10 @@ class relatorio_agrupador_tabela {
             <table class="table table-bordered table-hover table-striped">
         ';
 
+        $this->montarTabelaTotalizador();
         $this->montarTabelaCabecalho()
-            ->montarTabelaCorpo()
-            ->montarTabelaRodape()
+             ->montarTabelaCorpo()
+             ->montarTabelaRodape()
         ;
         
         $this->tabela .= '

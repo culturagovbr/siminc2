@@ -28,11 +28,12 @@
         $filtros[] = "ptr.irpcod::INTEGER IN(". join($_POST['filtro']['irpcod'], ','). ")";
     }
     $modelPlanoInterno = new Pi_PlanoInterno();
+//    ver($_POST, d);
     $sql = $modelPlanoInterno->montarSqlRelGerencialFuncionais($filtros, $_POST['filtro']['prsano']);
-    
+
     # Busca lista pra montar a tabela do relatório
     $listaRelatorio = $db->carregar($sql);
-    
+
     # Colunas do relatorio
     $listaTodasColunas = montarColunasRelatorioFuncional();
     $listaColunasSelecionadas = $_POST['coluna'];
@@ -56,11 +57,11 @@
         ->setListaRelatorio($listaRelatorio)
         ->montarTabela()
         ->getTabela();
-    
+
     # Gera o XLS do relatório
     if($_REQUEST['req'] == 'xls'){
         echo $tabela;
-        
+
         header('Content-Type: application/vnd.ms-excel');
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -68,7 +69,7 @@
         die();
     }
 
-    include APPRAIZ. "includes/cabecalho_bootstrap_v3_popup.inc";
+    include APPRAIZ. "includes/cabecalho_bootstrap_v3_relatorio.inc";
 ?>
 
 <div class="row" style="margin-top: 5px;">
@@ -77,10 +78,43 @@
             <div class="ibox-title">
                 <h5>Relatório de Funcionais</h5>
             </div>
+            <?php
+                if(count($_POST['filtro']['suoid']) === 1):
+
+            $sql = "SELECT DISTINCT
+                        suo.suonome AS descricao
+                    FROM public.vw_subunidadeorcamentaria suo
+                    WHERE
+                        suo.suostatus = 'A'
+                        AND suo.prsano = '". $_REQUEST['filtro']['prsano']."'
+                        AND suo.suoid = '".$_POST['filtro']['suoid'][0]."'
+                    ORDER BY
+                        descricao
+            ";
+            $suonome = $db->pegaUm($sql); ?>
+                <h2 style="text-align: center"><?= $suonome ?> </h2>
+            <?php endif; ?>
             <div class="ibox-content">
                 <div class="table-responsive" style="overflow-y: auto;">
 
                     <?=$tabela?>
+
+                </div>
+                <div class="table-responsive" style="overflow-y: auto;">
+
+                    <?php
+                        $stSql = "
+                            SELECT DISTINCT
+                                suo.unoid AS codigo,
+                                suo.unocod || ' - ' || unonome AS descricao
+                            FROM vw_subunidadeorcamentaria suo
+                            WHERE
+                                suo.suostatus = 'A'
+                            ORDER BY
+                                descricao
+                        ";
+                       echo $simec->select("filtro[unoid][]", 'Unidade', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                    ?>
 
                 </div>
             </div>
