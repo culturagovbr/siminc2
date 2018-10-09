@@ -101,21 +101,105 @@
 
                 </div>
                 <div class="table-responsive" style="overflow-y: auto;">
+                    <h5>Filtros do Relatório</h5>
+                    <div class="ibox-title"></div>
 
                     <?php
-                        $stSql = "
-                            SELECT DISTINCT
-                                suo.unoid AS codigo,
-                                suo.unocod || ' - ' || unonome AS descricao
-                            FROM vw_subunidadeorcamentaria suo
-                            WHERE
-                                suo.suostatus = 'A'
-                            ORDER BY
-                                descricao
-                        ";
-                       echo $simec->select("filtro[unoid][]", 'Unidade', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
-                    ?>
+                    # Configura o formulário pra ter formatação de somente leitura
+                    $simec->setPodeEditar(FALSE);
 
+                    if( count($_REQUEST['filtro']['unoid']) > 0 ){
+
+                        $stSql = "SELECT DISTINCT
+                                      suo.unoid AS codigo,
+                                      suo.unocod || ' - ' || unonome AS descricao
+                                  FROM vw_subunidadeorcamentaria suo
+                                  WHERE
+                                      suo.suostatus = 'A'
+                                  ORDER BY
+                                      descricao
+                        ";
+                       echo $simec->select("filtro[unoid][]", 'Unidade', $_REQUEST['filtro']['unoid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                    }
+
+                    if( count($_REQUEST['filtro']['suoid']) > 0 ){
+
+                        $stSql = "SELECT DISTINCT
+                                      suo.suoid AS codigo,
+                                      suo.suocod || ' - ' || suo.suonome AS descricao
+                                  FROM public.vw_subunidadeorcamentaria suo
+                                  WHERE
+                                      suo.suostatus = 'A'
+                                      AND suo.prsano = '". $_REQUEST['filtro']['prsano']."'
+                                  ORDER BY
+                                      descricao
+                        ";
+                        echo $simec->select("filtro[suoid][]", 'Subunidade', $_REQUEST['filtro']['suoid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                    }
+
+                    if( count($_REQUEST['filtro']['acaid']) > 0 ){
+
+                        $stSql = "SELECT DISTINCT
+                                      acao.acaid AS codigo,
+                                      prgcod || ' - ' || acacod || ' - ' || acaobjetivocod || ' - ' || loccod || ' - ' || acatitulo AS descricao
+                                  FROM monitora.acao acao
+                                  JOIN public.vw_subunidadeorcamentaria suo ON(
+                                        suostatus = 'A'
+                                        AND acao.unicod = suo.unocod
+                                        AND suo.prsano = prgano
+                                  )
+                                  WHERE
+                                      acastatus = 'A'
+                                      AND prgano = '". $_REQUEST['filtro']['prsano']."'
+                                  ORDER BY
+                                      descricao
+                        ";
+                        echo $simec->select("filtro[acaid][]", 'Ação', $_REQUEST['filtro']['acaid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+
+                    }
+
+                    if( count($_REQUEST['filtro']['ptrid']) > 0 ){
+
+                        $stSql = "SELECT DISTINCT
+                                      ptr.ptrid codigo,
+                                      COALESCE (ptr.prgcod, '') ||
+                                      ' - ' || COALESCE (ptr.acacod, '') ||
+                                      ' - ' || COALESCE (ptr.loccod, '') ||
+                                      ' - ' || COALESCE (ptr.acaobjetivocod, '') ||
+                                      ' - ' || COALESCE(ptr.plocod, '') ||
+                                      ' - ' || ptr.acatitulo ||
+                                      ' - ' || ptr.plodsc descricao
+                                  FROM monitora.vw_ptres ptr
+		                          JOIN public.vw_subunidadeorcamentaria suo ON(
+                                      suostatus = 'A'
+                                      AND ptr.unicod = suo.unocod
+                                      AND suo.prsano = ptr.ptrano
+		                          )
+                                  WHERE
+                                      ptr.ptrstatus = 'A'
+                                      AND ptr.ptrano = '". $_REQUEST['filtro']['prsano']."'
+                                  ORDER BY
+                                      descricao
+                        ";
+                        echo $simec->select("filtro[ptrid][]", 'Funcional', $_REQUEST['filtro']['ptrid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+
+                    }
+
+                    if( count($_REQUEST['filtro']['irpcod']) > 0 ){
+
+                        $stSql = "SELECT DISTINCT
+                                      irp.irpcod AS codigo,
+                                      irp.irpcod || ' - ' || irp.irpdsc AS descricao
+                                  FROM public.identresultprimario irp
+                                  WHERE
+                                      irp.irpstatus = 'A'
+                                  ORDER BY
+                                      descricao
+                        ";
+                        echo $simec->select("filtro[irpcod][]", 'RP', $_REQUEST['filtro']['irpcod'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+
+                    }
+                    ?>
                 </div>
             </div>
         </div>

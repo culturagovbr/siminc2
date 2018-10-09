@@ -4,7 +4,8 @@ if(isset($_REQUEST['req'])){
     switch ($_REQUEST['req']) {
         case 'exibir':
             include $_REQUEST['tipo_relatorio']."/relatorio.inc";
-            die;
+            include APPRAIZ. 'includes/rodape_bootstrap_v3.inc';
+        die;
         case 'xls':
             include $_REQUEST['tipo_relatorio']."/relatorio.inc";
             die;

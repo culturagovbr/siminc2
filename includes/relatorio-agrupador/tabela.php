@@ -122,23 +122,27 @@ class relatorio_agrupador_tabela {
             <thead>
                 <tr>
         ';
-        foreach($this->listaColunasSelecionadas as $colunaSelecionada){
-            if (array_key_exists($colunaSelecionada, $this->listaColunaTotalizador)){
-                $this->tabela .= '
-                        <th>
-                            '.formata_valor($this->listaColunaTotalizador[$colunaSelecionada]). '
-                        </th>
-                ';
-            }else{
-                $this->tabela .= '
-                        <th>
+        if ($this->listaColunaTotalizador!=null) {
+            foreach ($this->listaColunasSelecionadas as $colunaSelecionada) {
+                if (array_key_exists($colunaSelecionada, $this->listaColunaTotalizador)) {
+                    $this->tabela .= '
+                            <th>
+                                ' . formata_valor($this->listaColunaTotalizador[$colunaSelecionada]) . '
+                            </th>
+                    ';
+                } else {
+                    $this->tabela .= '
+                            <th>
 
-                        </th>
-                ';
+                            </th>
+                    ';
+                }
             }
+            $this->tabela .= '
+                    </tr>
+            ';
         }
         $this->tabela .= '
-                </tr>
                 <tr>
         ';
         foreach($this->listaColunasSelecionadas as $colunaSelecionada){
@@ -212,7 +216,7 @@ class relatorio_agrupador_tabela {
      * @return $this
      */
     public function montarTabelaTotalizador(){
-        if($this->listaColunaFormatoMoeda){
+        if($this->listaColunaFormatoMoeda && $this->listaRelatorio!=''){
             $arrRetorno = array();
             foreach($this->listaColunaFormatoMoeda as $colunaSelecionada){
                 foreach($this->listaRelatorio as $itemRelatorio) {
