@@ -151,6 +151,8 @@ class Monitora_Model_Ptres extends Modelo
                 AND aca.prgcod = '{$acaoDto['codigoprograma']}'
                 AND aca.acacod = '{$acaoDto['codigoacao']}'
                 AND aca.loccod = '{$acaoDto['codigolocalizador']}'
+	    ORDER BY
+		aca.acastatus
         ";
 
         $acaid = $this->pegaUm($sql);
@@ -179,20 +181,27 @@ class Monitora_Model_Ptres extends Modelo
 
     public function atualizarPtresSiop($acaoDto, $acaid)
     {
-        $sql = "select ptrid
-                from monitora.ptres ptr
-                where ptr.ptrano = '{$acaoDto['exercicio']}'
-                and ptr.acacod = '{$acaoDto['codigoacao']}'
-                and ptr.prgcod = '{$acaoDto['codigoprograma']}'
-                and ptr.loccod = '{$acaoDto['codigolocalizador']}'
-                and ptr.unicod = '{$acaoDto['codigoorgao']}'
-                and ptr.plocod = '{$acaoDto['planoorcamentario']}'
-                ";
+        $sql = "
+            SELECT
+                ptrid
+            FROM monitora.ptres ptr
+            WHERE
+                ptr.ptrano = '{$acaoDto['exercicio']}'
+                AND ptr.acacod = '{$acaoDto['codigoacao']}'
+                AND ptr.prgcod = '{$acaoDto['codigoprograma']}'
+                AND ptr.loccod = '{$acaoDto['codigolocalizador']}'
+                AND ptr.unicod = '{$acaoDto['codigoorgao']}'
+                AND ptr.plocod = '{$acaoDto['planoorcamentario']}'
+	    ORDER BY
+		ptr.ptrstatus
+        ";
         $ptrid = $this->pegaUm($sql);
 
         $mPtres = new Monitora_Model_Ptres($ptrid);
 
-        $mPtres->ptres = 0;
+        if(!$mPtres->ptrid){
+            $mPtres->ptres = 0;
+        }
         $mPtres->acaid = $acaid;
         $mPtres->ptrano = $acaoDto['exercicio'];
         $mPtres->prgcod = $acaoDto['codigoprograma'];
