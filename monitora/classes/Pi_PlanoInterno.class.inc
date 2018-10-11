@@ -111,7 +111,7 @@ class Pi_PlanoInterno extends Modelo
             "order by uno.unonome, suo.suonome";
 
         // Carregando dados da base de dados do SIMINC antigo
-        $dados = adapterConnection::oldSiminc()->carregar($sql);
+        $dados = adapterConnection::siminc1()->carregar($sql);
         return $dados ? $dados : [];
     }
 
@@ -141,7 +141,7 @@ class Pi_PlanoInterno extends Modelo
                 where ppi.ppiid = $ppiid";
 
         // Carregando dados da base de dados do SIMINC antigo
-        $dadosProposta = adapterConnection::oldSiminc()->pegaLinha($sql);
+        $dadosProposta = adapterConnection::siminc1()->pegaLinha($sql);
 
 
         $dadosPI = [
@@ -1194,7 +1194,7 @@ class Pi_PlanoInterno extends Modelo
                 order by descricao";
 
         // Carregando dados da base de dados do SIMINC antigo
-        $dados = adapterConnection::oldSiminc()->carregar($sql);
+        $dados = adapterConnection::siminc1()->carregar($sql);
         return $dados ? $dados : [];
     }
 
@@ -1210,7 +1210,7 @@ class Pi_PlanoInterno extends Modelo
                 order by descricao;";
 
         // Carregando dados da base de dados do SIMINC antigo
-        $dados = adapterConnection::oldSiminc()->carregar($sql);
+        $dados = adapterConnection::siminc1()->carregar($sql);
         return $dados ? $dados : [];
     }
 

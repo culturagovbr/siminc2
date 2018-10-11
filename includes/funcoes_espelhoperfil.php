@@ -12,7 +12,7 @@ function removerPerfisSlaves($usucpf, $sisid) {
         foreach ($arrslaves as $arrs) {
             if ($arrs['servidorslave'] == 'EXTERNO') {
                 $sql = "DELETE FROM seguranca.perfilusuario WHERE usucpf = '" . $usucpf . "' AND pflcod='" . $arrs['pflcodslave'] . "'";
-                adapterConnection::oldSiminc()->executar($sql);
+                adapterConnection::siminc1()->executar($sql);
             } else {
                 $sql = "DELETE FROM seguranca.perfilusuario WHERE usucpf = '" . $usucpf . "' AND pflcod='" . $arrs['pflcodslave'] . "'";
                 $db->executar($sql);
@@ -38,7 +38,7 @@ function inserirPerfisSlaves($usucpf, $pflcod) {
 
             if ($pfl['servidorslave'] == 'EXTERNO') {
 
-                $existe_us = adapterConnection::oldSiminc()->pegaUm("SELECT usucpf FROM seguranca.usuario WHERE usucpf='". $usucpf. "'");
+                $existe_us = adapterConnection::siminc1()->pegaUm("SELECT usucpf FROM seguranca.usuario WHERE usucpf='". $usucpf. "'");
 
                 if (!$existe_us) {
 
@@ -105,20 +105,20 @@ function inserirPerfisSlaves($usucpf, $pflcod) {
                         " . (($dados_us['tpocod']) ? "'" . $dados_us['tpocod'] . "'" : "NULL") . ", 
                         " . (($dados_us['carid']) ? "'" . $dados_us['carid'] . "'" : "NULL") . ");";
 
-                    adapterConnection::oldSiminc()->executar($sql);
+                    adapterConnection::siminc1()->executar($sql);
                 } else {
 
                     $dados_us = $db->pegaLinha("SELECT * FROM seguranca.usuario WHERE usucpf='" . $usucpf . "'");
 
                     $sql = "update seguranca.usuario set suscod = '{$dados_us['suscod']}' where usucpf = '{$usucpf}'";
-                    adapterConnection::oldSiminc()->executar($sql);
+                    adapterConnection::siminc1()->executar($sql);
                 }
 
-                $existe = adapterConnection::oldSiminc()->pegaUm("SELECT usucpf from seguranca.perfilusuario where pflcod='" . $pfl['pflcodslave'] . "' and usucpf='" . $usucpf . "'");
+                $existe = adapterConnection::siminc1()->pegaUm("SELECT usucpf from seguranca.perfilusuario where pflcod='" . $pfl['pflcodslave'] . "' and usucpf='" . $usucpf . "'");
 
                 if (!$existe) {
                     $sql = "INSERT INTO seguranca.perfilusuario ( usucpf, pflcod ) VALUES ( '" . $usucpf . "', '" . $pfl['pflcodslave'] . "');";
-                    adapterConnection::oldSiminc()->executar($sql);
+                    adapterConnection::siminc1()->executar($sql);
                 }
             } else {
 
@@ -144,15 +144,15 @@ function inserirPerfisSlaves($usucpf, $pflcod) {
 
             if ($sis['servidorslave'] == 'EXTERNO') {
 
-                $existe = adapterConnection::oldSiminc()->pegaUm("SELECT usucpf from seguranca.usuario_sistema where sisid='" . $sis['sisidslave'] . "' and usucpf='" . $usucpf . "'");
+                $existe = adapterConnection::siminc1()->pegaUm("SELECT usucpf from seguranca.usuario_sistema where sisid='" . $sis['sisidslave'] . "' and usucpf='" . $usucpf . "'");
 
                 if (!$existe) {
                     $sql = "INSERT INTO seguranca.usuario_sistema(usucpf, sisid, susstatus, pflcod, susdataultacesso, suscod) VALUES ('" . $usucpf . "', '" . $sis['sisidslave'] . "', 'A', NULL::integer, NOW(), '" . $suscod . "')";
-                    adapterConnection::oldSiminc()->executar($sql);
+                    adapterConnection::siminc1()->executar($sql);
                 }
 
                 $sql = "UPDATE seguranca.usuario_sistema SET suscod='" . $suscod . "' WHERE usucpf='" . $usucpf . "' AND sisid='" . $sis['sisidslave'] . "'";
-                adapterConnection::oldSiminc()->executar($sql);
+                adapterConnection::siminc1()->executar($sql);
             } else {
 
                 $existe = $db->pegaUm("SELECT usucpf from seguranca.usuario_sistema where sisid='" . $sis['sisidslave'] . "' and usucpf='" . $usucpf . "'");
@@ -198,13 +198,13 @@ function atualizarResponsabilidadesSlaves($usucpf, $pflcod) {
 
             if ($registro['servidorslave'] == 'EXTERNO') {
                 $sql = "select sisdiretorio from seguranca.sistema where sisid = " . $registro['sisidslave'];
-                $registro['sisdiretorioslave'] = adapterConnection::oldSiminc()->pegaUm($sql);
+                $registro['sisdiretorioslave'] = adapterConnection::siminc1()->pegaUm($sql);
             }
 
             if ($registro['urcampo']) {
 
                 if ($registro['servidorslave'] == 'EXTERNO') {
-                    adapterConnection::oldSiminc()->executar("UPDATE " . $registro['sisdiretorioslave'] . ".usuarioresponsabilidade SET rpustatus='I' WHERE usucpf='" . $usucpf . "' AND pflcod='" . $registro['pflcodslave'] . "'");
+                    adapterConnection::siminc1()->executar("UPDATE " . $registro['sisdiretorioslave'] . ".usuarioresponsabilidade SET rpustatus='I' WHERE usucpf='" . $usucpf . "' AND pflcod='" . $registro['pflcodslave'] . "'");
 
                     $regs = $db->carregar("SELECT " . $registro['urcampo'] . " FROM " . $registro['sisdiretoriomaster'] . ".usuarioresponsabilidade WHERE rpustatus='A' AND usucpf='" . $usucpf . "' AND pflcod='" . $pflcod . "'");
 
@@ -212,7 +212,7 @@ function atualizarResponsabilidadesSlaves($usucpf, $pflcod) {
                         foreach ($regs as $r) {
                             $sql = "INSERT INTO " . $registro['sisdiretorioslave'] . ".usuarioresponsabilidade (pflcod, usucpf, rpustatus, rpudata_inc, " . $registro['urcampo'] . ")
                                 VALUES ('" . $registro['pflcodslave'] . "', '{$usucpf}', 'A', NOW(), '" . $r[$registro['urcampo']] . "')";
-                            adapterConnection::oldSiminc()->executar($sql);
+                            adapterConnection::siminc1()->executar($sql);
                         }
                     }
                 } else {
