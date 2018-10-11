@@ -62,18 +62,18 @@ class Planacomorc_Controller_ImportaDadosSiop{
     public function AtualizarDotacao(){
         $this->exercicio = date('Y');
         $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-        $dados = $mImportaDadosSiop->RetornaFuncionais($this->exercicio);
-        $dadosSiop = [];
-        foreach($dados as $dado){
-            $dadosSiop[$dado['funcional']][$dado['categoriaeconomica']] = $dado['dotatual'];
+        $listaResultadoFuncionaisSIOP = $mImportaDadosSiop->RetornaFuncionais($this->exercicio);
+        $listaFuncionaisSiop = [];
+        foreach($listaResultadoFuncionaisSIOP as $funcionalSIOP){
+            $listaFuncionaisSiop[$funcionalSIOP['funcional']][$funcionalSIOP['categoriaeconomica']] = $funcionalSIOP['dotatual'];
         }
         
-        $dados = $mImportaDadosSiop->RetornaDadosSiminc($this->exercicio);
-        $dadosSiminc = [];
-        foreach($dados as $dado){
-            $dadosSiminc[$dado['funcional']][] = $dado;
-        }       
-        $this->GeraTabelasDivergentes($dadosSiminc, $dadosSiop);
+        $listaResultadoFuncionaisSubunidadeSiminc = $mImportaDadosSiop->RetornaDadosSiminc($this->exercicio);
+        $listaFuncionaisSubunidadeSiminc = [];
+        foreach($listaResultadoFuncionaisSubunidadeSiminc as $funcionalSubunidadeSiminc){
+            $listaFuncionaisSubunidadeSiminc[$funcionalSubunidadeSiminc['funcional']][] = $funcionalSubunidadeSiminc;
+        }
+        $this->GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop);
         
         $dadosProvisionado = $mImportaDadosSiop->RetornaDadosProvisionados($this->exercicio);
         $this->GeraTabelaProvisionado($dadosProvisionado);
@@ -89,7 +89,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
         $this->EnviaEmail();
     }
     
-    private function GeraTabelasDivergentes($dadosSiminc, $dadosSiop){
+    private function GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop){
         $this->sqls = [];
         $this->htmlTabela1 = "
         <h3>Foram realizadas alterações na Dotação das seguintes unidades:</h3>
@@ -125,48 +125,48 @@ class Planacomorc_Controller_ImportaDadosSiop{
             </thead>
             <tbody>";  
 
-        foreach($dadosSiminc as $funcional => $dado){
+        foreach($listaFuncionaisSubunidadeSiminc as $codigoFuncional => $funcionalSubunidadeSiminc){
 
-            $dadosSiop[$funcional][3] = !empty($dadosSiop[$funcional][3]) ? $dadosSiop[$funcional][3] : 0;
-            $dadosSiop[$funcional][4] = !empty($dadosSiop[$funcional][4]) ? $dadosSiop[$funcional][4] : 0;
+            $listaFuncionaisSiop[$codigoFuncional][3] = !empty($listaFuncionaisSiop[$codigoFuncional][3]) ? $listaFuncionaisSiop[$codigoFuncional][3] : 0;
+            $listaFuncionaisSiop[$codigoFuncional][4] = !empty($listaFuncionaisSiop[$codigoFuncional][4]) ? $listaFuncionaisSiop[$codigoFuncional][4] : 0;
 
-            if(isset($dadosSiop[$funcional]) && count($dado) == 1){
+            if(isset($listaFuncionaisSiop[$codigoFuncional]) && count($funcionalSubunidadeSiminc) == 1){
 
                 // Alteração do valor de Custeio
-                if(isset($dadosSiop[$funcional][3]) && $dado[0]['ptrdotacaocusteio'] != $dadosSiop[$funcional][3]){
+                if(isset($listaFuncionaisSiop[$codigoFuncional][3]) && $funcionalSubunidadeSiminc[0]['ptrdotacaocusteio'] != $listaFuncionaisSiop[$codigoFuncional][3]){
                     $this->htmlTabela1 .= "
                         <tr>
-                            <td>{$dado[0]['funcionalptres']}</td>
-                            <td>{$dado[0]['unosigla']} - {$dado[0]['suosigla']}</td>
+                            <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
+                            <td>{$funcionalSubunidadeSiminc[0]['unosigla']} - {$funcionalSubunidadeSiminc[0]['suosigla']}</td>
                             <td>3 - CUSTEIO</td>
-                            <td style='text-align: right; color: red;'>" . number_format($dado[0]['ptrdotacaocusteio'], 0, ',', '.') . "</td>
-                            <td style='text-align: right; color: green;'>" . number_format($dadosSiop[$funcional][3], 0, ',', '.') . "</td>
+                            <td style='text-align: right; color: red;'>" . number_format($funcionalSubunidadeSiminc[0]['ptrdotacaocusteio'], 0, ',', '.') . "</td>
+                            <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][3], 0, ',', '.') . "</td>
                         </tr>
                     ";
-                    $this->sqls[] = "UPDATE spo.ptressubunidade psu SET ptrdotacaocusteio = {$dadosSiop[$funcional][3]} WHERE psuid = {$dado[0]['psuid']}";
+                    $this->sqls[] = "UPDATE spo.ptressubunidade psu SET ptrdotacaocusteio = {$listaFuncionaisSiop[$codigoFuncional][3]} WHERE psuid = {$funcionalSubunidadeSiminc[0]['psuid']}";
                     $this->boAlteracao = true;
                 }
 
                 // Alteração do valor de Capital
-                if(isset($dadosSiop[$funcional][4]) && $dado[0]['ptrdotacaocapital'] != $dadosSiop[$funcional][4]){
+                if(isset($listaFuncionaisSiop[$codigoFuncional][4]) && $funcionalSubunidadeSiminc[0]['ptrdotacaocapital'] != $listaFuncionaisSiop[$codigoFuncional][4]){
 
                     $this->htmlTabela1 .= "
                         <tr>
-                            <td>{$dado[0]['funcionalptres']}</td>
-                            <td>{$dado[0]['unosigla']} - {$dado[0]['suosigla']}</td>
+                            <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
+                            <td>{$funcionalSubunidadeSiminc[0]['unosigla']} - {$funcionalSubunidadeSiminc[0]['suosigla']}</td>
                             <td>4 - CAPITAL</td>
-                            <td style='text-align: right; color: red;'>" . number_format($dado[0]['ptrdotacaocapital'], 0, ',', '.') . "</td>
-                            <td style='text-align: right; color: green;'>" . number_format($dadosSiop[$funcional][4], 0, ',', '.') . "</td>
+                            <td style='text-align: right; color: red;'>" . number_format($funcionalSubunidadeSiminc[0]['ptrdotacaocapital'], 0, ',', '.') . "</td>
+                            <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][4], 0, ',', '.') . "</td>
                         </tr>
                     ";
 
-                    $this->sqls[] = "UPDATE spo.ptressubunidade psu SET ptrdotacaocapital = {$dadosSiop[$funcional][4]} WHERE psuid = {$dado[0]['psuid']}";
+                    $this->sqls[] = "UPDATE spo.ptressubunidade psu SET ptrdotacaocapital = {$listaFuncionaisSiop[$codigoFuncional][4]} WHERE psuid = {$funcionalSubunidadeSiminc[0]['psuid']}";
                     $this->boAlteracao = true;
                 }
-            } elseif(count($dado) > 1){
+            } elseif(count($funcionalSubunidadeSiminc) > 1){
                 $total[3] = $total[4] = 0;
                 $unidades[3] = $unidades[4] = NULL;
-                foreach($dado as $subunidade){
+                foreach($funcionalSubunidadeSiminc as $subunidade){
                     $total[3] += $subunidade['ptrdotacaocusteio'];
                     $total[4] += $subunidade['ptrdotacaocapital'];
 
@@ -174,27 +174,27 @@ class Planacomorc_Controller_ImportaDadosSiop{
                     $unidades[4][] .= "{$subunidade['unosigla']} - {$subunidade['suosigla']} (R$ " . number_format($subunidade['ptrdotacaocapital'], 0, ',', '.') . ")";
                 }
 
-                if(isset($dadosSiop[$funcional][3]) && $total[3] != $dadosSiop[$funcional][3]){
+                if(isset($listaFuncionaisSiop[$codigoFuncional][3]) && $total[3] != $listaFuncionaisSiop[$codigoFuncional][3]){
                     $this->htmlTabela2 .= "
                             <tr>
-                                <td class='mid'>{$dado[0]['funcionalptres']}</td>
+                                <td class='mid'>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
                                 <td>" . implode('<hr />', $unidades[3]) . "</td>
                                 <td class='mid'>3 - CUSTEIO</td>
                                 <td class='mid' style='text-align: right; color: red;'>" . number_format($total[3], 0, ',', '.') . "</td>
-                                <td class='mid' style='text-align: right; color: green;'>" . number_format($dadosSiop[$funcional][3], 0, ',', '.') . "</td>
+                                <td class='mid' style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][3], 0, ',', '.') . "</td>
                             </tr>
                         ";
                     $this->boAlteracaoCompartilhada = true;
                 }
 
-                if(isset($dadosSiop[$funcional][4]) && $total[4] != $dadosSiop[$funcional][4]){
+                if(isset($listaFuncionaisSiop[$codigoFuncional][4]) && $total[4] != $listaFuncionaisSiop[$codigoFuncional][4]){
                     $this->htmlTabela2 .= "
                             <tr>
-                                <td>{$dado[0]['funcionalptres']}</td>
+                                <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
                                 <td>" . implode('<hr />', $unidades[4]) . "</td>
                                 <td>4 - CAPITAL</td>
                                 <td style='text-align: right; color: red;'>" . number_format($total[4], 0, ',', '.') . "</td>
-                                <td style='text-align: right; color: green;'>" . number_format($dadosSiop[$funcional][4], 0, ',', '.') . "</td>
+                                <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][4], 0, ',', '.') . "</td>
                             </tr>
                         ";
                     $this->boAlteracaoCompartilhada = true;
