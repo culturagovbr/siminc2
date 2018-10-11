@@ -216,7 +216,7 @@
                         echo $simec->select("filtro[capid][]", 'Modalidade de Pactuação', $_REQUEST['filtro']['capid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
                     }
 
-                    if( count($_REQUEST['filtro']['bented']) > 0 ) {
+                    if( $_REQUEST['filtro']['bented'] != '' ) {
 
                         echo $simec->radio("filtro[bented]", 'TED', $_REQUEST['filtro']['bented'], ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
                     }
@@ -250,12 +250,12 @@
                         echo $simec->select("filtro[aloid][]", 'Alterações', $_REQUEST['filtro']['aloid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
                     }
 
-                    if( count($_REQUEST['filtro']['benparecertecnico']) > 0 ) {
+                    if( $_REQUEST['filtro']['benparecertecnico'] != '' ) {
 
                         echo $simec->radio("filtro[benparecertecnico]", 'Parecer Técnico', $_REQUEST['filtro']['benparecertecnico'], ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
                     }
 
-                    if( count($_REQUEST['filtro']['benparecerjuridico']) > 0 ) {
+                    if( $_REQUEST['filtro']['benparecerjuridico'] != '' ) {
                         echo $simec->radio("filtro[benparecerjuridico]", 'Parecer Jurídico', $_REQUEST['filtro']['benparecerjuridico'], ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
                     }
 

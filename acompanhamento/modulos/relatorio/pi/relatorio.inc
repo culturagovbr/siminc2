@@ -136,7 +136,7 @@
                         echo $simec->select("filtro[eqdid][]", 'Enquadramento', $_REQUEST['filtro']['eqdid'], $stSql, null, ['input-size' => 9, 'label-size' => 2]);
                     }
 
-                    if( count($_REQUEST['filtro']['picted']) > 0 ) {
+                    if( $_REQUEST['filtro']['picted'] != '') {
 
                         echo $simec->radio("filtro[picted]", 'TED', $_REQUEST['filtro']['picted'], ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], null, ['input-size' => 9, 'label-size' => 2]);
                     }
