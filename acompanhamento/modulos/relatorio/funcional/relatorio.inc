@@ -119,7 +119,7 @@
                                   ORDER BY
                                       descricao
                         ";
-                       echo $simec->select("filtro[unoid][]", 'Unidade', $_REQUEST['filtro']['unoid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                       echo $simec->select("filtro[unoid][]", 'Unidade', $_REQUEST['filtro']['unoid'], $stSql, NULL, ['input-size' => 3, 'label-size' => 1]);
                     }
 
                     if( count($_REQUEST['filtro']['suoid']) > 0 ){
@@ -134,7 +134,7 @@
                                   ORDER BY
                                       descricao
                         ";
-                        echo $simec->select("filtro[suoid][]", 'Subunidade', $_REQUEST['filtro']['suoid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                        echo $simec->select("filtro[suoid][]", 'Subunidade', $_REQUEST['filtro']['suoid'], $stSql, NULL, ['input-size' => 3, 'label-size' => 1]);
                     }
 
                     if( count($_REQUEST['filtro']['acaid']) > 0 ){
@@ -154,7 +154,7 @@
                                   ORDER BY
                                       descricao
                         ";
-                        echo $simec->select("filtro[acaid][]", 'Ação', $_REQUEST['filtro']['acaid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                        echo $simec->select("filtro[acaid][]", 'Ação', $_REQUEST['filtro']['acaid'], $stSql, NULL, ['input-size' => 3, 'label-size' => 1]);
 
                     }
 
@@ -162,13 +162,13 @@
 
                         $stSql = "SELECT DISTINCT
                                       ptr.ptrid codigo,
-                                      COALESCE (ptr.prgcod, '') ||
-                                      ' - ' || COALESCE (ptr.acacod, '') ||
-                                      ' - ' || COALESCE (ptr.loccod, '') ||
-                                      ' - ' || COALESCE (ptr.acaobjetivocod, '') ||
-                                      ' - ' || COALESCE(ptr.plocod, '') ||
-                                      ' - ' || ptr.acatitulo ||
-                                      ' - ' || ptr.plodsc descricao
+                                      COALESCE (ptr.prgcod, '') || ' - ' ||
+                                      COALESCE (ptr.acacod, '') || ' - ' ||
+                                      COALESCE (ptr.loccod, '') || ' - ' ||
+                                      COALESCE (ptr.acaobjetivocod, '') || ' - ' ||
+                                      COALESCE (ptr.plocod, '') || ' - ' ||
+                                      ptr.acatitulo || ' - ' ||
+                                      ptr.plodsc descricao
                                   FROM monitora.vw_ptres ptr
 		                          JOIN public.vw_subunidadeorcamentaria suo ON(
                                       suostatus = 'A'
@@ -181,7 +181,7 @@
                                   ORDER BY
                                       descricao
                         ";
-                        echo $simec->select("filtro[ptrid][]", 'Funcional', $_REQUEST['filtro']['ptrid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                        echo $simec->select("filtro[ptrid][]", 'Funcional', $_REQUEST['filtro']['ptrid'], $stSql, NULL, ['input-size' => 3, 'label-size' => 1]);
 
                     }
 
@@ -196,7 +196,7 @@
                                   ORDER BY
                                       descricao
                         ";
-                        echo $simec->select("filtro[irpcod][]", 'RP', $_REQUEST['filtro']['irpcod'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                        echo $simec->select("filtro[irpcod][]", 'RP', $_REQUEST['filtro']['irpcod'], $stSql, NULL, ['input-size' => 3, 'label-size' => 1]);
 
                     }
                     ?>
