@@ -19,28 +19,52 @@
     // Início das colunas
     $agrupador = new AgrupadorBootstrap('filtro', '');
     // Dados padrão de destino (nulo)
-    $destino = isset($agrupador2) ? $agrupador2 : array();
-    // Dados padrão de origem
-    $origem = array(array('codigo' => 'locquantidadeproposta', 'descricao' => 'Quantidade Localizador'),
-                    array('codigo' => 'proquantidade', 'descricao' => 'Quantidade PO'),
-                    array('codigo' => 'proquantidadeexpansao', 'descricao' => 'Quantidade Expansão PO'),
-                    array('codigo' => 'projustificativa', 'descricao' => 'Justificativa'),
-                    array('codigo' => 'projustificativaexpansao', 'descricao' => 'Justificativa Expansão'),
-                    array('codigo' => 'prdvalor', 'descricao' => 'Valor'),
-                    array('codigo' => 'prdvalorexpansao', 'descricao' => 'Valor Expansão'),
-                    array('codigo' => 'suonome', 'descricao' => 'Subunidade'),
-                    array('codigo' => 'eqddsc', 'descricao' => 'Enquadramento da Despesa'),
-                    array('codigo' => 'irpcod', 'descricao' => 'RP'),
-                    array('codigo' => 'funcional', 'descricao' => 'Funcional'),
-                    array('codigo' => 'acatitulo', 'descricao' => 'Ação'),
-                    array('codigo' => 'plodsc', 'descricao' => 'PO'),
-                    array('codigo' => 'ndpid', 'descricao' => 'Natureza de Despesa'),
-                    array('codigo' => 'iducod', 'descricao' => 'IDUSO'),
-                    array('codigo' => 'foncod', 'descricao' => 'Fonte'),
-                    array('codigo' => 'idoid', 'descricao' => 'IDOC'),
-                    array('codigo' => 'proid', 'descricao' => 'ID Proposta'),
-                    array('codigo' => 'prsano', 'descricao' => 'Ano'),
-    );
+    $arrColunas = array(array('codigo' => 'locquantidadeproposta', 'descricao' => 'Quantidade Localizador'),
+                        array('codigo' => 'proquantidade', 'descricao' => 'Quantidade PO'),
+                        array('codigo' => 'proquantidadeexpansao', 'descricao' => 'Quantidade Expansão PO'),
+                        array('codigo' => 'projustificativa', 'descricao' => 'Justificativa'),
+                        array('codigo' => 'projustificativaexpansao', 'descricao' => 'Justificativa Expansão'),
+                        array('codigo' => 'prdvalor', 'descricao' => 'Valor'),
+                        array('codigo' => 'prdvalorexpansao', 'descricao' => 'Valor Expansão'),
+                        array('codigo' => 'suonome', 'descricao' => 'Subunidade'),
+                        array('codigo' => 'eqddsc', 'descricao' => 'Enquadramento da Despesa'),
+                        array('codigo' => 'irpcod', 'descricao' => 'RP'),
+                        array('codigo' => 'funcional', 'descricao' => 'Funcional'),
+                        array('codigo' => 'acatitulo', 'descricao' => 'Ação'),
+                        array('codigo' => 'plodsc', 'descricao' => 'PO'),
+                        array('codigo' => 'ndpid', 'descricao' => 'Natureza de Despesa'),
+                        array('codigo' => 'iducod', 'descricao' => 'IDUSO'),
+                        array('codigo' => 'foncod', 'descricao' => 'Fonte'),
+                        array('codigo' => 'idoid', 'descricao' => 'IDOC'),
+                        array('codigo' => 'proid', 'descricao' => 'ID Proposta'),
+                        array('codigo' => 'prsano', 'descricao' => 'Ano'),
+        );
+    
+    if ($retConsultaRelatorio['colunas']){
+        foreach($arrColunas as $arrColuna){
+            foreach($retConsultaRelatorio['colunas'] as $coluna){
+                if ($coluna['dscampo']==$arrColuna['codigo']){
+                    $destino[] = $arrColuna;
+                }
+            }
+        }
+        foreach($arrColunas as $arrColuna){
+            $achou=false;
+            foreach($retConsultaRelatorio['colunas'] as $coluna){
+                if ($coluna['dscampo']==$arrColuna['codigo']){
+                    $achou=true;
+                }
+            }
+            if (!$achou){
+                $origem[] = $arrColuna;
+            }
+        }        
+    }else{
+        $destino = isset($agrupador2) ? $agrupador2 : array();
+        $origem = $arrColunas;
+        // Dados padrão de origem
+//        $origem = 
+    }
     // exibe agrupador
     $agrupador->setOrigem('naoColuna', null, $origem);
     $agrupador->setDestino('coluna', null, $destino);
@@ -52,31 +76,27 @@
                  WHERE suo.prsano='".$_REQUEST['filtro']['prsano']."' AND suo.suostatus = 'A'
                  ORDER BY 3,2";
     echo $simec->select("filtro[suoid][]", 'Unidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    
     $stSql = "  SELECT DISTINCT eqd.eqdid AS codigo,
                        eqd.eqddsc AS descricao
                   FROM monitora.pi_enquadramentodespesa eqd
                  WHERE eqd.eqdano='".$_REQUEST['filtro']['prsano']."'
                    and eqdstatus = 'A'
                  ORDER BY 2,1";
-
-    echo $simec->select("filtro[eqdid][]", 'Enquadramento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
+    echo $simec->select("filtro[eqdid][]", 'Enquadramento', $eqdid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);  
+    
     $stSql = "  SELECT DISTINCT irp.irpcod AS codigo,
                        irp.irpcod || ' - ' || irp.irpdsc AS descricao
                   FROM public.identresultprimario irp
                  WHERE irp.irpstatus = 'A'
                  ORDER BY 2,1";
-
-    echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
+    echo $simec->select("filtro[irpcod][]", 'RP', $irpcod, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
+    
     $stSql = "  SELECT DISTINCT tpd.tpdid AS codigo,
                        tpd.tpdcod || ' - ' || tpd.tpdnome AS descricao 
                   FROM proposta.tipodetalhamento tpd
                  WHERE tpd.tpdstatus = 'A'
                  ORDER BY 2,1";
-
-    echo $simec->select("filtro[tpdid][]", 'Tipo de Detalhamento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
+    echo $simec->select("filtro[tpdid][]", 'Tipo de Detalhamento', $tpdid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
     ?>    
-    <div class="text-center">
-        <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
-        <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
-    </div>
 </div>
