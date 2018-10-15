@@ -368,6 +368,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
     function salvarConsulta(){
         var formulario = document.filtro;
+        document.filtro.target = "";
         selectAllOptions(formulario.coluna);
         $("#req").val("salvar-relatorio");
         if ($("#norelatorio").val()==''){
