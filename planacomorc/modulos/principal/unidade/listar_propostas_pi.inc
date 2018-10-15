@@ -42,7 +42,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <tr>
                             <td>
                                 <?php if(!array_intersect($perfis, [PFL_CONSULTA, PFL_CONSULTA_UNIDADE])){ ?>
-                                    <a href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&replicarProposta=<?php echo $prepi['pliid']; ?>"><span class="fa fa-plus-circle" title="Criar PI"></span></a>
+                                    <a href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&replicarProposta=<?php echo $prepi['pliid']; ?>" title="Criar PI">
+                                        <span class="btn btn-primary btn-sm fa fa-plus-circle"></span>
+                                    </a>
                                 <?php } ?>
                             </td>
                             <td><?php echo $prepi['funcional']; ?></td>
