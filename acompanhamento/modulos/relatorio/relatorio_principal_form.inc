@@ -234,9 +234,11 @@ include APPRAIZ . "includes/cabecalho.inc";
 
         $("#crid").change(function(){
             document.filtro.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
+            document.filtro.target = "";
             if ($(this).val()!=''){
-                document.filtro.target = "";
                 $("#req").val("seleciona-relatorio");
+            }else{
+                $("#req").val("");
             }
             document.filtro.submit();
 
