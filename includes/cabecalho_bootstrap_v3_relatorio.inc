@@ -170,7 +170,7 @@ $navBar = $_COOKIE['navbar']=='false' ? 'mini-navbar' : null;
                     <div class="clearfix"></div>
                 </div>
 
-                    <div class="ibox float-e-margins">
+                    <div class="ibox float-e-margins" style="margin-bottom: 0px !important;">
                         <div class="ibox-title">
                             <p style="font-weight: bold">Minist&eacute;rio da Cultura</p>
                             <p style="margin-top: -1em;font-weight: bold">Coordena&ccedil;&atilde;o de Planejamento, Or&ccedil;amento, Finan&ccedil;as e Contabilidade</p>

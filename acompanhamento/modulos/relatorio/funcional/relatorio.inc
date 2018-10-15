@@ -75,9 +75,6 @@
 <div class="row" style="margin-top: 5px;">
     <div class="col-md-12">
         <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>Relatório de Funcionais</h5>
-            </div>
             <?php
                 if(count($_POST['filtro']['suoid']) === 1):
 
@@ -92,7 +89,7 @@
                         descricao
             ";
             $suonome = $db->pegaUm($sql); ?>
-                <h2 style="text-align: center"><?= $suonome ?> </h2>
+                    <h2 style="text-align: center; margin-top: 10px !important;"><?= $suonome ?> </h2>
             <?php endif; ?>
             <div class="ibox-content">
                 <div class="table-responsive" style="overflow-y: auto;">
