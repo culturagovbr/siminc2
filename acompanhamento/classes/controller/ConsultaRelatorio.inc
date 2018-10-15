@@ -24,7 +24,7 @@ class Acompanhamento_Controller_ConsultaRelatorio
             $this->salvarColunas($mConsultaRelatorio->crid, $dados['coluna']);
             $this->salvarFiltros($mConsultaRelatorio->crid, $dados['filtro']);
             $mConsultaRelatorio->commit();
-            simec_redirecionar($url . '&tipo_relatorio=' . $dados['tipo_relatorio'] . '&crid='.$mConsultaRelatorio->crid, 'success');
+            simec_redirecionar($url . '&crid='.$mConsultaRelatorio->crid, 'success');
         } catch (Exception $e){
             $mConsultaRelatorio->rollback();
             simec_redirecionar($url, 'error');
