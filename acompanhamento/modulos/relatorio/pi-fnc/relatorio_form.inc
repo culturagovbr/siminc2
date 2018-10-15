@@ -93,7 +93,7 @@
     echo $simec->select("filtro[eqdid][]", 'Enquadramento', $eqdid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     # Traz o Todos por default
-    $picted;
+    $picted=$picted?$picted:'';
     echo $simec->radio("filtro[picted]", 'TED', $picted, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "

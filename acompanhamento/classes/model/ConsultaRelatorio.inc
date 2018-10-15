@@ -67,7 +67,6 @@ class Acompanhamento_Model_ConsultaRelatorio extends Modelo
         $sql = "select norelatorio, tprel
                   from acompanhamento.consulta_relatorio
                  where crid = $crid";
-        return $this->pegaLinha($sql);
-                
+        return $this->pegaLinha($sql);        
     }
 }

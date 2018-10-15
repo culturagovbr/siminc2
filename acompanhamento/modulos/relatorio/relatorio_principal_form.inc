@@ -98,12 +98,16 @@ if(isset($_REQUEST['req'])){
             $cConsultaRelatorio = new Acompanhamento_Controller_ConsultaRelatorio();
             $cConsultaRelatorio->salvar($_REQUEST);
             die;
+        case 'excluir-relatorio':
+            $cConsultaRelatorio = new Acompanhamento_Controller_ConsultaRelatorio();
+            $cConsultaRelatorio->excluirRelatorio($_REQUEST['crid']);
+            die;              
         case 'seleciona-relatorio':
             $cConsultaRelatorio = new Acompanhamento_Controller_ConsultaRelatorio();
             $retConsultaRelatorio = $cConsultaRelatorio->consultarRelatorio($_REQUEST['crid']);
             $tipoRelatorio = $_REQUEST['tipo_relatorio'];
             $crid = $_REQUEST['crid'];
-            $norelatorio = $retConsultaRelatorio['consulta'];
+            $norelatorio = $retConsultaRelatorio['consulta'];          
     }
 }
 if ($_REQUEST['crid']){
@@ -207,6 +211,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                 <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
                 <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
                 <a class="btn btn-warning btn-buscar" href="javascript:salvarConsulta();"><i class="fa fa-check"></i> Salvar Consulta</a>
+                <?php if ($_REQUEST['crid']){?>
+                    <a class="btn btn-danger btn-buscar" href="javascript:excluirConsulta();"><i class="fa fa-check"></i> Excluir Consulta</a>
+                <?php } ?>
             </div>                
         </div>
 
@@ -387,6 +394,29 @@ include APPRAIZ . "includes/cabecalho.inc";
             formulario.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
             formulario.submit();              
         }
+
+    }
+
+    function excluirConsulta(){
+        var formulario = document.filtro;
+        $("#req").val("excluir-relatorio");
+        swal({
+            title: $("#tipo_relatorio option:selected").text(),
+            text: "Deseja Realmente Excluir essa consulta?",
+            icon: "warning",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+            animation: "slide-from-top"
+        },function(isConfirm){
+                if (isConfirm){
+                    formulario.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
+                    formulario.submit();
+                }else{
+                    return false;    
+                }
+        });
 
     }
 </script>

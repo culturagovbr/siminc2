@@ -164,7 +164,7 @@
         echo $simec->select("filtro[capid][]", 'Modalidade de Pactuação', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         # Traz o Todos por default
-        $bented;
+        $bented = $bented?$bented:'';
         echo $simec->radio("filtro[bented]", 'TED', $bented, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
@@ -195,14 +195,14 @@
         echo $simec->select("filtro[aloid][]", 'Alterações', $aloid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         # Traz o Todos por default
-        $benparecertecnico;
+        $benparecertecnico=$benparecertecnico?$benparecertecnico:'';
         if ($retConsultaRelatorio['valores']['benparecertecnico']){
             $parecerTecn = $retConsultaRelatorio['valores']['benparecertecnico'];
         }  
         echo $simec->radio("filtro[benparecertecnico]", 'Parecer Técnico', $benparecertecnico, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
 
         # Traz o Todos por default
-        $benparecerjuridico;
+        $benparecerjuridico=$benparecerjuridico?$benparecerjuridico:'';
         echo $simec->radio("filtro[benparecerjuridico]", 'Parecer Jurídico', $benparecerjuridico, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "

@@ -24,9 +24,9 @@ class Acompanhamento_Controller_ConsultaRelatorio
             $this->salvarColunas($mConsultaRelatorio->crid, $dados['coluna']);
             $this->salvarFiltros($mConsultaRelatorio->crid, $dados['filtro']);
             $mConsultaRelatorio->commit();
-            simec_redirecionar($url . '&tipo_relatorio=' . $dados['tipo_relatorio'] . '&crid='.$dados['crid'], 'success');
+            simec_redirecionar($url . '&tipo_relatorio=' . $dados['tipo_relatorio'] . '&crid='.$mConsultaRelatorio->crid, 'success');
         } catch (Exception $e){
-            $mMonitoramento->rollback();
+            $mConsultaRelatorio->rollback();
             simec_redirecionar($url, 'error');
         }
     }
@@ -77,6 +77,26 @@ class Acompanhamento_Controller_ConsultaRelatorio
         $arrRetorno['filtros'] = $mConsultaRelatorioFiltros->selecionaFiltros($crid);
         $arrRetorno['valores'] = $mConsultaRelatorioFiltrosValor->selecionaValores($crid);
         return $arrRetorno;
+    }
+    
+    public function excluirRelatorio($crid){
+        $url = '?modulo=relatorio/relatorio_principal_form&acao=A';
+
+        try {
+            $mConsultaRelatorio = new Acompanhamento_Model_ConsultaRelatorio($crid);
+            $mConsultaRelatorioFiltrosValor = new Acompanhamento_Model_ConsultaRelatorioFiltrosValor();
+            $mConsultaRelatorioFiltros = new Acompanhamento_Model_ConsultaRelatorioFiltros();
+            $mConsultaRelatorioColunas = new Acompanhamento_Model_ConsultaRelatorioColunas();
+            $mConsultaRelatorioFiltrosValor->removeFiltrosValores($crid);            
+            $mConsultaRelatorioFiltros->removeFiltros($crid);            
+            $mConsultaRelatorioColunas->removeColunas($crid);
+            $mConsultaRelatorio->excluir();
+            $mConsultaRelatorio->commit();
+            simec_redirecionar($url , 'success');
+        } catch (Exception $e){
+            $mConsultaRelatorio->rollback();
+            simec_redirecionar($url, 'error');
+        }
     }
 
 }
