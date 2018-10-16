@@ -1,5 +1,9 @@
 <?php
 
+//include APPRAIZ.'acompanhamento/classes/controller/ConsultaRelatorio.inc';
+
+$tipoRelatorio = $_REQUEST['tipo_relatorio'] ? $_REQUEST['tipo_relatorio'] : array();
+$norelatorio = '';
 if(isset($_REQUEST['req'])){
     switch ($_REQUEST['req']) {
         case 'exibir':
@@ -91,9 +95,32 @@ if(isset($_REQUEST['req'])){
                 ['input-size' => 9, 'label-size' => 2]
             );
             die();
+        case 'salvar-relatorio':
+            $cConsultaRelatorio = new Acompanhamento_Controller_ConsultaRelatorio();
+            $cConsultaRelatorio->salvar($_REQUEST);
+            die;
+        case 'excluir-relatorio':
+            $cConsultaRelatorio = new Acompanhamento_Controller_ConsultaRelatorio();
+            $cConsultaRelatorio->excluirRelatorio($_REQUEST['crid']);
+            die;              
+        case 'seleciona-relatorio':
+            $cConsultaRelatorio = new Acompanhamento_Controller_ConsultaRelatorio();
+            $retConsultaRelatorio = $cConsultaRelatorio->consultarRelatorio($_REQUEST['crid']);
+            $tipoRelatorio = $_REQUEST['tipo_relatorio'];
+            $crid = $_REQUEST['crid'];
+            $norelatorio = $retConsultaRelatorio['consulta'];          
     }
 }
-
+if ($_REQUEST['crid']){
+    $cConsultaRelatorio = new Acompanhamento_Controller_ConsultaRelatorio();
+    $retConsultaRelatorio = $cConsultaRelatorio->consultarRelatorio($_REQUEST['crid']);
+    $tipoRelatorio = $retConsultaRelatorio['consulta']['tprel'];
+    $crid = $_REQUEST['crid'];
+    $norelatorio = $retConsultaRelatorio['consulta']['norelatorio'];    
+    foreach($retConsultaRelatorio['valores'] as $key=>$value){
+        $$key = $value;
+    }
+}
 include APPRAIZ . 'includes/AgrupadorBootstrap.php';
 
 /**
@@ -118,7 +145,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="ibox-title">
                         <h5 style="margin: 8px 0 7px;">Relatório:</h5>
                             <?php
-                                $preenchidos = $_REQUEST['tipo_relatorio']? $_REQUEST['tipo_relatorio']: array();
+                                $preenchidos = $tipoRelatorio? $tipoRelatorio: array();
                                 $base = array(
                                     'proposta' => 'Relatório de Propostas',
                                     'emendas'=> 'Relatório de Beneficiários/Emenda',
@@ -136,10 +163,26 @@ include APPRAIZ . "includes/cabecalho.inc";
 
         <div class="row">
             <div class="col-md-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5 style="margin: 8px 0 7px;">Consultas Salvas:</h5>
+                            <input type="hidden" id='norelatorio' name='norelatorio' value="<?php echo $norelatorio;?>">
+                            <?php
+                                $preenchidos = $_REQUEST['crid']? $_REQUEST['crid']: array();
+                                $sql = "select crid as codigo, norelatorio as descricao from acompanhamento.consulta_relatorio";
+                                echo $simec->select('crid', '', $preenchidos, $sql);
+                            ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
                 <div class="ibox float-e-margins div_form_rel">
 
                     <?php
-                        switch ($_REQUEST['tipo_relatorio']) {
+                        switch ($tipoRelatorio) {
                             case 'emendas':
                                 include_once APPRAIZ. 'acompanhamento/modulos/relatorio/emendas/relatorio_form.inc';
                             break;
@@ -162,7 +205,17 @@ include APPRAIZ . "includes/cabecalho.inc";
                     ?>
 
                 </div>
-            </div>
+            </div>        
+        </div>
+        <div class='ibox-content'>
+            <div class="text-center">
+                <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
+                <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
+                <a class="btn btn-warning btn-buscar" href="javascript:salvarConsulta();"><i class="fa fa-check"></i> Salvar Consulta</a>
+                <?php if ($_REQUEST['crid']){?>
+                    <a class="btn btn-danger btn-buscar" href="javascript:excluirConsulta();"><i class="fa fa-check"></i> Excluir Consulta</a>
+                <?php } ?>
+            </div>                
         </div>
 
     </div>
@@ -175,10 +228,23 @@ include APPRAIZ . "includes/cabecalho.inc";
         $("#tipo_relatorio").change(function(){
             document.filtro.target = "";
             $("#req").val("");
+            $("#crid").val('');
+            $("#norelatorio").val('');
+            document.filtro.submit();
+        });
+
+        $("#crid").change(function(){
+            document.filtro.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
+            document.filtro.target = "";
+            if ($(this).val()!=''){
+                $("#req").val("seleciona-relatorio");
+            }else{
+                $("#req").val("");
+            }
             document.filtro.submit();
 
         });
-
+        
         $("#filtro-prsano").change(function(){
             document.filtro.target = "";
             $("#req").val("");
@@ -301,4 +367,61 @@ include APPRAIZ . "includes/cabecalho.inc";
         });
     }
 
+    function salvarConsulta(){
+        var formulario = document.filtro;
+        document.filtro.target = "";
+        selectAllOptions(formulario.coluna);
+        $("#req").val("salvar-relatorio");
+        if ($("#norelatorio").val()==''){
+            swal({
+                title: $("#tipo_relatorio option:selected").text(),
+                text: "Digite o nome da consulta",
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                animation: "slide-from-top",
+                inputPlaceholder: ""
+              },
+              function(inputValue){
+                if (inputValue === false) return false;
+
+                if (inputValue === "") {
+                  swal.showInputError("Favor digitar o nome da consulta!");
+                  return false;
+                }
+                $("#norelatorio").val(inputValue);
+                formulario.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
+                formulario.submit();
+              });
+        }else{
+            formulario.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
+            formulario.submit();              
+        }
+
+    }
+
+    function excluirConsulta(){
+        var formulario = document.filtro;
+        $("#req").val("excluir-relatorio");
+        swal({
+            title: $("#tipo_relatorio option:selected").text(),
+            text: "Deseja Realmente Excluir essa consulta?",
+            icon: "warning",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+            animation: "slide-from-top"
+        },function(isConfirm){
+                if (isConfirm){
+                    formulario.action = '?modulo=relatorio/relatorio_principal_form&acao=A';
+                    formulario.submit();
+                }else{
+                    return false;    
+                }
+        });
+
+    }
 </script>

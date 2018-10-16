@@ -22,13 +22,38 @@
     // Início das colunas
     $agrupador = new AgrupadorBootstrap('filtro', '');
     // Dados padrão de destino (nulo)
-    $destino = isset($agrupador2) ? $agrupador2 : array();
 
     # Colunas do relatorio
-    $listaTodasColunas = montarColunasRelatorioProposta();
+    $arrColunas = montarColunasRelatorioProposta();
+    
+    if ($retConsultaRelatorio['colunas']){
+        foreach($arrColunas as $arrColuna){
+            foreach($retConsultaRelatorio['colunas'] as $coluna){
+                if ($coluna['dscampo']==$arrColuna['codigo']){
+                    $destino[] = $arrColuna;
+                }
+            }
+        }
+        foreach($arrColunas as $arrColuna){
+            $achou=false;
+            foreach($retConsultaRelatorio['colunas'] as $coluna){
+                if ($coluna['dscampo']==$arrColuna['codigo']){
+                    $achou=true;
+                }
+            }
+            if (!$achou){
+                $origem[] = $arrColuna;
+            }
+        }        
+    }else{
+        $destino = isset($agrupador2) ? $agrupador2 : array();
+        $origem = $arrColunas;
+        // Dados padrão de origem
+//        $origem = 
+    }
 
     // exibe agrupador
-    $agrupador->setOrigem('naoColuna', null, $listaTodasColunas);
+    $agrupador->setOrigem('naoColuna', null, $origem);
     $agrupador->setDestino('coluna', null, $destino);
     $agrupador->exibir();
 
@@ -46,24 +71,20 @@
                  WHERE eqd.eqdano='".$_REQUEST['filtro']['prsano']."'
                    and eqdstatus = 'A'
                  ORDER BY 2,1";
-    echo $simec->select("filtro[eqdid][]", 'Enquadramento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
-
+    echo $simec->select("filtro[eqdid][]", 'Enquadramento', $eqdid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);  
+    
     $stSql = "  SELECT DISTINCT irp.irpcod AS codigo,
                        irp.irpcod || ' - ' || irp.irpdsc AS descricao
                   FROM public.identresultprimario irp
                  WHERE irp.irpstatus = 'A'
                  ORDER BY 2,1";
-    echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
-
+    echo $simec->select("filtro[irpcod][]", 'RP', $irpcod, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
+    
     $stSql = "  SELECT DISTINCT tpd.tpdid AS codigo,
                        tpd.tpdcod || ' - ' || tpd.tpdnome AS descricao 
                   FROM proposta.tipodetalhamento tpd
                  WHERE tpd.tpdstatus = 'A'
                  ORDER BY 2,1";
-    echo $simec->select("filtro[tpdid][]", 'Tipo de Detalhamento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[tpdid][]", 'Tipo de Detalhamento', $tpdid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);    
     ?>    
-    <div class="text-center">
-        <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
-        <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
-    </div>
 </div>

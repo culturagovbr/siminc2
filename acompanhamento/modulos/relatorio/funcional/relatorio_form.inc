@@ -21,8 +21,30 @@
         // Dados padrão de destino (nulo)
         $destino = isset($agrupador2) ? $agrupador2 : array();
         // Dados padrão de origem
-        $origem = montarColunasRelatorioFuncional();
-        
+        $arrColunas = montarColunasRelatorioFuncional();
+        if ($retConsultaRelatorio['colunas']){
+            foreach($arrColunas as $arrColuna){
+                foreach($retConsultaRelatorio['colunas'] as $coluna){
+                    if ($coluna['dscampo']==$arrColuna['codigo']){
+                        $destino[] = $arrColuna;
+                    }
+                }
+            }
+            foreach($arrColunas as $arrColuna){
+                $achou=false;
+                foreach($retConsultaRelatorio['colunas'] as $coluna){
+                    if ($coluna['dscampo']==$arrColuna['codigo']){
+                        $achou=true;
+                    }
+                }
+                if (!$achou){
+                    $origem[] = $arrColuna;
+                }
+            }        
+        }else{
+            $destino = isset($agrupador2) ? $agrupador2 : array();
+            $origem = $arrColunas;
+        }
         // exibe agrupador
         $agrupador->setOrigem('naoColuna', NULL, $origem);
         $agrupador->setDestino('coluna', NULL, $destino);
@@ -39,7 +61,7 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[unoid][]", 'Unidade', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        echo $simec->select("filtro[unoid][]", 'Unidade', $unoid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
         
         echo "<div class='div_suoid'>";
         $stSql = "
@@ -52,7 +74,7 @@
                 AND suo.prsano = '". $_REQUEST['filtro']['prsano']."'
             ORDER BY
                 descricao";
-        echo $simec->select("filtro[suoid][]", 'Subunidade', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
         echo "</div>";
         
         echo "<div class='div_acaid'>";
@@ -72,7 +94,7 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[acaid][]", 'Ação', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        echo $simec->select("filtro[acaid][]", 'Ação', $acaid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
         echo "</div>";
         
         echo "<div class='div_ptrid'>";
@@ -92,7 +114,7 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[ptrid][]", 'Funcional', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        echo $simec->select("filtro[ptrid][]", 'Funcional', $ptrid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
         echo "</div>";
 
         $stSql = "
@@ -104,10 +126,6 @@
                 irp.irpstatus = 'A'
             ORDER BY
                 descricao";
-        echo $simec->select("filtro[irpcod][]", 'RP', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        echo $simec->select("filtro[irpcod][]", 'RP', $irpcod, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
     ?>
-    <div class="text-center">
-        <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
-        <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
-    </div>
 </div>
