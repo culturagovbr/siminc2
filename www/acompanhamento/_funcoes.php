@@ -248,7 +248,7 @@
             array('codigo' => 'orc_custeio_12',     'descricao' => 'Cronograma Orçamentario / Custeio Dezembro'),
             array('codigo' => 'vlrautorizado',      'descricao' => 'Valor Provisionado'),
             array('codigo' => 'vlrempenhado',       'descricao' => 'Valor Empenhado'),
-            array('codigo' => 'vlrliquido',         'descricao' => 'Valor Liquidado'),
+            array('codigo' => 'vlrliquidado',         'descricao' => 'Valor Liquidado'),
             array('codigo' => 'vlrpago',            'descricao' => 'Valor Pago'),
             array('codigo' => 'executado',          'descricao' => 'Executado'),
             array('codigo' => 'analise',            'descricao' => 'Análise Situacional'),

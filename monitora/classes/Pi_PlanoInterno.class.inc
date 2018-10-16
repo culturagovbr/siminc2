@@ -49,144 +49,6 @@ class Pi_PlanoInterno extends Modelo
         'docid' => null,
     );
 
-    public function recuperarPropostasSiminc($exercicio, $aFiltro)
-    {
-        $where = [];
-        if (!empty($aFiltro['uno'])) {
-            $where[] = " AND uno.unoid = {$aFiltro['uno']}";
-        }
-
-        # Verifica se o usuário tem vinculo de Sub-Unidades no seu Perfil
-        $listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object)array('usucpf' => $_SESSION['usucpf']));
-
-        if (count($listaSubUnidadeUsuario)) {
-            $where[] = " AND  suo.suocod IN('" . join("','", $listaSubUnidadeUsuario) . "') ";
-        }
-
-        $sql = "SELECT  ppi.ppiid, ppi.ppinome, ppi.ppidescricao, uno.unonome, suo.suonome, mom.momnome, fun.funcionalcampobusca,
-                        CASE
-                                WHEN NOT ppi.maiid IS NULL THEN COALESCE(ppi.ppinome,mai.mainome)
-                                ELSE ppi.ppinome
-                        END AS ppinome,
-                        eqd.eqdnome, are.arenome, pri.prinome, ump.umpnome, esd.esddsc, ppi.ppiqtdmeta, ppi.ppivlrcusteio, ppi.ppivlrcapital,
-                        ( COALESCE(ppi.ppivlrcusteio,0) + COALESCE(ppi.ppivlrcapital,0) ) AS total,
-                        COALESCE(ims.imsvlrdespesaempenhada, 0.00) AS imsvlrdespesaempenhada,
-                        COALESCE(ims.imsvlrdespesaliquidada, 0.00) AS imsvlrdespesaliquidada,
-                        COALESCE(ims.imsvlrpago, 0.00) AS imsvlrpago,
-                        CASE
-                            WHEN ( ppi.ppivlrcusteio + ppi.ppivlrcapital ) = 0 THEN '0.00%'
-                            ELSE ROUND(COALESCE(ims.imsvlrdespesaempenhada, 0) / ( ppi.ppivlrcusteio + ppi.ppivlrcapital ) * 100, 2)  || '%'
-                        END AS percentualempenhadoaprovado,
-                        COALESCE(dpisoma.vlrdetalhamento, 0.00) AS vlrdetalhamento,
-                        mom.momflgpossuidetalhe, ppi.ppiid, eqd.eqdid, mom.momflgpossuidetalhe, mom.momid, ppi.docid
-                FROM planointerno.propostapi ppi
-                JOIN planointerno.ppamomentounidade pmu ON ppi.pmuid = pmu.pmuid AND pmu.pmustatus = 'A' AND pmu.prsano = '$exercicio'
-                JOIN planointerno.subunidadeorcamentaria suo ON suo.suoid = pmu.suoid AND suo.suostatus = 'A'
-                JOIN planointerno.momento mom ON mom.momid = pmu.momid AND mom.momstatus = 'A'
-                left JOIN planointerno.vw_funcional_2016 fun ON fun.pmuid = pmu.pmuid
-                JOIN planointerno.enquadramentodespesa eqd ON eqd.eqdid = ppi.eqdid AND eqd.eqdstatus = 'A'
-                LEFT JOIN planointerno.areacultural are ON are.areid = ppi.areid AND are.arestatus = 'A'
-                JOIN planointerno.produtopi pri ON pri.priid = ppi.priid AND pri.pristatus = 'A'
-                LEFT JOIN planointerno.unidademedidapi ump ON ump.umpid = ppi.umpid AND ump.umpstatus = 'A'
-                JOIN planointerno.unidadeorcamentaria uno ON uno.unoid = suo.unoid AND uno.unostatus = 'A'
-                LEFT JOIN planointerno.manutencaoitem mai ON mai.maiid = ppi.maiid
-                LEFT JOIN workflow.documento doc ON doc.docid = ppi.docid
-                LEFT JOIN workflow.estadodocumento esd ON esd.esdid = doc.esdid
-                LEFT JOIN (
-                        SELECT  SUM(imsvlrdespesaliquidada) AS imsvlrdespesaliquidada, SUM(imsvlrpago) AS imsvlrpago, SUM(imsvlrdespesaempenhada) AS imsvlrdespesaempenhada, dpi2.ppiid
-                        FROM planointerno.importacaosiafi ims2
-                                JOIN planointerno.detalhepi dpi2 ON dpi2.dpicodigopi = ims2.imsnumeropi AND dpi2.dpistatus = 'A'
-                        WHERE ims2.imsexercicio = '$exercicio'
-                        GROUP BY 4
-                ) ims ON ppi.ppiid = ims.ppiid
-                LEFT JOIN (
-                        SELECT SUM( ( dpivlrcusteio + dpivlrcapital ) ) AS vlrdetalhamento, ppiid
-                        FROM planointerno.detalhepi
-                        WHERE dpistatus = 'A'
-                        GROUP BY ppiid
-                ) dpisoma ON dpisoma.ppiid = ppi.ppiid
-                WHERE mom.momid = (select momid from planointerno.momento where prsano = '$exercicio' AND momstatus = 'A' order by momid limit 1)
-                AND  ppi.ppistatus = 'A'"
-            . implode(' ', $where) .
-            "order by uno.unonome, suo.suonome";
-
-        // Carregando dados da base de dados do SIMINC antigo
-        $dados = adapterConnection::oldSiminc()->carregar($sql);
-        return $dados ? $dados : [];
-    }
-
-    public function recuperarDadosPropostasSiminc($ppiid)
-    {
-        $sql = "select  ppi.*, pmu.prsano, uno.unoid, uno.unonome, uno.unocod, suo.suoid, suo.suonome, suo.suocod, aca.acaid, aca.acacod, prg.prgid, prg.prgcod, loc.locid, loc.loccod, plo.ploid, plo.plocod,
-                        eqd.eqdnome, mai.mainome, masnome, obj.objid, obj.objcod, objnome, ini.iniid, ini.inicod, ini.ininome, mpp.mppid, mpp.mppcod, mpp.mppnome, mpn.mpnid, mpn.mpncod, mpn.mpnnome,
-                        are.areid, arenome, pri.priid, pri.prinome, ump.umpid, ump.umpnome, eqd.eqdsigla, are.aresigla
-                from planointerno.propostapi ppi
-                        INNER JOIN planointerno.ppamomentounidade pmu ON ppi.pmuid = pmu.pmuid AND pmu.pmustatus = 'A'
-                        INNER JOIN planointerno.ppaacao aca on aca.acaid = pmu.acaid AND aca.acastatus = 'A'
-                        INNER JOIN planointerno.ppaprograma prg on prg.prgid = pmu.prgid AND prg.prgstatus = 'A'
-                        INNER JOIN planointerno.ppalocalizador loc on loc.locid = pmu.locid AND loc.locstatus = 'A'
-                        INNER JOIN planointerno.ppaplanoorcamentario plo on plo.ploid = pmu.ploid AND plo.plostatus = 'A'
-                        INNER JOIN planointerno.subunidadeorcamentaria suo ON suo.suoid = pmu.suoid AND suo.suostatus = 'A'
-                        INNER JOIN planointerno.unidadeorcamentaria uno ON uno.unoid = suo.unoid AND uno.unostatus = 'A'
-                        INNER JOIN planointerno.enquadramentodespesa eqd ON eqd.eqdid = ppi.eqdid AND eqd.eqdstatus = 'A'
-                        LEFT JOIN planointerno.areacultural are ON are.areid = ppi.areid AND are.arestatus = 'A'
-                        LEFT JOIN planointerno.produtopi pri ON pri.priid = ppi.priid AND pri.pristatus = 'A'
-                        LEFT JOIN planointerno.unidademedidapi ump ON ump.umpid = ppi.umpid AND ump.umpstatus = 'A'
-                        LEFT JOIN planointerno.manutencaoitem mai ON mai.maiid = ppi.maiid AND mai.maistatus = 'A'
-                        LEFT JOIN planointerno.manutencaosubitem mas on mas.masid = ppi.masid AND mas.masstatus = 'A'
-                        LEFT JOIN planointerno.ppaobjetivo obj on obj.objid = pmu.objid AND obj.objstatus = 'A'
-                        LEFT JOIN planointerno.ppainiciativa ini on ini.iniid = pmu.iniid AND ini.inistatus = 'A'
-                        LEFT JOIN planointerno.metappa mpp on mpp.mppid = ppi.mppid AND mpp.mppstatus = 'A'
-                        LEFT JOIN planointerno.metapnc mpn on mpn.mpnid = ppi.mpnid AND mpn.mpnstatus = 'A'
-                where ppi.ppiid = $ppiid";
-
-        // Carregando dados da base de dados do SIMINC antigo
-        $dadosProposta = adapterConnection::oldSiminc()->pegaLinha($sql);
-
-
-        $dadosPI = [
-            'plititulo' => $dadosProposta['ppinome'],
-            'plidsc' => $dadosProposta['ppidescricao'],
-            'pliano' => $dadosProposta['prsano'],
-            'unicod' => $dadosProposta['unocod'],
-            'ungcod' => $dadosProposta['suocod'],
-            'picquantidade' => $dadosProposta['ppiqtdmeta'],
-            'picvalorcusteio' => $dadosProposta['ppivlrcusteio'],
-            'picvalorcapital' => $dadosProposta['ppivlrcapital'],
-        ];
-
-        // Carregando dados do SIMINC 2 de acordo com dados do SIMINC antigo
-        $dadosPI['eqdid'] = $this->pegaUm("select eqdid from monitora.pi_enquadramentodespesa eqd where eqdcod = '{$dadosProposta['eqdsigla']}' AND eqd.eqdano = '{$dadosProposta['prsano']}' AND eqd.eqdstatus = 'A'");
-        $dadosPI['maiid'] = $this->pegaUm("select maiid from planacomorc.manutencaoitem mai where upper(mai.mainome) = upper('{$dadosProposta['mainome']}') AND mai.prsano = '{$dadosProposta['prsano']}' AND mai.maistatus = 'A'");
-        $dadosPI['masid'] = $this->pegaUm("select masid from planacomorc.manutencaosubitem mas where upper(mas.masnome) = upper('{$dadosProposta['masnome']}') AND mas.prsano = '{$dadosProposta['prsano']}' AND mas.masstatus = 'A'");
-        $dadosPI['mppid'] = $this->pegaUm("select mppid from public.metappa mpp where mpp.mppcod = '{$dadosProposta['mppcod']}' AND mpp.prsano = '{$dadosProposta['prsano']}' AND mpp.mppstatus = 'A'");
-        $dadosPI['mdeid'] = $this->pegaUm("select mdeid from monitora.pi_modalidadeensino mde where upper(mdedsc) = upper('{$dadosProposta['arenome']}') AND mde.mdeano = '{$dadosProposta['prsano']}' AND mde.mdestatus = 'A'");
-        $dadosPI['pprid'] = $this->pegaUm("select pprid from monitora.pi_produto ppr where upper(ppr.pprnome) = upper('{$dadosProposta['prinome']}') AND prsano = '{$dadosProposta['prsano']}' AND ppr.pprstatus = 'A'");
-        $dadosPI['pumid'] = $this->pegaUm("select pumid from monitora.pi_unidade_medida pum where upper(pum.pumnome) = upper('{$dadosProposta['umpnome']}') AND pum.prsano = '{$dadosProposta['prsano']}' AND pum.pumstatus = 'A'");
-        $dadosPI['oppid'] = $this->pegaUm("select oppid from public.objetivoppa opp where opp.oppcod = '{$dadosProposta['objcod']}' AND opp.prsano = '{$dadosProposta['prsano']}' AND opp.oppstatus = 'A'");
-        $dadosPI['ippid'] = $this->pegaUm("select ippid from public.iniciativappa ipp where ipp.ippcod = '{$dadosProposta['inicod']}' AND ipp.prsano = '{$dadosProposta['prsano']}' AND ipp.ippstatus = 'A'");
-
-        $MetaPnc = $this->pegaLinha("select mpnid, ipnid from public.indicadorpnc ipn where ipn.ipncod = '" . trim($dadosProposta['mpncod']) . "' AND ipn.prsano = '{$dadosProposta['prsano']}' AND ipn.ipnstatus = 'A'");
-
-        $dadosPI['mpnid'] = $MetaPnc['mpnid'];
-        $dadosPI['ipnid'] = $MetaPnc['ipnid'];
-
-        // Recuperando PTRES
-        $sql = "select ptrid
-                from monitora.ptres ptr
-                where ptr.acacod = '{$dadosProposta['acacod']}'
-                AND ptr.prgcod = '{$dadosProposta['prgcod']}'
-                AND ptr.loccod = '{$dadosProposta['loccod']}'
-                AND ptr.unicod = '{$dadosProposta['unocod']}'
-                AND ptr.plocod = '{$dadosProposta['plocod']}'
-                AND ptr.ptrano = '{$dadosProposta['prsano']}'
-                AND ptr.ptrstatus = 'A'";
-
-        $dadosPI['ptrid'] = $this->pegaUm($sql);
-
-        return $dadosPI;
-    }
-
     public function montarSqlExecucaoOrcamentaria($filtro = []){
         $filtro[] = "suo.suostatus = 'A'";
         $filtro[] = "ptr.irpcod <> '6'";
@@ -1194,7 +1056,7 @@ class Pi_PlanoInterno extends Modelo
                 order by descricao";
 
         // Carregando dados da base de dados do SIMINC antigo
-        $dados = adapterConnection::oldSiminc()->carregar($sql);
+        $dados = adapterConnection::siminc1()->carregar($sql);
         return $dados ? $dados : [];
     }
 
@@ -1210,7 +1072,7 @@ class Pi_PlanoInterno extends Modelo
                 order by descricao;";
 
         // Carregando dados da base de dados do SIMINC antigo
-        $dados = adapterConnection::oldSiminc()->carregar($sql);
+        $dados = adapterConnection::siminc1()->carregar($sql);
         return $dados ? $dados : [];
     }
 
