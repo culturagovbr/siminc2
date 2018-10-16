@@ -35,7 +35,8 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
             fr.foncod,
             prd.idoid,
             prd.prdvalor,
-            prd.prdvalorexpansao
+            prd.prdvalorexpansao,
+            pro.prsano
         FROM proposta.proposta pro
             JOIN monitora.vw_ptres ptr ON pro.ptrid = ptr.ptrid
 	        JOIN monitora.acao aca ON ptr.acaid = aca.acaid
@@ -188,13 +189,13 @@ function montarColunasRelatorioProposta()
         array('codigo' => 'projustificativaexpansao', 'descricao' => 'Justificativa Expansão'),
         array('codigo' => 'prdvalor', 'descricao' => 'Valor'),
         array('codigo' => 'prdvalorexpansao', 'descricao' => 'Valor Expansão'),
-        array('codigo' => 'suonome', 'descricao' => 'Subunidade'),
+        array('codigo' => 'subunidade', 'descricao' => 'Subunidade'),
         array('codigo' => 'eqddsc', 'descricao' => 'Enquadramento da Despesa'),
         array('codigo' => 'irpcod', 'descricao' => 'RP'),
         array('codigo' => 'funcional', 'descricao' => 'Funcional'),
         array('codigo' => 'acatitulo', 'descricao' => 'Ação'),
         array('codigo' => 'plodsc', 'descricao' => 'PO'),
-        array('codigo' => 'ndpid', 'descricao' => 'Natureza de Despesa'),
+        array('codigo' => 'ndpcod', 'descricao' => 'Natureza de Despesa'),
         array('codigo' => 'iducod', 'descricao' => 'IDUSO'),
         array('codigo' => 'foncod', 'descricao' => 'Fonte'),
         array('codigo' => 'idoid', 'descricao' => 'IDOC'),
