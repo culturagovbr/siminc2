@@ -8944,7 +8944,7 @@ function montarSqlRelIndicadoresSecretaria(stdClass $dto){
             unm.unmdesc AS unidade,
             ume.umedesc AS produto,
             NULL AS parecer_gestor_a,
-            indobsgestor AS observacao_gestor_i,
+            indobservacao AS observacao_gestor_i,
             (
 		SELECT
 --		    TO_CHAR(NOW(), 'YYYY') ano,
