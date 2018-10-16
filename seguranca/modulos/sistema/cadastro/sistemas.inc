@@ -78,7 +78,7 @@ if (($_REQUEST['act'] == 'inserir') and (! is_array($msgerro))):
 	         alert ('O Sistema: <?=$_REQUEST['sisdsc']?> já se encontra cadastrado no sistema.');
 	         history.back();
 	      </script>
-	   <?
+	   <?php
 	     exit();
 	}
 
@@ -127,20 +127,22 @@ if (($_REQUEST['act'] == 'inserir') and (! is_array($msgerro))):
    unset($sql);
 
 ///////// Cadastro dos PERFIS (Super Usuário) //////////
-   $sql = sprintf("INSERT INTO seguranca.perfil 
-		   			(
-		   			 pfldsc, pflstatus, pflresponsabilidade,
-		   			 pflsncumulativo, pflfinalidade, pflnivel,
-		   			 pfldescricao, sisid, pflsuperuser
-		   			) SELECT 
-		   					pfldsc, pflstatus, pflresponsabilidade,
-		   					pflsncumulativo, pflfinalidade, pflnivel, 
-		   					pfldescricao, %d as sisid, pflsuperuser 
-		   			   FROM 
-		   			   		seguranca.perfil 
-		   			   WHERE 
-		   			   		sisid=999 AND 
-		   			   		pflsuperuser='t';", $sisidNew);
+   $sql = sprintf("
+        INSERT INTO seguranca.perfil
+        (
+            pfldsc, pflstatus, pflresponsabilidade,
+            pflsncumulativo, pflfinalidade, pflnivel,
+            pfldescricao, sisid, pflsuperuser
+        )
+        SELECT
+            pfldsc, pflstatus, pflresponsabilidade,
+            pflsncumulativo, pflfinalidade, pflnivel, 
+            pfldescricao, %d as sisid, pflsuperuser 
+        FROM seguranca.perfil 
+        WHERE 
+            sisid = 4
+            AND pflsuperuser = 't';
+    ", $sisidNew);
    
 
    
