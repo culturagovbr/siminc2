@@ -24,11 +24,24 @@ $titulo = "Metas do Indicador";
 monta_titulo( $titulo, "&nbsp;" );
 cabecalhoIndicador($_SESSION['indid']);
 
-$arrInd = $db->pegaLinha("select ind.*, u.umedesc from painel.indicador ind inner join painel.unidademeta u ON u.umeid = ind.umeid where indid = $indid");
+$arrInd = $db->pegaLinha(""
+        . "     SELECT  ind.*,"
+        . "             u.umedesc "
+        . "     FROM              "
+        . "             painel.indicador ind "
+        . "     INNER JOIN "
+        . "             painel.unidademeta u "
+        . "     ON u.umeid = ind.umeid where indid = $indid");
 
-$sql = "select prtobj from public.parametros_tela where mnuid = {$_SESSION['mnuid']} and prtdsc = '$indid'";
+$sql = "    SELECT "
+. "             prtobj "
+. "         FROM public.parametros_tela "
+. "         WHERE "
+. "             mnuid = {$_SESSION['mnuid']} "
+. "             AND prtdsc = '$indid'";
+
 $prtobj = $db->pegaUm($sql);
-
+//ver($arrInd,$sql,d);
 if($prtobj){
 	$prtobj = unserialize($prtobj);
 	extract($prtobj);
