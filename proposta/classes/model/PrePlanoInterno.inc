@@ -923,6 +923,100 @@ class Proposta_Model_PrePlanoInterno extends Modelo
 //ver($sql,d);
         return $sql;
     }
+    
+    /**
+     * Adapta os dados de Pre-Pi do módulo Proposta Orçamentária para PI do módulo Planejamento Orçamentário.
+     * 
+     * @return array
+     */
+    public function adaptarPiPropostaPlanejamento() {
+        $planejamento = [];
+        if($this->pliid){
+            $planejamento['plititulo'] = $this->plititulo;
+            $planejamento['plidsc'] = $this->plidsc;
+            $planejamento['pliano'] = $this->prsano;
+            # Subunidade
+            $subunidade = new Public_Model_SubUnidadeOrcamentaria($this->suoid);
+            $planejamento['ungcod'] = $subunidade->suocod;
+            # UO
+            $uo = new Public_Model_UnidadeOrcamentaria($subunidade->unoid);
+            $planejamento['unicod'] = $uo->unocod;
+            $planejamento['picquantidade'] = $this->pliquantidade;
+            $planejamento['picvalorcusteio'] = $this->plivalorcusteio;
+            $planejamento['picvalorcapital'] = $this->plivalorcapital;
+            $planejamento['eqdid'] = $this->eqdid;
+            $planejamento['maiid'] = $this->maiid;
+            $planejamento['masid'] = $this->masid;
+            $planejamento['mppid'] = $this->mppid;
+            $planejamento['mdeid'] = $this->mdeid;
+            $planejamento['pprid'] = $this->pprid;
+            $planejamento['pumid'] = $this->pumid;
+            $planejamento['oppid'] = $this->oppid;
+            $planejamento['ippid'] = $this->ippid;
+            $planejamento['mpnid'] = $this->mpnid;
+            $planejamento['ipnid'] = $this->ipnid;
+            $planejamento['neeid'] = $this->neeid;
+            $planejamento['esfid'] = $this->esfid;
+            $planejamento['ptrid'] = $this->ptrid;
+        }
+//ver($planejamento, d);
+        return $planejamento;
+    }
+    
+    /**
+     * Adapta os dados de Localização do Pre-Pi do módulo Proposta Orçamentária para PI do módulo Planejamento Orçamentário.
+     * 
+     * @return array
+     */
+    public function adaptarLocalizacaoPiPropostaPlanejamento() {
+        if(!$this->esfid || $this->esfid == Territorios_Model_Esfera::K_FEDERAL){
+            return [];
+        }
 
-}//end Class
+        switch($this->esfid){
+            case Territorios_Model_Esfera::K_EXTERIOR:
+                $sql = "
+                    SELECT
+                        NULL AS pilid,
+                        p.paidescricao,
+                        p.paiid
+                    FROM proposta.preplanointernolocalizacao l
+                        JOIN territorios.pais p on p.paiid = l.paiid
+                    WHERE
+                        l.pliid = ". (int)$this->pliid;
+            break;
+            case Territorios_Model_Esfera::K_ESTADUAL:
+                $sql = "
+                    SELECT
+                        NULL AS pilid,
+                        e.estuf,
+                        e.estdescricao,
+                        e.estcod 
+                    FROM proposta.preplanointernolocalizacao l
+                        JOIN territorios.estado e on e.estuf = l.estuf
+                    WHERE
+                        l.pliid = ". (int)$this->pliid;
+            break;
+            case Territorios_Model_Esfera::K_MUNICIPAL:
+                $sql = "
+                    SELECT
+                        NULL AS pilid,
+                        e.estuf,
+                        e.estdescricao,
+                        e.estcod,
+                        m.muncod,
+                        m.mundescricao
+                    FROM proposta.preplanointernolocalizacao l
+                        JOIN territorios.municipio m on m.muncod = l.muncod
+                        JOIN territorios.estado e on e.estuf = m.estuf
+                    WHERE
+                        l.pliid = ". (int)$this->pliid;
+            break;
+        }
+
+        $dados = $this->carregar($sql);
+        return $dados ? $dados : [];
+    }
+
+}
 

@@ -1219,15 +1219,17 @@ else
 </form>
 <script type="text/javascript" src="/includes/prototype.js"></script>	
 <script type="text/javascript">
-function verificaSH(){   
-    if (document.formulario.perid.value!==document.formulario.perid_conf.value){
-        alert('Se alterar a periodicidade a série histórica será apagada!'); 
-        return;
+function verificaSH(){
+    if (document.formulario.indid.value!=''){
+        if (document.formulario.perid.value!==document.formulario.perid_conf.value){
+            alert('Se alterar a periodicidade a série histórica será apagada!'); 
+            return;
+        }
+        if (document.formulario.regid.value!==document.formulario.regid_conf.value){
+            alert('Se alterar a regionalização a série histórica será apagada!'); 
+            return;
+        }    
     }
-    if (document.formulario.regid.value!==document.formulario.regid_conf.value){
-        alert('Se alterar a regionalização a série histórica será apagada!'); 
-        return;
-    }    
 }
 
 function submeter(evento, indid){	

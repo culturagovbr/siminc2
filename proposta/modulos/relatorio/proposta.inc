@@ -35,13 +35,13 @@
     $listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf']));
     $listaSubUnidadeUsuario = implode("', '", $listaSubUnidadeUsuario);
     if((in_array(PFL_CONSULTA_UNIDADE, $listaPerfil)) || in_array(PFL_SUBUNIDADE, $listaPerfil) && ($listaSubUnidadeUsuario)){
-        $filtro = array('exercicio' => $_SESSION['exercicio']);
+        $filtro = array('prsano' => $_SESSION['exercicio']);
         if($listaSubUnidadeUsuario){
             $filtro['suocod']=$listaSubUnidadeUsuario;
         }
         $sql = montarSqlRelatorioGeralProposta((object) $filtro);
     }else if (in_array(PFL_ADMINISTRADOR, $listaPerfil) || in_array(PFL_SUPERUSUARIO, $listaPerfil)){
-        $filtro = array('exercicio' => $_SESSION['exercicio']);
+        $filtro = array('prsano' => $_SESSION['exercicio']);
         $sql = montarSqlRelatorioGeralProposta((object) $filtro);
     }
     $lista = $db->carregar($sql);
