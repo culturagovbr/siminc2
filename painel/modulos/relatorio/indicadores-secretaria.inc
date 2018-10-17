@@ -202,7 +202,7 @@
                                 <?=$indicadores['produto']; ?>
                             </td>
                             <td>
-                                <?=$indicadores['parecer_gestor_a']; ?>
+                                <?=$indicadores['observacao_gestor_i']; ?>
                             </td>
                             <td>
                                 <?=$indicadores['meta']; ?>
@@ -276,7 +276,7 @@
                                     <?=$indicadores['produto']; ?>
                                 </td>
                                 <td>
-                                    <?=$indicadores['parecer_gestor_a']; ?>
+                                    <?=$indicadores['observacao_gestor_i']; ?>
                                 </td>
                                 <td>
                                     <?=$indicadores['meta']; ?>
