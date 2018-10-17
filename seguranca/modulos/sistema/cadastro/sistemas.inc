@@ -398,6 +398,7 @@ if (($_REQUEST['act'] == 'inserir') and (! is_array($msgerro))):
                     $_REQUEST['diret'],
                     $_REQUEST['diret'],
                     $_REQUEST['diret'],
+                    $_REQUEST['diret'],
                     $_REQUEST['diret']);
 		$db->executar($sql);
 		unset($sql);
@@ -424,6 +425,7 @@ if (($_REQUEST['act'] == 'inserir') and (! is_array($msgerro))):
                     COMMENT ON COLUMN %s.tprperfil.prfid IS 'Identificador único da tabela tprperfil.';
                     COMMENT ON COLUMN %s.tprperfil.tprcod IS 'Código único da tabela tiporesponsabilidade.';
                     COMMENT ON COLUMN %s.tprperfil.pflcod IS 'Código único da tabela perfil.';",
+                $_REQUEST['diret'],
                 $_REQUEST['diret'],
                 $_REQUEST['diret'],
                 $_REQUEST['diret'],
@@ -478,7 +480,6 @@ if (($_REQUEST['act'] == 'inserir') and (! is_array($msgerro))):
                     $_REQUEST['diret'],
                     $_REQUEST['diret'],
                     $_REQUEST['diret'],
-                    $_REQUEST['diret'],
                     $_REQUEST['diret']);
 		$db->executar($sql);
 		unset($sql);
@@ -486,10 +487,10 @@ if (($_REQUEST['act'] == 'inserir') and (! is_array($msgerro))):
 
 	$db->commit();
 
-	$pathDef = $_SERVER['DOCUMENT_ROOT'];
-	copyDir($pathDef.'/raiz', $pathDef.'/'.$_REQUEST['diret']);
-	copyDir($pathDef.'/../raiz', $pathDef.'/../'.$_REQUEST['diret']);
-	rename($pathDef.'/'.$_REQUEST['diret'].'/raiz.php', $pathDef.'/'.$_REQUEST['diret'].'/'.$_REQUEST['diret'].'.php');
+//	$pathDef = $_SERVER['DOCUMENT_ROOT'];
+//	copyDir($pathDef.'/raiz', $pathDef.'/'.$_REQUEST['diret']);
+//	copyDir($pathDef.'/../raiz', $pathDef.'/../'.$_REQUEST['diret']);
+//	rename($pathDef.'/'.$_REQUEST['diret'].'/raiz.php', $pathDef.'/'.$_REQUEST['diret'].'/'.$_REQUEST['diret'].'.php');
 
     ?>
     	<script>
