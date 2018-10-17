@@ -486,7 +486,9 @@ if (($_REQUEST['act'] == 'inserir') and (! is_array($msgerro))):
 	endif;
 
 	$db->commit();
+//	$db->rollback();
 
+        # Criação de estrutura padrão de arquivos e pastas do novo módulo/Sistema.
 //	$pathDef = $_SERVER['DOCUMENT_ROOT'];
 //	copyDir($pathDef.'/raiz', $pathDef.'/'.$_REQUEST['diret']);
 //	copyDir($pathDef.'/../raiz', $pathDef.'/../'.$_REQUEST['diret']);
