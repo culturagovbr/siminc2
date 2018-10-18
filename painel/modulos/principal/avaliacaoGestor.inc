@@ -45,16 +45,24 @@ $db->cria_aba(57105,$url,'');
         </tr>          
         <?php
         $classUp='fa-thumbs-o-up';
-        $classDown='fa-thumbs-o-down';        
+        $classDown='fa-thumbs-o-down'; 
+        $classExclamation='fa-exclamation';
         $value = "";
         if ($indavalgestor=='S'){
             $classUp='fa-thumbs-up';
             $classDown='fa-thumbs-o-down';
+            $classExclamation='fa-exclamation';
             $value = "S";
         }else if ($indavalgestor=='N'){
             $classUp='fa-thumbs-o-up';
             $classDown='fa-thumbs-down';
+            $classExclamation='fa-exclamation';
             $value = "N";
+        }else if ($indavalgestor=='E'){
+            $classUp='fa-thumbs-o-up';
+            $classDown='fa-thumbs-o-down';
+            $classExclamation='fa-exclamation-circle';
+            $value = "E";            
         }
         ?>    
         <input type="hidden" name="indavalgestor" id="indavalgestor" value="<?=$value;?>">
@@ -63,14 +71,22 @@ $db->cria_aba(57105,$url,'');
         ?>    
             <tr>
                 <td align="right" width="25%" class="SubTituloDireita">Avaliação do Gestor:</td>
-                <td><a href="javascript:alteraClasseThumbs('S');"><i style="font-size:2.5em" id="indthumbsup" class="fa <?php echo $classUp;?>"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:alteraClasseThumbs('N');"><i style="font-size:2.5em" id="indthumbsdown" class="fa <?php echo $classDown;?>"></i></a></td>
+                <td>
+                    <a href="javascript:alteraClasseThumbs('S');"><i style="font-size:2.5em" id="indthumbsup" class="fa <?php echo $classUp;?>"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:alteraClasseThumbs('N');"><i style="font-size:2.5em" id="indthumbsdown" class="fa <?php echo $classDown;?>"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:alteraClasseThumbs('E');"><i style="font-size:2.5em" id="indthumbsexclamation" class="fa <?php echo $classExclamation;?>"></i></a>
+                </td>
             </tr>
         <?php
         }else{
         ?>   
             <tr>
                 <td align="right" width="25%" class="SubTituloDireita">Avaliação do Gestor:</td>
-                <td><i style="font-size:2.5em" id="indthumbsup" class="fa <?php echo $classUp;?>"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i style="font-size:2.5em" id="indthumbsdown" class="fa <?php echo $classDown;?>"></i></td>
+                <td>
+                    <i style="font-size:2.5em" id="indthumbsup" class="fa <?php echo $classUp;?>"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i style="font-size:2.5em" id="indthumbsdown" class="fa <?php echo $classDown;?>"></i>
+                    <i style="font-size:2.5em" id="indthumbsexclamation" class="fa <?php echo $classExclamation;?>"></i>
+                </td>
             </tr>    
         <?php
         }
@@ -105,6 +121,8 @@ $db->cria_aba(57105,$url,'');
             document.getElementById('indthumbsup').classList.remove('fa-thumbs-up');
             document.getElementById('indthumbsdown').classList.add('fa-thumbs-o-down');        
             document.getElementById('indthumbsdown').classList.remove('fa-thumbs-down');
+            document.getElementById('indthumbsexclamation').classList.add('fa-exclamation');        
+            document.getElementById('indthumbsexclamation').classList.remove('fa-exclamation-circle');
             document.getElementById('indavalgestor').value = '';
         }else{
             document.getElementById('indavalgestor').value = value;
@@ -113,11 +131,22 @@ $db->cria_aba(57105,$url,'');
                 document.getElementById('indthumbsup').classList.add('fa-thumbs-up');
                 document.getElementById('indthumbsdown').classList.remove('fa-thumbs-down');
                 document.getElementById('indthumbsdown').classList.add('fa-thumbs-o-down');        
-            }else{
+                document.getElementById('indthumbsexclamation').classList.add('fa-exclamation');        
+                document.getElementById('indthumbsexclamation').classList.remove('fa-exclamation-circle');
+            }else if (value=='N'){
                 document.getElementById('indthumbsup').classList.remove('fa-thumbs-up');
                 document.getElementById('indthumbsup').classList.add('fa-thumbs-o-up');
                 document.getElementById('indthumbsdown').classList.remove('fa-thumbs-o-down');
-                document.getElementById('indthumbsdown').classList.add('fa-thumbs-down');                
+                document.getElementById('indthumbsdown').classList.add('fa-thumbs-down');
+                document.getElementById('indthumbsexclamation').classList.add('fa-exclamation');        
+                document.getElementById('indthumbsexclamation').classList.remove('fa-exclamation-circle');
+            }else{
+                document.getElementById('indthumbsup').classList.remove('fa-thumbs-up');
+                document.getElementById('indthumbsup').classList.add('fa-thumbs-o-up');
+                document.getElementById('indthumbsdown').classList.add('fa-thumbs-o-down');
+                document.getElementById('indthumbsdown').classList.remove('fa-thumbs-down');
+                document.getElementById('indthumbsexclamation').classList.remove('fa-exclamation');        
+                document.getElementById('indthumbsexclamation').classList.add('fa-exclamation-circle');
             }
         }
 
