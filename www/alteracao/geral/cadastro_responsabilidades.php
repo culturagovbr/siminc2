@@ -26,8 +26,8 @@ if (!$pflcod && !$usucpf) {
 $sqlResponsabilidadesPerfil = "
     SELECT
         tr.*
-    FROM proposta.tprperfil p
-        JOIN proposta.tiporesponsabilidade tr ON p.tprcod = tr.tprcod
+    FROM alteracao.tprperfil p
+        JOIN alteracao.tiporesponsabilidade tr ON p.tprcod = tr.tprcod
     WHERE
         tprsnvisivelperfil = TRUE
         AND p.pflcod = '%s'
@@ -53,7 +53,7 @@ if (!$responsabilidadesPerfil || @count($responsabilidadesPerfil) < 1) {
                         ung.suocod AS codigo,
                         ung.suocod || ' - ' || ung.suonome AS descricao,
                         ur.rpustatus AS status
-                    FROM proposta.usuarioresponsabilidade ur
+                    FROM alteracao.usuarioresponsabilidade ur
                         JOIN public.vw_subunidadeorcamentaria ung ON(ur.ungcod = ung.suocod)
                     WHERE
                         ur.rpustatus = 'A'
@@ -69,7 +69,7 @@ if (!$responsabilidadesPerfil || @count($responsabilidadesPerfil) < 1) {
                         uni.unicod AS codigo,
                         uni.unicod || ' - ' || uni.unidsc AS descricao,
                         ur.rpustatus AS status
-                    FROM proposta.usuarioresponsabilidade ur
+                    FROM alteracao.usuarioresponsabilidade ur
                         JOIN public.unidade uni USING(unicod)
                     WHERE
                         ur.usucpf = '%s'

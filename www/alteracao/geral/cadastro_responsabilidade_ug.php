@@ -16,14 +16,14 @@ $db = new cls_banco();
 
 function gravarResponsabilidadeAcao($dados) {
     global $db;
-    $sql = "UPDATE proposta.usuarioresponsabilidade SET rpustatus='I' WHERE usucpf='".$dados['usucpf']."' AND pflcod='".$dados['pflcod']."'";
+    $sql = "UPDATE alteracao.usuarioresponsabilidade SET rpustatus='I' WHERE usucpf='".$dados['usucpf']."' AND pflcod='".$dados['pflcod']."'";
     $db->executar($sql);
 
     if ($dados['usuacaresp']) {
         foreach($dados['usuacaresp'] as $ungcod) {
 
             $sql = <<<DML
-INSERT INTO proposta.usuarioresponsabilidade(pflcod, usucpf, rpustatus, rpudata_inc, ungcod)
+INSERT INTO alteracao.usuarioresponsabilidade(pflcod, usucpf, rpustatus, rpudata_inc, ungcod)
   VALUES ('{$dados['pflcod']}', '{$dados['usucpf']}', 'A', NOW(), '{$ungcod}')
 DML;
             $db->executar($sql);
@@ -110,7 +110,7 @@ $pflcod = $_REQUEST['pflcod'];
                     || CASE WHEN urp.rpuid IS NOT NULL THEN ' checked' ELSE '' END || '>' AS acao,
                     ung.suocod || ' - ' || ung.suonome AS descricao
                 FROM public.vw_subunidadeorcamentaria ung
-                    LEFT JOIN proposta.usuarioresponsabilidade urp ON(
+                    LEFT JOIN alteracao.usuarioresponsabilidade urp ON(
                         urp.ungcod = ung.suocod
                         AND urp.rpustatus = 'A'
                         AND urp.usucpf = '{$usucpf}'
@@ -136,7 +136,7 @@ $pflcod = $_REQUEST['pflcod'];
                         SELECT DISTINCT
                             ung.suocod AS codigo,
                             ung.suocod || ' - ' || ung.suonome AS descricao
-                        FROM proposta.usuarioresponsabilidade ur
+                        FROM alteracao.usuarioresponsabilidade ur
                             JOIN public.vw_subunidadeorcamentaria ung ON(ur.ungcod = ung.suocod)
                         WHERE
                             ur.rpustatus = 'A'
