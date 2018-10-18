@@ -211,9 +211,9 @@ include APPRAIZ . "includes/cabecalho.inc";
 <script language="JavaScript" src="../includes/funcoesspo.js?v=1"></script>
 <link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css">
 <script src="/library/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<script src="js/cadastro_pi_funcoes.js?v=9"></script>
+<script src="js/cadastro_pi_funcoes.js?v=10"></script>
 <script src="js/cadastro_pi_validacoes.js?v=9"></script>
-<script src="js/cadastro_pi_init.js?v=10"></script>
+<script src="js/cadastro_pi_init.js?v=11"></script>
 <style>
     autorizadocapital {
         display: none;
@@ -1469,7 +1469,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <h4 class="modal-title">Anexar arquivos(Documentos)</h4>
                     </div>
                     <div class="modal-body">
-                        <form class="dropzone" method="POST" enctype="multipart/form-data" action="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&uploadAnexo=1" id="formularioAnexo" name="formularioAnexo">
+                        <form class="dropzone" method="POST" enctype="multipart/form-data" action="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&uploadAnexo=1" id="formularioAnexoPlanacomorc" name="formularioAnexoPlanacomorc">
                             <div class="form-group">
                                 <label for="arqdescricao" class="col-lg-2 control-label">Descrição:</label>
                                 <div class="col-lg-10">

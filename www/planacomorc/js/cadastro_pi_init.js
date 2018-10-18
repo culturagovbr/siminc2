@@ -152,12 +152,14 @@
         });
 
         $('#btn_adicionar_sei').click(function(){
+            var nuSei = $('#input_sei').val();
+            nuSei = nuSei.replace(/[^\d]+/g,'');
              var trHtml =
-                '<tr style="height: 30px;" id="tr_sei_' + $('#input_sei').val()+ '" >'
+                '<tr style="height: 30px;" id="tr_sei_' + nuSei+ '" >'
                         + '<td style="text-align: left;">' + $('#input_sei').val() + '</td>'
                         + '<td style="text-align: center;">'
                             + '<input type="hidden" name="lista_sei[]" value="' + $('#input_sei').val() + '" />'
-                            + '<span class="glyphicon glyphicon-trash link btnRemoveSei" data-sei="' + $('#input_sei').val()+ '" ></span>'
+                            + '<span class="glyphicon glyphicon-trash link btnRemoveSei" data-sei="' + nuSei+ '" ></span>'
                         + '</td>'
                 + '</tr>';
             $('#table_sei').append(trHtml);
@@ -285,7 +287,7 @@
         });
 
         // Evento de terminar de carregar arquivos
-        Dropzone.options.formularioAnexo = {
+        Dropzone.options.formularioAnexoPlanacomorc = {
             init: function() {
                 
                 this.on("success", function(file, response){
@@ -297,7 +299,6 @@
                 });
 
                 this.on("queuecomplete", function(file){
-
                     // Armazena o objeto Dropzone para chamar métodos
                     objFormularioAnexo = this;
                     // Chama mensagem de sucesso
