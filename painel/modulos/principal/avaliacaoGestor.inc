@@ -94,7 +94,7 @@ $db->cria_aba(57105,$url,'');
         <tr>
             <?php
             $acessoGestor='S';
-            if (in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){
+            if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
                 $acessoGestor='N';
                 echo "<input type='hidden' name='ind'>";
             }
