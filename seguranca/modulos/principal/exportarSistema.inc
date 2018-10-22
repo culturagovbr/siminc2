@@ -2,23 +2,6 @@
 
 ini_set("memory_limit", "1024M");
 
-$arCpfsAutorizados = array('', '','','', '', '', '', '', '','', '', '', '', '', '', '', '', '');
-
-if(!in_array($_SESSION['usucpf'], $arCpfsAutorizados)){
-	echo "<br/><br/><center><p><font color=\"red\">Voce não tem permissão para visualizar esta tela.</font></p></center>";
-	die;
-}
-
-global $servidor_bd, $porta_bd, $nome_bd, $usuario_db, $senha_bd;
-
-$nome_bd     = '';
-$servidor_bd = '';
-$porta_bd    = '';
-$usuario_db  = '';
-$senha_bd    = '';
-
-$db2 = new cls_banco();
-
 function montaSqlDadosTabela($shema, $table)
 {
 	$sql = "SELECT
@@ -188,10 +171,17 @@ if($_REQUEST['req'] == 'exportar'){
 	}
 	
 	// Monta INSERT seguranca.perfilmenu
-	$sql = "select pm.*, pf.pfldsc, mn.mnucod, mn.mnudsc, mn.mnulink from seguranca.perfilmenu pm 
-			join seguranca.perfil pf on pf.pflcod = pm.pflcod
-			join seguranca.menu mn on mn.mnuid = pm.mnuid
-			where pf.sisid = {$_REQUEST['sisid']} and mn.sisid = {$_REQUEST['sisid']}";
+	$sql = "
+            select
+                pm.*,
+                pf.pfldsc,
+                mn.mnucod,
+                mn.mnudsc,
+                mn.mnulink
+            from seguranca.perfilmenu pm 
+                join seguranca.perfil pf on pf.pflcod = pm.pflcod
+                join seguranca.menu mn on mn.mnuid = pm.mnuid
+            where pf.sisid = {$_REQUEST['sisid']} and mn.sisid = {$_REQUEST['sisid']}";
 	$dataPerfilMenu = $db->carregar($sql);
 	
 	// Recupera campos do banco de destino, definido com a variavel $db2
@@ -509,16 +499,20 @@ monta_titulo($linha1, $linha2);
 		<tr>
 			<td class="subtituloDireita">Escolha um sistema:</td>
 			<td>
-				<?php
-					$sql = "SELECT 
-								sisid as codigo,
-								sisid || ' - ' || sisdsc as descricao
-							FROM seguranca.sistema
-							ORDER BY sisid";
-					
-					unset($sisid);
-					$db->monta_combo('sisid', $sql, 'S', 'Selecione...', '', '', '');
-				?>
+                            <?php
+                                $sql = "
+                                    SELECT 
+                                        sisid AS codigo,
+                                        sisid || ' - ' || sisdsc AS descricao
+                                    FROM seguranca.sistema
+                                    WHERE
+                                        sisstatus = 'A'
+                                    ORDER BY
+                                        descricao
+                                ";
+                                unset($sisid);
+                                $db->monta_combo('sisid', $sql, 'S', 'Selecione...', '', '', '');
+                            ?>
 			</td>
 		</tr>
 		<tr>
