@@ -533,8 +533,9 @@ function gerFuncResp ($sisid, $sisDir, $usucpf, $dados = array()) {
 				$_REQUEST['usunome'],
 				md5_decrypt_senha( $usuario->ususenha, '' )
 				);
-
-				enviar_email( $remetente, $destinatario, $assunto, $conteudo );
+                $corpoEmailV3 = $conteudo;
+                include APPRAIZ . "includes/email-template.php";
+				enviar_email( $remetente, $destinatario, $assunto, $corpoEmailV3 );
 			}
 
 
