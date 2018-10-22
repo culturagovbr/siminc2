@@ -535,7 +535,7 @@ function gerFuncResp ($sisid, $sisDir, $usucpf, $dados = array()) {
 				);
                 $corpoEmailV3 = $conteudo;
                 include APPRAIZ . "includes/email-template.php";
-				enviar_email( $remetente, $destinatario, $assunto, $corpoEmailV3 );
+				enviar_email( $remetente, $destinatario, $assunto, $textoEmailV3 );
 			}
 
 
