@@ -132,8 +132,6 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid 				= $_REQUEST['mtiid'];
 				$indshformula		= $_REQUEST['indshformula'];
 				$formulash			= $_REQUEST['formulash'];
-				$indavalgestor			= $_REQUEST['indavalgestor'];
-				$indobsgestor			= $_REQUEST['indobsgestor'];
 				if($indpublicado=='true'){
 					$indhomologado = true;
 				}
@@ -178,13 +176,12 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 							  indformula, indtermos, indfontetermo, indnormalinicio, indnormalfinal, indatencaoinicio,
 							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,
                                                           indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,
-                                                          indhomologado,mtiid,indshformula,formulash,indencerrado,indavalgestor, indobsgestor)
+                                                          indhomologado,mtiid,indshformula,formulash,indencerrado)
 						  VALUES 
 						  	   (".$unmid.", ".$cliid.", ".$tpiid.", ".$secid.", ".$secidgestora.", ".$acaid.", ".$perid.", ".$estid.", ".$colid.", '".$usucpf."', '".$indnome."', '".$indobjetivo."',
 							  '".$indformula."', '".$indtermos."', '".$indfontetermo."', ".$indnormalinicio.", ".$indnormalfinal.", ".$indatencaoinicio.",
 							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',"
-                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado,
-                                                          '$indavalgestor', '$indobsgestor')
+                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado)
 						  RETURNING	indid
 						  ";
 			
@@ -258,9 +255,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
                                          indencerrado = 		".($indencerrado=='' ? 'indencerrado' : "'".$indencerrado."'").",
                                          mtiid = $mtiid,
                                          indshformula = $indshformula,
-                                         formulash = '$formulash',
-                                         indavalgestor = '$indavalgestor',
-                                         indobsgestor = '$indobsgestor'
+                                         formulash = '$formulash'
                                         WHERE indid = 			".$indid."	
                                 ";
 
