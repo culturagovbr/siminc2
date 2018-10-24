@@ -59,7 +59,7 @@
 
                         <div class="row">
                             <div class="col-lg-3">
-                                <?= $simec->select('janid', 'Tipo', $filtroalteracao['janid'], (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo(), null,  ['input-size' => 9, 'label-size' => 2]); ?>
+                                <?= $simec->select('tpaid', 'Tipo', $filtroalteracao['tpaid'], (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), null,  ['input-size' => 9, 'label-size' => 2]); ?>
                             </div>
                             <div class="col-lg-3">
                                 <?= $simec->select('janid', 'Janela', $filtroalteracao['janid'], (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo(), null,  ['input-size' => 9, 'label-size' => 2]); ?>
