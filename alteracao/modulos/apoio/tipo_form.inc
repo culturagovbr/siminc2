@@ -11,7 +11,7 @@ switch ($_REQUEST['req']) {
         $cTipo->excluir($_REQUEST['tpaid']);
     break;
     case 'valida-tipo':
-        $resposta = $cTipo->validaTipo();
+        $resposta = $cTipo->validarTipo();
         echo $resposta;
     die;
 }
@@ -63,22 +63,22 @@ include APPRAIZ . "includes/cabecalho.inc";
 
 <script>
     $(function(){
-        // $('#codigo-tipo').change(function () {
-        //
-        //     $.ajax({
-        //         url: 'proposta.php?modulo=apoio/fonte_form&acao=A&req=valida-tipo&tpacod='+ $('#tpacod').val()+ '&tpaid='+ $('#tpaid').val(),
-        //         dataType: 'json',
-        //         success: function(response){
-        //             if(response.type == 'error'){
-        //                 swal({
-        //                     title: response.title,
-        //                     text: response.text,
-        //                     type: response.type
-        //                 });
-        //                 $('#tpacod').val('');
-        //             }
-        //         }
-        //     });
-        // });
+        $('#codigo-tipo').change(function () {
+
+            $.ajax({
+                url: 'alteracao.php?modulo=apoio/tipo_form&acao=A&req=valida-tipo&tpacod='+ $('#tpacod').val()+ '&tpaid='+ $('#tpaid').val(),
+                dataType: 'json',
+                success: function(response){
+                    if(response.type == 'error'){
+                        swal({
+                            title: response.title,
+                            text: response.text,
+                            type: response.type
+                        });
+                        $('#tpacod').val('');
+                    }
+                }
+            });
+        });
     });
 </script>

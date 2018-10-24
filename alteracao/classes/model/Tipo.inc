@@ -62,4 +62,24 @@ class Alteracao_Model_Tipo extends Modelo
         'tpastatus'  => null,
     );
 
+    /**
+     * Consulta se o código inserido existe e retorna a primeira coluna do primeiro registro.
+     *
+     * @return array
+     */
+    public function carregarPorCodigo()
+    {
+        $sql = "SELECT
+                    tpaid,
+                    tpacod
+                FROM alteracao.tipo
+                WHERE
+                    tpastatus = 'A'
+                    AND tpacod = '" . $this->tpacod . "'
+                    AND tpaid <> '" . (int)$this->tpaid . "'
+        ";
+
+        return $this->pegaLinha($sql);
+    }
+
 }
