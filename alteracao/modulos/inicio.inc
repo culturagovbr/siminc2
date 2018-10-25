@@ -34,58 +34,47 @@
     include APPRAIZ. "includes/cabecalho.inc";
 ?>
 <script src="js/principal/alteracao.js?v=0"></script>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-8">
+        <h2>Painel de Acompanhamento de Pedidos de Alteração</h2>
+    </div>
+    <div class="col-lg-4">
+        <div style="padding-top: 10px;" class="text-right">
+            <button id="btn-exportar-xls" class="btn btn-primary btn-buscar" type="button">
+                <i class="fa fa-file-excel-o"></i> Exportar XLS
+            </button>
+        </div>
+    </div>
+</div>
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-md-12">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Pesquisa avançada por Pedidos de Cr&eacute;dito</h5>
+
+                <div class="tabs-container tabs">
+                    <ul class="nav nav-tabs prodTabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-interno" tipo="Interno">Interno</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-externo" tipo="Externo">Externo</a></li>
+                    </ul>
+                    <div class="ibox-title">
+                        <h5>Pesquisa avançada por Pedidos de Altera&ccedil;&atilde;o</h5>
+                    </div>
+                    <div class="tab-content">
+                        <div id="tab-interno" class="tab-pane active">
+                            <?php
+                            $tpdid = WF_TPDID_INTERNO;
+                            include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");?>
+                        </div>
+                        <div id="tab-externo" class="tab-pane">
+                            <?php
+                            $tpdid = WF_TPDID_EXTERNO;
+                            include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");?>
+                        </div>
+                    </div>
                 </div>
-                <div class="ibox-content">
-                    <form id="filtroalteracao" name="filtroalteracao" method="POST" role="form" class="form-horizontal">
-                        <input name="requisicao" id="requisicao" value="" type="hidden">
 
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <?= $simec->input('altid',  'Nº do Pedido', $filtroalteracao['altid'], ['maxlength' => 12, 'class' => 'inteiro'], ['input-size' => 9, 'label-size' => 2]); ?>
-                            </div>
-                            <div class="col-lg-3">
-                                <?= $simec->select('sitid', 'Situação', $filtroalteracao['sitid'], (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo(), null,  ['input-size' => 9, 'label-size' => 2]); ?>
-                            </div>
-                            <div class="col-lg-6">
-                                <?= $simec->select('suoid[]', 'Unidades', $filtroalteracao['suoid'], (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), null, ['input-size' => 9, 'label-size' => 2]); ?>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <?= $simec->select('tpaid', 'Tipo', $filtroalteracao['tpaid'], (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), null,  ['input-size' => 9, 'label-size' => 2]); ?>
-                            </div>
-                            <div class="col-lg-3">
-                                <?= $simec->select('janid', 'Janela', $filtroalteracao['janid'], (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo(), null,  ['input-size' => 9, 'label-size' => 2]); ?>
-                            </div>
-                            <div class="col-lg-6">
-                                <?= $simec->input('altid',  'Título', $filtroalteracao['altid'], NULL, ['input-size' => 9, 'label-size' => 2]); ?>
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="text-center">
-                                <button class="btn btn-warning btn-limpar" type="button">
-                                    <span class="glyphicon glyphicon-remove-circle"></span> Limpar
-                                </button>
-                                <button class="btn btn-primary btn-buscar" type="submit">
-                                    <span class="glyphicon glyphicon-search"></span> Buscar
-                                </button>
-                                <button class="btn btn-success btn-novo" type="button">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                    Novo
-                                </button>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
             </div>
         </div>
     </div>
@@ -110,12 +99,12 @@
                                     <th>Cancelado</th>
                                     <th>Suplementado</th>
                                     <th width="20%">T&iacute;tulo</th>
-                                    <th>Cadatrado em</th>
+                                    <th>Cadastrado em</th>
                                 </tr>
                             </thead>
                             <tbody>
                             <?php
-                            foreach($aAlteracao as $dados){ ?>
+                            foreach($aAlteracao as $dados): ?>
                                 <tr>
                                     <td class="text-center" nowrap="nowrap">
                                         <a href="#" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
@@ -131,7 +120,7 @@
                                     <td><?= $dados['tit']; ?></td>
                                     <td><?= $dados['cad']; ?></td>
                                 </tr>
-                            <?php } ?>
+                            <?php endforeach ?>
                             </tbody>
                         </table>
 
