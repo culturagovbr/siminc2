@@ -13,7 +13,7 @@ class Alteracao_Controller_Janela
             $mJanela->janinicioprogramacao = $mJanela->janinicioprogramacao ? formata_data_sql($mJanela->janinicioprogramacao) : NULL;
             $mJanela->janfimprogramacao = $mJanela->janfimprogramacao ? formata_data_sql($mJanela->janfimprogramacao) : NULL;
             $mJanela->prsano = $mJanela->prsano ? $mJanela->prsano : $_SESSION['exercicio'];
-            $mJanela->salvar();
+            $mJanela->salvar(null, null, ['janinicioprogramacao', 'janfimprogramacao']);
             $mJanela->commit();
             simec_redirecionar($url, 'success');
         } catch (Exception $e){
