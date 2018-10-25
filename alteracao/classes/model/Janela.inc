@@ -58,8 +58,6 @@ class Alteracao_Model_Janela extends Modelo
         'jannome' => null,
         'janinicio' => null,
         'janfim' => null,
-        'janinicioprogramacao' => null,
-        'janfimprogramacao' => null,
         'janstatus' => null,
         'prsano' => null,
     );

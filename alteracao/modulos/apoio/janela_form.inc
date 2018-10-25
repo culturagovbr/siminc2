@@ -37,8 +37,6 @@
                             echo $simec->input('jannome', 'Janela', $mJanela->jannome, ['required', 'maxlength' => 125]);
                             echo $simec->data('janinicio', 'Data Início', $mJanela->janinicio, ['required']);
                             echo $simec->data('janfim', 'Data Fim', $mJanela->janfim, ['required']);
-                            echo $simec->data('janinicioprogramacao', 'Data Início Programação', $mJanela->janinicioprogramacao);
-                            echo $simec->data('janfimprogramacao', 'Data Fim Programação', $mJanela->janfimprogramacao);
                         ?>
 
                         <div class="form-group">

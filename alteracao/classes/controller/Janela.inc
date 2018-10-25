@@ -10,10 +10,8 @@ class Alteracao_Controller_Janela
             $mJanela->popularDadosObjeto($dados);
             $mJanela->janinicio = $mJanela->janinicio ? formata_data_sql($mJanela->janinicio) : NULL;
             $mJanela->janfim = $mJanela->janfim ? formata_data_sql($mJanela->janfim) : NULL;
-            $mJanela->janinicioprogramacao = $mJanela->janinicioprogramacao ? formata_data_sql($mJanela->janinicioprogramacao) : NULL;
-            $mJanela->janfimprogramacao = $mJanela->janfimprogramacao ? formata_data_sql($mJanela->janfimprogramacao) : NULL;
             $mJanela->prsano = $mJanela->prsano ? $mJanela->prsano : $_SESSION['exercicio'];
-            $mJanela->salvar(null, null, ['janinicioprogramacao', 'janfimprogramacao']);
+            $mJanela->salvar();
             $mJanela->commit();
             simec_redirecionar($url, 'success');
         } catch (Exception $e){
@@ -36,4 +34,5 @@ class Alteracao_Controller_Janela
             simec_redirecionar($url, 'error');
         }
     }
+
 }
