@@ -8,7 +8,7 @@ class Alteracao_Controller_Tipo
         try {
             $mAlteracao = new Alteracao_Model_Tipo($dados['tpaid']);
             $mAlteracao->popularDadosObjeto($dados);
-            $mAlteracao->salvar(null, null);
+            $mAlteracao->salvar(null, null, ['tpaobs']);
             $mAlteracao->commit();
             simec_redirecionar($url, 'success');
         } catch (Exception $e){

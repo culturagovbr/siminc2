@@ -26,7 +26,7 @@
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
                             <tr class="text-center">
-                                <th>Ação</th>
+                                <th width="10%">Ação</th>
                                 <th>Código</th>
                                 <th>Descrição</th>
                             </tr>
@@ -37,8 +37,13 @@
                                 foreach($listaTipo as $dados) :
                                     ?>
                                     <tr>
-                                        <td class="text-center">
-                                            <a title="Alterar" href="?modulo=apoio/tipo_form&acao=A&tpaid=<?= $dados['tpaid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <td class="text-center" nowrap="nowrap">
+                                            <a href="?modulo=apoio/tipo_form&acao=A&tpaid=<?= $dados['tpaid']; ?>" title="Editar" >
+                                                <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
+                                            </a>
+                                            <a href="?modulo=apoio/tipo_form&acao=A&req=excluir-tipo&tpaid=<?= $dados['tpaid']; ?>" title="Apagar">
+                                                <span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span>
+                                            </a>
                                         </td>
                                         <td><?= $dados['tpacod']; ?></td>
                                         <td><?= $dados['tpadsc']; ?></td>
