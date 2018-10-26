@@ -42,7 +42,7 @@
                             <?php foreach($aPtres as $dados){ ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/funcionais_form&acao=A&ptrid=<?php echo $dados['ptrid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=apoio/funcionais_form&acao=A&ptrid=<?php echo $dados['ptrid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['unidade_orcamentaria']; ?></td>
                                     <td><?php echo $dados['acacod']; ?></td>

@@ -34,7 +34,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     foreach ($listaIduso as $dados) { ?>
                                         <tr>
                                             <td class="text-center">
-                                                <a title="Alterar" href="?modulo=apoio/iduso_form&acao=A&iduid=<?php echo $dados['iduid']; ?>"><i class="fa fa-pencil"></i></a>
+                                                <a title="Alterar" href="?modulo=apoio/iduso_form&acao=A&iduid=<?php echo $dados['iduid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                             </td>
                                             <td><?php echo $dados['iducod']?></td>
                                             <td><?php echo $dados['idudsc']; ?></td>

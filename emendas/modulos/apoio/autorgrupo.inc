@@ -34,7 +34,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <?php foreach($aAutorGrupo as $dados){ ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/autorgrupo_form&acao=A&agrid=<?php echo $dados['agrid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=apoio/autorgrupo_form&acao=A&agrid=<?php echo $dados['agrid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['agrdsc']; ?></td>
                                 </tr>

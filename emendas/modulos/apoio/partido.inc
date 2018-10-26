@@ -37,7 +37,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <?php foreach($aPartido as $dados){ ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/partido_form&acao=A&parid=<?php echo $dados['parid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=apoio/partido_form&acao=A&parid=<?php echo $dados['parid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['parcod']; ?></td>
                                     <td><?php echo $dados['pardsc']; ?></td>

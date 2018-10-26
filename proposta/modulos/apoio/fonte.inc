@@ -39,7 +39,7 @@ $listaFonte = (new Public_Model_FonteRecurso())->recuperarTodos('*', ["fonstatus
                                 ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/fonte_form&acao=A&fonid=<?= $dados['fonid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=apoio/fonte_form&acao=A&fonid=<?= $dados['fonid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['foncod']; ?></td>
                                     <td><?php echo $dados['fondsc']; ?></td>

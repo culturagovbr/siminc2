@@ -35,7 +35,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 foreach($listaIdoc as $dados){ ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="?modulo=apoio/idoc_form&acao=A&idoid=<?= $dados['idoid']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="?modulo=apoio/idoc_form&acao=A&idoid=<?= $dados['idoid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                         <td><?= $dados['idocod']?></td>
                                         <td><?= $dados['idodsc']?></td>

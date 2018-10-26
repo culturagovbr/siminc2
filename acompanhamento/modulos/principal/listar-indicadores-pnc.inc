@@ -43,13 +43,13 @@
                                     <?= !$acompanhamentoIndicadorPnc->idpquantidade? 0: $acompanhamentoIndicadorPnc->idpquantidade ?>
                                 </a>
                             <?php else: ?>
-                                <span class="editar_indicador fa fa-pencil link" data-idpid="" data-acpid="<?php echo $acpid; ?>" data-unocod="<?php echo $unidadeOrcamentaria->unocod; ?>" data-suocod="<?php echo $subunidade->suocod; ?>" data-ipncod="<?php echo trim($indicador['ipncod']); ?>" data-prsano="<?php echo $ano; ?>" title="Editar Indicador PNC"></span>
+                                <span class="editar_indicador btn btn-primary btn-sm glyphicon glyphicon-pencil  link" data-idpid="" data-acpid="<?php echo $acpid; ?>" data-unocod="<?php echo $unidadeOrcamentaria->unocod; ?>" data-suocod="<?php echo $subunidade->suocod; ?>" data-ipncod="<?php echo trim($indicador['ipncod']); ?>" data-prsano="<?php echo $ano; ?>" title="Editar Indicador PNC"></span>
                             <?php endif; ?>
                         <?php else: ?>
                             <?php if($acompanhamentoIndicadorPnc->idpid): ?>
                                 <?= !$acompanhamentoIndicadorPnc->idpquantidade? 0: $acompanhamentoIndicadorPnc->idpquantidade ?>
                             <?php else: ?>
-                                <span class="fa fa-pencil" title="Indicador PNC"></span>
+                                <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil" title="Indicador PNC"></span>
                             <?php endif; ?>
                         <?php endif; ?>
                     </td>

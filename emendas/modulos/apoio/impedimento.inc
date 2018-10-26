@@ -36,7 +36,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <tr>
                                         <td class="text-center">
                                             <a title="Alterar" href="?modulo=apoio/impedimento_form&acao=A&impid=<?php echo $dados['impid']; ?>">
-                                                <i class="fa fa-pencil"></i>
+                                                <i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i>
                                             </a>
                                         </td>
                                         <td>

@@ -40,7 +40,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <?php foreach($listaAutor as $dados){ ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="?modulo=apoio/autor_form&acao=A&autid=<?php echo $dados['autid']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="?modulo=apoio/autor_form&acao=A&autid=<?php echo $dados['autid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                         <td><?php echo $dados['autcod']; ?></td>
                                         <td><?php echo $dados['autnome']; ?></td>

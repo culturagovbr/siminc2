@@ -160,7 +160,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <?php foreach($aBeneficiario as $dados){ ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="?modulo=principal/beneficiario_form&acao=A&benid=<?php echo $dados['benid']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="?modulo=principal/beneficiario_form&acao=A&benid=<?php echo $dados['benid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                         <td><?php echo $dados['procnpj'] . ' - ' . $dados['pronome']; ?></td>
                                         <td><?php echo $dados['suocod'] . ' - ' . $dados['suonome']; ?></td>

@@ -34,7 +34,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <?php foreach($aAlteracaoOrcamentaria as $dados){ ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/alteracaoorcamentaria_form&acao=A&aloid=<?php echo $dados['aloid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=apoio/alteracaoorcamentaria_form&acao=A&aloid=<?php echo $dados['aloid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['alodsc']; ?></td>
                                 </tr>

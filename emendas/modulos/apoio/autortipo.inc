@@ -35,7 +35,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <?php foreach($listaAutorTipo as $dados){ ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/autortipo_form&acao=A&atpid=<?php echo $dados['atpid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=apoio/autortipo_form&acao=A&atpid=<?php echo $dados['atpid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['atpdsc']; ?></td>
                                     <td><?php echo $dados['agrdsc']; ?></td>

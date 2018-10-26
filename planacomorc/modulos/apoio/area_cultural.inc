@@ -39,7 +39,7 @@ $listaAreaCultural = (new Monitora_Model_PiModalidadeEnsino())->recuperarTodos('
                                 ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/area_cultural_form&acao=A&mdeid=<?php echo $dados['mdeid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/area_cultural_form&acao=A&mdeid=<?php echo $dados['mdeid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['mdecod']; ?></td>
                                     <td><?php echo $dados['mdedsc']; ?></td>

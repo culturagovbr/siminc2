@@ -38,7 +38,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <?php foreach($aJanela as $dados){ ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="?modulo=apoio/janela_form&acao=A&janid=<?php echo $dados['janid']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="?modulo=apoio/janela_form&acao=A&janid=<?php echo $dados['janid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                         <td><?php echo $dados['jandsc']; ?></td>
                                         <td><?php echo formata_data($dados['janinicio']); ?></td>

@@ -36,7 +36,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/objetivoppa_form&acao=A&oppid=<?php echo $dados['codigo']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/objetivoppa_form&acao=A&oppid=<?php echo $dados['codigo']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['descricao']; ?></td>
                                 </tr>

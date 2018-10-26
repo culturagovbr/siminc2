@@ -38,7 +38,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <td class="text-center">
                                             <a title="Alterar"
                                                href="?modulo=apoio/programa_form&acao=A&prgid=<?= $dados['prgid']; ?>">
-                                                <i class="fa fa-pencil"></i>
+                                                <i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i>
                                             </a>
                                         </td>
                                         <td><?= $dados['prgcod']; ?></td>

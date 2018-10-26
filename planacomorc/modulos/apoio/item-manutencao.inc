@@ -53,7 +53,7 @@
 								foreach ($manutencao_itens as $manutencao_item): ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="planacomorc.php?modulo=apoio/item-manutencao-form&acao=A&maiid=<?php echo $manutencao_item['codigo']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="planacomorc.php?modulo=apoio/item-manutencao-form&acao=A&maiid=<?php echo $manutencao_item['codigo']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                         <td><?php echo $manutencao_item['nome']; ?></td>
                                         <td><?php echo $manutencao_item['descricao']; ?></td>

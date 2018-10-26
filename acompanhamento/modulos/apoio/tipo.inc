@@ -33,7 +33,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 foreach ($listaTipo as $dados): ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="?modulo=apoio/tipo_form&acao=A&tipid=<?= $dados['tipid']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="?modulo=apoio/tipo_form&acao=A&tipid=<?= $dados['tipid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                         <td><?= $dados['tipdsc'] ?></td>
                                     </tr>
