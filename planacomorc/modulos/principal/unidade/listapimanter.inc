@@ -199,10 +199,10 @@
                             <?php
                                 # Fomatações para ficar mais visível os valores de Custeio e Capital.
                                 $custeioformat = number_format($dados['custeio'],2,',','.');
-                                $capitlformat = number_format($dados['capital'],2,',','.');
+                                $capitalformat = number_format($dados['capital'],2,',','.');
                             ?>
 
-                            <td title="Valor Custeio: <?= $custeioformat ."\n\n"?>Valor Capital: <?= $capitlformat ?>" class="text-right">
+                            <td title="Valor Custeio: <?= $custeioformat ."\n\n"?>Valor Capital: <?= $capitalformat ?>" class="text-right">
                                 <?= number_format(($dados['custeio'] + $dados['capital']), 2, ',', '.'); ?>
                             </td>
                             <th class="text-right"><?php echo marcarVermelhoValorSuperior($dados['autorizado'], $dados['custeio']+ $dados['capital'], 2); ?></th>
@@ -236,7 +236,9 @@
                             $totalCusteioFormat = number_format($total['custeio'],2,',','.');
                             $totalCapitalFormat = number_format($total['capital'],2,',','.');
                         ?>
-                        <th title="Valor Total Custeio: <?= $totalCusteioFormat."\n\n"?>Valor Total Capital: <?= $totalCapitalFormat."\n\n"?>" class="text-right"><?= number_format(($total['custeio'] + $total['capital']), 2, ',', '.'); ?></th>
+                        <th title="Valor Total Custeio: <?= $totalCusteioFormat."\n\n"?>Valor Total Capital: <?= $totalCapitalFormat."\n\n"?>" class="text-right">
+                            <?= number_format(($total['custeio'] + $total['capital']), 2, ',', '.'); ?>
+                        </th>
                         <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['autorizado'], $total['custeio']+ $total['capital'], 2); ?></th>
                         <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['empenhado'], $total['custeio']+ $total['capital'], 2); ?></th>
                         <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['liquidado'], $total['custeio']+ $total['capital'], 2); ?></th>
@@ -246,7 +248,9 @@
                     <tfoot>
                     <tr>
                         <th colspan="7">TOTAL</th>
-                        <th title="Valor Total Custeio: <?= $totalCusteioFormat."\n\n"?>Valor Total Capital: <?= $totalCapitalFormat."\n\n"?>" class="text-right"><?php echo number_format(($total['custeio'] + $total['capital']), 2, ',', '.'); ?></th>
+                        <th title="Valor Total Custeio: <?= $totalCusteioFormat."\n\n"?>Valor Total Capital: <?= $totalCapitalFormat."\n\n"?>" class="text-right">
+                            <?= number_format(($total['custeio'] + $total['capital']), 2, ',', '.'); ?>
+                        </th>
                         <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['autorizado'], $total['custeio']+ $total['capital'], 2); ?></th>
                         <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['empenhado'], $total['custeio']+ $total['capital'], 2); ?></th>
                         <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['liquidado'], $total['custeio']+ $total['capital'], 2); ?></th>
