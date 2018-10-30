@@ -1,6 +1,6 @@
 <?php
 
-    $listaTipo = (new Alteracao_Model_Tipo())->recuperarTodos('*', ["tpastatus = 'A' "], 'tpacod');
+    $listaTipo = (new Alteracao_Model_Tipo())->recuperarTodos();
 
     include APPRAIZ . "includes/cabecalho.inc";
 ?>
@@ -29,6 +29,7 @@
                                 <th width="10%">Ação</th>
                                 <th>Código</th>
                                 <th>Descrição</th>
+                                <th>Fluxo de trabalho</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -47,6 +48,7 @@
                                         </td>
                                         <td><?= $dados['tpacod']; ?></td>
                                         <td><?= $dados['tpadsc']; ?></td>
+                                        <td><?= $dados['tpafluxo']; ?></td>
                                     </tr>
                                 <?php endforeach;
                             endif ?>

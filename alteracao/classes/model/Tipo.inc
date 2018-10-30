@@ -60,6 +60,7 @@ class Alteracao_Model_Tipo extends Modelo
         'tpadsc'  => null,
         'tpaobs'  => null,
         'tpastatus'  => null,
+        'tpafluxo'  => null,
     );
 
     /**
@@ -80,6 +81,32 @@ class Alteracao_Model_Tipo extends Modelo
         ";
 
         return $this->pegaLinha($sql);
+    }
+
+    /**
+     * Recupera todas os registos.
+     *
+     * @return array
+     */
+    public function recuperarTodos()
+    {
+        $sql = "SELECT DISTINCT
+                    tpaid,
+                    tpacod,
+                    tpadsc,
+                    tpaobs,
+                    CASE tpafluxo
+                        WHEN 'I' THEN 'Interno'
+                        ELSE 'Externo'
+                    END AS tpafluxo
+                FROM alteracao.tipo
+                WHERE
+                    tpastatus = 'A'
+                ORDER BY
+                    tpadsc
+        ";
+
+        return $this->carregar($sql);
     }
 
 }

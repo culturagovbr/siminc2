@@ -43,6 +43,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <?php
                             echo $simec->input('tpadsc', 'Descrição', $mTipo->tpadsc, ['required' ,'maxlength' => 125]);
                             echo $simec->input('tpaobs', 'Observação', $mTipo->tpaobs, ['maxlength' => 125]);
+                            echo $simec->radio('tpafluxo', 'Fluxo de trabalho', $mTipo->tpafluxo, ['E' => 'Externo', 'I' => 'Interno']);
                         ?>
 
                         <div class="form-group">
