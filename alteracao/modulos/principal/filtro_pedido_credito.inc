@@ -34,7 +34,7 @@
                 <button class="btn btn-primary btn-buscar" type="submit">
                     <span class="glyphicon glyphicon-search"></span> Buscar
                 </button>
-                <button class="btn btn-success btn-novo" type="button">
+                <button class="btn btn-success btn-novo" type="button" onclick="javascript:window.location.href='/alteracao/alteracao.php?modulo=principal/cadastro_alteracoes&acao=C'">
                     <span class="glyphicon glyphicon-plus"></span>
                     Novo
                 </button>

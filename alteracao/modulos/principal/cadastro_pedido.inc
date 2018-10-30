@@ -1,0 +1,50 @@
+<?php
+?>
+<div class="ibox-content">
+    <form id="filtroalteracao" name="filtroalteracao" method="POST" role="form" action="?modulo=principal/cadastro_alteracoes&acao=C" class="form-horizontal">
+        <input name="req" id="req" value="" type="hidden">
+        <input name="pedid" id="pedid" value="<?=$mAlteracaoPedido->pedid;?>" type="hidden">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $simec->select('suoid', 'Unidades', $mAlteracaoPedido->suoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), null, ['input-size' => 9, 'label-size' => 2]); ?>
+            </div>
+            <div class="col-lg-3">
+                <br>
+            </div>
+            <div class="col-lg-3">
+                <br>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $simec->input('pedtitulo',  'Título', $mAlteracaoPedido->pedtitulo, NULL, ['input-size' => 9, 'label-size' => 2]); ?>
+            </div>            
+            <div class="col-lg-3">
+                <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), null,  ['input-size' => 6, 'label-size' => 5]); ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $simec->select('janid', 'Janela', $mAlteracaoPedido->janid, (new Alteracao_Model_Janela())->recuperarSqlCombo(), null,  ['input-size' => 9, 'label-size' => 2]); ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="text-center">
+                <button class="btn btn-primary btn-buscar" type="button" id="btnSalvarPedido">
+                    <span class="glyphicon glyphicon-saved"></span> Salvar
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script>
+    $(function(){
+        $("#btnSalvarPedido").click(function(){
+            $("#req").val('salvar_pedido');
+//            $("#filtroalteracao").action('?modulo=principal/cadastro_alteracoes&acao=C');
+            $("#filtroalteracao").submit();
+        });
+    });
+</script>

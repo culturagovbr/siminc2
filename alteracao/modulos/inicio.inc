@@ -19,7 +19,7 @@
         'exercicio' => $_SESSION['exercicio'],
         'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario
     ), $filtroalteracao);
-
+    $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($SQL, $var);
     if($requisicao){
         switch ($requisicao) {
             case 'limpar':
@@ -107,17 +107,17 @@
                             foreach($aAlteracao as $dados): ?>
                                 <tr>
                                     <td class="text-center" nowrap="nowrap">
-                                        <a href="#" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
-                                            <a href="#" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
+                                        <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
+                                        <a href="#" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
                                     </td>
-                                    <td><?= $dados['ped']; ?></td>
-                                    <td><?= $dados['tpc']; ?></td>
-                                    <td><?= $dados['jan']; ?></td>
+                                    <td><?= $dados['pedid']; ?></td>
+                                    <td><?= $dados['tpadsc']; ?></td>
+                                    <td><?= $dados['jannome']; ?></td>
                                     <td><?= $dados['sit']; ?></td>
-                                    <td><?= $dados['suoid']; ?></td>
+                                    <td><?= $dados['suoid'].' - '.$dados['suonome']; ?></td>
                                     <td><?= $dados['cnc']; ?></td>
                                     <td><?= $dados['soap']; ?></td>
-                                    <td><?= $dados['tit']; ?></td>
+                                    <td><?= $dados['pedtitulo']; ?></td>
                                     <td><?= $dados['cad']; ?></td>
                                 </tr>
                             <?php endforeach ?>
