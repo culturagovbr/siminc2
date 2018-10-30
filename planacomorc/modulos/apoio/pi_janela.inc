@@ -18,9 +18,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-                    
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/pi_janela_form&acao=A">Novo</a>
-                    
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/pi_janela_form&acao=A">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Novo
+                    </a>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
