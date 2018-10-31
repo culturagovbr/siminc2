@@ -247,7 +247,7 @@ if ( $_REQUEST['expirou'] ) {
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <h2 class="arrow-down-blue">SISGEST</h2>
+                                            <h2 class="arrow-down-blue">SIGEST</h2>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="box-area">
