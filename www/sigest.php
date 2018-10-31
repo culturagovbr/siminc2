@@ -279,8 +279,7 @@ if ( $_REQUEST['expirou'] ) {
                                                                 <input type="password" class="form-control" name="ususenha" id="ususenha" placeHolder="Senha" required="">
                                                             </div>
                                                             <div class="form-group form-check">
-                                                                <input type="checkbox" class="form-check-input" id="rememberme">
-                                                                <label class="form-check-label lnkLembrarSenha" for="rememberme">Lembrar senha <i class="fa fa-key"></i> </label>
+                                                                <i class="fa fa-key"></i> <a href="<?php echo URL_SISTEMA. 'recupera_senha.php'; ?>">Esqueceu sua senha?</a>
                                                             </div>
                                                             <button type="submit" class="btn btn-primary btn-acessar">Acessar</button>
                                                             

@@ -180,7 +180,7 @@
 							<div class="form-group" style="font-size: 14px;">
 								<div class="col-sm-12 pull-right">
 									<a class="btn btn-success" href="javascript:enviar_formulario()"><span class="glyphicon glyphicon glyphicon glyphicon-ok"></span> Lembrar senha</a>
-									<a class="btn btn-danger" href="./login.php" ><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
+									<a class="btn btn-danger" href="javascript:history.back();" ><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
 								</div>
 							</div>
                 		</form>
