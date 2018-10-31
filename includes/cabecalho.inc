@@ -229,7 +229,7 @@ else
 		$sql = sprintf("SELECT TRIM( paginainicial ) AS paginic FROM seguranca.sistema WHERE sisid = %d", $_SESSION['sisid']);
 		$paginic = $db->pegaUm( $sql );
 	?>
-	<body LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0" BGCOLOR="#ffffff">
+	<body LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0" BGCOLOR="#ffffff" <?php echo $_SESSION['sisid'] == 48? 'style="background: #FFFFFF;"': NULL; ?>>
 	<?php if ($_SESSION['mostramsg']) : ?>
 		<script>window.open("../geral/ctrlmensagens.php?tot=<?=$_SESSION['mostramsg']?>", "VtrlMensagem", "width=420,height=300,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes");</script>
 	<?php endif; unset($_SESSION['mostramsg']); ?>
