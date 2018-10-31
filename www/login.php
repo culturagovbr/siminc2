@@ -186,7 +186,7 @@ function DownloadArquivoInfo($arqid){
                             </div>
                             <div class="form-group" style="font-size: 14px;">
                                 <div class="col-sm-7" style="margin-top: 3px">
-                                    <i class="fa fa-key"></i> <a href="recupera_senha.php" style="color: #fff">Esqueci minha senha?</a>
+                                    <i class="fa fa-key"></i> <a href="recupera_senha.php" style="color: #fff">Esqueceu sua senha?</a>
                                 </div>
                                 <div class="col-sm-5 text-right">
                                     <button style="background-color: #1da589; border-color: #1da589;" type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Acessar</button>
