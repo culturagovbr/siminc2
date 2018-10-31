@@ -61,19 +61,18 @@
 
 
 	// carrega os dados da conta do usuário a partir do cpf informado
-	$sql = sprintf(
-		"SELECT
-			u.usucpf,
-			u.ususenha,
-			u.suscod,
-			u.usutentativas,
-			u.usunome,
-			u.usuemail
-		 FROM
-			seguranca.usuario u
-		 WHERE
-			u.usucpf = '%s'",
-		$cpf
+	$sql = sprintf("
+            SELECT
+                u.usucpf,
+                u.ususenha,
+                u.suscod,
+                u.usutentativas,
+                u.usunome,
+                u.usuemail
+            FROM seguranca.usuario u
+            WHERE
+                u.usucpf = '%s'",
+            $cpf
 	);
 
 	$usuario = (object) $db->recuperar( $sql );
@@ -85,13 +84,13 @@
 
 	// verifica o status do usuário
 	switch ( $usuario->suscod ) {
-		case STATUS_ATIVO:
-			break;
-		case STATUS_PENDENTE:
-			erro( $alerta['status_pendente'] );
-		case STATUS_BLOQUEADO:
-		default:
-			erro( $alerta['status_bloqueado'] );
+            case STATUS_ATIVO:
+                break;
+            case STATUS_PENDENTE:
+                erro( $alerta['status_pendente'] );
+            case STATUS_BLOQUEADO:
+            default:
+                erro( $alerta['status_bloqueado'] );
 	}
 
 	// atribuições requeridas para que a auditoria do sistema funcione
@@ -132,24 +131,51 @@
 	$_SESSION['usucpforigem'] = $usuario->usucpf;
 
 	// verifica permissão de acesso aos módulos
-	$sql = sprintf(
-		"SELECT
-		s.sisid, s.sisdiretorio, s.sisarquivo, s.sisdsc, s.sisurl, s.sisabrev, s.sisexercicio, s.paginainicial, p.pflnivel AS usunivel, us.susdataultacesso, s.sissnalertaajuda, s.sislayoutbootstrap
-		FROM seguranca.sistema s
-		INNER JOIN seguranca.usuario_sistema us USING ( sisid )
-		INNER JOIN seguranca.usuario u USING ( usucpf )
-		INNER JOIN seguranca.perfilusuario pu USING ( usucpf )
-		INNER JOIN seguranca.perfil p ON pu.pflcod = p.pflcod AND p.sisid = s.sisid
-		WHERE
-		us.suscod = 'A' AND
-		u.usucpf = '%s' AND
-		u.suscod = 'A' AND
-		p.pflstatus = 'A' AND
-        s.sisstatus = 'A'
-		GROUP BY s.sisid, s.sisdiretorio,  s.sisarquivo, s.sisdsc, s.sisurl, s.sisabrev, s.sisexercicio, s.paginainicial, p.pflnivel, us.susdataultacesso, s.sissnalertaajuda, s.sislayoutbootstrap
-		ORDER BY us.susdataultacesso DESC
-		LIMIT 1",
-		$usuario->usucpf
+	$sql = sprintf("
+            SELECT
+                s.sisid,
+                s.sisdiretorio,
+                s.sisarquivo,
+                s.sisdsc,
+                s.sisurl,
+                s.sisabrev,
+                s.sisexercicio,
+                s.paginainicial,
+                p.pflnivel AS usunivel,
+                us.susdataultacesso,
+                s.sissnalertaajuda,
+                s.sislayoutbootstrap
+            FROM seguranca.sistema s
+                INNER JOIN seguranca.usuario_sistema us USING (sisid)
+                INNER JOIN seguranca.usuario u USING (usucpf)
+                INNER JOIN seguranca.perfilusuario pu USING (usucpf)
+                INNER JOIN seguranca.perfil p ON(
+                    pu.pflcod = p.pflcod
+                    AND p.sisid = s.sisid
+                )
+            WHERE
+                us.suscod = 'A'
+                AND u.usucpf = '%s'
+                AND u.suscod = 'A'
+                AND p.pflstatus = 'A'
+                AND s.sisstatus = 'A'
+            GROUP BY
+                s.sisid,
+                s.sisdiretorio,
+                s.sisarquivo,
+                s.sisdsc,
+                s.sisurl,
+                s.sisabrev,
+                s.sisexercicio,
+                s.paginainicial,
+                p.pflnivel,
+                us.susdataultacesso,
+                s.sissnalertaajuda,
+                s.sislayoutbootstrap
+            ORDER BY
+                us.susdataultacesso DESC
+            LIMIT 1",
+            $usuario->usucpf
 	);
 
 	$sistema = (object) $db->pegaLinha( $sql );
@@ -172,10 +198,10 @@
 	// atualiza a data de último acesso no módulo selecionado
 	$_SESSION['usuacesso'] = date( 'Y/m/d H:i:s' );
 	$sql = sprintf(
-		$sql = "UPDATE seguranca.usuario_sistema SET susdataultacesso = '%s' where usucpf = '%s' and sisid = %d",
-		$_SESSION['usuacesso'],
-		$usuario->usucpf,
-		$sistema->sisid
+            $sql = "UPDATE seguranca.usuario_sistema SET susdataultacesso = '%s' where usucpf = '%s' and sisid = %d",
+            $_SESSION['usuacesso'],
+            $usuario->usucpf,
+            $sistema->sisid
 	);
 	$db->executar( $sql );
 
