@@ -1,32 +1,27 @@
 <?php
 
-# carrega as bibliotecas internas do sistema
-require_once 'config.inc';
-require_once APPRAIZ . "includes/classes_simec.inc";
-require_once APPRAIZ . "includes/funcoes.inc";
-require_once APPRAIZ . "includes/library/simec/funcoes.inc";
+    # carrega as bibliotecas internas do sistema
+    require_once 'config.inc';
+    require_once APPRAIZ . "includes/classes_simec.inc";
+    require_once APPRAIZ . "includes/funcoes.inc";
+    require_once APPRAIZ . "includes/library/simec/funcoes.inc";
 
-# Valida o CPF, vindo do post
-if($_POST['usucpf'] && !validaCPF($_POST['usucpf'])) {
-    die('<script>alert(\'CPF inválido!\');history.go(-1);</script>');
-}
-
-# Executa a rotina de autenticação quando o formulário for submetido
-if($_POST['usucpf']){
     # Abre conexão com o servidor de banco de dados
     $db = new cls_banco();
 
-    if(AUTHSSD) {
-        include_once APPRAIZ . "includes/autenticarssd.inc";
-    } else {
-        include_once APPRAIZ . "includes/autenticar.inc";
+    $sisid = $_REQUEST['sisid'];
+    $modid = $_REQUEST['modid'];
+    $usucpf = $_REQUEST['usucpf'];
+
+    # Leva o usuário para o passo seguinte do cadastro
+    if ($_REQUEST['usucpf'] && $_REQUEST['modulo'] && $_REQUEST['varaux'] == '1') {
+        $_SESSION = array();
+        if($theme){
+            $_SESSION['theme_temp'] = $theme;
+        }
+        header("Location: cadastrar_usuario_2_sigest.php?sisid=$sisid&modid=$modid&usucpf=$usucpf");
+        exit();
     }
-}
-
-if ( $_REQUEST['expirou'] ) {
-    $_SESSION['MSG_AVISO'][] = "Sua conexão expirou por tempo de inatividade. Para entrar no sistema efetue login novamente.";
-}
-
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -254,7 +249,7 @@ if ( $_REQUEST['expirou'] ) {
                                                 <!-- Mensagens de retorno de autenticação para os usuários -->
                                                 <?php if ($_SESSION['MSG_AVISO']): ?>
                                                     <div class="row">
-                                                        <div class="col-md-6 offset-md-3">
+                                                        <div class="col-md-8 offset-md-2">
                                                             <div class="alert alert-danger" style="font-size: 14px; line-height: 20px;">
                                                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                                                 <i class="fa fa-bell"></i> <?php echo implode("<br />", (array) $_SESSION['MSG_AVISO']); ?>
@@ -264,29 +259,79 @@ if ( $_REQUEST['expirou'] ) {
                                                     </div>
                                                 <?php endif; ?>
                                                 <div class="row">
-                                                    <div class="col-md-6 offset-md-3 box-area-inner">
-                                                        <h3>Login</h3>
+                                                    <div class="col-md-8 offset-md-2 box-area-inner">
+                                                        <h3><span class="glyphicon glyphicon-user"></span> Solicitação de cadastro de usuários</h3>
                                                         <hr />
-                                                        <form role="form" method="post" action="">
-                                                            <input type="hidden" name="versao" value="<?php echo $_POST['versao']; ?>"/>
-                                                            <input type="hidden" name="formulario" value="1"/>
-                                                            
+                                                        
+                                                        <form name="formulario" id="formulario" class="form-horizontal" role="form" method="post" action="" onsubmit="return false;">
+                                                            <input type=hidden name="modulo" value="./inclusao_usuario.php"/>
+                                                            <input type=hidden name="varaux" value="">
                                                             <div class="form-group">
-                                                                <label for="usucpf">CPF</label>
-                                                                <input type="text" maxlength="14" class="form-control" name="usucpf" id="usucpf" placeHolder="CPF" required="">
+                                                                <div class="col-sm-12">
+                                                                    <?php
+                                                                        $sql = "
+                                                                            SELECT
+                                                                                s.sisid AS codigo,
+                                                                                s.sisabrev AS descricao
+                                                                            FROM seguranca.sistema s
+                                                                            WHERE
+                                                                                s.sisstatus = 'A'
+                                                                                AND sismostra = 't'
+                                                                            ORDER BY
+                                                                                descricao";
+                                                                        $sistemas = $db->carregar($sql);
+                                                                        $select = '';
+
+                                                                        if($sistemas) {
+                                                                            $select .= '<select name="sisid_modid" ' . $disabled . ' class="chosen-select" style="width: 100%; display: none;" onchange="sel_modulo(this);">';
+                                                                            $select .= '<option value="">Selecione...</option>';
+
+                                                                            foreach ($sistemas as $sistema) {
+                                                                                $select .= '<option value="' . $sistema['codigo'] . '"' . ($sisid == $sistema['codigo'] ? 'selected' : '') . '>' . $sistema['descricao'] . '</option>';
+                                                                            }
+                                                                            $select .= '</select>';
+                                                                        }
+                                                                        echo $select;
+                                                                    ?>
+                                                                </div>
                                                             </div>
+
+                                                            <input type="hidden" name="sisid" id="sisid" value="<?php echo $sisid; ?>" />
+                                                            <input type="hidden" name="modid" id="modid" value="<?php echo $modid; ?>" />
+
                                                             <div class="form-group">
-                                                                <label for="ususenha">Senha</label>
-                                                                <input type="password" class="form-control" name="ususenha" id="ususenha" placeHolder="Senha" required="">
+                                                                <div class="col-sm-12">
+                                                                    <?php if ($sisid): ?>
+                                                                        <?php $sql = sprintf("select sisid, sisdsc, sisfinalidade, sispublico, sisrelacionado from sistema where sisid = %d", $sisid); ?>
+                                                                        <?php $sistema = (object) $db->pegaLinha($sql); ?>
+                                                                        <?php if ($sistema->sisid) : ?>
+                                                                            <div class="sistema-texto">
+                                                                                <h2><?php echo 'SIGEST - '. $sistema->sisdsc ?></h2><br/>
+                                                                                <p><?php echo $sistema->sisfinalidade ?></p>
+                                                                                <ul>
+                                                                                    <li><i class="fa fa-bullseye"></i>&nbsp;&nbsp;&nbsp;Público-Alvo: <?php echo $sistema->sispublico ?><br></li>
+                                                                                    <li><i class="fa fa-cubes"></i> Sistemas Relacionados: <?php echo $sistema->sisrelacionado ?></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        <?php endif; ?>
+                                                                    <?php endif; ?>
+                                                                    <input type="hidden" name="sisfinalidade_selc" value="<?php echo $sisfinalidade_selc; ?>"/>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group form-check">
-                                                                <i class="fa fa-key"></i> <a href="<?php echo URL_SISTEMA. 'recupera_senha_sigest.php'; ?>">Esqueceu sua senha?</a>
+
+                                                            <div class="form-group">
+                                                                <div class="col-sm-12">
+                                                                    <input type="text" maxlength="14" class="form-control cpf" name="usucpf" id="usucpf" placeHolder="CPF" required="" value="<?php echo $usucpf; ?>"/>
+                                                                </div>
                                                             </div>
-                                                            <button type="submit" class="btn btn-primary btn-acessar">Acessar</button>
-                                                            
-                                                            <hr>
-                                                            <p class="text-center">Não tem acesso ainda? <i class="fa fa-user"></i> <a href="<?php echo URL_SISTEMA. 'cadastrar_usuario_sigest.php?sisid=48';?>" class="lnkSolicitarAcesso">Solicitar acesso</a></p>
-                                                        </form>      
+                                                            <div class="form-group" style="font-size: 14px;">
+                                                                <div class="col-sm-12 text-right">
+                                                                    <a class="btn btn-success" href="javascript:validar_formulario()"><span class="glyphicon glyphicon glyphicon glyphicon-ok"></span> Continuar</a>
+                                                                    <a class="btn btn-danger" href="./sigest.php" ><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,6 +427,26 @@ if ( $_REQUEST['expirou'] ) {
             });
 
         });
+        
+        document.formulario.usucpf.focus();
+
+        function validar_formulario(){
+            var validacao = true;
+            var mensagem  = '';
+
+            if (!validar_cpf(document.formulario.usucpf.value)) {
+                mensagem += '\nO cpf informado não é válido.';
+                validacao = false;
+            }
+
+            document.formulario.varaux.value = '1';
+
+            if ( !validacao ) {
+                alert( mensagem );
+            } else {
+                document.formulario.submit();
+            }
+        }
     </script>
 
     <div id="footer-brasil" class="verde"></div>

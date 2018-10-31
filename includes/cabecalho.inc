@@ -229,7 +229,7 @@ else
 		$sql = sprintf("SELECT TRIM( paginainicial ) AS paginic FROM seguranca.sistema WHERE sisid = %d", $_SESSION['sisid']);
 		$paginic = $db->pegaUm( $sql );
 	?>
-	<body LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0" BGCOLOR="#ffffff">
+	<body LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0" BGCOLOR="#ffffff" <?php echo $_SESSION['sisid'] == 48? 'style="background: #FFFFFF;"': NULL; ?>>
 	<?php if ($_SESSION['mostramsg']) : ?>
 		<script>window.open("../geral/ctrlmensagens.php?tot=<?=$_SESSION['mostramsg']?>", "VtrlMensagem", "width=420,height=300,menubar=no,location=no,resizable=yes,scrollbars=yes,status=yes");</script>
 	<?php endif; unset($_SESSION['mostramsg']); ?>
@@ -398,9 +398,17 @@ else
             <div id="top_content" class="notprint">
 				<br />
                 <div id="top_content_logo_menu">
-                    <div style="float: left;">
-                        <img style="cursor:pointer" onclick="window.location.href='<?=$_SESSION['sisarquivo']?>.php?modulo=<?=$paginic?>'" src="../includes/layout/<? echo $theme ?>/img/logo.png" >
-                    </div>
+                    
+                    <?php if($_SESSION['sisid'] == 48): ?>
+                        <div style="float: left; margin-top: 2px; margin-right: 8px">
+                            <img style="cursor:pointer" onclick="window.location.href='<?=$_SESSION['sisarquivo']?>.php?modulo=<?=$paginic?>'" src="<?php echo URL_SISTEMA. 'painel/images/logo.png'; ?>" >
+                        </div>
+                    <?php else: ?>
+                        <div style="float: left;">
+                            <img style="cursor:pointer" onclick="window.location.href='<?=$_SESSION['sisarquivo']?>.php?modulo=<?=$paginic?>'" src="<?php echo '../includes/layout/'. $theme. '/img/logo.png'; ?>" >
+                        </div>
+                    <?php endif; ?>
+                    
                     <?php $sistemas = carregarSistemas(); ?>
                     <div style="float: left;">
                         <div style="margin-top: 10px;" class="cabecalho">

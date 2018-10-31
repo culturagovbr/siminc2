@@ -1,32 +1,72 @@
 <?php
 
-# carrega as bibliotecas internas do sistema
-require_once 'config.inc';
-require_once APPRAIZ . "includes/classes_simec.inc";
-require_once APPRAIZ . "includes/funcoes.inc";
-require_once APPRAIZ . "includes/library/simec/funcoes.inc";
+    # carrega as bibliotecas internas do sistema
+    require_once 'config.inc';
+    require_once APPRAIZ . "includes/classes_simec.inc";
+    require_once APPRAIZ . "includes/funcoes.inc";
+    require_once APPRAIZ . "includes/library/simec/funcoes.inc";
 
-# Valida o CPF, vindo do post
-if($_POST['usucpf'] && !validaCPF($_POST['usucpf'])) {
-    die('<script>alert(\'CPF inválido!\');history.go(-1);</script>');
-}
-
-# Executa a rotina de autenticação quando o formulário for submetido
-if($_POST['usucpf']){
+    function erro(){
+        global $db;
+        $db->commit();
+        $_SESSION = array();
+        $_SESSION['MSG_AVISO'] = func_get_args();
+        header( "Location: ". $_SERVER['PHP_SELF'] );
+        exit();
+    }
+    
     # Abre conexão com o servidor de banco de dados
     $db = new cls_banco();
 
-    if(AUTHSSD) {
-        include_once APPRAIZ . "includes/autenticarssd.inc";
-    } else {
-        include_once APPRAIZ . "includes/autenticar.inc";
+    # Executa a rotina de recuperação de senha quando o formulário for submetido
+    if($_POST['usucpf']) {
+        // verifica se a conta está ativa
+        $sql = sprintf("SELECT u.* FROM seguranca.usuario u WHERE u.usucpf = '%s'", corrige_cpf( $_REQUEST['usucpf'] ));
+        $usuario = (object) $db->pegaLinha( $sql );
+
+        if ( $usuario->suscod != 'A' ) {
+                erro( "A conta não está ativa." );
+        }
+
+        $_SESSION['mnuid'] = 10;
+        $_SESSION['sisid'] = 4;
+        $_SESSION['exercicio_atual'] = $db->pega_ano_atual();
+        $_SESSION['usucpf'] = $usuario->usucpf;
+        $_SESSION['usucpforigem'] = $usuario->usucpf;
+
+        # Cria uma nova senha
+        $senha = strtoupper(senha());
+        $sql = sprintf(
+            "UPDATE seguranca.usuario SET ususenha = '%s', usuchaveativacao = 'f' WHERE usucpf = '%s'",
+            md5_encrypt_senha( $senha, '' ),
+            $usuario->usucpf
+        );
+        $db->executar( $sql );
+
+        # Envia email de confirmação
+        $sql = "select ittemail from public.instituicao where ittstatus = 'A'";
+        $remetente = $db->pegaUm( $sql );
+        $destinatario = $usuario->usuemail;
+        $assunto = SIGLA_SISTEMA. " - Recuperação de Senha";
+        $conteudo = sprintf(
+            "%s %s<br/>Sua senha foi alterada para %s<br>Ao se conectar, altere esta senha para a sua senha preferida.",
+            $usuario->ususexo == 'F' ?  'Prezada Sra.': 'Prezado Sr.',
+            $usuario->usunome,
+            $senha
+        );
+        
+        enviar_email( $remetente, $destinatario, $assunto, $conteudo );
+
+        $db->commit();
+        $_SESSION = array();
+        $_SESSION['MSG_AVISO'][] = "Recuperação de senha concluída. Em breve você receberá uma nova senha por email.";
+        header( "Location: /sigest.php" );
+        exit();
     }
-}
 
-if ( $_REQUEST['expirou'] ) {
-    $_SESSION['MSG_AVISO'][] = "Sua conexão expirou por tempo de inatividade. Para entrar no sistema efetue login novamente.";
-}
-
+    if ( $_REQUEST['expirou'] ) {
+        $_SESSION['MSG_AVISO'][] = "Sua conexão expirou por tempo de inatividade. Para entrar no sistema efetue login novamente.";
+    }
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -254,7 +294,7 @@ if ( $_REQUEST['expirou'] ) {
                                                 <!-- Mensagens de retorno de autenticação para os usuários -->
                                                 <?php if ($_SESSION['MSG_AVISO']): ?>
                                                     <div class="row">
-                                                        <div class="col-md-6 offset-md-3">
+                                                        <div class="col-md-8 offset-md-2">
                                                             <div class="alert alert-danger" style="font-size: 14px; line-height: 20px;">
                                                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                                                 <i class="fa fa-bell"></i> <?php echo implode("<br />", (array) $_SESSION['MSG_AVISO']); ?>
@@ -264,28 +304,22 @@ if ( $_REQUEST['expirou'] ) {
                                                     </div>
                                                 <?php endif; ?>
                                                 <div class="row">
-                                                    <div class="col-md-6 offset-md-3 box-area-inner">
-                                                        <h3>Login</h3>
+                                                    <div class="col-md-8 offset-md-2 box-area-inner">
+                                                        <h3>Recuperação de senha de usuários</h3>
                                                         <hr />
-                                                        <form role="form" method="post" action="">
-                                                            <input type="hidden" name="versao" value="<?php echo $_POST['versao']; ?>"/>
-                                                            <input type="hidden" name="formulario" value="1"/>
-                                                            
+                                                        
+                                                        <form method="POST" name="formulario">
                                                             <div class="form-group">
-                                                                <label for="usucpf">CPF</label>
-                                                                <input type="text" maxlength="14" class="form-control" name="usucpf" id="usucpf" placeHolder="CPF" required="">
+                                                                <div class="col-sm-12">
+                                                                    <input type="text" maxlength="14" class="form-control cpf" name="usucpf" id="usucpf" placeHolder="CPF" required="" value="<?php echo $usucpf; ?>">
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label for="ususenha">Senha</label>
-                                                                <input type="password" class="form-control" name="ususenha" id="ususenha" placeHolder="Senha" required="">
+                                                            <div class="form-group" style="font-size: 14px;">
+                                                                <div class="col-sm-12 pull-right">
+                                                                    <a class="btn btn-success" href="javascript:enviar_formulario()"><span class="glyphicon glyphicon glyphicon glyphicon-ok"></span> Lembrar senha</a>
+                                                                    <a class="btn btn-danger" href="./sigest.php" ><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group form-check">
-                                                                <i class="fa fa-key"></i> <a href="<?php echo URL_SISTEMA. 'recupera_senha_sigest.php'; ?>">Esqueceu sua senha?</a>
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary btn-acessar">Acessar</button>
-                                                            
-                                                            <hr>
-                                                            <p class="text-center">Não tem acesso ainda? <i class="fa fa-user"></i> <a href="<?php echo URL_SISTEMA. 'cadastrar_usuario_sigest.php?sisid=48';?>" class="lnkSolicitarAcesso">Solicitar acesso</a></p>
                                                         </form>      
                                                     </div>
                                                 </div>
@@ -382,6 +416,27 @@ if ( $_REQUEST['expirou'] ) {
             });
 
         });
+        
+        document.formulario.usucpf.focus();
+
+        function enviar_formulario() {
+            if ( validar_formulario() ) {
+                document.formulario.submit();
+            }
+        }
+
+        function validar_formulario() {
+            var validacao = true;
+            var mensagem = '';
+            if ( !validar_cpf( document.formulario.usucpf.value ) ) {
+                mensagem += '\nO cpf informado não é válido.';
+                validacao = false;
+            }
+            if ( !validacao ) {
+                alert( mensagem );
+            }
+            return validacao;
+        }
     </script>
 
     <div id="footer-brasil" class="verde"></div>

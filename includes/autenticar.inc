@@ -41,7 +41,7 @@
 	$alerta = array(
 		'cpf' => "O cpf informado não está cadastrado.",
 		'status_pendente' => "Sua conta está pendente para aprovação, aguarde a avaliação dos administradores.",
-		'status_bloqueado' => "Sua conta está bloqueada, clique <a href='solicitar_ativacao_de_conta.php' title='solicitar ativação de conta'>aqui</a> para solicitar a ativação.",
+		'status_bloqueado' => "Sua conta está bloqueada, clique <a href='solicitar_ativacao_de_conta_sigest.php' title='solicitar ativação de conta'>aqui</a> para solicitar a ativação.",
 		'senha' => "A senha informada não é válida. Tentativas restantes: %s",
 		'tentativas' => "Você excedeu a quantidade de tentativas.",
 		'permissao' => "Você não possui permissão de acesso em nenhum dos módulos.",
