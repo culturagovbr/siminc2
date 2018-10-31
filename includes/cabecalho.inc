@@ -398,9 +398,17 @@ else
             <div id="top_content" class="notprint">
 				<br />
                 <div id="top_content_logo_menu">
-                    <div style="float: left;">
-                        <img style="cursor:pointer" onclick="window.location.href='<?=$_SESSION['sisarquivo']?>.php?modulo=<?=$paginic?>'" src="../includes/layout/<? echo $theme ?>/img/logo.png" >
-                    </div>
+                    
+                    <?php if($_SESSION['sisid'] == 48): ?>
+                        <div style="float: left; margin-top: 2px; margin-right: 8px">
+                            <img style="cursor:pointer" onclick="window.location.href='<?=$_SESSION['sisarquivo']?>.php?modulo=<?=$paginic?>'" src="<?php echo URL_SISTEMA. 'painel/images/logo.png'; ?>" >
+                        </div>
+                    <?php else: ?>
+                        <div style="float: left;">
+                            <img style="cursor:pointer" onclick="window.location.href='<?=$_SESSION['sisarquivo']?>.php?modulo=<?=$paginic?>'" src="<?php echo '../includes/layout/'. $theme. '/img/logo.png'; ?>" >
+                        </div>
+                    <?php endif; ?>
+                    
                     <?php $sistemas = carregarSistemas(); ?>
                     <div style="float: left;">
                         <div style="margin-top: 10px;" class="cabecalho">

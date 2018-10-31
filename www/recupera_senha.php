@@ -174,7 +174,7 @@
                         <form name="formulario" id="formulario" class="form-horizontal" role="form" method="post" action="" onsubmit="return false;">
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <input type="text" class="form-control cpf" name="usucpf" id="usucpf" placeHolder="CPF" required="" value=<?php echo $usucpf; ?>/>
+                                    <input type="text" maxlength="14" class="form-control cpf" name="usucpf" id="usucpf" placeHolder="CPF" required="" value=<?php echo $usucpf; ?>/>
                                 </div>
                             </div>
                             <div class="form-group" style="font-size: 14px;">
@@ -195,42 +195,42 @@
 
 </body>
 <script language="javascript">
-	$(function(){
-	    $('.modal-informes').modal('show');
-		$('span').tooltip({placement: 'bottom'})
-		$('.carousel').carousel();
-		$('.chosen-select').chosen();
-		$('.cpf').mask('999.999.999-99');
-		$(".menu-close").click(function(e) {
-			e.preventDefault();
-			$("." + $(this).data('toggle')).toggleClass("active");
-		});
-		$(".menu-toggle").click(function(e) {
-			e.preventDefault();
-			$("." + $(this).data('toggle')).toggleClass("active");
-		});
-	});
-	        
-	document.formulario.usucpf.focus();
+    $(function(){
+        $('.modal-informes').modal('show');
+        $('span').tooltip({placement: 'bottom'})
+        $('.carousel').carousel();
+        $('.chosen-select').chosen();
+        $('.cpf').mask('999.999.999-99');
+        $(".menu-close").click(function(e) {
+            e.preventDefault();
+            $("." + $(this).data('toggle')).toggleClass("active");
+        });
+        $(".menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("." + $(this).data('toggle')).toggleClass("active");
+        });
+    });
 
-	function enviar_formulario() {
-		if ( validar_formulario() ) {
-			document.formulario.submit();
-		}
-	}
+    document.formulario.usucpf.focus();
 
-	function validar_formulario() {
-		var validacao = true;
-		var mensagem = '';
-		if ( !validar_cpf( document.formulario.usucpf.value ) ) {
-			mensagem += '\nO cpf informado não é válido.';
-			validacao = false;
-		}
-		if ( !validacao ) {
-			alert( mensagem );
-		}
-		return validacao;
-	}
+    function enviar_formulario() {
+        if ( validar_formulario() ) {
+            document.formulario.submit();
+        }
+    }
+
+    function validar_formulario() {
+        var validacao = true;
+        var mensagem = '';
+        if ( !validar_cpf( document.formulario.usucpf.value ) ) {
+            mensagem += '\nO cpf informado não é válido.';
+            validacao = false;
+        }
+        if ( !validacao ) {
+            alert( mensagem );
+        }
+        return validacao;
+    }
 </script>
 </html>
 <?php $db->close(); ?>
