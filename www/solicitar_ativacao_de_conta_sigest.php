@@ -1,31 +1,59 @@
 <?php
 
-# carrega as bibliotecas internas do sistema
-require_once 'config.inc';
-require_once APPRAIZ . "includes/classes_simec.inc";
-require_once APPRAIZ . "includes/funcoes.inc";
-require_once APPRAIZ . "includes/library/simec/funcoes.inc";
+    # Carrega as bibliotecas internas do sistema
+    include "config.inc";
+    require APPRAIZ . "includes/classes_simec.inc";
+    include APPRAIZ . "includes/funcoes.inc";
 
-# Valida o CPF, vindo do post
-if($_POST['usucpf'] && !validaCPF($_POST['usucpf'])) {
-    die('<script>alert(\'CPF inválido!\');history.go(-1);</script>');
-}
-
-# Executa a rotina de autenticação quando o formulário for submetido
-if($_POST['usucpf']){
-    # Abre conexão com o servidor de banco de dados
+    # Abre conexão com o banco de dados
     $db = new cls_banco();
 
-    if(AUTHSSD) {
-        include_once APPRAIZ . "includes/autenticarssd.inc";
-    } else {
-        include_once APPRAIZ . "includes/autenticar.inc";
-    }
-}
+    $usucpf = $_REQUEST['usucpf'];
+    $sisid = $_REQUEST['sisid'];
 
-if ( $_REQUEST['expirou'] ) {
-    $_SESSION['MSG_AVISO'][] = "Sua conexão expirou por tempo de inatividade. Para entrar no sistema efetue login novamente.";
-}
+    if($_REQUEST['formulario']) {
+        $cpf = corrige_cpf($_POST['usucpf']);
+        $justificativa = trim($_POST['htudsc']);
+
+        # carrega os dados do usuário
+        $sql = sprintf(
+            "SELECT u.usucpf, u.suscod FROM seguranca.usuario u WHERE u.usucpf = '%s'",
+            $cpf
+        );
+        $usuario = (object) $db->recuperar( $sql );
+
+        # atribuições requeridas para que a auditoria do sistema funcione
+        $_SESSION['sisid'] = 4; # seleciona o sistema de segurança
+        $_SESSION['usucpf'] = $usuario->usucpf;
+        $_SESSION['usucpforigem'] = $usuario->usucpf;
+        $_SESSION['superuser'] = $db->testa_superuser( $usuario->usucpf );
+
+        $descricao = "Usuário solicitou a ativação da conta e apresentou a seguinte justificativa: ". $justificativa;
+        if($usuario->usucpf){
+            if($sisid){
+                $sql = sprintf(
+                    "SELECT us.* FROM seguranca.usuario_sistema us WHERE us.sisid = %d AND us.usucpf = '%s'",
+                    $sisid,
+                    $usuario->usucpf
+                );
+                $usuario_sistema = (object) $db->pegaLinha($sql);
+                if ( $usuario_sistema->suscod == 'B' ) {
+                    $db->alterar_status_usuario($cpf, 'P', $descricao, $usuario_sistema->sisid);
+                }
+            } else if($usuario->suscod == 'B'){
+                $db->alterar_status_usuario($cpf, 'P', $descricao);
+            }
+        }
+        $db->commit();
+        $_SESSION['MSG_AVISO'] = array("Seu pedido foi submetido e será avaliado em breve.");
+
+        if($sisid = 48){
+            header("Location: sigest.php");
+        } else {
+            header("Location: login.php");
+        }
+        exit();
+    }
 
 ?>
 <!doctype html>
@@ -254,7 +282,7 @@ if ( $_REQUEST['expirou'] ) {
                                                 <!-- Mensagens de retorno de autenticação para os usuários -->
                                                 <?php if ($_SESSION['MSG_AVISO']): ?>
                                                     <div class="row">
-                                                        <div class="col-md-6 offset-md-3">
+                                                        <div class="col-md-8 offset-md-2">
                                                             <div class="alert alert-danger" style="font-size: 14px; line-height: 20px;">
                                                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                                                 <i class="fa fa-bell"></i> <?php echo implode("<br />", (array) $_SESSION['MSG_AVISO']); ?>
@@ -264,29 +292,63 @@ if ( $_REQUEST['expirou'] ) {
                                                     </div>
                                                 <?php endif; ?>
                                                 <div class="row">
-                                                    <div class="col-md-6 offset-md-3 box-area-inner">
-                                                        <h3>Login</h3>
+                                                    <div class="col-md-8 offset-md-2 box-area-inner">
+                                                        <h3>Solicitação de Ativação Conta</h3>
+                                                        <p>
+                                                            Preencha os Dados Abaixo e clique no botão: "Enviar Solicitação". <br />
+                                                        </p>
                                                         <hr />
-                                                        <form role="form" method="post" action="">
-                                                            <input type="hidden" name="versao" value="<?php echo $_POST['versao']; ?>"/>
+                                                        
+                                                        <form method="POST" name="formulario">
                                                             <input type="hidden" name="formulario" value="1"/>
-                                                            
                                                             <div class="form-group">
-                                                                <label for="usucpf">CPF</label>
-                                                                <input type="text" maxlength="14" class="form-control" name="usucpf" id="usucpf" placeHolder="CPF" required="">
+                                                                <div class="col-sm-12">
+                                                                    <input type="text" maxlength="14" class="form-control" name="usucpf" id="usucpf" placeHolder="CPF" required="">
+                                                                </div>
                                                             </div>
+                                                            <?php if($_REQUEST['sisid']): ?>
                                                             <div class="form-group">
-                                                                <label for="ususenha">Senha</label>
-                                                                <input type="password" class="form-control" name="ususenha" id="ususenha" placeHolder="Senha" required="">
+                                                                <div class="col-sm-12">
+                                                                   <?php
+                                                                       $sql = "
+                                                                           SELECT
+                                                                               s.sisid AS codigo,
+                                                                               s.sisabrev AS descricao
+                                                                           FROM seguranca.sistema s
+                                                                           WHERE
+                                                                               s.sisstatus = 'A'
+                                                                               AND sismostra = 't'
+                                                                           ORDER BY
+                                                                               descricao";
+                                                                       $sistemas = $db->carregar($sql);
+                                                                       $select = '';
+
+                                                                       if ($sistemas) {
+                                                                           $select .= '<select name="sisid_modid" ' . $disabled . ' class="chosen-select" style="width: 100%" onchange="sel_modulo(this);">';
+                                                                           $select .= '<option value="">Selecione...</option>';
+
+                                                                           foreach ($sistemas as $sistema) {
+                                                                               $select .= '<option value="' . $sistema['codigo'] . '"' . ($sisid == $sistema['codigo'] ? 'selected' : '') . '>' . $sistema['descricao'] . '</option>';
+                                                                           }
+                                                                           $select .= '</select>';
+                                                                       }
+                                                                       echo $select;
+                                                                   ?>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group form-check">
-                                                                <i class="fa fa-key"></i> <a href="<?php echo URL_SISTEMA. 'recupera_senha_sigest.php'; ?>">Esqueceu sua senha?</a>
+                                                            <?php endif; ?>
+                                                            <div class="form-group">
+                                                                <div class="col-sm-12">
+                                                                    <textarea name="htudsc" cols="64" rows="3" placeHolder="Justificativa"><?= $observacao ?></textarea>
+                                                                </div>
                                                             </div>
-                                                            <button type="submit" class="btn btn-primary btn-acessar">Acessar</button>
-                                                            
-                                                            <hr>
-                                                            <p class="text-center">Não tem acesso ainda? <i class="fa fa-user"></i> <a href="<?php echo URL_SISTEMA. 'cadastrar_usuario_sigest.php?sisid=48';?>" class="lnkSolicitarAcesso">Solicitar acesso</a></p>
-                                                        </form>      
+                                                            <div class="form-group" style="font-size: 14px;">
+                                                                <div class="col-sm-12 pull-right">
+                                                                    <a class="btn btn-success" href="javascript:enviar_formulario();"><span class="glyphicon glyphicon glyphicon glyphicon-ok"></span> Enviar Solicita&ccedil;&atilde;o</a>
+                                                                    <a class="btn btn-danger" href="/sigest.php"><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,6 +444,31 @@ if ( $_REQUEST['expirou'] ) {
             });
 
         });
+        
+        document.formulario.usucpf.focus();
+
+        function enviar_formulario() {
+            if ( validar_formulario() ) {
+                document.formulario.submit();
+            }
+        }
+
+        function validar_formulario() {
+            var validacao = true;
+            var mensagem = '';
+            if ( document.formulario.usucpf.value == "" ) {
+                mensagem += '\nInforme o cpf.';
+                validacao = false;
+            }
+            if ( document.formulario.htudsc.value == "" ) {
+                mensagem += '\nVocê deve justificar o pedido.';
+                validacao = false;
+            }
+            if ( !validacao ) {
+                alert( mensagem );
+            }
+            return validacao;
+        }
     </script>
 
     <div id="footer-brasil" class="verde"></div>
