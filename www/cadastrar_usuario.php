@@ -224,6 +224,7 @@
             </div>
         </section>
         <!--/Register -->
+
     </body>
 
 <!-- Custom Theme JavaScript -->

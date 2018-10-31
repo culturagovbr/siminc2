@@ -152,46 +152,47 @@
 </head>
 <body class="page-index">
 
-	<?php if ( $_SESSION['MSG_AVISO'] ): ?>
-		<div class="col-md-4 col-md-offset-4">
-			<div class="alert alert-danger" style="font-size: 14px; line-height: 20px;">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<i class="fa fa-bell"></i> <?php echo implode( "<br />", (array) $_SESSION['MSG_AVISO'] ); ?>
-			</div>
-		</div>
-	<?php endif; ?>
-	<?php $_SESSION['MSG_AVISO'] = array(); ?>
+    <?php if ( $_SESSION['MSG_AVISO'] ): ?>
+        <div class="col-md-4 col-md-offset-4">
+            <div class="alert alert-danger" style="font-size: 14px; line-height: 20px;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <i class="fa fa-bell"></i> <?php echo implode( "<br />", (array) $_SESSION['MSG_AVISO'] ); ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php $_SESSION['MSG_AVISO'] = array(); ?>
     
-     <!-- Register -->
+    <!-- Register -->
     <section class="login">
-		<div class="content">
-			<div class="col-md-4 col-md-offset-4">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<span class="glyphicon glyphicon-user"></span> Recuperação de senha de usuários <br>
-					</div>
-					<div class="panel-body">
-						<form name="formulario" id="formulario" class="form-horizontal" role="form" method="post" action="" onsubmit="return false;">
-							<div class="form-group">
-								<div class="col-sm-12">
-									<input type="text" class="form-control cpf" name="usucpf" id="usucpf" placeHolder="CPF" required="" value=<?php echo $usucpf; ?>/>
-								</div>
-							</div>
-							<div class="form-group" style="font-size: 14px;">
-								<div class="col-sm-12 pull-right">
-									<a class="btn btn-success" href="javascript:enviar_formulario()"><span class="glyphicon glyphicon glyphicon glyphicon-ok"></span> Lembrar senha</a>
-									<a class="btn btn-danger" href="javascript:history.back();" ><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
-								</div>
-							</div>
-                		</form>
-					</div>
-					<div class="panel-footer text-center" style="font-size: 14px;">
-					   Data do Sistema: <? echo date("d/m/Y - H:i:s") ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+        <div class="content">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-user"></span> Recuperação de senha de usuários <br>
+                    </div>
+                    <div class="panel-body">
+                        <form name="formulario" id="formulario" class="form-horizontal" role="form" method="post" action="" onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control cpf" name="usucpf" id="usucpf" placeHolder="CPF" required="" value=<?php echo $usucpf; ?>/>
+                                </div>
+                            </div>
+                            <div class="form-group" style="font-size: 14px;">
+                                <div class="col-sm-12 pull-right">
+                                    <a class="btn btn-success" href="javascript:enviar_formulario()"><span class="glyphicon glyphicon glyphicon glyphicon-ok"></span> Lembrar senha</a>
+                                    <a class="btn btn-danger" href="javascript:history.back();" ><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-footer text-center" style="font-size: 14px;">
+                        Data do Sistema: <? echo date("d/m/Y - H:i:s") ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </body>
 <script language="javascript">
 	$(function(){

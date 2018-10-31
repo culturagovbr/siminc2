@@ -176,13 +176,6 @@
                                         $select = '';
 
                                         if ($sistemas) {
-//                                            if ($selecionar_modulo_habilitado == 'S') {
-//                                                $disabled = '';
-//                                            } else {
-//                                                $disabled = 'disabled="disabled"';
-//                                            }
-
-                                            /*                                             * * Inicia a montagem do combo ** */
                                             $select .= '<select name="sisid_modid" ' . $disabled . ' class="chosen-select" style="width: 100%" onchange="sel_modulo(this);">';
                                             $select .= '<option value="">Selecione...</option>';
 
