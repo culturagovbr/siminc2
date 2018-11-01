@@ -1,0 +1,745 @@
+.site-title {
+    font-family: 'Open Sans', sans-serif;
+}
+header.site-header .custom-header-bg img {
+    display: none;
+}
+article .entry-footer {
+    border-top: 0;
+}
+button.navbar-toggler {
+    background: #243850;
+}
+#footer-brasil.verde {
+    background: none repeat scroll 0% 0% #0A1524;
+    padding: 1em 0px;
+    max-width: 100%;
+}
+@media (max-width: 700px) {
+    header.site-header>div.container {
+        position: absolute;
+    }
+    header.site-header a {
+        font-size: 27px !important;
+        top: -18px !important;
+        position: relative !important;
+        left: -13%;
+    }
+    header.site-header .site-description {
+        font-size: 14px;
+        text-transform: uppercase;
+        display: none;
+    }
+    .card {
+        margin-bottom: 55px !important;
+    }
+    footer.site-footer {
+        display: none;
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        margin: 0 auto !important;
+    }
+    .et_divi_builder #et_builder_outer_content .et_pb_image img {
+        position: relative;
+        margin-left: 24px;
+    }
+    header.site-header .custom-header-bg img {
+        height: 101px;
+        display: block;
+        width: auto;
+        right: 20%;
+        top: 20px;
+        position: absolute;
+    }
+    .col-md-5th-1 {
+        width: 20% ;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+    .et_pb_row {
+        max-width: 1200px !important;
+        margin: 0 auto;
+    }
+    header.site-header, header.site-header .site-title {
+        color: #243850;
+        position: relative;
+        top: -22px;
+    }
+    header.site-header .site-description {
+        position: relative;
+        top: -19px;
+    }
+}
+.arrow-down-blue:after {
+    width: 0;
+    height: 0;
+    border-left: 32px solid transparent !important;
+    display: block;
+    border-right: 32px solid transparent;
+    content: "";
+    text-align: center;
+    border-top: solid 25px rgb(36, 56, 80);
+    position: absolute;
+    margin: 17px auto;
+    bottom: 0;
+    left: 50%;
+}
+.et_pb_section.content-home.arrow-down-blue.et_pb_section_1.et_pb_with_background.et_section_regular {
+    padding: 0 !important;
+    margin-top: 50px !important;
+}
+.row-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.arrow-down:before {
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent !important;
+    display: block;
+    border-right: 20px solid transparent;
+    content: "";
+    text-align: center;
+    border-top: solid 20px rgb(202, 202, 202);
+    position: absolute;
+    margin: 0 auto;
+    bottom: 0px;
+    left: 50%;
+}
+.arrow-down:after {
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent !important;
+    display: block;
+    border-right: 20px solid transparent;
+    content: "";
+    text-align: center;
+    border-top: solid 20px rgb(246, 246, 247);
+    position: absolute;
+    margin: 0 auto;
+    bottom: 1px;
+    left: 50%;
+}
+.et_pb_section.secao-home.arrow-down > div:last-child {
+    border-bottom: #e0e0e0 1px solid !important;
+    box-shadow: 0px 1px 0px #e0e0e0 !important;
+}
+/**/
+header#header {
+    top: 0px;
+    background: linear-gradient(0deg, #FFFFFF 16.48%, #D5D9DD 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    position: relative;
+    z-index: 1;
+}
+header.site-header .service-bar-container {
+    background: transparent;
+}
+header.site-header, header.site-header .site-title {
+    color: #205065;
+}
+ul#shortcut-bar {
+    opacity: 0;
+}
+#accessibility {
+    opacity: 0;
+}
+header.site-header .service-bar-container .service-bar li a {
+    color: #4F4F4F;
+    padding: 0 0 0 7px;
+    border-left: 1px dotted #fff;
+}
+.navbar-dark .navbar-nav .active>.nav-link, .navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .show>.nav-link {
+    color: #243850;
+}
+header.site-header .service-bar-container .service-bar li {
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+ul#menu-menu-principal {
+    position: relative;
+    z-index: 1;
+    margin: 0 !important;
+}
+main#main .row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+div#banner-home {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+footer.site-footer .row {
+    margin-right: -45px;
+    margin-left: -45px;
+}
+footer.site-footer {
+    background-color: #112640;
+}
+#footer-brasil #wrapper-footer-brasil {
+    max-width: 1140px;
+    padding: 0;
+}
+.et_divi_builder #et_builder_outer_content .et_pb_row {
+    width: 100%;
+    max-width: inherit;
+}
+brasil.verde {
+    background: none repeat scroll 0% 0% #0A1524;
+}
+#banner-home .et_pb_container.clearfix {
+    height: 459px !important;
+}
+#banner-home .et_pb_slide {
+    padding: 0 !important;
+}
+div#banner-home {
+    background: url(http://gestaoestrategica.cultura.gov.br/wp-content/uploads/sites/33/2018/02/Rectangle-2.png);
+    background-attachment: fixed;
+}
+.et_divi_builder #et_builder_outer_content .et_pb_slider .et_pb_slide_0 {
+    background-image: url(http://gestaoestrategica.cultura.gov.br/wp-content/uploads/sites/33/2018/02/Rectangle-8.png);
+    background-size: 100% 77%;
+}
+header.site-header a {
+    color: #243850 !important;
+}
+.et_pb_slide_image:after {
+    display: block;
+    position: absolute;
+    width: 213%;
+    z-index: 13;
+    height: 547px;
+    content: "";
+    margin-left: 81%;
+    top: -110px;
+    background-image: url(http://gestaoestrategica.cultura.gov.br/wp-content/uploads/sites/33/2018/02/Rectangle-8.2.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.titulo-home {
+    background: #243850 !important;
+    font-size: 28px;
+    padding: 20px !important;
+    font-weight: 100;
+    text-transform: uppercase;
+    color: #fff !important;
+    margin-top: -41px !important;
+}
+.et_divi_builder .et_pb_section.secao-home > div {
+    background-color: #F6F6F7 !important;
+    display: block;
+}
+.et_divi_builder #et_builder_outer_content .et_pb_section.secao-home {
+    padding: 20px 0;
+}
+.et_divi_builder .et_pb_section.secao-home > div:first-child {
+    border-top: 2px solid #243850 !important;
+    padding-top: 12px !important;
+    font-size: 24px;
+    text-transform: uppercase;
+    padding-left: 12px !important;
+    color: #243850 !important;
+    padding-right: 12px !important;
+}
+.card strong {
+    font-size: 24px;
+    text-transform: uppercase;
+    margin-left: 20px !important;
+    color: #243850 !important;
+}
+.card {
+    text-align: center !important;
+    background: white !important;
+    margin-top: -63px !important;
+    margin-left: 15px !important;
+    padding-top: 20px !important;
+    border-radius: 4px !important;
+    padding-bottom: 20px !important;
+    display: block !important;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) !important;
+    margin-right: 15px !important;
+    background-image: url(http://gestaoestrategica.cultura.gov.br/wp-content/uploads/sites/33/2018/02/card-background.png) !important;
+    background-repeat: no-repeat !important;
+    background-position: center 18px !important;
+    background-size: 92% !important;
+}
+.card .card-body a {
+    color: #293d54 !important;
+    padding-top: 14px !important;
+    display: block;
+    text-transform: uppercase !important;
+    min-height: 64px !important;
+}
+.card img.card-img-top {
+    height: 90px !important;
+    width: auto !important;
+    padding-top: 20px !important;
+}
+article {
+    margin-bottom: 0 !important;
+}
+.et_divi_builder #et_builder_outer_content .et_pb_section_1.et_pb_section {
+    background-color: #ffffff!important;
+    z-index: 0;
+}
+.et_divi_builder #et_builder_outer_content .et_pb_slider .et_pb_slide:first-child {
+    display: list-item;
+    z-index: 0;
+}
+#breadcrumb {
+    background: 0 0;
+    text-transform: uppercase;
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 15px;
+    margin-bottom: 0;
+    color: #828282;
+    cursor: default;
+    opacity: 0.6;
+}
+.site-footer {
+    background-color: #112640;
+    text-transform: uppercase;
+}
+.site-footer .widget {
+    border-left: none;
+}
+.widget ul {
+    margin-left: 9px;
+}
+a {
+    color: #092352;
+}
+.card {
+    margin-bottom:20px;
+}
+#acoes-estrategicas .card-wrapper {
+    float: none;
+    clear: both;
+    width: inherit;
+    max-height: inherit;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#acoes-estrategicas .ge-card .card-header .headline {
+    font-size: 12px;
+    color: #0000008b;
+    font-weight: bold;
+    width: 155px;
+    overflow: hidden;
+    display: block;
+}
+div#card-2 {
+    position: relative;
+}
+#acoes-estrategicas .ge-card {
+    margin: 15px 15px 0 15px;
+    background: #fff;
+    position: relative;
+    box-shadow: 0px 2px 3px 0px #ccc;
+}
+#acoes-estrategicas .ge-card .card-header .meta {
+    float: right;
+    font-size: 18px;
+    position: absolute;
+    right: 17px;
+    top: 17px;
+}
+#acoes-estrategicas .ge-card .card-desc .card-media {
+    position: absolute;
+    right: 15px;
+    top: 0;
+    background-color: #243850;
+    width: 70px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 3px;
+    overflow: hidden;
+    height: 46px;
+    border-radius: 4px;
+    color: #ffffff;
+    line-height: 39px;
+    font-weight: bold;
+}
+.current-menu-item a.nav-link {
+    color: #3a82bb !important;
+    box-shadow: 0px 2px 0px;
+    text-align: center;
+    padding: 0px !important;
+}
+#acoes-estrategicas .ge-card .card-header .headline .img {
+    display: none !important;
+}
+#acoes-estrategicas .ge-card .card-desc .text h4 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 18px;
+}
+.site-footer .widget ul.sub-menu li {
+    border-bottom: none;
+    color: #486487;
+    list-style: disc;
+    margin-left: 11px;
+}
+#acoes-estrategicas .ge-card .card-header {
+    background: transparent;
+}
+#acoes-estrategicas .ge-card:hover, #acoes-estrategicas .ge-card:hover a {
+    box-shadow: 0px 2px 3px 0px #ccc inset;
+    background: #f1f9ff;
+    color: #4689bf;
+}
+h1.entry-title {
+    background: #243850 !important;
+    font-size: 28px;
+    padding: 20px !important;
+    font-weight: 100;
+    text-transform: uppercase;
+    color: #fff !important;
+    margin-bottom: 20px;
+}
+li#menu-item-493 a {
+    float: right;
+    display: block;
+    text-align: right;
+    right: -278px;
+    background: #e1e2e3;
+    color: #243850 !important;
+    position: absolute;
+    padding: 9px;
+    top: -2px;
+    border: 0;
+    display: none;
+}
+li#menu-item-493 a:hover {
+    background: #243850;
+    color: #fff !important;
+}
+a.nav-link-nova-acao {
+    padding: 8px;
+    position: absolute;
+    right: 29px;
+    border-radius: 4px;
+    top: 30px;
+    border: 2px solid #fff;
+    background: transparent;
+    color: #fff;
+}
+ul.acoes-estrategicas-objetivos {
+    position: absolute;
+    top: -385px;
+    width: 841px;
+    left: 240px;
+}
+ul.acoes-estrategicas-objetivos li {
+    overflow: hidden;
+    width: 202px;
+    float: left;
+    /* min-height: 144px; */
+    display: block;
+    border-radius: 4px !important;
+    margin: 4px !important;
+    text-align: center;
+}
+ul.acoes-estrategicas-objetivos li a {
+    font-size: 13px;
+    background: #486487 !important;
+    display: block;
+    overflow: hidden !important;
+    padding: 11px !important;
+    height: 95px;
+    color: #fff !important;
+    border-radius: 4px !important;
+    line-height: 16px !important;
+    font-size: 13px;
+    text-align: center !important;
+    color: #fff !important;
+    text-transform: uppercase !important;
+}
+
+ul.acoes-estrategicas-objetivos li {
+    display: inline-block;
+    float: none;
+    clear: both;
+}
+ul.acoes-estrategicas-objetivos li a:hover {
+    background: #ffffff !important;
+    color: #3a82bb !important 
+}
+header.site-header .service-bar-container .navbar{
+    padding: 5px 0;
+}
+ul.acoes-estrategicas-objetivos li:last-child {
+    width: 99%;
+}
+
+.et_divi_builder #et_builder_outer_content .et_pb_row {
+    width: 100%;
+    max-width: inherit;
+    z-index: 0;
+}
+
+.et_divi_builder #et_builder_outer_content .et_pb_section {
+    padding: 0; 
+}
+
+@media (max-width: 1300px) {
+    ul.acoes-estrategicas-objetivos {
+        left: 205px;
+        top: -347px;
+        width: 79%;
+    }
+    ul.acoes-estrategicas-objetivos li {
+        overflow: hidden;
+        width: 170px;
+        display: inline-block;
+        /* min-height: 144px; */
+        border-radius: 4px !important;
+        margin: 4px !important;
+        text-align: center;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
+    ul.acoes-estrategicas-objetivos li a {
+        background: #486487 !important;
+        display: inline-block;
+        overflow: hidden !important;
+        padding: 8px !important;
+        height: 85px;
+        border-radius: 4px !important;
+        line-height: 16px !important;
+        font-size: 11px;
+        text-align: center !important;
+        color: #fff !important;
+        text-transform: uppercase !important;
+    }
+    .card {
+        margin-top: -42px !important;
+    }
+    ul.acoes-estrategicas-objetivos li:last-child a {
+        width: 93.6%;
+    }
+}
+.home .card a {
+    transition: all 0.3s ease 0.3s !important;
+    min-height: 86px !important;
+}
+/*
+.home .card a:hover {
+    background: #dddde47a !important;
+    margin-top: -118px !important;
+    padding-top: 136px !important;
+    min-height: 86px !important;
+    margin-bottom: -20px !important;
+}
+*/
+
+@media (max-width: 500px) {
+    ul.acoes-estrategicas-objetivos {
+        width: 100%;
+        position: inherit !important;
+        top: 0;
+        left: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    ul.acoes-estrategicas-objetivos li {
+        width: 100%;
+    }
+    .card img {
+        width: 53px;
+    }
+    ul.acoes-estrategicas-objetivos li a {
+        background: #2c3847 !important;
+    }
+    .col-lg-12 {
+        padding: 0;
+    }
+    button.navbar-toggler {
+        position: absolute;
+        right: 0;
+        top: 12px;
+        z-index: 9;
+    }
+    header.site-header .service-bar-container .service-bar li a {
+        font-size: 11px !important;
+        margin: 0 !important;
+        text-align: left;
+        float: left;
+        width: 100%;
+    }
+    header.site-header .service-bar-container .service-bar li {
+        font-family: 'Open Sans', sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        text-transform: uppercase;
+        padding: 7px;
+    }
+    ul#menu-menu-principal {
+        position: relative;
+        z-index: 1;
+        top: 19px;
+        right: -37px;
+        margin: 0 !important;
+    }
+    a.nav-link-nova-acao {
+        position: inherit;
+        color: #fff;
+        background: #243850;
+        border: #243850 1px solid;
+        margin: 0 auto;
+        box-shadow: 1px 3px 4px #868585, 1px 3px 4px #b3b3b3;
+    }
+    #accessibility {
+        display: none;
+    }
+}
+
+#acoes-estrategicas.subacoes .ge-card .card-desc .text {
+    padding: 0 !important;
+}
+div#acoes-estrategicas.subacoes {
+    margin-left: -30px;
+    margin-right: -30px;
+    margin-bottom: 56px;
+}
+a.nav-link-nova-acao {
+    top: -103px;
+    color: #fff !important;
+    border: 1px solid !important;
+    padding: 15px !important;
+    right: 11px;
+}
+.acao h3 a {
+    color: #fff !important;
+    font-weight: 100 !important;
+    margin-left: 11px !important;
+    line-height: 28px !important;
+    top: -12px;
+    position: relative;
+    text-transform: uppercase !important;
+}
+.acao {
+    margin: 10px !important;
+}
+.dropdown-menu.show {
+    background: #fff !important;
+    left: 0 !important;
+    position: absolute !important;
+    color: #243850 !important;
+}
+.dropdown.d-inline.show {
+    position: relative !important;
+}
+.et_divi_builder #et_builder_outer_content .et_pb_module a {
+    color: #23282d;
+}
+.dropdown-menu.show {
+    box-shadow: 1px 1px 1px #ccc !important;
+    padding: 20px !important;
+}
+
+.et_divi_builder #et_builder_outer_content a.et_pb_more_button.et_pb_button {
+    color: white;
+}
+.arrow-right-plano a {
+    background: url(http://gestaoestrategica.cultura.gov.br/wp-content/uploads/sites/33/2018/07/right-arrow.png) !important;
+    display: block;
+    width: 100%;
+    color: #486487 !important;
+    background-repeat: no-repeat !important;
+    background-position: right !important;
+    padding-bottom: 0 !important;
+}
+.no-padding{
+    padding: 14px !important;
+}
+.arrow-right-plano a:hover {
+    color: #5d9be8 !important;
+}
+.acoes-estrategicas-resultados {
+    position: relative;
+    text-align: center;
+    min-height: 660px;
+    margin: 29px 0 45px;
+}
+.acoes-estrategicas-resultados .medal-1 h3 {
+    top: -78px;
+    padding: 0;
+}
+
+.acoes-estrategicas-resultados-list a.list-group-item {
+    background: #F6F6F7 !important;
+    border-bottom: 1px solid #243850 !important;
+    margin-bottom: 1px !important;
+    margin-top: -1px !important;
+    text-transform: uppercase !important;
+    font-weight: bold !important;
+}
+
+#login-form-page h2{
+    background-color: rgb(36, 56, 80) !important;
+    color: #fff;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+#login-form-page .box-area{
+    border-top: 2px solid #243850 !important;
+    background-color: #f6f6f7;
+    padding: 15px;
+    margin-bottom: 30px;
+}
+
+#login-form-page .box-area-inner{
+    padding: 15px;
+    background-color: #fff;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#login-form-page h3{
+    font-size: 24px;
+    color: #243850;
+    text-transform: uppercase;
+}
+
+#login-form-page input[type="checkbox"]{
+    position: static;
+    margin: auto;
+}
+
+#login-form-page label.form-check-label{
+    padding: 0;
+}
+
+#login-form-page .btn.btn-primary{
+    background-color: #243850;
+    border: transparent;
+}
+
+.lnkSolicitarAcesso{
+    color: #3a82bb;
+    font-weight: bold;
+}
+
+.lnkLembrarSenha{
+    cursor: hand;
+    cursor: pointer;
+}
+
+.btn-acessar{
+    cursor: hand;
+    cursor: pointer;
+}
