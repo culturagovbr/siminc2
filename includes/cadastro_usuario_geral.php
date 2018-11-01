@@ -841,12 +841,15 @@ function gerFuncResp ($sisid, $sisDir, $usucpf, $dados = array()) {
 		<td>
 			<span id="spanOrgao">
 			 	<?php
-			 		$entid = $usuario->entid;
-
+					// $entid = $usuario->entid;
+					
 					if ( ($tpocod == 2 || $tpocod == 3) && !empty($usuario->orgao) ){
-			 			$entid = 999999;
-			 		}
-			 		carrega_orgao($editavel, $usuario->usucpf);
+						$entid = 999999;
+					}
+					// equivalente ao orgao xpto
+					$entid = (!$entid) ? 390374 : $entid;
+					
+					carrega_orgao($editavel, $usuario->usucpf);
 			 	?>
 			</span>
 		</td>
