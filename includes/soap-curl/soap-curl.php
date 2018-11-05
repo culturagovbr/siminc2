@@ -3,6 +3,10 @@
 include_once "soap-curl-http.php";
 include_once "soap-curl-ssl.php";
 
+/**
+ * Classe principal que compoem o componente de comunicação via SOAP.
+ * 
+ */
 class soapCurl {
     
     /**
@@ -117,6 +121,17 @@ class soapCurl {
         return $this;
     }
 
+    /**
+     * Manipula a comunicação via SOAP.
+     * 
+     * @param resource $resource
+     * @param soapCurlHttp $http
+     * @param soapCurlSsl $ssl
+     * @param array $listField
+     * @param string $xml
+     * @param string $file
+     * @param string $response
+     */
     public function __construct($resource = NULL, soapCurlHttp $http = NULL, soapCurlSsl $ssl = NULL, $listField = NULL, $xml = NULL, $file = NULL, $response = NULL) {
         $this->resource = $resource? $resource: curl_init();
         $this->http = $http? $http: new soapCurlHttp();
@@ -194,4 +209,13 @@ class soapCurl {
         return $this;
     }
 
+    /**
+     * Ao descarregar o objeto da mémoria encerra a sessão e os recursos
+     *
+     * @return VOID
+     */
+    public function __destruct(){
+        $this->close();
+    }
+    
 }

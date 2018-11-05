@@ -82,6 +82,15 @@ class soapCurlSsl {
         return $this;
     }
     
+    /**
+     * Manipula o protocolo de segurança
+     * 
+     * @param string $password
+     * @param string $certificate
+     * @param integer $version
+     * @param boolean $verifyPeer
+     * @param boolean $verifyHost
+     */
     public function __construct($password = NULL, $certificate = NULL, $version = NULL, $verifyPeer = NULL, $verifyHost = NULL) {
         $this->password = $password;
         $this->certificate = $certificate;

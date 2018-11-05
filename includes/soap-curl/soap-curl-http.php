@@ -130,6 +130,18 @@ class soapCurlHttp {
         return $this;
     }    
     
+    /**
+     * Manipula as informações da requisição
+     * 
+     * @param string $url
+     * @param boolean $post
+     * @param array $listHeader
+     * @param string $user
+     * @param string $password
+     * @param integer $auth
+     * @param integer $timeout
+     * @param boolean $return
+     */
     public function __construct($url = NULL, $post = NULL, $listHeader = NULL, $user = NULL, $password = NULL, $auth = NULL, $timeout = NULL, $return = NULL) {
         $this->url = $url;
         $this->post = $post;
