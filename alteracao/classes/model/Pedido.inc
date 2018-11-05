@@ -60,6 +60,7 @@ class Alteracao_Model_Pedido extends Modelo
     protected $arAtributos = array(
         'pedid' => null,
         'pedtitulo' => null,
+        'docid' => null,
         'suoid' => null,
         'tpaid' => null,
         'janid' => null,
@@ -79,7 +80,41 @@ class Alteracao_Model_Pedido extends Modelo
                   from alteracao.pedido ped
                  inner join alteracao.tipo tpa on ped.tpaid = tpa.tpaid
                  inner join alteracao.janela jan on ped.janid = jan.janid
-                 inner join public.subunidadeorcamentaria suo on ped.suoid = suo.suoid";
+                 inner join public.subunidadeorcamentaria suo on ped.suoid = suo.suoid
+                  left join workflow.documento doc on ped.docid = doc.docid
+                 where ped.pedstatus = 'A'";
+        if ($filtroprop['pedid']){
+            $sql .= " and ped.pedid = ".$filtroprop['pedid'];
+        }
+        if ($filtroprop['esdid']){
+            $sql .= " and doc.esdid = ".$filtroprop['esdid'];
+        }
+        if ($filtroprop['tpaid']){
+            $sql .= " and ped.tpaid = ".$filtroprop['tpaid'];
+        }
+        if ($filtroprop['janid']){
+            $sql .= " and ped.janid = ".$filtroprop['janid'];
+        }
+        if ($filtroprop['pedtitulo']){
+            $sql .= " and ped.pedtitulo like '".$filtroprop['pedtitulo']."'";
+        }
+        if ($filtroprop['suoid']){
+            $sql .= " and ped.suoid in ".implode(' AND '.$filtroprop['suoid']);
+        }
         return $this->carregar($sql);
+    }
+    
+    function pegarDocidPedido($pedid, $tipoFluxo){
+        global $db;
+        $sql = "select docid from alteracao.pedido where pedid = {$pedid}";
+        $docid = $db->pegaUm($sql);
+        if (!$docid) {
+            $docid = wf_cadastrarDocumento($tipoFluxo, "Pedido {$pedid}");
+
+            $db->executar("UPDATE alteracao.pedido SET docid = $docid where pedid = {$pedid}");
+            $db->commit();
+        }
+
+        return $docid;
     }
 }

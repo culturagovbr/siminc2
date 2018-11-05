@@ -42,9 +42,28 @@
 <script>
     $(function(){
         $("#btnSalvarPedido").click(function(){
-            $("#req").val('salvar_pedido');
-//            $("#filtroalteracao").action('?modulo=principal/cadastro_alteracoes&acao=C');
-            $("#filtroalteracao").submit();
+            salvarPedido(true);
         });
     });
+    
+    function salvarPedido(showAlert){
+        $.post('?modulo=principal/cadastro_alteracoes&acao=C',
+        {
+            req: 'salvar_pedido',
+            pedid: $("#pedid").val(),
+            suoid: $("#suoid").val(),
+            pedtitulo: $("#pedtitulo").val(),
+            tpaid: $("#tpaid").val(),
+            janid: $("#janid").val()
+        },function(result){
+            result = JSON.parse(result);
+            if (result['result']){
+                if (showAlert){
+                    swal('','Registro salvo com sucesso!', 'success');
+                }
+            }else{
+                swal('','Erro ao salvar registro!', 'error');
+            }
+        });
+    }
 </script>

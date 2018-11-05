@@ -12,18 +12,18 @@
 
     # Filtro de Situação na sessão do usuário
     $filtroalteracao = $_SESSION['filtroalteracao'] = (isset($_REQUEST['esdid'])? $_REQUEST: $_SESSION['filtroalteracao']);
-    $requisicao = $_REQUEST['filtroalteracao'];
+    $requisicao = $_REQUEST['requisicao'];
 
-
-    $aAlteracao = (new Alteracao_Model_Alteracao())->recuperarListagem((object) array(
+    $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem(array(
         'exercicio' => $_SESSION['exercicio'],
         'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario
     ), $filtroalteracao);
-    $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($SQL, $var);
     if($requisicao){
         switch ($requisicao) {
             case 'limpar':
                 $filtroalteracao = $_SESSION['filtroalteracao'] = array();
+            case 'buscar_pedidos':
+                $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($_REQUEST);
             break;
         }
     }
@@ -107,8 +107,8 @@
                             foreach($aAlteracao as $dados): ?>
                                 <tr>
                                     <td class="text-center" nowrap="nowrap">
-                                        <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
-                                        <a href="#" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
+                                        <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>&tpdid=<?=$tpdid;?>" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
+                                        <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>&req=excluir_pedido" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
                                     </td>
                                     <td><?= $dados['pedid']; ?></td>
                                     <td><?= $dados['tpadsc']; ?></td>

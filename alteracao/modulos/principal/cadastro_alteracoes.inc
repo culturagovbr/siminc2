@@ -1,6 +1,12 @@
 <?php
+require_once APPRAIZ . 'includes/workflow.php';
 
 $mAlteracaoPedido = new Alteracao_Model_Pedido($_REQUEST['pedid']);
+if ($_REQUEST['pedid']){
+    if (!$mAlteracaoPedido->docid){
+        $mAlteracaoPedido->docid = $mAlteracaoPedido->pegarDocidPedido($_REQUEST['pedid'], $_REQUEST['tpdid']);
+    }
+}
 if ($_REQUEST['req']){
     switch ($_REQUEST['req']) {
         case 'pedidos':
@@ -10,6 +16,10 @@ if ($_REQUEST['req']){
             $cPedido = new Alteracao_Controller_Pedido();
             $cPedido->salvar($_REQUEST);
             die;
+        case 'excluir_pedido':
+            $cPedido = new Alteracao_Controller_Pedido();
+            $cPedido->excluir($_REQUEST['pedid']);
+            die;   
         default:
             break;
     }
@@ -19,7 +29,7 @@ include APPRAIZ. "includes/cabecalho.inc";
 
 <style>
 .wizard > .steps > ul > li {
-    width: 200px;
+    width: 210px;
 }
 </style>
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -27,37 +37,46 @@ include APPRAIZ. "includes/cabecalho.inc";
         <h2><?= $titulo_modulo;?></h2>
     </div>
 </div>
+<div class="row">
+    <div class="col-lg-11">
+        <div class="ibox-content">
+            <div id="wizard">
+                <h1>PEDIDO</h1>
+                <div class="div_lista_indicadores_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
+                    Carregando ...
+                </div>
 
-<div class="ibox-content">
-    <div id="wizard">
-        <h1>PEDIDO</h1>
-        <div class="div_lista_indicadores_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
-            Carregando ...
-        </div>
+                <h1>SELECIONAR PI</h1>
+                <div class="div_lista_atividades_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
+                    Carregando ...
+                </div>
 
-        <h1>SELECIONAR PI</h1>
-        <div class="div_lista_atividades_pnc" data-mode="async" data-url="">
-            Carregando ...
-        </div>
+                <h1>REMANEJAMENTO LOA</h1>
+                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
+                    Carregando ...
+                </div>
+                <h1>NATUREZA DA RECEITA</h1>
+                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
+                    Carregando ...
+                </div>
+                <h1>JUSTIFICATIVA</h1>
+                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
+                    Carregando ...
+                </div>
+                <h1>ESPELHO</h1>
+                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
+                    Carregando ...
+                </div>
 
-        <h1>REMANEJAMENTO LOA</h1>
-        <div class="div_lista_anexos_pnc" data-mode="async" data-url="">
-            Carregando ...
+            </form>  
+            </div>
         </div>
-        <h1>NATUREZA DA RECEITA</h1>
-        <div class="div_lista_anexos_pnc" data-mode="async" data-url="">
-            Carregando ...
-        </div>
-        <h1>JUSTIFICATIVA</h1>
-        <div class="div_lista_anexos_pnc" data-mode="async" data-url="">
-            Carregando ...
-        </div>
-        <h1>ESPELHO</h1>
-        <div class="div_lista_anexos_pnc" data-mode="async" data-url="">
-            Carregando ...
-        </div>
-
-    </form>
+    </div>
+    <div class="col-lg-1">
+        <div class="col-md-1">
+            <?php wf_desenhaBarraNavegacao($mAlteracaoPedido->docid, array('pedid' => $mAlteracaoPedido->pedid)); ?>
+            <div id="div_comentario_estado_atual" style="display: none;"><?php echo wf_pegarComentarioEstadoAtual($mAlteracaoPedido->docid); ?></div>
+        </div>         
     </div>
 </div>
 
@@ -68,6 +87,7 @@ $(function(){
         transitionEffect: "slide",
         startIndex: 0,
         width: 50,
+        enableAllSteps: true,
         //enableFinishButton: exibirBotaoEnviar(),
         labels: {
             cancel: "Cancelar",
@@ -81,22 +101,8 @@ $(function(){
         onStepChanging: function(event, currentIndex, newIndex){
             var permitirAvancarPasso = true;
             switch(currentIndex) {
-                case numeroPassoIndicadores:
-                    if(newIndex === numeroPassoAtividades){
-                        permitirAvancarPasso = verificarPreenchimentoIndicadoresAtual();
-                        if(permitirAvancarPasso === false){
-                            swal('', 'Por favor, preencha pelo menos os indicadores do ano de '+ $('#chosen-exercicio').val()+ '.', 'warning');
-                        }
-                    }
-                    break;
-                case numeroPassoAtividades:
-                    if(newIndex === numeroPassoAnexos){
-                        permitirAvancarPasso = verificarPreenchimentoAtividade();
-                        if(permitirAvancarPasso === false){
-                            swal('', 'Por favor, insira pelo menos uma atividade.', 'warning');
-                        }
-                    }
-                    break;
+                case 0:
+                    salvarPedido();
             }
             return permitirAvancarPasso;
         },
