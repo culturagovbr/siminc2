@@ -37,14 +37,6 @@ class soapCurlSsl {
      */
     private $verifyHost;
     
-    public function __construct($password = NULL, $certificate = NULL, $version = NULL, $verifyPeer = NULL, $verifyHost = NULL) {
-        $this->password = $password;
-        $this->certificate = $certificate;
-        $this->version = $version;
-        $this->verifyPeer = $verifyPeer;
-        $this->verifyHost = $verifyHost;
-    }
-    
     public function getPassword() {
         return $this->password;
     }
@@ -89,7 +81,49 @@ class soapCurlSsl {
         $this->verifyHost = $verifyHost;
         return $this;
     }
-
+    
+    public function __construct($password = NULL, $certificate = NULL, $version = NULL, $verifyPeer = NULL, $verifyHost = NULL) {
+        $this->password = $password;
+        $this->certificate = $certificate;
+        $this->version = $version;
+        $this->verifyPeer = $verifyPeer;
+        $this->verifyHost = $verifyHost;
+    }
+    
+    public function configurePassword($resource){
+        if($this->password){
+            curl_setopt($resource, CURLOPT_SSLCERTPASSWD, $this->password);
+        }
+        return $this;
+    }
+    
+    public function configureCertificate($resource){
+        if($this->certificate){
+            curl_setopt($resource, CURLOPT_SSLCERT, $this->certificate);
+        }
+        return $this;
+    }
+    
+    public function configureVersion($resource){
+        if($this->version){
+            curl_setopt($resource, CURLOPT_SSLVERSION, $this->version);
+        }
+        return $this;
+    }
+    
+    public function configureVerifyPeer($resource){
+        if($this->verifyPeer){
+            curl_setopt($resource, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
+        }
+        return $this;
+    }
+    
+    public function configureVerifyHost($resource){
+        if($this->verifyHost){
+            curl_setopt($resource, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
+        }
+        return $this;
+    }
 
 }
 
