@@ -118,22 +118,58 @@ class soapCurl {
     }
 
     public function __construct($resource = NULL, soapCurlHttp $http = NULL, soapCurlSsl $ssl = NULL, $listField = NULL, $xml = NULL, $file = NULL, $response = NULL) {
-        $this->resource = $resource;
-        $this->http = $http;
-        $this->ssl = $ssl;
+        $this->resource = $resource? $resource: curl_init();
+        $this->http = $http? $http: new soapCurlHttp();
+        $this->ssl = $ssl? $ssl: new soapCurlSsl();
         $this->listField = $listField;
         $this->xml = $xml;
         $this->file = $file;
         $this->response = $response;
     }
     
+    public function configureHttp(){
+        $this->http->configureAll($this->resource);
+        return $this;
+    }
+    
+    public function configureSsl(){
+        $this->ssl->configureAll($this->resource);
+        return $this;
+    }
+    
+    public function configureListField(){
+        if($this->listField){
+            curl_setopt($this->resource, CURLOPT_POSTFIELDS, $this->listField);
+        }
+        return $this;
+    }
+    
+    public function configureXml(){
+        if($this->xml){
+            curl_setopt($this->resource, CURLOPT_POSTFIELDS, $this->xml);
+        }
+        return $this;
+    }
+    
+    public function configureFile(){
+        if($this->file){
+            curl_setopt($this->resource, CURLOPT_POSTFIELDS, $this->file);
+        }
+        return $this;
+    }
+    
     /**
-     * Faz requisição de forma segura encerrando a sessão corretamente e retorna a resposta.
+     * Faz requisição de forma segura configurando todos as opções e encerrando a sessão.
      * 
      * @return string
      */
     public function request(){
-        $this->execute()
+        $this->configureHttp()
+            ->configureSsl()
+            ->configureListField()
+            ->configureXml()
+            ->configureFile()
+            ->execute()
             ->close();
         return $this->response;
     }
