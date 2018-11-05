@@ -90,6 +90,16 @@ class soapCurlSsl {
         $this->verifyHost = $verifyHost;
     }
     
+    public function configureAll($resource){
+        $this->configurePassword($resource)
+            ->configureCertificate($resource)
+            ->configureVersion($resource)
+            ->configureVerifyPeer($resource)
+            ->configureVerifyHost($resource)
+        ;
+        return $this;
+    }
+    
     public function configurePassword($resource){
         if($this->password){
             curl_setopt($resource, CURLOPT_SSLCERTPASSWD, $this->password);

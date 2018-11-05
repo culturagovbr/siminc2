@@ -45,29 +45,18 @@ class soapCurlHttp {
     private $auth;
     
     /**
-     * Opção para retornar o resultado da conexão como uma string
-     * 
-     * @var boolean
-     */
-    private $returnTranfer;
-    
-    /**
      * Opção de tempo de espera da resposta da requisição
      * 
      * @var integer
      */
     private $timeout;
     
-    public function __construct($url = NULL, $post = NULL, $listHeader = NULL, $user = NULL, $password = NULL, $auth = NULL, $returnTranfer = NULL, $timeout = NULL) {
-        $this->url = $url;
-        $this->post = $post;
-        $this->listHeader = $listHeader;
-        $this->user = $user;
-        $this->password = $password;
-        $this->auth = $auth;
-        $this->returnTranfer = $returnTranfer;
-        $this->timeout = $timeout;
-    }
+    /**
+     * Opção para retornar o resultado da conexão como uma string
+     * 
+     * @var boolean
+     */
+    private $return;
     
     public function getUrl() {
         return $this->url;
@@ -93,12 +82,12 @@ class soapCurlHttp {
         return $this->auth;
     }
 
-    public function getReturnTranfer() {
-        return $this->returnTranfer;
-    }
-
     public function getTimeout() {
         return $this->timeout;
+    }
+
+    public function getReturn() {
+        return $this->return;
     }
 
     public function setUrl($url) {
@@ -131,13 +120,85 @@ class soapCurlHttp {
         return $this;
     }
 
-    public function setReturnTranfer($returnTranfer) {
-        $this->returnTranfer = $returnTranfer;
+    public function setTimeout($timeout) {
+        $this->timeout = $timeout;
         return $this;
     }
 
-    public function setTimeout($timeout) {
+    public function setReturn($return) {
+        $this->return = $return;
+        return $this;
+    }    
+    
+    public function __construct($url = NULL, $post = NULL, $listHeader = NULL, $user = NULL, $password = NULL, $auth = NULL, $timeout = NULL, $return = NULL) {
+        $this->url = $url;
+        $this->post = $post;
+        $this->listHeader = $listHeader;
+        $this->user = $user;
+        $this->password = $password;
+        $this->auth = $auth;
         $this->timeout = $timeout;
+        $this->return = $return;
+    }
+    
+    public function configureAll($resource){
+        $this->configureUrl($resource)
+            ->configurePost($resource)
+            ->configureListHeader($resource)
+            ->configureUser($resource)
+            ->configureAuth($resource)
+            ->configureTimeout($resource)
+            ->configureReturn($resource)
+        ;
+        return $this;
+    }    
+    
+    public function configureUrl($resource){
+        if($this->url){
+            curl_setopt($resource, CURLOPT_URL, $this->url);
+        }
+        return $this;
+    }
+    
+    public function configurePost($resource){
+        if($this->post){
+            curl_setopt($resource, CURLOPT_POST, $this->post);
+        }
+        return $this;
+    }
+    
+    public function configureListHeader($resource){
+        if($this->listHeader){
+            curl_setopt($resource, CURLOPT_HTTPHEADER, $this->listHeader);
+        }
+        return $this;
+    }
+    
+    public function configureUser($resource){
+        if($this->user){
+            curl_setopt($resource, CURLOPT_USERPWD, $this->user. ':'. $this->password);
+        }
+        return $this;
+    }
+    
+    public function configureAuth($resource){
+        if($this->auth){
+            curl_setopt($resource, CURLOPT_HTTPAUTH, $this->auth);
+        }
+        return $this;
+    }
+    
+    public function configureTimeout($resource){
+        if($this->timeout){
+            curl_setopt($resource, CURLOPT_TIMEOUT, $this->timeout);
+        }
+        return $this;
+    }
+    
+    public function configureReturn($resource){
+        if($this->return){
+            curl_setopt($resource, CURLOPT_RETURNTRANSFER, $this->return);
+        }
         return $this;
     }
 
