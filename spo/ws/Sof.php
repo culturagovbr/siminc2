@@ -91,10 +91,7 @@ abstract class Spo_Ws_Sof extends Simec_BasicWS
             ->add('trace', true)
             ->add('encoding', 'ISO-8859-1')
             ->add('cache_wsdl', WSDL_CACHE_NONE)
-            ->add('soap_version', SOAP_1_2)
-            ->add('ssl_method', SOAP_SSL_METHOD_SSLv23)
-            ->add('verify_peer_name', false)
-            ->add('verify_peer', false);
+            ->add('soap_version', SOAP_1_2);
 
         $options->add('local_cert', WEB_SERVICE_SIOP_CERTIFICADO)
             ->add('passphrase', 'simec');

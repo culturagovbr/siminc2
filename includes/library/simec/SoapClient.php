@@ -48,12 +48,12 @@ class Simec_SoapClient extends SoapClient {
             $options->add('trace', 1);
             $options->add('exceptions', true);
             $options->add('cache_wsdl', WSDL_CACHE_NONE);
-            $options->add('ssl_method', SOAP_SSL_METHOD_SSLv23);
         }
 
             $options->add('stream_context', stream_context_create(array(
                 "ssl" => array(
-                    "verify_peer" => FALSE
+                    "verify_peer" => FALSE,
+                    "allow_self_signed" => TRUE
             ))));
 
         if (!is_null($classMap)) {
