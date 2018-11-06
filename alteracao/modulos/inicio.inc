@@ -25,6 +25,10 @@
             case 'buscar_pedidos':
                 $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($_REQUEST);
             break;
+            case 'excluir_pedido':
+                $cPedido = new Alteracao_Controller_Pedido();
+                $cPedido->excluir($_REQUEST['pedid']);
+            die;
         }
     }
     /**
@@ -108,7 +112,7 @@
                                 <tr>
                                     <td class="text-center" nowrap="nowrap">
                                         <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>&tpdid=<?=$tpdid;?>" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
-                                        <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>&req=excluir_pedido" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
+                                        <a href="?modulo=inicio&acao=C&pedid=<?=$dados['pedid'];?>&requisicao=excluir_pedido" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
                                     </td>
                                     <td><?= $dados['pedid']; ?></td>
                                     <td><?= $dados['tpadsc']; ?></td>

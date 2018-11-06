@@ -11,17 +11,13 @@ if ($_REQUEST['req']){
     switch ($_REQUEST['req']) {
         case 'pedidos':
             include_once APPRAIZ.'alteracao/modulos/principal/cadastro_pedido.inc';
-            die;
+        die;
         case 'salvar_pedido':
             $cPedido = new Alteracao_Controller_Pedido();
             $cPedido->salvar($_REQUEST);
-            die;
-        case 'excluir_pedido':
-            $cPedido = new Alteracao_Controller_Pedido();
-            $cPedido->excluir($_REQUEST['pedid']);
-            die;   
+        die;
         default:
-            break;
+        break;
     }
 }
 include APPRAIZ. "includes/cabecalho.inc";

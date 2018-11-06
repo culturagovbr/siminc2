@@ -20,10 +20,10 @@ class Alteracao_Controller_Pedido
     
     public function excluir($pedid)
     {
-        $url = '?modulo=inicio&Acao=C';
+        $url = 'alteracao.php?modulo=inicio&acao=C';
 
         try {
-            $mPedido = new Alteracao_Model_Pedido($tpaid);
+            $mPedido = new Alteracao_Model_Pedido($pedid);
             $mPedido->pedstatus = 'I';
             $mPedido->salvar();
             $mPedido->commit();
