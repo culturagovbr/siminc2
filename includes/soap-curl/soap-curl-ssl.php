@@ -1,5 +1,7 @@
 <?php
 
+include_once 'soap-curl.php';
+
 class soapCurlSsl {
 
     /**
@@ -99,47 +101,47 @@ class soapCurlSsl {
         $this->verifyHost = $verifyHost;
     }
     
-    public function configureAll($resource){
-        $this->configurePassword($resource)
-            ->configureCertificate($resource)
-            ->configureVersion($resource)
-            ->configureVerifyPeer($resource)
-            ->configureVerifyHost($resource)
+    public function configureAll(){
+        $this->configurePassword()
+            ->configureCertificate()
+            ->configureVersion()
+            ->configureVerifyPeer()
+            ->configureVerifyHost()
         ;
         return $this;
     }
     
-    public function configurePassword($resource){
+    public function configurePassword(){
         if($this->password){
-            curl_setopt($resource, CURLOPT_SSLCERTPASSWD, $this->password);
+            curl_setopt(soapCurl::$resource, CURLOPT_SSLCERTPASSWD, $this->password);
         }
         return $this;
     }
     
-    public function configureCertificate($resource){
+    public function configureCertificate(){
         if($this->certificate){
-            curl_setopt($resource, CURLOPT_SSLCERT, $this->certificate);
+            curl_setopt(soapCurl::$resource, CURLOPT_SSLCERT, $this->certificate);
         }
         return $this;
     }
     
-    public function configureVersion($resource){
+    public function configureVersion(){
         if($this->version){
-            curl_setopt($resource, CURLOPT_SSLVERSION, $this->version);
+            curl_setopt(soapCurl::$resource, CURLOPT_SSLVERSION, $this->version);
         }
         return $this;
     }
     
-    public function configureVerifyPeer($resource){
+    public function configureVerifyPeer(){
         if($this->verifyPeer){
-            curl_setopt($resource, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
+            curl_setopt(soapCurl::$resource, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
         }
         return $this;
     }
     
-    public function configureVerifyHost($resource){
+    public function configureVerifyHost(){
         if($this->verifyHost){
-            curl_setopt($resource, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
+            curl_setopt(soapCurl::$resource, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
         }
         return $this;
     }

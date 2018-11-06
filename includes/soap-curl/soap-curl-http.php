@@ -1,5 +1,7 @@
 <?php
 
+include_once 'soap-curl.php';
+
 class soapCurlHttp {
  
     /**
@@ -153,63 +155,63 @@ class soapCurlHttp {
         $this->return = $return;
     }
     
-    public function configureAll($resource){
-        $this->configureUrl($resource)
-            ->configurePost($resource)
-            ->configureListHeader($resource)
-            ->configureUser($resource)
-            ->configureAuth($resource)
-            ->configureTimeout($resource)
-            ->configureReturn($resource)
+    public function configureAll(){
+        $this->configureUrl()
+            ->configurePost()
+            ->configureListHeader()
+            ->configureUser()
+            ->configureAuth()
+            ->configureTimeout()
+            ->configureReturn()
         ;
         return $this;
     }    
     
-    public function configureUrl($resource){
+    public function configureUrl(){
         if($this->url){
-            curl_setopt($resource, CURLOPT_URL, $this->url);
+            curl_setopt(soapCurl::$resource, CURLOPT_URL, $this->url);
         }
         return $this;
     }
     
-    public function configurePost($resource){
+    public function configurePost(){
         if($this->post){
-            curl_setopt($resource, CURLOPT_POST, $this->post);
+            curl_setopt(soapCurl::$resource, CURLOPT_POST, $this->post);
         }
         return $this;
     }
     
-    public function configureListHeader($resource){
+    public function configureListHeader(){
         if($this->listHeader){
-            curl_setopt($resource, CURLOPT_HTTPHEADER, $this->listHeader);
+            curl_setopt(soapCurl::$resource, CURLOPT_HTTPHEADER, $this->listHeader);
         }
         return $this;
     }
     
-    public function configureUser($resource){
+    public function configureUser(){
         if($this->user){
-            curl_setopt($resource, CURLOPT_USERPWD, $this->user. ':'. $this->password);
+            curl_setopt(soapCurl::$resource, CURLOPT_USERPWD, $this->user. ':'. $this->password);
         }
         return $this;
     }
     
-    public function configureAuth($resource){
+    public function configureAuth(){
         if($this->auth){
-            curl_setopt($resource, CURLOPT_HTTPAUTH, $this->auth);
+            curl_setopt(soapCurl::$resource, CURLOPT_HTTPAUTH, $this->auth);
         }
         return $this;
     }
     
-    public function configureTimeout($resource){
+    public function configureTimeout(){
         if($this->timeout){
-            curl_setopt($resource, CURLOPT_TIMEOUT, $this->timeout);
+            curl_setopt(soapCurl::$resource, CURLOPT_TIMEOUT, $this->timeout);
         }
         return $this;
     }
     
-    public function configureReturn($resource){
+    public function configureReturn(){
         if($this->return){
-            curl_setopt($resource, CURLOPT_RETURNTRANSFER, $this->return);
+            curl_setopt(soapCurl::$resource, CURLOPT_RETURNTRANSFER, $this->return);
         }
         return $this;
     }

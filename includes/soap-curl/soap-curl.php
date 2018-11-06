@@ -1,7 +1,7 @@
 <?php
 
-include_once "soap-curl-http.php";
-include_once "soap-curl-ssl.php";
+include_once 'soap-curl-http.php';
+include_once 'soap-curl-ssl.php';
 
 /**
  * Classe principal que compoem o componente de comunicação via SOAP.
@@ -14,7 +14,7 @@ class soapCurl {
      * 
      * @var resource
      */
-    private $resource;
+    public static $resource;
     
     /**
      * Protocolo de comunicação
@@ -58,10 +58,6 @@ class soapCurl {
      */
     private $response;
 
-    public function getResource() {
-        return $this->resource;
-    }
-
     public function getHttp() {
         return $this->http;
     }
@@ -82,9 +78,8 @@ class soapCurl {
         return $this->file;
     }
 
-    public function setResource($resource) {
-        $this->resource = $resource;
-        return $this;
+    public function getResponse() {
+        return $this->response;
     }
 
     public function setHttp(soapCurlHttp $http) {
@@ -111,10 +106,6 @@ class soapCurl {
         $this->file = $file;
         return $this;
     }
-    
-    public function getResponse() {
-        return $this->response;
-    }
 
     public function setResponse($response) {
         $this->response = $response;
@@ -124,7 +115,6 @@ class soapCurl {
     /**
      * Manipula a comunicação via SOAP.
      * 
-     * @param resource $resource
      * @param soapCurlHttp $http
      * @param soapCurlSsl $ssl
      * @param array $listField
@@ -132,10 +122,10 @@ class soapCurl {
      * @param string $file
      * @param string $response
      */
-    public function __construct($resource = NULL, soapCurlHttp $http = NULL, soapCurlSsl $ssl = NULL, $listField = NULL, $xml = NULL, $file = NULL, $response = NULL) {
-        $this->resource = $resource? $resource: curl_init();
-        $this->http = $http? $http: new soapCurlHttp();
-        $this->ssl = $ssl? $ssl: new soapCurlSsl();
+    public function __construct(soapCurlHttp $http, soapCurlSsl $ssl, $listField, $xml, $file, $response) {
+        self::$resource = $resource? $resource: curl_init();
+        $this->http = $http;
+        $this->ssl = $ssl;
         $this->listField = $listField;
         $this->xml = $xml;
         $this->file = $file;
@@ -143,32 +133,32 @@ class soapCurl {
     }
     
     public function configureHttp(){
-        $this->http->configureAll($this->resource);
+        $this->http->configureAll(self::$resource);
         return $this;
     }
     
     public function configureSsl(){
-        $this->ssl->configureAll($this->resource);
+        $this->ssl->configureAll(self::$resource);
         return $this;
     }
     
     public function configureListField(){
         if($this->listField){
-            curl_setopt($this->resource, CURLOPT_POSTFIELDS, $this->listField);
+            curl_setopt(self::$resource, CURLOPT_POSTFIELDS, $this->listField);
         }
         return $this;
     }
     
     public function configureXml(){
         if($this->xml){
-            curl_setopt($this->resource, CURLOPT_POSTFIELDS, $this->xml);
+            curl_setopt(self::$resource, CURLOPT_POSTFIELDS, $this->xml);
         }
         return $this;
     }
     
     public function configureFile(){
         if($this->file){
-            curl_setopt($this->resource, CURLOPT_POSTFIELDS, $this->file);
+            curl_setopt(self::$resource, CURLOPT_POSTFIELDS, $this->file);
         }
         return $this;
     }
@@ -195,7 +185,7 @@ class soapCurl {
      * @return $this
      */
     public function execute(){
-        $this->response = curl_exec($this->resource);
+        $this->response = curl_exec(self::$resource);
         return $this;
     }
     
@@ -205,7 +195,7 @@ class soapCurl {
      * @return $this
      */
     public function close(){
-        curl_close($this->resource);
+        curl_close(self::$resource);
         return $this;
     }
 
