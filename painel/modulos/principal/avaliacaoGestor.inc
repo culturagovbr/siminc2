@@ -23,6 +23,7 @@ switch ($requisicao) {
 }
 $dados = $mIndicador->RetornaRegistro($_SESSION['indid']);
 $indobsgestor = $dados['indobsgestor'];
+$indobsgestorindicador = $dados['indobsgestorindicador'];
 $indavalgestor = $dados['indavalgestor'];
 // monta cabeçalho 
 print '<br/>';
@@ -96,11 +97,26 @@ $db->cria_aba(57105,$url,'');
             $acessoGestor='S';
             if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
                 $acessoGestor='N';
-                echo "<input type='hidden' name='ind'>";
             }
             ?>
             <td align="right" width="25%" class="SubTituloDireita">Observação do Gestor:</td>
             <td><?=campo_textarea( 'indobsgestor', 'N', $acessoGestor, '', 98, 5, 125 );?></td>
+        </tr>
+        <tr>
+            <?php
+            $sql = "select secid 
+              from painel.usuarioresponsabilidade 
+             where usucpf = '".$_SESSION['usucpf']."' 
+               and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
+               and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
+            $secid_confirma = $db->pegaUm($sql);
+            $acessoGestor='S';
+            if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis) && !$secid_confirma){
+                $acessoGestor='N';             
+            }
+            ?>
+            <td align="right" width="25%" class="SubTituloDireita">Observação do Gestor Indicador:</td>
+            <td><?=campo_textarea( 'indobsgestorindicador', 'N', $acessoGestor, '', 98, 5, 255 );?></td>
         </tr>
         <tr>
             <td align="center" colspan="2">

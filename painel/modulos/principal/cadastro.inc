@@ -53,15 +53,12 @@ if($_SESSION['indid']):
 
 	$db->cria_aba($abacod_tela,$url,'');
 	!$_SESSION['indid']? $_SESSION['indid'] = $_REQUEST['indid']: $_SESSION['indid'] = $_SESSION['indid'];
-	if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR,$listaPerfis)){
-            $acesso=false;
-        }else{
-            $permissoes = verificaPerfilPainel();
-            if($permissoes['verindicadores'] == 'vertodos') {
-                    $acesso = true;
-            } else {
-                    $acesso = validaAcessoIndicadores($permissoes['verindicadores'], $_SESSION['indid']);
-            }
+
+        $permissoes = verificaPerfilPainel();
+        if($permissoes['verindicadores'] == 'vertodos') {
+                $acesso = true;
+        } else {
+                $acesso = validaAcessoIndicadores($permissoes['verindicadores'], $_SESSION['indid']);
         }
 	
 endif;
@@ -387,6 +384,14 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 			}		
 		break;	
 	}
+}
+
+$sql = "select secid from painel.usuarioresponsabilidade where usucpf = '".$_SESSION['usucpf']."' and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." and secid = ".$secid;
+$secid_confirma = $db->pegaUm($sql);
+if (!in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO,$listaPerfis) && !in_array(PAINEL_PERFIL_SUPER_USUARIO,$listaPerfis)){
+    if (!(in_array(PAINEL_PERFIL_GESTOR_INDICADOR,$listaPerfis) && $secid_confirma)){
+        $acesso=false;
+    }
 }
 ?>
 <script language="javascript" type="text/javascript" src="../includes/calendario.js"></script>

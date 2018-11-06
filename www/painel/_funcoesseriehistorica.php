@@ -385,13 +385,22 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 	if($registros[0]) {
 		foreach($registros as $key => $reg) {
 			// pegando a serie historica
-			$seriehistorica = $db->pegaLinha("SELECT sehid,sehbloqueado FROM painel.seriehistorica WHERE indid='".$_SESSION['indid']."' AND dpeid='".$reg['codigo']."' AND (sehstatus='A' OR sehstatus='H')");
-                        $mIndicador = new Painel_Model_Indicador();
-                        $listaPerfis = $mIndicador->RetornaPerfil();
-                        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                        $sql = "select secid 
+                                  from painel.usuarioresponsabilidade 
+                                 where usucpf = '".$_SESSION['usucpf']."' 
+                                   and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
+                                   and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
+                        $secid_confirma = $db->pegaUm($sql);
+                        if ($secid_confirma){
+                            $seriehistorica = $db->pegaLinha("SELECT sehid,sehbloqueado FROM painel.seriehistorica WHERE indid='".$_SESSION['indid']."' AND dpeid='".$reg['codigo']."' AND (sehstatus='A' OR sehstatus='H')");
+                            if($seriehistorica) {
+                                $seriehistorica['sehbloqueado']="f";
+                            }
+                        }else{
+                            $seriehistorica = $db->pegaLinha("SELECT sehid,sehbloqueado FROM painel.seriehistorica WHERE indid='".$_SESSION['indid']."' AND dpeid='".$reg['codigo']."' AND (sehstatus='A' OR sehstatus='H')");
                             if($seriehistorica) {
                                 $seriehistorica['sehbloqueado']="t";
-                            }
+                            }                            
                         }
 			$html .= "<tr bgcolor='".((fmod($key,2) == 0)?'#F7F7F7':'')."' onmouseover=\"this.bgColor='#ffffcc';\" onmouseout=\"this.bgColor='".((fmod($key,2) == 0)?'#F7F7F7':'')."';\">";
 			$html .= "<td nowrap>".$reg['descricao']."</td>";
@@ -1974,9 +1983,15 @@ function gravarGridDadosSemFiltros($dados) {
         /**
          * Lista de perfis por usuário
          */
+        $sql = "select secid 
+          from painel.usuarioresponsabilidade 
+         where usucpf = '".$_SESSION['usucpf']."' 
+           and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
+           and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
+        $secid_confirma = $db->pegaUm($sql);
         $mIndicador = new Painel_Model_Indicador();
         $listaPerfis = $mIndicador->RetornaPerfil();
-        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis) && !$secid_confirma){
             $sql = "select dsh.dshid, dsh.dshqtde, dsh.dshobs, se.dpeid 
                                         from painel.seriehistorica se 
                                        inner join painel.detalheseriehistorica dsh
@@ -1994,7 +2009,7 @@ function gravarGridDadosSemFiltros($dados) {
 	$formatoinput = pegarFormatoInput();
         
         //Rotina para incluir os dados que não podem ser editados pelo perfil Gestor Indicador
-        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis) && !$secid_confirma){
             foreach($dadosAnteriores as $dadosAnt){
                 $sehid = $db->pegaUm("INSERT INTO painel.seriehistorica(indid, sehvalor, sehstatus, sehqtde, dpeid)
                                       VALUES ('".$_SESSION['indid']."', NULL, 'H', '0', '".$dadosAnt['dpeid']."') RETURNING sehid;");
