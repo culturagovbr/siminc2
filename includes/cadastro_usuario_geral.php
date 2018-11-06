@@ -519,7 +519,7 @@ function gerFuncResp ($sisid, $sisDir, $usucpf, $dados = array()) {
 			if ( $email_aprovacao) {
 				$remetente = array("nome" => $_SESSION['usunome'],"email" => $_SESSION['usuemail']);
 				$destinatario = $_REQUEST['usuemail'];
-				$assunto = "Aprovação do Cadastro no Simec";
+                $assunto = "Aprovação do Cadastro no ".SIGLA_SISTEMA;
 				$conteudo = "
 					<br/>
 					<span style='background-color: red;'><b>Esta é uma mensagem gerada automaticamente pelo sistema. </b></span>
@@ -533,8 +533,9 @@ function gerFuncResp ($sisid, $sisDir, $usucpf, $dados = array()) {
 				$_REQUEST['usunome'],
 				md5_decrypt_senha( $usuario->ususenha, '' )
 				);
-
-				enviar_email( $remetente, $destinatario, $assunto, $conteudo );
+                $corpoEmailV3 = $conteudo;
+                include APPRAIZ . "includes/email-template.php";
+				enviar_email( $remetente, $destinatario, $assunto, $textoEmailV3 );
 			}
 
 

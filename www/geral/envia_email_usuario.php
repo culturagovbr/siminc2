@@ -31,12 +31,15 @@ else
   $resu =  $db->carrega_registro($RSu,0);
   if(is_array($resu)) foreach($resu as $k=>$v) ${$k}=$v;
   $assunto = $_REQUEST['assunto'];
-  $mensagem = $_REQUEST['email'];  
-  $emailSession = $_SESSION['usuemail'];  
+  $mensagem = $_REQUEST['email'];
+  $corpoEmailV3 = $mensagem;
+  include APPRAIZ . "includes/email-template.php";
+//ver($textoEmailV3, d);
+  $emailSession = $_SESSION['usuemail'];
   $paraUsu = $_REQUEST['usunome'];
   $cc=$_REQUEST['cc'];
   $cco=$_REQUEST['cco'];  
-  enviar_email_usuario($emailSession, $paraUsu, $assunto, $mensagem, $cc, $cco);  
+  enviar_email_usuario($emailSession, $paraUsu, $assunto, $textoEmailV3, $cc, $cco);
   ?>
       <script>
          alert('Email enviado com sucesso. Esta janela será fechada.')

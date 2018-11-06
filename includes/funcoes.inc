@@ -3640,7 +3640,7 @@ function associaPerfilUsuarioPendente($usucpf,$perfil,$sisid = null,$arrUsuResp 
 		foreach($arrDadosUsuario as $dadoUsuario):
 			$remetente = array("nome" => $_SESSION['usunome'],"email" => $_SESSION['usuemail']);
 			$destinatario = $dadoUsuario['usuemail'];
-			$assunto = "Aprovação do Cadastro no Simec";
+            $assunto = "Aprovação do Cadastro no ".SIGLA_SISTEMA;
 			$conteudo = "
 				<br/>
 				<span style='background-color: red;'><b>Esta é uma mensagem gerada automaticamente pelo sistema. </b></span>
