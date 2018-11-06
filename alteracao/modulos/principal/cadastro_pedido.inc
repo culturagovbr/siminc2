@@ -1,5 +1,3 @@
-<?php
-?>
 <div class="ibox-content">
     <form id="filtroalteracao" name="filtroalteracao" method="POST" role="form" action="?modulo=principal/cadastro_alteracoes&acao=C" class="form-horizontal">
         <input name="req" id="req" value="" type="hidden">
@@ -7,19 +5,19 @@
 
         <div class="row">
             <div class="col-lg-8">
-                <?= $simec->select('suoid', 'Unidades', $mAlteracaoPedido->suoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), null, ['input-size' => 9, 'label-size' => 2]); ?>
+                <?= $simec->select('suoid', 'Unidade', $mAlteracaoPedido->suoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), ['required'], ['input-size' => 9, 'label-size' => 2]); ?>
             </div>
             <div class="col-lg-3">
-                <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), null,  ['input-size' => 9, 'label-size' => 2]); ?>
+                <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), ['required'],  ['input-size' => 8, 'label-size' => 3]); ?>
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-8">
-                <?= $simec->input('pedtitulo',  'Título', $mAlteracaoPedido->pedtitulo, NULL, ['input-size' => 9, 'label-size' => 2]); ?>
+                <?= $simec->input('pedtitulo',  'Título', $mAlteracaoPedido->pedtitulo, ['required'], ['input-size' => 9, 'label-size' => 2]); ?>
             </div>
             <div class="col-lg-3">
-                <?= $simec->select('janid', 'Janela', $mAlteracaoPedido->janid, (new Alteracao_Model_Janela())->recuperarSqlCombo(), null,  ['input-size' => 9, 'label-size' => 2]); ?>
+                <?= $simec->select('janid', 'Janela', $mAlteracaoPedido->janid, (new Alteracao_Model_Janela())->recuperarSqlCombo(), ['required'],  ['input-size' => 8, 'label-size' => 3]); ?>
             </div>
         </div>
 
@@ -39,7 +37,7 @@
             salvarPedido(true);
         });
     });
-    
+
     function salvarPedido(showAlert){
         $.post('?modulo=principal/cadastro_alteracoes&acao=C',
         {

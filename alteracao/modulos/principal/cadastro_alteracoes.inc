@@ -12,6 +12,9 @@ if ($_REQUEST['req']){
         case 'pedidos':
             include_once APPRAIZ.'alteracao/modulos/principal/cadastro_pedido.inc';
         die;
+        case 'justificativa':
+            include_once APPRAIZ.'alteracao/modulos/principal/cadastro_justificativa.inc';
+        die;
         case 'salvar_pedido':
             $cPedido = new Alteracao_Controller_Pedido();
             $cPedido->salvar($_REQUEST);
@@ -56,7 +59,7 @@ include APPRAIZ. "includes/cabecalho.inc";
                     Carregando ...
                 </div>
                 <h1>JUSTIFICATIVA</h1>
-                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
+                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=justificativa&pedid=<?= $_REQUEST['pedid']; ?>">
                     Carregando ...
                 </div>
                 <h1>ESPELHO</h1>
@@ -64,7 +67,6 @@ include APPRAIZ. "includes/cabecalho.inc";
                     Carregando ...
                 </div>
 
-            </form>  
             </div>
         </div>
     </div>
