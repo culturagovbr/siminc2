@@ -27,8 +27,9 @@ $listaAreaCultural = (new Monitora_Model_PiModalidadeEnsino())->recuperarTodos('
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
+                                
                             <tr class="text-center">
-                                <th>Ação</th>
+                                <th width="5%">Ação</th>
                                 <th>Código PI</th>
                                 <th>Descrição</th>
                             </tr>

@@ -27,7 +27,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
                             <tr class="text-center">
-                                <th>Ações</th>
+                                <th style="width 5%">Ação</th>
                                 <th>Programa</th>
                                 <th>Ação</th>
                                 <th>Localizador</th>

@@ -107,7 +107,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tbody>
                             <thead>
                                 <tr class="text-center">
-                                    <th width="4%">Ações</th>
+                                    <th width="5%">Ação</th>
                                     <th>Id</th>
                                     <th>Subunidade</th>
                                     <th>Funcional</th>

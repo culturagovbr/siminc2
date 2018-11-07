@@ -28,7 +28,7 @@
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
                                 <tr class="text-center">
-                                    <th width="10%">Ações</th>
+                                    <th width="5%">Ação</th>
                                     <th>Unidade Orçamentária</th>
                                     <th>Cód. Ação</th>
                                     <th>Ação</th>
