@@ -40,22 +40,33 @@
 
     function salvarPedido(showAlert){
         $.post('?modulo=principal/cadastro_alteracoes&acao=C',
-        {
-            req: 'salvar_pedido',
-            pedid: $("#pedid").val(),
-            suoid: $("#suoid").val(),
-            pedtitulo: $("#pedtitulo").val(),
-            tpaid: $("#tpaid").val(),
-            janid: $("#janid").val()
-        },function(result){
-            result = JSON.parse(result);
-            if (result['result']){
-                if (showAlert){
-                    swal('','Registro salvo com sucesso!', 'success');
+            {
+                req: 'salvar_pedido',
+                pedid: $("#pedid").val(),
+                suoid: $("#suoid").val(),
+                pedtitulo: $("#pedtitulo").val(),
+                tpaid: $("#tpaid").val(),
+                janid: $("#janid").val()
+            }, function (result) {
+                result = JSON.parse(result);
+                if (result['result']) {
+                    if (showAlert) {
+                        swal('', 'Registro salvo com sucesso!', 'success');
+                    }
+                    window.location.href = '?modulo=principal/cadastro_alteracoes&acao=C&tpdid='+$("#tpdid").val()+'&pedid=' + result['pedid']+'&startIndex='+$("#startIndex").val();
+                } else {
+                    swal('', 'Erro ao salvar registro!', 'error');
                 }
-            }else{
-                swal('','Erro ao salvar registro!', 'error');
+            });
+    }
+
+    function verificaCampos(){
+        var retorno = true;
+        $("#filtroalteracao input,select").each(function(){
+            if ($(this).attr('required') && $(this).val()==''){
+                retorno = false;
             }
         });
+        return retorno;
     }
 </script>

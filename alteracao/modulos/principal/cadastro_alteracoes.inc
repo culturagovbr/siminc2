@@ -7,6 +7,7 @@ if ($_REQUEST['pedid']){
         $mAlteracaoPedido->docid = $mAlteracaoPedido->pegarDocidPedido($_REQUEST['pedid'], $_REQUEST['tpdid']);
     }
 }
+$startIndex = $_REQUEST['startIndex']?$_REQUEST['startIndex']:0;
 if ($_REQUEST['req']){
     switch ($_REQUEST['req']) {
         case 'pedidos':
@@ -36,6 +37,8 @@ include APPRAIZ. "includes/cabecalho.inc";
         <h2><?= $titulo_modulo;?></h2>
     </div>
 </div>
+<input type="hidden" id="startIndex" name="startIndex" value="<?= $startIndex ?>">
+<input type="hidden" id="tpdid" name="tpdid" value="<?= $_REQUEST['tpdid'] ?>">
 <div class="row">
     <div class="col-lg-11">
         <div class="ibox-content">
@@ -83,7 +86,7 @@ $(function(){
         
     var wizard = $("#wizard").steps({
         transitionEffect: "slide",
-        startIndex: 0,
+        startIndex: <?= $startIndex?>,
         width: 50,
         enableAllSteps: true,
         //enableFinishButton: exibirBotaoEnviar(),
@@ -100,6 +103,13 @@ $(function(){
             var permitirAvancarPasso = true;
             switch(currentIndex) {
                 case 0:
+                    permitirAvancarPasso = verificaCampos();
+                    if (permitirAvancarPasso) {
+                        $("#startIndex").val(newIndex);
+                        salvarPedido();
+                    }
+                case 1:
+                    $("#startIndex").val(newIndex);
                     salvarPedido();
             }
             return permitirAvancarPasso;
