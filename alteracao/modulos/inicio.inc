@@ -115,9 +115,9 @@
                                         <a href="?modulo=inicio&acao=C&pedid=<?=$dados['pedid'];?>&requisicao=excluir_pedido" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
                                     </td>
                                     <td><?= $dados['pedid']; ?></td>
-                                    <td><?= $dados['tpadsc']; ?></td>
+                                    <td><?= $dados['tpacod']; ?></td>
                                     <td><?= $dados['jannome']; ?></td>
-                                    <td><?= $dados['sit']; ?></td>
+                                    <td><?= $dados['esddsc']; ?></td>
                                     <td><?= $dados['suoid'].' - '.$dados['suonome']; ?></td>
                                     <td><?= $dados['cnc']; ?></td>
                                     <td><?= $dados['soap']; ?></td>

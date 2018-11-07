@@ -67,22 +67,34 @@ class Alteracao_Model_Pedido extends Modelo
         'pedstatus' => null,
         'pedano' => null,
     );
-    
+
+    /**
+     * Carrega a lista de pedidos de Alteração Orçamentária.
+     *
+     * @param $filtroprop
+     * @return array|string
+     */
     public function recuperarListagem($filtroprop){
-        $sql = "select ped.pedid,
-                       ped.pedtitulo,
-                       ped.suoid,
-                       ped.tpaid,
-                       ped.janid,
-                       tpa.tpadsc,
-                       jan.jannome,
-                       suo.suonome
-                  from alteracao.pedido ped
-                 inner join alteracao.tipo tpa on ped.tpaid = tpa.tpaid
-                 inner join alteracao.janela jan on ped.janid = jan.janid
-                 inner join public.subunidadeorcamentaria suo on ped.suoid = suo.suoid
-                  left join workflow.documento doc on ped.docid = doc.docid
-                 where ped.pedstatus = 'A'";
+        $sql = "SELECT
+                    ped.pedid,
+                    ped.pedtitulo,
+                    ped.suoid,
+                    ped.tpaid,
+                    ped.janid,
+                    tpa.tpacod,
+                    esd.esddsc,
+                    jan.jannome,
+                    suo.suonome
+                FROM alteracao.pedido AS ped
+                JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
+                JOIN alteracao.janela AS jan ON ped.janid = jan.janid
+                JOIN public.subunidadeorcamentaria AS suo ON ped.suoid = suo.suoid
+                LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
+                LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
+                WHERE
+                    ped.pedstatus = 'A'
+        ";
+
         if ($filtroprop['pedid']){
             $sql .= " and ped.pedid = ".$filtroprop['pedid'];
         }
