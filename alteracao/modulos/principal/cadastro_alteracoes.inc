@@ -108,9 +108,11 @@ $(function(){
                         $("#startIndex").val(newIndex);
                         salvarPedido();
                     }
+                    break;
                 case 1:
                     $("#startIndex").val(newIndex);
                     salvarPedido();
+                    break;
             }
             return permitirAvancarPasso;
         },
