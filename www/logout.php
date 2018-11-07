@@ -7,7 +7,11 @@
     $_SESSION = array();
     $_SESSION['MSG_AVISO'] = $aviso;
 
-    header('Location: /login.php');
+    if($sisid == 48){
+        header('Location: /sigest.php');
+    } else {
+        header('Location: /login.php');
+    }
 
     exit();
 ?>

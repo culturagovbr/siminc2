@@ -354,7 +354,7 @@ function alteraDadosUsuario($info){
                 "email" => $_SESSION ['usuemail']
             );
             $destinatario = $_REQUEST ['usuemail'];
-            $assunto = "Aprovação do Cadastro no ". SIGLA_SISTEMA;
+            $assunto = "Aprovação do Cadastro no ".SIGLA_SISTEMA;
             $conteudo = "
                 <br />
                 <span style='background-color: red;'><b>Esta é uma mensagem gerada automaticamente pelo sistema. </b></span>

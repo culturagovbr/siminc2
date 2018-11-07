@@ -180,9 +180,13 @@
                             <td><?php echo $dados['plititulo']; ?></td>
                             <td><?php echo $dados['funcional']; ?></td>
                             <td><?php echo $dados['situacao']; ?></td>
-                            <td class="text-right"><?php echo number_format($dados['custeio'], 2, ',', '.'); ?></td>
-                            <td class="text-right"><?php echo number_format($dados['capital'], 2, ',', '.'); ?></td>
-                            <td class="text-right"><?php echo number_format(($dados['custeio'] + $dados['capital']), 2, ',', '.'); ?></td>
+                            <?php
+                                $custeioformat = number_format($dados['custeio'], 2, ',', '.');
+                                $capitalformat = number_format($dados['capital'], 2, ',', '.');
+                            ?>
+                            <td title="Valor Custeio: <?= $custeioformat ."\n\n"?>Valor Capital: <?= $capitalformat ?>" class="text-right">
+                                <?= number_format(($dados['custeio'] + $dados['capital']), 2, ',', '.'); ?>
+                            </td>
                             <td class="text-right"><?php echo number_format($dados['autorizado'], 2, ',', '.'); ?></td>
                             <td class="text-right"><?php echo number_format($dados['empenhado'], 2, ',', '.'); ?></td>
                             <td class="text-right"><?php echo number_format($dados['liquidado'], 2, ',', '.'); ?></td>
@@ -202,8 +206,6 @@
                         <th colspan="7">Orçamento do PI (R$)</th>
                     </tr>
                     <tr class="text-center">
-                        <th>Custeio</th>
-                        <th>Capital</th>
                         <th>Total</th>
                         <th>Provisionado</th>
                         <th>Empenhado</th>
@@ -212,9 +214,13 @@
                     </tr>
                     <tr>
                         <th colspan="7">TOTAL</th>
-                        <th class="text-right"><?php echo number_format($total['custeio'], 2, ',', '.'); ?></th>
-                        <th class="text-right"><?php echo number_format($total['capital'], 2, ',', '.'); ?></th>
-                        <th class="text-right"><?php echo number_format(($total['custeio'] + $total['capital']), 2, ',', '.'); ?></th>
+                        <?php
+                            $totalCusteioFormat = number_format($total['custeio'], 2, ',', '.');
+                            $totalCapitalFormat = number_format($total['capital'], 2, ',', '.');
+                        ?>
+                        <th title="Valor Total Custeio: <?= $totalCusteioFormat."\n\n"?>Valor Total Capital: <?= $totalCapitalFormat."\n\n"?>" class="text-right">
+                            <?= number_format(($total['custeio'] + $total['capital']), 2, ',', '.'); ?>
+                        </th>
                         <th class="text-right"><?php echo number_format($total['autorizado'], 2, ',', '.'); ?></th>
                         <th class="text-right"><?php echo number_format($total['empenhado'], 2, ',', '.'); ?></th>
                         <th class="text-right"><?php echo number_format($total['liquidado'], 2, ',', '.'); ?></th>
@@ -224,9 +230,13 @@
                     <tfoot>
                     <tr>
                         <th colspan="7">TOTAL</th>
-                        <th class="text-right"><?php echo number_format($total['custeio'], 2, ',', '.'); ?></th>
-                        <th class="text-right"><?php echo number_format($total['capital'], 2, ',', '.'); ?></th>
-                        <th class="text-right"><?php echo number_format(($total['custeio'] + $total['capital']), 2, ',', '.'); ?></th>
+                        <?php
+                            $totalCusteioFormat = number_format($total['custeio'], 2, ',', '.');
+                            $totalCapitalFormat = number_format($total['capital'], 2, ',', '.');
+                        ?>
+                        <th title="Valor Total Custeio: <?= $totalCusteioFormat."\n\n"?>Valor Total Capital: <?= $totalCapitalFormat."\n\n"?>" class="text-right">
+                            <?= number_format(($total['custeio'] + $total['capital']), 2, ',', '.'); ?>
+                        </th>
                         <th class="text-right"><?php echo number_format($total['autorizado'], 2, ',', '.'); ?></th>
                         <th class="text-right"><?php echo number_format($total['empenhado'], 2, ',', '.'); ?></th>
                         <th class="text-right"><?php echo number_format($total['liquidado'], 2, ',', '.'); ?></th>
