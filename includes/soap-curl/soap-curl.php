@@ -122,7 +122,7 @@ class soapCurl {
      * @param string $file
      * @param string $response
      */
-    public function __construct(soapCurlHttp $http, soapCurlSsl $ssl, $listField, $xml, $file, $response) {
+    public function __construct(soapCurlHttp $http = NULL, soapCurlSsl $ssl = NULL, $listField = NULL, $xml = NULL, $file = NULL, $response = NULL) {
         self::$resource = $resource? $resource: curl_init();
         $this->http = $http;
         $this->ssl = $ssl;
