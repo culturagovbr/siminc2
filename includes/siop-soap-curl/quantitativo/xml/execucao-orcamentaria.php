@@ -1,12 +1,14 @@
 <?php
 
-include_once 'siop-xml.php';
+include_once APPRAIZ. 'includes/siop-soap-curl/xml.php';
 
 /**
  * Classe para conectar com o Webservice do SIOP através do componente SoapCurl
  * 
  */
-class siopXmlExecucaoOrcamentaria extends siopXml {
+class SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria extends SiopSoapCurl_Xml {
+
+    protected $service = 'consultarExecucaoOrcamentaria';
 
     /**
      * Lista de filtros
@@ -20,21 +22,81 @@ class siopXmlExecucaoOrcamentaria extends siopXml {
      * 
      * @var array
      */
-    private $listField;
-
+    private $listField = array(
+        'acao' => 'true',
+        'acompanhamentoPO' => 'true',
+        'anoExercicio' => 'true',
+        'anoReferencia' => 'true',
+        'autorizado' => 'true',
+        'bloqueadoRemanejamento' => 'true',
+        'bloqueadoSOF' => 'true',
+        'categoriaEconomica' => 'true',
+        'creditoContidoSOF' => 'true',
+        'detalheAcompanhamentoPO' => 'true',
+        'disponivel' => 'true',
+        'dotAtual' => 'true',
+        'dotInicialSiafi' => 'true',
+        'dotacaoAntecipada' => 'true',
+        'dotacaoInicial' => 'true',
+        'elementoDespesa' => 'true',
+        'empLiquidado' => 'true',
+        'empenhadoALiquidar' => 'true',
+        'esfera' => 'true',
+        'estatalDependente' => 'true',
+        'executadoPorInscricaoDeRAP' => 'true',
+        'fonte' => 'true',
+        'funcao' => 'true',
+        'grupoNaturezaDespesa' => 'true',
+        'identificadorAcompanhamentoPO' => 'true',
+        'idoc' => 'true',
+        'iduso' => 'true',
+        'indisponivel' => 'true',
+        'localizador' => 'true',
+        'modalidadeAplicacao' => 'true',
+        'natureza' => 'true',
+        'numeroptres' => 'true',
+        'origem' => 'true',
+        'pago' => 'true',
+        'planoInterno' => 'true',
+        'planoOrcamentario' => 'true',
+        'programa' => 'true',
+        'projetoLei' => 'true',
+        'rapAPagarNaoProcessado' => 'true',
+        'rapAPagarProcessado' => 'true',
+        'rapCanceladosNaoProcessados' => 'true',
+        'rapCanceladosProcessados' => 'true',
+        'rapExerciciosAnteriores' => 'true',
+        'rapInscritoNaoProcessado' => 'true',
+        'rapInscritoProcessado' => 'true',
+        'rapNaoProcessadoALiquidar' => 'true',
+        'rapNaoProcessadoBloqueado' => 'true',
+        'rapNaoProcessadoLiquidadoAPagar' => 'true',
+        'rapPagoNaoProcessado' => 'true',
+        'rapPagoProcessado' => 'true',
+        'resultadoPrimarioAtual' => 'true',
+        'resultadoPrimarioLei' => 'true',
+        'subElementoDespesa' => 'true',
+        'subFuncao' => 'true',
+        'tematicaPO' => 'true',
+        'tipoApropriacaoPO' => 'true',
+        'tipoCredito' => 'true',
+        'unidadeGestoraResponsavel' => 'true',
+        'unidadeOrcamentaria' => 'true',
+    );
+    
     /**
      * Pagina atual da consulta
      * 
      * @var int
      */    
-    private $page;
+    private $page = 1;
     
     /**
      * Quantidade de registros por consulta
      * 
      * @var int
      */
-    private $limit;
+    private $limit = 2000;
     
     public function getListFilter() {
         return $this->listFilter;
@@ -70,17 +132,6 @@ class siopXmlExecucaoOrcamentaria extends siopXml {
     public function setLimit($limit) {
         $this->limit = $limit;
         return $this;
-    }
-
-    public function __construct($service = 'operacao', $user = NULL, $password = NULL, $profile = NULL, $listFilter = NULL, $listField = NULL, $page = 1, $limit = 2000) {
-        $this->service = $service;
-        $this->user = $user;
-        $this->password = $password;
-        $this->profile = $profile;
-        $this->listFilter = $listFilter;
-        $this->listField = $listField;
-        $this->page = $page;
-        $this->limit = $limit;
     }
     
     public function describeService() {

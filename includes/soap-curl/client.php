@@ -7,7 +7,7 @@ include_once 'ssl.php';
  * Classe principal que compoem o componente de comunicação via SOAP.
  * 
  */
-class SoapCurl_Service {
+class SoapCurl_Client {
     
     /**
      * Conexão com o provedor do serviço

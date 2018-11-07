@@ -1,6 +1,6 @@
 <?php
 
-interface iSiopXml {
+interface SiopSoapCurl_InterfaceXml {
 
     public function describeService();
 

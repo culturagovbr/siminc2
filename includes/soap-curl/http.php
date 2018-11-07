@@ -1,6 +1,6 @@
 <?php
 
-include_once 'service.php';
+include_once 'client.php';
 
 class SoapCurl_Http {
  
@@ -169,49 +169,49 @@ class SoapCurl_Http {
     
     public function configureWsdl(){
         if($this->wsdl){
-            curl_setopt(SoapCurl_Service::$resource, CURLOPT_URL, $this->wsdl);
+            curl_setopt(SoapCurl_Client::$resource, CURLOPT_URL, $this->wsdl);
         }
         return $this;
     }
     
     public function configurePost(){
         if($this->post){
-            curl_setopt(SoapCurl_Service::$resource, CURLOPT_POST, $this->post);
+            curl_setopt(SoapCurl_Client::$resource, CURLOPT_POST, $this->post);
         }
         return $this;
     }
     
     public function configureListHeader(){
         if($this->listHeader){
-            curl_setopt(SoapCurl_Service::$resource, CURLOPT_HTTPHEADER, $this->listHeader);
+            curl_setopt(SoapCurl_Client::$resource, CURLOPT_HTTPHEADER, $this->listHeader);
         }
         return $this;
     }
     
     public function configureUser(){
         if($this->user){
-            curl_setopt(SoapCurl_Service::$resource, CURLOPT_USERPWD, $this->user. ':'. $this->password);
+            curl_setopt(SoapCurl_Client::$resource, CURLOPT_USERPWD, $this->user. ':'. $this->password);
         }
         return $this;
     }
     
     public function configureAuth(){
         if($this->auth){
-            curl_setopt(SoapCurl_Service::$resource, CURLOPT_HTTPAUTH, $this->auth);
+            curl_setopt(SoapCurl_Client::$resource, CURLOPT_HTTPAUTH, $this->auth);
         }
         return $this;
     }
     
     public function configureTimeout(){
         if($this->timeout){
-            curl_setopt(SoapCurl_Service::$resource, CURLOPT_TIMEOUT, $this->timeout);
+            curl_setopt(SoapCurl_Client::$resource, CURLOPT_TIMEOUT, $this->timeout);
         }
         return $this;
     }
     
     public function configureReturn(){
         if($this->return){
-            curl_setopt(SoapCurl_Service::$resource, CURLOPT_RETURNTRANSFER, $this->return);
+            curl_setopt(SoapCurl_Client::$resource, CURLOPT_RETURNTRANSFER, $this->return);
         }
         return $this;
     }

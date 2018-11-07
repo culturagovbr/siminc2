@@ -1,41 +1,40 @@
 <?php
 
-include_once 'i-siop-xml.php';
-//include_once 'siop-soap-curl.php';
+include_once 'interface-xml.php';
 
 /**
  * Classe para conectar com o Webservice do SIOP através do componente SoapCurl
  * 
  */
-abstract class siopXml implements iSiopXml {
+abstract class SiopSoapCurl_Xml implements SiopSoapCurl_InterfaceXml {
 
     /**
      * Serviço acessado
      * 
      * @var string
      */
-    private $service;
+    protected $service = 'operacao';
     
     /**
      * Usuário
      * 
      * @var string
      */
-    private $user;
+    protected $user = WEB_SERVICE_SIOP_USUARIO;
     
     /**
      * Senha do usuário
      * 
      * @var string
      */
-    private $password;
+    protected $password = WEB_SERVICE_SIOP_SENHA;
     
     /**
      * Perfil de acesso ao serviço fornecido junto ao usuário e a senha pelo provedor
      * 
      * @var int
      */
-    private $profile;
+    protected $profile = WEB_SERVICE_SIOP_PERFIL;
     
     public function getService() {
         return $this->service;
@@ -71,13 +70,6 @@ abstract class siopXml implements iSiopXml {
     public function setProfile($profile) {
         $this->profile = $profile;
         return $this;
-    }
-
-    public function __construct($service = 'operacao', $user = NULL, $password = NULL, $profile = NULL) {
-        $this->service = $service;
-        $this->user = $user;
-        $this->password = $password;
-        $this->profile = $profile;
     }
     
     public function describeCredential() {
