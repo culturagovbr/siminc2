@@ -72,8 +72,6 @@ abstract class SiopSoapCurl_Service implements SiopSoapCurl_InterfaceService {
         $this->client->getHttp()
             ->setWsdl($this->url. '?wsdl')
             ->setReturn(TRUE)
-            ->setUser(WEB_SERVICE_SIOP_USUARIO)
-            ->setPassword(WEB_SERVICE_SIOP_SENHA)
             ->setAuth(CURLAUTH_ANY)
             ->setTimeout(180)
             ->setPost(TRUE)
