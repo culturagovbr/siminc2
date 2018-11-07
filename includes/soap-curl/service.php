@@ -1,13 +1,13 @@
 <?php
 
-include_once 'soap-curl-http.php';
-include_once 'soap-curl-ssl.php';
+include_once 'http.php';
+include_once 'ssl.php';
 
 /**
  * Classe principal que compoem o componente de comunicação via SOAP.
  * 
  */
-class soapCurl {
+class SoapCurl_Service {
     
     /**
      * Conexão com o provedor do serviço
@@ -19,14 +19,14 @@ class soapCurl {
     /**
      * Protocolo de comunicação
      * 
-     * @var soapCurlHttp
+     * @var SoapCurl_Http
      */
     private $http;
     
     /**
      * Protocolo de segurança
      * 
-     * @var soapCurlSsl
+     * @var SoapCurl_Ssl
      */
     private $ssl;
     
@@ -82,12 +82,12 @@ class soapCurl {
         return $this->response;
     }
 
-    public function setHttp(soapCurlHttp $http) {
+    public function setHttp(SoapCurl_Http $http) {
         $this->http = $http;
         return $this;
     }
 
-    public function setSsl(soapCurlSsl $ssl) {
+    public function setSsl(SoapCurl_Ssl $ssl) {
         $this->ssl = $ssl;
         return $this;
     }
@@ -115,14 +115,14 @@ class soapCurl {
     /**
      * Manipula a comunicação via SOAP.
      * 
-     * @param soapCurlHttp $http
-     * @param soapCurlSsl $ssl
+     * @param SoapCurl_Http $http
+     * @param SoapCurl_Ssl $ssl
      * @param array $listField
      * @param string $xml
      * @param string $file
      * @param string $response
      */
-    public function __construct(soapCurlHttp $http = NULL, soapCurlSsl $ssl = NULL, $listField = NULL, $xml = NULL, $file = NULL, $response = NULL) {
+    public function __construct(SoapCurl_Http $http = NULL, SoapCurl_Ssl $ssl = NULL, $listField = NULL, $xml = NULL, $file = NULL, $response = NULL) {
         self::$resource = $resource? $resource: curl_init();
         $this->http = $http;
         $this->ssl = $ssl;

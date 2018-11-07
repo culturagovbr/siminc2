@@ -1,8 +1,8 @@
 <?php
 
-include_once 'soap-curl.php';
+include_once 'service.php';
 
-class soapCurlSsl {
+class SoapCurl_Ssl {
 
     /**
      * Senha usada para gerar o certificado
@@ -12,7 +12,7 @@ class soapCurlSsl {
     private $password;
     
     /**
-     * Caminho do certificado
+     * Caminho físico do certificado
      * 
      * @var string
      */
@@ -113,35 +113,35 @@ class soapCurlSsl {
     
     public function configurePassword(){
         if($this->password){
-            curl_setopt(soapCurl::$resource, CURLOPT_SSLCERTPASSWD, $this->password);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_SSLCERTPASSWD, $this->password);
         }
         return $this;
     }
     
     public function configureCertificate(){
         if($this->certificate){
-            curl_setopt(soapCurl::$resource, CURLOPT_SSLCERT, $this->certificate);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_SSLCERT, $this->certificate);
         }
         return $this;
     }
     
     public function configureVersion(){
         if($this->version){
-            curl_setopt(soapCurl::$resource, CURLOPT_SSLVERSION, $this->version);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_SSLVERSION, $this->version);
         }
         return $this;
     }
     
     public function configureVerifyPeer(){
         if($this->verifyPeer){
-            curl_setopt(soapCurl::$resource, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
         }
         return $this;
     }
     
     public function configureVerifyHost(){
         if($this->verifyHost){
-            curl_setopt(soapCurl::$resource, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
         }
         return $this;
     }

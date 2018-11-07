@@ -1,15 +1,15 @@
 <?php
 
-include_once 'soap-curl.php';
+include_once 'service.php';
 
-class soapCurlHttp {
+class SoapCurl_Http {
  
     /**
-     * Endereço da documentação do serviço
+     * Url do serviço onde contem o WSDL
      * 
      * @var string
      */
-    private $url;
+    private $wsdl;
     
     /**
      * Opção pra definir se o tipo da requisição é POST
@@ -60,8 +60,8 @@ class soapCurlHttp {
      */
     private $return;
     
-    public function getUrl() {
-        return $this->url;
+    public function getWsdl() {
+        return $this->wsdl;
     }
 
     public function getPost() {
@@ -92,8 +92,8 @@ class soapCurlHttp {
         return $this->return;
     }
 
-    public function setUrl($url) {
-        $this->url = $url;
+    public function setWsdl($wsdl) {
+        $this->wsdl = $wsdl;
         return $this;
     }
 
@@ -130,12 +130,12 @@ class soapCurlHttp {
     public function setReturn($return) {
         $this->return = $return;
         return $this;
-    }    
+    }
     
     /**
      * Manipula as informações da requisição
      * 
-     * @param string $url
+     * @param string $wsdl
      * @param boolean $post
      * @param array $listHeader
      * @param string $user
@@ -144,8 +144,8 @@ class soapCurlHttp {
      * @param integer $timeout
      * @param boolean $return
      */
-    public function __construct($url = NULL, $post = NULL, $listHeader = NULL, $user = NULL, $password = NULL, $auth = NULL, $timeout = NULL, $return = NULL) {
-        $this->url = $url;
+    public function __construct($wsdl = NULL, $post = NULL, $listHeader = NULL, $user = NULL, $password = NULL, $auth = NULL, $timeout = NULL, $return = NULL) {
+        $this->wsdl = $wsdl;
         $this->post = $post;
         $this->listHeader = $listHeader;
         $this->user = $user;
@@ -156,7 +156,7 @@ class soapCurlHttp {
     }
     
     public function configureAll(){
-        $this->configureUrl()
+        $this->configureWsdl()
             ->configurePost()
             ->configureListHeader()
             ->configureUser()
@@ -165,53 +165,53 @@ class soapCurlHttp {
             ->configureReturn()
         ;
         return $this;
-    }    
+    }
     
-    public function configureUrl(){
-        if($this->url){
-            curl_setopt(soapCurl::$resource, CURLOPT_URL, $this->url);
+    public function configureWsdl(){
+        if($this->wsdl){
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_URL, $this->wsdl);
         }
         return $this;
     }
     
     public function configurePost(){
         if($this->post){
-            curl_setopt(soapCurl::$resource, CURLOPT_POST, $this->post);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_POST, $this->post);
         }
         return $this;
     }
     
     public function configureListHeader(){
         if($this->listHeader){
-            curl_setopt(soapCurl::$resource, CURLOPT_HTTPHEADER, $this->listHeader);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_HTTPHEADER, $this->listHeader);
         }
         return $this;
     }
     
     public function configureUser(){
         if($this->user){
-            curl_setopt(soapCurl::$resource, CURLOPT_USERPWD, $this->user. ':'. $this->password);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_USERPWD, $this->user. ':'. $this->password);
         }
         return $this;
     }
     
     public function configureAuth(){
         if($this->auth){
-            curl_setopt(soapCurl::$resource, CURLOPT_HTTPAUTH, $this->auth);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_HTTPAUTH, $this->auth);
         }
         return $this;
     }
     
     public function configureTimeout(){
         if($this->timeout){
-            curl_setopt(soapCurl::$resource, CURLOPT_TIMEOUT, $this->timeout);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_TIMEOUT, $this->timeout);
         }
         return $this;
     }
     
     public function configureReturn(){
         if($this->return){
-            curl_setopt(soapCurl::$resource, CURLOPT_RETURNTRANSFER, $this->return);
+            curl_setopt(SoapCurl_Service::$resource, CURLOPT_RETURNTRANSFER, $this->return);
         }
         return $this;
     }
