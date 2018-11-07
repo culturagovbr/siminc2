@@ -123,9 +123,12 @@ class SoapCurl_Client {
      * @param string $response
      */
     public function __construct(SoapCurl_Http $http = NULL, SoapCurl_Ssl $ssl = NULL, $listField = NULL, $xml = NULL, $file = NULL, $response = NULL) {
-        self::$resource = $resource? $resource: curl_init();
-        $this->http = $http;
-        $this->ssl = $ssl;
+        if(isset(self::$resource)){
+            $this->close();
+        }
+        self::$resource = curl_init();
+        $this->http = $http? $http: new SoapCurl_Http();
+        $this->ssl = $ssl? $ssl: new SoapCurl_Ssl();
         $this->listField = $listField;
         $this->xml = $xml;
         $this->file = $file;
@@ -133,12 +136,12 @@ class SoapCurl_Client {
     }
     
     public function configureHttp(){
-        $this->http->configureAll(self::$resource);
+        $this->http->configureAll();
         return $this;
     }
     
     public function configureSsl(){
-        $this->ssl->configureAll(self::$resource);
+        $this->ssl->configureAll();
         return $this;
     }
     
@@ -163,17 +166,23 @@ class SoapCurl_Client {
         return $this;
     }
     
+    public function configureAll() {
+        $this->configureSsl()
+            ->configureHttp()
+            ->configureListField()
+            ->configureXml()
+            ->configureFile();
+        
+        return $this;
+    }
+    
     /**
      * Faz requisição de forma segura configurando todos as opções e encerrando a sessão.
      * 
      * @return string
      */
     public function request(){
-        $this->configureHttp()
-            ->configureSsl()
-            ->configureListField()
-            ->configureXml()
-            ->configureFile()
+        $this->configureAll()
             ->execute()
             ->close();
         return $this->response;
@@ -197,15 +206,6 @@ class SoapCurl_Client {
     public function close(){
         curl_close(self::$resource);
         return $this;
-    }
-
-    /**
-     * Ao descarregar o objeto da mémoria encerra a sessão e os recursos
-     *
-     * @return VOID
-     */
-    public function __destruct(){
-        $this->close();
     }
     
 }

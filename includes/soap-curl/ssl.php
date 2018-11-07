@@ -114,6 +114,8 @@ class SoapCurl_Ssl {
     public function configurePassword(){
         if($this->password){
             curl_setopt(SoapCurl_Client::$resource, CURLOPT_SSLCERTPASSWD, $this->password);
+//ver($this->password);
+//ver('ok certificado', d);
         }
         return $this;
     }
@@ -133,14 +135,14 @@ class SoapCurl_Ssl {
     }
     
     public function configureVerifyPeer(){
-        if($this->verifyPeer){
+        if(isset($this->verifyPeer)){
             curl_setopt(SoapCurl_Client::$resource, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
         }
         return $this;
     }
     
     public function configureVerifyHost(){
-        if($this->verifyHost){
+        if(isset($this->verifyHost)){
             curl_setopt(SoapCurl_Client::$resource, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
         }
         return $this;

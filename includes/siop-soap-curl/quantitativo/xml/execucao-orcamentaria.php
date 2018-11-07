@@ -15,7 +15,7 @@ class SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria extends SiopSoapCurl_Xm
      * 
      * @var array
      */
-    private $listFilter;
+    private $listFilter = array('anoExercicio' => '2018');
     
     /**
      * Lista de campos que serão retornados

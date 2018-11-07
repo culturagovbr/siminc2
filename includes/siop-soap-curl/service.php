@@ -1,12 +1,13 @@
 <?php
 
+include_once 'interface-service.php';
 include_once APPRAIZ. 'includes/soap-curl/client.php';
 
 /**
  * Classe para conectar com o Webservice do SIOP através do componente SoapCurl
  * 
  */
-abstract class SiopSoapCurl_Service {
+abstract class SiopSoapCurl_Service implements SiopSoapCurl_InterfaceService {
     
     /**
      * Url do serviço
@@ -15,13 +16,6 @@ abstract class SiopSoapCurl_Service {
      */
     protected $url;
 
-    /**
-     * Documento XML
-     * 
-     * @var string
-     */
-    protected $xml;
-    
     /**
      * Cliente usado pra comunicar com o serviço
      * 
@@ -33,10 +27,6 @@ abstract class SiopSoapCurl_Service {
         return $this->url;
     }
 
-    public function getXml() {
-        return $this->xml;
-    }
-
     public function getClient() {
         return $this->client;
     }
@@ -46,22 +36,15 @@ abstract class SiopSoapCurl_Service {
         return $this;
     }
 
-    public function setXml($xml) {
-        $this->xml = $xml;
-        return $this;
-    }
-
     public function setClient(SoapCurl_Client $client) {
         $this->client = $client;
         return $this;
     }
-
-    public function __construct($url, $xml, SoapCurl_Client $client) {
-        $this->url = $url;
-        $this->xml = $xml;
-        $this->client = $client? $client: new SoapCurl_Client();
+  
+    public function __construct() {
+        $this->client = new SoapCurl_Client();
     }
-
+    
     protected function mountListHeader(){
         $listHeader = array(
             "Content-type: text/xml;charset=\"utf-8\"",
@@ -69,18 +52,18 @@ abstract class SiopSoapCurl_Service {
             "Cache-Control: no-cache",
             "Pragma: no-cache",
             "SOAPAction: ". $this->url,
-            "Content-length: ". strlen($this->xml)
+            "Content-length: ". strlen($this->loadXml())
         );
         
         return $listHeader;
     }
     
-    protected function configure(){
+    public function configure(){
         # Configurado Protocolo de segurança
         $this->client->getSsl()
             ->setVerifyPeer(FALSE)
             ->setVerifyHost(FALSE)
-            ->setVersion(3)
+            ->setVersion('3')
             ->setCertificate(WEB_SERVICE_SIOP_CERTIFICADO)
             ->setPassword('simec')
         ;
@@ -99,7 +82,19 @@ abstract class SiopSoapCurl_Service {
         
         # Configurando xml contendo o nome e parametros utilizados pelo serviço especifico
         $this->client
-            ->setXml($this->xml);
+            ->setXml($this->loadXml())->configureAll();
+        
+        return $this;
     }
 
+    /**
+     * Faz requisição ao serviço
+     * 
+     * @return string
+     */
+    public function request(){
+        $this->client->request();
+        return $this->client->getResponse();
+    }
+    
 }

@@ -175,7 +175,7 @@ class SoapCurl_Http {
     }
     
     public function configurePost(){
-        if($this->post){
+        if(isset($this->post)){
             curl_setopt(SoapCurl_Client::$resource, CURLOPT_POST, $this->post);
         }
         return $this;
@@ -210,7 +210,7 @@ class SoapCurl_Http {
     }
     
     public function configureReturn(){
-        if($this->return){
+        if(isset($this->return)){
             curl_setopt(SoapCurl_Client::$resource, CURLOPT_RETURNTRANSFER, $this->return);
         }
         return $this;
