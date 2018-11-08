@@ -49,11 +49,15 @@
                 janid: $("#janid").val()
             }, function (result) {
                 result = JSON.parse(result);
-                if (result['result']) {
+                if (result['result']) {            
                     if (showAlert) {
-                        swal('', 'Registro salvo com sucesso!', 'success');
+                        swal({
+                            title: "",
+                            text: "Registro salvo com sucesso!",
+                            type: "success",
+                            confirmButtonText: 'OK'
+                        });
                     }
-                    window.location.href = '?modulo=principal/cadastro_alteracoes&acao=C&tpdid='+$("#tpdid").val()+'&pedid=' + result['pedid']+'&startIndex='+$("#startIndex").val();
                 } else {
                     swal('', 'Erro ao salvar registro!', 'error');
                 }

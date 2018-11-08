@@ -7,21 +7,20 @@ if ($_REQUEST['pedid']){
         $mAlteracaoPedido->docid = $mAlteracaoPedido->pegarDocidPedido($_REQUEST['pedid'], $_REQUEST['tpdid']);
     }
 }
-$startIndex = $_REQUEST['startIndex']?$_REQUEST['startIndex']:0;
 if ($_REQUEST['req']){
     switch ($_REQUEST['req']) {
-        case 'pedidos':
+        case 'carrega_pedidos':
             include_once APPRAIZ.'alteracao/modulos/principal/cadastro_pedido.inc';
-        die;
-        case 'justificativa':
+            die;   
+        case 'carrega_justificativa':
             include_once APPRAIZ.'alteracao/modulos/principal/cadastro_justificativa.inc';
-        die;
+            die;
         case 'salvar_pedido':
             $cPedido = new Alteracao_Controller_Pedido();
             $cPedido->salvar($_REQUEST);
-        die;
+            die;
         default:
-        break;
+            break;
     }
 }
 include APPRAIZ. "includes/cabecalho.inc";
@@ -37,38 +36,29 @@ include APPRAIZ. "includes/cabecalho.inc";
         <h2><?= $titulo_modulo;?></h2>
     </div>
 </div>
-<input type="hidden" id="startIndex" name="startIndex" value="<?= $startIndex ?>">
-<input type="hidden" id="tpdid" name="tpdid" value="<?= $_REQUEST['tpdid'] ?>">
 <div class="row">
     <div class="col-lg-11">
         <div class="ibox-content">
             <div id="wizard">
                 <h1>PEDIDO</h1>
-                <div class="div_lista_indicadores_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
-                    Carregando ...
+                <div class="div_lista_indicadores">
+                    <?php include_once APPRAIZ.'alteracao/modulos/principal/cadastro_pedido.inc'; ?>
                 </div>
 
                 <h1>SELECIONAR PI</h1>
-                <div class="div_lista_atividades_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
-                    Carregando ...
-                </div>
+                <div class="div_selecionar_pi"></div>
 
                 <h1>REMANEJAMENTO LOA</h1>
-                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
-                    Carregando ...
-                </div>
+                <div class="div_remanejamento_loa"></div>
+                
                 <h1>NATUREZA DA RECEITA</h1>
-                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
-                    Carregando ...
-                </div>
+                <div class="div_natureza_receita"></div>
+                
                 <h1>JUSTIFICATIVA</h1>
-                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=justificativa&pedid=<?= $_REQUEST['pedid']; ?>">
-                    Carregando ...
-                </div>
+                <div class="div_justificativa"></div>
+                
                 <h1>ESPELHO</h1>
-                <div class="div_lista_anexos_pnc" data-mode="async" data-url="?modulo=principal/cadastro_alteracoes&acao=C&req=pedidos&pedid=<?=$_REQUEST['pedid'];?>">
-                    Carregando ...
-                </div>
+                <div class="div_espelho"></div>
 
             </div>
         </div>
@@ -86,7 +76,7 @@ $(function(){
         
     var wizard = $("#wizard").steps({
         transitionEffect: "slide",
-        startIndex: <?= $startIndex?>,
+        startIndex: 0,
         width: 50,
         enableAllSteps: true,
         //enableFinishButton: exibirBotaoEnviar(),
@@ -118,6 +108,16 @@ $(function(){
         },
         onFinished: function(event, currentIndex){
             enviarAcompanhamento();
+        },
+        onStepChanged: function(event, currentIndex, priorIndex){
+            switch(currentIndex){
+                case 0:
+                    $(".div_lista_atividades").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_pedidos&pedid=<?=$_REQUEST['pedid'];?>');
+                    break;
+                case 4:
+                    $(".div_justificativa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_justificativa&pedid=<?=$_REQUEST['pedid'];?>');
+                    break;
+            }
         }
     }); 
 });
