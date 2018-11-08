@@ -96,5 +96,21 @@ abstract class SiopSoapCurl_Xml implements SiopSoapCurl_InterfaceXml {
         $xml = $this->describe();
         return $xml;
     }
+    
+    /**
+     * Exibe o documento xml completo em um arquivo separado pra Baixar/fazer download.
+     * 
+     * @return VOID
+     */
+    public function show() {
+        echo $this->describe();
+        header('Content-Type: application/xml; charset=utf-8');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Content-Disposition: attachment; filename="'. $this->service. '-request.xml"');
+        die;
+    }
+    
+    
 
 }

@@ -39,8 +39,14 @@ class Planacomorc_Controller_ImportaDadosSiop{
     private function ConsultaDadosWs(){
         $continuar = TRUE;
         do{
-            $ws = new Spo_Ws_Sof_Quantitativo('spo', Spo_Ws_Sof_Quantitativo::PRODUCTION);
-            $resultados = $ws->consultarExecucaoOrcamentaria($this->filtro, NULL, $this->pagina, TRUE);
+            # Busca dados de Quantitativo operação consultarExecucaoOrcamentaria do webservice do SIOP
+            $serviceConsultarExecucaoOrcamentaria = new SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria();
+            $resultados = $serviceConsultarExecucaoOrcamentaria
+                ->setAno($this->exercicio)
+                ->setPagina($this->pagina)
+                ->configure()
+                ->request()
+            ;
 
             if($resultados){
                 include_once  APPRAIZ . 'wssof/classes/Ws_ExecucaoOrcamentariaDto.inc';

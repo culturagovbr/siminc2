@@ -57,6 +57,17 @@ class SoapCurl_Client {
      * @var string
      */
     private $response;
+    
+    /**
+     * Erro ao fazer requisição
+     * 
+     * @var string
+     */
+    private $error;
+
+    public static function getResource() {
+        return self::$resource;
+    }
 
     public function getHttp() {
         return $this->http;
@@ -80,6 +91,15 @@ class SoapCurl_Client {
 
     public function getResponse() {
         return $this->response;
+    }
+
+    public function getError() {
+        return $this->error;
+    }
+
+    public static function setResource($resource) {
+        self::$resource = $resource;
+        return self;
     }
 
     public function setHttp(SoapCurl_Http $http) {
@@ -112,6 +132,11 @@ class SoapCurl_Client {
         return $this;
     }
 
+    public function setError($error) {
+        $this->error = $error;
+        return $this;
+    }
+
     /**
      * Manipula a comunicação via SOAP.
      * 
@@ -123,7 +148,7 @@ class SoapCurl_Client {
      * @param string $response
      */
     public function __construct(SoapCurl_Http $http = NULL, SoapCurl_Ssl $ssl = NULL, $listField = NULL, $xml = NULL, $file = NULL, $response = NULL) {
-        if(isset(self::$resource)){
+        if(self::$resource){
             $this->close();
         }
         self::$resource = curl_init();
@@ -182,9 +207,20 @@ class SoapCurl_Client {
      * @return string
      */
     public function request(){
-        $this->configureAll()
-            ->execute()
-            ->close();
+        # Configura opções no modulo de conexão
+        $this->configureAll();
+        
+        # Executa a requisição ao serviço
+        $this->execute();
+        
+        # Em caso de não ter resposta, busca a mensagem do erro ocorrido
+        if(!$this->response){
+            $this->warn();
+        }
+        
+        # Encerra a sessão da conexão e encerra todos os recursos utilizados
+        $this->close();
+        
         return $this->response;
     }
     
@@ -199,12 +235,23 @@ class SoapCurl_Client {
     }
     
     /**
+     * Captura o erro ocorrido na requisição
+     * 
+     * @return $this
+     */
+    public function warn(){
+        $this->error = curl_error(self::$resource);
+        return $this;
+    }
+    
+    /**
      * Encerra a sessão da conexão e encerra todos os recursos utilizados
      * 
      * @return $this
      */
     public function close(){
         curl_close(self::$resource);
+        self::$resource = NULL;
         return $this;
     }
     

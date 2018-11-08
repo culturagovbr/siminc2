@@ -8,20 +8,13 @@ include_once APPRAIZ. 'includes/siop-soap-curl/quantitativo/xml/execucao-orcamen
  * 
  */
 class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCurl_Service {
-    
+
     /**
      * Url do serviço
      * 
      * @var string
      */
     protected $url = WEB_SERVICE_SIOP_URL. 'WSQuantitativo';
-
-    /**
-     * Filtro do ano do exercicio
-     * 
-     * @var int
-     */
-    protected $ano;
     
     /**
      * Documento XML
@@ -30,25 +23,38 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
      */
     protected $xml;
     
+    /**
+     * Filtro do ano do exercicio
+     * 
+     * @var int
+     */
+    protected $ano = 2018;
+    
+    /**
+     * Numero da página do controle de paginação
+     * 
+     * @return int
+     */
+    protected $pagina = 0;
+
     public function getUrl() {
         return $this->url;
-    }
-
-    public function getAno() {
-        return $this->ano;
     }
 
     public function getXml() {
         return $this->xml;
     }
 
-    public function setUrl($url) {
-        $this->url = $url;
-        return $this;
+    public function getAno() {
+        return $this->ano;
     }
 
-    public function setAno($ano) {
-        $this->ano = $ano;
+    public function getPagina() {
+        return $this->pagina;
+    }
+
+    public function setUrl($url) {
+        $this->url = $url;
         return $this;
     }
 
@@ -57,12 +63,44 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
         return $this;
     }
 
+    public function setAno($ano) {
+        $this->ano = $ano;
+        return $this;
+    }
+
+    public function setPagina($pagina) {
+        $this->pagina = $pagina;
+        return $this;
+    }
+    
+    /**
+     * Retorna o XML pra ser enviado no momento da requisição
+     * 
+     * @return string xml
+     */
     public function loadXml() {
         $this->xml = new SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria();
         $this->xml->setListFilter(array('anoExercicio' => $this->ano));
+        $this->xml->setPage($this->pagina);
         $documento = $this->xml->describe();
         
         return $documento;
+    }
+    
+    /**
+     * Faz requisição ao serviço e retorna a lista de execuções orçamentárias(funcionais,
+     * Dotações, PIs, valores Autorizados, Empenhados, Liquidados, Pagos e informações complementares)
+     * 
+     * @return array
+     */
+    public function request() {
+        $result = parent::request();
+        if($result && $result->execucoesOrcamentarias){
+            $listExecucoesOrcamentarias = (array)$result->execucoesOrcamentarias;
+            $listExecucaoOrcamentaria = $listExecucoesOrcamentarias['execucaoOrcamentaria'];
+        }
+
+        return $listExecucaoOrcamentaria;
     }
 
 }

@@ -86,7 +86,8 @@
     include_once APPRAIZ. 'includes/failure/ErrorHandler.php';
     include_once APPRAIZ. 'includes/failure/ExceptionHandler.php';
     include_once APPRAIZ. 'includes/library/simec/SoapClient.php';
-    include_once APPRAIZ. "includes/connection/adapter-connection.php";
+    include_once APPRAIZ. 'includes/connection/adapter-connection.php';
+    include_once APPRAIZ. 'includes/siop-soap-curl/quantitativo/service/execucao-orcamentaria.php';
 
     function fechar_conexoes(){
         while(  pg_ping()){

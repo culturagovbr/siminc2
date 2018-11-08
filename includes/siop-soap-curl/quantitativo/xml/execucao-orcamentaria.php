@@ -89,7 +89,7 @@ class SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria extends SiopSoapCurl_Xm
      * 
      * @var int
      */    
-    private $page = 1;
+    private $page = 0;
     
     /**
      * Quantidade de registros por consulta
