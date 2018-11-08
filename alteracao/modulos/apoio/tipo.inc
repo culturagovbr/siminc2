@@ -20,13 +20,16 @@
                 </div>
                 <div class="ibox-content">
 
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/tipo_form&acao=A">Novo</a>
+                    <a class="btn btn-small btn-success" href="?modulo=apoio/tipo_form&acao=A">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Novo
+                    </a>
 
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
                             <tr class="text-center">
-                                <th width="10%">Ação</th>
+                                <th width="5%">Ação</th>
                                 <th>Código</th>
                                 <th>Descrição</th>
                                 <th>Fluxo de trabalho</th>
@@ -41,9 +44,6 @@
                                         <td class="text-center" nowrap="nowrap">
                                             <a href="?modulo=apoio/tipo_form&acao=A&tpaid=<?= $dados['tpaid']; ?>" title="Editar" >
                                                 <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
-                                            </a>
-                                            <a href="?modulo=apoio/tipo_form&acao=A&req=excluir-tipo&tpaid=<?= $dados['tpaid']; ?>" title="Apagar">
-                                                <span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span>
                                             </a>
                                         </td>
                                         <td><?= $dados['tpacod']; ?></td>

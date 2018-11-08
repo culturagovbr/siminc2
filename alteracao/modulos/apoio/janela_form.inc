@@ -43,6 +43,11 @@
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
                                 <a href="?modulo=apoio/janela&acao=A" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                                <?php if( $mJanela->janid ):  ?>
+                                    <a href="?modulo=apoio/janela_form&acao=A&req=excluir&janid=<?= $mJanela->janid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button">
+                                        <i class="fa fa-close"></i>&nbsp;Excluir
+                                    </a>
+                                <? endif;?>
                             </div>
                         </div>                        
                     </form>

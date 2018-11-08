@@ -20,13 +20,16 @@ include APPRAIZ . "includes/cabecalho.inc";
                 </div>
                 <div class="ibox-content">
 
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/janela_form&acao=A">Novo</a>
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/janela_form&acao=A">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Novo
+                    </a>
 
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
                             <tr class="text-center">
-                                <th width="10%">Ações</th>
+                                <th width="5%">Ação</th>
                                 <th>Janela</th>
                                 <th>Início</th>
                                 <th>Fim</th>
@@ -39,9 +42,6 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <td class="text-center" nowrap="nowrap">
                                         <a href="?modulo=apoio/janela_form&acao=A&janid=<?= $dados['janid']; ?>" title="Editar" >
                                             <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
-                                        </a>
-                                        <a href="?modulo=apoio/janela_form&acao=A&req=excluir&janid=<?= $dados['janid']; ?>" title="Apagar">
-                                            <span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span>
                                         </a>
                                     </td>
                                     <td><?= $dados['jannome']; ?></td>

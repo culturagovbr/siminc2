@@ -50,6 +50,11 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
                                 <a href="?modulo=apoio/tipo&acao=A" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                                <?php if( $mTipo->tpaid ) : ?>
+                                    <a href="?modulo=apoio/tipo_form&acao=A&req=excluir-tipo&tpaid=<?= $mTipo->tpaid ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button">
+                                        <i class="fa fa-close"></i>&nbsp;Excluir
+                                    </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </form>
