@@ -1,8 +1,6 @@
 <div class="ibox-content">
     <form id="filtroalteracao" name="filtroalteracao" method="POST" role="form" action="?modulo=principal/cadastro_alteracoes&acao=C" class="form-horizontal">
         <input name="req" id="req" value="" type="hidden">
-        <input name="pedid" id="pedid" value="<?=$mAlteracaoPedido->pedid;?>" type="hidden">
-
         <div class="row">
             <div class="col-lg-8">
                 <?= $simec->select('suoid', 'Unidade', $mAlteracaoPedido->suoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), ['required'], ['input-size' => 9, 'label-size' => 2]); ?>
@@ -46,10 +44,12 @@
                 suoid: $("#suoid").val(),
                 pedtitulo: $("#pedtitulo").val(),
                 tpaid: $("#tpaid").val(),
-                janid: $("#janid").val()
+                janid: $("#janid").val(),
+                tpdid: $("#tpdid").val()
             }, function (result) {
                 result = JSON.parse(result);
-                if (result['result']) {            
+                if (result['result']) {
+                    $("#pedid").val(result['pedid']);
                     if (showAlert) {
                         swal({
                             title: "",

@@ -129,4 +129,59 @@ class Alteracao_Model_Pedido extends Modelo
 
         return $docid;
     }
+    
+    public function recuperarPedidoPorId($pedid){
+        $sql = "SELECT
+                    ped.pedid,
+                    ped.pedtitulo,
+                    ped.suoid,
+                    ped.tpaid,
+                    ped.janid,
+                    tpa.tpacod,
+                    tpa.tpadsc,
+                    esd.esddsc,
+                    jan.jannome,
+                    suo.suonome
+                FROM alteracao.pedido AS ped
+                JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
+                JOIN alteracao.janela AS jan ON ped.janid = jan.janid
+                JOIN public.subunidadeorcamentaria AS suo ON ped.suoid = suo.suoid
+                LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
+                LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
+                WHERE
+                    ped.pedstatus = 'A'
+                and ped.pedid = ".$pedid;
+        return $this->pegaLinha($sql);
+    }
+    
+    public function listaPisSelecionados($pedid){
+        $sql = "select pis.pliselid,
+                       pis.pedid,
+                       pis.pliid,
+                       pc.picvalorcusteio AS custeio,
+                       pc.picvalorcapital AS capital,
+                       pis.vlsaldoempenhocusteio,
+                       pis.vlsaldoempenhocapital,
+                       pis.vlsuplementarcusteio,
+                       pis.vlsuplementarcapital,
+                       pis.vlcancelarcusteio,
+                       pis.vlcancelarcapital,
+                       pis.vlsuplementarexcessocusteio,
+                       pis.vlsuplementarexcessocapital,
+                       pis.vlsuplementarsuperavitcusteio,
+                       pis.vlsuplementarsuperavitcapital,
+                       pis.vldotacaocusteio,
+                       pis.vldotacaocapital,
+                       COALESCE(pli.plititulo, 'N/A') AS plititulo,
+                       TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
+                  from alteracao.plano_interno_selecionado pis
+                 inner join monitora.pi_planointerno pli on pis.pliid = pli.pliid 
+                 inner JOIN planacomorc.pi_complemento pc on pis.pliid = pc.pliid 
+                  LEFT JOIN monitora.pi_planointernoptres ppt on pis.pliid = ppt.pliid
+                  LEFT JOIN monitora.ptres ptr ON( ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
+                  LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
+                 where pis.pedid = $pedid
+                 order by pis.pliselid";
+        return $this->carregar($sql);
+    }
 }

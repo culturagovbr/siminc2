@@ -151,13 +151,14 @@ class Spo_Model_Planointerno extends Modelo
      */
     public static function listar(stdClass $filtros){
         $where = self::montarFiltro($filtros);
-//ver($where,d);
+        $pedid = isset($filtros->pedid)?$filtros->pedid:0;
 
         $sql = "
             SELECT DISTINCT
                 pli.pliid::VARCHAR AS pliid,
                 ben.benid::VARCHAR AS benid,
                 pli.pliid::VARCHAR AS id,
+                pli.plicod,
                 '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || pli.plicod || '</a>' AS codigo_pi,
                 pli.ungcod || '-' || suo.suonome AS sub_unidade,
                 '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || COALESCE(pli.plititulo, 'N/A') || '</a>' AS plititulo,
@@ -165,6 +166,7 @@ class Spo_Model_Planointerno extends Modelo
 		ed.esddsc AS situacao,
 		pc.picvalorcusteio AS custeio,
 		pc.picvalorcapital AS capital,
+                (select coalesce(pliselid,0) from alteracao.plano_interno_selecionado pis where pis.pliid=pli.pliid and pis.pedid = $pedid) as pliselid,
 		coalesce((SELECT 
 			sum(coalesce(se.vlrautorizado,0::numeric)) AS vlrautorizado
 		   FROM spo.siopexecucao se
