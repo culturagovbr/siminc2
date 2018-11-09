@@ -19,20 +19,6 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
      * @var SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria
      */
     protected $xml;
-    
-    /**
-     * Filtro do ano do exercicio
-     * 
-     * @var int
-     */
-    protected $ano = 2018;
-    
-    /**
-     * Numero da página do controle de paginação
-     * 
-     * @return int
-     */
-    protected $pagina = 0;
 
     public function getUrl() {
         return $this->url;
@@ -40,14 +26,6 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
 
     public function getXml() {
         return $this->xml;
-    }
-
-    public function getAno() {
-        return $this->ano;
-    }
-
-    public function getPagina() {
-        return $this->pagina;
     }
 
     public function setUrl($url) {
@@ -60,14 +38,9 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
         return $this;
     }
 
-    public function setAno($ano) {
-        $this->ano = $ano;
-        return $this;
-    }
-
-    public function setPagina($pagina) {
-        $this->pagina = $pagina;
-        return $this;
+    public function __construct() {
+        parent::__construct();
+        $this->xml = new SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria();
     }
     
     /**
@@ -76,9 +49,6 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
      * @return string xml
      */
     public function loadXml() {
-        $this->xml = new SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria();
-        $this->xml->setListFilter(array('anoExercicio' => $this->ano));
-        $this->xml->setPage($this->pagina);
         $documento = $this->xml->describe();
         
         return $documento;
