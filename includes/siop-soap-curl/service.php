@@ -1,8 +1,5 @@
 <?php
 
-include_once 'interface-service.php';
-include_once APPRAIZ. 'includes/soap-curl/client.php';
-
 /**
  * Classe para conectar com o Webservice do SIOP através do componente SoapCurl
  * 

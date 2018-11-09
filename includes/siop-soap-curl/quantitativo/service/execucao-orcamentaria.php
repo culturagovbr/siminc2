@@ -1,8 +1,5 @@
 <?php
 
-include_once APPRAIZ. 'includes/siop-soap-curl/service.php';
-include_once APPRAIZ. 'includes/siop-soap-curl/quantitativo/xml/execucao-orcamentaria.php';
-
 /**
  * Classe para conectar com o Webservice do SIOP através do componente SoapCurl
  * 
