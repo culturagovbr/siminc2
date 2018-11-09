@@ -1,7 +1,5 @@
 <?php
 
-include_once 'interface-xml.php';
-
 /**
  * Classe para conectar com o Webservice do SIOP através do componente SoapCurl
  * 
