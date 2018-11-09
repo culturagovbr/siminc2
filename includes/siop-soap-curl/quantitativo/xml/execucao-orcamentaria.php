@@ -132,6 +132,11 @@ class SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria extends SiopSoapCurl_Xm
         return $this;
     }
     
+    /**
+     * Retorna trexo código XML referente a tag do serviço solicitado
+     * 
+     * @return string xml
+     */
     public function describeService() {
         $xml = "\n        <ns1:". $this->service. '>';
         $xml .= $this->describeCredential();

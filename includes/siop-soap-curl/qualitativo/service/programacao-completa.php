@@ -4,22 +4,22 @@
  * Classe para conectar com o Webservice do SIOP através do componente SoapCurl
  * 
  */
-class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCurl_Service {
+class SiopSoapCurl_Quantitativo_Service_ProgramacaoCompleta extends SiopSoapCurl_Service {
 
     /**
      * Url do serviço
      * 
      * @var string
      */
-    protected $url = WEB_SERVICE_SIOP_URL. 'WSQuantitativo';
+    protected $url = WEB_SERVICE_SIOP_URL. 'WSQualitativo';
     
     /**
      * Documento XML
      * 
-     * @var SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria
+     * @var SiopSoapCurl_Quantitativo_Xml_ProgramacaoCompleta
      */
     protected $xml;
-
+    
     public function getUrl() {
         return $this->url;
     }
@@ -33,14 +33,14 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
         return $this;
     }
 
-    public function setXml(SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria $xml) {
+    public function setXml(SiopSoapCurl_Quantitativo_Xml_ProgramacaoCompleta $xml) {
         $this->xml = $xml;
         return $this;
     }
 
     public function __construct() {
         parent::__construct();
-        $this->xml = new SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria();
+        $this->xml = new SiopSoapCurl_Quantitativo_Xml_ProgramacaoCompleta();
     }
     
     /**
@@ -55,19 +55,26 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
     }
     
     /**
-     * Faz requisição ao serviço e retorna a lista de execuções orçamentárias(funcionais,
-     * Dotações, PIs, valores Autorizados, Empenhados, Liquidados, Pagos e informações complementares)
+     * Faz requisição ao serviço e retorna lista de ações, localizadores e Planos Orçamentários(POs)
      * 
      * @return array
      */
     public function request() {
         $result = parent::request();
-        if($result && $result->execucoesOrcamentarias){
-            $listExecucoesOrcamentarias = (array)$result->execucoesOrcamentarias;
-            $listExecucaoOrcamentaria = $listExecucoesOrcamentarias['execucaoOrcamentaria'];
+        $listas = new stdClass();
+        $listas->return = new stdClass();
+
+        foreach($result as $nome => $registro){
+            if(strpos($nome, 'DTO')){
+                if(!$listas->return->$nome){
+                    $listas->return->$nome = array();
+                }
+                array_push($listas->return->$nome, $registro);
+            }
         }
 
-        return $listExecucaoOrcamentaria;
+        return $listas;
     }
 
 }
+

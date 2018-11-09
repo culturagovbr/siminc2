@@ -12,6 +12,10 @@ include_once APPRAIZ. 'includes/siop-soap-curl/service.php';
 include_once APPRAIZ. 'includes/siop-soap-curl/xml.php';
 
 # Classes personalizadas para consumir serviços
+# Quantitativo
 include_once APPRAIZ. 'includes/siop-soap-curl/quantitativo/service/execucao-orcamentaria.php';
 include_once APPRAIZ. 'includes/siop-soap-curl/quantitativo/xml/execucao-orcamentaria.php';
+# Qualitativo
+include_once APPRAIZ. 'includes/siop-soap-curl/qualitativo/service/programacao-completa.php';
+include_once APPRAIZ. 'includes/siop-soap-curl/qualitativo/xml/programacao-completa.php';
 
