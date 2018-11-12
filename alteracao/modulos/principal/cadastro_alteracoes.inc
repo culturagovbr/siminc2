@@ -35,6 +35,12 @@ if ($_REQUEST['req']){
         case 'carrega_justificativa':
             include_once APPRAIZ.'alteracao/modulos/principal/cadastro_justificativa.inc';
             die;
+        case 'carrega_dados_credito':
+            if ($_REQUEST['pedid']){
+                $arrPedidos= $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);
+            }
+            include_once APPRAIZ.'alteracao/modulos/principal/dados_credito.inc';
+            die;
         case 'salvar_pedido':
             $cPedido = new Alteracao_Controller_Pedido();
             $cPedido->salvar($_REQUEST);
@@ -75,19 +81,8 @@ include APPRAIZ. "includes/cabecalho.inc";
         <h3>DADOS DO CRÉDITO</h3>
     </div>
 </div>
-<div class="divDadosCredito row wrapper border-bottom white-bg page-heading" style="display: none;">
-    <div class="col-lg-2">
-        <h4><b>Nº do Pedido:</b> <?=$arrPedidos['pedid'];?></h4>
-    </div>
-    <div class="col-lg-2">
-        <h4><b>Tipo:</b> <?=$arrPedidos['tpacod'];?></h4>
-    </div>
-    <div class="col-lg-2">
-        <h4><b>Momento:</b> <?=$arrPedidos['jannome'];?></h4>
-    </div>
-    <div class="col-lg-6">
-        <h4><b>Título:</b> <?=$arrPedidos['pedtitulo'];?></h4>
-    </div>
+<div class="divDadosCredito row wrapper border-bottom white-bg page-heading" id="divDadosCredito" style="display: none;">
+    <?php include_once APPRAIZ.'alteracao/modulos/principal/dados_credito.inc'; ?>
 </div>
 <div class="row">
     <div class="col-lg-12">

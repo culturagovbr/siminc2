@@ -5,7 +5,7 @@
             <th>Funcional</th>
             <th>Id Planejamento</th>
             <th>Título</th>
-            <th width="10%">Tipo</th>
+            <th width="11%">Tipo</th>
             <th>Saldo a Empenhar</th>
             <th>Suplementar</th>
             <th>Cancelar</th>

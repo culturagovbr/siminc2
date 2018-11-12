@@ -50,6 +50,7 @@
                 result = JSON.parse(result);
                 if (result['result']) {
                     $("#pedid").val(result['pedid']);
+                    $("#divDadosCredito").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_dados_credito&pedid='+result['pedid']+'&tpdid=<?=$_REQUEST['tpdid'];?>');
                     if (showAlert) {
                         swal({
                             title: "",
