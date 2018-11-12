@@ -148,19 +148,21 @@
     });
     
     function salvarCampo(nomeCampo, pliselid, valor){
-        $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
-        {
-            pliselid: pliselid,
-            campo: nomeCampo,
-            valor: valor
-        },
-            function(retorno){
-                if (retorno){
-                    var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-                    $('#listaPisSelecionados').load(url);
+        if (valor!=''){
+            $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+            {
+                pliselid: pliselid,
+                campo: nomeCampo,
+                valor: valor
+            },
+                function(retorno){
+                    if (retorno){
+                        var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                        $('#listaPisSelecionados').load(url);
+                    }
                 }
-            }
-        );         
+            );         
+        }
     }
 </script>
 <style>

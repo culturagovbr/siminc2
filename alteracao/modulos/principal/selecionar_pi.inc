@@ -64,6 +64,8 @@ Final da modal de listar pis disponíveis
                 if (retorno){
                     var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+pedid;
                     $('#listaPisSelecionados').load(url);
+                    url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis&pedid='+$("#pedid").val();
+                    $('#seleciona_pi .modal-body').load(url);                    
                 }
             }
         );

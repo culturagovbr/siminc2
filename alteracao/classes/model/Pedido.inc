@@ -111,7 +111,11 @@ class Alteracao_Model_Pedido extends Modelo
             $sql .= " and ped.pedtitulo like '".$filtroprop['pedtitulo']."'";
         }
         if ($filtroprop['suoid']){
-            $sql .= " and ped.suoid in ".implode(' AND '.$filtroprop['suoid']);
+            if (is_array($filtroprop['suoid'])){
+                $sql .= " and ped.suoid in (".implode(' , ',$filtroprop['suoid']).')';
+            }else{
+                $sql .= " and ped.suoid in ".$filtroprop['suoid'];
+            }
         }
         return $this->carregar($sql);
     }
