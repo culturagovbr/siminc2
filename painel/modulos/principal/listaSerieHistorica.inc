@@ -202,8 +202,17 @@ if($permissoes['verindicadores'] == 'vertodos') {
 		<?php if($dadosindicador['regid'] == REGIONALIZACAO_SETOR): ?>
 			<input type="button" value="Importar Dados do Setor" name="botao" onclick="popupImportarTerritorios();">
 		<?php endif; ?>
+                <?php
+                    $sql = "select secid 
+                        from painel.usuarioresponsabilidade 
+                       where usucpf = '".$_SESSION['usucpf']."' 
+                         and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
+                         and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
+                    $secid_confirma = $db->pegaUm($sql);
+                    if ($secid_confirma){ ?>
 			<input type="button" value="Sem novas atualizações" name="botao" onclick="atualizardatacoleta();">
 			<input type="button" value="Incluir dados" name="botao" onclick="window.location='?modulo=principal/preenchimentoSerieHistorica&acao=A';">
+                    <?php } ?>
 	<?php endif; ?>
 	<? endif; ?>
 	

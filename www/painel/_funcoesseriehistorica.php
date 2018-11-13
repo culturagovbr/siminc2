@@ -1523,7 +1523,18 @@ function carregarGridBrasil($dados) {
 	$html .= montarSubRodapeDetalhes($detalhes);
 	// Botão para gravar o formulario de estado
 	$html .= "<tr>";
-	$html .= "<td colspan='".($colspancabecalho+2)."' class='SubTituloDireita'><input type='submit' value='Gravar'> <input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
+	$html .= "<td colspan='".($colspancabecalho+2)."' class='SubTituloDireita'>";
+        
+        $sql = "select secid 
+          from painel.usuarioresponsabilidade 
+         where usucpf = '".$_SESSION['usucpf']."' 
+           and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
+           and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
+        $secid_confirma = $db->pegaUm($sql);
+        if ($secid_confirma){
+            $html .= "<input type='submit' value='Gravar'>";
+        }
+        $html .= "<input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
 	$html .= "</tr>";
 	
 	$html .= "</tfoot>";
