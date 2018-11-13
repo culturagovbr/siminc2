@@ -159,6 +159,8 @@ class Spo_Model_Planointerno extends Modelo
                 ben.benid::VARCHAR AS benid,
                 pli.pliid::VARCHAR AS id,
                 pli.plicod,
+                ed.esdid,
+                ed.esddsc,
                 '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || pli.plicod || '</a>' AS codigo_pi,
                 pli.ungcod || '-' || suo.suonome AS sub_unidade,
                 '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || COALESCE(pli.plititulo, 'N/A') || '</a>' AS plititulo,

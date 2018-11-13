@@ -5,6 +5,7 @@
                 <tr class="text-center">
                     <th width="5%">Ações</th>
                     <th width="5%">Id Planejamento</th>
+                    <th width="5%">Id Planejamento</th>
                     <th width="5%">Funcional</th>
                     <th width="5%">Número do PI</th>
                     <th width="50%">Título</th>
@@ -16,8 +17,9 @@
             <?php
             foreach($aDadosPi as $dados): ?>
                 <tr>
-                    <td align="center"><input type="checkbox" <?= $dados['pliselid']>0?'checked="true"':''; ?> class="check checkbox-success" id="chk<?=$dados['id'];?>" pliselid="<?=$dados["pliselid"];?>" value="<?=$dados['id'];?>" name="chkPliid"></td>
+                    <td align="center"><input type="checkbox" <?= $dados['pliselid']>0?'checked="true"':''; ?> class="check checkbox-success" id="chk<?=$dados['id'];?>" esdid="<?=$dados['esdid'];?>" pliselid="<?=$dados["pliselid"];?>" value="<?=$dados['id'];?>" name="chkPliid"></td>
                     <td align="center"><?= $dados['id']; ?></td>
+                    <td align="center"><?= $dados['esddsc']; ?></td>
                     <td align="center"><?= $dados['funcional']; ?></td>
                     <td align="center"><?= $dados['plicod']; ?></td>
                     <td align="left"><?= $dados['plititulo']; ?></td>
@@ -43,6 +45,10 @@
         });
         
         $(".check").click(function(){
+            if ($(this).attr('esdid')==1769 || $(this).attr('esdid')==1774){
+                swal('', 'PI Em Cadastramento!\n Não pode ser selecionado!', 'warning');
+                return false;
+            }
             if ($(this).prop("checked")){
                 adicionaPiPedido($(this).attr('value'), $("#pedid").val());
             }else{

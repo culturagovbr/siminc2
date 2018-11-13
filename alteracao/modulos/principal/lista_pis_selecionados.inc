@@ -11,7 +11,7 @@
             <th>Cancelar</th>
             <th>Suplementar por Excesso</th>
             <th>Suplementar por Superávit</th>
-            <th>Dotação Provável</th>
+            <th>Resultado Provável</th>
         </tr>
     </thead>
     <tbody>
@@ -19,7 +19,7 @@
     foreach($aDadosPiSelecionados as $dados): ?>
         <tr>
             <td style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;" align="center">
-                <button class="btn btn-danger btnRemovePi" type="button" pliselid="<?=$dados['pliselid'];?>" name="btnSelecionarPi">
+                <button class="btn btn-danger btnRemovePi" type="button" title="Excluir pedido" pliselid="<?=$dados['pliselid'];?>" name="btnSelecionarPi">
                     <span class="glyphicon glyphicon-trash"></span>
             </td>
             <td ><?= $dados['funcional']; ?></td>
@@ -28,10 +28,16 @@
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
-                        <td style="border: none;">Custeio: R$ <?= number_format($dados['custeio'],2,',','.'); ?></td>
+                        <td style="border: none;">
+                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" value="<?= number_format($dados['custeio'],2,',','.'); ?>">
+                            Custeio: R$ <?= number_format($dados['custeio'],2,',','.'); ?>
+                        </td>
                     </tr>
                     <tr>
-                        <td style="border: none; border-top: 1px solid #e7eaec;">Capital: R$ <?= number_format($dados['capital'],2,',','.'); ?></td>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" value="<?= number_format($dados['capital'],2,',','.'); ?>">
+                            Capital: R$ <?= number_format($dados['capital'],2,',','.'); ?>
+                        </td>
                     </tr>
                 </table>
             </td>
@@ -39,12 +45,12 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="text" size="10" class="input_valor salvar-dotacao-fnc" name="vlsaldoempenhocusteio" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenharcusteio<?=$dados['pliid'];?>" value="<?=$dados['vlsaldoempenhocusteio'];?>">
+                            <input type="text" size="10" class="input_valor" tipo="custeio" name="vlsaldoempenhocusteio" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenharcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsaldoempenhocusteio'];?>">
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="vlsaldoempenhocapital" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenhocapital<?=$dados['pliid'];?>" value="<?=$dados['vlsaldoempenhocapital'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsaldoempenhocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenhocapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsaldoempenhocapital'];?>">
                         </td>
                     </tr>
                 </table>
@@ -54,12 +60,12 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="text" size="10" class="input_valor" name="vlsuplementarcusteio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcusteio<?=$dados['pliid'];?>" value="<?=$dados['vlsuplementarcusteio'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcusteio'];?>">
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="vlsuplementarcapital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcapital<?=$dados['pliid'];?>" value="<?=$dados['vlsuplementarcapital'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcapital'];?>">
                         </td>
                     </tr>
                 </table>
@@ -68,12 +74,12 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="text" size="10" class="input_valor" name="vlcancelarcusteio" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcusteio<?=$dados['pliid'];?>" value="<?=$dados['vlcancelarcusteio'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlcancelarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarcusteio'];?>">
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="vlcancelarcapital" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcapital<?=$dados['pliid'];?>" value="<?=$dados['vlcancelarcapital'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlcancelarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarcapital'];?>">
                         </td>
                     </tr>
                 </table>
@@ -82,12 +88,12 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="text" size="10" class="input_valor" name="vlsuplementarexcessocusteio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocusteio<?=$dados['pliid'];?>" value="<?=$dados['vlsuplementarexcessocusteio'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarexcessocusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessocusteio'];?>">
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="vlsuplementarexcessocapital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocapital<?=$dados['pliid'];?>" value="<?=$dados['vlsuplementarexcessocapital'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarexcessocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessocapital'];?>">
                         </td>
                     </tr>
                 </table>
@@ -96,12 +102,12 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcusteio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcusteio<?=$dados['pliid'];?>" value="<?=$dados['vlsuplementarsuperavitcusteio'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcusteio'];?>">
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcusteio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcapital<?=$dados['pliid'];?>" value="<?=$dados['vlsuplementarsuperavitcapital'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcusteio" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcapital'];?>">
                         </td>
                     </tr>
                 </table>
@@ -110,12 +116,12 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="text" size="10" class="input_valor" name="vldotacaocusteio" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocusteio<?=$dados['pliid'];?>" value="<?=$dados['vldotacaocusteio'];?>">
+                            <input type="text" size="10" class="input_valor" name="vldotacaocusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocusteio<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocusteio'];?>">
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="vldotacaocapital" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocapital<?=$dados['pliid'];?>" value="<?=$dados['vldotacaocapital'];?>">
+                            <input type="text" size="10" class="input_valor" name="vldotacaocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocapital<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocapital'];?>">
                         </td>
                     </tr>
                 </table>
@@ -143,17 +149,28 @@
         });
         
         $(".input_valor").blur(function(){
-            salvarCampo($(this).prop('name'), $(this).attr('pliselid'), $(this).val());
+            salvarCampo($(this).prop('name'), $(this).attr('pliselid'), $(this).val(), $(this).attr('tipo'));
         });
+        $('.input_valor').keyup(function(){
+            $(this).val(mascaraglobal('###.###.###.###,##', $(this).val()));
+        }).keyup();
     });
     
-    function salvarCampo(nomeCampo, pliselid, valor){
+    function salvarCampo(nomeCampo, pliselid, valor, tipo){
         if (valor!=''){
+            var vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
+            var vlrPi = $("#pi"+tipo+pliselid).val();
+            vlrPi = vlrPi ? str_replace(['.', ','], ['', '.'], vlrPi) : 0;
+            if (vlrCampo>vlrPi){
+                swal('', 'Valor maior que o valor do PI!', 'warning');
+                $("#"+nomeCampo+pliselid).val('');
+                return;
+            }
             $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
             {
                 pliselid: pliselid,
                 campo: nomeCampo,
-                valor: valor
+                valor: vlrCampo
             },
                 function(retorno){
                     if (retorno){
