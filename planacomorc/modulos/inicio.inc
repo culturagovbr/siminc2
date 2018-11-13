@@ -1,5 +1,23 @@
 <?php
 
+            # Busca dados de Quantitativo operação consultarExecucaoOrcamentaria do webservice do SIOP
+            $serviceExecucaoOrcamentaria = new SiopSoapCurl_Receita_Service_CaptarBaseExterna();
+            $serviceExecucaoOrcamentaria->getXml()
+                    ->setCodigoCaptacaoBaseExterna(598)
+                    ->setCodigoNaturezaReceita(13210011)
+                    ->setCodigoUnidadeRecolhedora(26239)
+                    ->setSubNatureza(280)
+                    ->setJustificativa('A previsão de R$ 1.360.894 será para atender à receita oriunda remuneração de depósitos bancários, cuja projeção encontra-se em linha com o arrecadado registrado até setembro de 2018.')
+                    ->setMetodologia('Foi utilizada como base de cálculo os valores estimados para aplicação somado aos rendimentos auferidos no exercício até 28/09/2018 Rendimentos = (Montante x juros x período estimado da aplicação) + rendimento já auferidos.')
+                    ->setMemoriaDeCalculo('Rendimentos = (Montante x juros x período estimado da aplicação) + rendimento já auferidos 1.360.894,04 = (15.926.570,41 x 0,042631286 x 62/100) + 939.932,53')
+                    ->setValor('1360894.00')
+                    ->setExercicio(2018);
+            $resultados = $serviceExecucaoOrcamentaria->configure()->request();
+            ver($resultados);
+            die;
+            
+            
+            
 include_once APPRAIZ . "includes/library/simec/Grafico.php";
 
 include_once '_funcoespi.php';
