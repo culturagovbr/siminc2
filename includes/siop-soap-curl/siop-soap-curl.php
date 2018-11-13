@@ -18,4 +18,7 @@ include_once APPRAIZ. 'includes/siop-soap-curl/quantitativo/xml/execucao-orcamen
 # Qualitativo
 include_once APPRAIZ. 'includes/siop-soap-curl/qualitativo/service/programacao-completa.php';
 include_once APPRAIZ. 'includes/siop-soap-curl/qualitativo/xml/programacao-completa.php';
+# Receita
+include_once APPRAIZ. 'includes/siop-soap-curl/receita/service/captar-base-externa.php';
+include_once APPRAIZ. 'includes/siop-soap-curl/receita/xml/captar-base-externa.php';
 

@@ -1,5 +1,5 @@
 <?php
-
+            
 include_once APPRAIZ . "includes/library/simec/Grafico.php";
 
 include_once '_funcoespi.php';
