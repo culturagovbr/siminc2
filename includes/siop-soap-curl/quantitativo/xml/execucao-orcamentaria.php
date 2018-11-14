@@ -6,21 +6,47 @@
  */
 class SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria extends SiopSoapCurl_Xml {
 
+    /**
+     * Serviço acessado
+     * 
+     * @var string
+     */
     protected $service = 'consultarExecucaoOrcamentaria';
 
     /**
-     * Lista de filtros
+     * Filtros de consulta, permite a passagem de uma lista de ações.
      * 
      * @var array
      */
-    private $listFilter = array('anoExercicio' => '2018');
+    private $acoes;
     
     /**
-     * Lista de campos que serão retornados
+     * Filtros de consulta por anoExercicio.
+     * 
+     * @var int
+     */
+    private $anoExercicio;
+
+    /**
+     * Filtros de consulta por anoReferencia.
+     * 
+     * @var int
+     */
+    private $anoReferencia;
+
+    /**
+     * Filtros de consulta, permite a passagem de uma lista de Planos Orçamentários.
      * 
      * @var array
      */
-    private $listField = array(
+    private $planosOrcamentarios;
+    
+    /**
+     * Contém um valor booleano opcional para cada elemento da classificação que deva ser retornado pela operação.
+     * 
+     * @var array
+     */
+    private $selecaoRetorno = array(
         'acao' => 'true',
         'acompanhamentoPO' => 'true',
         'anoExercicio' => 'true',
@@ -83,52 +109,88 @@ class SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria extends SiopSoapCurl_Xm
     );
     
     /**
-     * Pagina atual da consulta
-     * 
-     * @var int
-     */    
-    private $page = 0;
-    
-    /**
-     * Quantidade de registros por consulta
+     * Caso esteja querendo usar paginação na consulta, o número da página deverá ser informado.
      * 
      * @var int
      */
-    private $limit = 2000;
+    private $pagina;
     
-    public function getListFilter() {
-        return $this->listFilter;
+    /**
+     * Caso esteja queira usar paginação na consulta, o número de registros por página deverá ser informado.
+     * 
+     * @var int
+     */
+    private $registrosPorPagina;
+    
+    public function getService() {
+        return $this->service;
     }
 
-    public function getListField() {
-        return $this->listField;
+    public function getAcoes() {
+        return $this->acoes;
     }
 
-    public function getPage() {
-        return $this->page;
+    public function getAnoExercicio() {
+        return $this->anoExercicio;
     }
 
-    public function getLimit() {
-        return $this->limit;
+    public function getAnoReferencia() {
+        return $this->anoReferencia;
     }
 
-    public function setListFilter($listFilter) {
-        $this->listFilter = $listFilter;
+    public function getPlanosOrcamentarios() {
+        return $this->planosOrcamentarios;
+    }
+
+    public function getSelecaoRetorno() {
+        return $this->selecaoRetorno;
+    }
+
+    public function getPagina() {
+        return $this->pagina;
+    }
+
+    public function getRegistrosPorPagina() {
+        return $this->registrosPorPagina;
+    }
+
+    public function setService($service) {
+        $this->service = $service;
         return $this;
     }
 
-    public function setListField($listField) {
-        $this->listField = $listField;
+    public function setAcoes($acoes) {
+        $this->acoes = $acoes;
         return $this;
     }
 
-    public function setPage($page) {
-        $this->page = $page;
+    public function setAnoExercicio($anoExercicio) {
+        $this->anoExercicio = $anoExercicio;
         return $this;
     }
 
-    public function setLimit($limit) {
-        $this->limit = $limit;
+    public function setAnoReferencia($anoReferencia) {
+        $this->anoReferencia = $anoReferencia;
+        return $this;
+    }
+
+    public function setPlanosOrcamentarios($planosOrcamentarios) {
+        $this->planosOrcamentarios = $planosOrcamentarios;
+        return $this;
+    }
+
+    public function setSelecaoRetorno($selecaoRetorno) {
+        $this->selecaoRetorno = $selecaoRetorno;
+        return $this;
+    }
+
+    public function setPagina($pagina) {
+        $this->pagina = $pagina;
+        return $this;
+    }
+
+    public function setRegistrosPorPagina($registrosPorPagina) {
+        $this->registrosPorPagina = $registrosPorPagina;
         return $this;
     }
     
@@ -140,41 +202,66 @@ class SiopSoapCurl_Quantitativo_Xml_ExecucaoOrcamentaria extends SiopSoapCurl_Xm
     public function describeService() {
         $xml = "\n        <ns1:". $this->service. '>';
         $xml .= $this->describeCredential();
-        $xml .= $this->describeListFilter();
-        $xml .= $this->describeListField();
-        $xml .= $this->describePagination();
+        $xml .= $this->describeFiltro();
+        $xml .= $this->describeSelecaoRetorno();
+        $xml .= $this->describePaginacao();
         $xml .= "\n". '        </ns1:'. $this->service. '>';
         return $xml;
     }
     
-    public function describeListFilter() {
+    public function describeFiltro() {
         $xml = "\n              <filtro>";
-        if($this->listFilter){
-            foreach ($this->listFilter as $filter => $value) {
-                $xml .= "\n                  <". $filter. '>'. $value. '</'. $filter. '>';
-            }
-        }
+        $xml .= $this->describeAcoes();
+        $xml .= $this->anoExercicio? "\n                  <anoExercicio>". $this->anoExercicio. '</anoExercicio>': NULL;
+        $xml .= $this->anoReferencia? "\n                  <anoReferencia>". $this->anoReferencia. '</anoReferencia>': NULL;
+        $xml .= $this->describePlanosOrcamentarios();
         $xml .= "\n              </filtro>";
         return $xml;
     }
     
-    public function describeListField() {
+    public function describeAcoes() {
+        $xml = NULL;
+        if($this->acoes){
+            $xml .= "\n                  <acoes>";
+            foreach($this->acoes as $acao) {
+                $xml .= "\n                     <acao>". $acao. '</acao>';
+            }
+            $xml .= "\n                  </acoes>";
+        }
+        return $xml;
+    }
+    
+    public function describePlanosOrcamentarios() {
+        $xml = NULL;
+        if($this->planosOrcamentarios){
+            $xml .= "\n                  <planosOrcamentarios>";
+            foreach($this->planosOrcamentarios as $planoOrcamentario) {
+                $xml .= "\n                     <planoOrcamentario>". $planoOrcamentario. '</planoOrcamentario>';
+            }
+            $xml .= "\n                  </planosOrcamentarios>";
+        }
+        return $xml;
+    }
+    
+    public function describeSelecaoRetorno() {
         $xml = "\n              <selecaoRetorno>";
-        if($this->listField){
-            foreach ($this->listField as $field => $value) {
-                $xml .= "\n                  <". $field. '>'. $value. '</'. $field. '>';
+        if($this->selecaoRetorno){
+            foreach ($this->selecaoRetorno as $selecao => $retorno) {
+                $xml .= "\n                  <". $selecao. '>'. $retorno. '</'. $selecao. '>';
             }
         }
         $xml .= "\n              </selecaoRetorno>";
         return $xml;
     }
     
-    public function describePagination() {
-        $xml = "\n              <paginacao>";
-        $xml .= "\n                  <pagina>". (int)$this->page. '</pagina>';
-        $xml .= "\n                  <registrosPorPagina>". (int)$this->limit. '</registrosPorPagina>';
-        $xml .= "\n              </paginacao>";
-
+    public function describePaginacao() {
+        if($this->pagina || $this->registrosPorPagina){
+            $xml = "\n              <paginacao>";
+            $xml .= "\n                  <pagina>". (int)$this->pagina. '</pagina>';
+            $xml .= "\n                  <registrosPorPagina>". (int)$this->registrosPorPagina. '</registrosPorPagina>';
+            $xml .= "\n              </paginacao>";
+        }
+        
         return $xml;
     }
     
