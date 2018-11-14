@@ -1,27 +1,27 @@
 #!/bin/bash
-# Substituir dados [USUÁRIO_SERVIDOR_BKP], [IP_SERVIDOR_BKP], [IP_SERVIDOR_BANCO]
+# Substituir dados [USUÁRIO_SERVIDOR_BKP], [IP_SERVIDOR_BKP], [IP_SERVIDOR_BANCO], [SENHA_BD]
 
 # Copia o arquivo do servidor para a pasta local
 scp [USUÁRIO_SERVIDOR_BKP]@[IP_SERVIDOR_BKP]:/home/bkp_siminc/bkp_prod_dbsiminc.backup .
 
 # Criar banco siminc2_hom_new
-psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" -c "CREATE DATABASE siminc2_hom_new;"
+PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" -c "CREATE DATABASE siminc2_hom_new;"
 
-psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" -c "ALTER DATABASE siminc2_hom_new SET datestyle TO European; ALTER DATABASE siminc2_hom_new SET timezone TO 'America/Sao_Paulo';"
+PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" -c "ALTER DATABASE siminc2_hom_new SET datestyle TO European; ALTER DATABASE siminc2_hom_new SET timezone TO 'America/Sao_Paulo';"
 
-pg_restore --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_hom_new" --disable-triggers -O -x --verbose bkp_prod_dbsiminc.backup
+pg_restore --dbname=postgres://postgres:[SENHA_BD]@[IP_SERVIDOR_BANCO]:5432/siminc2_hom_new --disable-triggers -O -x --verbose bkp_prod_dbsiminc.backup
 
 # Executar criação de estrutura de auditoria e mudança de senhas, emails
-psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_hom_new" -f create_auditoria.sql
+PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_hom_new" -f create_auditoria.sql
 
 # Executar permissções nas tabelas
-psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_hom_new" -f grants.sql
+PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_hom_new" -f grants.sql
 
 # Deleta base de dados de backup
-psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" -c "DROP DATABASE IF EXISTS siminc2_homologacao_bkp;"
+PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" -c "DROP DATABASE IF EXISTS siminc2_homologacao_bkp;"
 
 # Finalizar processos de banco e Mudar nome de bases
-psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" -c "
+PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" -c "
 SELECT
     pg_terminate_backend(pid)
 FROM
@@ -41,7 +41,7 @@ ALTER DATABASE siminc2_hom_new RENAME TO siminc2_homologacao;
 "
 
 # Configurando usuário inicial/padrão pra acesso ao sistema
-psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_homologacao" -c "
+PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_homologacao" -c "
 DELETE FROM seguranca.usuario_sistema WHERE usucpf = '86274565426';
 DELETE FROM seguranca.perfilusuario WHERE usucpf = '86274565426';
 UPDATE seguranca.usuario SET suscod = 'A' WHERE usucpf = '86274565426';
@@ -80,7 +80,7 @@ WHERE
 "
 
 # Apagando tabelas de logs que não são necessárias
-psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_homologacao" -c "
+PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_homologacao" -c "
 TRUNCATE TABLE acomporc.mensagensretorno;
 DELETE FROM spo.logws;
 VACUUM FULL VERBOSE acomporc.mensagensretorno;
