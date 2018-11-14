@@ -20,14 +20,16 @@ $listaAreaCultural = (new Monitora_Model_PiModalidadeEnsino())->recuperarTodos('
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/area_cultural_form&acao=A">Novo</a>
-
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/area_cultural_form&acao=A">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Novo
+                    </a>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
+                                
                             <tr class="text-center">
-                                <th>Ação</th>
+                                <th width="5%">Ação</th>
                                 <th>Código PI</th>
                                 <th>Descrição</th>
                             </tr>
@@ -39,7 +41,7 @@ $listaAreaCultural = (new Monitora_Model_PiModalidadeEnsino())->recuperarTodos('
                                 ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/area_cultural_form&acao=A&mdeid=<?php echo $dados['mdeid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/area_cultural_form&acao=A&mdeid=<?php echo $dados['mdeid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['mdecod']; ?></td>
                                     <td><?php echo $dados['mdedsc']; ?></td>

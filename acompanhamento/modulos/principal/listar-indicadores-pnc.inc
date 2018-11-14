@@ -49,7 +49,7 @@
                             <?php if($acompanhamentoIndicadorPnc->idpid): ?>
                                 <?= !$acompanhamentoIndicadorPnc->idpquantidade? 0: $acompanhamentoIndicadorPnc->idpquantidade ?>
                             <?php else: ?>
-                                <span class="fa fa-pencil" title="Indicador PNC"></span>
+                                <span class= "fa fa-pencil" title="Indicador PNC"></span>
                             <?php endif; ?>
                         <?php endif; ?>
                     </td>

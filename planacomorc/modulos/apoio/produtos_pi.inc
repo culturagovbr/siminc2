@@ -14,14 +14,15 @@
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/produtos_pi_form&acao=A">Novo</a>
-
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/produtos_pi_form&acao=A">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Novo
+                    </a>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
                             <tr class="text-center">
-                                <th>Ação</th>
+                                <th width="5%"">Ação</th>
                                 <th>Nome</th>
                                 <th>Descrição</th>
                                 <th>Status</th>
@@ -51,7 +52,7 @@
                             foreach($produtos as $produto): ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/produtos_pi_form&acao=A&pprid=<?php echo $produto['codigo']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/produtos_pi_form&acao=A&pprid=<?php echo $produto['codigo']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         <!--<a style="color: red;" title="Excluir" href="planacomorc.php?modulo=apoio/produtos_pi_form&acao=A&req=excluir&pprid=<?php /*echo $produto['codigo']; */?>"><i class="fa fa-trash"></i></a>-->
                                     </td>
                                     <td><?php echo $produto['nome']; ?></td>

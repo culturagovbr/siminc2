@@ -19,14 +19,15 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-                    
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/proponentetipo_form&acao=A">Novo</a>
-                    
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/proponentetipo_form&acao=A">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Novo
+                    </a>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
                             <tr class="text-center">
-                                <th width="10%">Ações</th>
+                                <th width="5%">Ação</th>
                                 <th>Nome</th>
                             </tr>
                             </thead>
@@ -34,7 +35,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <?php foreach($aProponentetipo as $dados){ ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/proponentetipo_form&acao=A&prtid=<?php echo $dados['prtid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=apoio/proponentetipo_form&acao=A&prtid=<?php echo $dados['prtid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['prtdsc']; ?></td>
                                 </tr>

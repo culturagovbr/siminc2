@@ -18,14 +18,15 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-                    
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/pi_janela_form&acao=A">Novo</a>
-                    
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/pi_janela_form&acao=A">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Novo
+                    </a>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
                                 <tr class="text-center">
-                                    <th width="10%">Ações</th>
+                                    <th width="5%">Ação</th>
                                     <th>Reunião</th>
                                     <th>Início</th>
                                     <th>Fim</th>
@@ -37,7 +38,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <tr>
                                         <td class="text-center">
                                             <a title="Alterar" href="?modulo=apoio/pi_janela_form&acao=A&pijid=<?php echo $dados['pijid']; ?>">
-                                                <i class="fa fa-pencil"></i>
+                                                <i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i>
                                             </a>
                                         </td>
                                         <td><?php echo $dados['pijdsc']; ?></td>
