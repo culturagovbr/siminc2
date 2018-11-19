@@ -170,10 +170,9 @@
                 <tr>
                     <tr>
                         <th scope="col" width="20%">Nome</th>
-                        <th scope="col" width="5%"style="text-align: center;">Unidade </th>
                         <th scope="col" width="10%"style="text-align: center;">Produto</th>
                         <th scope="col" width="5%"style="text-align: center;">Orçamento</th>
-                        <th scope="col" width="5%"style="text-align: center;">Meta atual</th>
+                        <th scope="col" width="5%"style="text-align: center;">Previsto</th>
                         <th scope="col" width="5%"style="text-align: center;">Realizado</th>
                         <th scope="col" width="40%"style="text-align: left;">Observações</th>
                     </tr>
@@ -197,9 +196,6 @@
                         <tr>
                             <td>
                                 <?=$indicadores['nome']; ?>
-                            </td>
-                            <td align="center">
-                                <?=$indicadores['unidade']; ?>
                             </td>
                             <td align="center">
                                 <?=$indicadores['produto']; ?>
@@ -237,7 +233,7 @@
             <?php else: ?>
                 <tfoot>
                     <tr>
-                        <td colspan="7">Não existem indicadores cadastrados</td>
+                        <td colspan="6">Não existem indicadores cadastrados</td>
                     </tr>
                 </tfoot>
             <?php endif; ?>
@@ -256,10 +252,9 @@
                 <thead>
                     <tr>
                         <th scope="col" width="20%">Nome</th>
-                        <th scope="col" width="5%"style="text-align: center;">Unidade </th>
                         <th scope="col" width="10%"style="text-align: center;">Produto</th>
                         <th scope="col" width="5%"style="text-align: center;">Orçamento</th>
-                        <th scope="col" width="5%"style="text-align: center;">Meta atual</th>
+                        <th scope="col" width="5%"style="text-align: center;">Previsto</th>
                         <th scope="col" width="5%"style="text-align: center;">Realizado</th>
                         <th scope="col" width="40%"style="text-align: left;">Observações</th>
                     </tr>
@@ -282,9 +277,6 @@
                             <tr>
                                 <td>
                                     <?=$indicadores['nome']; ?>
-                                </td>
-                                <td align="center">
-                                    <?=$indicadores['unidade']; ?>
                                 </td>
                                 <td align="center">
                                     <?=$indicadores['produto']; ?>
@@ -325,7 +317,7 @@
                 <?php else: ?>
                     <tfoot>
                         <tr>
-                            <td colspan="7">Não existem indicadores cadastrados</td>
+                            <td colspan="6">Não existem indicadores cadastrados</td>
                         </tr>
                     </tfoot>
                 <?php endif; ?>

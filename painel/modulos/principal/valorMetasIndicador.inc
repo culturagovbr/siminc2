@@ -123,7 +123,7 @@ function alteraPeriodo(perid)
 			<td id="combo_dpeid"><?php getComboPeriodoPorPerid($arrDados['perid'],true,"",$_SESSION['painel']['metid']) ?></td>
 		</tr>
 		<tr>
-			<td width="25%" class="SubTituloDireita" ><?php echo $arrDados['umedesc']; ?>:</td>
+			<td width="25%" class="SubTituloDireita">Previsto:</td>
 			<td><?php echo campo_texto('dmiqtde','S',"S",'',20,20,$formatoinput['mascara'],'');?></td>
 		</tr>
 		<tr>
