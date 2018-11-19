@@ -161,8 +161,8 @@
             var vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
             var vlrPi = $("#pi"+tipo+pliselid).val();
             vlrPi = vlrPi ? str_replace(['.', ','], ['', '.'], vlrPi) : 0;
-            if (vlrCampo>vlrPi){
-                swal('', 'Valor maior que o valor do PI!', 'warning');
+            if (parseFloat(vlrCampo)>parseFloat(vlrPi) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital')){
+                swal('', 'Valor cancelado maior que o valor do PI!', 'warning');
                 $("#"+nomeCampo+pliselid).val('');
                 return;
             }
