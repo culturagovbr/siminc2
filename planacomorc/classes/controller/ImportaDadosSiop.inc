@@ -49,7 +49,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
             $resultados = $service->configure()->request();
 
             if($resultados){
-                include_once  APPRAIZ . 'wssof/classes/Ws_ExecucaoOrcamentariaDto.inc';
+                include_once APPRAIZ. 'wssof/classes/Ws_ExecucaoOrcamentariaDto.inc';
                 foreach ($resultados as $resultado){
                     $model = new Wssof_Ws_ExecucaoOrcamentariaDto();
                     $model->realizarCarga($resultado);
