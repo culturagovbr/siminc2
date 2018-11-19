@@ -66,7 +66,7 @@ class SiopSoapCurl_Quantitativo_Service_ExecucaoOrcamentaria extends SiopSoapCur
 
         if($result && $result->execucoesOrcamentarias){
             foreach($result->execucoesOrcamentarias->execucaoOrcamentaria as $execucao){
-                $listExecucaoOrcamentaria[] = objectUtf8Decode($execucao);
+                $listExecucaoOrcamentaria[] = $execucao;
             }
         }
 

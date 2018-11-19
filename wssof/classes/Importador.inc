@@ -90,7 +90,7 @@ class Wssof_Importador extends Modelo
 
                 foreach($aRegistros as $count => $dados){
                     $model = new $aTabelasCarga[$tabela];
-                    $model->realizarCarga($dados);
+                    $model->realizarCarga($dados, TRUE);
                     unset($model);
                 }
             }
@@ -99,8 +99,8 @@ class Wssof_Importador extends Modelo
     }
 
     public function obterProgramacaoCompleta($exercicio, $momento, $map = null){
-        $servicoProgramacaoCompleta = new SiopSoapCurl_Quantitativo_Service_ProgramacaoCompleta();
-        $servicoProgramacaoCompleta->getXml()
+        $servico = new SiopSoapCurl_Quantitativo_Service_ProgramacaoCompleta();
+        $servico->getXml()
             ->setExercicio($exercicio)
             ->setCodigoMomento($momento)
             ->setListasRetornadas(array(
@@ -109,7 +109,7 @@ class Wssof_Importador extends Modelo
                 'retornarPlanosOrcamentarios'
             ))
         ;
-        $dadosImportar = $servicoProgramacaoCompleta->configure()->request();
+        $dadosImportar = $servico->configure()->request();
         $this->importarTabelasSof($exercicio, $dadosImportar, $momento);
     }
 }//end Class
