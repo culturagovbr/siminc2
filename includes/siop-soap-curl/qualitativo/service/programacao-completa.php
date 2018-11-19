@@ -69,7 +69,7 @@ class SiopSoapCurl_Quantitativo_Service_ProgramacaoCompleta extends SiopSoapCurl
                 if(!$listas->return->$nome){
                     $listas->return->$nome = array();
                 }
-                array_push($listas->return->$nome, $registro);
+                array_push($listas->return->$nome, objectUtf8Decode($registro));
             }
         }
 

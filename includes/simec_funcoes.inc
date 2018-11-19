@@ -200,6 +200,24 @@ function simec_utf8_decode_recursive($array)
     return $utf8_array;
 }
 
+function objectUtf8Decode($object){
+    if(is_object($object)){
+        foreach($object as $attrib => $value) {
+            $object->$attrib = utf8_decode($value);
+        }
+    }
+    return $object;
+}
+
+function objectUtf8Encode($object){
+    if(is_object($object)){
+        foreach($object as $attrib => $value) {
+            $object->$attrib = utf8_encode($value);
+        }
+    }
+    return $object;
+}
+
 /*
  * simec_utf8_encode_recursive - Função utilizada para formatar encode recursivo
  */
