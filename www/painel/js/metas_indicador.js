@@ -326,3 +326,22 @@ function excluirValorMeta(dmiid)
 		 });
 	}
 }
+
+function mostrarPopup(url){
+    $1_11("#dialog_vincular_temas").load(url, function(){
+        $1_11("#dialog_vincular_temas").dialog({
+            modal: true,
+            width: 880,
+            position: 'top',
+            buttons: {
+                Salvar: function(){
+                   salvarValorMeta(); 
+                },
+                Fechar: function() {
+                    $1_11("#dialog_vincular_temas").dialog( "close" );
+                }
+            }
+        });
+    });
+    
+}

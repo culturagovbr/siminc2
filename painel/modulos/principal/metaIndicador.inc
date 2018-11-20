@@ -213,7 +213,7 @@ function escondeOpcoes()
 
 function cadastrarNovaMetaMeta()
 {
-	window.location.href='painel.php?modulo=principal/cadastrarMetasIndicador&acao=A&novameta=<?php echo $_SESSION['indid'] ?>';
+	window.location.href='painel.php?modulo=principal/listarMetasIndicador&acao=A&novameta=<?php echo $_SESSION['indid'] ?>';
 }
 
 <?php if($prtobj): ?>
@@ -385,7 +385,7 @@ function cadastrarNovaMetaMeta()
 			if($db->testa_superuser()){
 			?>
 				<input type="button" name="btn_salvar_view" value="Definir Visualização Padrão" onclick="salvarExibicaoGraficoMeta()" />
-				<input type="button" name="btn_cadastrar_meta" value="Cadastrar Nova Meta" onclick="cadastrarNovaMetaMeta()" />
+				<!--<input type="button" name="btn_cadastrar_meta" value="Listagem de Metas do Indicador" onclick="cadastrarNovaMetaMeta()" />-->
 			<?php
 			}
 			?>

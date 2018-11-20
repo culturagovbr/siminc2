@@ -348,7 +348,6 @@ function excluirAcao()
 function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$metid = null)
 {
 	global $db;
-
 	$dpeid = $_POST['dpeid'];
 
 	if(!$dpeid){
@@ -363,6 +362,7 @@ function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$
 		return true;
 	}
 
+        
 	$sql = "select
 				dpeid as codigo,
 				dpedsc as descricao
@@ -372,41 +372,19 @@ function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$
 				dpestatus = 'A'
 			and
 				perid = $perid
-			".($removeUtilizados ? "and
-										dpeid not in (	select
-															distinct dpe.dpeid
-														from
-															painel.detalheperiodicidade dpe
-														inner join
-															painel.detalhemetaindicador dmi ON dpe.dpeid = dmi.dpeid
-														where
-															dpe.dpestatus = 'A'
-														and
-															dmi.dmistatus = 'A'
-														".($dmiid ? " and
-															dmi.dmiid != $dmiid " : " ")."
-														and
-															dmi.metid = $metid
-													  )" : "and
-																dpeid not in (	select
-																					distinct dpe.dpeid
-																				from
-																					painel.detalheperiodicidade dpe
-																				inner join
-																					painel.detalhemetaindicador dmi ON dpe.dpeid = dmi.dpeid
-																				where
-																					dpe.dpestatus = 'A'
-																				and
-																					dmi.dmistatus = 'A'
-																				".($dmiid ? " and
-																					dmi.dmiid != $dmiid " : " ")."
-																				and
-																					dmi.metid = $metid
-																			  )")."
+			".($removeUtilizados===true ? "and dpeid not in (select distinct dpe.dpeid
+									   from painel.detalheperiodicidade dpe
+                                                                          inner join painel.detalhemetaindicador dmi ON dpe.dpeid = dmi.dpeid
+                                                                          where dpe.dpestatus = 'A'
+                                                                            and dmi.dmistatus = 'A'
+                                                                            ".($dmiid ? " and dmi.dmiid != $dmiid " : " ")."
+                                                                            and dmi.metid = $metid )" 
+                                                    : "")."
 			order by
 				dpeordem,
 				dpeanoref";
 
+//        ver($sql);
 	$db->monta_combo('dpeid',$sql,"S",'Selecione o Período','','','','','S','','',$dpeid);
 }
 
