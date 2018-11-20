@@ -580,7 +580,10 @@ global $db;
 	if(!$dpeid || !$dmiqtde || !$metid){
 		return array("msg" => "Favor preencher todos os campos obrigatórios!", "erro" => true);
 	}
-
+        if (!$dmiid){
+            $sql = "select dmiid from painel.detalhemetaindicador where dpeid = $dpeid and metid = $metid and dmistatus = 'A'";
+            $dmiid = $db->pegaUm($sql);
+        }
 	if($dmiid){
 		$sql = "update
 					painel.detalhemetaindicador
