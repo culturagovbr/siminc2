@@ -1487,7 +1487,7 @@ function carregarGridBrasil($dados) {
 	$html .= "<table class=\"tabela\" style=\"color:333333;\" cellSpacing=\"1\" cellPadding=\"3\" align=\"center\">";
 	$html .= "<thead>";
 	// imprimindo o cabeçalho
-	$html .= "<tr>";
+    	$html .= "<tr>";
 	
 	// realizando o controle do cabeçalho em relação aos detalhes (controle de rowspan e colspan das coluna no cabeçalho)
 	$rowspancabecalho = 1;
@@ -1531,7 +1531,9 @@ function carregarGridBrasil($dados) {
            and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
            and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
         $secid_confirma = $db->pegaUm($sql);
-        if ($secid_confirma){
+        $mIndicador = new Painel_Model_Indicador();
+        $listaPerfis = $mIndicador->RetornaPerfil();
+        if ($secid_confirma || (in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis) || (in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)))){
             $html .= "<input type='submit' value='Gravar'>";
         }
         $html .= "<input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
