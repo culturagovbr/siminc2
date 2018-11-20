@@ -475,12 +475,16 @@ function listarValorMetas($metid, $listaPerfis)
 			array_push($cabecalho,"Valor");
 		}
 	}else{
-		$sql = "select
-				CASE WHEN dmi.dmivalor is not null
-					THEN '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\'".($indqtdevalor == "t" ? ",\'' || trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) || '\'" : "").")\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
-					ELSE '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
-				END as acao,
-				dpe.dpedsc,
+		$sql = "select";
+                    if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                        $sql .= "'<img src=\"../imagens/alterar_01.gif\" class=\"link\"/> <img src=\"../imagens/excluir_01.gif\" class=\"link\" />' as acao, ";
+                    }else{
+			$sql .= "	CASE WHEN dmi.dmivalor is not null
+					THEN '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || coalesce(dmi.dmiobs,'') || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\'".($indqtdevalor == "t" ? ",\'' || trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) || '\'" : "").")\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
+					ELSE '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || coalesce(dmi.dmiobs,'') || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
+				END as acao, ";                        
+                    }
+                    $sql .= "	dpe.dpedsc,
 				CASE WHEN dmi.dmidatameta IS NOT NULL
 					THEN to_char(dmi.dmidatameta,'DD/MM/YYYY')
 					ELSE 'N/A'
