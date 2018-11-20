@@ -385,12 +385,13 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 		break;	
 	}
 }
-
-$sql = "select secid from painel.usuarioresponsabilidade where usucpf = '".$_SESSION['usucpf']."' and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." and secid = ".$secid;
-$secid_confirma = $db->pegaUm($sql);
-if (!in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO,$listaPerfis) && !in_array(PAINEL_PERFIL_SUPER_USUARIO,$listaPerfis)){
-    if (!(in_array(PAINEL_PERFIL_GESTOR_INDICADOR,$listaPerfis) && $secid_confirma)){
-        $acesso=false;
+if ($_SESSION['indid']){
+    $sql = "select secid from painel.usuarioresponsabilidade where usucpf = '".$_SESSION['usucpf']."' and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." and secid = ".$secid;
+    $secid_confirma = $db->pegaUm($sql);
+    if (!in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO,$listaPerfis) && !in_array(PAINEL_PERFIL_SUPER_USUARIO,$listaPerfis)){
+        if (!(in_array(PAINEL_PERFIL_GESTOR_INDICADOR,$listaPerfis) && $secid_confirma)){
+            $acesso=false;
+        }
     }
 }
 ?>
