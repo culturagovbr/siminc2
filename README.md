@@ -3,6 +3,8 @@
 <a href="https://app.zenhub.com/workspace/o/culturagovbr/siminc2/boards" target="_blank">
     <img src="https://img.shields.io/badge/Managed_with-ZenHub-5e60ba.svg" alt="zenhub">
 </a>
+[![GitHub Issues Abertas](https://img.shields.io/github/issues/culturagovbr/siminc2.svg?maxAge=2592000)]() 
+[![GitHub Issues Fechas](https://img.shields.io/github/issues-closed-raw/culturagovbr/siminc2.svg?maxAge=2592000)]()
 
 O SIMINC2 é uma customização do Sistema Integrado de Planejamento Orçamento e Finanças - [SIMEC](https://softwarepublico.gov.br/social/simec/), solução desenvolvida inicialmente pelo Ministério da Educação e compartilhada como Software Público com diversos órgãos públicos.
 
