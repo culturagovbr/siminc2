@@ -409,7 +409,7 @@ function cadastrarNovaMetaMeta()
 	</tr>        
 <?php else: ?>
 	<tr>
-		<td class="SubtituloTabela bold center"><input type="button" name="btn_cadastrar_meta" value="Cadastrar Nova Meta" onclick="cadastrarNovaMetaMeta()" /></td>
+		<!--<td class="SubtituloTabela bold center"><input type="button" name="btn_cadastrar_meta" value="Cadastrar Nova Meta" onclick="cadastrarNovaMetaMeta()" /></td>-->
 	</tr>
 	<tr>
 		<td class="SubtituloTabela bold center">Não existe(m) meta(s) para este indicador.</td>
@@ -418,5 +418,7 @@ function cadastrarNovaMetaMeta()
 </table>
 </form>
 <script>
+    <?php if($arrDados): ?>
     exibirGraficoMeta();
+    <?php endif; ?>
 </script>
