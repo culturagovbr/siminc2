@@ -90,7 +90,7 @@ class Wssof_Importador extends Modelo
 
                 foreach($aRegistros as $count => $dados){
                     $model = new $aTabelasCarga[$tabela];
-                    $model->realizarCarga($dados);
+                    $model->realizarCarga($dados, TRUE);
                     unset($model);
                 }
             }
@@ -99,33 +99,17 @@ class Wssof_Importador extends Modelo
     }
 
     public function obterProgramacaoCompleta($exercicio, $momento, $map = null){
-        if(!$map){
-            $map = [
-                'retornarOrgaos' => 'orgaosDTO',
-                'retornarProgramas' => 'programasDTO',
-                'retornarIndicadores' => 'indicadoresDTO',
-                'retornarObjetivos' => 'objetivosDTO',
-                'retornarIniciativas' => 'iniciativasDTO',
-                'retornarAcoes' => 'acoesDTO',
-                'retornarLocalizadores' => 'localizadoresDTO',
-                'retornarMetas' => 'metasDTO',
-                'retornarRegionalizacoes' => 'regionalizacoesDTO',
-                'retornarPlanosOrcamentarios' => 'planosOrcamentariosDTO',
-                'retornarAgendaSam' => 'agendasSamDTO',
-                'retornarMedidasInstitucionaisNormativas' => 'medidasInstitucionaisNormativasDTO',
-            ];
-        }
-
-        $wsQualitatico = new Spo_Ws_Sof_Qualitativo();
-
-        $obterProgramacaoCompleta = new ObterProgramacaoCompleta();
-        $obterProgramacaoCompleta->exercicio = $exercicio;
-        $obterProgramacaoCompleta->codigoMomento = $momento;
-
-        foreach($map as $ws => $dto){
-            $obterProgramacaoCompleta->{$ws} = true;
-        }
-        $dadosImportar = $wsQualitatico->obterProgramacaoCompleta($obterProgramacaoCompleta);
+        $servico = new SiopSoapCurl_Quantitativo_Service_ProgramacaoCompleta();
+        $servico->getXml()
+            ->setExercicio($exercicio)
+            ->setCodigoMomento($momento)
+            ->setListasRetornadas(array(
+                'retornarAcoes',
+                'retornarLocalizadores',
+                'retornarPlanosOrcamentarios'
+            ))
+        ;
+        $dadosImportar = $servico->configure()->request();
         $this->importarTabelasSof($exercicio, $dadosImportar, $momento);
     }
 }//end Class

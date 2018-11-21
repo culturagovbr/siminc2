@@ -55,7 +55,7 @@ $db->cria_aba(57105,$url,'');
     <input type="hidden" name="req" id="req">
     <table style="border-bottom:0px"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
         <tr>
-            <td class="TituloTela" align="center" colspan="2">Estratégia das Metas do Indicador</td>
+            <td class="TituloTela" align="center" colspan="2">Legendas</td>
         </tr>
         <tr>
             <td class="TituloTela" align="center" colspan="2"><br></td>
@@ -72,7 +72,7 @@ $db->cria_aba(57105,$url,'');
     </table>
     <?php 
     $sql = $mEstrategiaMeta->retornaSqlEtrategiaMetas($_SESSION['indid']);
-    $cabecalho = array("&nbsp;Ações&nbsp;&nbsp;&nbsp;&nbsp;", "Estratégia das Metas");
+    $cabecalho = array("&nbsp;Ações&nbsp;&nbsp;&nbsp;&nbsp;", "Legendas");
     $db->monta_lista($sql,$cabecalho,70,5,'N','left','','',array('5%','95%')); ?>
 </form>
 <script>

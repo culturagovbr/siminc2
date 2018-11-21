@@ -174,16 +174,6 @@ function DownloadArquivoInfo($arqid){
                             <input type="hidden" name="versao" value="<?php echo $_POST['versao']; ?>"/>
                             <input type="hidden" name="formulario" value="1"/>
 
-                            <?php if (!IS_PRODUCAO) : ?>
-    <!--				            <input type="hidden" name="baselogin" id="baselogin" value="simec_espelho_producao"/>
-     <div class="form-group text-right">
-     <div class="col-lg-12">
-         <div class="make-switch" data-on-label="Espelho" data-off-label="Desenv. " data-on="primary" data-off="danger">
-             <input type="checkbox" name="baselogincheck" id="baselogincheck" value="simec_espelho_producao" checked="checked" />
-         </div>
-     </div>
-    </div>-->
-                            <?php endif; ?>
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <input type="text" maxlength="14" class="form-control" name="usucpf" id="usucpf" placeHolder="CPF" required="">
@@ -196,7 +186,7 @@ function DownloadArquivoInfo($arqid){
                             </div>
                             <div class="form-group" style="font-size: 14px;">
                                 <div class="col-sm-7" style="margin-top: 3px">
-                                    <i class="fa fa-key"></i> <a href="recupera_senha.php" style="color: #fff">Esqueci minha senha?</a>
+                                    <i class="fa fa-key"></i> <a href="recupera_senha.php" style="color: #fff">Esqueceu sua senha?</a>
                                 </div>
                                 <div class="col-sm-5 text-right">
                                     <button style="background-color: #1da589; border-color: #1da589;" type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Acessar</button>

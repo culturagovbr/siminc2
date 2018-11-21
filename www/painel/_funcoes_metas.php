@@ -491,7 +491,7 @@ function listarValorMetas($metid, $listaPerfis)
 				dmi.dmidatameta";
 		$arrDados = $db->carregar($sql);
 
-		$cabecalho = array("Ações","Período","Data da Meta","Data de Execução","Data de Validação","Estado",$umedesc,'Observação');
+		$cabecalho = array("Ações","Período","Data da Meta","Data de Execução","Data de Validação","Estado", 'Previsto','Observação');
 
 		if($indqtdevalor == "t"){
 			array_push($cabecalho,"Valor");

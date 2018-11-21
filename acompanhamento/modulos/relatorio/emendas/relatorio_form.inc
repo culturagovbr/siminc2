@@ -24,8 +24,32 @@
         $destino = isset($agrupador2) ? $agrupador2 : array();
 
         # Dados das colunas do Relatório
-        $origem = Emendas_Model_Emenda::montarColunasRelatorioEmendas();
-
+        $arrColunas = Emendas_Model_Emenda::montarColunasRelatorioEmendas();
+        if ($retConsultaRelatorio['colunas']){
+            foreach($arrColunas as $arrColuna){
+                foreach($retConsultaRelatorio['colunas'] as $coluna){
+                    if ($coluna['dscampo']==$arrColuna['codigo']){
+                        $destino[] = $arrColuna;
+                    }
+                }
+            }
+            foreach($arrColunas as $arrColuna){
+                $achou=false;
+                foreach($retConsultaRelatorio['colunas'] as $coluna){
+                    if ($coluna['dscampo']==$arrColuna['codigo']){
+                        $achou=true;
+                    }
+                }
+                if (!$achou){
+                    $origem[] = $arrColuna;
+                }
+            }        
+        }else{
+            $destino = isset($agrupador2) ? $agrupador2 : array();
+            $origem = $arrColunas;
+            // Dados padrão de origem
+    //        $origem = 
+        }
         // exibe agrupador
         $agrupador->setOrigem('naoColuna', null, $origem);
         $agrupador->setDestino('coluna', null, $destino);
@@ -38,11 +62,20 @@
             FROM public.vw_subunidadeorcamentaria suo
             WHERE
                 suo.prsano = '".$_REQUEST['filtro']['prsano']."'
-                AND suo.suostatus = 'A'
-            ORDER BY
+                AND suo.suostatus = 'A'";
+        if (count($listaSubUnidades)>0){
+            $stSql .= " AND suo.suoid in (".implode(',', $listaSubUnidades).")";
+        }        
+        $stSql .= " ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        
+        if (count($listaSubUnidades)>0){
+            $suoid = $listaSubUnidades;
+            echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        }else{
+            echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        }
         
         $stSql = "
             SELECT DISTINCT
@@ -55,7 +88,8 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[suoid_delegada][]", 'Subunidade Delegada', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        $suoid_delegada;
+        echo $simec->select("filtro[suoid_delegada][]", 'Subunidade Delegada', $suoid_delegada, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT
@@ -67,7 +101,8 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[sitid][]", 'Situação SICONV', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $sitid;
+        echo $simec->select("filtro[sitid][]", 'Situação SICONV', $sitid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT
@@ -80,7 +115,8 @@
             ORDER BY
                 esddsc
         ";
-        echo $simec->select("filtro[esdid][]", 'Situação', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $esdid;
+        echo $simec->select("filtro[esdid][]", 'Situação', $esdid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT
@@ -94,7 +130,8 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[autid][]", 'Autor', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $autid;
+        echo $simec->select("filtro[autid][]", 'Autor', $autid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT
@@ -104,7 +141,8 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[estuf][]", 'UF Parlamentar', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $estuf;   
+        echo $simec->select("filtro[estuf][]", 'UF Parlamentar', $estuf, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT
@@ -116,7 +154,8 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[parid][]", 'Partido', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $parid;
+        echo $simec->select("filtro[parid][]", 'Partido', $parid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT
@@ -129,10 +168,11 @@
             ORDER BY
                 descricao
         ";
+        $parid;
         echo $simec->select("filtro[capid][]", 'Modalidade de Pactuação', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         # Traz o Todos por default
-        $bented = '';
+        $bented = $bented?$bented:'';
         echo $simec->radio("filtro[bented]", 'TED', $bented, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
@@ -146,7 +186,8 @@
             ORDER BY
                 descricao ASC
         ";
-        echo $simec->select("filtro[mdeid][]", 'Área Cultural', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $mdeid;
+        echo $simec->select("filtro[mdeid][]", 'Área Cultural', $mdeid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT
@@ -158,15 +199,19 @@
             ORDER BY
                 descricao
         ";
-        echo $simec->select("filtro[aloid][]", 'Alterações', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $aloid;  
+        echo $simec->select("filtro[aloid][]", 'Alterações', $aloid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         # Traz o Todos por default
-        $parecerTecn = '';
-        echo $simec->radio("filtro[benparecertecnico]", 'Parecer Técnico', $parecerTecn, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
+        $benparecertecnico=$benparecertecnico?$benparecertecnico:'';
+        if ($retConsultaRelatorio['valores']['benparecertecnico']){
+            $parecerTecn = $retConsultaRelatorio['valores']['benparecertecnico'];
+        }  
+        echo $simec->radio("filtro[benparecertecnico]", 'Parecer Técnico', $benparecertecnico, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
 
         # Traz o Todos por default
-        $parecerJur = '';
-        echo $simec->radio("filtro[benparecerjuridico]", 'Parecer Jurídico', $parecerJur, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
+        $benparecerjuridico=$benparecerjuridico?$benparecerjuridico:'';
+        echo $simec->radio("filtro[benparecerjuridico]", 'Parecer Jurídico', $benparecerjuridico, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT
@@ -178,10 +223,7 @@
             ORDER BY
                 descricao
             ";
-        echo $simec->select("filtro[impid][]", 'Impedimento', NULL, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $impid; 
+        echo $simec->select("filtro[impid][]", 'Impedimento', $impid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
     ?>
-    <div class="text-center">
-        <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
-        <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
-    </div>
 </div>

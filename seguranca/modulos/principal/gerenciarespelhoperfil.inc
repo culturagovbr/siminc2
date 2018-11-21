@@ -108,7 +108,7 @@
             if ($servidor_master == SIGLA_SISTEMA) {
                 $db->monta_combo('urcampo', $sql, 'S', 'Selecione', '', '', '', '', 'N', 'urcampo', false, $dados['urcamposel']);
             } else {
-                $db->monta_combo('urcampo', adapterConnection::oldSiminc()->carregar($sql), 'S', 'Selecione', '', '', '', '', 'N', 'urcampo', false, $dados['urcamposel']);
+                $db->monta_combo('urcampo', adapterConnection::siminc1()->carregar($sql), 'S', 'Selecione', '', '', '', '', 'N', 'urcampo', false, $dados['urcamposel']);
             }
         } else {
             $sql = "
@@ -143,7 +143,7 @@
             if ($servidor_master == SIGLA_SISTEMA) {
                 $arrDadosMaster = $db->carregarColuna($sql);
             } else {
-                $resultado = adapterConnection::oldSiminc()->carregar($sql);
+                $resultado = adapterConnection::siminc1()->carregar($sql);
                 $arrDadosMaster = $resultado? array_values($resultado): array();
             }
             $sql = "
@@ -181,7 +181,7 @@
             if ($servidor_slave == SIGLA_SISTEMA) {
                 $arrDadosSlave = $db->carregarColuna($sql);
             } else {
-                $resultado = adapterConnection::oldSiminc()->carregar($sql);
+                $resultado = adapterConnection::siminc1()->carregar($sql);
                 $arrDadosSlave = $resultado? array_values($resultado): array();
             }
 
@@ -220,7 +220,7 @@
                 $db->monta_combo($dados['name'], $sql, 'S', 'Selecione', '', '', '', '', 'S', $dados['name'], false, $dados['pflcodsel']);
                 break;
             case "EXTERNO":
-                $db->monta_combo($dados['name'], adapterConnection::oldSiminc()->carregar($sql), 'S', 'Selecione', '', '', '', '', 'S', $dados['name'], false, $dados['pflcodsel']);
+                $db->monta_combo($dados['name'], adapterConnection::siminc1()->carregar($sql), 'S', 'Selecione', '', '', '', '', 'S', $dados['name'], false, $dados['pflcodsel']);
                 break;
         }
     }
@@ -287,7 +287,7 @@
                 break;
             case "EXTERNO":
                 $sql = "SELECT sisid as codigo, sisabrev as descricao FROM seguranca.sistema WHERE sisstatus='A' order by sisabrev";
-                $db->monta_combo('sisidslave', adapterConnection::oldSiminc()->carregar($sql), 'S', 'Selecione', 'carregarPerfilSlave', '', '', '', 'S', 'sisidslave', false, $espelhoperfil['sisidslave']);
+                $db->monta_combo('sisidslave', adapterConnection::siminc1()->carregar($sql), 'S', 'Selecione', 'carregarPerfilSlave', '', '', '', 'S', 'sisidslave', false, $espelhoperfil['sisidslave']);
                 break;
         }
     }
@@ -302,7 +302,7 @@
                 break;
             case "EXTERNO":
                 $sql = "SELECT sisid as codigo, sisabrev as descricao FROM seguranca.sistema WHERE sisstatus='A' order by sisabrev";
-                $db->monta_combo('sisidmaster', adapterConnection::oldSiminc()->carregar($sql), 'S', 'Selecione', 'carregarPerfilMaster', '', '', '', 'S', 'sisidmaster', false, $espelhoperfil['sisidmaster']);
+                $db->monta_combo('sisidmaster', adapterConnection::siminc1()->carregar($sql), 'S', 'Selecione', 'carregarPerfilMaster', '', '', '', 'S', 'sisidmaster', false, $espelhoperfil['sisidmaster']);
                 break;
         }
     }
@@ -463,7 +463,7 @@
                 <?php
                     $sql = "SELECT sisid as codigo, sisabrev as descricao FROM seguranca.sistema WHERE sisstatus='A' order by sisabrev";
                     if ($espelhoperfil['servidormaster'] == "EXTERNO") {
-                        $db->monta_combo('sisidmaster', adapterConnection::oldSiminc()->carregar($sql), 'S', 'Selecione', 'carregarPerfilMaster', '', '', '', 'S', 'sisidmaster', false, $espelhoperfil['sisidmaster']);
+                        $db->monta_combo('sisidmaster', adapterConnection::siminc1()->carregar($sql), 'S', 'Selecione', 'carregarPerfilMaster', '', '', '', 'S', 'sisidmaster', false, $espelhoperfil['sisidmaster']);
                     } else {
                         $db->monta_combo('sisidmaster', $sql, 'S', 'Selecione', 'carregarPerfilMaster', '', '', '', 'S', 'sisidmaster', false, $espelhoperfil['sisidmaster']);
                     }
@@ -480,7 +480,7 @@
                 <?php
                     $sql = "SELECT sisid as codigo, sisabrev as descricao FROM seguranca.sistema WHERE sisstatus='A' order by sisabrev";
                     if ($espelhoperfil['servidorslave'] == "EXTERNO") {
-                        $db->monta_combo('sisidslave', adapterConnection::oldSiminc()->carregar($sql), 'S', 'Selecione', 'carregarPerfilSlave', '', '', '', 'S', 'sisidslave', false, $espelhoperfil['sisidslave']);
+                        $db->monta_combo('sisidslave', adapterConnection::siminc1()->carregar($sql), 'S', 'Selecione', 'carregarPerfilSlave', '', '', '', 'S', 'sisidslave', false, $espelhoperfil['sisidslave']);
                     } else {
                         $db->monta_combo('sisidslave', $sql, 'S', 'Selecione', 'carregarPerfilSlave', '', '', '', 'S', 'sisidslave', false, $espelhoperfil['sisidslave']);
                     }
@@ -532,20 +532,20 @@
             $arrDadosFinal[$n] = $dado;
             if($dado['servidormaster'] == "EXTERNO"){
                 $sql = "select sisdsc || ' (Banco: EXTERNO)' from seguranca.sistema where sisid = ".$dado['sisidmaster'];
-                $arrDadosFinal[$n]['sistemamaster'] = adapterConnection::oldSiminc()->pegaUm($sql);
+                $arrDadosFinal[$n]['sistemamaster'] = adapterConnection::siminc1()->pegaUm($sql);
 
                 if($dado['pflcodmaster']) {
                     $sql = "select pfldsc from seguranca.perfil where pflcod = ".$dado['pflcodmaster'];
-                    $arrDadosFinal[$n]['perfilmaster'] = adapterConnection::oldSiminc()->carregar($sql);
+                    $arrDadosFinal[$n]['perfilmaster'] = adapterConnection::siminc1()->carregar($sql);
                 }
             }
             if($dado['servidorslave'] == "EXTERNO"){
                 $sql = "select sisdsc || ' (Banco: EXTERNO)' from seguranca.sistema where sisid = ".$dado['sisidslave'];
-                $arrDadosFinal[$n]['sistemaslave'] = adapterConnection::oldSiminc()->carregar($sql);
+                $arrDadosFinal[$n]['sistemaslave'] = adapterConnection::siminc1()->carregar($sql);
 
                 if($dado['pflcodslave']) {
                     $sql = "select pfldsc from seguranca.perfil where pflcod = ".$dado['pflcodslave'];
-                    $arrDadosFinal[$n]['perfilslave'] = adapterConnection::oldSiminc()->carregar($sql);
+                    $arrDadosFinal[$n]['perfilslave'] = adapterConnection::siminc1()->carregar($sql);
                 }
             }
             unset($arrDadosFinal[$n]['servidormaster']);

@@ -88,7 +88,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=principal/preplanointerno_form&acao=A&pliid=<?php echo $dados['pliid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=principal/preplanointerno_form&acao=A&pliid=<?php echo $dados['pliid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?php echo $dados['pliid']; ?></td>
                                     <td><?php echo $dados['subunidade']; ?></td>
@@ -107,7 +107,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tbody>
                             <thead>
                                 <tr class="text-center">
-                                    <th width="4%">Ações</th>
+                                    <th width="5%">Ação</th>
                                     <th>Id</th>
                                     <th>Subunidade</th>
                                     <th>Funcional</th>

@@ -23,8 +23,30 @@
     $destino = isset($agrupador2) ? $agrupador2 : array();
 
     # Dados das colunas do Relatório
-    $origem = montarColunasRelatorioPI();
-
+    $arrColunas = montarColunasRelatorioPI();
+    if ($retConsultaRelatorio['colunas']){
+        foreach($arrColunas as $arrColuna){
+            foreach($retConsultaRelatorio['colunas'] as $coluna){
+                if ($coluna['dscampo']==$arrColuna['codigo']){
+                    $destino[] = $arrColuna;
+                }
+            }
+        }
+        foreach($arrColunas as $arrColuna){
+            $achou=false;
+            foreach($retConsultaRelatorio['colunas'] as $coluna){
+                if ($coluna['dscampo']==$arrColuna['codigo']){
+                    $achou=true;
+                }
+            }
+            if (!$achou){
+                $origem[] = $arrColuna;
+            }
+        }        
+    }else{
+        $destino = isset($agrupador2) ? $agrupador2 : array();
+        $origem = $arrColunas;
+    }
     // exibe agrupador
     $agrupador->setOrigem('naoColuna', null, $origem);
     $agrupador->setDestino('coluna', null, $destino);
@@ -37,11 +59,20 @@
         FROM public.vw_subunidadeorcamentaria suo
         WHERE
 	        suo.prsano = '".$_REQUEST['filtro']['prsano']."'
-	        AND suo.suostatus = 'A'
-        ORDER BY
-            descricao
-    ";
-    echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+	        AND suo.suostatus = 'A'";
+        if (count($listaSubUnidades)>0){
+            $stSql .= " AND suo.suoid in (".implode(',', $listaSubUnidades).")";
+        }        
+        $stSql .= " ORDER BY
+                descricao
+        ";
+        
+        if (count($listaSubUnidades)>0){
+            $suoid = $listaSubUnidades;
+            echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        }else{
+            echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        }
 
     $stSql = "
         SELECT DISTINCT
@@ -53,7 +84,7 @@
         ORDER BY
             descricao
     ";
-    echo $simec->select("filtro[esdid][]", 'Situação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[esdid][]", 'Situação', $esdid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
         SELECT DISTINCT
@@ -65,10 +96,10 @@
         ORDER BY
             descricao
     ";
-    echo $simec->select("filtro[eqdid][]", 'Enquadramento', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[eqdid][]", 'Enquadramento', $eqdid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     # Traz o Todos por default
-    $picted = '';
+    $picted=$picted?$picted:'';
     echo $simec->radio("filtro[picted]", 'TED', $picted, ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
@@ -81,7 +112,7 @@
         ORDER BY
             descricao
     ";
-    echo $simec->select("filtro[irpcod][]", 'RP', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[irpcod][]", 'RP', $irpcod, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
         SELECT DISTINCT
@@ -95,7 +126,7 @@
         ORDER BY
             descricao
     ";
-    echo $simec->select("filtro[oppid][]", 'Objetivo', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[oppid][]", 'Objetivo', $oppid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
         SELECT
@@ -108,7 +139,7 @@
         ORDER BY
             descricao ASC
     ";
-    echo $simec->select("filtro[mdeid][]", 'Área Cultural', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[mdeid][]", 'Área Cultural', $mdeid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
         SELECT DISTINCT
@@ -122,7 +153,7 @@
        ORDER BY
           descricao
     ";
-    echo $simec->select("filtro[capid][]", 'Modalidade de Pactuação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[capid][]", 'Modalidade de Pactuação', $capid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
         SELECT
@@ -132,7 +163,7 @@
         ORDER BY
             codigo
     ";
-    echo $simec->select("filtro[mescod][]", 'Edital', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[mescod][]", 'Edital', $mescod, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
     $stSql = "
         SELECT
@@ -145,10 +176,6 @@
         ORDER BY
             descricao
     ";
-    echo $simec->select("filtro[claid][]", 'Classificação', null, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+    echo $simec->select("filtro[claid][]", 'Classificação', $claid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
     ?>
-    <div class="text-center">
-        <a class="btn-success btn btn-md" href="javascript:exibeRelatorioGeral('exibir');"><i class="fa fa-eye"></i> Visualizar</a>
-        <a class="btn btn-primary btn-buscar" href="javascript:exibeRelatorioGeral('xls');"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
-    </div>
 </div>

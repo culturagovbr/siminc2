@@ -223,9 +223,9 @@ include APPRAIZ . "includes/cabecalho.inc";
 <script language="JavaScript" src="../includes/funcoesspo.js?v=1"></script>
 <link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css">
 <script src="/library/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<script src="js/cadastro_pi_funcoes.js?v=9"></script>
+<script src="js/cadastro_pi_funcoes.js?v=10"></script>
 <script src="js/cadastro_pi_validacoes.js?v=9"></script>
-<script src="js/cadastro_pi_init.js?v=10"></script>
+<script src="js/cadastro_pi_init.js?v=11"></script>
 <style>
     autorizadocapital {
         display: none;

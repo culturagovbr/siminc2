@@ -409,7 +409,7 @@ class Modelo extends cls_banco {
 
             if (key_exists($campo, $arDados)) {
                 $this->$campo = $arDados[$campo];
-                $this->$campo = ($utf8_decode && is_string($arDados[$campo])) ? utf8_decode($arDados[$campo]) : $arDados[$campo];
+                $this->$campo = ($utf8_decode && is_string($arDados[$campo]))? str_replace(' ? ', ' - ', utf8_decode($arDados[$campo])): $arDados[$campo];
             }
         }
 

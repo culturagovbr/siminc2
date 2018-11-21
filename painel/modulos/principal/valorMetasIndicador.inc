@@ -44,15 +44,21 @@ $sql = "select
 			painel.unidademeta ume ON ind.umeid = ume.umeid 
 		where 
 			metid = {$_SESSION['painel']['metid']}";
+//                        ver($sql, d);
 $arrDados = $db->pegaLinha($sql);
 
 // monta cabeçalho 
 include APPRAIZ . 'includes/cabecalho.inc';
 print '<br/>';
-
-$menu[0] = array("descricao" => "Metas do Indicador", 		 "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
-$menu[1] = array("descricao" => "Editar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
-$menu[2] = array("descricao" => "Valores de Meta", 		 	 "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
+$menu[0] = array("descricao" => "Lista de Indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A");
+$menu[1] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
+$menu[2] = array("descricao" => "Série Histórica", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
+$menu[3] = array("descricao" => "Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/metaIndicador&acao=A");
+$menu[4] = array("descricao" => "Listagem de Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
+$menu[5] = array("descricao" => "Editar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
+$menu[6] = array("descricao" => "Valores de Meta", "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
+$menu[7] = array("descricao" => "Estratégia de Metas", "link"=> "/painel/painel.php?modulo=principal/cadastroEstrategiaMetas&acao=A");
+$menu[8] = array("descricao" => "Avaliação do Gestor", "link"=> "/painel/painel.php?modulo=principal/avaliacaoGestor&acao=A");
 echo montarAbasArray($menu, "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
 
 $titulo = "Valores de Meta";
@@ -117,7 +123,7 @@ function alteraPeriodo(perid)
 			<td id="combo_dpeid"><?php getComboPeriodoPorPerid($arrDados['perid'],true,"",$_SESSION['painel']['metid']) ?></td>
 		</tr>
 		<tr>
-			<td width="25%" class="SubTituloDireita" ><?php echo $arrDados['umedesc']; ?>:</td>
+			<td width="25%" class="SubTituloDireita">Previsto:</td>
 			<td><?php echo campo_texto('dmiqtde','S',"S",'',20,20,$formatoinput['mascara'],'');?></td>
 		</tr>
 		<tr>

@@ -23,6 +23,8 @@ include_once APPRAIZ . "planacomorc/classes/Pi_Cronograma.class.inc";
 include_once APPRAIZ . "planacomorc/classes/Pi_Anexo.class.inc";
 include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 
+require_once APPRAIZ. 'proposta/classes/model/PrePlanoInterno.inc';
+
 if($_REQUEST['uploadAnexo']){
     $file = new FilesSimec();
     if($file->setUpload($_REQUEST['arqdescricao'], '', false)){
@@ -167,8 +169,13 @@ if (validaRequisicao('pliid')) { // -- Edição de PI
     // -- S: deixa o formulário aberto para edição e liga as regras de validação - edição de
     // -- informações para confirmar a transação.
     $dadosPI = carregarTransacao($_REQUEST['scpid']);
-} elseif ($_REQUEST['replicarProposta']) {
-    $dadosPI = (new Pi_PlanoInterno())->recuperarDadosPropostasSiminc($_REQUEST['replicarProposta']);
+}
+elseif($_REQUEST['replicarProposta'])
+{
+    $idPrePi = $_REQUEST['replicarProposta'];
+    $modelPrePi = new Proposta_Model_PrePlanoInterno((int)$idPrePi);
+    $dadosPI = $modelPrePi->adaptarPiPropostaPlanejamento();
+    $aLocalizacao = $modelPrePi->adaptarLocalizacaoPiPropostaPlanejamento();
 }
 /* Habilita a Edição para Super Usuário */
 if ($db->testa_superuser()) {
@@ -204,9 +211,9 @@ include APPRAIZ . "includes/cabecalho.inc";
 <script language="JavaScript" src="../includes/funcoesspo.js?v=1"></script>
 <link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css">
 <script src="/library/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<script src="js/cadastro_pi_funcoes.js?v=9"></script>
+<script src="js/cadastro_pi_funcoes.js?v=10"></script>
 <script src="js/cadastro_pi_validacoes.js?v=9"></script>
-<script src="js/cadastro_pi_init.js?v=10"></script>
+<script src="js/cadastro_pi_init.js?v=11"></script>
 <style>
     autorizadocapital {
         display: none;
@@ -500,102 +507,102 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                         <td nowrap><b>Não&nbsp;Empenhado</b></td>
                                                     </tr>
                                                     <?php
-                                                    if ($dadosPI['pliid'] || $dadosPI['ptrid']) {
-                                                        if($_REQUEST['replicarProposta']){
-                                                            $sql_lista = montarSqlBuscarFuncionalImportacao((object)array(
-                                                                'exercicio' => $_SESSION['exercicio'],
-                                                                'ptrid' => $dadosPI['ptrid'],
-                                                            ));
-                //ver($sql_lista);
-                                                            $dadosPTRES = $db->carregar($sql_lista);
-                                                            if(is_array($dadosPTRES)) {
-                                                                $dadosPTRES = formatarValoresFuncional($dadosPTRES);
-                                                            }
-                                                            if($dadosPTRES) {
-                //ver($dadosPTRES);
-                                                                foreach ($dadosPTRES as $ptres):
-                                                                    $vlrPiDetalhado = strip_tags($ptres['det_pi']);
-                                                                    $vlrPiDetalhadoCusteio = '';
-                                                                    $vlrPiDetalhadoCapital = '';
-                                                                    $vlrPtresCusteio = strip_tags($ptres['ptrdotacaocusteio']);
-                                                                    $vlrPtresCapital = strip_tags($ptres['ptrdotacaocapital']);
-                                                                    $vlrPiNaoDetalhado = strip_tags($ptres['nao_det_pi']);
-                                                                    $vlrPiNaoDetalhadoCusteio = strip_tags($ptres['nao_det_pi_custeio']);
-                                                                    $vlrPiNaoDetalhadoCapital = strip_tags($ptres['nao_det_pi_capital']);
-                                                                    ?>
-                                                                    <tr style="height:30px;" id="ptres_<?php echo $ptres['ptrid']; ?>">
-                                                                        <td align="center">
-                                                                            <span class="link btnVisualizarDetalhes" ptrid="<?php echo $ptres['ptrid']; ?>" ><?php echo $ptres['ptres']; ?></span>
-                                                                        </td>
-                                                                        <td align="left">
-                                                                            <span class="link btnVisualizarDetalhes" ptrid="<?php echo $ptres['ptrid']; ?>" ><?php echo $ptres['descricao']; ?></span>
-                                                                        </td>
-                                                                        <td align="right"><?php echo $ptres['dotacaoatual']; ?></td>
-                                                                        <td align="right" id="td_pi_detalhado">
-                                                                            <?php echo $ptres['det_pi']; ?>
-                                                                        </td>
-                                                                        <td align="right" id="td_pi_nao_detalhado">
-                                                                            <?php echo $ptres['nao_det_pi']; ?>
-                                                                        </td>
-                                                                        <td align="right"><?php echo $ptres['empenhado']; ?></td>
-                                                                        <td align="right">
-                                                                            <?php echo $ptres['nao_empenhado']; ?>
-                                                                            <input type="hidden" name="ptrid" value="<?php echo $ptres['ptrid']; ?>" />
-                                                                        </td>
-                                                                        <td align="center" id="td_valor_projeto">
-                                                                            <?php echo 'R$ '. $ptres['pipvalor']; ?>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <?php
-                                                                endforeach;
-                                                            }
-                                                        } else {
-                                                            $dadosPTRES = buscarPTRES((object) array(
-                                                                'exercicio' => $_SESSION['exercicio'],
-                                                                'pliid' => $dadosPI['pliid'],
-                                                                'ptrid' => $dadosPI['ptrid'],
-                                                                'importar' => ($_REQUEST['replicarProposta']? TRUE: FALSE)
-                                                            ));
-                                                            if($dadosPTRES) {
-                //ver($dadosPTRES);
-                                                                foreach ($dadosPTRES as $ptres):
-                                                                    $vlrPiDetalhado = strip_tags($ptres['det_pi']);
-                                                                    $vlrPiDetalhadoCusteio = strip_tags($ptres['det_pi_custeio']);
-                                                                    $vlrPiDetalhadoCapital = strip_tags($ptres['det_pi_capital']);
-                                                                    $vlrPtresCusteio = strip_tags($ptres['ptrdotacaocusteio']);
-                                                                    $vlrPtresCapital = strip_tags($ptres['ptrdotacaocapital']);
-                                                                    $vlrPiNaoDetalhado = strip_tags($ptres['nao_det_pi']);
-                                                                    $vlrPiNaoDetalhadoCusteio = strip_tags($ptres['nao_det_pi_custeio']);
-                                                                    $vlrPiNaoDetalhadoCapital = strip_tags($ptres['nao_det_pi_capital']);
-                                                                    ?>
-                                                                    <tr style="height:30px;" id="ptres_<?php echo $ptres['ptrid']; ?>">
-                                                                        <td align="center">
-                                                                            <span class="link btnVisualizarDetalhes" ptrid="<?php echo $ptres['ptrid']; ?>" ><?php echo $ptres['ptres']; ?></span>
-                                                                        </td>
-                                                                        <td align="left">
-                                                                            <span class="link btnVisualizarDetalhes" ptrid="<?php echo $ptres['ptrid']; ?>" ><?php echo $ptres['descricao']; ?></span>
-                                                                        </td>
-                                                                        <td align="right"><?php echo $ptres['dotacaoatual']; ?></td>
-                                                                        <td align="right" id="td_pi_detalhado">
-                                                                            <?php echo $ptres['det_pi']; ?>
-                                                                        </td>
-                                                                        <td align="right" id="td_pi_nao_detalhado">
-                                                                            <?php echo $ptres['nao_det_pi']; ?>
-                                                                        </td>
-                                                                        <td align="right"><?php echo $ptres['empenhado']; ?></td>
-                                                                        <td align="right">
-                                                                            <?php echo $ptres['nao_empenhado']; ?>
-                                                                            <input type="hidden" name="ptrid" value="<?php echo $ptres['ptrid']; ?>" />
-                                                                        </td>
-                                                                        <td align="center" id="td_valor_projeto">
-                                                                            <?php echo 'R$ '. $ptres['pipvalor']; ?>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <?php
-                                                                endforeach;
+                                                        if($dadosPI['pliid'] || $dadosPI['ptrid']){
+                                                            if($_REQUEST['replicarProposta']){
+                                                                $sql_lista = montarSqlBuscarFuncionalImportacao((object)array(
+                                                                    'exercicio' => $_SESSION['exercicio'],
+                                                                    'ptrid' => $dadosPI['ptrid'],
+                                                                ));
+                    //ver($sql_lista);
+                                                                $dadosPTRES = $db->carregar($sql_lista);
+                                                                if(is_array($dadosPTRES)) {
+                                                                    $dadosPTRES = formatarValoresFuncional($dadosPTRES);
+                                                                }
+                                                                if($dadosPTRES) {
+                    //ver($dadosPTRES);
+                                                                    foreach ($dadosPTRES as $ptres):
+                                                                        $vlrPiDetalhado = strip_tags($ptres['det_pi']);
+                                                                        $vlrPiDetalhadoCusteio = '';
+                                                                        $vlrPiDetalhadoCapital = '';
+                                                                        $vlrPtresCusteio = strip_tags($ptres['ptrdotacaocusteio']);
+                                                                        $vlrPtresCapital = strip_tags($ptres['ptrdotacaocapital']);
+                                                                        $vlrPiNaoDetalhado = strip_tags($ptres['nao_det_pi']);
+                                                                        $vlrPiNaoDetalhadoCusteio = strip_tags($ptres['nao_det_pi_custeio']);
+                                                                        $vlrPiNaoDetalhadoCapital = strip_tags($ptres['nao_det_pi_capital']);
+                                                                        ?>
+                                                                        <tr style="height:30px;" id="ptres_<?php echo $ptres['ptrid']; ?>">
+                                                                            <td align="center">
+                                                                                <span class="link btnVisualizarDetalhes" ptrid="<?php echo $ptres['ptrid']; ?>" ><?php echo $ptres['ptres']; ?></span>
+                                                                            </td>
+                                                                            <td align="left">
+                                                                                <span class="link btnVisualizarDetalhes" ptrid="<?php echo $ptres['ptrid']; ?>" ><?php echo $ptres['descricao']; ?></span>
+                                                                            </td>
+                                                                            <td align="right"><?php echo $ptres['dotacaoatual']; ?></td>
+                                                                            <td align="right" id="td_pi_detalhado">
+                                                                                <?php echo $ptres['det_pi']; ?>
+                                                                            </td>
+                                                                            <td align="right" id="td_pi_nao_detalhado">
+                                                                                <?php echo $ptres['nao_det_pi']; ?>
+                                                                            </td>
+                                                                            <td align="right"><?php echo $ptres['empenhado']; ?></td>
+                                                                            <td align="right">
+                                                                                <?php echo $ptres['nao_empenhado']; ?>
+                                                                                <input type="hidden" name="ptrid" value="<?php echo $ptres['ptrid']; ?>" />
+                                                                            </td>
+                                                                            <td align="center" id="td_valor_projeto">
+                                                                                <?php echo 'R$ '. $ptres['pipvalor']; ?>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <?php
+                                                                    endforeach;
+                                                                }
+                                                            } else {
+                                                                $dadosPTRES = buscarPTRES((object) array(
+                                                                    'exercicio' => $_SESSION['exercicio'],
+                                                                    'pliid' => $dadosPI['pliid'],
+                                                                    'ptrid' => $dadosPI['ptrid'],
+                                                                    'importar' => ($_REQUEST['replicarProposta']? TRUE: FALSE)
+                                                                ));
+                                                                if($dadosPTRES) {
+                    //ver($dadosPTRES);
+                                                                    foreach ($dadosPTRES as $ptres):
+                                                                        $vlrPiDetalhado = strip_tags($ptres['det_pi']);
+                                                                        $vlrPiDetalhadoCusteio = strip_tags($ptres['det_pi_custeio']);
+                                                                        $vlrPiDetalhadoCapital = strip_tags($ptres['det_pi_capital']);
+                                                                        $vlrPtresCusteio = strip_tags($ptres['ptrdotacaocusteio']);
+                                                                        $vlrPtresCapital = strip_tags($ptres['ptrdotacaocapital']);
+                                                                        $vlrPiNaoDetalhado = strip_tags($ptres['nao_det_pi']);
+                                                                        $vlrPiNaoDetalhadoCusteio = strip_tags($ptres['nao_det_pi_custeio']);
+                                                                        $vlrPiNaoDetalhadoCapital = strip_tags($ptres['nao_det_pi_capital']);
+                                                                        ?>
+                                                                        <tr style="height:30px;" id="ptres_<?php echo $ptres['ptrid']; ?>">
+                                                                            <td align="center">
+                                                                                <span class="link btnVisualizarDetalhes" ptrid="<?php echo $ptres['ptrid']; ?>" ><?php echo $ptres['ptres']; ?></span>
+                                                                            </td>
+                                                                            <td align="left">
+                                                                                <span class="link btnVisualizarDetalhes" ptrid="<?php echo $ptres['ptrid']; ?>" ><?php echo $ptres['descricao']; ?></span>
+                                                                            </td>
+                                                                            <td align="right"><?php echo $ptres['dotacaoatual']; ?></td>
+                                                                            <td align="right" id="td_pi_detalhado">
+                                                                                <?php echo $ptres['det_pi']; ?>
+                                                                            </td>
+                                                                            <td align="right" id="td_pi_nao_detalhado">
+                                                                                <?php echo $ptres['nao_det_pi']; ?>
+                                                                            </td>
+                                                                            <td align="right"><?php echo $ptres['empenhado']; ?></td>
+                                                                            <td align="right">
+                                                                                <?php echo $ptres['nao_empenhado']; ?>
+                                                                                <input type="hidden" name="ptrid" value="<?php echo $ptres['ptrid']; ?>" />
+                                                                            </td>
+                                                                            <td align="center" id="td_valor_projeto">
+                                                                                <?php echo 'R$ '. $ptres['pipvalor']; ?>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <?php
+                                                                    endforeach;
+                                                                }
                                                             }
                                                         }
-                                                    }
                                                     ?>
                                                 </table>
 
@@ -1462,7 +1469,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <h4 class="modal-title">Anexar arquivos(Documentos)</h4>
                     </div>
                     <div class="modal-body">
-                        <form class="dropzone" method="POST" enctype="multipart/form-data" action="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&uploadAnexo=1" id="formularioAnexo" name="formularioAnexo">
+                        <form class="dropzone" method="POST" enctype="multipart/form-data" action="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&uploadAnexo=1" id="formularioAnexoPlanacomorc" name="formularioAnexoPlanacomorc">
                             <div class="form-group">
                                 <label for="arqdescricao" class="col-lg-2 control-label">Descrição:</label>
                                 <div class="col-lg-10">

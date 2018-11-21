@@ -3,19 +3,25 @@
 /**
  * Monta consulta do relatório geral de Propostas
  * 
- * @param stdClass $filtros
+ * @param stdClass $Objwhere
  * @return string
  */
-function montarSqlRelatorioGeralProposta(stdClass $filtros){
-    if($filtros->suocod){
-        $filtro = "AND suo.suocod in ('".$filtros->suocod. "')";    
-    }
+function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
+    $where = '';
+
+    $where .= $Objwhere->prsano? "\n AND pro.prsano = '". (int)$Objwhere->prsano. "'": NULL;
+    $where .= $Objwhere->suoid? "\n AND suo.suoid IN(".join($Objwhere->suoid, ','). ")": NULL;
+    $where .= $Objwhere->eqdid? "\n AND pro.eqdid IN(".join($Objwhere->eqdid, ','). ")": NULL;
+    $where .= $Objwhere->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($Objwhere->irpcod, ','). ")": NULL;
+    $where .= $Objwhere->tpdid? "\n AND eqd.tpdid IN(".join($Objwhere->tpdid, ','). ")": NULL;
+    $where .= $Objwhere->suocod? "\n AND suo.suocod IN(".join($Objwhere->suocod, ','). ")": NULL;
+
     $sql = "
         SELECT
             pro.proid,
             suo.unosigla || ' - ' || suo.suonome subunidade,
             eqd.eqddsc,
-	    ptr.irpcod,
+	        ptr.irpcod,
             ptr.funcional,
             ptr.acatitulo,
             ptr.plodsc,
@@ -23,16 +29,17 @@ function montarSqlRelatorioGeralProposta(stdClass $filtros){
             pro.proquantidade,
             pro.proquantidadeexpansao,
             pro.projustificativa,
-	    pro.projustificativaexpansao,
-	    ndp.ndpcod,
-	    idu.iducod,
-	    fr.foncod,
-	    prd.idoid,
-	    prd.prdvalor,
-	    prd.prdvalorexpansao
+            pro.projustificativaexpansao,
+            ndp.ndpcod,
+            idu.iducod,
+            fr.foncod,
+            prd.idoid,
+            prd.prdvalor,
+            prd.prdvalorexpansao,
+            pro.prsano
         FROM proposta.proposta pro
             JOIN monitora.vw_ptres ptr ON pro.ptrid = ptr.ptrid
-	    JOIN monitora.acao aca ON ptr.acaid = aca.acaid
+	        JOIN monitora.acao aca ON ptr.acaid = aca.acaid
             JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pro.suoid
             JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pro.eqdid
             LEFT JOIN proposta.propostadetalhe prd ON(
@@ -40,17 +47,16 @@ function montarSqlRelatorioGeralProposta(stdClass $filtros){
 		AND prd.prdstatus = 'A'
 	    )
             LEFT JOIN public.naturezadespesa ndp ON(prd.ndpid = ndp.ndpid)
-            left join public.fonterecurso fr on prd.fonid = fr.fonid
-            left join public.identifuso idu on prd.iduid = idu.iduid
+            LEFT JOIN public.fonterecurso fr on prd.fonid = fr.fonid
+            LEFT JOIN public.identifuso idu on prd.iduid = idu.iduid
         WHERE
-            pro.prsano = '". (int)$filtros->exercicio. "'
-            $filtro
-            AND prostatus = 'A'
+            pro.prostatus = 'A'
+            $where
         ORDER BY
             pro.proid,
             subunidade,
             eqd.eqddsc,
-	    ptr.irpcod,
+	        ptr.irpcod,
             ptr.funcional,
             ptr.acatitulo,
             ptr.plodsc
@@ -169,3 +175,47 @@ function controlarCorPorValorDisponivel($valorDisponivel)
     return $resultado;
 }
 
+/**
+ * Monta as Colunas que receberão formatação de moeda para o Relatório de Proposta.
+ *
+ * @return array
+ */
+function montarColunasRelatorioProposta()
+{
+    $colunas = array(array('codigo' => 'locquantidadeproposta', 'descricao' => 'Quantidade Localizador'),
+        array('codigo' => 'proquantidade', 'descricao' => 'Quantidade PO'),
+        array('codigo' => 'proquantidadeexpansao', 'descricao' => 'Quantidade Expansão PO'),
+        array('codigo' => 'projustificativa', 'descricao' => 'Justificativa'),
+        array('codigo' => 'projustificativaexpansao', 'descricao' => 'Justificativa Expansão'),
+        array('codigo' => 'prdvalor', 'descricao' => 'Valor'),
+        array('codigo' => 'prdvalorexpansao', 'descricao' => 'Valor Expansão'),
+        array('codigo' => 'subunidade', 'descricao' => 'Subunidade'),
+        array('codigo' => 'eqddsc', 'descricao' => 'Enquadramento da Despesa'),
+        array('codigo' => 'irpcod', 'descricao' => 'RP'),
+        array('codigo' => 'funcional', 'descricao' => 'Funcional'),
+        array('codigo' => 'acatitulo', 'descricao' => 'Ação'),
+        array('codigo' => 'plodsc', 'descricao' => 'PO'),
+        array('codigo' => 'ndpcod', 'descricao' => 'Natureza de Despesa'),
+        array('codigo' => 'iducod', 'descricao' => 'IDUSO'),
+        array('codigo' => 'foncod', 'descricao' => 'Fonte'),
+        array('codigo' => 'idoid', 'descricao' => 'IDOC'),
+        array('codigo' => 'proid', 'descricao' => 'ID Proposta'),
+        array('codigo' => 'prsano', 'descricao' => 'Ano'),
+    );
+
+    return $colunas;
+}
+
+/**
+ * Monta as Colunas que receberão formatação de moeda para o Relatório de Proposta.
+ *
+ * @return array
+ */
+function montarColunasFormatoMoedaRelatorioProposta()
+{
+    $colunas = [
+        'prdvalor',
+        'prdvalorexpansao',
+    ];
+    return $colunas;
+}
