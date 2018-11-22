@@ -55,7 +55,7 @@ $db->cria_aba(57105,$url,'');
     <input type="hidden" name="req" id="req">
     <table style="border-bottom:0px"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
         <tr>
-            <td class="TituloTela" align="center" colspan="2">Estratégia das Metas do Indicador</td>
+            <td class="TituloTela" align="center" colspan="2">Legendas</td>
         </tr>
         <tr>
             <td class="TituloTela" align="center" colspan="2"><br></td>

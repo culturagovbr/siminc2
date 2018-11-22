@@ -7,27 +7,37 @@ include (APPRAIZ.'www/painel/_funcoes_metas.php');
 $mIndicador = new Painel_Model_Indicador();
 $listaPerfis = $mIndicador->RetornaPerfil();
 
-if($_POST['requisicaoAjax']){
-	header('content-type: text/html; charset=ISO-8859-1');
-	if($_POST['requisicaoAjax'] == "getComboPeriodoPorPerid"){
-		if(!$_POST['perid'] && $_POST['dpeid']){
-			$perid = $db->pegaUm("select perid from painel.detalheperiodicidade where dpeid = {$_POST['dpeid']}");
-		}else{
-			$perid = $_POST['perid'];
-		}
-		if($perid){
-			getComboPeriodoPorPerid($perid,false,$_POST['dmiid'],$_SESSION['painel']['metid']);
-		}else{
-			echo "Selecione o período.";
-		}
-	}else{
-		$_POST['requisicaoAjax']();
-	}
-	exit();
+if($_REQUEST['requisicaoAjax']){
+    header('content-type: text/html; charset=ISO-8859-1');
+    switch ($_REQUEST['requisicaoAjax']) {
+        case "getComboPeriodoPorPerid":
+            if(!$_REQUEST['perid'] && $_REQUEST['dpeid']){
+                    $perid = $db->pegaUm("select perid from painel.detalheperiodicidade where dpeid = {$_REQUEST['dpeid']}");
+            }else{
+                    $perid = $_REQUEST['perid'];
+            }
+            if($perid){
+                    getComboPeriodoPorPerid($perid,false,$_REQUEST['dmiid'],$_SESSION['painel']['metid']);
+            }else{
+                    echo "Selecione o período.";
+            }
+
+            break;
+        case "salvarValorMeta":
+            $retorno = salvarValorMeta();
+            echo json_encode($retorno);
+            die;
+        case "listarValorMeta":
+            echo listarValorMetas($_SESSION['painel']['metid'], $listaPerfis);
+            die;
+        default:
+            $_REQUEST['requisicaoAjax']();
+            break;
+    }
 }
 
-if($_POST['requisicao']){
-	$resultado = $_POST['requisicao']();
+if($_REQUEST['requisicao']){
+	$resultado = $_REQUEST['requisicao']();
 }
 
 $sql = "select 

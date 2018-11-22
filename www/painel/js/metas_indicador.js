@@ -275,9 +275,19 @@ function salvarValorMeta()
 {
 	var dmiid 	 = $("[name=dmiid]").val();
 	var dpeid 	 = $("[name=dpeid]").val();
-	var dmivalor = $("[name=dmivalor]").val();
+	var metid 	 = $("[name=metid]").val();
+        if ($("[name=dmivalor]").val()==undefined){
+	   var dmivalor = '';
+        }else{
+           var dmivalor = $("[name=dmivalor]").val();
+        }
 	var dmiqtde  = $("[name=dmiqtde]").val();
-	var dmidataexecucao = $("[name=dmidataexecucao]").val();
+	var dmiobs  = $("[name=dmiobs]").val();
+        if ($("[name=dmidataexecucao]").val()==undefined){
+            var dmidataexecucao = '';
+        }else{
+            var dmidataexecucao = $("[name=dmidataexecucao]").val();
+        }
 	var erro = 0;
 	
 	if(!dpeid && !dmidataexecucao){
@@ -302,7 +312,23 @@ function salvarValorMeta()
 	}
 	*/
 	if(erro == 0){
-		 $("[name=formulario_valor_metas]").submit();
+            var params = "requisicaoAjax=salvarValorMeta&dmiid=" + dmiid + "&dpeid=" + dpeid + "&dmivalor=" + dmivalor + "&dmiqtde=" + dmiqtde + "&dmidataexecucao=" + dmidataexecucao + "&metid=" + metid + "&dmiobs=" + dmiobs;
+            $.ajax({
+                type: "POST",
+                url: '?modulo=principal/valorMetasIndicador&acao=A',
+                data: params,
+                success: function(retorno){
+                    retorno = JSON.parse(retorno);
+                    console.log(retorno);
+                    if( retorno.retorno ){
+                        $("#lista_valor_meta").load('?modulo=principal/valorMetasIndicador&acao=A&requisicaoAjax=listarValorMeta');
+                        swal('', retorno.msg, 'success');
+                    }else{
+                        swal('Erro!', retorno.msg, 'warning');
+                    }
+                }
+            });
+//            $("[name=formulario_valor_metas]").submit();
 	}
 	
 }
@@ -316,12 +342,12 @@ function excluirValorMeta(dmiid)
 		   url: window.location,
 		   data: params,
 		   success: function(msg){
-		   		if( msg == "true"){
-		   			var destino = $("#lista_valor_meta");
-		   			window.location.href = window.location;
-		   		}else{
-		   			alert('Não foi possível realizar a operação!');
-		   		}
+                        if( msg == "true"){
+                            swal('', 'Registro Exclu\u00eddo com sucesso!', 'success');
+                            $("#lista_valor_meta").load('?modulo=principal/valorMetasIndicador&acao=A&requisicaoAjax=listarValorMeta');
+                        }else{
+                            swal('Erro!', 'N\u00e3o foi poss\u00edvel realizar a opera\u00e7\u00e3o!', 'warning');
+                        }
 		   }
 		 });
 	}

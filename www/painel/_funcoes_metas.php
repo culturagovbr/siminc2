@@ -466,7 +466,7 @@ function listarValorMetas($metid, $listaPerfis)
 			and
 				dmi.dmistatus = 'A'
 			order by
-				dmi.dmidatameta";
+				dmi.dpeid";
 		$arrDados = $db->carregar($sql);
 
 		$cabecalho = array("Ações","Período","Data da Meta","Data de Execução","Data de Validação","Estado",$umedesc,'Observação');
@@ -514,7 +514,7 @@ function listarValorMetas($metid, $listaPerfis)
 			and
 				dmi.dmistatus = 'A'
 			order by
-				dmi.dmidatameta";
+				dmi.dpeid";
 		$arrDados = $db->carregar($sql);
 
 		$cabecalho = array("Ações","Período","Data da Meta","Data de Execução","Data de Validação","Estado");
@@ -578,7 +578,7 @@ global $db;
 	}
 
 	if(!$dpeid || !$dmiqtde || !$metid){
-		return array("msg" => "Favor preencher todos os campos obrigatórios!", "erro" => true);
+		return array("retorno"=>false, "msg" => utf8_encode("Favor preencher todos os campos obrigatórios!"), "erro" => true);
 	}
         if (!$dmiid){
             $sql = "select dmiid from painel.detalhemetaindicador where dpeid = $dpeid and metid = $metid and dmistatus = 'A'";
@@ -610,9 +610,9 @@ global $db;
 	}
 
 	if($db->commit()){
-		return array("dmiid" => $dmiid, "msg" => "Operação realizado com sucesso!");
+            return array("retorno"=>true, "dmiid" => $dmiid, "msg" => utf8_encode("Operação realizado com sucesso!"));
 	}else{
-		return array("msg" => "Não foi possível realizar a operação!", "erro" => true);
+            return array("retorno"=>false, "msg" => utf8_encode("Não foi possível realizar a operação!"), "erro" => true);
 	}
 }
 
@@ -698,7 +698,7 @@ function excluirValorMeta()
 {
 	global $db;
 
-	$dmiid = $_POST['dmiid'];
+	$dmiid = $_REQUEST['dmiid'];
 
 	$sql = "update painel.detalhemetaindicador set dmistatus = 'I' where dmiid = $dmiid;";
 	$db->executar($sql);
