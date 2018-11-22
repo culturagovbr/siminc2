@@ -3,7 +3,9 @@
 include_once 'client.php';
 
 class SoapCurl_Http {
- 
+
+    const OK = 200;
+    
     /**
      * Url do serviço onde contem o WSDL
      * 
@@ -253,7 +255,7 @@ class SoapCurl_Http {
      * 
      * @return $this
      */
-    public function warn(){
+    public function inform(){
         $this->code = curl_getinfo(SoapCurl_Client::$resource, CURLINFO_HTTP_CODE);
         return $this;
     }

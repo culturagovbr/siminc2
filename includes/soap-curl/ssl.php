@@ -170,7 +170,7 @@ class SoapCurl_Ssl {
      * @return $this
      */
     public function warn(){
-        $this->error = curl_error(self::$resource);
+        $this->error = curl_error(SoapCurl_Client::$resource);
         return $this;
     }
     

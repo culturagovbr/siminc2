@@ -59,22 +59,27 @@ class SiopSoapCurl_Receita_Service_CaptarBaseExterna extends SiopSoapCurl_Servic
      * 
      * @return array
      */
-//    public function request() {
-//        $result = parent::request();
-//        $listas = new stdClass();
-//        $listas->return = new stdClass();
-//
-//        foreach($result as $nome => $registro){
-//            if(strpos($nome, 'DTO')){
-//                if(!$listas->return->$nome){
-//                    $listas->return->$nome = array();
-//                }
-//                array_push($listas->return->$nome, $registro);
-//            }
-//        }
-//
-//        return $listas;
-//    }
+    public function request() {
+        $responseXml = parent::request();
+
+        if(strtolower($responseXml->sucesso) == 'false'){
+            $response = new stdClass();
+            $response->mensagensErro = utf8_decode($responseXml->mensagensErro);
+            $response->sucesso = FALSE;
+            $response->captacoesBaseExterna = array();
+            foreach($responseXml->captacoesBaseExterna->captacaoBaseExterna as $element => $captacaoBaseExternaXml) {
+                $captacaoBaseExterna = new stdClass();
+                $captacaoBaseExterna->codigoCaptacaoBaseExterna = current($captacaoBaseExternaXml->codigoCaptacaoBaseExterna);
+                $captacaoBaseExterna->descricao = utf8_decode($captacaoBaseExternaXml->descricao);
+                $captacaoBaseExterna->detalhesBaseExterna = $captacaoBaseExternaXml->detalhesBaseExterna;
+                $response->captacoesBaseExterna[] = $captacaoBaseExterna;
+            }
+        } else {
+            $response = $responseXml;
+        }
+
+        return $response;
+    }
 
 }
 
