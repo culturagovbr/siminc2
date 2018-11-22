@@ -60,6 +60,20 @@ class SoapCurl_Http {
      */
     private $return;
     
+    /**
+     * Erro ao fazer requisição
+     * 
+     * @var string
+     */
+    private $error;
+    
+    /**
+     * Código de retorno da requisição
+     * 
+     * @var int
+     */
+    private $code;
+    
     public function getWsdl() {
         return $this->wsdl;
     }
@@ -90,6 +104,14 @@ class SoapCurl_Http {
 
     public function getReturn() {
         return $this->return;
+    }
+
+    public function getError() {
+        return $this->error;
+    }
+
+    public function getCode() {
+        return $this->code;
     }
 
     public function setWsdl($wsdl) {
@@ -129,6 +151,16 @@ class SoapCurl_Http {
 
     public function setReturn($return) {
         $this->return = $return;
+        return $this;
+    }
+
+    public function setError($error) {
+        $this->error = $error;
+        return $this;
+    }
+
+    public function setCode($code) {
+        $this->code = $code;
         return $this;
     }
     
@@ -216,5 +248,14 @@ class SoapCurl_Http {
         return $this;
     }
 
+    /**
+     * Captura o erro ocorrido na requisição
+     * 
+     * @return $this
+     */
+    public function warn(){
+        $this->code = curl_getinfo(SoapCurl_Client::$resource, CURLINFO_HTTP_CODE);
+        return $this;
+    }
 
 }

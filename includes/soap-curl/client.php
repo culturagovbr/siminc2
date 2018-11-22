@@ -57,13 +57,6 @@ class SoapCurl_Client {
      * @var string
      */
     private $response;
-    
-    /**
-     * Erro ao fazer requisição
-     * 
-     * @var string
-     */
-    private $error;
 
     public static function getResource() {
         return self::$resource;
@@ -91,10 +84,6 @@ class SoapCurl_Client {
 
     public function getResponse() {
         return $this->response;
-    }
-
-    public function getError() {
-        return $this->error;
     }
 
     public static function setResource($resource) {
@@ -129,11 +118,6 @@ class SoapCurl_Client {
 
     public function setResponse($response) {
         $this->response = $response;
-        return $this;
-    }
-
-    public function setError($error) {
-        $this->error = $error;
         return $this;
     }
 
@@ -215,7 +199,7 @@ class SoapCurl_Client {
         
         # Em caso de não ter resposta, busca a mensagem do erro ocorrido
         if(!$this->response){
-            $this->warn();
+            $this->ssl->warn();
         }
         
         # Encerra a sessão da conexão e encerra todos os recursos utilizados
@@ -231,16 +215,6 @@ class SoapCurl_Client {
      */
     public function execute(){
         $this->response = curl_exec(self::$resource);
-        return $this;
-    }
-    
-    /**
-     * Captura o erro ocorrido na requisição
-     * 
-     * @return $this
-     */
-    public function warn(){
-        $this->error = curl_error(self::$resource);
         return $this;
     }
     

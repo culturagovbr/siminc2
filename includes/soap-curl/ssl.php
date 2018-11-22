@@ -39,6 +39,13 @@ class SoapCurl_Ssl {
      */
     private $verifyHost;
     
+    /**
+     * Erro ao fazer requisição
+     * 
+     * @var string
+     */
+    private $error;
+    
     public function getPassword() {
         return $this->password;
     }
@@ -57,6 +64,10 @@ class SoapCurl_Ssl {
 
     public function getVerifyHost() {
         return $this->verifyHost;
+    }
+
+    public function getError() {
+        return $this->error;
     }
 
     public function setPassword($password) {
@@ -81,6 +92,11 @@ class SoapCurl_Ssl {
 
     public function setVerifyHost($verifyHost) {
         $this->verifyHost = $verifyHost;
+        return $this;
+    }
+
+    public function setError($error) {
+        $this->error = $error;
         return $this;
     }
     
@@ -148,5 +164,15 @@ class SoapCurl_Ssl {
         return $this;
     }
 
+    /**
+     * Captura o erro ocorrido na requisição
+     * 
+     * @return $this
+     */
+    public function warn(){
+        $this->error = curl_error(self::$resource);
+        return $this;
+    }
+    
 }
 
