@@ -344,7 +344,7 @@ $paginic = $db->pegaUm($sql);
     <link href="/zimec/public/temas/simec/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
     <link href="/zimec/public/temas/simec/css/style.min.css?v=1.1.1" rel="stylesheet" media="all">
-    <link href="/zimec/public/temas/simec/css/simec.css?v=2.3.0" rel="stylesheet" media="all">
+    <link href="/zimec/public/temas/simec/css/simec.css?v=2.4.0" rel="stylesheet" media="all">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
