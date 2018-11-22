@@ -279,7 +279,7 @@
                                     <?=$indicadores['nome']; ?>
                                 </td>
                                 <td align="center">
-                                    <?=$indicadores['produto']; ?>
+                                    <?= $indicadores['produto'] ? $indicadores['produto'] : '-' ;?>
                                 </td>
                                 <td align="center">
                                     <?=number_format($indicadores['orcamento'], 0, ',', '.')?>

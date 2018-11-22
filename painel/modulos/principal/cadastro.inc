@@ -87,15 +87,15 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 		
 		case 'I':	
 						
-				$indid = $_REQUEST['indid']; 			
-				
+				$indid = $_REQUEST['indid'];
 				$exoid 			= $_REQUEST['exoid'];
 				$unmid 			= $_REQUEST['unmid']; 
 				$cliid 			= $_REQUEST['cliid'];
 				$tpiid 			= $_REQUEST['tpiid'];  
 				$secid  		= $_REQUEST['secid'];  
 				$secidgestora		= $_REQUEST['secidgestora'];
-				$acaid   		= $_REQUEST['acaid']; 
+				$acaid   		= $_REQUEST['acaid'];
+                $produto		= $_REQUEST['indprod'];
 				$perid  		= $_REQUEST['perid'];  
 				$peridatual		= $_REQUEST['peridatual'];
 				$estid  		= $_REQUEST['estid'];
@@ -176,15 +176,15 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 							  indformula, indtermos, indfontetermo, indnormalinicio, indnormalfinal, indatencaoinicio,
 							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,
                                                           indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,
-                                                          indhomologado,mtiid,indshformula,formulash,indencerrado)
+                                                          indhomologado,mtiid,indshformula,formulash,indencerrado, indprod)
 						  VALUES 
 						  	   (".$unmid.", ".$cliid.", ".$tpiid.", ".$secid.", ".$secidgestora.", ".$acaid.", ".$perid.", ".$estid.", ".$colid.", '".$usucpf."', '".$indnome."', '".$indobjetivo."',
 							  '".$indformula."', '".$indtermos."', '".$indfontetermo."', ".$indnormalinicio.", ".$indnormalfinal.", ".$indatencaoinicio.",
 							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',"
-                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado)
+                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado, '".$produto."')
 						  RETURNING	indid
 						  ";
-			
+
 				$indid = $db->pegaUm($sql_I);
 				
 				//OBJETIVO
@@ -225,6 +225,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
                                          secid = 				".$secid.",
                                          secidgestora =			".$secidgestora.",
                                          acaid = 				".$acaid.",
+                                         indprod =              '".$produto."',
                                          perid = 				".$perid.",
                                          peridatual =			'".$peridatual."',
                                          colid = 				".$colid.",
@@ -294,7 +295,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 			$indid = $_REQUEST['indid']; 			
 			$sql = "
 				SELECT 
-					unmid, indcumulativo, indcumulativovalor, indpublicado, indobservacao, indescala, indqtdevalor, exoid, regid, umeid, cliid, tpiid, secid, secidgestora, acaid, perid, estid, colid, usucpf, indnome, indobjetivo,
+					unmid, indcumulativo, indcumulativovalor, indpublicado, indobservacao, indescala, indqtdevalor, exoid, regid, umeid, cliid, tpiid, secid, secidgestora, acaid, indprod, perid, estid, colid, usucpf, indnome, indobjetivo,
 					indformula, indtermos, indfontetermo, peridatual,indshformula,formulash,
 					TRIM (TO_CHAR(indnormalinicio , '999G999G999D99')) as indnormalinicio, 
 					TRIM (TO_CHAR(indnormalfinal , '999G999G999D99')) as indnormalfinal, 
@@ -350,6 +351,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$secid  			= $dados['secid'];
 				$secidgestora		= $dados['secidgestora']; 
 				$acaid   			= $dados['acaid']; 
+				$indprod   			= $dados['indprod'];
 				$perid  			= $dados['perid'];
 				$peridatual			= $dados['peridatual'];
 				$regid				= $dados['regid'];
@@ -780,8 +782,11 @@ function validaUnidadeMedicao(valor) {
 			 descricao	 
 		";
 	?>
-    <td align='right' class="SubTituloDireita">Exibir produto da unidade como:</td>
-    <td><?=$db->monta_combo('umeid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S');?></td>
+    <td style="display: none;" align='right' class="SubTituloDireita">Exibir produto da unidade como:</td>
+    <td style="display: none;"><?=$db->monta_combo('umeid',$sql,'N','Selecione...','','','','','S', null, null, 76);?></td>
+
+    <td align='right' class="SubTituloDireita">Produto:</td>
+    <td><?= campo_textarea( 'indprod', 'S', (($acesso)?'S':'N'), '', 98, 1, 70 );?></td>
 </tr>
 
 <tr style="display: none" >
@@ -1330,6 +1335,9 @@ function validar(){
 	}
 	if(document.formulario.regid.value == ''){
 		msg+="O preenchimento do campo \"Regionalização\" é obrigatório.\n";
+	}
+	if(document.formulario.indprod.value == ''){
+		msg+="O preenchimento do campo \"Produto\" é obrigatório.\n";
 	}
 
 	if(msg != "") {
