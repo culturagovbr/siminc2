@@ -7,27 +7,37 @@ include (APPRAIZ.'www/painel/_funcoes_metas.php');
 $mIndicador = new Painel_Model_Indicador();
 $listaPerfis = $mIndicador->RetornaPerfil();
 
-if($_POST['requisicaoAjax']){
-	header('content-type: text/html; charset=ISO-8859-1');
-	if($_POST['requisicaoAjax'] == "getComboPeriodoPorPerid"){
-		if(!$_POST['perid'] && $_POST['dpeid']){
-			$perid = $db->pegaUm("select perid from painel.detalheperiodicidade where dpeid = {$_POST['dpeid']}");
-		}else{
-			$perid = $_POST['perid'];
-		}
-		if($perid){
-			getComboPeriodoPorPerid($perid,false,$_POST['dmiid'],$_SESSION['painel']['metid']);
-		}else{
-			echo "Selecione o período.";
-		}
-	}else{
-		$_POST['requisicaoAjax']();
-	}
-	exit();
+if($_REQUEST['requisicaoAjax']){
+    header('content-type: text/html; charset=ISO-8859-1');
+    switch ($_REQUEST['requisicaoAjax']) {
+        case "getComboPeriodoPorPerid":
+            if(!$_REQUEST['perid'] && $_REQUEST['dpeid']){
+                    $perid = $db->pegaUm("select perid from painel.detalheperiodicidade where dpeid = {$_REQUEST['dpeid']}");
+            }else{
+                    $perid = $_REQUEST['perid'];
+            }
+            if($perid){
+                    getComboPeriodoPorPerid($perid,false,$_REQUEST['dmiid'],$_SESSION['painel']['metid']);
+            }else{
+                    echo "Selecione o período.";
+            }
+
+            break;
+        case "salvarValorMeta":
+            $retorno = salvarValorMeta();
+            echo json_encode($retorno);
+            die;
+        case "listarValorMeta":
+            echo listarValorMetas($_SESSION['painel']['metid'], $listaPerfis);
+            die;
+        default:
+            $_REQUEST['requisicaoAjax']();
+            break;
+    }
 }
 
-if($_POST['requisicao']){
-	$resultado = $_POST['requisicao']();
+if($_REQUEST['requisicao']){
+	$resultado = $_REQUEST['requisicao']();
 }
 
 $sql = "select 
@@ -48,23 +58,40 @@ $sql = "select
 $arrDados = $db->pegaLinha($sql);
 
 // monta cabeçalho 
-include APPRAIZ . 'includes/cabecalho.inc';
-print '<br/>';
-$menu[0] = array("descricao" => "Lista de Indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A");
-$menu[1] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
-$menu[2] = array("descricao" => "Série Histórica", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
-$menu[3] = array("descricao" => "Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/metaIndicador&acao=A");
-$menu[4] = array("descricao" => "Listagem de Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
-$menu[5] = array("descricao" => "Editar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
-$menu[6] = array("descricao" => "Valores de Meta", "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
-$menu[7] = array("descricao" => "Estratégia de Metas", "link"=> "/painel/painel.php?modulo=principal/cadastroEstrategiaMetas&acao=A");
-$menu[8] = array("descricao" => "Avaliação do Gestor", "link"=> "/painel/painel.php?modulo=principal/avaliacaoGestor&acao=A");
-echo montarAbasArray($menu, "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
+//include APPRAIZ . 'includes/cabecalho.inc';
+//print '<br/>';
+//$menu[0] = array("descricao" => "Lista de Indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A");
+//$menu[1] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A");
+//$menu[2] = array("descricao" => "Série Histórica", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
+//$menu[3] = array("descricao" => "Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/metaIndicador&acao=A");
+//$menu[4] = array("descricao" => "Listagem de Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
+//$menu[5] = array("descricao" => "Editar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
+//$menu[6] = array("descricao" => "Valores de Meta", "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
+//$menu[7] = array("descricao" => "Estratégia de Metas", "link"=> "/painel/painel.php?modulo=principal/cadastroEstrategiaMetas&acao=A");
+//$menu[8] = array("descricao" => "Avaliação do Gestor", "link"=> "/painel/painel.php?modulo=principal/avaliacaoGestor&acao=A");
+//echo montarAbasArray($menu, "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
 
 $titulo = "Valores de Meta";
-monta_titulo( $titulo, $arrDados['indid']." - ".$arrDados['indnome'] );
+//monta_titulo( $titulo, $arrDados['indid']." - ".$arrDados['indnome'] );
 
 ?>
+<!--    <link href="../library/sliding_panel/css/slide.css" rel="stylesheet" media="screen">
+    <script src="../library/jquery/jquery-1.11.1.min.js" type="text/javascript" charset="ISO-8895-1"></script>
+    <script src="../library/jquery/jquery-ui-1.10.3/jquery-ui.min.js"></script>
+    <script src="../library/chosen-1.0.0/chosen.jquery.js"></script>
+            <link href="../library/bootstrap-3.0.0/css/bootstrap.min-simec.css" rel="stylesheet" media="screen">
+        <link href="/zimec/public/temas/simec/fonts/awesome/font-awesome.css?v=1.0" rel="stylesheet">
+        <script src="../includes/JQuery/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="../library/chosen-1.0.0/chosen.jquery.js" type="text/javascript"></script>
+        <script src="../library/chosen-1.0.0/docsupport/prism.js" type="text/javascript"></script>        
+        <link href="../library/chosen-1.0.0/chosen.css" rel="stylesheet" media="screen" >
+        		<script language="JavaScript" src="../includes/funcoes.js"></script>
+        <link href="/library/simec/css/css_reset.css" rel="stylesheet">
+        <link href="/library/simec/css/barra_brasil.css" rel="stylesheet">
+		<link href="../includes/Estilo.css" rel="stylesheet" type="text/css"/>
+		<link href='../includes/listagem.css' rel='stylesheet' type='text/css'/>-->
+<link href="/library/jquery/jquery-ui-1.10.3/themes/custom-theme/jquery-ui-1.10.3.custom.min.css" rel="stylesheet">
+<script language="javascript" type="text/javascript" src="/includes/jquery-ui-1.8.18.custom/js/jquery-ui-1.8.18.custom.min.js"></script>
 <script language="javascript" type="text/javascript" src="../includes/JQuery/jquery-ui-1.8.4.custom/js/jquery-1.4.2.min.js"></script>
 <script language="javascript" type="text/javascript" src="../painel/js/metas_indicador.js"></script>
 <script language="javascript" type="text/javascript" src="../includes/JsLibrary/date/displaycalendar/displayCalendar.js"></script>
@@ -84,11 +111,11 @@ monta_titulo( $titulo, $arrDados['indid']." - ".$arrDados['indnome'] );
 	  $formatoinput['campovalor']['mascara'] = !$formatoinput['campovalor']['mascara'] ? "###.###.###.###.###,##" : $formatoinput['campovalor']['mascara']; ?>
 <script>
 function editarValorMeta(perid,dmiid,dpeid, dmiobs,dmiqtde,dmivalor)
-{
+{ 
 	$("[name=dmiid]").val(dmiid);
 	$("[name=perid]").val(perid);
         $("[name=dmiobs]").val(dmiobs);
-	executarAjax("requisicaoAjax=getComboPeriodoPorPerid&dpeid=" + dpeid + "&dmiid=" + dmiid,$("#combo_dpeid"));
+	executarAjax("requisicaoAjax=getComboPeriodoPorPerid&perid="+perid+"&dpeid=" + dpeid + "&dmiid=" + dmiid,$("#combo_dpeid"));
 	$("[name=dmiqtde]").val(mascaraglobal('[<?php echo $formatoinput['mascara'] ?>]',dmiqtde));
 	if($("[name=dmivalor]") && dmivalor){
 		$("[name=dmivalor]").val(mascaraglobal('<?php echo $formatoinput['campovalor']['mascara'] ?>',dmivalor));
@@ -141,8 +168,6 @@ function alteraPeriodo(perid)
 			<td class="SubtituloTabela" >
 				<input type="hidden" id="dmiid" name="dmiid" value="" />
 				<input type="hidden" name="requisicao" value="salvarValorMeta" />
-				<input type="button" id="btn_salvar" value="Salvar" onclick="salvarValorMeta()" />
-				<input type="button" id="btn_cancelar" value="Cancelar" onclick="window.location.href='painel.php?modulo=principal/listarMetasIndicador&acao=A'" />
 			</td>
 		</tr>
 	</table>

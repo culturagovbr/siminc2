@@ -460,7 +460,9 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
                                 $sql = "SELECT dshobs FROM painel.detalheseriehistorica WHERE sehid='".$seriehistorica['sehid']."'";
                                 $valor = $db->pegaUm($sql);
                         }                        
-                        $html .= "<td><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='obs_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='obs[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" size=\"100\" maxlength=\"255\"></td>";                        
+                        $html .= "<td><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='obs_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='obs[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" size=\"100\" maxlength=\"255\"></td>";
+                        $html .= "<td><img title='Exportar CSV' src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('{$seriehistorica['sehid']}');></td>";
+                        $html .= "<td><img title='Excluir Série Histórica' src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('{$seriehistorica['sehid']}');\"></td>";
 			$html .= "</tr>";
 		}
 	} else {
@@ -642,8 +644,8 @@ function montarSubCabecalhoDetalhes($detalhes = false) {
 			$html .="<td class='SubTituloCentro' ".((count($detalhes['nivel2']))?"colspan='".count($detalhes['nivel2'])."'":"").">".$de1['tiddsc']."</td>";
 		}
 		$html .="</tr>";
-		
 		if($detalhes['nivel2']) {
+                    
 			$html .="<tr>";
 			foreach($detalhes['nivel1'] as $de1) {
 				foreach($detalhes['nivel2'] as $de2) {
@@ -1494,6 +1496,7 @@ function carregarGridBrasil($dados) {
 	$html .= "<td class='SubTituloEsquerda' ".(($rowspancabecalho)?"rowspan='".$rowspancabecalho."'":"").">Períodos</td>";
 	$html .= "<td class='SubTituloEsquerda' ".(($colspancabecalho)?"colspan='".$colspancabecalho."'":"").">Valor / Quantidade ".($linhasperiodos[0]['unmid'] == 1 ? " (%)" : "")."</td>";
 	$html .= "<td class='SubTituloEsquerda' ".(($rowspancabecalho)?"rowspan='".$rowspancabecalho."'":"").">Observação</td>";
+        $html .= "<td class='SubTituloEsquerda' colspan='2'>&nbsp;</td>";
 	$html .= "</tr>";
 
 	

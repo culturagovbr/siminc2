@@ -36,86 +36,8 @@ monta_titulo( $titulo, '&nbsp' );
 </style>
 
 <form name="formulario_metas" id="formulario_metas"  method="post" action="" >
-	<table class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
-		<tr>
-			<td width="25%" class="SubTituloDireita" >Selecione a Secretaria:</td>
-			<td id="td_combo_secid" >
-				<?php 
-				$secid = $_POST['secid'];
-				$sql = "SELECT 
-							secid as codigo,
-							secdsc as descricao
-						FROM
-							painel.secretaria
-						WHERE
-							secstatus = 'A'";
-				$db->monta_combo('secid',$sql,'S','Selecione a Secretaria','filtrarAcao','');
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td class="SubTituloDireita" >Selecione a Ação:</td>
-			<td>
-			<!--- <td id="td_combo_acaid" > --->
-				<?php 
-				/* $acaid = $_POST['acaid'];
-				if($secid){ */
-					$habilitado = "S";
-					$sql = "SELECT 
-								acaid as codigo,
-								acadsc as descricao
-							FROM
-								painel.acao
-							WHERE
-								acastatus = 'A'
-							--- AND acaid in ( select acaid from painel.acaosecretaria where secid = $secid)";
-				/* }else{
-					$habilitado = "N";
-					$sql = array();
-				} */
-				$db->monta_combo('acaid',$sql,$habilitado,'Selecione a Ação','filtrarIndicador','');
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td class="SubTituloDireita" >Selecione o Indicador:</td>
-			<!--- <td id="td_combo_indid" > --->
-			<td>
-				<?php 
-				/* $indid = $_POST['indid'];
-				if($secid && $acaid){ */
-					$habilitado = "S";
-					$sql = "SELECT 
-								indid as codigo,
-								indid || ' - ' || indnome as descricao
-							FROM
-								painel.indicador
-							WHERE
-								indstatus = 'A'
-							--- AND secid = $secid
-							--- AND acaid = $acaid";
-				/* }else{
-					$habilitado = "N";
-					$sql = array();
-				} */
-				$db->monta_combo('indid',$sql,'','Selecione o Indicador','','');
-				?>
-			</td>
-		</tr>
-		<tr> 
-			<td class="SubTituloDireita" >Meta:</td>
-			<td><?$metdesc = $_POST['metdesc'] ; echo campo_texto('metdesc','N',"S",'',60,80,'','');?></td>
-		</tr>
-		<tr>
-			<td class="SubtituloTabela" ></td>
-			<td class="SubtituloTabela" >
-				<input type="hidden" name="requisicao" value="pesquisarMetas" />
-				<input type="hidden" name="metid" value="" />
-				<input type="button" id="btn_pesquisar" value="Pesquisar" onclick="pesquisarMetas()" />
-				<input type="button" id="btn_listar_todos" value="Listar Todos" onclick="listarTodasMetas()" />
-			</td>
-		</tr>
-	</table>
+    <input type="hidden" name="requisicao" value="pesquisarMetas" />
+    <input type="hidden" name="metid" value="" />
 </form>
 <?php
 $arrWhere[] = "metstatus = 'A'";
@@ -127,8 +49,8 @@ if($_POST['secid']){
 if($_POST['acaid']){
 	$arrWhere[] = "ind.acaid = {$_POST['acaid']}";
 }
-if($_POST['indid']){
-	$arrWhere[] = "ind.indid = {$_POST['indid']}";
+if($_SESSION['indid']){
+	$arrWhere[] = "ind.indid = {$_SESSION['indid']}";
 }
 if($_POST['metdesc']){
 	$arrWhere[] = "(removeacento(upper(met.metdesc)) like removeacento(('%".strtoupper($_POST['metdesc'])."%')) or removeacento(upper(ind.indnome)) like removeacento(('%".strtoupper($_POST['metdesc'])."%')) or ind.indid::text like removeacento(('%".strtoupper($_POST['metdesc'])."%')))";
