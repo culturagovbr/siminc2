@@ -4,15 +4,18 @@ include_once APPRAIZ.'/painel/classes/controller/Indicador.inc';
 include_once APPRAIZ.'/painel/classes/model/Indicador.inc';
 $cIndicador = new Painel_Controller_Indicador();
 $mIndicador = new Painel_Model_Indicador();
+$cAvaliacaoGestor = new Painel_Controller_AvaliacaoGestor();
+$mAvaliacaoGestor = new Painel_Model_AvaliacaoGestor();
 $listaPerfis = $mIndicador->RetornaPerfil();
 /**
  * Tratamento das requisições
  */
 include APPRAIZ . 'includes/cabecalho.inc';
 $requisicao = $_REQUEST['req'];
+ver($_REQUEST,d);
 switch ($requisicao) {
     case 'gravar':
-        if ($cIndicador->salvar($_REQUEST)){
+        if ($cAvaliacaoGestor->salvar($_REQUEST)){
             echo "<script>swal('','Dados Salvos com sucesso!!!', 'success');</script>";
         }else{
             echo "<script>swal('', 'Erro ao salvar dados!!!', 'error');</script>";
@@ -21,9 +24,11 @@ switch ($requisicao) {
     default:
         break;
 }
-$dados = $mIndicador->RetornaRegistro($_SESSION['indid']);
-$indobsgestor = $dados['indobsgestor'];
-$indavalgestor = $dados['indavalgestor'];
+if($_REQUEST['agid']){
+    $dados = $mAvaliacaoGestor->RetornaRegistro($_REQUEST['agid']);
+    $indobsgestor = $dados['indobsgestor'];
+    $indavalgestor = $dados['indavalgestor'];
+}
 // monta cabeçalho 
 print '<br/>';
 $db->cria_aba(57105,$url,'');
@@ -34,6 +39,7 @@ $db->cria_aba(57105,$url,'');
 <form method="POST" id="formulario" name="formulario">
     <input type="hidden" name="evento" id="evento" value="I">
     <input type="hidden" name="indid" id="indid" value="<?=$_SESSION['indid']?>">
+    <input type="hidden" name="agid" id="agid" value="<?=$_REQUEST['agid']?>">
     <input type="hidden" name="req" id="req">
     
     <table style="border-top:0px;border-top:0px;border-bottom:0px"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
@@ -42,7 +48,47 @@ $db->cria_aba(57105,$url,'');
         </tr>
         <tr>
             <td class="TituloTela" align="center" colspan="2"><br></td>
-        </tr>          
+        </tr> 
+        <tr>
+            <?php
+                $anoInicial = date("Y")-7;
+                $anoFinal = date("Y")+5;
+                $j=0;
+                for ($i=$anoInicial;$i<=$anoFinal;$i++){
+                    $listaAnos[$j]['codigo']=$i;
+                    $listaAnos[$j]['descricao']=$i;
+                    $j++;
+                }
+                $nroAnoReferencia = $_REQUEST['nuanoreferencia']?$_REQUEST['nuanoreferencia']:date("Y");
+                echo "<td class='SubTituloDireita' style='width:150px;'>Ano Referência:</td>";
+                echo "<td>";
+                   $db->monta_combo('nuanoreferencia', $listaAnos, 'S', 'Selecione', '', '', '', '200', 'S', 'nuanoreferencia','',$nroAnoReferencia);
+                echo "</td>";
+            ?>
+        </tr>
+        <tr>
+            <?php
+                $listaMeses = Array(
+                                    array('codigo' => 1, 'descricao'=>'Janeiro'),
+                                    array('codigo' => 2, 'descricao'=>'Fevereiro'),
+                                    array('codigo' => 3, 'descricao'=>'Março'),
+                                    array('codigo' => 4, 'descricao'=>'Abril'),
+                                    array('codigo' => 5, 'descricao'=>'Maio'),
+                                    array('codigo' => 6, 'descricao'=>'Junho'),
+                                    array('codigo' => 7, 'descricao'=>'Julho'),
+                                    array('codigo' => 8, 'descricao'=>'Agosto'),
+                                    array('codigo' => 9, 'descricao'=>'Setembro'),
+                                    array('codigo' => 10, 'descricao'=>'Outubro'),
+                                    array('codigo' => 11, 'descricao'=>'Novembro'),
+                                    array('codigo' => 12, 'descricao'=>'Dezembro')
+                                   );
+                $nroMesReferencia = $_REQUEST['numesreferencia']?$_REQUEST['numesreferencia']:date("m");
+                echo "<td class='SubTituloDireita' style='width:150px;'>Mês Referência:</td>";
+                echo "<td>";
+                   $db->monta_combo('numesreferencia', $listaMeses, 'S', 'Selecione', '', '', '', '200', 'S', 'numesreferencia','',$nroMesReferencia);
+                echo "</td>";
+            ?>
+        </tr>
         <?php
         $classUp='fa-thumbs-o-up';
         $classDown='fa-thumbs-o-down'; 
@@ -108,10 +154,23 @@ $db->cria_aba(57105,$url,'');
             </td>
         </tr>        
     </table>
+    <?php
+    	$cabecalho = array("Ações","Ano","Mês","Avaliação Gestor","Obs. Gestor","Obs. Indicador");
+        $arrAvaliacoes = $mAvaliacaoGestor->retornaListaAvaliacoes();
+//        ver($arrAvaliacoes,d);
+        for($i=0;$i<count($arrAvaliacoes);$i++){
+            foreach($listaMeses as $value){
+                if ($value['codigo']==$arrAvaliacoes[$i]['numesreferencia']){
+                    $arrAvaliacoes[$i]['dsmesreferencia'] = $value['descricao'];
+                }
+            }
+        }
+	$db->monta_lista_array($arrAvaliacoes,$cabecalho,100,5,'N','center');
+    ?>
 </form>
 <script>
     function submeter(req){
-        document.formulario.req.value=req;
+        $("#req").val(req);
         document.formulario.submit();
     }
     
@@ -150,5 +209,10 @@ $db->cria_aba(57105,$url,'');
             }
         }
 
-    }     
+    }    
+    
+    function alterarAvaliacao(agid){
+        $("#agid").val(agid);
+        document.formulario.submit();
+    }
 </script>

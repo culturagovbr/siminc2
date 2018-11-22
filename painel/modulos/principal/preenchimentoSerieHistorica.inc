@@ -45,6 +45,11 @@ switch($_REQUEST['acao']) {
 	break;
 }
 /* Fim Segurança : Validando os acessos as funções autorizadas */
+<<<<<<< Updated upstream
+=======
+//carregarGridBrasil();
+//gravarGridDados();
+>>>>>>> Stashed changes
 if($_REQUEST['requisicao']) {
 	if($_FUNCOESAUTORIZADAS[$_REQUEST['requisicao']]) {
 		$_REQUEST['requisicao']($_REQUEST);
@@ -499,6 +504,7 @@ switch($dadosindicador['regid']) {
 </tr>
 <tr>
 <?php
+<<<<<<< Updated upstream
 
 $anoInicial = date("Y")-7;
 $anoFinal = date("Y")+5;
@@ -516,6 +522,8 @@ $tabeladefiltros[] = array("descricao"	       => "Ano Referência:",
                             "td_id"	       => "tdAnos",
                             "sql"	       => $listaAnos);
 
+=======
+>>>>>>> Stashed changes
 if($tabeladefiltros) {
 	foreach($tabeladefiltros as $tbl) {
 		echo "<td class='SubTituloDireita' style='width:150px;'>".$tbl['descricao']."</td>";
