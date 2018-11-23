@@ -120,7 +120,11 @@ $db->cria_aba(57105,$url,'');
         </tr>
         <tr>
             <td align="center" colspan="2">
-                <input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter('gravar');">
+                <?php
+                if ($secid_confirma || in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis)){
+                    echo '<input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter(\'gravar\');">';
+                }
+                ?>
             </td>
         </tr>        
     </table>
