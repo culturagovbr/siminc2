@@ -67,7 +67,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     </div>
     <div class="col-lg-4">
         <div style="padding-top: 10px;" class="text-right">
-            <a class="btn btn-danger" href="?modulo=principal/painel_siop&acao=A&req=gerar-planilha">Gerar Planilha</a>
+            <a class="btn btn-danger fa fa-table" href="?modulo=principal/painel_siop&acao=A&req=gerar-planilha"> Gerar Planilha</a>
         </div>
     </div>
 </div>

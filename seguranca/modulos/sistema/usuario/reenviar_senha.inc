@@ -57,9 +57,9 @@ function reenvia_senha_acesso(){
 										public.orgao o on u.orgcod=o.orgcod
 									WHERE 
 										u.orgcod=o.orgcod and 
-										( uni.uniano is null or uni.uniano = o.organo )" . $texto);	
-	
-	$assunto = "Aprovação do Cadastro no Simec";
+										( uni.uniano is null or uni.uniano = o.organo )" . $texto);
+
+    $assunto = "Aprovação do Cadastro no ".SIGLA_SISTEMA;
 		
 	$total_usuarios = count( $destinatario );
 	

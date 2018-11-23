@@ -78,7 +78,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             foreach($aProposta as $dados){ ?>
                                 <tr>
                                     <td class="text-center">
-                                        <a title="Alterar" href="?modulo=principal/proposta_form&acao=A&proid=<?php echo $dados['proid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a title="Alterar" href="?modulo=principal/proposta_form&acao=A&proid=<?php echo $dados['proid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                     </td>
                                     <td><?= $dados['proid']; ?></td>
                                     <td><?= $dados['subunidade']; ?></td>
@@ -100,7 +100,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tbody>
                             <thead>
                             <tr class="text-center">
-                                <th width="4%">Ações</th>
+                                <th width="5%">Ação</th>
                                 <th>Id</th>
                                 <th>Subunidade</th>
                                 <th>Funcional</th>

@@ -14,9 +14,10 @@
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-
-                    <a class="btn btn-small btn-warning" href="?modulo=apoio/item-manutencao-form&acao=A">Novo</a>
-
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/item-manutencao-form&acao=A">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Novo
+                    </a>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables">
                             <thead>
@@ -53,7 +54,7 @@
 								foreach ($manutencao_itens as $manutencao_item): ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="planacomorc.php?modulo=apoio/item-manutencao-form&acao=A&maiid=<?php echo $manutencao_item['codigo']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="planacomorc.php?modulo=apoio/item-manutencao-form&acao=A&maiid=<?php echo $manutencao_item['codigo']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                         <td><?php echo $manutencao_item['nome']; ?></td>
                                         <td><?php echo $manutencao_item['descricao']; ?></td>

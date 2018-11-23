@@ -133,9 +133,11 @@ include APPRAIZ . "includes/cabecalho.inc";
         	</div>
         	<div class="ibox-content">
                 <?php if($mEmenda->emeid){ ?>
-
                     <?php if($podeEditar): ?>
-                        <a class="btn btn-small btn-warning" href="?modulo=principal/beneficiario_form&acao=A&emeid=<?php echo $mEmenda->emeid; ?>">Novo</a>
+                        <a class="btn-small btn btn-success" href="?modulo=principal/beneficiario_form&acao=A&emeid=<?php echo $mEmenda->emeid; ?>">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Novo
+                        </a>
                     <?php endif; ?>
 
                     <?php $aBeneficiario = (new Emendas_Model_Beneficiario())->recuperarTodos('*', ['emeid = ' . $mEmenda->emeid, "benstatus = 'A'"]);
@@ -160,7 +162,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <?php foreach($aBeneficiario as $dados){ ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a title="Alterar" href="?modulo=principal/beneficiario_form&acao=A&benid=<?php echo $dados['benid']; ?>"><i class="fa fa-pencil"></i></a>
+                                            <a title="Alterar" href="?modulo=principal/beneficiario_form&acao=A&benid=<?php echo $dados['benid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                         <td><?php echo $dados['procnpj'] . ' - ' . $dados['pronome']; ?></td>
                                         <td><?php echo $dados['suocod'] . ' - ' . $dados['suonome']; ?></td>

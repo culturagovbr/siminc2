@@ -104,7 +104,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
                         <div class="form-group">
                             <div class="text-center">
-                                <button id="btn-limpar" class="btn btn-success" type="button">
+                                <button id="btn-limpar" class="btn btn-warning" type="button">
                                     <span class="glyphicon glyphicon-remove-circle"></span> Limpar
                                 </button>
                                 <button class="btn btn-primary btn-buscar" type="submit">
@@ -114,7 +114,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <i class="fa fa-file-excel-o"></i> Exportar XLS
                                 </button>
                                 <?php if($podeEditar): ?>
-                                    <button id="btn_novo" class="btn btn-warning" type="button">
+                                    <button id="btn_novo" class="btn btn-success" type="button">
                                         <span class="glyphicon glyphicon-plus"></span>
                                         Novo
                                     </button>

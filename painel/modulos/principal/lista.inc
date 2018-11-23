@@ -21,7 +21,6 @@ $permissoes = verificaPerfilPainel();
 				WHERE pu.usucpf = '". $_SESSION['usucpf'] ."' and p.pflstatus = 'A' and p.sisid =  '". $_SESSION['sisid'] ."' 
 				ORDER BY pflnivel ASC LIMIT 1";
 echo montarAbasArray($permissoes['menu'], $_SERVER['REQUEST_URI']);
-
 // titulos da tela
 $titulo = "Indicadores";
 

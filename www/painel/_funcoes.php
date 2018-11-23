@@ -1196,7 +1196,7 @@ function verificaPerfilPainel() {
 		$permissoes['sou_atendente']          = (($db->pegaUm("SELECT usucpf FROM seguranca.perfilusuario WHERE usucpf='".$_SESSION['usucpf']."' AND pflcod='".PAINEL_PERFIL_ATENDENTE."'"))?true:false);
 		
 		$permissoes['menu'][0] = array("descricao" => "Lista de Indicadores", "link"=> ($enderecosweb[$_SERVER['REQUEST_URI']])?$_SERVER['REQUEST_URI']:key($enderecosweb));
-		$permissoes['menu'][1] = array("descricao" => "Meus indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A&evento=M");
+//		$permissoes['menu'][1] = array("descricao" => "Meus indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A&evento=M");
 		$permissoes['menu'][2] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A&indid=novoIndicador");
 	} else {
 		// selecionando o perfil de maior nivel
@@ -8960,7 +8960,6 @@ function montarSqlRelIndicadoresSecretaria(stdClass $dto){
 	    i.indid,
 	    s.secordem,
             i.indnome AS nome,
-            unm.unmdesc AS unidade,
             ume.umedesc AS produto,
             indavalgestor AS parecer_gestor_a,
             indobsgestor AS observacao_gestor_i,

@@ -1215,7 +1215,7 @@ class Pi_PlanoInterno extends Modelo
                 ptr.acacod, ptr.acatitulo, ptr.loccod, ptr.locdsc, ptr.plocod, plodsc po, ptr.ptres,
                 mde.mdedsc, mpn.mpncod || ' - ' || mpn.mpnnome mpnnome, mpp.mppcod || ' - ' || mpp.mppnome mppnome,
                 pli.plititulo, pli.plidsc, nee.needsc, cap.capdsc,
-                case when pli.pliemenda = true then 'Sim' else 'Não' end as pliemenda,
+                case when rp.rpcod = 6 then 'Sim' else 'Não' end as pliemenda,
                 case when pic.picedital = true then 'Sim' else 'Não' end as picedital, esf.esfdsc,
                 case
                         when pic.esfid in (1, 2, 3) then 'Brasil'

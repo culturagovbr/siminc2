@@ -54,7 +54,7 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
     
     public function excluiDadosSiopExecucao($exercicio){
         $sql = "DELETE FROM spo.siopexecucao WHERE exercicio = '". (int)$exercicio. "'";
-        $this->executar($sql);        
+        $this->executar($sql);
     }
     
     public function insereDadosSiopExecucao($exercicio){
