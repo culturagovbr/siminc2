@@ -1,8 +1,7 @@
 <?php
-
 include_once APPRAIZ.'/painel/classes/controller/Indicador.inc';
 include_once APPRAIZ.'/painel/classes/model/Indicador.inc';
-$cIndicador = new Painel_Controller_Indicador();
+//$cIndicador = new Painel_Controller_Indicador();
 $mIndicador = new Painel_Model_Indicador();
 $cAvaliacaoGestor = new Painel_Controller_AvaliacaoGestor();
 $mAvaliacaoGestor = new Painel_Model_AvaliacaoGestor();
@@ -11,14 +10,44 @@ $listaPerfis = $mIndicador->RetornaPerfil();
  * Tratamento das requisições
  */
 include APPRAIZ . 'includes/cabecalho.inc';
-$requisicao = $_REQUEST['req'];
-ver($_REQUEST,d);
+$requisicao = $_REQUEST['requisicao'];
 switch ($requisicao) {
     case 'gravar':
         if ($cAvaliacaoGestor->salvar($_REQUEST)){
-            echo "<script>swal('','Dados Salvos com sucesso!!!', 'success');</script>";
+            echo '<script>
+            swal({
+                title: "",
+                text: "Dados Salvos com sucesso!!!",
+                type: "success",
+                showCancelButton: false,
+                confirmButtonText: "Ok",
+                closeOnConfirm: true
+            },
+            function(){
+                window.location.href="?modulo=principal/avaliacaoGestor&acao=A";
+            });
+            </script>';
         }else{
             echo "<script>swal('', 'Erro ao salvar dados!!!', 'error');</script>";
+        }
+        break; 
+    case 'excluir':
+        if ($cAvaliacaoGestor->excluir($_REQUEST['agid'])){
+            echo '<script>
+            swal({
+                title: "",
+                text: "Dados excluidos com sucesso!!!",
+                type: "success",
+                showCancelButton: false,
+                confirmButtonText: "Ok",
+                closeOnConfirm: true
+            },
+            function(){
+                window.location.href="?modulo=principal/avaliacaoGestor&acao=A";
+            });
+            </script>';
+        }else{
+            echo "<script>swal('', 'Erro ao excluir dados!!!', 'error');</script>";
         }
         break; 
     default:
@@ -36,11 +65,17 @@ $db->cria_aba(57105,$url,'');
 <script language="javascript" type="text/javascript" src="../includes/calendario.js"></script>
 <script language="JavaScript" src="../includes/wz_tooltip.js"></script>
 <script language="javascript" type="text/javascript" src="../includes/JQuery/jquery-ui-1.8.4.custom/js/jquery-1.4.2.min.js"></script>
-<form method="POST" id="formulario" name="formulario">
+<style>
+.corAzul
+{
+    color: #133368;
+    TEXT-DECORATION: none;
+}    
+</style>
+<form method="POST" id="formAvaliacao" name="formAvaliacao">
     <input type="hidden" name="evento" id="evento" value="I">
     <input type="hidden" name="indid" id="indid" value="<?=$_SESSION['indid']?>">
     <input type="hidden" name="agid" id="agid" value="<?=$_REQUEST['agid']?>">
-    <input type="hidden" name="req" id="req">
     
     <table style="border-top:0px;border-top:0px;border-bottom:0px"  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
         <tr>
@@ -157,7 +192,6 @@ $db->cria_aba(57105,$url,'');
     <?php
     	$cabecalho = array("Ações","Ano","Mês","Avaliação Gestor","Obs. Gestor","Obs. Indicador");
         $arrAvaliacoes = $mAvaliacaoGestor->retornaListaAvaliacoes();
-//        ver($arrAvaliacoes,d);
         for($i=0;$i<count($arrAvaliacoes);$i++){
             foreach($listaMeses as $value){
                 if ($value['codigo']==$arrAvaliacoes[$i]['numesreferencia']){
@@ -170,8 +204,8 @@ $db->cria_aba(57105,$url,'');
 </form>
 <script>
     function submeter(req){
-        $("#req").val(req);
-        document.formulario.submit();
+        var dados = $("#formAvaliacao").serialize();
+        window.location.href='?modulo=principal/avaliacaoGestor&acao=A&requisicao='+req+'&dados='+dados;
     }
     
     function alteraClasseThumbs(value){
@@ -212,7 +246,10 @@ $db->cria_aba(57105,$url,'');
     }    
     
     function alterarAvaliacao(agid){
-        $("#agid").val(agid);
-        document.formulario.submit();
+        window.location.href='?modulo=principal/avaliacaoGestor&acao=A&agid='+agid;
+    }  
+    
+    function excluirAvaliacao(agid){
+        window.location.href='?modulo=principal/avaliacaoGestor&acao=A&requisicao=excluir&agid='+agid;
     }
 </script>

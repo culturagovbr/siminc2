@@ -71,9 +71,9 @@ class Painel_Model_AvaliacaoGestor extends Modelo
                         </center>',
                        ag.nuanoreferencia,
                        '' as dsmesreferencia,
-                       case when ag.indavalgestor='S' then '<i style=\"font-size:2.5em\" id=\"indthumbsup\" class=\"fa fa-thumbs-up\"></i>'
-                            when ag.indavalgestor='N' then '<i style=\"font-size:2.5em\" id=\"indthumbsup\" class=\"fa fa-thumbs-down\"></i>'
-                            when ag.indavalgestor='E' then '<i style=\"font-size:2.5em\" id=\"indthumbsup\" class=\"fa fa-exclamation-circle\"></i>'
+                       case when ag.indavalgestor='S' then '<i style=\"font-size:2.5em\" class=\"fa fa-thumbs-up corAzul\"></i>'
+                            when ag.indavalgestor='N' then '<i style=\"font-size:2.5em\" class=\"fa fa-thumbs-down corAzul\"></i>'
+                            when ag.indavalgestor='E' then '<i style=\"font-size:2.5em\" class=\"fa fa-exclamation-circle corAzul\"></i>'
                        else 'Não Avaliado'
                        end as indavalgestor, 
                        ag.indobsgestor,

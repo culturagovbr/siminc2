@@ -12,18 +12,17 @@ class Painel_Controller_AvaliacaoGestor
             $mAvaliacaoGestor->nucpf = $_SESSION['usucpf'];
             $mAvaliacaoGestor->salvar(null, null, ['indavalgestor', 'indobsgestor', 'indobsgestorindicador']);
             $mAvaliacaoGestor->commit();
-            simec_redirecionar($url, 'success');
+            return true;
         } catch (Exception $e){
             $mAvaliacaoGestor->rollback();
             return false;
         }
     } //end salvar()
 
-    public function excluir($emiid)
+    public function excluir($agid)
     {
         try {
-            $mEstrategiaMeta = new Painel_Model_AvaliacaoGestor($emiid);
-
+            $mEstrategiaMeta = new Painel_Model_AvaliacaoGestor($agid);
             $mEstrategiaMeta->excluir();
             $mEstrategiaMeta->commit();
             return true;

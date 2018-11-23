@@ -56,23 +56,11 @@ print '<br/>';
 if($arrDados && $arrDados['metid']){
 	$_REQUEST['metid'] = $metid;
 	$_SESSION['painel']['metid'] = $metid;
-<<<<<<< Updated upstream
-	$menu[0] = array("descricao" => "Lista de Indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A");
-	$menu[1] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
-	$menu[2] = array("descricao" => "Série Histórica", "link"=> "/painel/painel.php?modulo=principal/listaSerieHistorica&acao=A");
-	$menu[3] = array("descricao" => "Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/metaIndicador&acao=A");
-	$menu[4] = array("descricao" => "Listagem de Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
-	$menu[5] = array("descricao" => "Editar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
-	$menu[6] = array("descricao" => "Valores de Meta", "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
-	$menu[7] = array("descricao" => "Estratégia de Metas", "link"=> "/painel/painel.php?modulo=principal/cadastroEstrategiaMetas&acao=A");
-	$menu[8] = array("descricao" => "Avaliação do Gestor", "link"=> "/painel/painel.php?modulo=principal/avaliacaoGestor&acao=A");
-=======
         $menu[0] = array("descricao" => "Lista de Indicadores", "link"=> "painel.php?modulo=principal/listarMetasIndicador&acao=A");
 	$menu[1] = array("descricao" => "Metas do Indicador", 		 "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
 	$menu[2] = array("descricao" => "Editar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
 	$menu[3] = array("descricao" => "Estratégias de Meta", 		 "link"=> "/painel/painel.php?modulo=principal/estrategiaMetasIndicador&acao=A");
 	$menu[4] = array("descricao" => "Valores de Meta", 		 	 "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
->>>>>>> Stashed changes
 	echo montarAbasArray($menu, "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
 }else{
 	$db->cria_aba($abacod_tela,$url,'');	
