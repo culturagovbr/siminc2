@@ -391,7 +391,9 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
                                    and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
                                    and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
                         $secid_confirma = $db->pegaUm($sql);
-                        if ($secid_confirma){
+                        $mIndicador = new Painel_Model_Indicador();
+                        $listaPerfis = $mIndicador->RetornaPerfil();
+                        if ($secid_confirma || in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis)){
                             $seriehistorica = $db->pegaLinha("SELECT sehid,sehbloqueado FROM painel.seriehistorica WHERE indid='".$_SESSION['indid']."' AND dpeid='".$reg['codigo']."' AND (sehstatus='A' OR sehstatus='H')");
                             if($seriehistorica) {
                                 $seriehistorica['sehbloqueado']="f";
@@ -471,7 +473,9 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
                         }                        
                         $html .= "<td><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='obs_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='obs[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" size=\"100\" maxlength=\"255\"></td>";
                         $html .= "<td><img title='Exportar CSV' src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('{$seriehistorica['sehid']}');></td>";
-                        $html .= "<td><img title='Excluir Série Histórica' src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('{$seriehistorica['sehid']}');\"></td>";
+                        if ($secid_confirma || in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis)){
+                            $html .= "<td><img title='Excluir Série Histórica' src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('{$seriehistorica['sehid']}');\"></td>";
+                        }
 			$html .= "</tr>";
 		}
 	} else {

@@ -635,7 +635,7 @@ function validaUnidadeMedicao(valor) {
 			WHERE aggstatus = 'A'
 			order by
 				 descricao";
-	combo_popup( 'aggid', $Sql, 'Selecione a(s) Agenda(s) de Governo(s)', '360x460', 0, array(), "", "S", false, false, 5, 400);
+	combo_popup( 'aggid', $Sql, 'Selecione a(s) Agenda(s) de Governo(s)', '360x460', 0, array(), "", (($acesso)?'S':'N'), false, false, 5, 400);
 	?>
 	</td>
 </tr>
