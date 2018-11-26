@@ -11,17 +11,14 @@
     $listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf']));
 
     # Filtro de Situação na sessão do usuário
-    $filtroalteracao = $_SESSION['filtroalteracao'] = (isset($_REQUEST['esdid'])? $_REQUEST: $_SESSION['filtroalteracao']);
+    $filtroalteracao = $_SESSION['filtroalteracao'] = (isset($_REQUEST['esdid']) ? $_REQUEST : $_SESSION['filtroalteracao']);
     $requisicao = $_REQUEST['requisicao'];
 
-    $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem(array(
-        'exercicio' => $_SESSION['exercicio'],
-        'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario
-    ), $filtroalteracao);
     if($requisicao){
         switch ($requisicao) {
             case 'limpar':
                 $filtroalteracao = $_SESSION['filtroalteracao'] = array();
+            break;
             case 'buscar_pedidos':
                 $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($_REQUEST);
             break;
@@ -29,15 +26,24 @@
                 $cPedido = new Alteracao_Controller_Pedido();
                 $cPedido->excluir($_REQUEST['pedid']);
             die;
+            case 'lista-pedidos':
+                ob_clean();
+                ob_flush();
+                $filtroalteracao['tpdid'] = $_REQUEST['tpdid'];
+                $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($filtroalteracao);
+                include_once APPRAIZ.'alteracao/modulos/principal/lista_incio.inc';
+            die;
         }
     }
+    $filtroalteracao['tpdid'] = $_REQUEST['tpdid'] ? $_REQUEST['tpdid'] : 269;
+    $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($filtroalteracao);
     /**
      * Cabeçalho padrão do sistema.
      * @see cabecalho.inc
      */
     include APPRAIZ. "includes/cabecalho.inc";
 ?>
-<script src="js/principal/alteracao.js?v=0"></script>
+<script src="js/principal/alteracao.js?v=1"></script>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-8">
         <h2>Painel de Acompanhamento de Pedidos de Alteração</h2>
@@ -57,8 +63,8 @@
 
                 <div class="tabs-container tabs">
                     <ul class="nav nav-tabs prodTabs">
-                        <li class="active"><a data-toggle="tab" href="#tab-interno" tipo="Interno">Interno</a></li>
-                        <li class=""><a data-toggle="tab" href="#tab-externo" tipo="Externo">Externo</a></li>
+                        <li class="active"><a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-interno" tipo="269">Interno</a></li>
+                        <li class=""><a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-externo" tipo="270">Externo</a></li>
                     </ul>
                     <div class="ibox-title">
                         <h5>Pesquisa avançada por Pedidos de Altera&ccedil;&atilde;o</h5>
@@ -66,19 +72,18 @@
                     <div class="tab-content">
                         <div id="tab-interno" class="tab-pane active">
                             <?php
-                            $tpdid = WF_TPDID_INTERNO;
-                            include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");?>
+                                $tpdid = WF_TPDID_INTERNO;
+                                include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");
+                            ?>
                         </div>
                         <div id="tab-externo" class="tab-pane">
                             <?php
-                            $tpdid = WF_TPDID_EXTERNO;
-                            include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");?>
+                                $tpdid = WF_TPDID_EXTERNO;
+                                include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");
+                            ?>
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>
@@ -89,45 +94,8 @@
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-                    <div class="table-responsive">
-                        
-                        <table class="table table-striped table-bordered table-hover dataTables" >
-                            <thead>
-                                <tr class="text-center">
-                                    <th width="4%">Ações</th>
-                                    <th>Nº do Pedido</th>
-                                    <th>Tipo de Cr&eacute;dito</th>
-                                    <th>Janela</th>
-                                    <th>Situa&ccedil;&atilde;o</th>
-                                    <th>Unidade</th>
-                                    <th>Cancelado</th>
-                                    <th>Suplementado</th>
-                                    <th width="20%">T&iacute;tulo</th>
-                                    <th>Cadastrado em</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                            foreach($aAlteracao as $dados): ?>
-                                <tr>
-                                    <td class="text-center" nowrap="nowrap">
-                                        <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>&tpdid=<?=$tpdid;?>" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
-                                        <a href="?modulo=inicio&acao=C&pedid=<?=$dados['pedid'];?>&requisicao=excluir_pedido" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
-                                    </td>
-                                    <td><?= $dados['pedid']; ?></td>
-                                    <td><?= $dados['tpacod']; ?></td>
-                                    <td><?= $dados['jannome']; ?></td>
-                                    <td><?= $dados['esddsc']; ?></td>
-                                    <td><?= $dados['suoid'].' - '.$dados['suonome']; ?></td>
-                                    <td><?= $dados['cnc']; ?></td>
-                                    <td><?= $dados['soap']; ?></td>
-                                    <td><?= $dados['pedtitulo']; ?></td>
-                                    <td><?= $dados['cad']; ?></td>
-                                </tr>
-                            <?php endforeach ?>
-                            </tbody>
-                        </table>
-
+                    <div class="" id="div-principal">
+                        <?php include_once APPRAIZ.'alteracao/modulos/principal/lista_incio.inc'; ?>
                     </div>
                 </div>
             </div>

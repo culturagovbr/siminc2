@@ -74,7 +74,8 @@ class Alteracao_Model_Pedido extends Modelo
      * @param $filtroprop
      * @return array|string
      */
-    public function recuperarListagem($filtroprop){
+    public function recuperarListagem($filtroprop)
+    {
         $sql = "SELECT
                     ped.pedid,
                     ped.pedtitulo,
@@ -93,7 +94,7 @@ class Alteracao_Model_Pedido extends Modelo
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 WHERE
                     ped.pedstatus = 'A'
-        ";
+                    AND doc.tpdid = ".$filtroprop['tpdid'];
 
         if ($filtroprop['pedid']){
             $sql .= " and ped.pedid = ".$filtroprop['pedid'];
