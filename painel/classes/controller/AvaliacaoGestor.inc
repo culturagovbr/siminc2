@@ -10,6 +10,8 @@ class Painel_Controller_AvaliacaoGestor
             $mAvaliacaoGestor = new Painel_Model_AvaliacaoGestor($dados['agid']);
             $mAvaliacaoGestor->popularDadosObjeto($dados);
             $mAvaliacaoGestor->nucpf = $_SESSION['usucpf'];
+            $mAvaliacaoGestor->indobsgestor = utf8_decode($dados['indobsgestor']);
+            $mAvaliacaoGestor->indobsgestorindicador = utf8_decode($dados['indobsgestorindicador']);
             $mAvaliacaoGestor->salvar(null, null, ['indavalgestor', 'indobsgestor', 'indobsgestorindicador']);
             $mAvaliacaoGestor->commit();
             return true;
