@@ -121,7 +121,7 @@ $db->cria_aba(57105,$url,'');
         <tr>
             <td align="center" colspan="2">
                 <?php
-                if ($secid_confirma || in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis)){
+                if ($secid_confirma || (in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis) || in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis))){
                     echo '<input type="button" class="botao" name="btassociar" value="Gravar" onclick="submeter(\'gravar\');">';
                 }
                 ?>
