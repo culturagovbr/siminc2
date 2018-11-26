@@ -53,30 +53,10 @@
             </td>
             <td style="vertical-align: middle;">
                 <?php
-//                    ver($dados['custeio'], $dados['capital'], $dados['empenhado']);
-                    $empenhado = $dados['empenhado']-$dados['custeio']+$dados['capital'];
+                    $empenhado = $dados['custeio']+$dados['capital']-$dados['empenhado'];
                     $empenhado = number_format($empenhado,2,',','.');
                     echo "R$ ".$empenhado;
                 ?>
-<!--                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
-                    <tr>
-                        <td style="border: none;">
-                            R$ <?= number_format($dados['custeio'],2,',','.'); ?>
-                            <input type="text" size="10" class="input_valor" tipo="custeio" name="vlsaldoempenhocusteio" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenharcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsaldoempenhocusteio'];?>">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: none; border-top: 1px solid #e7eaec;">
-                            R$ <?= number_format($dados['custeio'],2,',','.'); ?>
-                            <input type="text" size="10" class="input_valor" name="vlsaldoempenhocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenhocapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsaldoempenhocapital'];?>">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: none; border-top: 1px solid #e7eaec;">
-                            -
-                        </td>
-                    </tr>
-                </table>-->
             </td>
             
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
