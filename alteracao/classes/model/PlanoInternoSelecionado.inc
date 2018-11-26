@@ -71,5 +71,7 @@ class Alteracao_Model_PlanoInternoSelecionado extends Modelo
         'vlsuplementarsuperavitcapital' => null,
         'vldotacaocusteio' => null,
         'vldotacaocapital' => null,
+        'plisuplementarquantidade' => null,
+        'plicancelarquantidade' => null,
     );
 }

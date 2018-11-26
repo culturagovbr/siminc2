@@ -24,7 +24,11 @@
             </td>
             <td ><?= $dados['funcional']; ?></td>
             <td ><?= $dados['pliid']; ?></td>
-            <td ><?= $dados['plititulo']; ?></td>
+            <td >
+                <?= $dados['plititulo']; ?><br>
+                <b>Unidade:</b> <?= $dados['unonome']; ?><br>
+                <b>Produto:</b> <?= $dados['pprnome']; ?>
+            </td>
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
@@ -39,6 +43,12 @@
                             Capital: R$ <?= number_format($dados['capital'],2,',','.'); ?>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <input type="hidden" id="picquantidade<?=$dados['pliselid'];?>" value="<?= number_format($dados['picquantidade'],2,',','.'); ?>">
+                            Físico: <?= number_format($dados['picquantidade'],0,',','.'); ?>
+                        </td>
+                    </tr>
                 </table>
             </td>
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
@@ -51,6 +61,11 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <input type="text" size="10" class="input_valor" name="vlsaldoempenhocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenhocapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsaldoempenhocapital'];?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            -
                         </td>
                     </tr>
                 </table>
@@ -68,6 +83,11 @@
                             <input type="text" size="10" class="input_valor" name="vlsuplementarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcapital'];?>">
                         </td>
                     </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <input type="text" size="10" class="input_valor" name="plisuplementarquantidade" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="plisuplementarquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plisuplementarquantidade'];?>">
+                        </td>
+                    </tr>
                 </table>
             </td>
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
@@ -82,6 +102,11 @@
                             <input type="text" size="10" class="input_valor" name="vlcancelarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarcapital'];?>">
                         </td>
                     </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <input type="text" size="10" class="input_valor" name="plicancelarquantidade" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="plicancelarquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plicancelarquantidade'];?>">
+                        </td>
+                    </tr>                    
                 </table>
             </td>
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
@@ -94,6 +119,11 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <input type="text" size="10" class="input_valor" name="vlsuplementarexcessocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessocapital'];?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            -
                         </td>
                     </tr>
                 </table>
@@ -110,6 +140,11 @@
                             <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcusteio" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcapital'];?>">
                         </td>
                     </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            -
+                        </td>
+                    </tr>
                 </table>
             </td>
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
@@ -122,6 +157,18 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <input type="text" size="10" class="input_valor" name="vldotacaocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocapital<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocapital'];?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <?php
+                        if ($dados['vlrprovavel']<0){
+                            $color='red';
+                        }else{
+                            $color='';
+                        }
+                        ?>
+                        <td style="color: <?=$color;?>; border: none; border-top: 1px solid #e7eaec;" id="fisico<?=$dados['pliselid'];?>">
+                            <?=$dados['vlrprovavel'];?>
                         </td>
                     </tr>
                 </table>
@@ -158,27 +205,59 @@
     
     function salvarCampo(nomeCampo, pliselid, valor, tipo){
         if (valor!=''){
-            var vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
-            var vlrPi = $("#pi"+tipo+pliselid).val();
-            vlrPi = vlrPi ? str_replace(['.', ','], ['', '.'], vlrPi) : 0;
-            if (parseFloat(vlrCampo)>parseFloat(vlrPi) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital')){
-                swal('', 'Valor cancelado maior que o valor do PI!', 'warning');
-                $("#"+nomeCampo+pliselid).val('');
-                return;
-            }
-            $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
-            {
-                pliselid: pliselid,
-                campo: nomeCampo,
-                valor: vlrCampo
-            },
-                function(retorno){
-                    if (retorno){
-                        var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-                        $('#listaPisSelecionados').load(url);
-                    }
+            var vlrCampo=0;
+            var vlrcancelado=0;
+            var vlrsuplementar=0;
+            $('.input_valor').each(function(){
+                if ($(this).attr('name')=='vlsuplementarcusteio' || $(this).attr('name')=='vlsuplementarcapital'){
+                    vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
+                    vlrsuplementar = parseFloat(vlrsuplementar)+parseFloat(vlrCampo);
+                }else if ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital'){
+                    vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
+                    vlrcancelado = parseFloat(vlrcancelado)+parseFloat(vlrCampo);
                 }
-            );         
+            });
+            vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
+            if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
+                swal({
+                    title: "",
+                    text: "Valor cancelado divergente do suplementado!",
+                    type: "warning",
+                    confirmButtonText: 'Ok',
+                    closeOnConfirm: true
+                },
+                function(isConfirm){
+                    if(isConfirm){
+                        $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+                        {
+                            pliselid: pliselid,
+                            campo: nomeCampo,
+                            valor: vlrCampo
+                        },
+                            function(retorno){
+                                if (retorno){
+                                    var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                                    $('#listaPisSelecionados').load(url);
+                                }
+                            }
+                        );
+                    }
+               });                
+            }else{
+                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+                {
+                    pliselid: pliselid,
+                    campo: nomeCampo,
+                    valor: vlrCampo
+                },
+                    function(retorno){
+                        if (retorno){
+                            var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                            $('#listaPisSelecionados').load(url);
+                        }
+                    }
+                );                
+            }
         }
     }
 </script>

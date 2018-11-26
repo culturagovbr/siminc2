@@ -176,14 +176,26 @@ class Alteracao_Model_Pedido extends Modelo
                        pis.vlsuplementarsuperavitcapital,
                        pis.vldotacaocusteio,
                        pis.vldotacaocapital,
+                       coalesce(pis.plisuplementarquantidade,0) as plisuplementarquantidade,
+                       coalesce(pis.plicancelarquantidade,0) as plicancelarquantidade,
+                       coalesce(pis.plisuplementarquantidade,0)-coalesce(pis.plicancelarquantidade,0) as vlrprovavel,
+                       pp.pprnome,
+                       suo.unonome,
+                       pc.picquantidade,
                        COALESCE(pli.plititulo, 'N/A') AS plititulo,
                        TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
                   from alteracao.plano_interno_selecionado pis
                  inner join monitora.pi_planointerno pli on pis.pliid = pli.pliid 
                  inner JOIN planacomorc.pi_complemento pc on pis.pliid = pc.pliid 
+                 inner join monitora.pi_produto pp on pc.pprid = pp.pprid
                   LEFT JOIN monitora.pi_planointernoptres ppt on pis.pliid = ppt.pliid
                   LEFT JOIN monitora.ptres ptr ON( ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
                   LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
+                 inner join public.vw_subunidadeorcamentaria suo ON(
+                    suo.suocod = pli.ungcod 
+                    AND suo.unocod = pli.unicod 
+                    AND suo.prsano = pli.pliano
+                )                  
                  where pis.pedid = $pedid
                  order by pis.pliselid";
         return $this->carregar($sql);
