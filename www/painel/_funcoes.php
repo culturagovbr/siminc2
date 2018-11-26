@@ -20,6 +20,7 @@ function cabecalhoIndicador($indid){
 						i.indnome,
 						i.indobjetivo,
 						s.sehid,
+						i.indprod,
 						um.umedesc,
 						sec.secdsc,
 						e.exodsc,
@@ -92,10 +93,10 @@ function cabecalhoIndicador($indid){
 	</tr>	
 	<tr >
 		<td valign="top" class="SubTituloDireita">
-			Unidade Meta:
+			Produto:
 		</td>
 		<td>
-			<?=$dados['umedesc'];?>
+			<?= $dados['indprod'] ? $dados['indprod'] : '-' ;?>
 		</td>
 	</tr>
 	<tr >
@@ -8960,7 +8961,7 @@ function montarSqlRelIndicadoresSecretaria(stdClass $dto){
 	    i.indid,
 	    s.secordem,
             i.indnome AS nome,
-            ume.umedesc AS produto,
+            i.indprod AS produto,
             indavalgestor AS parecer_gestor_a,
             indobsgestor AS observacao_gestor_i,
             (
