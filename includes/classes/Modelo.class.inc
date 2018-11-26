@@ -629,7 +629,7 @@ class Modelo extends cls_banco {
     /**
      * Monta filtros para pesquisas dinamicamente.
      * 
-     * @example Exemplos de utilização: array( 'suo.unocod' => UNIDADEORCAMENTARIA_SUOCOD_FNC, 'suo.unocod != '. UNIDADEORCAMENTARIA_SUOCOD_FNC, 'suo.unocod' => array(UNIDADEORCAMENTARIA_SUOCOD_FNC, 42101)
+     * @example Exemplos de utilização: array( 'suo.unocod' => UNICOD_FNC, 'suo.unocod != '. UNICOD_FNC, 'suo.unocod' => array(UNICOD_FNC, 42101)
      * 
      * @param array $aFiltro
      * @param boolean $where Informa se é necessário construir com a palavra reservada WHERE.

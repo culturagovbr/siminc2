@@ -157,21 +157,21 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                 coalesce(psu.ptrdotacaocusteio, 0) AS ptrdotacaocusteio,
                 funcional AS funcionalptres,
                 ptr.prgcod || '.' || ptr.acacod || '.' || ptr.plocod || '.' || ptr.unicod AS funcional,
-                suo.suonome,
                 suo.unosigla,
-                suo.suosigla
+                suo.unonome,
+                suo.suosigla,
+                suo.suonome
             FROM spo.ptressubunidade AS psu
                 JOIN monitora.vw_ptres AS ptr ON ptr.ptrid = psu.ptrid
                 JOIN public.vw_subunidadeorcamentaria AS suo ON suo.suoid = psu.suoid
             WHERE
                 ptr.ptrano = '". (int)$exercicio. "'
-                AND suo.unofundo = 'f'
                 AND ptr.irpcod != '6'
             ORDER BY
                 ptr.unicod,
                 funcional
         ";
-        //ver($sql, d);
+
         $dados = $this->carregar($sql);
         return $dados ? $dados : [];        
     }
@@ -434,7 +434,7 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                         WHERE
                             pli.pliano = '$exercicio'
                             AND suo.unofundo IS FALSE
-                            AND ptr.irpcod != '6'
+                            AND ptr.irpcod <> '6'
                             AND(pli.plicod IS NOT NULL AND pli.plicod != '')
                     ) pi_correto ON(pi_siop.plicod = pi_siminc2.plicod AND pi_siop.ptres = pi_correto.ptres)
                 WHERE
@@ -446,6 +446,7 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                     )
                     -- Filtrar os PIs do SIOP que tem código de pi e ptres diferente do código do pi e ptres do SIMINC2
                     AND pi_siop.ptres != pi_siminc2.ptres
+                    AND ptr_divergente.irpcod <> '6'
             ) consulta
             ORDER BY
                 funcional
