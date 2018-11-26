@@ -73,7 +73,7 @@ define("FNDE", 26298);
 define("EBSERH", 26443);
 define("FIES", 74902);
 define("SUPERVISAOMEC", 73107);
-define("UNIDADEORCAMENTARIA_SUOCOD_FNC", 42902);
+define("UNICOD_FNC", 42902);
 
 // -- E-mail de recebimento de notificações sobre
 define('EMAIL_NOTIFICACAO_SUBACAO', $_SESSION['email_sistema']);

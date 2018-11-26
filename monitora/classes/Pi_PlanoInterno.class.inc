@@ -311,7 +311,7 @@ class Pi_PlanoInterno extends Modelo
     
     /**
      * Busca lista de PI.
-     * @example array( 'suo.unocod' => UNIDADEORCAMENTARIA_SUOCOD_FNC, 'suo.unocod != '. UNIDADEORCAMENTARIA_SUOCOD_FNC, 'suo.unocod' => array(UNIDADEORCAMENTARIA_SUOCOD_FNC, 42101)
+     * @example array( 'suo.unocod' => UNICOD_FNC, 'suo.unocod != '. UNICOD_FNC, 'suo.unocod' => array(UNICOD_FNC, 42101)
      *
      * @param integer $exercicio
      * @param array $aFiltro

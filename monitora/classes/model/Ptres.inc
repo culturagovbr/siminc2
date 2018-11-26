@@ -278,7 +278,6 @@ class Monitora_Model_Ptres extends Modelo
             ORDER BY
                 descricao
         ";
-//ver($sql, d);
         return $sql;
     }
 
@@ -374,7 +373,7 @@ class Monitora_Model_Ptres extends Modelo
                 produto_po,
                 produto_acao
         ";
-//ver($sql,d);
+
         return $db->pegaLinha($sql);
     }
 
@@ -496,7 +495,7 @@ class Monitora_Model_Ptres extends Modelo
                 aca.codigoorgao,
                 plo.planoorcamentario
         ";
-//ver($sql);
+
         return $this->carregar($sql);
     }
 

@@ -36,7 +36,6 @@ switch ($_REQUEST['req']) {
         $mPtres->popularDadosObjeto($_REQUEST);
         $mPtres->salvar(null, null, ['ptrdotacaocusteio', 'ptrdotacaocapital']);
         $mPtres->commit();
-//        ver($mPtres, d);
         die;
 }
 
@@ -50,9 +49,6 @@ if($listaSubUnidadeUsuario){
 }
 $aPropostas = $oPlanoInterno->recuperarExecucaoOrcamentaria($filtros);
 $aFnc = $oPlanoInterno->recuperarExecucaoOrcamentariaFnc();
-
-//var_dump($aPropostas);
-//die('painel');
 
 /**
  * Cabeçalho padrão do sistema.
@@ -306,9 +302,9 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
             $("#"+tipo+unoid).html(number_format(vlrSoma.toFixed(0), 0, ',', '.'));
             $("#totalDetalhe"+ptrid).html(number_format(totalGeral.toFixed(2), 2, ',', '.'));
             $("#total"+unoid).html(number_format(vlrSomaTotal.toFixed(0), 0, ',', '.'));
-//            $.ajax({
-//                url: 'planacomorc.php?modulo=apoio/unidadegestora-limite&acao=A&req=salvar-dotacao-fnc&ptrid=' + ptrid + '&' + campo + '=' + valor
-//            });
+            $.ajax({
+                url: 'planacomorc.php?modulo=apoio/unidadegestora-limite&acao=A&req=salvar-dotacao-fnc&ptrid=' + ptrid + '&' + campo + '=' + valor
+            });
         });
 
         $('.salvar-dotacao').change(function(){

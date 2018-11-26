@@ -149,6 +149,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
                             <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][3], 0, ',', '.') . "</td>
                         </tr>
                     ";
+
                     $this->sqls[] = "UPDATE spo.ptressubunidade psu SET ptrdotacaocusteio = {$listaFuncionaisSiop[$codigoFuncional][3]} WHERE psuid = {$funcionalSubunidadeSiminc[0]['psuid']}";
                     $this->boAlteracao = true;
                 }
@@ -170,40 +171,88 @@ class Planacomorc_Controller_ImportaDadosSiop{
                     $this->boAlteracao = true;
                 }
             } elseif(count($funcionalSubunidadeSiminc) > 1){
-                $total[3] = $total[4] = 0;
-                $unidades[3] = $unidades[4] = NULL;
-                foreach($funcionalSubunidadeSiminc as $subunidade){
-                    $total[3] += $subunidade['ptrdotacaocusteio'];
-                    $total[4] += $subunidade['ptrdotacaocapital'];
-
-                    $unidades[3][] .= "{$subunidade['unosigla']} - {$subunidade['suosigla']} (R$ " . number_format($subunidade['ptrdotacaocusteio'], 0, ',', '.') . ")";
-                    $unidades[4][] .= "{$subunidade['unosigla']} - {$subunidade['suosigla']} (R$ " . number_format($subunidade['ptrdotacaocapital'], 0, ',', '.') . ")";
-                }
-
-                if(isset($listaFuncionaisSiop[$codigoFuncional][3]) && $total[3] != $listaFuncionaisSiop[$codigoFuncional][3]){
-                    $this->htmlTabela2 .= "
-                            <tr>
-                                <td class='mid'>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
-                                <td>" . implode('<hr />', $unidades[3]) . "</td>
-                                <td class='mid'>3 - CUSTEIO</td>
-                                <td class='mid' style='text-align: right; color: red;'>" . number_format($total[3], 0, ',', '.') . "</td>
-                                <td class='mid' style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][3], 0, ',', '.') . "</td>
-                            </tr>
-                        ";
-                    $this->boAlteracaoCompartilhada = true;
-                }
-
-                if(isset($listaFuncionaisSiop[$codigoFuncional][4]) && $total[4] != $listaFuncionaisSiop[$codigoFuncional][4]){
-                    $this->htmlTabela2 .= "
+                # Busca o código da UO(unicod) no número da funcional
+                $unicod = substr($codigoFuncional, 15, 22);
+                # Verifica se a UO é o Fundo Nacional de Cultura-FNC
+                if($unicod == UNICOD_FNC){
+                    # Alteração do valor de Custeio
+                    if(isset($listaFuncionaisSiop[$codigoFuncional][3]) && $funcionalSubunidadeSiminc[0]['ptrdotacaocusteio'] != $listaFuncionaisSiop[$codigoFuncional][3]){
+                        $this->htmlTabela1 .= "
                             <tr>
                                 <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
-                                <td>" . implode('<hr />', $unidades[4]) . "</td>
+                                <td>{$funcionalSubunidadeSiminc[0]['unosigla']} - {$funcionalSubunidadeSiminc[0]['unonome']}</td>
+                                <td>3 - CUSTEIO</td>
+                                <td style='text-align: right; color: red;'>" . number_format($funcionalSubunidadeSiminc[0]['ptrdotacaocusteio'], 0, ',', '.') . "</td>
+                                <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][3], 0, ',', '.') . "</td>
+                            </tr>
+                        ";
+
+                        # Atualiza a dotação de todas as Subunidades do FNC
+                        foreach($funcionalSubunidadeSiminc as $subunidade){
+                            $this->sqls[] = "UPDATE spo.ptressubunidade psu SET ptrdotacaocusteio = {$listaFuncionaisSiop[$codigoFuncional][3]} WHERE psuid = {$subunidade['psuid']}";
+                        }
+                        # Atualiza a dotação de Custeio da Funcional do FNC
+                        $this->sqls[] = "UPDATE monitora.ptres SET ptrdotacaocusteio = {$listaFuncionaisSiop[$codigoFuncional][3]} WHERE ptrid = {$funcionalSubunidadeSiminc[0]['ptrid']}";
+                        $this->boAlteracao = true;
+                    }
+
+                    # Alteração do valor de Capital
+                    if(isset($listaFuncionaisSiop[$codigoFuncional][4]) && $funcionalSubunidadeSiminc[0]['ptrdotacaocapital'] != $listaFuncionaisSiop[$codigoFuncional][4]){
+
+                        $this->htmlTabela1 .= "
+                            <tr>
+                                <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
+                                <td>{$funcionalSubunidadeSiminc[0]['unosigla']} - {$funcionalSubunidadeSiminc[0]['unonome']}</td>
                                 <td>4 - CAPITAL</td>
-                                <td style='text-align: right; color: red;'>" . number_format($total[4], 0, ',', '.') . "</td>
+                                <td style='text-align: right; color: red;'>" . number_format($funcionalSubunidadeSiminc[0]['ptrdotacaocapital'], 0, ',', '.') . "</td>
                                 <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][4], 0, ',', '.') . "</td>
                             </tr>
                         ";
-                    $this->boAlteracaoCompartilhada = true;
+
+                        # Atualiza a dotação de todas as Subunidades do FNC
+                        foreach($funcionalSubunidadeSiminc as $subunidade){
+                            $this->sqls[] = "UPDATE spo.ptressubunidade psu SET ptrdotacaocapital = {$listaFuncionaisSiop[$codigoFuncional][4]} WHERE psuid = {$subunidade['psuid']}";
+                        }
+                        # Atualiza a dotação de Capital da Funcional do FNC
+                        $this->sqls[] = "UPDATE monitora.ptres SET ptrdotacaocapital = {$listaFuncionaisSiop[$codigoFuncional][4]} WHERE ptrid = {$funcionalSubunidadeSiminc[0]['ptrid']}";
+                        $this->boAlteracao = true;
+                    }
+                } else {
+                    $total[3] = $total[4] = 0;
+                    $unidades[3] = $unidades[4] = NULL;
+                    foreach($funcionalSubunidadeSiminc as $subunidade){
+                        $total[3] += $subunidade['ptrdotacaocusteio'];
+                        $total[4] += $subunidade['ptrdotacaocapital'];
+
+                        $unidades[3][] .= "{$subunidade['unosigla']} - {$subunidade['suosigla']} (R$ " . number_format($subunidade['ptrdotacaocusteio'], 0, ',', '.') . ")";
+                        $unidades[4][] .= "{$subunidade['unosigla']} - {$subunidade['suosigla']} (R$ " . number_format($subunidade['ptrdotacaocapital'], 0, ',', '.') . ")";
+                    }
+
+                    if(isset($listaFuncionaisSiop[$codigoFuncional][3]) && $total[3] != $listaFuncionaisSiop[$codigoFuncional][3]){
+                        $this->htmlTabela2 .= "
+                                <tr>
+                                    <td class='mid'>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
+                                    <td>" . implode('<hr />', $unidades[3]) . "</td>
+                                    <td class='mid'>3 - CUSTEIO</td>
+                                    <td class='mid' style='text-align: right; color: red;'>" . number_format($total[3], 0, ',', '.') . "</td>
+                                    <td class='mid' style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][3], 0, ',', '.') . "</td>
+                                </tr>
+                            ";
+                        $this->boAlteracaoCompartilhada = true;
+                    }
+
+                    if(isset($listaFuncionaisSiop[$codigoFuncional][4]) && $total[4] != $listaFuncionaisSiop[$codigoFuncional][4]){
+                        $this->htmlTabela2 .= "
+                                <tr>
+                                    <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
+                                    <td>" . implode('<hr />', $unidades[4]) . "</td>
+                                    <td>4 - CAPITAL</td>
+                                    <td style='text-align: right; color: red;'>" . number_format($total[4], 0, ',', '.') . "</td>
+                                    <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][4], 0, ',', '.') . "</td>
+                                </tr>
+                            ";
+                        $this->boAlteracaoCompartilhada = true;
+                    }
                 }
             }
         }
@@ -297,7 +346,6 @@ class Planacomorc_Controller_ImportaDadosSiop{
             $this->corpoEmailV3 = "<h2 style='color: red; text-align: center'>Relatório de Alterações e Divergências</h2>" . $this->corpoEmailV3;
             if(count($this->sqls)){
                 $this->sqls = implode('; ', $this->sqls);
-
                 $mImportaDadosSiop->executar($this->sqls);
                 $mImportaDadosSiop->commit();
             }
