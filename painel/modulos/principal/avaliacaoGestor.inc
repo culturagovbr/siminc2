@@ -53,10 +53,14 @@ switch ($requisicao) {
     default:
         break;
 }
+$nuanoreferencia = $_REQUEST['nuanoreferencia']?$_REQUEST['nuanoreferencia']:date("Y");
+$numesreferencia = $_REQUEST['numesreferencia']?$_REQUEST['numesreferencia']:date("m");    
 if($_REQUEST['agid']){
     $dados = $mAvaliacaoGestor->RetornaRegistro($_REQUEST['agid']);
     $indobsgestor = $dados['indobsgestor'];
     $indavalgestor = $dados['indavalgestor'];
+    $nuanoreferencia = $dados['nuanoreferencia'];
+    $numesreferencia = $dados['numesreferencia'];
 }
 // monta cabeçalho 
 print '<br/>';
@@ -94,10 +98,9 @@ $db->cria_aba(57105,$url,'');
                     $listaAnos[$j]['descricao']=$i;
                     $j++;
                 }
-                $nroAnoReferencia = $_REQUEST['nuanoreferencia']?$_REQUEST['nuanoreferencia']:date("Y");
                 echo "<td class='SubTituloDireita' style='width:150px;'>Ano Referência:</td>";
                 echo "<td>";
-                   $db->monta_combo('nuanoreferencia', $listaAnos, 'S', 'Selecione', '', '', '', '200', 'S', 'nuanoreferencia','',$nroAnoReferencia);
+                   $db->monta_combo('nuanoreferencia', $listaAnos, 'S', 'Selecione', '', '', '', '200', 'S', 'nuanoreferencia','',$nuanoreferencia);
                 echo "</td>";
             ?>
         </tr>
@@ -117,10 +120,9 @@ $db->cria_aba(57105,$url,'');
                                     array('codigo' => 11, 'descricao'=>'Novembro'),
                                     array('codigo' => 12, 'descricao'=>'Dezembro')
                                    );
-                $nroMesReferencia = $_REQUEST['numesreferencia']?$_REQUEST['numesreferencia']:date("m");
                 echo "<td class='SubTituloDireita' style='width:150px;'>Mês Referência:</td>";
                 echo "<td>";
-                   $db->monta_combo('numesreferencia', $listaMeses, 'S', 'Selecione', '', '', '', '200', 'S', 'numesreferencia','',$nroMesReferencia);
+                   $db->monta_combo('numesreferencia', $listaMeses, 'S', 'Selecione', '', '', '', '200', 'S', 'numesreferencia','',$numesreferencia);
                 echo "</td>";
             ?>
         </tr>
