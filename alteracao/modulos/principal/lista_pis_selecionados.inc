@@ -6,7 +6,7 @@
             <th>Id Planejamento</th>
             <th>Título</th>
             <th width="11%">Tipo</th>
-            <th>Saldo a Empenhar</th>
+            <th width="11%">Saldo a Empenhar</th>
             <th>Suplementar</th>
             <th>Cancelar</th>
             <th>Suplementar por Excesso</th>
@@ -51,15 +51,23 @@
                     </tr>
                 </table>
             </td>
-            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
-                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
+            <td style="vertical-align: middle;">
+                <?php
+//                    ver($dados['custeio'], $dados['capital'], $dados['empenhado']);
+                    $empenhado = $dados['empenhado']-$dados['custeio']+$dados['capital'];
+                    $empenhado = number_format($empenhado,2,',','.');
+                    echo "R$ ".$empenhado;
+                ?>
+<!--                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
+                            R$ <?= number_format($dados['custeio'],2,',','.'); ?>
                             <input type="text" size="10" class="input_valor" tipo="custeio" name="vlsaldoempenhocusteio" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenharcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsaldoempenhocusteio'];?>">
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
+                            R$ <?= number_format($dados['custeio'],2,',','.'); ?>
                             <input type="text" size="10" class="input_valor" name="vlsaldoempenhocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsaldoempenhocapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsaldoempenhocapital'];?>">
                         </td>
                     </tr>
@@ -68,7 +76,7 @@
                             -
                         </td>
                     </tr>
-                </table>
+                </table>-->
             </td>
             
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
@@ -104,7 +112,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="plicancelarquantidade" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="plicancelarquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plicancelarquantidade'];?>">
+                            <input type="text" size="10" class="input_valor" name="plicancelarquantidade" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="plicancelarquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plicancelarquantidade'];?>">
                         </td>
                     </tr>                    
                 </table>
@@ -123,7 +131,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            -
+                            <input type="text" size="10" class="input_valor" name="plisuplementarexcessoquantidade" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="plisuplementarexcessoquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plisuplementarexcessoquantidade'];?>">
                         </td>
                     </tr>
                 </table>
@@ -142,7 +150,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            -
+                            <input type="text" size="10" class="input_valor" name="plisuplementarsuperavitquantidade" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="plisuplementarsuperavitquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plisuplementarsuperavitquantidade'];?>">
                         </td>
                     </tr>
                 </table>

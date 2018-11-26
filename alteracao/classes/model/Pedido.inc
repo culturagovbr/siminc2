@@ -162,8 +162,8 @@ class Alteracao_Model_Pedido extends Modelo
         $sql = "select pis.pliselid,
                        pis.pedid,
                        pis.pliid,
-                       pc.picvalorcusteio AS custeio,
-                       pc.picvalorcapital AS capital,
+                       coalesce(pc.picvalorcusteio,0.00) AS custeio,
+                       coalesce(pc.picvalorcapital,0.00) AS capital,
                        pis.vlsaldoempenhocusteio,
                        pis.vlsaldoempenhocapital,
                        pis.vlsuplementarcusteio,
@@ -178,7 +178,13 @@ class Alteracao_Model_Pedido extends Modelo
                        pis.vldotacaocapital,
                        coalesce(pis.plisuplementarquantidade,0) as plisuplementarquantidade,
                        coalesce(pis.plicancelarquantidade,0) as plicancelarquantidade,
-                       coalesce(pis.plisuplementarquantidade,0)-coalesce(pis.plicancelarquantidade,0) as vlrprovavel,
+                       coalesce(pis.plisuplementarexcessoquantidade,0) as plisuplementarexcessoquantidade,
+                       coalesce(pis.plisuplementarsuperavitquantidade,0) as plisuplementarsuperavitquantidade,
+                       coalesce(pis.plisuplementarsuperavitquantidade,0)+coalesce(pis.plisuplementarexcessoquantidade,0)+coalesce(pis.plisuplementarquantidade,0)-coalesce(pis.plicancelarquantidade,0) as vlrprovavel,
+                       coalesce((SELECT sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhado
+		                   FROM spo.siopexecucao se
+		                  where se.plicod = pli.plicod
+		                    and se.exercicio = pli.pliano),0.00) as empenhado,
                        pp.pprnome,
                        suo.unonome,
                        pc.picquantidade,
