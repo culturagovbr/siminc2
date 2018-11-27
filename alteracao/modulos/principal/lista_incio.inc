@@ -34,34 +34,3 @@
     <?php endforeach ?>
     </tbody>
 </table>
-<?php if($_REQUEST['tpdid']):  ?>
-<script>
-    $(document).ready(function(){
-        $("#table-principal").dataTable({
-            bPaginate: false,
-            responsive: true,
-            paging: true,
-            pageLength: 25,
-            "language": {
-                "url": "/zimec/public/temas/simec/js/plugins/dataTables/Portuguese-Brasil.json"
-            }
-        });
-    });
-</script>
-<style>
-    div.dataTables_paginate ul.pagination {
-        margin: 2px 0;
-        white-space: nowrap;
-    }
-    .dataTables_wrapper .datatables-footer .dataTables_paginate .pagination {
-        display: block;
-        margin: 0;
-    }
-    .pagination {
-        display: -webkit-inline-box;
-    }
-    .wizard > .content > .body ul {
-        list-style: none !important;
-    }
-</style>
-<?php endif; ?>

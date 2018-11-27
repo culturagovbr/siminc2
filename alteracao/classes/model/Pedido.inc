@@ -118,6 +118,7 @@ class Alteracao_Model_Pedido extends Modelo
                 $sql .= " and ped.suoid in ".$filtroprop['suoid'];
             }
         }
+//        ver($sql, $filtroprop,d);
         return $this->carregar($sql);
     }
     
@@ -146,7 +147,10 @@ class Alteracao_Model_Pedido extends Modelo
                     tpa.tpadsc,
                     esd.esddsc,
                     jan.jannome,
-                    suo.suonome
+                    suo.suonome,
+                    case when tpa.tpafluxo='I' then 269 
+                         when tpa.tpafluxo='E' then 270
+                    end as tpdid
                 FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid

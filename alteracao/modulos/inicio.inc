@@ -26,16 +26,9 @@
                 $cPedido = new Alteracao_Controller_Pedido();
                 $cPedido->excluir($_REQUEST['pedid']);
             die;
-            case 'lista-pedidos':
-                ob_clean();
-                ob_flush();
-                $filtroalteracao['tpdid'] = $_REQUEST['tpdid'];
-                $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($filtroalteracao);
-                include_once APPRAIZ.'alteracao/modulos/principal/lista_incio.inc';
-            die;
         }
     }
-    $filtroalteracao['tpdid'] = $_REQUEST['tpdid'] ? $_REQUEST['tpdid'] : 269;
+    $filtroalteracao['tpdid'] = $_REQUEST['tpdid'] ? $_REQUEST['tpdid'] : WF_TPDID_INTERNO;
     $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($filtroalteracao);
     /**
      * Cabeçalho padrão do sistema.
@@ -63,23 +56,37 @@
 
                 <div class="tabs-container tabs">
                     <ul class="nav nav-tabs prodTabs">
-                        <li class="active"><a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-interno" tipo="269">Interno</a></li>
-                        <li class=""><a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-externo" tipo="270">Externo</a></li>
+                        <?php
+                            if ($_REQUEST['tpdid']==WF_TPDID_INTERNO || !$_REQUEST['tpdid']){
+                                $activeInterno = 'active';
+                                $activeExterno = '';
+                            }else{
+                                $activeInterno = '';
+                                $activeExterno = 'active';
+                            }
+                        ?>
+                        <li class="<?=$activeInterno?>"><a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-interno" tipo="269">Interno</a></li>
+                        <li class="<?=$activeExterno?>"><a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-externo" tipo="270">Externo</a></li>
                     </ul>
                     <div class="ibox-title">
                         <h5>Pesquisa avançada por Pedidos de Altera&ccedil;&atilde;o</h5>
                     </div>
                     <div class="tab-content">
-                        <div id="tab-interno" class="tab-pane active">
+                        <div id="tab-interno" class="tab-pane <?=$activeInterno?>">
                             <?php
-                                $tpdid = WF_TPDID_INTERNO;
-                                include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");
+                                if ($_REQUEST['tpdid']==WF_TPDID_INTERNO || !$_REQUEST['tpdid']){
+                                    $tpdid = WF_TPDID_INTERNO;
+                                    include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");
+                                }
                             ?>
                         </div>
-                        <div id="tab-externo" class="tab-pane">
-                            <?php
-                                $tpdid = WF_TPDID_EXTERNO;
-                                include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");
+                        
+                        <div id="tab-externo" class="tab-pane <?=$activeExterno?>">
+                            <?php 
+                                if ($_REQUEST['tpdid']==WF_TPDID_EXTERNO){
+                                    $tpdid = WF_TPDID_EXTERNO;
+                                    include(APPRAIZ . "alteracao/modulos/principal/filtro_pedido_credito.inc");
+                                }
                             ?>
                         </div>
                     </div>

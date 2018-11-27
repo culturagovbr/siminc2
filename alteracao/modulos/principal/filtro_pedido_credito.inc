@@ -1,6 +1,7 @@
 <div class="ibox-content">
     <form id="filtroalteracao" name="filtroalteracao" method="POST" role="form" class="form-horizontal">
         <input name="requisicao" id="requisicao" value="" type="hidden">
+        <input name="tpdid" id="tpdid" value="<?=$_REQUEST['tpdid']?>" type="hidden">
 
         <div class="row">
             <div class="col-lg-3">

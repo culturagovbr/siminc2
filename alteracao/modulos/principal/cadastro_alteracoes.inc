@@ -5,7 +5,7 @@ $mAlteracaoPedido = new Alteracao_Model_Pedido($_REQUEST['pedid']);
 if ($_REQUEST['pedid']){
     $arrPedidos= $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);
     if (!$mAlteracaoPedido->docid){
-        $mAlteracaoPedido->docid = $mAlteracaoPedido->pegarDocidPedido($_REQUEST['pedid'], $_REQUEST['tpdid']);
+        $mAlteracaoPedido->docid = $mAlteracaoPedido->pegarDocidPedido($arrPedidos['pedid'], $arrPedidos['tpdid']);
     }
 }
 if ($_REQUEST['req']){

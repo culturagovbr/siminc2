@@ -15,15 +15,8 @@ function initListaAlteracao() {
     });
 
     $('.tab-tipo').click(function () {
-
-        $.ajax({
-            type: 'POST',
-            url: '?modulo=inicio&acao=C&requisicao=lista-pedidos&tpdid='+ $(this).attr('tipo') +'&dados='+ $('#filtroalteracao').serialize(),
-            success: function(dados){
-                $('#div-principal').html(dados);
-            }
-        });
-
+        $("#tpdid").val($(this).attr('tipo'));
+        $('#filtroalteracao').submit();
     });
 
 }
