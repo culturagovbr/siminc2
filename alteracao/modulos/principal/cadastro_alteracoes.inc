@@ -17,6 +17,10 @@ if ($_REQUEST['req']){
             $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
             include_once APPRAIZ.'alteracao/modulos/principal/selecionar_pi.inc';
             die;   
+        case 'carrega_remanejamento_loa':
+            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
+            include_once APPRAIZ.'alteracao/modulos/principal/remanejamento_loa.inc';
+            die;   
         case 'carrega_lista_pis_selecionados':
             $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
             include_once APPRAIZ.'alteracao/modulos/principal/lista_pis_selecionados.inc';
@@ -163,6 +167,10 @@ $(function(){
                     break;
                 case 1:
                     $(".div_selecionar_pi").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_seleciona_pis&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
+                    $(".divDadosCredito").show('fast');
+                    break;
+                case 2:
+                    $(".div_remanejamento_loa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_remanejamento_loa&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
                     $(".divDadosCredito").show('fast');
                     break;
                 case 4:

@@ -167,6 +167,7 @@ class Alteracao_Model_Pedido extends Modelo
         $sql = "select pis.pliselid,
                        pis.pedid,
                        pis.pliid,
+                       pli.plicod,
                        coalesce(pc.picvalorcusteio,0.00) AS custeio,
                        coalesce(pc.picvalorcapital,0.00) AS capital,
                        pis.vlsaldoempenhocusteio,

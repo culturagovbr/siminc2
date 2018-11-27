@@ -9,6 +9,7 @@ class Alteracao_Controller_Pedido
             $mPedido->popularDadosObjeto($dados);
             $mPedido->pedano = $_SESSION['exercicio'];
             $mPedido->pedstatus = 'A';
+            $mPedido->pedtitulo = utf8_decode($dados['pedtitulo']);
             $mPedido->salvar(null, null, ['docid']);
             $mPedido->commit();
             echo json_encode(["result" => true, "pedid" => $mPedido->pedid]);
