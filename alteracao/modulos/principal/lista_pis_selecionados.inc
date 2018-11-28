@@ -57,6 +57,7 @@
                     $empenhado = number_format($empenhado,2,',','.');
                     echo "R$ ".$empenhado;
                 ?>
+                <input type="hidden" id="empenhado<?=$dados['pliselid'];?>" value="<?=$empenhado;?>">
             </td>
             
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
@@ -193,6 +194,24 @@
     
     function salvarCampo(nomeCampo, pliselid, valor, tipo){
         if (valor!=''){
+            var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
+            var vlrEmpenhado = $("#empenhado"+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#empenhado"+pliselid).val()) : 0;
+            if (parseFloat(vlrCancelado)>parseFloat(vlrEmpenhado)){
+                swal({
+                    title: "",
+                    text: "Valor cancelado maior que o do PI",
+                    type: "warning",
+                    confirmButtonText: 'Ok',
+                    closeOnConfirm: true
+                },
+                function(isConfirm){
+                    if(isConfirm){
+                        var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                        $('#listaPisSelecionados').load(url);
+                    }
+               });
+               return;
+            }
             var vlrCampo=0;
             var vlrcancelado=0;
             var vlrsuplementar=0;

@@ -30,6 +30,7 @@ if ($_REQUEST['req']){
             $filtropi['usucpf'] = $_SESSION['usucpf'];
             $filtropi['unofundo'] = 'FALSE';
             $filtropi['pedid'] = $_REQUEST['pedid']?$_REQUEST['pedid']:0;
+            $filtropi['esdid'] = array(ESD_PI_APROVADO);
 
             $mPlanointerno = new Spo_Model_Planointerno();
             $sql = $mPlanointerno->listar((object) $filtropi);
