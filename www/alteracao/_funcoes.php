@@ -219,3 +219,21 @@ function montarColunasFormatoMoedaRelatorioProposta()
     ];
     return $colunas;
 }
+
+/**
+ * Monta lista de options do cadastro de Remanejamento Loa.
+ *
+ * @param $name   => name do option
+ * @param $option => array de lista de valores
+ */
+function montaListaLoa($name, $option)
+{
+    $select = '<select name="{$name}" id="{$name}" rlid="" >';
+    $select .='<option selected disabled></option>';
+    foreach ($option as $options):
+        $select .='<option value=" '.$options['codigo'] .'">'. $options['descricao'].'</option>';
+    endforeach;
+    $select .='</select>';
+
+    echo $select;
+}

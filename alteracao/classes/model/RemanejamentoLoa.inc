@@ -89,33 +89,163 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     {
         $sql = "SELECT DISTINCT
                     ptr.ptrid AS codigo,
-                    TRIM(aca.prgcod) || '.' ||
-                    TRIM(aca.acacod) || '.' ||
-                    TRIM(aca.loccod) || '.' ||(
+                    TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (
                         CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN
                             '-'
                         ELSE
                             COALESCE(aca.acaobjetivocod, '-')
-                        END
-                    ) || '.' ||
-                    (
+                        END) || '.' || (
                         CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN
                             '-'
                         ELSE
                             COALESCE(ptr.plocod, '-')
-                        END
-                    ) AS descricao
-                FROM alteracao.remanejamento_loa pis
+                        END) AS descricao
+                FROM
+                    alteracao.plano_interno_selecionado pis
                     JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
                     LEFT JOIN monitora.pi_planointernoptres ppt ON pis.pliid = ppt.pliid
-                    LEFT JOIN monitora.ptres ptr ON(
-                        ppt.ptrid = ptr.ptrid
-                        AND pli.pliano = ptr.ptrano
-                    )
+                    LEFT JOIN monitora.ptres ptr ON (ppt.ptrid = ptr.ptrid
+                            AND pli.pliano = ptr.ptrano)
                     LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid
                 WHERE
                     pis.pedid = {$pedid}
          ";
+
+        return $this->carregar($sql);
+    }
+
+    /** Retorna combo de Categoria.
+     *
+     * @return array|string
+     * @since 28-11-2018
+     */
+    public function montaComboCategoria()
+    {
+        $sql = "SELECT
+                    ctecod as codigo,
+                    ctecod as descricao
+                FROM public.categoriaeconomica
+                WHERE
+                    ctestatus = 'A'
+                ORDER BY
+                    descricao
+                ";
+
+        return $this->carregar($sql);
+    }
+
+    /** Retorna combo de GND.
+     *
+     * @return array|string
+     * @since 28-11-2018
+     */
+    public function montaComboGND()
+    {
+        $sql = "SELECT
+                    gndcod as codigo,
+                    gndcod as descricao
+                FROM public.gnd
+                WHERE
+                    gndstatus = 'A'
+                ORDER BY
+                    descricao
+                ";
+
+        return $this->carregar($sql);
+    }
+
+    /** Retorna combo de GND.
+     *
+     * @return array|string
+     * @since 28-11-2018
+     */
+    public function montaComboModalidade()
+    {
+        $sql = "SELECT
+                    mapcod as codigo,
+                    mapcod as descricao
+                FROM public.modalidadeaplicacao
+                ORDER BY
+                    descricao
+                ";
+
+        return $this->carregar($sql);
+    }
+
+    /** Retorna combo de Fonte.
+     *
+     * @return array|string
+     * @since 28-11-2018
+     */
+    public function montaComboFonte()
+    {
+        $sql = "SELECT
+                    foncod as codigo,
+                    foncod as descricao
+                FROM public.fonterecurso
+                WHERE
+                    fonstatus = 'A'
+                ORDER BY
+                    descricao
+                ";
+
+        return $this->carregar($sql);
+    }
+
+    /** Retorna combo de Idoc.
+     *
+     * @return array|string
+     * @since 28-11-2018
+     */
+    public function montaComboIdoc()
+    {
+        $sql = "SELECT
+                    idoid as codigo,
+                    idoid as descricao
+                FROM public.idoc
+                WHERE
+                    idostatus = 'A'
+                ORDER BY
+                    descricao
+                ";
+
+        return $this->carregar($sql);
+    }
+
+    /** Retorna combo de Iduso.
+     *
+     * @return array|string
+     * @since 28-11-2018
+     */
+    public function montaComboIduso()
+    {
+        $sql = "SELECT
+                    iducod as codigo,
+                    iducod as descricao
+                FROM public.identifuso
+                WHERE
+                    idustatus = 'A'
+                ORDER BY
+                    descricao
+                ";
+
+        return $this->carregar($sql);
+    }
+
+    /** Retorna combo de RP.
+     *
+     * @return array|string
+     * @since 28-11-2018
+     */
+    public function montaComboRP()
+    {
+        $sql = "SELECT
+                    rpcod as codigo,
+                    rpcod as descricao
+                FROM planacomorc.resultadoprimario
+                ORDER BY
+                    descricao
+                ";
 
         return $this->carregar($sql);
     }
