@@ -5,6 +5,12 @@
     $modelPlanoInterno = new Pi_PlanoInterno();
 
     switch($_REQUEST['req']){
+        case 'exportar_xls_unidade':
+            $modelPlanoInterno->exportarXlsUnidade();
+            die;
+        case 'exportar_xls_acao':
+            $modelPlanoInterno->exportarXlsAcao();
+            die;
         case 'atualizarSIOP':
             try{
                 $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
@@ -60,7 +66,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5 class="col-lg-3">Acompanhamento Geral FNC - Por Unidade</h5>
-                    <a class="btn btn-primary" href="planacomorc.php?modulo=inicio&acao=C&req=exportar_xls_unidade"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
+                    <a class="btn btn-primary" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A&req=exportar_xls_unidade"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
@@ -214,7 +220,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5 class="col-lg-3">Acompanhamento Geral FNC - Por Ação</h5>
-                    <a class="btn btn-primary" href="planacomorc.php?modulo=inicio&acao=C&req=exportar_xls_acao"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
+                    <a class="btn btn-primary" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A&req=exportar_xls_acao"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">

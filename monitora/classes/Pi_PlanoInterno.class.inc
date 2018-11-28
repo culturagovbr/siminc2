@@ -2282,7 +2282,6 @@ class Pi_PlanoInterno extends Modelo
         $planilhaFinanceiro = $PHPExcel->getActiveSheet();
         $planilhaFinanceiro->setTitle("Unidades");
 
-
         $aPadrao = [
             'Unidade',
             'Apresentado',

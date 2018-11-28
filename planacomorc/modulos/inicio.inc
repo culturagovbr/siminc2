@@ -41,12 +41,6 @@ switch ($_REQUEST['req']) {
     case 'carregarGraficoCgconCogep':
         carregarGraficoCgconCogep($colors, true);
         die;
-    case 'exportar_xls_unidade':
-        $oPlanoInterno->exportarXlsUnidade();
-        die;                
-    case 'exportar_xls_acao':
-        $oPlanoInterno->exportarXlsAcao();
-        die;         
     case 'atualizarSIOP':
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
