@@ -71,6 +71,8 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                 plocod,
                 ptres,
                 plicod,
+                natcod,
+                gndcod,
                 vlrdotacaoinicial,
                 vlrdotacaoatual,
                 vlrempenhado,
@@ -90,6 +92,8 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                 exo.planoorcamentario AS plocod,
                 exo.numeroptres AS ptres,
                 exo.planointerno AS plicod,
+                natureza AS natcod,
+                gruponaturezadespesa AS gndcod,
                 CASE WHEN exo.dotacaoinicial <> '' THEN
                     exo.dotacaoinicial::NUMERIC
                 ELSE
