@@ -134,17 +134,7 @@
 <!--Início tratamento datatables dinamicamente-->
 <script>
     $(document).ready(function(){
-        $("#tbListaPisSelecionados").dataTable({
-            bPaginate: false,
-            responsive: true,
-            paging: true,
-            pageLength: 25,
-            pagingType: "full_numbers",
-            "language": {
-                "url": "/zimec/public/temas/simec/js/plugins/dataTables/Portuguese-Brasil.json"
-            }
-        });
-        
+
         $(".btnRemovePi").click(function(){
             removePiPedido($("#pedid").val(), $(this).attr('pliselid'));
         });
@@ -217,20 +207,3 @@
         }
     }
 </script>
-<style>
-div.dataTables_paginate ul.pagination {
-    margin: 2px 0;
-    white-space: nowrap;
-}
-.dataTables_wrapper .datatables-footer .dataTables_paginate .pagination {
-	display: block;
-	margin: 0;
-}
-.pagination {
-    display: -webkit-inline-box;
-}
-.wizard > .content > .body ul {
-    list-style: none !important; 
-}
-</style>
-<!--Final tratamento datatables dinamico-->
