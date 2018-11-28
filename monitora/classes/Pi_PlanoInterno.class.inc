@@ -356,12 +356,12 @@ class Pi_PlanoInterno extends Modelo
                     public.vw_subunidadeorcamentaria suo
                     JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid /* ESSE JOIN DE PTRES COM A VW_PTRES É NECESSÁRIO PARA RECUPERAR O VALOR DE DOTAÇÃO E CUSTEIO CORRETO EM CASO DO PNC */
                     JOIN monitora.vw_ptres vptr ON(
-                    vptr.ptrid = psu.ptrid
-                    AND vptr.ptrano = suo.prsano
+                        vptr.ptrid = psu.ptrid
+                        AND vptr.ptrano = suo.prsano
                     )
                     JOIN monitora.ptres ptr ON ptr.ptrid = vptr.ptrid
                     LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
-                    lmu.unoid = suo.unoid
+                        lmu.unoid = suo.unoid
                         AND lmu.lmustatus = 'A'
                         AND lmu.prsano = suo.prsano
                     )
@@ -390,12 +390,12 @@ class Pi_PlanoInterno extends Modelo
                     public.vw_subunidadeorcamentaria suo
                     JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid /* ESSE JOIN DE PTRES COM A VW_PTRES É NECESSÁRIO PARA RECUPERAR O VALOR DE DOTAÇÃO E CUSTEIO CORRETO EM CASO DO PNC */
                     JOIN monitora.vw_ptres vptr ON(
-                    vptr.ptrid = psu.ptrid
+                        vptr.ptrid = psu.ptrid
                         AND vptr.ptrano = suo.prsano
                     )
                     JOIN monitora.ptres ptr ON ptr.ptrid = vptr.ptrid
                     LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
-                    lmu.unoid = suo.unoid
+                        lmu.unoid = suo.unoid
                         AND lmu.lmustatus = 'A'
                         AND lmu.prsano = suo.prsano
                     )
@@ -524,6 +524,12 @@ class Pi_PlanoInterno extends Modelo
         # Filtros
         $criterio = $params->exercicio? "\n AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
         $criterio .= $params->suoid? "\n AND suo.suoid = ". (int)$params->suoid: NULL;
+        $criterio .= $params->ptrid? "\n AND ptr.ptrid = ". (int)$params->ptrid: NULL;
+        if(strtolower($params->gnd) == 'custeio'){
+            $criterio .= "\n AND sec.gndcod IN('0', '1', '2', '3')";
+        } else if(strtolower($params->gnd) == 'capital'){
+            $criterio .= "\n AND sec.gndcod IN('4', '5', '6')";
+        }
         
         $sql = "
             SELECT
@@ -536,15 +542,19 @@ class Pi_PlanoInterno extends Modelo
                 JOIN monitora.pi_planointernoptres ppt ON ptr.ptrid = ppt.ptrid
                 JOIN monitora.pi_planointerno pli ON ppt.pliid = pli.pliid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
-                    pli.ungcod = suo.suocod
-                    AND pli.pliano = suo.prsano)
+                    pli.plicod = sec.plicod
+                    AND pli.unicod = suo.unocod
+                    AND pli.ungcod = suo.suocod
+                    AND pli.pliano = suo.prsano
+                )
             WHERE
                 pli.plistatus = 'A'
                 AND suo.unofundo IS TRUE
                 AND ptr.irpcod <> '6'
+                AND suo.suocod NOT IN('". SUOCOD_ASCOM. "','". SUOCOD_ANCINE. "')
                 $criterio
         ";
-        
+
         return $sql;
     }
     
@@ -557,6 +567,8 @@ class Pi_PlanoInterno extends Modelo
     public function buscarTotalExecucaoFnc(stdClass $params){
         $sql = $this->montarSqlBuscarTotalExecucaoFnc($params);
         $total = $this->pegaUm($sql);
+//if($params->ptrid) ver($sql);
+//if($params->ptrid) ver($total);
         return $total? $total: 0;
     }
     
@@ -567,14 +579,28 @@ class Pi_PlanoInterno extends Modelo
      * @return string
      */
     public function montarSqlBuscarTotalFnc(stdClass $params){
+        # Campo de valor
+        switch(strtolower($params->tipo)) {
+            case 'custeio':
+                $campo = 'SUM(coalesce(pic.picvalorcusteio, 0))';
+            break;
+            case 'capital':
+                $campo = 'SUM(coalesce(pic.picvalorcapital, 0))';
+            break;
+            default:
+                $campo = 'SUM((coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0)))';
+            break;
+        }
+        
         # Filtros
         $criterio = $params->exercicio? "\n AND pli.pliano = '". (int)$params->exercicio. "'": NULL;
         $criterio .= $params->suoid? "\n AND suo.suoid = ". (int)$params->suoid: NULL;
+        $criterio .= $params->ptrid? "\n AND ptr.ptrid = ". (int)$params->ptrid: NULL;
         $criterio .= $params->esdid? "\n AND doc.esdid IN(". join(',', $params->esdid). ")": NULL;
         
         $sql = "
             SELECT
-                SUM((coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0))) AS total
+                $campo AS total
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
@@ -661,6 +687,88 @@ class Pi_PlanoInterno extends Modelo
         $sql = $this->montarSqlListarSubunidadeFnc($params);
         $listaSubunidadeFnc = $this->carregar($sql);
         return $listaSubunidadeFnc? $listaSubunidadeFnc: array();
+    }
+    
+    public function montarSqlListarFuncionaisFncTipo(stdClass $params){
+        $valorTipo = $params->tipo == 'custeio'? 'CUSTEIO': 'CAPITAL';
+        $campo = $params->tipo == 'custeio'? 'ptrdotacaocusteio': 'ptrdotacaocapital';
+        
+        # Filtros
+        $criterio = $params->exercicio? "\n AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
+        
+        $sql = "
+            SELECT DISTINCT
+                '{$valorTipo}' AS tipo,
+                suo.unoid,
+                suo.unocod,
+                suo.unosigla,
+                suo.unonome,
+                lmu.lmuvlr,
+                lmu.lmuid,
+                psu.ptrid,
+                vptr.funcional,
+                vptr.acatitulo,
+                vptr.irpcod,
+                vptr.plodsc,
+                ptr.{$campo} AS dotacao
+            FROM public.vw_subunidadeorcamentaria suo
+                JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
+                JOIN monitora.vw_ptres vptr ON(
+                    vptr.ptrid = psu.ptrid
+                    AND vptr.ptrano = suo.prsano
+                )
+                JOIN monitora.ptres ptr ON ptr.ptrid = vptr.ptrid
+                LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
+                    lmu.unoid = suo.unoid
+                    AND lmu.lmustatus = 'A'
+                    AND lmu.prsano = suo.prsano
+                )
+            WHERE
+                suo.suostatus = 'A'
+                AND vptr.irpcod <> '6'
+                AND suo.unofundo IS TRUE
+                AND suo.suocod NOT IN(
+                    '". SUOCOD_ANCINE. "',
+                    '". SUOCOD_ASCOM. "'
+                )
+                $criterio
+        ";
+
+        return $sql;
+    }
+    
+    /**
+     * Monta consulta a Funcionais do FNC
+     * 
+     * @param stdClass $params
+     * @return string
+     */
+    public function montarSqlListarFuncionaisFnc(stdClass $params){
+        $params->tipo = 'custeio';
+        $sql = $this->montarSqlListarFuncionaisFncTipo($params).
+            "\n UNION \n";
+        $params->tipo = 'capital';
+        $sql .= $this->montarSqlListarFuncionaisFncTipo($params).
+            "
+            ORDER BY
+                funcional ASC,
+                tipo DESC
+            "
+        ;
+
+        return $sql;
+    }
+    
+    /**
+     * Consulta as Funcionais do FNC
+     * 
+     * @param stdClass $params
+     * @return array
+     */
+    public function listarFuncionaisFnc(stdClass $params){
+        $sql = $this->montarSqlListarFuncionaisFnc($params);
+        $listaFuncionaisFnc = $this->carregar($sql);
+        return $listaFuncionaisFnc? $listaFuncionaisFnc: array();
     }
     
     public function recuperarDadosFncPorUnidade($exercicio)

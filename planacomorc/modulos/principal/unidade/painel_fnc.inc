@@ -25,10 +25,7 @@
     }
     
     $listaSubunidadeFnc = $modelPlanoInterno->listarSubunidadeFnc((object)array('exercicio' => $_SESSION['exercicio']));
-
-    $aDadosPorAcao = $modelPlanoInterno->recuperarDadosFncPorAcao($_SESSION['exercicio']);
-    $aValoresEstado = $modelPlanoInterno->recuperarValoresPorEstado($_SESSION['exercicio']);
-    $aValoresExecucao = $modelPlanoInterno->recuperarValoresPorExecucao($_SESSION['exercicio']);
+    $listaFuncionais = $modelPlanoInterno->listarFuncionaisFnc((object)array('exercicio' => $_SESSION['exercicio']));
     
     include APPRAIZ . "includes/cabecalho.inc";
 ?>
@@ -230,7 +227,6 @@
                                     <th>Selecionado</th>
                                     <th>Aprovado</th>
                                     <th>Provisionado</th>
-                                    <th>Limite</th>
                                     <th>Empenhado</th>
                                     <th>Liquidado</th>
                                     <th>Pago</th>
@@ -238,81 +234,187 @@
                             </thead>
                             <tbody>
                             <?php
-                                $total = null;
-                                $funcionalAtual = '';
-                                foreach($aDadosPorAcao as $dados){
-
-                                    $total['dotacao'][$dados['tipo']] += $dados['dotacao'];
-
-                                    $style = '';
-                                    if($funcionalAtual != $dados['funcional']){
+                                $totalDotacaoCusteio = 0;
+                                $totalDotacaoCapital = 0;
+                                # Previsto/Planejado/Aberto em PI
+                                $totalApresentadoCusteio = 0;
+                                $totalApresentadoCapital = 0;
+                                $totalSelecionadoCusteio = 0;
+                                $totalSelecionadoCapital = 0;
+                                $totalAprovadoCusteio = 0;
+                                $totalAprovadoCapital = 0;
+                                # Execução Orçamentária
+                                $totalProvisionadoCusteio = 0;
+                                $totalProvisionadoCapital = 0;
+                                $totalEmpenhadoCusteio = 0;
+                                $totalEmpenhadoCapital = 0;
+                                $totalLiquidadoCusteio = 0;
+                                $totalLiquidadoCapital = 0;
+                                $totalPagoCusteio = 0;
+                                $totalPagoCapital = 0;
+                                # Formatação da lista
+                                $funcionalAnterior = NULL;
+                                foreach($listaFuncionais as $funcional){
+                                    $style = NULL;
+                                    if($funcionalAnterior != $funcional['funcional']){
                                         $style = 'style="border-top: 2px #acacac solid"';
-                                        $funcionalAtual = $dados['funcional'];
+                                        $funcionalAnterior = $funcional['funcional'];
                                     }
                             ?>
                                 <tr class="text-right" <?php echo $style; ?>>
-                                    <td style="text-align: left"><?php echo $dados['funcional'] . ' (' . $dados['tipo'] . ') - ' . $dados['acatitulo'] . ': ' . $dados['plodsc'] . ' (RP ' . $dados['irpcod'] . ')'; ?></td>
+                                    <td style="text-align: left">
+                                        <?php echo $funcional['funcional']. ' ('. $funcional['tipo']. ') - '. $funcional['acatitulo']. ': '. $funcional['plodsc']. ' (RP '. $funcional['irpcod']. ')'; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo number_format($funcional['dotacao'], 2, ',', '.');
 
-                                    <td><?php echo number_format($dados['dotacao'], 2, ',', '.'); ?></td>
-                                    <?php
-                                        # VALOR APRESENTADO
-                                        $valor = $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_EM_ANALISE][$dados['tipo']] +
-                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_BANCO_PROJETOS][$dados['tipo']] +
-                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_DELIBERACAO_CFNC][$dados['tipo']] +
-                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_AGUARDANDO_CORRECAO][$dados['tipo']] +
-                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] +
-                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']];
-                                        $total['APRESENTADO'][$dados['tipo']] += $valor;
-                                        $disponivel = $dados['dotacao'] - $valor;
-                                    ?>
-                                    <td style="color: <?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>;">
-                                        <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
+                                            if($funcional['tipo'] == 'CUSTEIO'){
+                                                $totalDotacaoCusteio += $funcional['dotacao'];
+                                            } else {
+                                                $totalDotacaoCapital += $funcional['dotacao'];
+                                            }
+                                        
+                                            # Valor da coluna apresentado
+                                            $apresentado = $modelPlanoInterno->buscarTotalFnc((object) array(
+                                                'tipo' => $funcional['tipo'],
+                                                'exercicio' => $_SESSION['exercicio'],
+                                                'ptrid' => $funcional['ptrid'],
+                                                'esdid' => array(
+                                                    ESD_FNC_PI_EM_ANALISE,
+                                                    ESD_FNC_PI_BANCO_PROJETOS,
+                                                    ESD_FNC_PI_DELIBERACAO_CFNC,
+                                                    ESD_FNC_PI_AGUARDANDO_CORRECAO,
+                                                    ESD_FNC_PI_SELECIONADO_CFNC,
+                                                    ESD_FNC_PI_APROVADO
+                                                )
+                                            ));
+                                            if($funcional['tipo'] == 'CUSTEIO'){
+                                                $totalApresentadoCusteio += $apresentado;
+                                            } else {
+                                                $totalApresentadoCusteio += $apresentado;
+                                            }
+                                            $disponivel = $funcional['dotacao'] - $apresentado;
+                                        ?>
                                     </td>
-                                    <?php
-                                        # VALOR SELECIONADO
-                                        $valor = $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] +
-                                                 $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']];
+                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                        <?php echo $apresentado? number_format($apresentado, 2, ',', '.'): '-';
+                                        
+                                            # Valor da coluna selecionado
+                                            $selecionado = $modelPlanoInterno->buscarTotalFnc((object) array(
+                                                'tipo' => $funcional['tipo'],
+                                                'exercicio' => $_SESSION['exercicio'],
+                                                'ptrid' => $funcional['ptrid'],
+                                                'esdid' => array(
+                                                    ESD_FNC_PI_SELECIONADO_CFNC,
+                                                    ESD_FNC_PI_APROVADO
+                                                )
+                                            ));
+                                            if($funcional['tipo'] == 'CUSTEIO'){
+                                                $totalSelecionadoCusteio += $selecionado;
+                                            } else {
+                                                $totalSelecionadoCapital += $selecionado;
+                                            }
+                                            $disponivel = $funcional['dotacao'] - $selecionado;
+                                        ?>
+                                    </td>
+                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                        <?php echo $selecionado? number_format($selecionado, 2, ',', '.'): '-';
+                                            
+                                           # Valor da coluna aprovado
+                                            $aprovado = $modelPlanoInterno->buscarTotalFnc((object) array(
+                                                'tipo' => $funcional['tipo'],
+                                                'exercicio' => $_SESSION['exercicio'],
+                                                'ptrid' => $funcional['ptrid'],
+                                                'esdid' => array(
+                                                    ESD_FNC_PI_APROVADO
+                                                )
+                                            ));
+                                            if($funcional['tipo'] == 'CUSTEIO'){
+                                                $totalAprovadoCusteio += $aprovado;
+                                            } else {
+                                                $totalAprovadoCapital += $aprovado;
+                                            }
+                                            $disponivel = $funcional['dotacao'] - $aprovado;
+                                        ?>
+                                    </td>
+                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                        <?php echo $aprovado? number_format($aprovado, 2, ',', '.'): '-';
 
-                                        $total[ESD_FNC_PI_SELECIONADO_CFNC][$dados['tipo']] += $valor;
-                                        $disponivel = $dados['dotacao'] - $valor;
-                                    ?>
-                                    <td style="color: <?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>;">
-                                        <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
-                                    </td>
-                                    <?php
-                                        # VALOR APROVADO
-                                        $valor = !empty($aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']]) ? $aValoresEstado[$dados['ptrid']][ESD_FNC_PI_APROVADO][$dados['tipo']] : '0';
-                                        $total[ESD_FNC_PI_APROVADO][$dados['tipo']] += $valor;
-                                        $disponivel = $dados['dotacao'] - $valor;
-                                    ?>
-                                    <td style="color: <?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>;">
-                                        <?php echo $valor ? number_format($valor, 2, ',', '.') : '-'; ?>
-                                    </td>
-                                    <td> - </td>
-                                    <td> - </td>
-                                    <td>
-                                        <?php
-                                            # VALOR EMPENHADO
-                                            $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrempenhado']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrempenhado'] : '0';
-                                            $total['vlrempenhado'][$dados['tipo']] += $valor;
-                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                            # Valor da coluna Provisionado
+                                            $provisionado = $modelPlanoInterno->buscarTotalExecucaoFnc((object) array(
+                                                'tipo' => 'provisionado',
+                                                'exercicio' => $_SESSION['exercicio'],
+                                                'ptrid' => $funcional['ptrid'],
+                                                'gnd' => $funcional['tipo']
+                                            ));
+
+                                            if($funcional['tipo'] == 'CUSTEIO'){
+                                                $totalProvisionadoCusteio += $provisionado;
+                                            } else {
+                                                $totalProvisionadoCapital += $provisionado;
+                                            }
+                                            $disponivel = $funcional['dotacao'] - $provisionado;
                                         ?>
                                     </td>
-                                    <td>
-                                        <?php
-                                            # VALOR LIQUIDADO
-                                            $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrliquidado']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrliquidado'] : '0';
-                                            $total['vlrliquidado'][$dados['tipo']] += $valor;
-                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                        <?php echo $provisionado? number_format($provisionado, 2, ',', '.'): '-';
+                                        
+                                            # Valor da coluna Empenhado
+                                            $empenhado = $modelPlanoInterno->buscarTotalExecucaoFnc((object) array(
+                                                'tipo' => 'empenhado',
+                                                'exercicio' => $_SESSION['exercicio'],
+                                                'ptrid' => $funcional['ptrid'],
+                                                'gnd' => $funcional['tipo']
+                                            ));
+
+                                            if($funcional['tipo'] == 'CUSTEIO'){
+                                                $totalEmpenhadoCusteio += $empenhado;
+                                            } else {
+                                                $totalEmpenhadoCapital += $empenhado;
+                                            }
+                                            $disponivel = $funcional['dotacao'] - $empenhado;
                                         ?>
                                     </td>
-                                    <td>
-                                        <?php
-                                            # VALOR PAGO
-                                            $valor = !empty($aValoresExecucao[$dados['ptrid']][$dados['tipo']]['vlrpago']) ? $aValoresEstado[$dados['ptrid']][$dados['tipo']]['vlrpago'] : '0';
-                                            $total['vlrpago'][$dados['tipo']] += $valor;
-                                            echo $valor ? number_format($valor, 2, ',', '.') : '-';
+                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                        <?php echo $empenhado? number_format($empenhado, 2, ',', '.'): '-';
+                                        
+                                            # Valor da coluna Empenhado
+                                            $liquidado = $modelPlanoInterno->buscarTotalExecucaoFnc((object) array(
+                                                'tipo' => 'liquidado',
+                                                'exercicio' => $_SESSION['exercicio'],
+                                                'ptrid' => $funcional['ptrid'],
+                                                'gnd' => $funcional['tipo']
+                                            ));
+
+                                            if($funcional['tipo'] == 'CUSTEIO'){
+                                                $totalLiquidadoCusteio += $liquidado;
+                                            } else {
+                                                $totalLiquidadoCapital += $liquidado;
+                                            }
+                                            $disponivel = $funcional['dotacao'] - $liquidado;
                                         ?>
+                                    </td>
+                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                        <?php echo $liquidado? number_format($liquidado, 2, ',', '.'): '-';
+                                        
+                                            # Valor da coluna Empenhado
+                                            $pago = $modelPlanoInterno->buscarTotalExecucaoFnc((object) array(
+                                                'tipo' => 'pago',
+                                                'exercicio' => $_SESSION['exercicio'],
+                                                'ptrid' => $funcional['ptrid'],
+                                                'gnd' => $funcional['tipo']
+                                            ));
+
+                                            if($funcional['tipo'] == 'CUSTEIO'){
+                                                $totalPagoCusteio += $pago;
+                                            } else {
+                                                $totalPagoCapital += $pago;
+                                            }
+                                            $disponivel = $funcional['dotacao'] - $pago;
+                                        ?>
+                                    </td>
+                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                        <?php echo $pago? number_format($pago, 2, ',', '.'): '-'; ?>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -320,39 +422,36 @@
                             <tfoot>
                                 <tr class="text-right" style="border-top: 2px #acacac solid">
                                     <td style="text-align: left">TOTAL CUSTEIO</td>
-                                    <td><?php echo number_format($total['dotacao']['CUSTEIO'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total['APRESENTADO']['CUSTEIO'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total[ESD_FNC_PI_SELECIONADO_CFNC]['CUSTEIO'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total[ESD_FNC_PI_APROVADO]['CUSTEIO'], 2, ',', '.'); ?></td>
-                                    <td> - </td>
-                                    <td> - </td>
-                                    <td><?php echo number_format($total['vlrempenhado']['CUSTEIO'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total['vlrliquidado']['CUSTEIO'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total['vlrpago']['CUSTEIO'], 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalDotacaoCusteio, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalApresentadoCusteio, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalSelecionadoCusteio, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalAprovadoCusteio, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalProvisionadoCusteio, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalEmpenhadoCusteio, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalLiquidadoCusteio, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalPagoCusteio, 2, ',', '.'); ?></td>
                                 </tr>
                                 <tr class="text-right">
                                     <td style="text-align: left">TOTAL CAPITAL</td>
-                                    <td><?php echo number_format($total['dotacao']['CAPITAL'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total['APRESENTADO']['CAPITAL'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total[ESD_FNC_PI_SELECIONADO_CFNC]['CAPITAL'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total[ESD_FNC_PI_APROVADO]['CAPITAL'], 2, ',', '.'); ?></td>
-                                    <td> - </td>
-                                    <td> - </td>
-                                    <td><?php echo number_format($total['vlrempenhado']['CAPITAL'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total['vlrliquidado']['CAPITAL'], 2, ',', '.'); ?></td>
-                                    <td><?php echo number_format($total['vlrpago']['CAPITAL'], 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalDotacaoCapital, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalApresentadoCapital, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalSelecionadoCapital, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalAprovadoCapital, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalProvisionadoCapital, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalEmpenhadoCapital, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalLiquidadoCapital, 2, ',', '.'); ?></td>
+                                    <td><?php echo number_format($totalPagoCapital, 2, ',', '.'); ?></td>
                                 </tr>
                                 <tr class="text-right">
                                     <th style="text-align: left">TOTAL</th>
-                                    <th><?php echo number_format(array_sum($total['dotacao']), 2, ',', '.'); ?></th>
-                                    <th><?php echo number_format(array_sum($total['APRESENTADO']), 2, ',', '.'); ?></th>
-                                    <th><?php echo number_format(array_sum($total[ESD_FNC_PI_SELECIONADO_CFNC]), 2, ',', '.'); ?></th>
-                                    <th><?php echo number_format(array_sum($total[ESD_FNC_PI_APROVADO]), 2, ',', '.'); ?></th>
-                                    <th> - </th>
-                                    <th> - </th>
-                                    <th><?php echo number_format(array_sum($total['vlrempenhado']), 2, ',', '.'); ?></th>
-                                    <th><?php echo number_format(array_sum($total['vlrliquidado']), 2, ',', '.'); ?></th>
-                                    <th><?php echo number_format(array_sum($total['vlrpago']), 2, ',', '.'); ?></th>
+                                    <th><?php echo number_format($totalDotacaoCusteio + $totalDotacaoCapital, 2, ',', '.'); ?></th>
+                                    <th><?php echo number_format($totalApresentadoCusteio + $totalApresentadoCapital, 2, ',', '.'); ?></th>
+                                    <th><?php echo number_format($totalSelecionadoCusteio + $totalSelecionadoCapital, 2, ',', '.'); ?></th>
+                                    <th><?php echo number_format($totalAprovadoCusteio + $totalAprovadoCapital, 2, ',', '.'); ?></th>
+                                    <th><?php echo number_format($totalProvisionadoCusteio + $totalProvisionadoCapital, 2, ',', '.'); ?></th>
+                                    <th><?php echo number_format($totalEmpenhadoCusteio + $totalEmpenhadoCapital, 2, ',', '.'); ?></th>
+                                    <th><?php echo number_format($totalLiquidadoCusteio + $totalLiquidadoCapital, 2, ',', '.'); ?></th>
+                                    <th><?php echo number_format($totalPagoCusteio + $totalPagoCapital, 2, ',', '.'); ?></th>
                                 </tr>
                             </tfoot>
                         </table>
