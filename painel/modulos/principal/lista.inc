@@ -619,12 +619,7 @@ $sql = "SELECT  '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&i
    		LEFT JOIN painel.detalhetipoindicador dt1 ON dt1.indid = i.indid AND dt1.tdinumero = 1
    		LEFT JOIN painel.detalhetipoindicador dt2 ON dt2.indid = i.indid AND dt2.tdinumero = 2
 	    LEFT JOIN painel.mapa m ON m.mapid = m.mapid";
-        if (in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis) || in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){
 	    $sql .= " LEFT JOIN painel.secretaria s ON i.secid = s.secid ";
-        }else{ 
-            $sql .= " inner join painel.secretaria s on i.secid = s.secid
-                      inner join painel.usuarioresponsabilidade ur on s.secid = ur.secid and ur.usucpf = '".$_SESSION['usucpf']."'";
-        }
 	    $sql .= " LEFT JOIN painel.acao a ON a.acaid = i.acaid 
 	    LEFT JOIN painel.eixo ex ON ex.exoid = i.exoid 
 	    LEFT JOIN painel.unidademedicao unm ON unm.unmid = i.unmid 

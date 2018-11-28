@@ -385,13 +385,24 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 	if($registros[0]) {
 		foreach($registros as $key => $reg) {
 			// pegando a serie historica
-			$seriehistorica = $db->pegaLinha("SELECT sehid,sehbloqueado FROM painel.seriehistorica WHERE indid='".$_SESSION['indid']."' AND dpeid='".$reg['codigo']."' AND (sehstatus='A' OR sehstatus='H')");
+                        $sql = "select secid 
+                                  from painel.usuarioresponsabilidade 
+                                 where usucpf = '".$_SESSION['usucpf']."' 
+                                   and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
+                                   and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
+                        $secid_confirma = $db->pegaUm($sql);
                         $mIndicador = new Painel_Model_Indicador();
                         $listaPerfis = $mIndicador->RetornaPerfil();
-                        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                        if ($secid_confirma || in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis)){
+                            $seriehistorica = $db->pegaLinha("SELECT sehid,sehbloqueado FROM painel.seriehistorica WHERE indid='".$_SESSION['indid']."' AND dpeid='".$reg['codigo']."' AND (sehstatus='A' OR sehstatus='H')");
+                            if($seriehistorica) {
+                                $seriehistorica['sehbloqueado']="f";
+                            }
+                        }else{
+                            $seriehistorica = $db->pegaLinha("SELECT sehid,sehbloqueado FROM painel.seriehistorica WHERE indid='".$_SESSION['indid']."' AND dpeid='".$reg['codigo']."' AND (sehstatus='A' OR sehstatus='H')");
                             if($seriehistorica) {
                                 $seriehistorica['sehbloqueado']="t";
-                            }
+                            }                            
                         }
 			$html .= "<tr bgcolor='".((fmod($key,2) == 0)?'#F7F7F7':'')."' onmouseover=\"this.bgColor='#ffffcc';\" onmouseout=\"this.bgColor='".((fmod($key,2) == 0)?'#F7F7F7':'')."';\">";
 			$html .= "<td nowrap>".$reg['descricao']."</td>";
@@ -462,7 +473,9 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
                         }                        
                         $html .= "<td><input ".($seriehistorica['sehbloqueado'] == "t" ? " readonly='readonly' name='obs_bloqueado[".$variaveis['tipotabela']."][".$reg['codigo']."]' " : "name='obs[".$variaveis['tipotabela']."][".$reg['codigo']."]'")." type='text' class='normal' value='".$valor."' onfocus=\"MouseClick(this);this.select();\" onmouseout=\"MouseOut(this);\" onblur=\"MouseBlur(this);\" size=\"100\" maxlength=\"255\"></td>";
                         $html .= "<td><img title='Exportar CSV' src=../imagens/excel.gif style=cursor:pointer; onclick=exportarsehcsv('{$seriehistorica['sehid']}');></td>";
-                        $html .= "<td><img title='Excluir Série Histórica' src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('{$seriehistorica['sehid']}');\"></td>";
+                        if ($secid_confirma || in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis)){
+                            $html .= "<td><img title='Excluir Série Histórica' src=\"/imagens/excluir.gif\" border=0 title=\"Excluir\" style=\"cursor:pointer;\" onclick=\"excluirSerieHistorica('{$seriehistorica['sehid']}');\"></td>";
+                        }
 			$html .= "</tr>";
 		}
 	} else {
@@ -1480,7 +1493,7 @@ function carregarGridBrasil($dados) {
 	$html .= "<table class=\"tabela\" style=\"color:333333;\" cellSpacing=\"1\" cellPadding=\"3\" align=\"center\">";
 	$html .= "<thead>";
 	// imprimindo o cabeçalho
-	$html .= "<tr>";
+    	$html .= "<tr>";
 	
 	// realizando o controle do cabeçalho em relação aos detalhes (controle de rowspan e colspan das coluna no cabeçalho)
 	$rowspancabecalho = 1;
@@ -1517,7 +1530,20 @@ function carregarGridBrasil($dados) {
 	$html .= montarSubRodapeDetalhes($detalhes);
 	// Botão para gravar o formulario de estado
 	$html .= "<tr>";
-	$html .= "<td colspan='".($colspancabecalho+2)."' class='SubTituloDireita'><input type='submit' value='Gravar'> <input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
+	$html .= "<td colspan='".($colspancabecalho+2)."' class='SubTituloDireita'>";
+        
+        $sql = "select secid 
+          from painel.usuarioresponsabilidade 
+         where usucpf = '".$_SESSION['usucpf']."' 
+           and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
+           and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
+        $secid_confirma = $db->pegaUm($sql);
+        $mIndicador = new Painel_Model_Indicador();
+        $listaPerfis = $mIndicador->RetornaPerfil();
+        if ($secid_confirma || (in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis) || (in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)))){
+            $html .= "<input type='submit' value='Gravar'>";
+        }
+        $html .= "<input type='button' value='Voltar' name='voltar' onclick=\"window.location='?modulo=principal/listaSerieHistorica&acao=A'\"></td>";
 	$html .= "</tr>";
 	
 	$html .= "</tfoot>";
@@ -1977,9 +2003,15 @@ function gravarGridDadosSemFiltros($dados) {
         /**
          * Lista de perfis por usuário
          */
+        $sql = "select secid 
+          from painel.usuarioresponsabilidade 
+         where usucpf = '".$_SESSION['usucpf']."' 
+           and pflcod = ".PAINEL_PERFIL_GESTOR_INDICADOR." 
+           and secid = (select secid from painel.indicador where indid='".$_SESSION['indid']."')";
+        $secid_confirma = $db->pegaUm($sql);
         $mIndicador = new Painel_Model_Indicador();
         $listaPerfis = $mIndicador->RetornaPerfil();
-        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis) && !$secid_confirma){
             $sql = "select dsh.dshid, dsh.dshqtde, dsh.dshobs, se.dpeid 
                                         from painel.seriehistorica se 
                                        inner join painel.detalheseriehistorica dsh
@@ -1997,7 +2029,7 @@ function gravarGridDadosSemFiltros($dados) {
 	$formatoinput = pegarFormatoInput();
         
         //Rotina para incluir os dados que não podem ser editados pelo perfil Gestor Indicador
-        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+        if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis) && !$secid_confirma){
             foreach($dadosAnteriores as $dadosAnt){
                 $sehid = $db->pegaUm("INSERT INTO painel.seriehistorica(indid, sehvalor, sehstatus, sehqtde, dpeid)
                                       VALUES ('".$_SESSION['indid']."', NULL, 'H', '0', '".$dadosAnt['dpeid']."') RETURNING sehid;");
