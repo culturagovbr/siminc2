@@ -226,14 +226,18 @@ function montarColunasFormatoMoedaRelatorioProposta()
  * @param $name   => name do option
  * @param $option => array de lista de valores
  */
-function montaListaLoa($name, $option)
+function montaListaLoa($name, $option, $default=null, $rlid='')
 {
-    $select = '<select name="{$name}" id="{$name}" rlid="" >';
+    $select = '<select name="'.$name.'" id="'.$name.$rlid.'" rlid="" >';
     $select .='<option selected disabled></option>';
     foreach ($option as $options):
-        $select .='<option value=" '.$options['codigo'] .'">'. $options['descricao'].'</option>';
+        if ($options['codigo']==$default){
+            $select .='<option value="'.$options['codigo'] .'" selected>'. $options['descricao'].'</option>';
+        }else{
+            $select .='<option value="'.$options['codigo'] .'">'. $options['descricao'].'</option>';
+        }
     endforeach;
     $select .='</select>';
 
-    echo $select;
+    return $select;
 }

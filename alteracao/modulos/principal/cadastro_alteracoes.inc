@@ -62,6 +62,14 @@ if ($_REQUEST['req']){
             $cPedido = new Alteracao_Controller_PlanoInternoSelecionado();
             $cPedido->excluir($_REQUEST['pliselid']);
             die;
+        case 'salvar_loa':
+            $cPedido = new Alteracao_Controller_RemanejamentoLoa();
+            $cPedido->salvar($_REQUEST);
+            die;
+        case 'remover_loa':
+            $cPedido = new Alteracao_Controller_RemanejamentoLoa();
+            $cPedido->excluir($_REQUEST['rlid']);
+            die;
         default:
             break;
     }

@@ -87,8 +87,8 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
      */
     public function recuperaFuncionalSelecionada($pedid)
     {
-        $sql = "SELECT DISTINCT
-                    ptr.ptrid AS codigo,
+        $sql = "SELECT 
+                    pis.pliselid AS codigo,
                     TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (
                         CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN
                             '-'
@@ -99,7 +99,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                             '-'
                         ELSE
                             COALESCE(ptr.plocod, '-')
-                        END) AS descricao
+                        END) || ' pi: ' || pli.pliid AS descricao
                 FROM
                     alteracao.plano_interno_selecionado pis
                     JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
@@ -180,7 +180,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     public function montaComboFonte()
     {
         $sql = "SELECT
-                    foncod as codigo,
+                    fonid as codigo,
                     foncod as descricao
                 FROM public.fonterecurso
                 WHERE
@@ -220,7 +220,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     public function montaComboIduso()
     {
         $sql = "SELECT
-                    iducod as codigo,
+                    iduid as codigo,
                     iducod as descricao
                 FROM public.identifuso
                 WHERE
@@ -247,6 +247,30 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                     descricao
                 ";
 
+        return $this->carregar($sql);
+    }
+    
+    public function recuperarTodosPorPedido($pedid)
+    {
+        $sql = "select rl.rlid,
+                       rl.pliselid,
+                       rl.ctecod,
+                       rl.gndcod,
+                       rl.mapcod,
+                       rl.fonid,
+                       rl.idoid,
+                       rl.idoid,
+                       rl.iduid,
+                       rl.rpcod,
+                       rl.vldotacao,
+                       rl.vlsuplementar,
+                       rl.vlcancelado,
+                       rl.vlsuplementarexcesso,
+                       rl.vlsuplementarsuperavit
+                  from alteracao.remanejamento_loa rl
+                 inner join alteracao.plano_interno_selecionado pis
+                    on rl.pliselid = pis.pliselid
+                 where pedid = ".$pedid;
         return $this->carregar($sql);
     }
 }
