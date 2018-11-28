@@ -1,10 +1,17 @@
 <?php
 
     include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
+    require_once APPRAIZ . 'includes/php-excel/PHPExcel.php';
 
     $modelPlanoInterno = new Pi_PlanoInterno();
 
     switch($_REQUEST['req']){
+        case 'exportar_xls_unidade':
+            $modelPlanoInterno->exportarXlsUnidade((int)$_SESSION['exercicio']);
+            die;
+        case 'exportar_xls_acao':
+            $modelPlanoInterno->exportarXlsAcao((int)$_SESSION['exercicio']);
+            die;
         case 'atualizarSIOP':
             try{
                 $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
@@ -21,10 +28,13 @@
                     'message' => 'Não foi possível atualizar as informações de execução orçamentária(Aprovisionado, Empenhado, liquidado e Pago). O sistema não conseguiu acessar o SIOP-Sistema Integrado de Planejamento e Orçamento do Governo Federal. https://www.siop.planejamento.gov.br'
                 ));
             }
-            die;      
+            die;
     }
     
+    # Busca Subunidades do FNC
     $listaSubunidadeFnc = $modelPlanoInterno->listarSubunidadeFnc((object)array('exercicio' => $_SESSION['exercicio']));
+    
+    # Busca Funcionais do FNC
     $listaFuncionais = $modelPlanoInterno->listarFuncionaisFnc((object)array('exercicio' => $_SESSION['exercicio']));
     
     include APPRAIZ . "includes/cabecalho.inc";
@@ -60,7 +70,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5 class="col-lg-3">Acompanhamento Geral FNC - Por Unidade</h5>
-                    <a class="btn btn-primary" href="planacomorc.php?modulo=inicio&acao=C&req=exportar_xls_unidade"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
+                    <a class="btn btn-primary" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A&req=exportar_xls_unidade"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
@@ -214,7 +224,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5 class="col-lg-3">Acompanhamento Geral FNC - Por Ação</h5>
-                    <a class="btn btn-primary" href="planacomorc.php?modulo=inicio&acao=C&req=exportar_xls_acao"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
+                    <a class="btn btn-primary" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A&req=exportar_xls_acao"><i class="fa fa-file-excel-o"></i> Exportar XLS</a>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
@@ -296,7 +306,7 @@
                                             $disponivel = $funcional['dotacao'] - $apresentado;
                                         ?>
                                     </td>
-                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                    <td style="color: #<?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
                                         <?php echo $apresentado? number_format($apresentado, 2, ',', '.'): '-';
                                         
                                             # Valor da coluna selecionado
@@ -317,7 +327,7 @@
                                             $disponivel = $funcional['dotacao'] - $selecionado;
                                         ?>
                                     </td>
-                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                    <td style="color: #<?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
                                         <?php echo $selecionado? number_format($selecionado, 2, ',', '.'): '-';
                                             
                                            # Valor da coluna aprovado
@@ -337,7 +347,7 @@
                                             $disponivel = $funcional['dotacao'] - $aprovado;
                                         ?>
                                     </td>
-                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                    <td style="color: #<?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
                                         <?php echo $aprovado? number_format($aprovado, 2, ',', '.'): '-';
 
                                             # Valor da coluna Provisionado
@@ -356,7 +366,7 @@
                                             $disponivel = $funcional['dotacao'] - $provisionado;
                                         ?>
                                     </td>
-                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                    <td style="color: #<?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
                                         <?php echo $provisionado? number_format($provisionado, 2, ',', '.'): '-';
                                         
                                             # Valor da coluna Empenhado
@@ -375,10 +385,10 @@
                                             $disponivel = $funcional['dotacao'] - $empenhado;
                                         ?>
                                     </td>
-                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                    <td style="color: #<?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
                                         <?php echo $empenhado? number_format($empenhado, 2, ',', '.'): '-';
                                         
-                                            # Valor da coluna Empenhado
+                                            # Valor da coluna Liquidado
                                             $liquidado = $modelPlanoInterno->buscarTotalExecucaoFnc((object) array(
                                                 'tipo' => 'liquidado',
                                                 'exercicio' => $_SESSION['exercicio'],
@@ -394,10 +404,10 @@
                                             $disponivel = $funcional['dotacao'] - $liquidado;
                                         ?>
                                     </td>
-                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                    <td style="color: #<?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
                                         <?php echo $liquidado? number_format($liquidado, 2, ',', '.'): '-';
                                         
-                                            # Valor da coluna Empenhado
+                                            # Valor da coluna Pago
                                             $pago = $modelPlanoInterno->buscarTotalExecucaoFnc((object) array(
                                                 'tipo' => 'pago',
                                                 'exercicio' => $_SESSION['exercicio'],
@@ -413,7 +423,7 @@
                                             $disponivel = $funcional['dotacao'] - $pago;
                                         ?>
                                     </td>
-                                    <td style="color: <?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
+                                    <td style="color: #<?php echo $modelPlanoInterno->getCorPainelPorValorDisponivel((int)$disponivel); ?>;">
                                         <?php echo $pago? number_format($pago, 2, ',', '.'): '-'; ?>
                                     </td>
                                 </tr>
