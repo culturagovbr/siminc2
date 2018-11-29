@@ -21,7 +21,6 @@ $permissoes = verificaPerfilPainel();
 				WHERE pu.usucpf = '". $_SESSION['usucpf'] ."' and p.pflstatus = 'A' and p.sisid =  '". $_SESSION['sisid'] ."' 
 				ORDER BY pflnivel ASC LIMIT 1";
 echo montarAbasArray($permissoes['menu'], $_SERVER['REQUEST_URI']);
-
 // titulos da tela
 $titulo = "Indicadores";
 
@@ -138,11 +137,6 @@ switch($_POST['evento']){
 			$_SESSION['painel']['indpublico'] = $_REQUEST['indpublico'];
 		}
 		
-		if($_REQUEST['indhomologado'] || $_SESSION['painel']['indhomologado']) {
-			if($_REQUEST['indhomologado'] != 'ambos' && $_SESSION['painel']['indhomologado'] != 'ambos') $filtroprocesso[] = "i.indhomologado=".$_REQUEST['indhomologado']."";
-			$_SESSION['painel']['indhomologado'] = $_REQUEST['indhomologado'];
-		}
-		
 		if($_REQUEST['colid'] || $_SESSION['painel']['colid']) {
 			if($_REQUEST['colid'] != 'ambos' && $_SESSION['painel']['colid'] != 'ambos') $filtroprocesso[] = "i.colid=".$_REQUEST['colid']."";
 			$_SESSION['painel']['colid'] = $_REQUEST['colid'];
@@ -238,11 +232,6 @@ if($_POST['evento'] == "P"){
 	if($_REQUEST['indpublico'] || $_SESSION['painel']['indpublico']) {
 		if($_REQUEST['indpublico'] != 'ambos' && $_SESSION['painel']['indpublico'] != 'ambos') $filtroprocesso[] = "i.indpublico=".$_REQUEST['indpublico']."";
 		$_SESSION['painel']['indpublico'] = $_REQUEST['indpublico'];
-	}
-	
-	if($_REQUEST['indhomologado'] || $_SESSION['painel']['indhomologado']) {
-		if($_REQUEST['indhomologado'] != 'ambos' && $_SESSION['painel']['indhomologado'] != 'ambos') $filtroprocesso[] = "i.indhomologado=".$_REQUEST['indhomologado']."";
-		$_SESSION['painel']['indhomologado'] = $_REQUEST['indhomologado'];
 	}
 	
 	if($_REQUEST['colid'] || $_SESSION['painel']['colid']) {
@@ -630,12 +619,7 @@ $sql = "SELECT  '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&i
    		LEFT JOIN painel.detalhetipoindicador dt1 ON dt1.indid = i.indid AND dt1.tdinumero = 1
    		LEFT JOIN painel.detalhetipoindicador dt2 ON dt2.indid = i.indid AND dt2.tdinumero = 2
 	    LEFT JOIN painel.mapa m ON m.mapid = m.mapid";
-        if (in_array(PAINEL_PERFIL_SUPER_USUARIO, $listaPerfis) || in_array(PAINEL_PERFIL_GESTOR_ACOMPANHAMENTO, $listaPerfis)){
 	    $sql .= " LEFT JOIN painel.secretaria s ON i.secid = s.secid ";
-        }else{ 
-            $sql .= " inner join painel.secretaria s on i.secid = s.secid
-                      inner join painel.usuarioresponsabilidade ur on s.secid = ur.secid and ur.usucpf = '".$_SESSION['usucpf']."'";
-        }
 	    $sql .= " LEFT JOIN painel.acao a ON a.acaid = i.acaid 
 	    LEFT JOIN painel.eixo ex ON ex.exoid = i.exoid 
 	    LEFT JOIN painel.unidademedicao unm ON unm.unmid = i.unmid 
@@ -652,7 +636,6 @@ $sql = "SELECT  '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&i
             group by i.indid, col.coldsc, reg.regdescricao, dt1.tdidsc, dt2.tdidsc, s.secdsc, a.acadsc, unm.unmdesc, dt.dtcoleta
 	    ORDER BY (select s1.secordem from painel.secretaria s1 where s1.secid = i.secid and s1.secstatus = 'A')";
 $cabecalho = array("&nbsp;Ações&nbsp;&nbsp;&nbsp;&nbsp;", "Metas do Indicador", "Identificador do Indicador", "Nome", "Homologado", "Publicado", "Coleta", "Regionalização", "Detalhe", "Autarquia / Secretaria Executora" , "Ação", "Unidade de Medição", "Objetivo", "Última Atualização");
-
 $db->monta_lista($sql,$cabecalho,100,5,'N','center',$par2);
 
 ?>

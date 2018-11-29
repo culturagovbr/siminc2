@@ -104,6 +104,7 @@ class Painel_Model_Indicador extends Modelo
         'indencerrado' => null,
         'indavalgestor' => null,
         'indobsgestor' => null,
+        'indobsgestorindicador' => null,
     );
 
     public function RetornaPerfil(){

@@ -1407,7 +1407,7 @@ function validaBranco( campo, label )
 		{
 			return true;
 		}
-		alert( "Campo obrigat�rio: " + label + "." );
+		alert( "Campo obrigat\u00f3rio: " + label + "." );
 		return false;
 	}
 	else
@@ -1424,7 +1424,7 @@ function validaBranco( campo, label )
 			}
 			if ( teste_campo == "false" ) // todos os caracteres digitados s�o brancos
 			{
-				alert( "Campo obrigat�rio: " + label + "." );
+				alert( "Campo obrigat\u00f3rio: " + label + "." );
 				campo.focus();
 				return false;
 			}
@@ -1435,7 +1435,7 @@ function validaBranco( campo, label )
 		}
 		else
 		{
-			alert( "Campo obrigat�rio: " + label + "." );
+			alert( "Campo obrigat\u00f3rio: " + label + "." );
 			campo.focus();
 			return false;
 		}

@@ -4,6 +4,8 @@
 
 $tipoRelatorio = $_REQUEST['tipo_relatorio'] ? $_REQUEST['tipo_relatorio'] : array();
 $norelatorio = '';
+$listaSubUnidades = buscarSuoidUsuario((object) array('usucpf' => $_SESSION['usucpf']));
+
 if(isset($_REQUEST['req'])){
     switch ($_REQUEST['req']) {
         case 'exibir':

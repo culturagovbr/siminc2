@@ -512,3 +512,31 @@ function buscarSubUnidadeUsuario(stdClass $filtros){
 
     return $listaSubUnidadeUsuario;
 }
+
+/**
+ * Busca Sub-Unidades vinculadas ao usuário.
+ *
+ * @return array
+ */
+function buscarSuoidUsuario(stdClass $filtros){
+    global $db;
+    $listaSubUnidadeUsuario = array();
+    $sql = "
+        SELECT DISTINCT
+            suo.suoid
+        FROM {$_SESSION['sisdiretorio']}.usuarioresponsabilidade rpu
+            JOIN public.vw_subunidadeorcamentaria suo ON rpu.ungcod = suo.suocod
+        WHERE
+            rpu.rpustatus = 'A'
+            AND rpu.usucpf = '". pg_escape_string($filtros->usucpf). "'
+    ";
+//ver($sql,d);
+    $resultado = $db->carregar($sql);
+    if($resultado){
+        foreach($resultado as $contador => $subUnidade){
+            $listaSubUnidadeUsuario[] = $subUnidade['suoid'];
+        }
+    }
+
+    return $listaSubUnidadeUsuario;
+}

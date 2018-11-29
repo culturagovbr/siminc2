@@ -61,8 +61,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                         </div>
                         <div class="form-group">
                             <div class="text-center">
-                                <input type="submit" class="btn btn-primary" name="btg" value="Salvar" />
-                                <a href="planacomorc.php?modulo=inicio&acao=C" class="btn btn-warning" id="btnVoltar" type="button">Voltar</a>
+                                <button type="submit" class="btn btn-primary fa fa-check" name="btg" value="Salvar"> Salvar</button>
+                                <a href="planacomorc.php?modulo=inicio&acao=C" class="btn btn-warning fa fa-arrow-left" id="btnVoltar" type="button"> Voltar</a>
                             </div>
                         </div>
                     </form>

@@ -71,10 +71,20 @@
             FROM public.vw_subunidadeorcamentaria suo
             WHERE
                 suo.suostatus = 'A'
-                AND suo.prsano = '". $_REQUEST['filtro']['prsano']."'
-            ORDER BY
-                descricao";
-        echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                AND suo.prsano = '". $_REQUEST['filtro']['prsano']."'";
+        if (count($listaSubUnidades)>0){
+            $stSql .= " AND suo.suoid in (".implode(',', $listaSubUnidades).")";
+        }        
+        $stSql .= " ORDER BY
+                descricao
+        ";
+        
+        if (count($listaSubUnidades)>0){
+            $suoid = $listaSubUnidades;
+            echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        }else{
+            echo $simec->select("filtro[suoid][]", 'Subunidade', $suoid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        }
         echo "</div>";
         
         echo "<div class='div_acaid'>";

@@ -105,7 +105,7 @@
 		if ( $email_aprovacao ) {
 			$remetente = $_SESSION['usuemail'];
 			$destinatario = $_REQUEST['usuemail'];
-			$assunto = "Aprovação do Cadastro no Simec";
+			$assunto = "Aprovação do Cadastro no ".SIGLA_SISTEMA;
 			$conteudo = sprintf(
 				"%s %s<p>Sua conta está ativa. Sua Senha de acesso é: %s</p>",
 				$_REQUEST['ususexo'] == 'M' ? 'Prezado Sr.' : 'Prezada Sra.',

@@ -28,6 +28,7 @@
     include APPRAIZ . 'includes/cabecalho.inc';
 ?>
 <!--<link href="../painel/relatorio/css/indicadores-secretaria.css" rel="stylesheet" media="screen">-->
+<script language="JavaScript" src="../includes/wz_tooltip.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Material+Icons" rel="stylesheet">
 <style type="text/css">
     body {
@@ -147,7 +148,9 @@
     }
 
 </style>
-
+<div class="alert alert-warning alert-dismissable aria-hidden noprint" align="center" style="font-size: 14px">
+    Para uma melhor impressão dos dados utilize o navegador FireFox
+</div>
 <div class="container-tabela">
     <h1>
         Indicadores por Secretarias
@@ -167,13 +170,14 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col"style="text-align: left;">Unidade </th>
-                    <th scope="col"style="text-align: left;">Produto</th>
-                    <th scope="col"style="text-align: left;">Observações</th>
-                    <th scope="col"style="text-align: left;">Meta atual</th>
-                    <th scope="col"style="text-align: left;">Realizado</th>
-                    <th scope="col">Orçamento</th>
+                    <tr>
+                        <th scope="col" width="20%">Nome</th>
+                        <th scope="col" width="10%"style="text-align: center;">Produto</th>
+                        <th scope="col" width="5%"style="text-align: center;">Orçamento</th>
+                        <th scope="col" width="5%"style="text-align: center;">Previsto</th>
+                        <th scope="col" width="5%"style="text-align: center;">Realizado</th>
+                        <th scope="col" width="40%"style="text-align: left;">Observações</th>
+                    </tr>
                 </tr>
             </thead>
             <?php if($listaIndicadores): ?>
@@ -183,39 +187,47 @@
                             if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado']){
                                 //vermelho
                                 $bgColor = '#E92922';
-                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado'] || $indicadores['meta']>=$indicadores['realizado']){
-                                //azul
-                                $bgColor = '#6572b1f5';
+                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado'] || $indicadores['meta']>$indicadores['realizado']){
+                                //marrom
+                                $bgColor = '#bf662b'; 
                             }else{
                                 //verde
-                                $bgColor = '#1db954';                     
+                                $bgColor = '#1db954';                    
                             }
                         ?>   
                         <tr>
                             <td>
                                 <?=$indicadores['nome']; ?>
                             </td>
-                            <td>
-                                <?=$indicadores['unidade']; ?>
-                            </td>
-                            <td>
+                            <td align="center">
                                 <?=$indicadores['produto']; ?>
                             </td>
-                            <td>
-                                <?=$indicadores['observacao_gestor_i']; ?>
+                            <td align="center">
+                                <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                             </td>
-                            <td>
+                            <td align="center">
                                 <?=$indicadores['meta']; ?>
                             </td>
-                            <td style='color: <?= $bgColor;?>'>
+                            <td style='color: <?= $bgColor;?>' align="center">
                                 <?=$indicadores['realizado']; ?>
-                            </td>
-                            <td>
-                                <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                 <br/>
                                 <div class="progress" style="height: 6px;">
                                     <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%; background-color: <?= $bgColor;?>;" aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+                                </div>                                
+                            </td>
+                            <td>
+                                <?php
+                                $class='';
+                                if ($indicadores['indavalgestor']=='S'){
+                                    $class='fa-thumbs-up';
+                                }else if ($indicadores['indavalgestor']=='N'){
+                                    $class='fa-thumbs-down';
+                                }else if ($indicadores['indavalgestor']=='E'){
+                                    $class='fa-exclamation-circle';
+                                }
+                                ?>
+                                <i style="font-size:2.5em" class="fa <?= $class?>"></i>                                
+                                <?=$indicadores['observacao_gestor_i']; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -223,7 +235,7 @@
             <?php else: ?>
                 <tfoot>
                     <tr>
-                        <td colspan="7">Não existem indicadores cadastrados</td>
+                        <td colspan="6">Não existem indicadores cadastrados</td>
                     </tr>
                 </tfoot>
             <?php endif; ?>
@@ -241,13 +253,12 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Nome</th>
-                        <th scope="col"style="text-align: left;">Unidade </th>
-                        <th scope="col"style="text-align: left;">Produto</th>
-                        <th scope="col"style="text-align: left;">Observações</th>
-                        <th scope="col"style="text-align: left;">Meta atual</th>
-                        <th scope="col"style="text-align: left;">Realizado</th>
-                        <th scope="col">Orçamento</th>
+                        <th scope="col" width="20%">Nome</th>
+                        <th scope="col" width="10%"style="text-align: center;">Produto</th>
+                        <th scope="col" width="5%"style="text-align: center;">Orçamento</th>
+                        <th scope="col" width="5%"style="text-align: center;">Previsto</th>
+                        <th scope="col" width="5%"style="text-align: center;">Realizado</th>
+                        <th scope="col" width="40%"style="text-align: left;">Observações</th>
                     </tr>
                 </thead>
                 <?php if($listaIndicadores): ?>
@@ -257,39 +268,50 @@
                             if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado']){
                                 //vermelho
                                 $bgColor = '#E92922';
-                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado'] || $indicadores['meta']>=$indicadores['realizado']){
-                                //azul
-                                $bgColor = '#6572b1f5';
+                            }else if (($indicadores['meta']-($indicadores['meta']*0.15))>$indicadores['realizado'] || $indicadores['meta']>$indicadores['realizado']){
+                                //marrom
+                                $bgColor = '#bf662b'; 
                             }else{
                                 //verde
-                                $bgColor = '#1db954';                     
+                                $bgColor = '#1db954';                    
                             }
                             ?>                        
                             <tr>
                                 <td>
                                     <?=$indicadores['nome']; ?>
                                 </td>
-                                <td>
-                                    <?=$indicadores['unidade']; ?>
+                                <td align="center">
+                                    <?= $indicadores['produto'] ? $indicadores['produto'] : '-' ;?>
                                 </td>
-                                <td>
-                                    <?=$indicadores['produto']; ?>
+                                <td align="center">
+                                    <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                 </td>
-                                <td>
-                                    <?=$indicadores['observacao_gestor_i']; ?>
-                                </td>
-                                <td>
+                                <td align="center">
                                     <?=$indicadores['meta']; ?>
                                 </td>
-                                <td style='color: <?= $bgColor;?>'>
+                                <td style='color: <?= $bgColor;?>' align="center">
                                     <?=$indicadores['realizado']; ?>
-                                </td>
-                                <td>
-                                    <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                     <br/>
                                     <div class="progress" style="height: 6px;">
                                         <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%; background-color: <?= $bgColor;?>; aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                                    </div>                                    
+                                </td>
+                                <td>
+                                    <?php
+                                    $class='';
+                                    if ($indicadores['parecer_gestor_a']=='S'){
+                                        $class='fa-thumbs-up';
+                                        $color='#1db954';
+                                    }else if ($indicadores['parecer_gestor_a']=='N'){
+                                        $class='fa-thumbs-down';
+                                        $color='#E92922';
+                                    }else if ($indicadores['parecer_gestor_a']=='E'){
+                                        $class='fa-exclamation-circle';
+                                        $color='#bf662b';
+                                    }
+                                    ?>
+                                    <i style="font-size:2.5em; color: <?=$color?>" id="indthumbs" class="fa <?= $class?>"></i>                                                                        
+                                    <?=$indicadores['observacao_gestor_i']; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -297,13 +319,13 @@
                 <?php else: ?>
                     <tfoot>
                         <tr>
-                            <td colspan="7">Não existem indicadores cadastrados</td>
+                            <td colspan="6">Não existem indicadores cadastrados</td>
                         </tr>
                     </tfoot>
                 <?php endif; ?>
             </table>
             <!-- Quebra de pagina no documento impresso. -->
-            <br style='page-break-before:always' />
+            <br style='page-break-before:always; page-break-inside: avoid;' />        
         <?php endforeach; ?>
     <?php endif; ?>
 </div>

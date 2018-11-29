@@ -971,7 +971,7 @@ function atividade_atribuir_responsavel( $atividade, $perfil, $usuarios ){
 		if($usuariodados['usuchaveativacao'] == "f") {
 			$remetente = array("nome" => "Simec","email" => "simec@mec.gov.br");
 			$destinatario = $usuariodados['usuemail'];
-			$assunto = "Aprovação do Cadastro no Simec";
+            $assunto = "Aprovação do Cadastro no ".SIGLA_SISTEMA;
 			$conteudo = "
 						<br/>
 						<span style='background-color: red;'><b>Esta é uma mensagem gerada automaticamente pelo sistema. </b></span>
