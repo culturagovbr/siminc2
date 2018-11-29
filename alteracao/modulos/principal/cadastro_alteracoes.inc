@@ -112,8 +112,8 @@ include APPRAIZ. "includes/cabecalho.inc";
                 <h1>REMANEJAMENTO LOA</h1>
                 <div class="div_remanejamento_loa"></div>
                 
-                <h1>NATUREZA DA RECEITA</h1>
-                <div class="div_natureza_receita"></div>
+<!--                <h1>NATUREZA DA RECEITA</h1>-->
+<!--                <div class="div_natureza_receita"></div>-->
                 
                 <h1>JUSTIFICATIVA</h1>
                 <div class="div_justificativa"></div>
@@ -182,7 +182,7 @@ $(function(){
                     $(".div_remanejamento_loa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_remanejamento_loa&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
                     $(".divDadosCredito").show('fast');
                     break;
-                case 4:
+                case 3:
                     $(".div_justificativa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_justificativa&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
                     $(".divDadosCredito").show('fast');
                     break;
