@@ -389,7 +389,7 @@ class ErrorHandler {
         $assunto = 'Erro no '. SIGLA_SISTEMA . ' ' . date ( "d-m-Y H:i:s" ) . " - " . $_SESSION ['ambiente'];
 
         $aDestinatarios = carregarUsuariosSessao();
-        $remetente     = array("nome"=>SIGLA_SISTEMA. " - ".strtoupper($_SESSION['sisdiretorio'])." - " . $_SESSION['usunome'] . " - " . $_SESSION['usuorgao'], "email"=>"noreply@mec.gov.br");
+        $remetente     = array("nome"=>SIGLA_SISTEMA. " - ".strtoupper($_SESSION['sisdiretorio'])." - " . $_SESSION['usunome'] . " - " . $_SESSION['usuorgao'], "email"=>EMAIL_SISTEMA_NOREPLY);
         $destinatarios = !empty($aDestinatarios[$_SESSION['sisid']]) ? $aDestinatarios[$_SESSION['sisid']] : array_keys($aDestinatarios['todos']);
 
         simec_email($remetente, $destinatarios, $assunto, $msgLog);

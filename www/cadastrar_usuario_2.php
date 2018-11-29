@@ -347,19 +347,62 @@
         $tpocod_banco = $tpocod ? (integer) $tpocod : "null";
 
         if (!$cpf_cadastrado) {
-            // insere informações gerais do usuário
-            $sql = sprintf(
-                    "INSERT INTO seguranca.usuario (
-                                            usucpf, usunome, usuemail, usufoneddd, usufonenum,
-                                            usufuncao, carid, unicod, usuchaveativacao, regcod,
-                                            ususexo, ungcod, ususenha, suscod, orgao,
-                                            muncod, tpocod
-                                    ) values (
-                                            '%s', '%s', '%s', '%s', '%s',
-                                            '%s', '%s', '%s', '%s', '%s',
-                                            '%s', '%s', '%s', '%s', '%s',
-                                            '%s', %s
-                                    )", $cpf, str_to_upper($usunome), strtolower($usuemail), $usufoneddd, $usufonenum, $usufuncao, $carid, $unicod, 'f', $regcod, $ususexo, $_POST['ungcod_disable'], md5_encrypt_senha($senhageral, ''), 'P', $orgao, $muncod, $tpocod_banco
+            # Insere informações gerais do usuário
+            $sql = sprintf("
+                INSERT INTO seguranca.usuario (
+                    usucpf,
+                    usunome,
+                    usuemail,
+                    usufoneddd,
+                    usufonenum,
+                    usufuncao,
+                    carid,
+                    unicod,
+                    usuchaveativacao,
+                    regcod,
+                    ususexo,
+                    ungcod,
+                    ususenha,
+                    suscod,
+                    orgao,
+                    muncod,
+                    tpocod
+                ) VALUES (
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    %s
+                )",
+                $cpf, 
+                str_to_upper($usunome),
+                strtolower($usuemail),
+                $usufoneddd,
+                $usufonenum, 
+                $usufuncao, 
+                $carid, 
+                $unicod, 
+                'f',
+                $regcod,
+                $ususexo,
+                $_POST['ungcod_disable'],
+                md5_encrypt_senha($senhageral, ''),
+                'P',
+                $orgao,
+                $muncod,
+                $tpocod_banco
             );
 
             $db->executar($sql);
@@ -453,7 +496,7 @@
 
             //recuperando dados para enviar email para o gestor #Atilio, somente o mesmo poderá ativar o usuário.
             $emailCopia = "";
-            $remetente = array("nome" => SIGLA_SISTEMA, "email" => 'noreply@mec.gov.br');
+            $remetente = array("nome" => SIGLA_SISTEMA, "email" => EMAIL_SISTEMA_NOREPLY);
             $destinatario = array("nome" => SIGLA_SISTEMA, "email" => $_SESSION['email_sistema']);
             $assunto = "Solicitação de acesso";
             $nmusu = !empty($_REQUEST['usunome']) ? ", <b>" . $usuariod->usunome . "</b>" : "";
@@ -523,7 +566,7 @@
             if (count($aEnvio)) {
                 foreach ($aEnvio as $envioRegra) {
                     if (isset($envioRegra['emails'])) {
-                        $remetente = array("nome" => SIGLA_SISTEMA, "email" => "noreply@mec.gov.br");
+                        $remetente = array("nome" => SIGLA_SISTEMA, "email" => EMAIL_SISTEMA_NOREPLY);
 
                         $destinatariosBcc = $envioRegra['emails'];
                         $assunto = $envioRegra['assunto'];
