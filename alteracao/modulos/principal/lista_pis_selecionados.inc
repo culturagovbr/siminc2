@@ -3,7 +3,7 @@
         <tr class="text-center">
             <th>Ações</th>
             <th>Funcional</th>
-            <th>Id Planejamento</th>
+            <th>ID Planejamento</th>
             <th>Título</th>
             <th width="11%">Tipo</th>
             <th width="11%">Saldo a Empenhar</th>
@@ -179,11 +179,11 @@
                 "url": "/zimec/public/temas/simec/js/plugins/dataTables/Portuguese-Brasil.json"
             }
         });
-        
+
         $(".btnRemovePi").click(function(){
             removePiPedido($("#pedid").val(), $(this).attr('pliselid'));
         });
-        
+
         $(".input_valor").blur(function(){
             salvarCampo($(this).prop('name'), $(this).attr('pliselid'), $(this).val(), $(this).attr('tipo'));
         });
@@ -191,7 +191,7 @@
             $(this).val(mascaraglobal('###.###.###.###,##', $(this).val()));
         }).keyup();
     });
-    
+
     function salvarCampo(nomeCampo, pliselid, valor, tipo){
         if (valor!=''){
             var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;

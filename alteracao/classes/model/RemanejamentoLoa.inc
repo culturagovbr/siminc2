@@ -99,7 +99,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                             '-'
                         ELSE
                             COALESCE(ptr.plocod, '-')
-                        END) || ' pi: ' || pli.pliid AS descricao
+                        END) || ' PI: ' || pli.pliid AS descricao
                 FROM
                     alteracao.plano_interno_selecionado pis
                     JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
