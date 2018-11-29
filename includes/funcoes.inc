@@ -583,7 +583,7 @@ function email_pessoal($dequem,$deonde, $paraonde, $assunto, $message, $cc='',$c
 	$mensagem->Host         = "localhost";
 	$mensagem->Mailer       = "smtp";
 	$mensagem->FromName		= SIGLA_SISTEMA. " - " . $dequem;
-	$mensagem->AddReplyTo("noreply@mec.gov.br");
+	$mensagem->AddReplyTo(EMAIL_SISTEMA_NOREPLY);
 	$mensagem->From = $deonde;
 	$mensagem->AddAddress( $paraonde );
 	$mensagem->Subject = $assunto;
@@ -4724,7 +4724,7 @@ function recuperarUsuarioReceita($cpf)
 
 function enviarEmailUsuarioInvalido($cpf, $mensagem = '')
 {
-    $remetente     = array("nome"=>SIGLA_SISTEMA, "email"=>"noreply@mec.gov.br");
+    $remetente     = array("nome"=>SIGLA_SISTEMA, "email"=>EMAIL_SISTEMA_NOREPLY);
     $destinatarios = array($_SESSION['email_sistema']);
 
     $assunto = "Tentativa de entrar no sistema com CPF inválido";
