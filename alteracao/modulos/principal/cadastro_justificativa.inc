@@ -25,7 +25,7 @@
             <input type="hidden" name="jstid" id="jstid" value="<?= $justificativa->jstid; ?>">
             <div class="col-md-6">
                 <div class="ibox float-e-margins">
-                    <div class="ibox-content">
+                    <div class="ibox-title">
                         <?php
                             $simec->setFormTipo(Simec_View_Helper::K_FORM_TIPO_VERTICAL);
                             echo $simec->textarea('jstnecessidade', 'Necessidade de Alteração <i class="fa fa-info-circle size" id="necessidade"></i>',
