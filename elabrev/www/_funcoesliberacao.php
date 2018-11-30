@@ -732,7 +732,7 @@ function enviarEmailSPO($lbrid){
 		
 		$libnumprocesso = $db->pegaUm( "SELECT libnumprocesso FROM elabrev.liberacao WHERE lbrid = ".$_SESSION['elabrev_var']['lbrid']." and lbrstatus = 'A'" );
 		
-		$remetente = array("nome"=>SIGLA_SISTEMA, "email"=>"noreply@mec.gov.br");
+		$remetente = array("nome"=>SIGLA_SISTEMA, "email"=>EMAIL_SISTEMA_NOREPLY);
 		$strEmailTo = array($_SESSION['email_sistema']);
 		$strAssunto = 'Solicitação de CDO encaminhada via Simec pela UG '. $unidade .' - Processo nº '.$libnumprocesso;
 		$strMensagem = 'Solicitação de CDO encaminhada via Simec pela UG '.$unidade;
@@ -764,7 +764,7 @@ function enviarEmailSPOAprovada(){
 		
 		$libnumprocesso = $db->pegaUm( "SELECT libnumprocesso FROM elabrev.liberacao WHERE lbrid = ".$_SESSION['elabrev_var']['lbrid']." and lbrstatus = 'A'" );
 		
-		$remetente = array("nome"=>SIGLA_SISTEMA, "email"=>"noreply@mec.gov.br");
+		$remetente = array("nome"=>SIGLA_SISTEMA, "email"=>EMAIL_SISTEMA_NOREPLY);
 		$strEmailTo = array($_SESSION['email_sistema']);
 		$strAssunto = 'Solicitação de CDO encaminhada via Simec pela UG '. $unidade .' - Processo nº '.$libnumprocesso;
 		$strMensagem = 'CDO aprovado no Simec pela SPO';

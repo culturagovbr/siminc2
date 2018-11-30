@@ -13,7 +13,7 @@ class EmailObras extends Modelo {
     /**
      * E-mail de envio
      */
-    const EMAIL_REMETENTE = 'noreply@mec.gov.br';
+    const EMAIL_REMETENTE = EMAIL_SISTEMA_NOREPLY;
 
     /**
      * Array de Invervalo de Envio

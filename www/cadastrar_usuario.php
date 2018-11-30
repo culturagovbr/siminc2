@@ -211,7 +211,7 @@
                                 <div class="form-group" style="font-size: 14px;">
                                     <div class="col-sm-12 text-right">
                                         <a class="btn btn-success" href="javascript:validar_formulario()"><span class="glyphicon glyphicon glyphicon glyphicon-ok"></span> Continuar</a>
-                                        <a class="btn btn-danger" href="javascript:history.back();" ><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
+                                        <a class="btn btn-danger" href="<?php echo URL_SISTEMA; ?>" ><span class="glyphicon glyphicon glyphicon glyphicon-remove"></span> Cancelar</a>
                                     </div>
                                 </div>
                             </form>
