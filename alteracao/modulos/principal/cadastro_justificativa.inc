@@ -20,13 +20,14 @@
         </div>
     </div>
     <div class="row">
-        <form id="justificativa" name="justificativa" method="post" class="form-horizontal">
+        <form id="form-justificativa" name="form-justificativa" method="post" class="form-horizontal">
             <input type="hidden" name="pedid" id="pedid" value="<?= $_REQUEST['pedid']; ?>">
             <input type="hidden" name="jstid" id="jstid" value="<?= $justificativa->jstid; ?>">
             <div class="col-md-6">
                 <div class="ibox float-e-margins">
-                    <div class="ibox-title">
+                    <div class="ibox-content">
                         <?php
+                            $simec->setFormTipo(Simec_View_Helper::K_FORM_TIPO_VERTICAL);
                             echo $simec->textarea('jstnecessidade', 'Necessidade de Alteração <i class="fa fa-info-circle size" id="necessidade"></i>',
                                                 $justificativa->jstnecessidade,
                                                 ['cols' => 50, 'rows' => 6, 'required']
@@ -105,30 +106,56 @@
 
         $('#salvar-justificativa').click(function () {
 
-            $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_justificativa',
-                {
-                    jstid: $('#jstid').val(),
-                    pedid: $('#pedid').val(),
-                    jstnecessidade: $('#jstnecessidade').val(),
-                    jstcausa: $('#jstcausa').val(),
-                    jstfinanciamento: $('#jstfinanciamento').val(),
-                    jstfontes: $('#jstfontes').val(),
-                    jstmedida: $('#jstmedida').val(),
-                    jstlegislacao: $('#jstlegislacao').val(),
-                    jstoutros: $('#jstoutros').val(),
-                },
-                function(retorno){
-                    if (retorno){
-                        swal({
-                            title: "",
-                            text: "Registro salvo com sucesso!",
-                            type: "success",
-                            confirmButtonText: 'Ok',
-                            closeOnConfirm: true
-                        })
+            var podeSalvar = validaRequired();
+
+            if(podeSalvar == true){
+
+                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_justificativa',
+                    {
+                        jstid: $('#jstid').val(),
+                        pedid: $('#pedid').val(),
+                        jstnecessidade: $('#jstnecessidade').val(),
+                        jstcausa: $('#jstcausa').val(),
+                        jstfinanciamento: $('#jstfinanciamento').val(),
+                        jstfontes: $('#jstfontes').val(),
+                        jstmedida: $('#jstmedida').val(),
+                        jstlegislacao: $('#jstlegislacao').val(),
+                        jstoutros: $('#jstoutros').val(),
+                    },
+                    function(retorno){
+                        if (retorno){
+                            swal({
+                                title: "",
+                                text: "Registro salvo com sucesso!",
+                                type: "success",
+                                confirmButtonText: 'Ok',
+                                closeOnConfirm: true
+                            })
+                        }
                     }
-                }
-            );
+                );
+            }else{
+                return false;
+            }
         });
+
+        function validaRequired(){
+
+            var msg = '';
+
+            if($('#jstnecessidade').val() == '' || $('#jstnecessidade').val() == null){
+                msg += "<br>O preenchimento do campo \"Necessidade de Alteração\" é obrigatório.";
+            }
+            if($('#jstcausa').val() == '' || $('#jstcausa').val() == null){
+                msg += "<br>O preenchimento do campo \"Causa da Demanda\" é obrigatório.";
+            }
+
+            if(msg !== '') {
+                alert(msg);
+                return false;
+            } else {
+                return true;
+            }
+        }
     });
 </script>
