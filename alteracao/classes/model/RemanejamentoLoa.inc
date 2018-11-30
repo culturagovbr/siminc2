@@ -201,7 +201,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     {
         $sql = "SELECT
                     idoid as codigo,
-                    idoid as descricao
+                    idocod as descricao
                 FROM public.idoc
                 WHERE
                     idostatus = 'A'

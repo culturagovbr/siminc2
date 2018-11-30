@@ -99,11 +99,11 @@ echo $linha;
                            ?>'+
                         '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboIdoc();
-                               echo montaListaLoa('idoid', $options);
+                               echo montaListaLoa('idoid', $options, '1');
                            ?>'+
                         '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboIduso();
-                               echo montaListaLoa('iduid', $options);
+                               echo montaListaLoa('iduid', $options, '6');
                            ?>'+
                         '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboRP();
