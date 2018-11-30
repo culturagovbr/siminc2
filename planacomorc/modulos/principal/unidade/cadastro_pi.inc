@@ -224,18 +224,15 @@ include APPRAIZ . "includes/cabecalho.inc";
     }
 </style>
 
-
-<?php 
-    if($aDados['pliid']){ 
-    /* Esta condição irá retornar falso, por enquanto será mantida assim para futuras implementaçoes */
-    ?>
+<?php if(TRUE): ?>
     <div class="row">
-        <div class="alert alert-danger alert-dismissable alerta_atualizacao_dados">
-            Atualize os dados do cronograma referentes aos valores previstos.
+        <div class="alert alert-danger alert-dismissable">
+            Atenção! Esse PI teve alteração de valores de Custeio e Capital, por favor corrija o preenchimento dos Cronogramas Físico, Orçamentário e Financeiro.
             <button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="align-self: ">x</button>
         </div>
     </div>
-<?php } ?>
+<?php endif; ?>
+
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-5">
         <h2>
