@@ -66,6 +66,10 @@ if ($_REQUEST['req']){
             $cPedido = new Alteracao_Controller_RemanejamentoLoa();
             $cPedido->salvar($_REQUEST);
             die;
+        case 'salvar_justificativa':
+            $cJustificativa = new Alteracao_Controller_Justificativa();
+            $cJustificativa->salvar($_REQUEST);
+        die;
         case 'remover_loa':
             $cPedido = new Alteracao_Controller_RemanejamentoLoa();
             $cPedido->excluir($_REQUEST['rlid']);
