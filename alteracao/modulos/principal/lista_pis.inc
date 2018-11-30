@@ -21,8 +21,8 @@
                     <td align="center"><?= $dados['funcional']; ?></td>
                     <td align="center"><?= $dados['plicod']; ?></td>
                     <td align="left"><?= $dados['plititulo']; ?></td>
-                    <td align="right">R$ <?= number_format($dados['custeio'],2,',','.'); ?></td>
-                    <td align="right">R$ <?= number_format($dados['capital'],2,',','.'); ?></td>
+                    <td align="right">R$ <?= number_format($dados['custeio'],0,',','.'); ?></td>
+                    <td align="right">R$ <?= number_format($dados['capital'],0,',','.'); ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>

@@ -33,19 +33,19 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" value="<?= number_format($dados['custeio'],2,',','.'); ?>">
-                            Custeio: R$ <?= number_format($dados['custeio'],2,',','.'); ?>
+                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" value="<?= number_format($dados['custeio'],0,',','.'); ?>">
+                            Custeio: R$ <?= number_format($dados['custeio'],0,',','.'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" value="<?= number_format($dados['capital'],2,',','.'); ?>">
-                            Capital: R$ <?= number_format($dados['capital'],2,',','.'); ?>
+                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" value="<?= number_format($dados['capital'],0,',','.'); ?>">
+                            Capital: R$ <?= number_format($dados['capital'],0,',','.'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="hidden" id="picquantidade<?=$dados['pliselid'];?>" value="<?= number_format($dados['picquantidade'],2,',','.'); ?>">
+                            <input type="hidden" id="picquantidade<?=$dados['pliselid'];?>" value="<?= number_format($dados['picquantidade'],0,',','.'); ?>">
                             Físico: <?= number_format($dados['picquantidade'],0,',','.'); ?>
                         </td>
                     </tr>
@@ -54,7 +54,7 @@
             <td style="vertical-align: middle;">
                 <?php
                     $empenhado = $dados['custeio']+$dados['capital']-$dados['empenhado'];
-                    $empenhado = number_format($empenhado,2,',','.');
+                    $empenhado = number_format($empenhado,0,',','.');
                     echo "R$ ".$empenhado;
                 ?>
                 <input type="hidden" id="empenhado<?=$dados['pliselid'];?>" value="<?=$empenhado;?>">
@@ -188,7 +188,7 @@
             salvarCampo($(this).prop('name'), $(this).attr('pliselid'), $(this).val(), $(this).attr('tipo'));
         });
         $('.input_valor').keyup(function(){
-            $(this).val(mascaraglobal('###.###.###.###,##', $(this).val()));
+            $(this).val(mascaraglobal('###.###.###.###', $(this).val()));
         }).keyup();
     });
 
