@@ -212,6 +212,8 @@ $listaJanelasDeAlteracao = (new Planacomorc_Model_PiJanela)->buscarTodos((object
 $mPiPlanoInterno = new Pi_PlanoInterno();
 $podeEditar = $mPiPlanoInterno->verificarPermissaoEditarFnc($estadoAtual, $perfis, $listaJanelasDeAlteracao);
 
+$pedidoAlteracaoOrcamentaria = $dadosPI['pliid']? $mPiPlanoInterno->consultarPedidoAlteracaoEfetivado((object)array('pliid' => (int)$dadosPI['pliid'])): new stdClass();
+
 /**
  * Cabeçalho padrão do sistema.
  * @see cabecalho.inc
@@ -236,10 +238,12 @@ include APPRAIZ . "includes/cabecalho.inc";
     }
 </style>
 
-<?php if(TRUE): ?>
+<?php if($pedidoAlteracaoOrcamentaria->pedid): ?>
     <div class="row">
         <div class="alert alert-danger alert-dismissable">
             Atenção! Esse PI teve alteração de valores de Custeio e Capital, por favor corrija o preenchimento dos Cronogramas Físico, Orçamentário e Financeiro.
+            <b>N° do Pedido: <?php echo $pedidoAlteracaoOrcamentaria->pedid; ?></b>
+            <b>Tipo: <?php echo $pedidoAlteracaoOrcamentaria->tpddsc; ?></b>
             <button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="align-self: ">x</button>
         </div>
     </div>
