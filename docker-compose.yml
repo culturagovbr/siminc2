@@ -9,7 +9,7 @@ services:
       - ./sql/restore/users.sql:/var/www/db-init/users.sql
       - ./sql/restore/siminc2_desenvolvimento.bkp:/var/www/db-init/siminc2_desenvolvimento.bkp
     ports:
-      - 5452:5432
+      - 5432:5432
     restart: always
     environment: 
       POSTGRES_PASSWORD: 123456
