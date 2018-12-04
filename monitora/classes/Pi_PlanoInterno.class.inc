@@ -2393,7 +2393,6 @@ class Pi_PlanoInterno extends Modelo
             SELECT
                 ped.pedid,
                 ped.pedtitulo,
-                ped.suoid,
                 ped.tpaid,
                 ped.janid,
                 ped.pedano,

@@ -2950,3 +2950,44 @@ function alterarCodigoPi($request){
 
     return $resposta;
 }
+
+/**
+ * Consulta se o PI passou por alteração orçamentária e exibe o aviso na tela.
+ * 
+ * @param int $pliid
+ * @return VOID
+ */
+function controlarAvisoPedidoAlteracao($pliid){
+    $modelPi = new Pi_PlanoInterno();
+    $pedidoAlteracaoOrcamentaria = $pliid? $modelPi->consultarPedidoAlteracaoEfetivado((object)array('pliid' => (int)$pliid)): new stdClass();
+    if($pedidoAlteracaoOrcamentaria->pedid){
+        exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria);
+    }
+}
+
+/**
+ * Renderiza o aviso na tela de que o PI passou por Alteração Orçamentária.
+ * 
+ * @param stdClass $pedidoAlteracaoOrcamentaria
+ * @return VOID Mostra na tela o aviso com funcionalidade de ocultar após 10 segundos.
+ */
+function exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria){
+    $htmlAviso = '
+        <div class="row div_row_aviso_pedido">
+            <div class="alert alert-danger alert-dismissable">
+                Atenção! Esse PI teve alteração de valores de Custeio e Capital, por favor adeque-os preenchimentos dos Cronogramas Físico, Orçamentário e Financeiro.
+                <b>N° do Pedido: '. $pedidoAlteracaoOrcamentaria->pedid. '</b>
+                <b>Tipo: '. $pedidoAlteracaoOrcamentaria->tpddsc. '</b>
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="align-self: " title="Fechar aviso">X</button>
+            </div>
+        </div>
+
+        <script>
+            setTimeout(function(){
+                $(".div_row_aviso_pedido").hide("slow");
+            }, 10000);
+        </script>
+    ';
+    
+    echo $htmlAviso;
+}

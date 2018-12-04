@@ -238,16 +238,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     }
 </style>
 
-<?php if($pedidoAlteracaoOrcamentaria->pedid): ?>
-    <div class="row">
-        <div class="alert alert-danger alert-dismissable">
-            Atenção! Esse PI teve alteração de valores de Custeio e Capital, por favor corrija o preenchimento dos Cronogramas Físico, Orçamentário e Financeiro.
-            <b>N° do Pedido: <?php echo $pedidoAlteracaoOrcamentaria->pedid; ?></b>
-            <b>Tipo: <?php echo $pedidoAlteracaoOrcamentaria->tpddsc; ?></b>
-            <button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="align-self: ">x</button>
-        </div>
-    </div>
-<?php endif; ?>
+<?php controlarAvisoPedidoAlteracao($dadosPI['pliid']); ?>
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
