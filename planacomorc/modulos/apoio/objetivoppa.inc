@@ -33,15 +33,20 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tr>
                             </thead>
                             <tbody>
-                              <?php foreach($aObjetivoppa as $dados){ ?>
-
-                                <tr>
-                                    <td class="text-center">
-                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/objetivoppa_form&acao=A&oppid=<?php echo $dados['codigo']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
-                                    </td>
-                                    <td><?php echo $dados['descricao']; ?></td>
-                                </tr>
-                            <?php } ?>
+                            <?php
+                                if($aObjetivoppa):
+                                    foreach ($aObjetivoppa as $dados):
+                            ?>
+                                        <tr>
+                                            <td class="text-center">
+                                                <a title="Alterar"
+                                                   href="planacomorc.php?modulo=apoio/objetivoppa_form&acao=A&oppid=<?php echo $dados['codigo']; ?>"><i
+                                                            class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                            </td>
+                                            <td><?php echo $dados['descricao']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
