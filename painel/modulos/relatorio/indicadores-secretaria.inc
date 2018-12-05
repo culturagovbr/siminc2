@@ -148,6 +148,7 @@
     }
 
 </style>
+
 <div class="alert alert-warning alert-dismissable aria-hidden noprint" align="center" style="font-size: 14px">
     Para uma melhor impressão dos dados utilize o navegador FireFox
 </div>
@@ -243,9 +244,10 @@
     <?php else: ?>
         <hr />
         <?php
-            foreach($listaSecretarias as $secretaria):
-            $sqlListaIndicadores = montarSqlRelIndicadoresSecretaria((object)array('secid' => $secretaria['codigo']));
-            $listaIndicadores = $db->carregar($sqlListaIndicadores);
+            if($listaSecretarias) :
+                foreach($listaSecretarias as $secretaria):
+                $sqlListaIndicadores = montarSqlRelIndicadoresSecretaria((object)array('secid' => $secretaria['codigo']));
+                $listaIndicadores = $db->carregar($sqlListaIndicadores);
         ?>
             <h2>
                 <?=$secretaria['descricao']?>
@@ -326,7 +328,8 @@
             </table>
             <!-- Quebra de pagina no documento impresso. -->
             <br style='page-break-before:always; page-break-inside: avoid;' />        
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
 
