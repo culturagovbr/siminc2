@@ -5,3 +5,7 @@
  * @author Douglas Santana <douglas.fontes@cultura.gov.br>
  */
 
+
+UPDATE public.metapnc SET mpnstatus = 'I';
+UPDATE monitora.pi_planointerno SET plistatus = 'I';
+UPDATE public.objetivoppa SET oppstatus = 'I'
