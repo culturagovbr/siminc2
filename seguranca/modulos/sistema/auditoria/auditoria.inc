@@ -35,7 +35,7 @@ monta_titulo($titulo_modulo,$titul);
      <td>
      <?
        $sisid = $_REQUEST['sisid'];
-  		$sql="SELECT sisid as codigo, sisdsc as descricao FROM sistema order by sisdsc";
+  		$sql="SELECT sisid as codigo, sisdsc as descricao FROM sistema where sisstatus = 'A' order by sisdsc";
 		$db->monta_combo("sisid",$sql,'S',"Selecione o Sistema",'','');
 	?>
     </td>

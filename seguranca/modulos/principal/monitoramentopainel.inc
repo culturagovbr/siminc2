@@ -47,11 +47,10 @@ monta_titulo( "Monitoramento dos módulos do ". SIGLA_SISTEMA, "Painel de monitor
 	&nbsp;&nbsp;&nbsp;&nbsp;até&nbsp;&nbsp;&nbsp;&nbsp; 
 	
 	<? 
-	$diafim = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+//	$diafim = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
 	echo campo_texto('diafim', "N", "S", "Dia fim", 2, 2, "", "", '', '', 0, 'id="diafim"' ); ?> / <span id="permesfim"><? echo $mes; ?></span> / <span id="peranofim"><? echo $ano; ?></span>
 	
 	&nbsp;&nbsp;&nbsp;&nbsp;
-	
 	<input type="button" value="Filtrar" onclick="atualizarGridMonitoramentoPeriodo();">
 
 	</td>

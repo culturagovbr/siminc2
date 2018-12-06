@@ -441,7 +441,7 @@ monta_titulo($titulo_modulo, '');
       </tr>
 
       <tr>
-        <td align="right" class="SubTituloDireita">Municï¿½pio:</td>
+        <td align="right" class="SubTituloDireita">Município:</td>
         <td><select name="muncod" class="CampoEstilo" id="muncod"><option value="null">Selecione a UF</option></select></td>
       </tr>
 
