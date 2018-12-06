@@ -2380,4 +2380,36 @@ class Pi_PlanoInterno extends Modelo
         header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
     }
+    
+    /**
+     * Consulta os dados de pedido de Alteração Orçamentária.
+     * 
+     * @param stdClass $params
+     * @return stdClass
+     */
+    public function consultarPedidoAlteracaoEfetivado(stdClass $params){
+        $where = $params->pliid? "\n AND plise.pliid = ". (int)$params->pliid: NULL;
+        $sql = "
+            SELECT
+                ped.pedid,
+                ped.pedtitulo,
+                ped.tpaid,
+                ped.janid,
+                ped.pedano,
+                ped.docid,
+                tpd.tpddsc
+            FROM alteracao.pedido ped
+                JOIN workflow.documento doc ON(ped.docid = doc.docid)
+                JOIN workflow.estadodocumento esd ON(doc.esdid = esd.esdid)
+                JOIN workflow.tipodocumento tpd ON(esd.tpdid = tpd.tpdid)
+                JOIN alteracao.plano_interno_selecionado plise ON(ped.pedid = plise.pedid)
+            WHERE
+                ped.pedstatus = 'A'
+                AND doc.esdid IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ",". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")
+                $where
+        ";
+
+        $pedido = $this->pegaLinha($sql);
+        return $pedido? (object)$pedido: new stdClass();
+    }
 }
