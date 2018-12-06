@@ -1,3 +1,7 @@
+<div id="divAlerta" class="alert alert-danger alert-dismissable">
+    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <span id="divAlertaContent">Teste de alerta</span>
+</div>  
 <div class="wrapper wrapper-content animated fadeInRight">  
     <div class="row">
         <div class="col-lg-12">
@@ -47,6 +51,7 @@ Final da modal de listar pis disponíveis
 
 <script>
     $(document).ready(function(){
+        $("#divAlerta").hide();
         $("#btnSelecionarPi").click(function(){
             var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis&pedid='+$("#pedid").val();
             $('#seleciona_pi .modal-body').load(url);

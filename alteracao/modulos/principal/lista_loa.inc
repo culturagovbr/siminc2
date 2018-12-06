@@ -1,9 +1,11 @@
+<input type="hidden" id="ptrid" name="ptrid">
+<input type="hidden" id="unicod" name="unicod">
 <?php
 $req = '<span style="color: #ff0000">*</span>';
 $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table-hover" >
         <tr class="text-center">
             <th width="5%">Ação</th>
-            <th>Funcional'.$req.'</th>
+            <th class="tdpliselid">Funcional'.$req.'</th>
             <th>Categoria'.$req.'</th>
             <th>GND'.$req.'</th>
             <th>Modalidade'.$req.'</th>
@@ -26,20 +28,22 @@ $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table
                                   <a href="#" class="btnSalvarLoa" id="btnSalvarLoa" rlid="'.$loa['rlid'].'"><i class="fa fa-check"></i></a>
                               </td>';
                 $linha .= '<td class="combo">';
+                $linha .= '<input type="hidden" id="ptrid'.$loa['rlid'].'" name="ptrid">';
+                $linha .= '<input type="hidden" id="unicod'.$loa['rlid'].'" name="unicod" value="'.$loa['unicod'].'">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid']);
-                $linha .= montaListaLoa('pliselid',$options, $loa['pliselid'], $loa['rlid']);
+                $linha .= montaListaLoa('pliselid',$options, $loa['pliselid'], $loa['rlid'], 'SelecionaPtrid(this, '.$loa['rlid'].');');
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboCategoria();
-                $linha .= montaListaLoa('ctecod', $options, $loa['ctecod'], $loa['rlid']);
+                $linha .= montaListaLoa('ctecod', $options, $loa['ctecod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');');
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboGND();
-                $linha .= montaListaLoa('gndcod', $options, $loa['gndcod'], $loa['rlid']);
+                $linha .= montaListaLoa('gndcod', $options, $loa['gndcod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');');
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboModalidade();
-                $linha .= montaListaLoa('mapcod', $options, $loa['mapcod'], $loa['rlid']);
+                $linha .= montaListaLoa('mapcod', $options, $loa['mapcod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');');
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboFonte();
@@ -57,7 +61,7 @@ $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboRP();
                 $linha .= montaListaLoa('rpcod', $options, $loa['rpcod'], $loa['rlid']);
                 $linha .= '</td>';
-                $linha .= '        <td class="combo"><input type="text" id="vlDotacao'.$loa['rlid'].'" name="vlDotacao" rlid="'.$loa['rlid'].'" value="'.$loa['vldotacao'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento"></td>';
+                $linha .= '        <td class="combo" style="vertical-align: middle" id="vlDotacao'.$loa['rlid'].'">'.$loa['vldotacao'].'</td>';
                 $linha .= '        <td class="combo"><input type="text" id="vlSuplementar'.$loa['rlid'].'" name="vlSuplementar" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementar'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento"></td>';
                 $linha .= '        <td class="combo"><input type="text" id="vlCancelado'.$loa['rlid'].'" name="vlCancelado" rlid="'.$loa['rlid'].'" value="'.$loa['vlcancelado'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento"></td>';
                 $linha .= '        <td class="combo"><input type="text" id="vlSuplementarExcesso'.$loa['rlid'].'" name="vlSuplementarExcesso" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementarexcesso'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento"></td>';
@@ -79,19 +83,19 @@ echo $linha;
                                  '<a href="#" class="btnSalvarLoa" id="btnSalvarLoa" rlid=""><i class="fa fa-check"></i></a>' +
                          '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid']);
-                                echo montaListaLoa('pliselid',$options);
+                                echo montaListaLoa('pliselid',$options, null, '', 'SelecionaPtrid(this, );');
                              ?>'+
                          '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboCategoria();
-                               echo montaListaLoa('ctecod', $options);
+                               echo montaListaLoa('ctecod', $options, null, '',  'SelecionaDotacao();');
                            ?>'+
                         '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboGND();
-                               echo montaListaLoa('gndcod', $options);
+                               echo montaListaLoa('gndcod', $options, null, '',  'SelecionaDotacao();');
                            ?>'+
                         '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboModalidade();
-                               echo montaListaLoa('mapcod', $options);
+                               echo montaListaLoa('mapcod', $options, null, '',  'SelecionaDotacao();');
                            ?>'+
                         '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboFonte();
@@ -110,7 +114,7 @@ echo $linha;
                                echo montaListaLoa('rpcod', $options);
                            ?>'+
                         '</th>' +
-                '        <th><input type="text" id="vlDotacao" name="vlDotacao" rlid="" size="15" maxlength="15" class="form-control input_valor_remanejamento"></th>' +
+                '        <th id="vlDotacao" style="vertical-align: middle">-</th>' +
                 '        <th><input type="text" id="vlSuplementar" name="vlSuplementar" rlid="" size="15" maxlength="15" class="form-control input_valor_remanejamento"></th>' +
                 '        <th><input type="text" id="vlCancelado" name="vlCancelado" rlid="" size="15" maxlength="15" class="form-control input_valor_remanejamento"></th>' +
                 '        <th><input type="text" id="vlSuplementarExcesso" name="vlSuplementarExcesso" rlid="" size="15" maxlength="15" class="form-control input_valor_remanejamento"></th>' +
@@ -119,7 +123,7 @@ echo $linha;
             var tbody = $("#tbListaLoa > tbody");
             tbody.append(tr);
             $('.input_valor_remanejamento').keyup(function(){
-                $(this).val(mascaraglobal('###.###.###.###,##', $(this).val()));
+                $(this).val(mascaraglobal('###.###.###.###', $(this).val()));
             }).keyup();   
             $(".btnSalvarLoa").click(function(){
                 var rlid = $(this).attr('rlid');
@@ -182,7 +186,7 @@ echo $linha;
         // validaObrigatorio(rlid);
 
         var ptrid = $("#pliselid"+rlid).val();
-        var vlDotacao = acertaNumero($("#vlDotacao"+rlid).val());
+        var vlDotacao = acertaNumero($("#vlDotacao"+rlid).html());
         var vlSuplementar = acertaNumero($("#vlSuplementar"+rlid).val());
         var vlCancelado = acertaNumero($("#vlCancelado"+rlid).val());
         var vlSuplementarExcesso = acertaNumero($("#vlSuplementarExcesso"+rlid).val());
@@ -283,14 +287,73 @@ echo $linha;
         }
 
     }
+    
+    function SelecionaPtrid(pliselid, rlid){
+        if (rlid==undefined){
+            rlid='';
+        }
+        $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=seleciona_dados_funcional',
+        {
+            pliselid: pliselid.value
+        },
+            function(dados){
+                dados = JSON.parse(dados);
+                if (dados){
+                    $("#ptrid"+rlid).val(dados.ptrid);
+                    $("#unicod"+rlid).val(dados.unicod);
+                    $("#rpcod"+rlid).val(dados.irpcod);
+                    $("#rpcod"+rlid).trigger('chosen:updated');
+                    SelecionaDotacao(rlid);
+                }
+            }
+        );         
+    }
+    
+    function SelecionaDotacao(rlid){
+        if (rlid==undefined){
+            rlid='';
+        }
+        var unicod = $("#unicod"+rlid).val();
+        var funcional = $("#pliselid"+rlid+" option:selected").text();
+        var prgcod = funcional.substring(0,4);
+        var acacod = funcional.substring(5,9);
+        var loccod = funcional.substring(10,14);
+        var objcod = funcional.substring(15,19);
+        var plocod = funcional.substring(20,24);
+        var gndcod = $("#gndcod"+rlid).val();
+        var mapcod = $("#mapcod"+rlid).val();
+        var categoria = $("#ctecod"+rlid).val();
+        if (unicod && prgcod && acacod && loccod && plocod && mapcod && gndcod && categoria){
+            var natureza = categoria.concat(gndcod,mapcod);
+            $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=seleciona_dotacao',
+            {
+                unicod: unicod,
+                prgcod: prgcod,
+                acacod: acacod,
+                loccod: loccod,
+                plocod: plocod,
+                natureza: natureza
+            },
+                function(dados){
+                    dados = JSON.parse(dados);
+                    if (dados){
+                        $("#vlDotacao"+rlid).html(dados);
+                    }
+                }
+            );
+        }
+    }
 </script>
 <style>
     .combo > .chosen-container {
-        font-size: 9px;
+        font-size: 9px;        
     }
     .input_valor_remanejamento {
         font-size: 9px;
         width: 75px;
         padding: 0px;
+    }
+    .tdpliselid{
+        width: 220px;
     }
 </style>

@@ -3,7 +3,16 @@
         <input name="req" id="req" value="" type="hidden">
         <div class="row">
             <div class="col-lg-8">
-                <?= $simec->select('suoid', 'Unidade', $mAlteracaoPedido->suoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), ['required'], ['input-size' => 9, 'label-size' => 2]); ?>
+                <?php
+                $suoid = array();
+                if ($_REQUEST['pedid']){
+                    $suoid = (new Alteracao_Model_PedidoUnidade())->carregarPorPedido($_REQUEST['pedid']);
+                    foreach($suoid as $value){
+                        $arrSuoid[]=$value['suoid'];
+                    }
+                }
+                echo $simec->select('suoid[]', 'Unidade', $arrSuoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), ['required'], ['input-size' => 9, 'label-size' => 2]); 
+                ?>
             </div>
             <div class="col-lg-3">
                 <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), ['required'],  ['input-size' => 8, 'label-size' => 3]); ?>

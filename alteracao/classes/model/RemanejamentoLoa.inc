@@ -87,7 +87,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
      */
     public function recuperaFuncionalSelecionada($pedid)
     {
-        $sql = "SELECT 
+        $sql = "select distinct 
                     pis.pliselid AS codigo,
                     TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (
                         CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN
@@ -99,16 +99,14 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                             '-'
                         ELSE
                             COALESCE(ptr.plocod, '-')
-                        END) || ' PI: ' || pli.pliid AS descricao
-                FROM
-                    alteracao.plano_interno_selecionado pis
-                    JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
-                    LEFT JOIN monitora.pi_planointernoptres ppt ON pis.pliid = ppt.pliid
-                    LEFT JOIN monitora.ptres ptr ON (ppt.ptrid = ptr.ptrid
-                            AND pli.pliano = ptr.ptrano)
-                    LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid
-                WHERE
-                    pis.pedid = {$pedid}
+                        END) || ' PI: ' || pis.pliid AS descricao
+                    from public.vw_subunidadeorcamentaria vs 
+                   inner join alteracao.pedido_unidade pu on vs.suoid = pu.suoid and pu.pedid = 3  and vs.suostatus = 'A' and vs.prsano = '2018'
+                   inner JOIN monitora.ptres ptr ON (vs.unocod = ptr.unicod AND vs.prsano = ptr.ptrano and ptr.ptrstatus = 'A')
+                     inner JOIN monitora.pi_planointernoptres ppt ON ptr.ptrid = ppt.ptrid
+                   inner JOIN monitora.acao aca ON ptr.acaid = aca.acaid
+                   inner join alteracao.plano_interno_selecionado pis on pu.pedid = pis.pedid
+                   where pu.pedid = {$pedid}
          ";
 
         return $this->carregar($sql);
@@ -266,11 +264,51 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                        rl.vlsuplementar,
                        rl.vlcancelado,
                        rl.vlsuplementarexcesso,
-                       rl.vlsuplementarsuperavit
+                       rl.vlsuplementarsuperavit,
+                       ptr.unicod
                   from alteracao.remanejamento_loa rl
                  inner join alteracao.plano_interno_selecionado pis
                     on rl.pliselid = pis.pliselid
+                    JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
+                    LEFT JOIN monitora.pi_planointernoptres ppt ON pis.pliid = ppt.pliid
+                    LEFT JOIN monitora.ptres ptr ON (ppt.ptrid = ptr.ptrid
+                            AND pli.pliano = ptr.ptrano)
+                    LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid                    
                  where pedid = ".$pedid;
         return $this->carregar($sql);
+    }
+    
+    public function selecionaDadosFuncional($pliselid)
+    {
+        $sql = "SELECT 
+                    ptr.ptrid,
+                    ptr.unicod,
+                    ptr.irpcod
+                FROM
+                    alteracao.plano_interno_selecionado pis
+                    JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
+                    LEFT JOIN monitora.pi_planointernoptres ppt ON pis.pliid = ppt.pliid
+                    LEFT JOIN monitora.ptres ptr ON (ppt.ptrid = ptr.ptrid
+                            AND pli.pliano = ptr.ptrano)
+                    LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid
+                WHERE
+                    pis.pliselid = {$pliselid}
+         ";
+
+        return $this->pegaLinha($sql);
+    } 
+    
+    public function selecionaDotacao($dados){
+        $sql = "SELECT DISTINCT coalesce(SUM(dotinicialsiafi::NUMERIC),0) AS dotacao_inicial
+                  FROM wssof.ws_execucaoorcamentariadto exo
+                 WHERE anoexercicio = '".$_SESSION['exercicio']."' -- EXERCICIO
+                   AND unidadeorcamentaria = '".$dados['unicod']."' -- UNOCOD
+                   AND programa = '".$dados['prgcod']."' -- PRGCOD
+                   AND acao = '".$dados['acacod']."' -- ACACOD
+                   AND localizador = '".$dados['loccod']."' -- LOCCOD
+                   AND planoorcamentario = '".$dados['plocod']."' -- PLOCOD
+                   AND SUBSTR(natureza::TEXT, 1, 4) = '".$dados['natureza']."' -- CATEGORIA+GND+MODALIDADE";
+        $dados = $this->carregar($sql);
+        return $dados[0]['dotacao_inicial'];
     }
 }

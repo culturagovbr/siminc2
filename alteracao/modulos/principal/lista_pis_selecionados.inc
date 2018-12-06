@@ -195,11 +195,11 @@
     function salvarCampo(nomeCampo, pliselid, valor, tipo){
         if (valor!=''){
             var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
-            var vlrEmpenhado = $("#empenhado"+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#empenhado"+pliselid).val()) : 0;
-            if (parseFloat(vlrCancelado)>parseFloat(vlrEmpenhado)){
+            var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
+            if (parseInt(vlrCancelado)>parseInt(vlrPic)){
                 swal({
                     title: "",
-                    text: "Valor cancelado maior que o do PI",
+                    text: "Valor de "+tipo+" maior que o do "+tipo+" PI",
                     type: "warning",
                     confirmButtonText: 'Ok',
                     closeOnConfirm: true
@@ -210,62 +210,54 @@
                         $('#listaPisSelecionados').load(url);
                     }
                });
-               return;
-            }
-            var vlrCampo=0;
-            var vlrcancelado=0;
-            var vlrsuplementar=0;
-            $('.input_valor').each(function(){
-                if ($(this).attr('name')=='vlsuplementarcusteio' || $(this).attr('name')=='vlsuplementarcapital' || 
-                    $(this).attr('name')=='vlsuplementarsuperavitcusteio' || $(this).attr('name')=='vlsuplementarsuperavitcapital' ||
-                    $(this).attr('name')=='vlsuplementarexcessocusteio' || $(this).attr('name')=='vlsuplementarexcessocapital'){
-                    vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
-                    vlrsuplementar = parseFloat(vlrsuplementar)+parseFloat(vlrCampo);
-                }else if ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital'){
-                    vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
-                    vlrcancelado = parseFloat(vlrcancelado)+parseFloat(vlrCampo);
-                }
-            });
-            vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
-            if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
-                swal({
-                    title: "",
-                    text: "Valor cancelado divergente do suplementado!",
-                    type: "warning",
-                    confirmButtonText: 'Ok',
-                    closeOnConfirm: true
-                },
-                function(isConfirm){
-                    if(isConfirm){
-                        $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+            }else{
+                var vlrCampo=0;
+                var vlrcancelado=0;
+                var vlrsuplementar=0;
+                $('.input_valor').each(function(){
+                    if ($(this).attr('name')=='vlsuplementarcusteio' || $(this).attr('name')=='vlsuplementarcapital' || 
+                        $(this).attr('name')=='vlsuplementarsuperavitcusteio' || $(this).attr('name')=='vlsuplementarsuperavitcapital' ||
+                        $(this).attr('name')=='vlsuplementarexcessocusteio' || $(this).attr('name')=='vlsuplementarexcessocapital'){
+                        vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
+                        vlrsuplementar = parseFloat(vlrsuplementar)+parseFloat(vlrCampo);
+                    }else if ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital'){
+                        vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
+                        vlrcancelado = parseFloat(vlrcancelado)+parseFloat(vlrCampo);
+                    }
+                });
+                vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
+                if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
+                    $("#divAlertaContent").html("Valor cancelado divergente do suplementado!");
+                    $("#divAlerta").show();
+                    setTimeout(function(){$("#divAlerta").hide("fade");}, 5000);
+                    $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
                         {
                             pliselid: pliselid,
                             campo: nomeCampo,
                             valor: vlrCampo
                         },
-                            function(retorno){
-                                if (retorno){
-                                    var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-                                    $('#listaPisSelecionados').load(url);
-                                }
+                        function(retorno){
+                            if (retorno){
+                                var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                                $('#listaPisSelecionados').load(url);
                             }
-                        );
-                    }
-               });                
-            }else{
-                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
-                {
-                    pliselid: pliselid,
-                    campo: nomeCampo,
-                    valor: vlrCampo
-                },
-                    function(retorno){
-                        if (retorno){
-                            var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-                            $('#listaPisSelecionados').load(url);
                         }
-                    }
-                );                
+                    );
+                }else{
+                    $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+                    {
+                        pliselid: pliselid,
+                        campo: nomeCampo,
+                        valor: vlrCampo
+                    },
+                        function(retorno){
+                            if (retorno){
+                                var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                                $('#listaPisSelecionados').load(url);
+                            }
+                        }
+                    );                
+                }
             }
         }
     }

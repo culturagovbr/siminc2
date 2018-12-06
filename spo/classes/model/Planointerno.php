@@ -151,8 +151,10 @@ class Spo_Model_Planointerno extends Modelo
      */
     public static function listar(stdClass $filtros){
         $where = self::montarFiltro($filtros);
-        $pedid = isset($filtros->pedid)?$filtros->pedid:0;
-
+        if (isset($filtros->pedid)){
+            $pedid = isset($filtros->pedid)?$filtros->pedid:0;
+            $where .= " and pdsuo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid)";
+        }
         $sql = "
             SELECT DISTINCT
                 pli.pliid::VARCHAR AS pliid,
@@ -219,6 +221,7 @@ class Spo_Model_Planointerno extends Modelo
             ORDER BY
                 codigo_pi
         ";
+//        ver($sql,d);
         return $sql;
     }
     

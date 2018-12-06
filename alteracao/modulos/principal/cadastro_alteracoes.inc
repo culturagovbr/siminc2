@@ -74,6 +74,14 @@ if ($_REQUEST['req']){
             $cPedido = new Alteracao_Controller_RemanejamentoLoa();
             $cPedido->excluir($_REQUEST['rlid']);
             die;
+        case 'seleciona_dados_funcional':
+            $mPedido = new Alteracao_Model_RemanejamentoLoa();
+            echo json_encode($mPedido->selecionaDadosFuncional($_REQUEST['pliselid']));
+            die;
+        case 'seleciona_dotacao':
+            $mPedido = new Alteracao_Model_RemanejamentoLoa();
+            echo json_encode($mPedido->selecionaDotacao($_REQUEST));
+            die;
         default:
             break;
     }

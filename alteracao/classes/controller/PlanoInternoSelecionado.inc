@@ -37,7 +37,7 @@ class Alteracao_Controller_PlanoInternoSelecionado
             $mPedido = new Alteracao_Model_PlanoInternoSelecionado($dados['pliselid']);
             $mPedido->popularDadosObjeto($dados);
             $mPedido->{$dados['campo']} = $dados['valor'];
-            $mPedido->salvar(null, null, ['vlsaldoempenhocusteio','vlsaldoempenhocapital','vlsuplementarcusteio','vlsuplementarcapital','vlcancelarcusteio','vlcancelarcapital','vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vldotacaocusteio','vldotacaocapital', 'plisuplementarquantidade', 'plicancelarquantidade', 'plisuplementarsuperavitquantidade', 'plisuplementarexcessoquantidade']);
+            $mPedido->salvar(null, null, ['vlsaldoempenhocusteio','vlsaldoempenhocapital','vlsuplementarcusteio','vlsuplementarcapital','vlcancelarcusteio','vlcancelarcapital','vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vldotacaocusteio','vldotacaocapital']);
             $mPedido->commit();
             echo json_encode(true);
         } catch (Exception $e){

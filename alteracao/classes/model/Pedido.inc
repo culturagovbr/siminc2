@@ -47,7 +47,6 @@ class Alteracao_Model_Pedido extends Modelo
      */
     protected $arChaveEstrangeira = array(
         'docid' => array('tabela' => 'workflow.documento', 'pk' => 'docid'),
-        'suoid' => array('tabela' => 'subunidadeorcamentaria', 'pk' => 'suoid'),
         'tpaid' => array('tabela' => 'alteracao.tipo', 'pk' => 'tpaid'),
         'janid' => array('tabela' => 'alteracao.janela', 'pk' => 'janid'),
     );
@@ -61,7 +60,6 @@ class Alteracao_Model_Pedido extends Modelo
         'pedid' => null,
         'pedtitulo' => null,
         'docid' => null,
-        'suoid' => null,
         'tpaid' => null,
         'janid' => null,
         'pedstatus' => null,
@@ -76,22 +74,20 @@ class Alteracao_Model_Pedido extends Modelo
      */
     public function recuperarListagem($filtroprop)
     {
-        $sql = "SELECT
+        $sql = "SELECT distinct 
                     ped.pedid,
                     ped.pedtitulo,
-                    ped.suoid,
                     ped.tpaid,
                     ped.janid,
                     tpa.tpacod,
                     esd.esddsc,
-                    jan.jannome,
-                    suo.suonome
+                    jan.jannome
                 FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
-                JOIN public.subunidadeorcamentaria AS suo ON ped.suoid = suo.suoid
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
+                left join alteracao.pedido_unidade pu on ped.pedid = pu.pedid
                 WHERE
                     ped.pedstatus = 'A'
                     AND doc.tpdid = ".$filtroprop['tpdid'];
@@ -113,12 +109,12 @@ class Alteracao_Model_Pedido extends Modelo
         }
         if ($filtroprop['suoid']){
             if (is_array($filtroprop['suoid'])){
-                $sql .= " and ped.suoid in (".implode(' , ',$filtroprop['suoid']).')';
+                $sql .= " and pu.suoid in (".implode(' , ',$filtroprop['suoid']).')';
             }else{
-                $sql .= " and ped.suoid in ".$filtroprop['suoid'];
+                $sql .= " and pu.suoid in ".$filtroprop['suoid'];
             }
         }
-//        ver($sql, $filtroprop,d);
+//        ver($sql, d);
         return $this->carregar($sql);
     }
     
@@ -140,21 +136,18 @@ class Alteracao_Model_Pedido extends Modelo
         $sql = "SELECT
                     ped.pedid,
                     ped.pedtitulo,
-                    ped.suoid,
                     ped.tpaid,
                     ped.janid,
                     tpa.tpacod,
                     tpa.tpadsc,
                     esd.esddsc,
                     jan.jannome,
-                    suo.suonome,
                     case when tpa.tpafluxo='I' then 269 
                          when tpa.tpafluxo='E' then 270
                     end as tpdid
                 FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
-                JOIN public.subunidadeorcamentaria AS suo ON ped.suoid = suo.suoid
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 WHERE
@@ -182,11 +175,11 @@ class Alteracao_Model_Pedido extends Modelo
                        pis.vlsuplementarsuperavitcapital,
                        pis.vldotacaocusteio,
                        pis.vldotacaocapital,
-                       coalesce(pis.plisuplementarquantidade,0) as plisuplementarquantidade,
-                       coalesce(pis.plicancelarquantidade,0) as plicancelarquantidade,
-                       coalesce(pis.plisuplementarexcessoquantidade,0) as plisuplementarexcessoquantidade,
-                       coalesce(pis.plisuplementarsuperavitquantidade,0) as plisuplementarsuperavitquantidade,
-                       coalesce(pis.plisuplementarsuperavitquantidade,0)+coalesce(pis.plisuplementarexcessoquantidade,0)+coalesce(pis.plisuplementarquantidade,0)-coalesce(pis.plicancelarquantidade,0) as vlrprovavel,
+                       --coalesce(pis.plisuplementarquantidade,0) as plisuplementarquantidade,
+                       --coalesce(pis.plicancelarquantidade,0) as plicancelarquantidade,
+                       --coalesce(pis.plisuplementarexcessoquantidade,0) as plisuplementarexcessoquantidade,
+                       --coalesce(pis.plisuplementarsuperavitquantidade,0) as plisuplementarsuperavitquantidade,
+                       --coalesce(pis.plisuplementarsuperavitquantidade,0)+coalesce(pis.plisuplementarexcessoquantidade,0)+coalesce(pis.plisuplementarquantidade,0)-coalesce(pis.plicancelarquantidade,0) as vlrprovavel,
                        coalesce((SELECT sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhado
 		                   FROM spo.siopexecucao se
 		                  where se.plicod = pli.plicod
@@ -203,12 +196,10 @@ class Alteracao_Model_Pedido extends Modelo
                   LEFT JOIN monitora.pi_planointernoptres ppt on pis.pliid = ppt.pliid
                   LEFT JOIN monitora.ptres ptr ON( ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
                   LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
-                 inner join public.vw_subunidadeorcamentaria suo ON(
-                    suo.suocod = pli.ungcod 
-                    AND suo.unocod = pli.unicod 
-                    AND suo.prsano = pli.pliano
-                )                  
+                  LEFT JOIN planacomorc.pi_delegacao pd ON(pli.pliid = pd.pliid)
+		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(pd.suoid = suo.suoid)                          
                  where pis.pedid = $pedid
+                   and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid)
                  order by pis.pliselid";
         return $this->carregar($sql);
     }
