@@ -82,10 +82,20 @@ CREATE INDEX idx_usucpf_auddata
   USING btree
   (usucpf COLLATE pg_catalog."default", auddata);
 
--- Atualizando senhas e e-mail por segurança
+-- Atualizando senhas e e-mail pra evitar spam e fishing atraves da base de dados
 UPDATE
-    seguranca.usuario
-SET 
+    seguranca.usuario u
+SET
+    regcod = 'DF',
+    usunome = CASE WHEN LENGTH(SUBSTR(usunome, 1, POSITION(' ' IN usunome))) > 0 THEN SUBSTR(usunome, 1, POSITION(' ' IN usunome)) ELSE usunome END,
+    usuemail = 'teste@teste.com.br',
+    usufoneddd = '99',
+    usufonenum = '9999-9999',
     ususenha = 'o/0m5tlONgaBe9NwzktC4uUvv+26NqEE6YAJmOz4Qn4=', -- 123456
-    usuemail = 'teste@teste.com.br'
+    usufuncao = 'N/A',
+    usunomeguerra = SUBSTR(usunome, 1, POSITION(' ' IN usunome)),
+    muncod = '5300108',
+    usudatanascimento = '1984-01-01',
+    entid = 390374,
+    carid = 16
 ;
