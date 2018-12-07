@@ -23,8 +23,6 @@ services:
       - 9002:9000
     volumes:
       - .:/var/www/siminc2
-      - ./global/config-exemplo.inc:/var/www/siminc2/global/config.inc
-      - ./global/database-exemplo.php:/var/www/siminc2/global/database.php
     environment:
       - APPLICATION_ENV=development
     depends_on:
