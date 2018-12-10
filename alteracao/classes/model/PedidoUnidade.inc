@@ -73,5 +73,10 @@ class Alteracao_Model_PedidoUnidade extends Modelo
 
         return $this->carregar($sql);
     }
+    
+    public function removerUnidades($pedid){
+        $sql = "delete from alteracao.pedido_unidade where pedid = ".$pedid;
+        $this->executar($sql);
+    }
 
 }

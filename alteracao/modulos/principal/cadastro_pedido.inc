@@ -59,13 +59,18 @@
                 result = JSON.parse(result);
                 if (result['result']) {
                     $("#pedid").val(result['pedid']);
-                    $("#divDadosCredito").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_dados_credito&pedid='+result['pedid']+'&tpdid=<?=$_REQUEST['tpdid'];?>');
+                    $("#tpdid").val(result['tpdid']);
+                    $("#divDadosCredito").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_dados_credito&pedid='+result['pedid']+'&tpdid='+result['tpdid']);
                     if (showAlert) {
                         swal({
                             title: "",
                             text: "Registro salvo com sucesso!",
                             type: "success",
                             confirmButtonText: 'OK'
+                        }, function(isConfirm){
+                            if (isConfirm){
+                                window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid='+result['pedid']+'&tpdid='+result['tpdid'];
+                            }
                         });
                     }
                 } else {

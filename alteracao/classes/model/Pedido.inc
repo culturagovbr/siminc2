@@ -132,6 +132,11 @@ class Alteracao_Model_Pedido extends Modelo
         return $docid;
     }
     
+    public function alterarTpdidDocumento($tpdid, $docid){
+        $sql = "update workflow.documento set tpdid = ".$tpdid." where docid = ".$docid;
+        $this->executar($sql);
+    }
+    
     public function recuperarPedidoPorId($pedid){
         $sql = "SELECT
                     ped.pedid,

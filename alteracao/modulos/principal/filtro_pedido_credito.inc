@@ -35,7 +35,7 @@
                 <button class="btn btn-primary btn-buscar" type="button" onclick="javascript:buscarPedidos();">
                     <span class="glyphicon glyphicon-search"></span> Buscar
                 </button>
-                <button class="btn btn-success btn-novo" type="button" onclick="javascript:window.location.href='/alteracao/alteracao.php?modulo=principal/cadastro_alteracoes&acao=C&tpdid=<?=$tpdid;?>'">
+                <button class="btn btn-success btn-novo" type="button" onclick="javascript:window.location.href='/alteracao/alteracao.php?modulo=principal/cadastro_alteracoes&acao=C'">
                     <span class="glyphicon glyphicon-plus"></span>
                     Novo
                 </button>

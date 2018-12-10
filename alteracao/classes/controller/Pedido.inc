@@ -11,8 +11,14 @@ class Alteracao_Controller_Pedido
             $mPedido->pedstatus = 'A';
             $mPedido->pedtitulo = utf8_decode($dados['pedtitulo']);
             $mPedido->salvar(null, null, ['docid']);
+            $this->removerUnidades($mPedido->pedid);
+            $this->salvarUnidades($mPedido->pedid, $dados['suoid']);
+            $tpdid = $this->retornaTpdid($dados['tpaid']);
+            if ($mPedido->docid){
+                $mPedido->alterarTpdidDocumento($tpdid, $mPedido->docid);
+            }
             $mPedido->commit();
-            echo json_encode(["result" => true, "pedid" => $mPedido->pedid]);
+            echo json_encode(["result" => true, "pedid" => $mPedido->pedid, "tpdid" => $tpdid]);
         } catch (Exception $e){
             $mPedido->rollback();
             echo json_encode(["result" => false]);
@@ -56,6 +62,32 @@ class Alteracao_Controller_Pedido
             $resposta['type'] = 'success';
         }
         return simec_json_encode($resposta);
+    }
+    
+    public function retornaTpdid($tpaid){
+        $mTipo = new Alteracao_Model_Tipo($tpaid);
+        switch ($mTipo->tpafluxo) {
+            case 'I':
+                return WF_TPDID_INTERNO;
+            case 'E':
+                return WF_TPDID_EXTERNO;
+        }
+    }
+    
+    public function removerUnidades($pedid){
+        $mPedidoUnidade = new Alteracao_Model_PedidoUnidade();
+        $mPedidoUnidade->removerUnidades($pedid);
+        $mPedidoUnidade->commit();
+    }
+    
+    public function salvarUnidades($pedid, $suoid){
+        foreach($suoid as $value){
+            $mPedidoUnidade = new Alteracao_Model_PedidoUnidade();
+            $mPedidoUnidade->suoid = $value;
+            $mPedidoUnidade->pedid = $pedid;
+            $mPedidoUnidade->salvar();
+            $mPedidoUnidade->commit();
+        }
     }
 
 }
