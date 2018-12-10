@@ -18,9 +18,9 @@ Um container é a implementação de uma Imagem, quando ele é criado, é possí
 
 Para executarmos ações na plataforma docker precisamos executar alguns comandos. Clicando [aqui](https://github.com/vinnyfs89/dockerCommands) você pode obter uma lista dos comandos mais utilizados do Docker.
 
-## Imagens de Ambiente
+## Imagem de Ambiente
 
-As principais imagens utilizadas pelo SIMINC2 podem ser encontradas [aqui](https://hub.docker.com/r/culturagovbr/) .
+A principal imagem utilizadas pelo SIMINC2 podem ser encontradas [aqui](https://hub.docker.com/r/culturagovbr/siminc2) .
 
 ## Dockerfile
 
