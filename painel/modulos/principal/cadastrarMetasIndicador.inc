@@ -1,15 +1,13 @@
 <?php
-if($_GET['novameta']){
-	$sql = "select
-				secid,
-				acaid,
-				indid
-			from
-				painel.indicador
-			where
-				indid = {$_GET['novameta']}";
-	$arrDados = $db->pegaLinha($sql);
-}
+$sql = "select
+                        secid,
+                        acaid,
+                        indid
+                from
+                        painel.indicador
+                where
+                        indid = {$_SESSION['indid']}";
+$arrDados = $db->pegaLinha($sql);
 
 $mIndicador = new Painel_Model_Indicador();
 $listaPerfis = $mIndicador->RetornaPerfil();
@@ -21,7 +19,16 @@ if($_SESSION['painel']['metid']){
 if($_POST['requisicaoAjax']){
 	header('content-type: text/html; charset=ISO-8859-1');
 	include (APPRAIZ.'www/painel/_funcoes_metas.php');
-	$_POST['requisicaoAjax']();
+        switch ($_POST['requisicaoAjax']) {
+            case 'getComboPeriodoPorPerid':
+                getComboPeriodoPorPerid($_POST['perid'],false,"",$_SESSION['painel']['metid']);
+
+                break;
+
+            default:
+                $_POST['requisicaoAjax']();
+                break;
+        }
 	exit();
 }
 
@@ -56,11 +63,16 @@ print '<br/>';
 if($arrDados && $arrDados['metid']){
 	$_REQUEST['metid'] = $metid;
 	$_SESSION['painel']['metid'] = $metid;
-        $menu[0] = array("descricao" => "Lista de Indicadores", "link"=> "painel.php?modulo=principal/listarMetasIndicador&acao=A");
-	$menu[1] = array("descricao" => "Metas do Indicador", 		 "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
-	$menu[2] = array("descricao" => "Editar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
-	$menu[3] = array("descricao" => "Estratégias de Meta", 		 "link"=> "/painel/painel.php?modulo=principal/estrategiaMetasIndicador&acao=A");
-	$menu[4] = array("descricao" => "Valores de Meta", 		 	 "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
+
+	$menu[0] = array("descricao" => "Lista de Indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A");
+	$menu[1] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A");
+	$menu[2] = array("descricao" => "Série Histórica", "link"=> "/painel/painel.php?modulo=principal/listaSerieHistorica&acao=A");
+	$menu[3] = array("descricao" => "Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/metaIndicador&acao=A");
+	$menu[4] = array("descricao" => "Listagem de Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/listarMetasIndicador&acao=A");
+	$menu[5] = array("descricao" => "Cadastrar Metas do Indicador", "link"=> "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
+//	$menu[6] = array("descricao" => "Valores de Meta", "link"=> "/painel/painel.php?modulo=principal/valorMetasIndicador&acao=A");
+	$menu[7] = array("descricao" => "Legendas", "link"=> "/painel/painel.php?modulo=principal/cadastroEstrategiaMetas&acao=A");
+	$menu[8] = array("descricao" => "Avaliação do Gestor", "link"=> "/painel/painel.php?modulo=principal/avaliacaoGestor&acao=A");
 	echo montarAbasArray($menu, "/painel/painel.php?modulo=principal/cadastrarMetasIndicador&acao=A");
 }else{
 	$db->cria_aba($abacod_tela,$url,'');	
@@ -82,77 +94,16 @@ monta_titulo( $titulo, '&nbsp' );
 </style>
 
 <form name="formulario_metas" id="formulario_metas"  method="post" action="" >
+    <input type="hidden" name="secid" value="<?=$arrDados['secid']?>">
+    <input type="hidden" name="acaid" value="<?=$arrDados['acaid']?>">
+    <input type="hidden" name="indid" value="<?=$arrDados['indid']?>">
 	<table class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
-		<tr>
-			<td width="25%" class="SubTituloDireita" >Selecione a Secretaria:</td>
-			<td id="td_combo_secid" >
-				<?php				
-				$secid = $arrDados['secid'];
-				$sql = "select 
-							secid as codigo,
-							secdsc as descricao
-						from
-							painel.secretaria
-						where
-							secstatus = 'A'";
-				$db->monta_combo('secid',$sql,$habilitado,'Selecione a Secretaria','filtrarAcao','');
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td class="SubTituloDireita" >Selecione a Ação:</td>
-			<td id="td_combo_acaid" >
-				<?php 
-				$acaid = $arrDados['acaid'];
-				if($secid){
-					$sql = "select 
-								acaid as codigo,
-								acadsc as descricao
-							from
-								painel.acao
-							where
-								acastatus = 'A'
-							and
-								acaid in ( select acaid from painel.acaosecretaria where secid = $secid)";
-				}else{
-					$habilitado = "N";
-					$sql = array();
-				}
-				$db->monta_combo('acaid',$sql,$habilitado,'Selecione a Ação','filtrarIndicador','');
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td class="SubTituloDireita" >Selecione o Indicador:</td>
-			<td id="td_combo_indid" >
-				<?php 
-				$indid = $arrDados['indid'];
-				if($secid && $acaid){
-					$sql = "select 
-								indid as codigo,
-								indid || ' - ' || indnome as descricao
-							from
-								painel.indicador
-							where
-								indstatus = 'A'
-							and
-								secid = $secid
-							and
-								acaid = $acaid";
-				}else{
-					$habilitado = "N";
-					$sql = array();
-				}
-				$db->monta_combo('indid',$sql,$habilitado,'Selecione o Indicador','filtrarPeriodicidade','');
-				?>
-			</td>
-		</tr>
 		<tr>
 			<td class="SubTituloDireita" >Selecione a Periodicidade:</td>
 			<td id="td_combo_perid" >
 				<?php 
 				$perid = $arrDados['perid'];
-				if($indid){
+				if($_SESSION['indid']){
 					$sql = "select 
 								perid as codigo,
 								perdsc as descricao
@@ -161,7 +112,7 @@ monta_titulo( $titulo, '&nbsp' );
 							where
 								perstatus = 'A'
 							and
-								pernivel >= (select pernivel from  painel.periodicidade where perid = (select perid from painel.indicador where indid = $indid))
+								pernivel >= (select pernivel from  painel.periodicidade where perid = (select perid from painel.indicador where indid = {$_SESSION['indid']}))
 							order by
 								pernivel";
 				}else{
@@ -199,10 +150,17 @@ monta_titulo( $titulo, '&nbsp' );
 				<input type="hidden" name="metid" value="<?php echo $_REQUEST['metid'] ?>" />
 				<input type="button" id="btn_salvar" value="Salvar" onclick="salvarMetas()" />
 				<input type="button" id="btn_cancelar" value="Cancelar" onclick="window.location.href='painel.php?modulo=principal/listarMetasIndicador&acao=A'" />
+                                <?php
+                                if ($_REQUEST['metid']){?>
+				<input type="button" id="btn_valores" value="Valores de Meta" onclick="javascript:mostrarPopup('painel.php?modulo=principal/valorMetasIndicador&acao=A');" />
+                                <?php
+                                }
+                                ?>
 			</td>
 		</tr>
 	</table>
 </form>
+<div id="dialog_vincular_temas" title="Valores da Meta"></div>
 <?php if($resultado['msg']): ?>
 <script>
 	alert('<?php echo $resultado['msg'] ?>');

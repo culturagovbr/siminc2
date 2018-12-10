@@ -73,7 +73,16 @@ define("FNDE", 26298);
 define("EBSERH", 26443);
 define("FIES", 74902);
 define("SUPERVISAOMEC", 73107);
-define("UNIDADEORCAMENTARIA_SUOCOD_FNC", 42902);
+define("UNICOD_FNC", 42902);
+define("SUOCOD_ASCOM", 420017);
+define("SUOCOD_ANCINE", 203003);
+
+define("SUOCOD_FCRB", 344001);
+define("SUOCOD_FBN", 344042);
+define("SUOCOD_FCP", 344041);
+define("SUOCOD_IPHAN", 403101);
+define("SUOCOD_FUNARTE", 403201);
+define("SUOCOD_IBRAM", 423001);
 
 // -- E-mail de recebimento de notificações sobre
 define('EMAIL_NOTIFICACAO_SUBACAO', $_SESSION['email_sistema']);

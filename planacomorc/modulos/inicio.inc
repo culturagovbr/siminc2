@@ -41,12 +41,6 @@ switch ($_REQUEST['req']) {
     case 'carregarGraficoCgconCogep':
         carregarGraficoCgconCogep($colors, true);
         die;
-    case 'exportar_xls_unidade':
-        $oPlanoInterno->exportarXlsUnidade();
-        die;                
-    case 'exportar_xls_acao':
-        $oPlanoInterno->exportarXlsAcao();
-        die;         
     case 'atualizarSIOP':
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
@@ -85,6 +79,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
 <script src="js/unidade/lista-pi-manter.js?v=4"></script>
+<script src="js/painel.js?v=1"></script>
 <style>
     .detalhe-subunidade, .detalhe-funcional{
         cursor: pointer;
@@ -327,6 +322,7 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
                 $(this).tab('show');
             }
         });
+        
         $('.detalhe-subunidade').click(function(){
             $('#detalhe-subunidade .modal-body').load('planacomorc.php?modulo=inicio&acao=C&req=detalhe-subunidade&suoid='+ $(this).data('suoid'));
             $('#detalhe-subunidade').modal();
@@ -363,56 +359,5 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
             }
         });
     });
-
-    function exibirModalDetalheGrafico(tipoGraficoSubunidade, tipoValor, sigla){
-        var urlBase = 'planacomorc.php?modulo=inicio&acao=C'
-        if(tipoGraficoSubunidade === 1){
-            var parametroTipoGrafico = '&req=detalhe-grafico-subunidade';
-        } else {
-            var parametroTipoGrafico = '&req=detalhe-grafico-uo';
-        }
-        // Dotação ou Planejado
-        if(tipoValor.substr(0, 3) === "Dot" || tipoValor.substr(0, 3) === "Pla"){
-            $('#detalhe-grafico .modal-body').load(urlBase+ '&tipo_valor='+ tipoValor.substr(0, 3)+ '&sigla='+ sigla+ parametroTipoGrafico);
-            $('#detalhe-grafico').modal();
-        }
-    }
-    
-    function atualizarSIOP(){
-        divCarregando();
-        $.ajax({
-            type: 'POST',
-            url: window.location.href,
-            data: 'req=atualizarSIOP',
-            dataType: 'json',
-            success: function(resp){
-                if(resp.success){
-                    swal({
-                            title: '',
-                            text: resp.message,
-                            type: 'success',
-                            showCancelButton: false,
-                            confirmButtonText: 'OK',
-                            closeOnConfirm: true
-                        },
-                        function(){
-                            window.location.href = window.location.href;
-                        });
-                } else {
-                    swal({
-                            title: 'Erro!',
-                            text: resp.message,
-                            type: 'error',
-                            showCancelButton: false,
-                            confirmButtonText: 'OK',
-                            closeOnConfirm: true
-                        },
-                        function(){
-                            window.location.href = window.location.href;
-                        });
-                }
-            }
-        });
-    }
 
 </script>

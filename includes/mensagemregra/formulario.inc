@@ -157,7 +157,7 @@ monta_titulo($titulo_modulo, '&nbsp;');
 $modelMensagemRegra->sisid = $_SESSION['sisid'];
 ?>
 
-<form action="" method="post" name="formulario" id="formulario">
+<form action="" method="post" name="formulario" id="formulario" class="form-control">
     <input type="hidden" name="mreid" id="mreid" value="<?php echo $modelMensagemRegra->mreid; ?>"/>
     <table align="center" class="tabela" bgcolor="#f5f5f5" cellspacing="1" cellpadding="3">
         <tr>
@@ -270,7 +270,7 @@ $modelMensagemRegra->sisid = $_SESSION['sisid'];
         </tr>
         <tr>
             <td align='right' class="SubTituloDireita" style="width:25%;">
-                Perfis a serem avisados:
+                Usuários de perfis a serem avisados:
                 <br />
                 <span style="color: #ff0000">Utilize esse campo caso queira enviar e-mail para usuários específicos selecionados no campo abaixo.</span>
             </td>

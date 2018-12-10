@@ -148,7 +148,9 @@
     }
 
 </style>
-
+<div class="alert alert-warning alert-dismissable aria-hidden noprint" align="center" style="font-size: 14px">
+    Para uma melhor impressão dos dados utilize o navegador FireFox
+</div>
 <div class="container-tabela">
     <h1>
         Indicadores por Secretarias
@@ -279,7 +281,7 @@
                                     <?=$indicadores['nome']; ?>
                                 </td>
                                 <td align="center">
-                                    <?=$indicadores['produto']; ?>
+                                    <?= $indicadores['produto'] ? $indicadores['produto'] : '-' ;?>
                                 </td>
                                 <td align="center">
                                     <?=number_format($indicadores['orcamento'], 0, ',', '.')?>

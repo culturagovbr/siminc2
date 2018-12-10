@@ -348,7 +348,6 @@ function excluirAcao()
 function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$metid = null)
 {
 	global $db;
-
 	$dpeid = $_POST['dpeid'];
 
 	if(!$dpeid){
@@ -363,6 +362,7 @@ function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$
 		return true;
 	}
 
+        
 	$sql = "select
 				dpeid as codigo,
 				dpedsc as descricao
@@ -372,41 +372,19 @@ function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$
 				dpestatus = 'A'
 			and
 				perid = $perid
-			".($removeUtilizados ? "and
-										dpeid not in (	select
-															distinct dpe.dpeid
-														from
-															painel.detalheperiodicidade dpe
-														inner join
-															painel.detalhemetaindicador dmi ON dpe.dpeid = dmi.dpeid
-														where
-															dpe.dpestatus = 'A'
-														and
-															dmi.dmistatus = 'A'
-														".($dmiid ? " and
-															dmi.dmiid != $dmiid " : " ")."
-														and
-															dmi.metid = $metid
-													  )" : "and
-																dpeid not in (	select
-																					distinct dpe.dpeid
-																				from
-																					painel.detalheperiodicidade dpe
-																				inner join
-																					painel.detalhemetaindicador dmi ON dpe.dpeid = dmi.dpeid
-																				where
-																					dpe.dpestatus = 'A'
-																				and
-																					dmi.dmistatus = 'A'
-																				".($dmiid ? " and
-																					dmi.dmiid != $dmiid " : " ")."
-																				and
-																					dmi.metid = $metid
-																			  )")."
+			".($removeUtilizados===true ? "and dpeid not in (select distinct dpe.dpeid
+									   from painel.detalheperiodicidade dpe
+                                                                          inner join painel.detalhemetaindicador dmi ON dpe.dpeid = dmi.dpeid
+                                                                          where dpe.dpestatus = 'A'
+                                                                            and dmi.dmistatus = 'A'
+                                                                            ".($dmiid ? " and dmi.dmiid != $dmiid " : " ")."
+                                                                            and dmi.metid = $metid )" 
+                                                    : "")."
 			order by
 				dpeordem,
 				dpeanoref";
 
+//        ver($sql);
 	$db->monta_combo('dpeid',$sql,"S",'Selecione o Período','','','','','S','','',$dpeid);
 }
 
@@ -488,7 +466,7 @@ function listarValorMetas($metid, $listaPerfis)
 			and
 				dmi.dmistatus = 'A'
 			order by
-				dmi.dmidatameta";
+				dmi.dpeid";
 		$arrDados = $db->carregar($sql);
 
 		$cabecalho = array("Ações","Período","Data da Meta","Data de Execução","Data de Validação","Estado", 'Previsto','Observação');
@@ -497,12 +475,16 @@ function listarValorMetas($metid, $listaPerfis)
 			array_push($cabecalho,"Valor");
 		}
 	}else{
-		$sql = "select
-				CASE WHEN dmi.dmivalor is not null
-					THEN '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\'".($indqtdevalor == "t" ? ",\'' || trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) || '\'" : "").")\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
-					ELSE '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
-				END as acao,
-				dpe.dpedsc,
+		$sql = "select";
+                    if (in_array(PAINEL_PERFIL_GESTOR_INDICADOR, $listaPerfis)){
+                        $sql .= "'<img src=\"../imagens/alterar_01.gif\" class=\"link\"/> <img src=\"../imagens/excluir_01.gif\" class=\"link\" />' as acao, ";
+                    }else{
+			$sql .= "	CASE WHEN dmi.dmivalor is not null
+					THEN '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || coalesce(dmi.dmiobs,'') || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\'".($indqtdevalor == "t" ? ",\'' || trim(to_char(dmi.dmivalor, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['campovalor']['mascara'])."')) || '\'" : "").")\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
+					ELSE '<img src=\"../imagens/alterar.gif\" class=\"link\" onclick=\"editarValorMeta(\'' || dpe.perid || '\',\'' || dmi.dmiid || '\',\'' || dpe.dpeid || '\',\'' || coalesce(dmi.dmiobs,'') || '\',\'' || trim(to_char(dmi.dmiqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')) || '\')\" /> <img src=\"../imagens/excluir.gif\" class=\"link\" onclick=\"excluirValorMeta(\'' || dmi.dmiid || '\')\" />'
+				END as acao, ";                        
+                    }
+                    $sql .= "	dpe.dpedsc,
 				CASE WHEN dmi.dmidatameta IS NOT NULL
 					THEN to_char(dmi.dmidatameta,'DD/MM/YYYY')
 					ELSE 'N/A'
@@ -532,7 +514,7 @@ function listarValorMetas($metid, $listaPerfis)
 			and
 				dmi.dmistatus = 'A'
 			order by
-				dmi.dmidatameta";
+				dmi.dpeid";
 		$arrDados = $db->carregar($sql);
 
 		$cabecalho = array("Ações","Período","Data da Meta","Data de Execução","Data de Validação","Estado");
@@ -596,9 +578,12 @@ global $db;
 	}
 
 	if(!$dpeid || !$dmiqtde || !$metid){
-		return array("msg" => "Favor preencher todos os campos obrigatórios!", "erro" => true);
+		return array("retorno"=>false, "msg" => utf8_encode("Favor preencher todos os campos obrigatórios!"), "erro" => true);
 	}
-
+        if (!$dmiid){
+            $sql = "select dmiid from painel.detalhemetaindicador where dpeid = $dpeid and metid = $metid and dmistatus = 'A'";
+            $dmiid = $db->pegaUm($sql);
+        }
 	if($dmiid){
 		$sql = "update
 					painel.detalhemetaindicador
@@ -625,9 +610,9 @@ global $db;
 	}
 
 	if($db->commit()){
-		return array("dmiid" => $dmiid, "msg" => "Operação realizado com sucesso!");
+            return array("retorno"=>true, "dmiid" => $dmiid, "msg" => utf8_encode("Operação realizado com sucesso!"));
 	}else{
-		return array("msg" => "Não foi possível realizar a operação!", "erro" => true);
+            return array("retorno"=>false, "msg" => utf8_encode("Não foi possível realizar a operação!"), "erro" => true);
 	}
 }
 
@@ -713,7 +698,7 @@ function excluirValorMeta()
 {
 	global $db;
 
-	$dmiid = $_POST['dmiid'];
+	$dmiid = $_REQUEST['dmiid'];
 
 	$sql = "update painel.detalhemetaindicador set dmistatus = 'I' where dmiid = $dmiid;";
 	$db->executar($sql);

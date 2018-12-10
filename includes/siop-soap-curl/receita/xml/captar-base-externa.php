@@ -139,7 +139,7 @@ class SiopSoapCurl_Receita_Xml_CaptarBaseExterna extends SiopSoapCurl_Xml {
         $xml .= $this->codigoNaturezaReceita? "\n              <codigoNaturezaReceita>". (int) $this->codigoNaturezaReceita. "</codigoNaturezaReceita>": NULL;
         $xml .= $this->codigoUnidadeRecolhedora? "\n              <codigoUnidadeRecolhedora>". (int) $this->codigoUnidadeRecolhedora. "</codigoUnidadeRecolhedora>": NULL;
         $xml .= $this->subNatureza? "\n              <subNatureza>". (int) $this->subNatureza. "</subNatureza>": NULL;
-        $xml .= $this->justificativa? "\n              <justificativa>". utf8_encode($this->justificativa) . "</justificativa>": NULL;
+        $xml .= $this->justificativa? "\n              <justificativa>". utf8_encode($this->justificativa). "</justificativa>": NULL;
         $xml .= $this->metodologia? "\n              <metodologia>". utf8_encode($this->metodologia). "</metodologia>": NULL;
         $xml .= $this->memoriaDeCalculo? "\n              <memoriaDeCalculo>". utf8_encode($this->memoriaDeCalculo). "</memoriaDeCalculo>": NULL;
         $xml .= "\n        <valoresBaseExterna>";

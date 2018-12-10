@@ -34,8 +34,8 @@ else
   $usunome = $_SESSION['email_sistema'];
   $cc=''; // $_REQUEST['cc'];
   $cco=$_REQUEST['cco'];
-  enviar_email_usuario( array('nome'=>SIGLA_SISTEMA. ' - PACTO', 'email'=>'noreply@mec.gov.br'), $usunome, $assunto, $mensagem, $cc, $cco )
-  //enviar_email(array('nome'=>SIGLA_SISTEMA. ' - PACTO', 'email'=>'noreply@mec.gov.br'), $usunome, $assunto, $mensagem, $cc, $cco );
+  enviar_email_usuario( array('nome'=>SIGLA_SISTEMA. ' - PACTO', 'email'=>EMAIL_SISTEMA_NOREPLY), $usunome, $assunto, $mensagem, $cc, $cco )
+  //enviar_email(array('nome'=>SIGLA_SISTEMA. ' - PACTO', 'email'=>EMAIL_SISTEMA_NOREPLY), $usunome, $assunto, $mensagem, $cc, $cco );
  // email($usunome, $usuemail, $assunto, $mensagem,$cc,$cco);
   //$sql="select usunome,usuemail from usuario where usucpf='".$_SESSION['usucpf']."'";
   //$RSu = $db->record_set($sql);

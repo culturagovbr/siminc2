@@ -4,8 +4,6 @@ class Planacomorc_Controller_UnidadegestoraLimite
 {
     public function salvar($dados)
     {
-
-
         try {
             $mUnidadegestoralimite = new Planacomorc_Model_UnidadegestoraLimite($dados['lmuid']);
 
@@ -23,5 +21,5 @@ class Planacomorc_Controller_UnidadegestoraLimite
             $mUnidadegestoralimite->rollback();
             return false;
         }
-    } //end salvar()
+    }
 }

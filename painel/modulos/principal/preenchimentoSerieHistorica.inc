@@ -41,6 +41,7 @@ switch($_REQUEST['acao']) {
 									 'carregarComboUFPorPeriodo'=>true,
 									 'carregarGridPosgraducao'=>true,
 									 'carregarGridHospital'=>true,
+                    'removerSerieHistorica'  => true,
 								     'carregarGridPolo'=>true);
 	break;
 }
@@ -533,6 +534,17 @@ if($tabeladefiltros) {
 </form>
 <div id="gridinfo"></div>
 <script>
+function excluirSerieHistorica(sehid) {
+	var conf = confirm("Deseja realmente excluir esta série historica?");
+	if(conf) {
+		ajaxatualizar('requisicao=removerSerieHistorica&sehid='+sehid,'');
+                montargrid_brasil();
+//		ajaxatualizar('requisicao=listaSerieHistorica','listaSerieHistorica');
+	}
+}
+function exportarsehcsv(sehid) {
+	window.location='painel.php?modulo=principal/listaSerieHistorica&acao=A&requisicao=exportarsehcsv&sehid='+sehid;
+}    
     <?php
         if ($nroAnoReferencia){
             echo "montargrid_brasil();";

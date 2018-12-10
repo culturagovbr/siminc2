@@ -311,7 +311,7 @@ class Pi_PlanoInterno extends Modelo
     
     /**
      * Busca lista de PI.
-     * @example array( 'suo.unocod' => UNIDADEORCAMENTARIA_SUOCOD_FNC, 'suo.unocod != '. UNIDADEORCAMENTARIA_SUOCOD_FNC, 'suo.unocod' => array(UNIDADEORCAMENTARIA_SUOCOD_FNC, 42101)
+     * @example array( 'suo.unocod' => UNICOD_FNC, 'suo.unocod != '. UNICOD_FNC, 'suo.unocod' => array(UNICOD_FNC, 42101)
      *
      * @param integer $exercicio
      * @param array $aFiltro
@@ -335,257 +335,45 @@ class Pi_PlanoInterno extends Modelo
         return $dadosAgrupados;
     }
 
-    public function recuperarDadosFncPorAcao($exercicio)
-    {
-
-        $sql = "SELECT DISTINCT 'CUSTEIO'
-                        tipo,
-                    suo.unoid,
-                    suo.unocod,
-                    suo.unosigla,
-                    suo.unonome,
-                    lmu.lmuvlr,
-                    lmu.lmuid,
-                    psu.ptrid,
-                    vptr.funcional,
-                    vptr.acatitulo,
-                    vptr.irpcod,
-                    vptr.plodsc,
-                    ptr.ptrdotacaocusteio dotacao
-                FROM
-                    public.vw_subunidadeorcamentaria suo
-                    JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid /* ESSE JOIN DE PTRES COM A VW_PTRES É NECESSÁRIO PARA RECUPERAR O VALOR DE DOTAÇÃO E CUSTEIO CORRETO EM CASO DO PNC */
-                    JOIN monitora.vw_ptres vptr ON(
-                    vptr.ptrid = psu.ptrid
-                    AND vptr.ptrano = suo.prsano
-                    )
-                    JOIN monitora.ptres ptr ON ptr.ptrid = vptr.ptrid
-                    LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
-                    lmu.unoid = suo.unoid
-                        AND lmu.lmustatus = 'A'
-                        AND lmu.prsano = suo.prsano
-                    )
-                WHERE
-                    suo.suostatus = 'A'
-                    AND vptr.irpcod <> '6'
-                    AND suo.unofundo = 't'
-                    AND suo.suocod NOT IN ('203003', '420017')
-                    AND suo.prsano = '2018'
-                UNION
-                SELECT
-                    DISTINCT 'CAPITAL' tipo,
-                    suo.unoid,
-                    suo.unocod,
-                    suo.unosigla,
-                    suo.unonome,
-                    lmu.lmuvlr,
-                    lmu.lmuid,
-                    psu.ptrid,
-                    vptr.funcional,
-                    vptr.acatitulo,
-                    vptr.irpcod,
-                    vptr.plodsc,
-                    ptr.ptrdotacaocapital dotacao
-                FROM
-                    public.vw_subunidadeorcamentaria suo
-                    JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid /* ESSE JOIN DE PTRES COM A VW_PTRES É NECESSÁRIO PARA RECUPERAR O VALOR DE DOTAÇÃO E CUSTEIO CORRETO EM CASO DO PNC */
-                    JOIN monitora.vw_ptres vptr ON(
-                    vptr.ptrid = psu.ptrid
-                        AND vptr.ptrano = suo.prsano
-                    )
-                    JOIN monitora.ptres ptr ON ptr.ptrid = vptr.ptrid
-                    LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
-                    lmu.unoid = suo.unoid
-                        AND lmu.lmustatus = 'A'
-                        AND lmu.prsano = suo.prsano
-                    )
-                WHERE
-                    suo.suostatus = 'A'
-                    AND vptr.irpcod <> '6'
-                    AND suo.unofundo = 't'
-                    AND suo.suocod NOT IN ('203003', '420017')
-                    AND suo.prsano = '2018'
-                ORDER BY
-                    funcional,
-                    tipo DESC";
-
-        $dados = $this->carregar($sql);
-        return $dados ? $dados : [];
-    }
-
-    public function recuperarValoresPorEstado($exercicio)
-    {
-
-        $sql = "
-            SELECT DISTINCT
-                pli.pliid,
-                pip.ptrid,
-                pic.picvalorcapital,
-                pic.picvalorcusteio,
-                doc.esdid
-            FROM monitora.pi_planointerno pli
-                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
-                JOIN public.vw_subunidadeorcamentaria suo ON(
-                    suo.suocod = pli.ungcod
-                    AND suo.unocod = pli.unicod
-                    AND suo.prsano = pli.pliano)
-                JOIN workflow.documento doc ON doc.docid = pli.docid
-                JOIN monitora.pi_planointernoptres pip ON pip.pliid = pli.pliid
-                JOIN monitora.vw_ptres ptr ON(pip.ptrid = ptr.ptrid)
-            WHERE
-                pli.plistatus = 'A'
-                AND pli.pliano = '$exercicio'
-                AND suo.suocod NOT IN('203003', '420017')
-                AND suo.unofundo IS TRUE
-                AND ptr.irpcod <> '6'
-        ";
-
-        $dados = $this->carregar($sql);
-        $dados = $dados ? $dados : [];
-
-        $aValores = [];
-        foreach($dados as $dado){
-            $aValores[$dado['ptrid']][$dado['esdid']]['CAPITAL'] += $dado['picvalorcapital'];
-            $aValores[$dado['ptrid']][$dado['esdid']]['CUSTEIO'] += $dado['picvalorcusteio'];
+    /**
+     * Monta consulta de valores totais de execução orçamentária(provisionado, emepenhado, liquidado ou pago) do FNC de acordo com Ano e Subunidade.
+     * 
+     * @param stdClass $params
+     * @return string
+     */
+    public function montarSqlBuscarTotalExecucaoFnc(stdClass $params){
+        # Tipo de retorno
+        switch($params->tipo){
+            case 'provisionado':
+                $campo = 'vlrautorizado';
+                break;
+            case 'empenhado':
+                $campo = 'vlrempenhado';
+                break;
+            case 'liquidado':
+                $campo = 'vlrliquidado';
+                break;
+            case 'pago':
+                $campo = 'vlrpago';
+                break;
+            default:
+                $campo = 'vlrpago';
+                break;
         }
-        return $aValores;
-    }
-
-    public function recuperarValoresPorExecucao($exercicio)
-    {
-
-        $sql = "
-            SELECT DISTINCT
-                ptr.ptrid,
-                CASE WHEN substring(sec.natcod, 1, 1) = '3' THEN
-                    'CUSTEIO'
-                WHEN substring(sec.natcod, 1, 1) = '4' THEN
-                    'CAPITAL'
-                ELSE
-                    substring(sec.natcod, 1, 1)
-                END nat,
-                sum(COALESCE(sec.vlrempenhado, 0))::DECIMAL AS vlrempenhado,
-                sum(COALESCE(sec.vlrpago, 0))::DECIMAL AS vlrpago,
-                sum(COALESCE(sec.vlrliquidado, 0))::DECIMAL AS vlrliquidado
-            FROM spo.siopexecucao sec
-                JOIN monitora.ptres ptr ON(sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano)
-                JOIN monitora.pi_planointernoptres ppt ON ptr.ptrid = ppt.ptrid
-                JOIN monitora.pi_planointerno pli ON(ppt.pliid = pli.pliid AND sec.plicod = pli.plicod)
-                JOIN public.vw_subunidadeorcamentaria suo ON(pli.ungcod = suo.suocod AND pli.pliano = suo.prsano)
-            WHERE
-                suo.prsano = '$exercicio'
-                AND suo.suocod NOT IN ('203003', '420017')
-                AND suo.unofundo IS TRUE
-                AND pli.plistatus = 'A'
-                AND ptr.irpcod <> '6'
-            GROUP BY
-                ptr.ptrid,
-                nat
-        ";
-
-        $dados = $this->carregar($sql);
-        $dados = $dados ? $dados : [];
-        $aValores = [];
-        foreach($dados as $dado){
-            $aValores[$dado['ptrid']][$dado['nat']]['vlrempenhado'] += $dado['vlrempenhado'];
-            $aValores[$dado['ptrid']][$dado['nat']]['vlrpago'] += $dado['vlrpago'];
-            $aValores[$dado['ptrid']][$dado['nat']]['vlrliquidado'] += $dado['vlrliquidado'];
+        
+        # Filtros
+        $criterio = $params->exercicio? "\n AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
+        $criterio .= $params->suoid? "\n AND suo.suoid = ". (int)$params->suoid: NULL;
+        $criterio .= $params->ptrid? "\n AND ptr.ptrid = ". (int)$params->ptrid: NULL;
+        if(strtolower($params->gnd) == 'custeio'){
+            $criterio .= "\n AND sec.gndcod IN('0', '1', '2', '3')";
+        } else if(strtolower($params->gnd) == 'capital'){
+            $criterio .= "\n AND sec.gndcod IN('4', '5', '6')";
         }
-
-        return $aValores;
-    }
-
-    public function recuperarDadosFncPorUnidade($exercicio)
-    {
-        $sql = "
-            SELECT DISTINCT
-                suo.unoid,
-                suo.unocod,
-                suo.suocod,
-                suo.unosigla,
-                suo.unonome,
-                suo.suoid,
-                suo.suonome,
-                suo.suosigla,
-                CASE WHEN suo.suocod IN(
-                    '344042',
-                    '344001',
-                    '344041',
-                    '403201',
-                    '423001',
-                    '403101') THEN
-                    1
-                ELSE
-                    2
-                END ordem
-            FROM
-                public.vw_subunidadeorcamentaria suo
-                JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
-            WHERE
-                suo.suostatus = 'A'
-                AND suo.unofundo IS TRUE
-                AND suo.prsano = '$exercicio'
-                AND suo.suocod NOT IN(
-                    '203003',
-                    '420017')
-            ORDER BY
-                ordem,
-                suo.suonome
-        ";
-
-        $dadosUnidade = $this->carregar($sql);
-        $dados['unidade'] = $dadosUnidade ? $dadosUnidade : [];
-        $dados['estado'] = $this->recuperarValoresPorUnidadeEstado($exercicio);
-        $dados['execucao'] = $this->recuperarValoresPorUnidadeExecucao($exercicio);
-
-        return $dados;
-    }
-
-    public function recuperarValoresPorUnidadeEstado($exercicio)
-    {
+        
         $sql = "
             SELECT
-                pli.pliid,
-                suo.suoid,
-                (coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0)) valor,
-                doc.esdid
-            FROM monitora.pi_planointerno pli
-                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
-                JOIN public.vw_subunidadeorcamentaria suo ON(
-                    suo.suocod = pli.ungcod
-                    AND suo.unocod = pli.unicod
-                    AND suo.prsano = pli.pliano)
-                JOIN workflow.documento doc ON doc.docid = pli.docid
-                JOIN monitora.pi_planointernoptres pip ON pip.pliid = pli.pliid
-                JOIN monitora.vw_ptres ptr ON(pip.ptrid = ptr.ptrid)
-            WHERE
-                pli.plistatus = 'A'
-                AND pli.pliano = '$exercicio'
-                AND suo.suocod NOT IN ('203003', '420017')
-                AND suo.unofundo IS TRUE
-                AND ptr.irpcod <> '6'
-        ";
-
-        $dados = $this->carregar($sql);
-        $dados = $dados? $dados: [];
-
-        $aValores = [];
-
-        foreach($dados as $dado){
-            $aValores[$dado['suoid']][$dado['esdid']] += $dado['valor'];
-        }
-        return $aValores;
-    }
-
-    public function recuperarValoresPorUnidadeExecucao($exercicio)
-    {
-
-        $sql = "
-            SELECT
-                suo.suoid,
-                sum(COALESCE(sec.vlrempenhado, 0))::DECIMAL AS vlrempenhado,
-                sum(COALESCE(sec.vlrpago, 0))::DECIMAL AS vlrpago,
-                sum(COALESCE(sec.vlrliquidado, 0))::DECIMAL AS vlrliquidado
+		sum(COALESCE(sec.$campo, 0))::DECIMAL AS total
             FROM spo.siopexecucao sec
                 JOIN monitora.ptres ptr ON(
                     sec.ptres = ptr.ptres
@@ -594,28 +382,233 @@ class Pi_PlanoInterno extends Modelo
                 JOIN monitora.pi_planointernoptres ppt ON ptr.ptrid = ppt.ptrid
                 JOIN monitora.pi_planointerno pli ON ppt.pliid = pli.pliid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
-                    pli.ungcod = suo.suocod
-                    AND pli.pliano = suo.prsano)
+                    pli.plicod = sec.plicod
+                    AND pli.unicod = suo.unocod
+                    AND pli.ungcod = suo.suocod
+                    AND pli.pliano = suo.prsano
+                )
             WHERE
-                suo.prsano = '$exercicio'
-                AND suo.suocod NOT IN ('203003', '420017')
+                pli.plistatus = 'A'
                 AND suo.unofundo IS TRUE
-                AND pli.plistatus = 'A'
                 AND ptr.irpcod <> '6'
-            GROUP BY
-                suo.suoid
+                AND suo.suocod NOT IN('". SUOCOD_ASCOM. "','". SUOCOD_ANCINE. "')
+                $criterio
         ";
 
-        $dados = $this->carregar($sql);
-        $dados = $dados ? $dados : [];
-        $aValores = [];
-        foreach($dados as $dado){
-            $aValores[$dado['suoid']]['vlrempenhado'] += $dado['vlrempenhado'];
-            $aValores[$dado['suoid']]['vlrpago'] += $dado['vlrpago'];
-            $aValores[$dado['suoid']]['vlrliquidado'] += $dado['vlrliquidado'];
+        return $sql;
+    }
+    
+    /**
+     * Busca valor total de execução orçamentária(provisionado, emepenhado, liquidado ou pago) do FNC de acordo com Ano e Subunidade.
+     * 
+     * @param stdClass $params
+     * @return array
+     */
+    public function buscarTotalExecucaoFnc(stdClass $params){
+        $sql = $this->montarSqlBuscarTotalExecucaoFnc($params);
+        $total = $this->pegaUm($sql);
+//if($params->ptrid) ver($sql);
+//if($params->ptrid) ver($total);
+        return $total? $total: 0;
+    }
+    
+    /**
+     * Monta consulta de valores totais do FNC de acordo com Ano, Subunidade e Situação do Workflow.
+     * 
+     * @param stdClass $params
+     * @return string
+     */
+    public function montarSqlBuscarTotalFnc(stdClass $params){
+        # Campo de valor
+        switch(strtolower($params->tipo)) {
+            case 'custeio':
+                $campo = 'SUM(coalesce(pic.picvalorcusteio, 0))';
+            break;
+            case 'capital':
+                $campo = 'SUM(coalesce(pic.picvalorcapital, 0))';
+            break;
+            default:
+                $campo = 'SUM((coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0)))';
+            break;
         }
+        
+        # Filtros
+        $criterio = $params->exercicio? "\n AND pli.pliano = '". (int)$params->exercicio. "'": NULL;
+        $criterio .= $params->suoid? "\n AND suo.suoid = ". (int)$params->suoid: NULL;
+        $criterio .= $params->ptrid? "\n AND ptr.ptrid = ". (int)$params->ptrid: NULL;
+        $criterio .= $params->esdid? "\n AND doc.esdid IN(". join(',', $params->esdid). ")": NULL;
+        
+        $sql = "
+            SELECT
+                $campo AS total
+            FROM monitora.pi_planointerno pli
+                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suo.suocod = pli.ungcod
+                    AND suo.unocod = pli.unicod
+                    AND suo.prsano = pli.pliano)
+                JOIN workflow.documento doc ON doc.docid = pli.docid
+                JOIN monitora.pi_planointernoptres pip ON pip.pliid = pli.pliid
+                JOIN monitora.vw_ptres ptr ON(pip.ptrid = ptr.ptrid)
+            WHERE
+                pli.plistatus = 'A'
+                AND suo.unofundo IS TRUE
+                AND ptr.irpcod <> '6'
+                $criterio
+        ";
+        
+        return $sql;
+    }
+    
+    /**
+     * Busca valores totais do FNC de acordo com Ano, Subunidade e Situação do Workflow.
+     * 
+     * @param stdClass $params
+     * @return array
+     */
+    public function buscarTotalFnc(stdClass $params){
+        $sql = $this->montarSqlBuscarTotalFnc($params);
+        $total = $this->pegaUm($sql);
+        return $total? $total: 0;
+    }
+    
+    /**
+     * Monta consulta a Subunidades do FNC
+     * 
+     * @param stdClass $params
+     * @return string
+     */
+    public function montarSqlListarSubunidadeFnc(stdClass $params){
+        # Filtros
+        $criterio = $params->exercicio? "\n AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
+        
+        $sql = "
+            SELECT DISTINCT
+                suo.unoid,
+                suo.unocod,
+                suo.unonome,
+                suo.unosigla,
+                suo.suoid,
+                suo.suocod,
+                suo.suosigla,
+                suo.suonome,
+                CASE WHEN suo.suocod IN(
+                    '". SUOCOD_FBN. "',
+                    '". SUOCOD_FCRB. "',
+                    '". SUOCOD_FCP. "',
+                    '". SUOCOD_FUNARTE. "',
+                    '". SUOCOD_IBRAM. "',
+                    '". SUOCOD_IPHAN. "') THEN
+                    1
+                ELSE
+                    2
+                END ordem
+            FROM public.vw_subunidadeorcamentaria suo
+                JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
+            WHERE
+                suo.suostatus = 'A'
+                AND suo.unofundo IS TRUE
+                AND suo.suocod NOT IN('". SUOCOD_ASCOM. "','". SUOCOD_ANCINE. "')
+                $criterio
+            ORDER BY
+                ordem,
+                suo.suonome
+        ";
+        return $sql;
+    }
+    
+    /**
+     * Consulta as Subunidades do FNC
+     * 
+     * @param stdClass $params
+     * @return array
+     */
+    public function listarSubunidadeFnc(stdClass $params){
+        $sql = $this->montarSqlListarSubunidadeFnc($params);
+        $listaSubunidadeFnc = $this->carregar($sql);
+        return $listaSubunidadeFnc? $listaSubunidadeFnc: array();
+    }
+    
+    public function montarSqlListarFuncionaisFncTipo(stdClass $params){
+        $valorTipo = $params->tipo == 'custeio'? 'CUSTEIO': 'CAPITAL';
+        $campo = $params->tipo == 'custeio'? 'ptrdotacaocusteio': 'ptrdotacaocapital';
+        
+        # Filtros
+        $criterio = $params->exercicio? "\n AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
+        
+        $sql = "
+            SELECT DISTINCT
+                '{$valorTipo}' AS tipo,
+                suo.unoid,
+                suo.unocod,
+                suo.unosigla,
+                suo.unonome,
+                lmu.lmuvlr,
+                lmu.lmuid,
+                psu.ptrid,
+                vptr.funcional,
+                vptr.acatitulo,
+                vptr.irpcod,
+                vptr.plodsc,
+                ptr.{$campo} AS dotacao
+            FROM public.vw_subunidadeorcamentaria suo
+                JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
+                JOIN monitora.vw_ptres vptr ON(
+                    vptr.ptrid = psu.ptrid
+                    AND vptr.ptrano = suo.prsano
+                )
+                JOIN monitora.ptres ptr ON ptr.ptrid = vptr.ptrid
+                LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
+                    lmu.unoid = suo.unoid
+                    AND lmu.lmustatus = 'A'
+                    AND lmu.prsano = suo.prsano
+                )
+            WHERE
+                suo.suostatus = 'A'
+                AND vptr.irpcod <> '6'
+                AND suo.unofundo IS TRUE
+                AND suo.suocod NOT IN(
+                    '". SUOCOD_ANCINE. "',
+                    '". SUOCOD_ASCOM. "'
+                )
+                $criterio
+        ";
 
-        return $aValores;
+        return $sql;
+    }
+    
+    /**
+     * Monta consulta a Funcionais do FNC
+     * 
+     * @param stdClass $params
+     * @return string
+     */
+    public function montarSqlListarFuncionaisFnc(stdClass $params){
+        $params->tipo = 'custeio';
+        $sql = $this->montarSqlListarFuncionaisFncTipo($params).
+            "\n UNION \n";
+        $params->tipo = 'capital';
+        $sql .= $this->montarSqlListarFuncionaisFncTipo($params).
+            "
+            ORDER BY
+                funcional ASC,
+                tipo DESC
+            "
+        ;
+
+        return $sql;
+    }
+    
+    /**
+     * Consulta as Funcionais do FNC
+     * 
+     * @param stdClass $params
+     * @return array
+     */
+    public function listarFuncionaisFnc(stdClass $params){
+        $sql = $this->montarSqlListarFuncionaisFnc($params);
+        $listaFuncionaisFnc = $this->carregar($sql);
+        return $listaFuncionaisFnc? $listaFuncionaisFnc: array();
     }
 
     public function recuperarExecucaoOrcamentariaFnc()
@@ -1450,11 +1443,11 @@ class Pi_PlanoInterno extends Modelo
 
     public function getCorPainelPorValorDisponivel($valorDisponivel)
     {
-        if ($valorDisponivel > 0) return 'blue';
+        if ($valorDisponivel > 0) return '0000FF';
 
-        if ($valorDisponivel < 0) return 'red';
+        if ($valorDisponivel < 0) return 'FF0000';
 
-        return 'green';
+        return '008000';
     }
 
     public function recuperarPiPorSubunidade($suoid)
@@ -1995,19 +1988,14 @@ class Pi_PlanoInterno extends Modelo
         return $this->carregar($sql);
     }
 
-    public function exportarXlsUnidade(){
-        require_once APPRAIZ . 'includes/php-excel/PHPExcel.php';
-        include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
-        $exercicio = $_SESSION['exercicio'];
-        $oPlanoInterno = new Pi_PlanoInterno();       
+    public function exportarXlsUnidade($exercicio){
+        # Criando Planilha "Financeiro"
         $PHPExcel = new PHPExcel();
-
-        // Criando Planilha "Financeiro"
         $planilhaFinanceiro = $PHPExcel->getActiveSheet();
-        $planilhaFinanceiro->setTitle("Unidades");
+        $planilhaFinanceiro->setTitle("Acompanhamento FNC-Por Unidade");
 
-
-        $aPadrao = [
+        # Criando cabeçalhos
+        $listaColunasCabecalho = [
             'Unidade',
             'Apresentado',
             'Selecionado',
@@ -2017,231 +2005,378 @@ class Pi_PlanoInterno extends Modelo
             'Liquidado',
             'Pago',
         ];
-
-        // Criando cabeçalhos
-        $coluna = 0;
-        foreach($aPadrao as $titulo){
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna,1,utf8_encode($titulo));
-            $coluna++;
+        $linha = 1;
+        foreach($listaColunasCabecalho as $numeroColuna => $nome){
+            $planilhaFinanceiro->setCellValueByColumnAndRow($numeroColuna, $linha, utf8_encode($nome));
         }
         
-        $aDados = $oPlanoInterno->recuperarDadosFncPorUnidade($_SESSION['exercicio']);
-        $aDadosUnidade = $aDados['unidade'];
-        $aDadosEstado = $aDados['estado'];
-        $aDadosExecucao = $aDados['execucao'];
-        $linha = 2;
-        for ($i=0;$i<count($aDadosUnidade);$i++){
-            $coluna = 0;
-            $dado = $aDadosUnidade[$i]['unocod'] . ' - ' . $aDadosUnidade[$i]['suosigla'] . ' - ' . $aDadosUnidade[$i]['suonome'];
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha, utf8_encode($dado));
-            
-            // VALOR APRESENTADO
-            $valor = $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_EM_ANALISE] +
-                     $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_BANCO_PROJETOS] +
-                     $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_DELIBERACAO_CFNC] +
-                     $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_AGUARDANDO_CORRECAO] +
-                     $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_SELECIONADO_CFNC] +
-                     $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_APROVADO];
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            $total['APRESENTADO'] += $valor;
-            
-            // VALOR SELECIONADO
-            $valor = $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_SELECIONADO_CFNC] +
-                     $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_APROVADO];
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            $total[ESD_FNC_PI_SELECIONADO_CFNC] += $valor;
-            
-            // VALOR APRESENTADO
-            $valor = !empty($aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_APROVADO]) ? $aDadosEstado[$aDadosUnidade[$i]['suoid']][ESD_FNC_PI_APROVADO] : '0';
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            $total[ESD_FNC_PI_APROVADO] += $valor;
-            
-            // VALOR EMPENHADO
-            $valor = !empty($aDadosExecucao[$aDadosUnidade[$i]['suoid']]['vlrempenhado']) ? $aDadosEstado[$aDadosUnidade[$i]['suoid']]['vlrempenhado'] : '0';
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            $total['vlrempenhado'] += $valor;
-            
-            // VALOR LIQUIDADO
-            $valor = !empty($aDadosExecucao[$aDadosUnidade[$i]['suoid']]['vlrliquidado']) ? $aDadosEstado[$aDadosUnidade[$i]['suoid']]['vlrliquidado'] : '0';            
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            $total['vlrliquidado'] += $valor;
-            
-            // VALOR PAGO
-            $valor = !empty($aDadosExecucao[$aDadosUnidade[$i]['suoid']]['vlrpago']) ? $aDadosEstado[$aDadosUnidade[$i]['suoid']]['vlrpago'] : '0';            
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            $total['vlrpago'] += $valor;
+        # Busca Subunidades do FNC
+        $listaSubunidadeFnc = $this->listarSubunidadeFnc((object)array('exercicio' => $_SESSION['exercicio']));
+        $totalApresentado = 0;
+        $totalSelecionado = 0;
+        $totalAprovado = 0;
+        $totalProvisionado = 0;
+        $totalEmpenhado = 0;
+        $totalLiquidado = 0;
+        $totalPago = 0;
+
+        foreach($listaSubunidadeFnc as $subUnidadeFnc){
             $linha++;
+            $coluna = 0;
+            $nome = $subUnidadeFnc['unocod']. ' - '. $subUnidadeFnc['suosigla']. ' - '. $subUnidadeFnc['suonome'];
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, utf8_encode($nome));
+            
+            # Valor da coluna apresentado
+            $apresentado = $this->buscarTotalFnc((object) array(
+                'exercicio' => $_SESSION['exercicio'],
+                'suoid' => $subUnidadeFnc['suoid'],
+                'esdid' => array(
+                    ESD_FNC_PI_EM_ANALISE,
+                    ESD_FNC_PI_BANCO_PROJETOS,
+                    ESD_FNC_PI_DELIBERACAO_CFNC,
+                    ESD_FNC_PI_AGUARDANDO_CORRECAO,
+                    ESD_FNC_PI_SELECIONADO_CFNC,
+                    ESD_FNC_PI_APROVADO
+                )
+            ));
+            $totalApresentado += $apresentado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $apresentado);
+
+            # Valor da coluna selecionado
+            $selecionado = $this->buscarTotalFnc((object) array(
+                'exercicio' => $_SESSION['exercicio'],
+                'suoid' => $subUnidadeFnc['suoid'],
+                'esdid' => array(
+                    ESD_FNC_PI_SELECIONADO_CFNC,
+                    ESD_FNC_PI_APROVADO
+                )
+            ));
+            $totalSelecionado += $selecionado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $selecionado);
+            
+            # Valor da coluna Aprovado
+            $aprovado = $this->buscarTotalFnc((object) array(
+                'exercicio' => $_SESSION['exercicio'],
+                'suoid' => $subUnidadeFnc['suoid'],
+                'esdid' => array(ESD_FNC_PI_APROVADO)
+            ));
+            $totalAprovado += $aprovado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $aprovado);
+            
+            # Valor da coluna Provisionado
+            $provisionado = $this->buscarTotalExecucaoFnc((object) array(
+                'tipo' => 'provisionado',
+                'exercicio' => $_SESSION['exercicio'],
+                'suoid' => $subUnidadeFnc['suoid'],
+            ));
+            $totalProvisionado += $provisionado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $provisionado);
+            
+            # Valor da coluna Empenhado
+            $empenhado = $this->buscarTotalExecucaoFnc((object) array(
+                'tipo' => 'empenhado',
+                'exercicio' => $_SESSION['exercicio'],
+                'suoid' => $subUnidadeFnc['suoid'],
+            ));
+            $totalEmpenhado += $empenhado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $empenhado);
+            
+            # Valor da coluna Liquidado
+            $liquidado = $this->buscarTotalExecucaoFnc((object) array(
+                'tipo' => 'liquidado',
+                'exercicio' => $_SESSION['exercicio'],
+                'suoid' => $subUnidadeFnc['suoid'],
+            ));
+            $totalLiquidado += $liquidado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $liquidado);
+            
+            # Valor da coluna Empenhado
+            $pago = $this->buscarTotalExecucaoFnc((object) array(
+                'tipo' => 'pago',
+                'exercicio' => $_SESSION['exercicio'],
+                'suoid' => $subUnidadeFnc['suoid'],
+            ));
+            $totalPago += $pago;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $pago);
         }
-        $coluna=0;
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"TOTAL");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['APRESENTADO']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total[ESD_FNC_PI_SELECIONADO_CFNC]);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total[ESD_FNC_PI_APROVADO]);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"-");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrempenhado']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrliquidado']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrpago']);
 
+        $coluna = 0;
+        $linha++;
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, 'TOTAL');
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalApresentado);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalSelecionado);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalAprovado);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalProvisionado);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalEmpenhado);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalLiquidado);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalPago);
 
-        // Indicação da criação do ficheiro
+        # Indicação da criação do ficheiro
         $objWriter = PHPExcel_IOFactory::createWriter($PHPExcel, 'Excel5');
 
-        // Encaminhar o ficheiro resultante para abrir no browser ou fazer download
+        # Encaminhar o ficheiro resultante para abrir no browser ou fazer download
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="PlanilhaPainelUnidade.xls"');
+        header('Content-Disposition: attachment;filename="painel-fnc-unidade.xls"');
         header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
     }
 
-    public function exportarXlsAcao(){
-        require_once APPRAIZ . 'includes/php-excel/PHPExcel.php';
-        include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
-        $exercicio = $_SESSION['exercicio'];
-        $oPlanoInterno = new Pi_PlanoInterno();       
+    public function exportarXlsAcao($exercicio){
+        # Criando Planilha "Financeiro"
         $PHPExcel = new PHPExcel();
-
-        // Criando Planilha "Financeiro"
         $planilhaFinanceiro = $PHPExcel->getActiveSheet();
-        $planilhaFinanceiro->setTitle("Unidades");
+        $planilhaFinanceiro->setTitle("Acompanhamento FNC-Por Ação");
 
-
-        $aPadrao = [
+        # Criando cabeçalhos
+        $listaColunasCabecalho = [
             'Ação',
             'Dotação',
             'Apresentado',
             'Selecionado',
             'Aprovado',
             'Provisionado',
-            'Limite',
             'Empenhado',
             'Liquidado',
             'Pago',
         ];
-
-        // Criando cabeçalhos
+        $linha=1;
         $coluna = 0;
-        foreach($aPadrao as $titulo){
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna,1,utf8_encode($titulo));
-            $coluna++;
+        foreach($listaColunasCabecalho as $numeroColuna => $nome){
+            $planilhaFinanceiro->setCellValueByColumnAndRow($numeroColuna, $linha, utf8_encode($nome));
         }
-        $aDadosPorAcao = $oPlanoInterno->recuperarDadosFncPorAcao($_SESSION['exercicio']);
-        $aValoresEstado = $oPlanoInterno->recuperarValoresPorEstado($_SESSION['exercicio']);
-        $aValoresExecucao = $oPlanoInterno->recuperarValoresPorExecucao($_SESSION['exercicio']);
-        $styleArray = array(
-            'font'  => array(
-                'color' => array('rgb' => 'FF0000')
-            )
-        );
-        $linha = 2;
-        for ($i=0;$i<count($aDadosPorAcao);$i++){
-            $coluna = 0;
-            $dado = $aDadosPorAcao[$i]['funcional'] . ' (' . $aDadosPorAcao[$i]['tipo'] . ') - ' . $aDadosPorAcao[$i]['acatitulo'] . ': ' . $aDadosPorAcao[$i]['plodsc'] . ' (RP ' . $aDadosPorAcao[$i]['irpcod'] . ')';
-            $planilhaFinanceiro->setCellValueExplicitByColumnAndRow($coluna++,$linha, utf8_encode($dado));
-            
-            // VALOR DOTAÇÃO
-            $valor = $aDadosPorAcao[$i]['dotacao'];
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            $total['dotacao'][$aDadosPorAcao[$i]['tipo']] += $valor;
-            
-            // VALOR APRESENTADO
-            $valor = $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_EM_ANALISE][$aDadosPorAcao[$i]['tipo']] +
-                     $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_BANCO_PROJETOS][$aDadosPorAcao[$i]['tipo']] +
-                     $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_DELIBERACAO_CFNC][$aDadosPorAcao[$i]['tipo']] +
-                     $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_AGUARDANDO_CORRECAO][$aDadosPorAcao[$i]['tipo']] +
-                     $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_SELECIONADO_CFNC][$aDadosPorAcao[$i]['tipo']] +
-                     $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_APROVADO][$aDadosPorAcao[$i]['tipo']];
-            $total['APRESENTADO'][$aDadosPorAcao[$i]['tipo']] += $valor;
-            $disponivel = $aDadosPorAcao[$i]['dotacao'] - $valor;
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $valor);
-            if ($disponivel<0)
-                $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna-1) . $linha)->applyFromArray($styleArray);
-            
-            // VALOR SELECIONADO
-            $valor = $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_SELECIONADO_CFNC][$aDadosPorAcao[$i]['tipo']] +
-                     $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_APROVADO][$aDadosPorAcao[$i]['tipo']];
-            $total[ESD_FNC_PI_SELECIONADO_CFNC][$aDadosPorAcao[$i]['tipo']] += $valor;
-            $disponivel = $aDadosPorAcao[$i]['dotacao'] - $valor;
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor);     
-            if ($disponivel<0)
-                $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna) . $linha)->applyFromArray($styleArray);
-            
-            // VALOR APROVADO
-            $valor = !empty($aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_APROVADO][$aDadosPorAcao[$i]['tipo']]) ? $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][ESD_FNC_PI_APROVADO][$aDadosPorAcao[$i]['tipo']] : '0';
-            $total[ESD_FNC_PI_APROVADO][$aDadosPorAcao[$i]['tipo']] += $valor;
-            $disponivel = $aDadosPorAcao[$i]['dotacao'] - $valor;            
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            if ($disponivel<0)
-                $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna) . $linha)->applyFromArray($styleArray);
-            
-            // VALOR PROVISIONADO
-            $valor = '-';
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            
-            // VALOR LIMITE
-            $valor = '-';
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            
-            // VALOR EMPENHADO
-            $valor = !empty($aValoresExecucao[$aDadosPorAcao[$i]['ptrid']][$aDadosPorAcao[$i]['tipo']]['vlrempenhado']) ? $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][$aDadosPorAcao[$i]['tipo']]['vlrempenhado'] : '0';
-            $total['vlrempenhado'][$aDadosPorAcao[$i]['tipo']] += $valor;
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            
-            // VALOR LIQUIDADO
-            $valor = !empty($aValoresExecucao[$aDadosPorAcao[$i]['ptrid']][$aDadosPorAcao[$i]['tipo']]['vlrliquidado']) ? $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][$aDadosPorAcao[$i]['tipo']]['vlrliquidado'] : '0';
-            $total['vlrliquidado'][$aDadosPorAcao[$i]['tipo']] += $valor;
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            
-            // VALOR PAGO
-            $valor = !empty($aValoresExecucao[$aDadosPorAcao[$i]['ptrid']][$aDadosPorAcao[$i]['tipo']]['vlrpago']) ? $aValoresEstado[$aDadosPorAcao[$i]['ptrid']][$aDadosPorAcao[$i]['tipo']]['vlrpago'] : '0';
-            $total['vlrpago'][$aDadosPorAcao[$i]['tipo']] += $valor;            
-            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$valor); 
-            $linha++;
-            
-        }
-        $coluna=0;
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"TOTAL CUSTEIO");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['dotacao']['CUSTEIO']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['APRESENTADO']['CUSTEIO']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total[ESD_FNC_PI_SELECIONADO_CFNC]['CUSTEIO']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total[ESD_FNC_PI_APROVADO]['CUSTEIO']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"-");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"-");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrempenhado']['CUSTEIO']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrliquidado']['CUSTEIO']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrpago']['CUSTEIO']);
 
-        $linha++;
-        $coluna=0;
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"TOTAL CAPITAL");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['dotacao']['CAPITAL']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['APRESENTADO']['CAPITAL']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total[ESD_FNC_PI_SELECIONADO_CFNC]['CAPITAL']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total[ESD_FNC_PI_APROVADO]['CAPITAL']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"-");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"-");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrempenhado']['CAPITAL']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrliquidado']['CAPITAL']);
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,$total['vlrpago']['CAPITAL']);
-
-        $linha++;
-        $coluna=0;
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"TOTAL");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,array_sum($total['dotacao']));
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,array_sum($total['APRESENTADO']));
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,array_sum($total[ESD_FNC_PI_SELECIONADO_CFNC]));
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,array_sum($total[ESD_FNC_PI_APROVADO]));
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"-");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,"-");
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,array_sum($total['vlrempenhado']));
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,array_sum($total['vlrliquidado']));
-        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++,$linha,array_sum($total['vlrpago']));
+        # Busca Funcionais do FNC
+        $listaFuncionais = $this->listarFuncionaisFnc((object)array('exercicio' => $_SESSION['exercicio']));
         
-        // Indicação da criação do ficheiro
+        $totalDotacaoCusteio = 0;
+        $totalDotacaoCapital = 0;
+        # Previsto/Planejado/Aberto em PI
+        $totalApresentadoCusteio = 0;
+        $totalApresentadoCapital = 0;
+        $totalSelecionadoCusteio = 0;
+        $totalSelecionadoCapital = 0;
+        $totalAprovadoCusteio = 0;
+        $totalAprovadoCapital = 0;
+        # Execução Orçamentária
+        $totalProvisionadoCusteio = 0;
+        $totalProvisionadoCapital = 0;
+        $totalEmpenhadoCusteio = 0;
+        $totalEmpenhadoCapital = 0;
+        $totalLiquidadoCusteio = 0;
+        $totalLiquidadoCapital = 0;
+        $totalPagoCusteio = 0;
+        $totalPagoCapital = 0;
+        # Formatação da lista
+        $funcionalAnterior = NULL;
+        foreach($listaFuncionais as $funcional){
+            $linha++;
+            $coluna = 0;
+            $nome = $funcional['funcional']. ' ('. $funcional['tipo']. ') - '. $funcional['acatitulo']. ': '. $funcional['plodsc']. ' (RP '. $funcional['irpcod']. ')';
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, utf8_encode($nome));
+            
+            if($funcional['tipo'] == 'CUSTEIO'){
+                $totalDotacaoCusteio += $funcional['dotacao'];
+            } else {
+                $totalDotacaoCapital += $funcional['dotacao'];
+            }
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $funcional['dotacao']);
+            
+            # Valor da coluna apresentado
+            $apresentado = $this->buscarTotalFnc((object) array(
+                'tipo' => $funcional['tipo'],
+                'exercicio' => $_SESSION['exercicio'],
+                'ptrid' => $funcional['ptrid'],
+                'esdid' => array(
+                    ESD_FNC_PI_EM_ANALISE,
+                    ESD_FNC_PI_BANCO_PROJETOS,
+                    ESD_FNC_PI_DELIBERACAO_CFNC,
+                    ESD_FNC_PI_AGUARDANDO_CORRECAO,
+                    ESD_FNC_PI_SELECIONADO_CFNC,
+                    ESD_FNC_PI_APROVADO
+                )
+            ));
+            if($funcional['tipo'] == 'CUSTEIO'){
+                $totalApresentadoCusteio += $apresentado;
+            } else {
+                $totalApresentadoCusteio += $apresentado;
+            }
+            $disponivel = $funcional['dotacao'] - $apresentado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $apresentado);
+            $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna-1) . $linha)->applyFromArray(array(
+                'font' => array(
+                    'color' => array('rgb' => $this->getCorPainelPorValorDisponivel((int)$disponivel))
+                )
+            ));
+            
+            # Valor da coluna selecionado
+            $selecionado = $this->buscarTotalFnc((object) array(
+                'tipo' => $funcional['tipo'],
+                'exercicio' => $_SESSION['exercicio'],
+                'ptrid' => $funcional['ptrid'],
+                'esdid' => array(
+                    ESD_FNC_PI_SELECIONADO_CFNC,
+                    ESD_FNC_PI_APROVADO
+                )
+            ));
+            if($funcional['tipo'] == 'CUSTEIO'){
+                $totalSelecionadoCusteio += $selecionado;
+            } else {
+                $totalSelecionadoCapital += $selecionado;
+            }
+            $disponivel = $funcional['dotacao'] - $selecionado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $selecionado);
+            $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna-1) . $linha)->applyFromArray(array(
+                'font' => array(
+                    'color' => array('rgb' => $this->getCorPainelPorValorDisponivel((int)$disponivel))
+                )
+            ));
+            
+            # Valor da coluna aprovado
+            $aprovado = $this->buscarTotalFnc((object) array(
+                'tipo' => $funcional['tipo'],
+                'exercicio' => $_SESSION['exercicio'],
+                'ptrid' => $funcional['ptrid'],
+                'esdid' => array(
+                    ESD_FNC_PI_APROVADO
+                )
+            ));
+            if($funcional['tipo'] == 'CUSTEIO'){
+                $totalAprovadoCusteio += $aprovado;
+            } else {
+                $totalAprovadoCapital += $aprovado;
+            }
+            $disponivel = $funcional['dotacao'] - $aprovado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $aprovado);
+            $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna-1) . $linha)->applyFromArray(array(
+                'font' => array(
+                    'color' => array('rgb' => $this->getCorPainelPorValorDisponivel((int)$disponivel))
+                )
+            ));
+            
+            # Valor da coluna Provisionado
+            $provisionado = $this->buscarTotalExecucaoFnc((object) array(
+                'tipo' => 'provisionado',
+                'exercicio' => $_SESSION['exercicio'],
+                'ptrid' => $funcional['ptrid'],
+                'gnd' => $funcional['tipo']
+            ));
+            if($funcional['tipo'] == 'CUSTEIO'){
+                $totalProvisionadoCusteio += $provisionado;
+            } else {
+                $totalProvisionadoCapital += $provisionado;
+            }
+            $disponivel = $funcional['dotacao'] - $provisionado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $provisionado);
+            $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna-1) . $linha)->applyFromArray(array(
+                'font' => array(
+                    'color' => array('rgb' => $this->getCorPainelPorValorDisponivel((int)$disponivel))
+                )
+            ));
+            
+            # Valor da coluna Empenhado
+            $empenhado = $this->buscarTotalExecucaoFnc((object) array(
+                'tipo' => 'empenhado',
+                'exercicio' => $_SESSION['exercicio'],
+                'ptrid' => $funcional['ptrid'],
+                'gnd' => $funcional['tipo']
+            ));
+            if($funcional['tipo'] == 'CUSTEIO'){
+                $totalEmpenhadoCusteio += $empenhado;
+            } else {
+                $totalEmpenhadoCapital += $empenhado;
+            }
+            $disponivel = $funcional['dotacao'] - $empenhado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $empenhado);
+            $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna-1) . $linha)->applyFromArray(array(
+                'font' => array(
+                    'color' => array('rgb' => $this->getCorPainelPorValorDisponivel((int)$disponivel))
+                )
+            ));
+            
+            # Valor da coluna Liquidado
+            $liquidado = $this->buscarTotalExecucaoFnc((object) array(
+                'tipo' => 'liquidado',
+                'exercicio' => $_SESSION['exercicio'],
+                'ptrid' => $funcional['ptrid'],
+                'gnd' => $funcional['tipo']
+            ));
+
+            if($funcional['tipo'] == 'CUSTEIO'){
+                $totalLiquidadoCusteio += $liquidado;
+            } else {
+                $totalLiquidadoCapital += $liquidado;
+            }
+            $disponivel = $funcional['dotacao'] - $liquidado;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $liquidado);
+            $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna-1) . $linha)->applyFromArray(array(
+                'font' => array(
+                    'color' => array('rgb' => $this->getCorPainelPorValorDisponivel((int)$disponivel))
+                )
+            ));
+            
+            # Valor da coluna Pago
+            $pago = $this->buscarTotalExecucaoFnc((object) array(
+                'tipo' => 'pago',
+                'exercicio' => $_SESSION['exercicio'],
+                'ptrid' => $funcional['ptrid'],
+                'gnd' => $funcional['tipo']
+            ));
+            if($funcional['tipo'] == 'CUSTEIO'){
+                $totalPagoCusteio += $pago;
+            } else {
+                $totalPagoCapital += $pago;
+            }
+            $disponivel = $funcional['dotacao'] - $pago;
+            $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $pago);
+            $planilhaFinanceiro->getStyle(PHPExcel_Cell::stringFromColumnIndex($coluna-1) . $linha)->applyFromArray(array(
+                'font' => array(
+                    'color' => array('rgb' => $this->getCorPainelPorValorDisponivel((int)$disponivel))
+                )
+            ));
+        }
+        
+        $coluna=0;
+        $linha++;
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, "TOTAL CUSTEIO");
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalDotacaoCusteio);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalApresentadoCusteio);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalSelecionadoCusteio);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalAprovadoCusteio);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalProvisionadoCusteio);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalEmpenhadoCusteio);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalLiquidadoCusteio);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalPagoCusteio);
+
+        $linha++;
+        $coluna=0;
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, "TOTAL CAPITAL");
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalDotacaoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalApresentadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalSelecionadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalAprovadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalProvisionadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalEmpenhadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalLiquidadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalPagoCapital);
+
+        $linha++;
+        $coluna=0;
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, "TOTAL");
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalDotacaoCusteio + $totalDotacaoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalApresentadoCusteio + $totalApresentadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalSelecionadoCusteio + $totalSelecionadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalAprovadoCusteio + $totalAprovadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalProvisionadoCusteio + $totalProvisionadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalEmpenhadoCusteio + $totalEmpenhadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalLiquidadoCusteio + $totalLiquidadoCapital);
+        $planilhaFinanceiro->setCellValueByColumnAndRow($coluna++, $linha, $totalPagoCusteio + $totalPagoCapital);
+        
+        # Indicação da criação do ficheiro
         $objWriter = PHPExcel_IOFactory::createWriter($PHPExcel, 'Excel5');
 
-        // Encaminhar o ficheiro resultante para abrir no browser ou fazer download
+        # Encaminhar o ficheiro resultante para abrir no browser ou fazer download
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="PlanilhaPainelAcao.xls"');
+        header('Content-Disposition: attachment;filename="painel-fnc-acao.xls"');
         header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
     }

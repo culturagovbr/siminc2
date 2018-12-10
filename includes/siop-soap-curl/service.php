@@ -121,6 +121,7 @@ abstract class SiopSoapCurl_Service implements SiopSoapCurl_InterfaceService {
      */
     public function request(){
         $this->client->request();
+//$this->client->showXmlResponse();
         $this->convertResponseToObject();
         return $this->response;
     }
@@ -148,34 +149,6 @@ abstract class SiopSoapCurl_Service implements SiopSoapCurl_InterfaceService {
         }
 
         return $this->response;
-    }
-
-    /**
-     * Exibe o documento xml enviado no momento da requisição completo em um arquivo separado pra Baixar/fazer download.
-     * 
-     * @return VOID
-     */    
-    public function showXmlRequest(){
-        echo $this->loadXml();
-        header('Content-Type: application/xml; charset=utf-8');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Content-Disposition: attachment; filename="request.xml"');
-        die;
-    }
-
-    /**
-     * Exibe o documento xml de resposta completo em um arquivo separado pra Baixar/fazer download.
-     * 
-     * @return VOID
-     */
-    public function showXmlResponse() {
-        echo $this->client->getResponse();
-        header('Content-Type: application/xml; charset=utf-8');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Content-Disposition: attachment; filename="response.xml"');
-        die;
     }
     
 }

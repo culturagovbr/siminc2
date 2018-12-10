@@ -1,5 +1,6 @@
 <?php
 
+include_once 'http/code.php';
 include_once 'http.php';
 include_once 'ssl.php';
 
@@ -57,13 +58,6 @@ class SoapCurl_Client {
      * @var string
      */
     private $response;
-    
-    /**
-     * Erro ao fazer requisição
-     * 
-     * @var string
-     */
-    private $error;
 
     public static function getResource() {
         return self::$resource;
@@ -91,10 +85,6 @@ class SoapCurl_Client {
 
     public function getResponse() {
         return $this->response;
-    }
-
-    public function getError() {
-        return $this->error;
     }
 
     public static function setResource($resource) {
@@ -129,11 +119,6 @@ class SoapCurl_Client {
 
     public function setResponse($response) {
         $this->response = $response;
-        return $this;
-    }
-
-    public function setError($error) {
-        $this->error = $error;
         return $this;
     }
 
@@ -213,15 +198,62 @@ class SoapCurl_Client {
         # Executa a requisição ao serviço
         $this->execute();
         
+        # Busca informações sobre o código de resposta da requisição
+        $this->http->inform();
+
         # Em caso de não ter resposta, busca a mensagem do erro ocorrido
-        if(!$this->response){
-            $this->warn();
+        if($this->http->getCode() != SoapCurl_Http_Code::OK){
+            $this->exception();
         }
-        
+
         # Encerra a sessão da conexão e encerra todos os recursos utilizados
         $this->close();
         
         return $this->response;
+    }
+    
+    /**
+     * Lança exceção em caso de erro ao realizar requisição ou validar critérios do protocolo de segurança.
+     * 
+     * @throws Exception
+     */
+    public function exception(){
+        # Exibe erro ocorrido no momento da requisição
+        $this->ssl->warn();
+        if($this->ssl->getError()){
+            throw new Exception($this->ssl->getError());
+        }
+        
+        # Exibe erro ocorrido durante o processamento da requisição
+        throw new Exception($this->response, $this->http->getCode());
+    }
+    
+    /**
+     * Exibe o documento xml enviado no momento da requisição completo em um arquivo separado pra Baixar/fazer download.
+     * 
+     * @return VOID
+     */    
+    public function showXmlRequest(){
+        echo $this->xml;
+        header('Content-Type: application/xml; charset=utf-8');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Content-Disposition: attachment; filename="request.xml"');
+        die;
+    }
+    
+    /**
+     * Exibe o documento xml de resposta completo em um arquivo separado pra Baixar/fazer download.
+     * 
+     * @return VOID
+     */
+    public function showXmlResponse() {
+        echo $this->response;
+        header('Content-Type: application/xml; charset=utf-8');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Content-Disposition: attachment; filename="response.xml"');
+        die;
     }
     
     /**
@@ -231,16 +263,6 @@ class SoapCurl_Client {
      */
     public function execute(){
         $this->response = curl_exec(self::$resource);
-        return $this;
-    }
-    
-    /**
-     * Captura o erro ocorrido na requisição
-     * 
-     * @return $this
-     */
-    public function warn(){
-        $this->error = curl_error(self::$resource);
         return $this;
     }
     
