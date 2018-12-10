@@ -12,3 +12,5 @@ UPDATE public.indicadorpnc SET ipnstatus = 'I';
 UPDATE monitora.pi_enquadramentodespesa SET eqdstatus = 'I';
 UPDATE public.iniciativappa SET ippstatus = 'I';
 UPDATE monitora.acao SET acastatus = 'I';
+UPDATE monitora.ptres SET ptrstatus = 'I';
+UPDATE public.metapnc SET mpnstatus = 'I';
