@@ -19,7 +19,28 @@ Estas são documentações sobre o processo de desenvolvimento do SIMINC2, versi
 
 ## Docker
 Utilizamos o Docker como plataforma de desenvolvimento com o intuito de garantir o mesmo ambiente de desenvolvimento 
-independentemente do Sistema Operacional(SO) utilizado.
+independentemente do Sistema Operacional(SO) utilizado. Informaçoes mais detalhadas sobre a utilização do docker clique
+[aqui](doc/Guia_utilizacao_docker.md).
+
+Para criar um ambiente para trabalhar com o SIMINC2 basta executar o comando abaixo:
+```
+  docker-compose up
+```
+
+Para visualizar os container
+```
+  docker-compose ps
+```
+
+Após finalizado os procedimentos de configuração do ambiente acesse o sistema pela porta 8082 por exemplo:
+```
+http://localhost:8082
+```
+Na tela de login utilize o CPF de demonstração e senha abaixo:
+```
+CPF: 86274565426
+Senha: 123456
+```
 
 ## Tecnologias
 * [PHP](http://php.net/)
