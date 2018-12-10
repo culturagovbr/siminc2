@@ -99,3 +99,14 @@ SET
     entid = 390374,
     carid = 16
 ;
+
+-- Criando Usuário Padrão/Default para demostração do sistema
+
+-- Ativa o usuário de teste
+UPDATE seguranca.usuario SET usustatus = 'A', suscod = 'A' where usucpf ='86274565426';
+-- Vincula usuário aos principais módulos ativos na versão de demonstração
+UPDATE seguranca.usuario_sistema SET suscod = 'A' where sisid in(4, 157, 251, 255, 256, 48) and usucpf ='86274565426';
+-- Deleta todos os perfis de usuário
+DELETE FROM seguranca.perfilusuario where usucpf = '86274565426';
+-- Insere Perfis de Usuário aos módulos ativos
+INSERT INTO seguranca.perfilusuario ( usucpf, pflcod ) values ( '86274565426', 25), ( '86274565426', 955), ( '86274565426', 349), ( '86274565426', 1501), ( '86274565426', 1502), ( '86274565426', 1512);
