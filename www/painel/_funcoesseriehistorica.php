@@ -452,6 +452,7 @@ function processarLinhasTabelaSemFiltros($registros, $detalhes, $variaveis = fal
 				if($seriehistorica) {
 					$sql = "SELECT replace(trim(to_char(dshqtde, '".str_replace(array(".",",","#"),array("g","d","9"),$formatoinput['mascara'])."')),'.',',') as dshqtde FROM painel.detalheseriehistorica WHERE sehid='".$seriehistorica['sehid']."'";
 					$valor = $db->pegaUm($sql);
+//                                        ver($valor,d);
 				}
 				
 				if($formatoinput['campovalor']) {
@@ -1482,6 +1483,7 @@ function carregarGridBrasil($dados) {
 			WHERE dpestatus='A' AND indid='".$_SESSION['indid']."' 
                           and dpeanoref = '".$_REQUEST['nroAnoReferencia']."'
                         ORDER BY dpe.dpedatainicio";
+//        ver($sql,d);
 	$linhasperiodos = $db->carregar($sql);
 	// carregando os detalhes do indicador
 	$detalhes = detalhetipoindicador();

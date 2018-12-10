@@ -500,7 +500,6 @@ switch($dadosindicador['regid']) {
 </tr>
 <tr>
 <?php
-
 $anoInicial = date("Y")-7;
 $anoFinal = date("Y")+5;
 $j=0;
