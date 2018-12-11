@@ -19,3 +19,8 @@ UPDATE emendas.impedimento SET impstatus = 'I';
 UPDATE emendas.alteracaoorcamentaria SET alostatus = 'I';
 UPDATE emendas.siconvsituacao SET sitstatus = 'I';
 UPDATE emendas.proponentetipo SET prtstatus = 'I';
+UPDATE emendas.autortipo SET atpstatus = 'I';
+
+/*
+VACUUM FULL VERBOSE emendas.usuario_siconv;
+*/

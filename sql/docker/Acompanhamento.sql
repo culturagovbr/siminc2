@@ -8,5 +8,6 @@
 
 UPDATE public.metapnc SET mpnstatus = 'I';
 UPDATE monitora.pi_planointerno SET plistatus = 'I';
-UPDATE public.objetivoppa SET oppstatus = 'I'
+UPDATE public.objetivoppa SET oppstatus = 'I';
 UPDATE acompanhamento.acompanhamento SET acostatus = 'I';
+UPDATE acompanhamento.janela SET janstatus = 'I';
