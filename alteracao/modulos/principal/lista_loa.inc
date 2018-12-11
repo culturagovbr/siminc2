@@ -75,7 +75,7 @@ echo $linha;
     $(function () {
 
         $('#btnloa').click(function () {
-            $('#btnloa').prop('disabled', 'true');
+            $('#btnloa').attr('disabled', 'true');
             // recuperaFuncionalSelecionada
             var tr = '<tr class="text-center">' +
                 '        <th width="5% ">' +
