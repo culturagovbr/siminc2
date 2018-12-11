@@ -1,5 +1,8 @@
 	<!-- Navigation Modulos -->
 	<?php
+            // abre conexão com o servidor de banco de dados
+            $db = new cls_banco();
+            
 	    $sql = "SELECT sisid, sisabrev, sisdsc, sisfinalidade, sispublico, sisrelacionado
 	              FROM seguranca.sistema
 	             WHERE sisstatus='A' AND sismostra=true
