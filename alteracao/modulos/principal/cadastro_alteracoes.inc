@@ -60,7 +60,7 @@ if ($_REQUEST['req']){
             die;
         case 'remove_pi_pedido':
             $cPedido = new Alteracao_Controller_PlanoInternoSelecionado();
-            $cPedido->excluir($_REQUEST['pliselid']);
+            $cPedido->excluir($_REQUEST);
             die;
         case 'salvar_loa':
             $cPedido = new Alteracao_Controller_RemanejamentoLoa();

@@ -16,18 +16,21 @@ class Alteracao_Controller_PlanoInternoSelecionado
         }
     }
     
-    public function excluir($pedid)
+    public function excluir($dados)
     {
-        $url = 'alteracao.php?modulo=inicio&acao=C';
-
         try {
-            $mPedido = new Alteracao_Model_PlanoInternoSelecionado($pedid);
-            $mPedido->excluir();
-            $mPedido->commit();
-            simec_redirecionar($url, 'success');
+            $mRemanejamento = (new Alteracao_Model_RemanejamentoLoa())->verificaPiRemanejamento($dados['pliselid']);
+            if (count($mRemanejamento)>0){
+                echo json_encode(array("return" => false, "msg" => utf8_encode("Existe um remanejamento vinculado à este PI!")));
+            }else{
+                $mPedido = new Alteracao_Model_PlanoInternoSelecionado($dados['pliselid']);
+                $mPedido->excluir();
+                $mPedido->commit();
+                echo json_encode(array("return" => true));
+            }
         } catch (Exception $e){
             $mPedido->rollback();
-            simec_redirecionar($url, 'error');
+            echo json_encode(array("return" => false));
         }
     }
 

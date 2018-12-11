@@ -183,8 +183,6 @@ echo $linha;
 
     function SalvarLoa(rlid){
 
-        // validaObrigatorio(rlid);
-
         var ptrid = $("#pliselid"+rlid).val();
         var vlDotacao = acertaNumero($("#vlDotacao"+rlid).html());
         var vlSuplementar = acertaNumero($("#vlSuplementar"+rlid).val());
@@ -246,6 +244,9 @@ echo $linha;
     }
 
     function acertaNumero(num){
+        if (num==''){
+            num=0;
+        }
         num = str_replace(['.', ','], ['', '.'],num);
         return num;
     }

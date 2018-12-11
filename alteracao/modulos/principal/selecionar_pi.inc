@@ -79,12 +79,16 @@ Final da modal de listar pis disponíveis
     function removePiPedido(pedid, pliselid){
         $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=remove_pi_pedido',
         {
-            pliselid: pliselid
+            pliselid: pliselid,
+            pedid: pedid
         },
             function(retorno){
-                if (retorno){
+                retorno = JSON.parse(retorno);
+                if (retorno.return){
                     var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+pedid;
                     $('#listaPisSelecionados').load(url);
+                }else{
+                    swal('Atenção!', retorno.msg, 'warning');
                 }
             }
         );        

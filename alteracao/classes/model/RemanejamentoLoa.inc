@@ -311,4 +311,12 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
         $dados = $this->carregar($sql);
         return $dados[0]['dotacao_inicial'];
     }
+    
+    public function verificaPiRemanejamento($pliselid)
+    {
+        $sql = "select rl.rlid
+                  from alteracao.remanejamento_loa rl                    
+                 where pliselid = ".$pliselid;
+        return $this->carregar($sql);
+    }
 }

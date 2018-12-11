@@ -7,7 +7,7 @@ class Alteracao_Controller_RemanejamentoLoa
         try {
             $mPedido = new Alteracao_Model_RemanejamentoLoa();
             $mPedido->popularDadosObjeto($dados);
-            $mPedido->salvar(null, null, ['vldotacao','vlsuplementar','vlcancelado','vlsuplementarexcesso','vlsuplementarsuperavit']);
+            $mPedido->salvar(null, null, null);
             $mPedido->commit();
             echo json_encode(true);
         } catch (Exception $e){
