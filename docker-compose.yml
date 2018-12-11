@@ -5,25 +5,25 @@ services:
     container_name: siminc2-db
     image: postgres:9.3
     ports:
-      - 5432:5432
+        - 5433:5432
     volumes:
-      - ./sql/restore/desenvolvimento.sh:/docker-entrypoint-initdb.d/desenvolvimento.sh
-      - ./sql/restore/users.sql:/var/www/db-init/users.sql
-      - ./sql/restore/siminc2_desenvolvimento.bkp:/var/www/db-init/siminc2_desenvolvimento.bkp
+        - ./sql/restore/desenvolvimento.sh:/docker-entrypoint-initdb.d/desenvolvimento.sh
+        - ./sql/restore/users.sql:/var/www/db-init/users.sql
+        - ./sql/restore/siminc2_desenvolvimento.bkp:/var/www/db-init/siminc2_desenvolvimento.bkp
     restart: always
     environment: 
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: siminc2_desenvolvimento
+        POSTGRES_PASSWORD: 123456
+        POSTGRES_DB: siminc2_desenvolvimento
 
   web:
     container_name: siminc2-web
     image: culturagovbr/siminc2
     ports:
-      - 8082:80
-      - 9002:9000
+        - 8082:80
+        - 9002:9000
     volumes:
-      - .:/var/www/siminc2
+        - .:/var/www/siminc2
     environment:
-      - APPLICATION_ENV=development
+        - APPLICATION_ENV=development
     depends_on:
-      - db
+        - db
