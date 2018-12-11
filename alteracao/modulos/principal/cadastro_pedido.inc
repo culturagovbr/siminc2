@@ -41,7 +41,11 @@
 <script>
     $(function(){
         $("#btnSalvarPedido").click(function(){
-            salvarPedido(true);
+            if (verificaCampos()){
+                salvarPedido(true);
+            }else{
+                swal('Atenção!', 'Favor Preencher os campos obrigatórios', 'warning');
+            }
         });
     });
 
