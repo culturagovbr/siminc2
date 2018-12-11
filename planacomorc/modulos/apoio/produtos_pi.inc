@@ -42,7 +42,8 @@
                                     pprstatus AS status
                                 FROM monitora.pi_produto
                                 WHERE
-                                    prsano = '{$_SESSION['exercicio']}'
+                                    pprstatus = 'A'
+                                    AND prsano = '{$_SESSION['exercicio']}'
                                 ORDER BY
                                     descricao
                             ";
