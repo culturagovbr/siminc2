@@ -464,7 +464,13 @@ class ErrorHandler {
         // Ignora deprecated e warning de DESENVOLVIMENTO e grava um log para posterior verificação
         if (! isset ( $_SESSION ['usucpf'] )) {
             session_unset ();
-            $_SESSION ['MSG_AVISO'] = 'Sua sessão expirou. Efetue login novamente.';
+            
+            # Verifica se existe conexao com o banco principal
+            if(is_resource(cls_banco::$link[$GLOBALS['nome_bd']])){
+                $_SESSION ['MSG_AVISO'] = 'Sua sessão expirou. Efetue login novamente.';
+            } else {
+                $_SESSION ['MSG_AVISO'] = 'Não foi possível conectar à base de dados! Por favor, entre em contato com o suporte.';
+            }
             header ( 'Location: login.php' );
             exit ();
         }
