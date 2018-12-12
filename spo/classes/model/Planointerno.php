@@ -170,7 +170,7 @@ class Spo_Model_Planointerno extends Modelo
 		ed.esddsc AS situacao,
 		pc.picvalorcusteio AS custeio,
 		pc.picvalorcapital AS capital,
-                (select coalesce(pliselid,0) from alteracao.plano_interno_selecionado pis where pis.pliid=pli.pliid and pis.pedid = $pedid) as pliselid,
+                (select coalesce(pliselid,0) from alteracao.plano_interno_selecionado pis where pis.pliid=pli.pliid and pis.pedid = ".(int)$pedid.") as pliselid,
 		coalesce((SELECT 
 			sum(coalesce(se.vlrautorizado,0::numeric)) AS vlrautorizado
 		   FROM spo.siopexecucao se
