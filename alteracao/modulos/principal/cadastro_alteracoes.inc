@@ -151,8 +151,14 @@ $(function(){
         transitionEffect: "slide",
         startIndex: 0,
         width: 50,
-        enableAllSteps: true,
         //enableFinishButton: exibirBotaoEnviar(),
+        <?php
+        if (!$_REQUEST['pedid']){
+            echo 'enablePagination: false,';
+        }else{
+            echo 'enablePagination: true,';
+        }
+        ?>
         labels: {
             cancel: "Cancelar",
             current: "Passo atual:",
