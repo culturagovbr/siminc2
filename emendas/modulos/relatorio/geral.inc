@@ -88,6 +88,7 @@
         </tr>
     </thead>
     <tbody>
+    <?php if($lista): ?>
         <?php foreach($lista as $dado){ ?>
             <tr>
                 <?php foreach($dado as $coluna => $valor){ ?>
@@ -95,6 +96,7 @@
                 <?php } ?>
             </tr>
         <?php } ?>
+    <?php endif; ?>
     </tbody>
 </table>
 

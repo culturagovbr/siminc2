@@ -66,7 +66,9 @@ class Spo_Model_Ptres extends Modelo
         if($filtro->listaSubUnidadeUsuario){
             $where = "\n                AND suo.suocod::INTEGER IN(". join(',', $filtro->listaSubUnidadeUsuario). ") ";
         }
-        
+
+        $where .= "\n                AND pt.ptrstatus = 'A' ";
+
         $sql = "
             SELECT
                 pt.ptrid AS codigo,

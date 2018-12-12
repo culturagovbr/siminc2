@@ -40,21 +40,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php foreach($aPtres as $dados){ ?>
-                                <tr>
-                                    <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/funcionais_form&acao=A&ptrid=<?php echo $dados['ptrid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
-                                    </td>
-                                    <td><?php echo $dados['unidade_orcamentaria']; ?></td>
-                                    <td><?php echo $dados['acacod']; ?></td>
-                                    <td><?php echo $dados['acatitulo']; ?></td>
-                                    <td><?php echo $dados['ptres']; ?></td>
-                                    <td><?php echo $dados['funcional']; ?></td>
-                                    <td><?php echo $dados['plocod']; ?></td>
-                                    <td><?php echo $dados['plodsc']; ?></td>
-                                    <td><?php echo $dados['irpcod']; ?></td>
-                                </tr>
-                            <?php } ?>
+                            <?php
+                                if($aPtres):
+                                    foreach($aPtres as $dados): ?>
+                                        <tr>
+                                            <td class="text-center">
+                                                <a title="Alterar" href="?modulo=apoio/funcionais_form&acao=A&ptrid=<?php echo $dados['ptrid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                            </td>
+                                            <td><?php echo $dados['unidade_orcamentaria']; ?></td>
+                                            <td><?php echo $dados['acacod']; ?></td>
+                                            <td><?php echo $dados['acatitulo']; ?></td>
+                                            <td><?php echo $dados['ptres']; ?></td>
+                                            <td><?php echo $dados['funcional']; ?></td>
+                                            <td><?php echo $dados['plocod']; ?></td>
+                                            <td><?php echo $dados['plodsc']; ?></td>
+                                            <td><?php echo $dados['irpcod']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>

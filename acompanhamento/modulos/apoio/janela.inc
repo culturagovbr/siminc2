@@ -1,6 +1,6 @@
 <?php
 
-$aJanela = (new Acompanhamento_Model_Janela)->recuperarTodos('*' , ["prsano = '{$_SESSION['exercicio']}'"], NULL, array('join' => 'tipid'));
+$aJanela = (new Acompanhamento_Model_Janela)->recuperarTodos('*' , ["janstatus = 'A'", "prsano = '{$_SESSION['exercicio']}'"], NULL, array('join' => 'tipid'));
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
