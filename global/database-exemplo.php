@@ -3,7 +3,7 @@
 # Base de dados do sistema SIMINC2
 $nome_bd = 'simec_desenvolvimento';
 $servidor_bd = 'simec-db';
-$porta_bd = '5434';
+$porta_bd = '5432';
 $usuario_db = 'usr_simec';
 $senha_bd = '123456';
 
