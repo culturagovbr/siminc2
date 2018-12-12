@@ -33,19 +33,19 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" value="<?= number_format($dados['custeio'],0,',','.'); ?>">
+                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" name="vlsaldoempenhocusteio" value="<?= number_format($dados['custeio'],0,',','.'); ?>">
                             Custeio: R$ <?= number_format($dados['custeio'],0,',','.'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" value="<?= number_format($dados['capital'],0,',','.'); ?>">
+                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" name="vlsaldoempenhocapital" value="<?= number_format($dados['capital'],0,',','.'); ?>">
                             Capital: R$ <?= number_format($dados['capital'],0,',','.'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="hidden" id="picquantidade<?=$dados['pliselid'];?>" value="<?= number_format($dados['picquantidade'],0,',','.'); ?>">
+                            <input type="hidden" id="pifisico<?=$dados['pliselid'];?>" name="vlsaldoempenhofisico" value="<?= number_format($dados['picquantidade'],0,',','.'); ?>">
                             Físico: <?= number_format($dados['picquantidade'],0,',','.'); ?>
                         </td>
                     </tr>
@@ -74,7 +74,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="plisuplementarquantidade" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="plisuplementarquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plisuplementarquantidade'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarfisico'];?>">
                         </td>
                     </tr>
                 </table>
@@ -93,7 +93,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="plicancelarquantidade" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="plicancelarquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plicancelarquantidade'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlcancelarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarfisico'];?>">
                         </td>
                     </tr>                    
                 </table>
@@ -112,7 +112,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="plisuplementarexcessoquantidade" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="plisuplementarexcessoquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plisuplementarexcessoquantidade'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarexcessofisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessofisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessofisico'];?>">
                         </td>
                     </tr>
                 </table>
@@ -131,7 +131,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="plisuplementarsuperavitquantidade" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="plisuplementarsuperavitquantidade<?=$dados['pliselid'];?>" value="<?=$dados['plisuplementarsuperavitquantidade'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitfisico'];?>">
                         </td>
                     </tr>
                 </table>
@@ -157,7 +157,7 @@
                         }
                         ?>
                         <td style="color: <?=$color;?>; border: none; border-top: 1px solid #e7eaec;" id="fisico<?=$dados['pliselid'];?>">
-                            <?=$dados['vlrprovavel'];?>
+                            <?=$dados['vlrprovavel']?$dados['vlrprovavel']:'0';?>
                         </td>
                     </tr>
                 </table>
@@ -196,6 +196,7 @@
         if (valor!=''){
             var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
             var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
+            
             if (parseInt(vlrCancelado)>parseInt(vlrPic)){
                 swal({
                     title: "",
