@@ -1,4 +1,4 @@
-# SIMINC2
+# SIMEC
 
 [![GitHub Issues Abertas](https://img.shields.io/github/issues/culturagovbr/siminc2.svg?maxAge=2592000)]() 
 [![GitHub Issues Fechas](https://img.shields.io/github/issues-closed-raw/culturagovbr/siminc2.svg?maxAge=2592000)]()
@@ -6,11 +6,10 @@
     <img src="https://img.shields.io/badge/Managed_with-ZenHub-5e60ba.svg" alt="zenhub">
 </a>
 
-O SIMINC2 é uma customização do Sistema Integrado de Planejamento Orçamento e Finanças - [SIMEC](https://softwarepublico.gov.br/social/simec/), solução desenvolvida inicialmente pelo Ministério da Educação e compartilhada como Software Público com diversos órgãos públicos.
+O [SIMEC](https://softwarepublico.gov.br/social/simec/) é uma ferramenta web escrita em linguagem PHP e com servidor de banco de dados PostgreSQL. O sistema em PHP é responsável pela lógica do servidor com interfaces do lado do cliente escritas em Javascript, enquanto o PostgreSQL faz o papel de repositório de dados.
 
-Em 2012 o Ministério da Cultura implantou o SIMEC e realizou diversas customizações, batizando-o de SIMINC. Em 2015 o MinC viu a necessidade de atualizar a versão do software e de qualificar o processo de desenvolvimento, evitando futuros conflitos de versões. Para isso o MEC forneceu uma nova cópia do código mais atual e o MinC iniciou um novo ciclo de customizações de maneira a possibilitar o retorno do código novo ao MEC e reduzir o esforço de outros órgãos que também desejarem utilizá-lo. Esta versão foi batizada de [SIMINC2](http://siminc2.cultura.gov.br/) e desde então vem sendo desenvolvida abertamente aqui no Github.
 
-Estas são documentações sobre o processo de desenvolvimento do SIMINC2, versionameno e publicação:
+Estas são documentações sobre o processo de desenvolvimento do SIMEC, versionameno e publicação:
 
 * [Roteiro de publicação de releases](docs/Roteiro_de_publicacao_de_releases.md)
 * [Regras de versionamento](docs/Regras_versionamento.md)
@@ -22,7 +21,7 @@ Utilizamos o Docker como plataforma de desenvolvimento com o intuito de garantir
 independentemente do Sistema Operacional(SO) utilizado. Informaçoes mais detalhadas sobre a utilização do docker clique
 [aqui](docs/Guia_utilizacao_docker.md).
 
-Para criar um ambiente para trabalhar com o SIMINC2 basta executar o comando abaixo:
+Para criar um ambiente para trabalhar com o SIMEC basta executar o comando abaixo:
 ```
   docker-compose up
 ```
@@ -51,6 +50,6 @@ Senha: 123456
 * [PostgreSQL](https://www.postgresql.org/)
 
 ## Autores
-Várias pessoas colaboraram com o desenvimento do projeto SIMINC2 e decidimos centralizar em um único local todos os que participaram com o desenvolvimento do projeto.
+Várias pessoas colaboraram com o desenvimento do projeto SIMEC e decidimos centralizar em um único local todos os que participaram com o desenvolvimento do projeto.
   
 Clique [aqui](docs/Autores.md) para visualizar.
