@@ -1,4 +1,4 @@
-# SIMINC2 - Guia de utilização do Docker
+# SIMEC - Guia de utilização do Docker
 
 Para facilitar o desenvolvimento e escabilidade da aplicação trabalhamos a plataforma Docker. Com essa plataforma temos a possibilidade de isolar serviços permitindo várias possibilidades de integrações, manutenções e melhorias.
 
@@ -20,9 +20,9 @@ Para executarmos ações na plataforma docker precisamos executar alguns comando
 
 ## Imagem de Ambiente
 
-A principal imagem utilizadas pelo SIMINC2 podem ser encontradas [aqui](https://hub.docker.com/r/culturagovbr/siminc2) .
+A principal imagem utilizadas pelo SIMEC podem ser encontradas [aqui](https://hub.docker.com/r/culturagovbr/simec) .
 
 ## Dockerfile
 
-O SIMINC2 possui um Dockerfile contendo todas as informações necessárias para que tenhamos um ambiente para o funcionamento
-da aplicação. Para acessa-lo, clique [aqui](https://github.com/culturagovbr/docker-siminc2) .
+O SIMEC possui um Dockerfile contendo todas as informações necessárias para que tenhamos um ambiente para o funcionamento
+da aplicação. Para acessa-lo, clique [aqui](https://github.com/culturagovbr/docker-simec) .

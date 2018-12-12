@@ -2,13 +2,13 @@
 
 ## Git
 
-<http://git.cultura.gov.br/sistemas/siminc2>
+<https://github.com/culturagovbr/siminc2/tree/simec>
 
 Sistema em implantação; novas alterações estão sendo feitas no Git
 
 # Esquema de versionamento no Git
 
-* Branch Master: sistema em produção, segundo tags de versão de publicação
+* Branch Simec: sistema em produção, segundo tags de versão de publicação
 * Branch dev-backlog (operação / manutenção)
 * Branch dev-novaIN (implementação de novas funcionalidades da nova instrução normativa)
 
