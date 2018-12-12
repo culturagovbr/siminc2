@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Sistema Integrado de Planejamento, Orçamento e Finanças do Ministério da Educação
  * Setor responsvel: DTI/SE/MEC
@@ -18,7 +17,9 @@ require_once APPRAIZ . "includes/library/simec/funcoes.inc";
 
 //faz download do arquivo informes
 if($_REQUEST['download']){
-	$arqid = $_REQUEST['download'];
+    // abre conexão com o servidor de banco de dados
+    $db = new cls_banco();
+    $arqid = $_REQUEST['download'];
     DownloadArquivoInfo($arqid);
 }
 
@@ -28,7 +29,8 @@ if($_POST['usucpf'] && !validaCPF($_POST['usucpf'])) {
 }
 
 // executa a rotina de autenticação quando o formulário for submetido
-if ( $_POST['usucpf'] ) {
+if($_POST['usucpf']){
+    // abre conexão com o servidor de banco de dados
     $db = new cls_banco();
     
     if(AUTHSSD) {
@@ -45,22 +47,22 @@ if ( $_REQUEST['expirou'] ) {
 }
 
 function DownloadArquivoInfo($arqid){
-    global $db;
-
-    $sql ="SELECT * FROM public.arquivo WHERE arqid = ".$arqid;
-    $arquivo = $db->carregar($sql);
-    $caminho = APPRAIZ . 'arquivos/informes/'. floor($arquivo[0]['arqid']/1000) .'/'.$arquivo[0]['arqid'];
-
-    if ( !is_file( $caminho ) ) {
-            die('<script>alert("Arquivo não encontrado.");</script>');
-    }
-
-    $filename = str_replace(" ", "_", $arquivo[0]['arqnome'].'.'.$arquivo[0]['arqextensao']);
-    header( 'Content-type: '. $arquivo[0]['arqtipo'] );
-    header( 'Content-Disposition: attachment; filename='.$filename);
-    readfile( $caminho );
-    $db->close();
-    exit();
+	global $db;
+	
+	$sql ="SELECT * FROM public.arquivo WHERE arqid = ".$arqid;
+	$arquivo = $db->carregar($sql);
+	$caminho = APPRAIZ . 'arquivos/informes/'. floor($arquivo[0]['arqid']/1000) .'/'.$arquivo[0]['arqid'];
+	
+	if ( !is_file( $caminho ) ) {
+		die('<script>alert("Arquivo não encontrado.");</script>');
+	}
+	
+	$filename = str_replace(" ", "_", $arquivo[0]['arqnome'].'.'.$arquivo[0]['arqextensao']);
+	header( 'Content-type: '. $arquivo[0]['arqtipo'] );
+	header( 'Content-Disposition: attachment; filename='.$filename);
+	readfile( $caminho );
+        $db->close();
+	exit();
 }
 ?>
 <!DOCTYPE html>
@@ -105,7 +107,7 @@ function DownloadArquivoInfo($arqid){
     <script src="library/bootstrap-switch/js/bootstrap-switch.min.js"></script>
     
 	<!-- Custom Scripts -->
-    <script type="text/javascript" src="../includes/funcoes.js?v=1"></script>
+    <script type="text/javascript" src="../includes/funcoes.js"></script>
     
     <!-- FancyBox -->
     <script type="text/javascript" src="library/fancybox-2.1.5/source/jquery.fancybox.js?v=2.1.5"></script>
@@ -122,138 +124,105 @@ function DownloadArquivoInfo($arqid){
 
     <!-- Add Media helper (this is optional) -->
     <script type="text/javascript" src="library/fancybox-2.1.5/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
-
-    <style>
-        body{
-            height: auto;
-        }
-
-        .panel-login{
-            margin-top: 50px;
-        }
-
-        .panel-login hr{
-            margin-bottom: 0;
-        }
-
-        .panel-body{
-            padding-bottom: 10px;
-        }
-
-        .panel-login input.form-control{
-            height: 50px;
-        }
-
-        .panel-login input.form-control{
-            height: 50px;
-        }
-    </style>
-
 </head>
 
 <body class="page-index">
+   <?php // require_once 'navegacao.php'; ?>
 
     <!-- Login -->
     <section id="login" class="login">
-        <div class="content">
-            <?php if ($_SESSION['MSG_AVISO']): ?>
-                <div class="col-md-4 col-md-offset-4">
-                    <div class="alert alert-danger" style="font-size: 14px; line-height: 20px;">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <i class="fa fa-bell"></i> <?php echo implode("<br />", (array) $_SESSION['MSG_AVISO']); ?>
-                    </div>
-                </div>
-            <?php endif; ?>
-            <?php $_SESSION['MSG_AVISO'] = array(); ?>
-
-            <div class="col-md-4 col-md-offset-4">
-                <div class="panel-login">
-                    <div class="panel-heading">
-                        <img src="estrutura/temas/default/img/logo-siminc2.png" class="img-responsive" width="200">
-                    </div>
-                    <div class="panel-body">
-                        <form class="form-horizontal" role="form" method="post" action="">
-                            <input type="hidden" name="versao" value="<?php echo $_POST['versao']; ?>"/>
-                            <input type="hidden" name="formulario" value="1"/>
-
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <input type="text" maxlength="14" class="form-control" name="usucpf" id="usucpf" placeHolder="CPF" required="">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <input type="password" class="form-control" name="ususenha" id="ususenha" placeHolder="Senha" required="">
-                                </div>
-                            </div>
-                            <div class="form-group" style="font-size: 14px;">
-                                <div class="col-sm-7" style="margin-top: 3px">
-                                    <i class="fa fa-key"></i> <a href="recupera_senha.php" style="color: #fff">Esqueceu sua senha?</a>
-                                </div>
-                                <div class="col-sm-5 text-right">
-                                    <button style="background-color: #1da589; border-color: #1da589;" type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Acessar</button>
-                                </div>
-                            </div>
-                        </form>
-                        <hr>
-                    </div>
-                    <div class=" text-center" style="font-size: 14px;">
-                        <div class="btn-group">
-                            Não tem acesso ainda?&nbsp;
-                            <i class="fa fa-user"></i> 
-                            <a href="cadastrar_usuario.php" id="btn-cadastro" style="color: #fff">Solicitar acesso</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--/LOGIN -->
+		<div class="content">
+			<?php if ( $_SESSION['MSG_AVISO'] ): ?>
+				<div class="col-md-4 col-md-offset-4">
+					<div class="alert alert-danger" style="font-size: 14px; line-height: 20px;">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<i class="fa fa-bell"></i> <?php echo implode( "<br />", (array) $_SESSION['MSG_AVISO'] ); ?>
+					</div>
+				</div>
+			<?php endif; ?>
+			<?php $_SESSION['MSG_AVISO'] = array(); ?>
+		
+			<div class="col-md-4 col-md-offset-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span class="glyphicon glyphicon-lock"></span> Login
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form" method="post" action="">
+							<input type="hidden" name="versao" value="<?php echo $_POST['versao']; ?>"/>
+				            <input type="hidden" name="formulario" value="1"/>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input type="text" class="form-control cpf" name="usucpf" id="usucpf" placeHolder="CPF" required="">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input type="password" class="form-control" name="ususenha" id="ususenha" placeHolder="Senha" required="">
+								</div>
+							</div>
+							<div class="form-group" style="font-size: 14px;">
+								<div class="col-sm-7">
+									<i class="fa fa-key"></i> <a href="recupera_senha.php" style="color: #c8c5c5">Esqueci minha senha?</a>
+								</div>
+								<div class="col-sm-5 text-right">
+									<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Acessar</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="panel-footer text-center" style="font-size: 14px;">
+					   <div class="btn-group">
+							Não tem acesso ainda?&nbsp;
+							<i class="fa fa-user"></i> 
+							<a href="cadastrar_usuario.php" id="btn-cadastro" style="color: #c8c5c5">Solicitar acesso</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--/LOGIN -->
 
     <!-- Custom Theme JavaScript -->
     <script>
-        $(function(){
-            $('[data-tooltip="left"]').tooltip({placement : 'left'});
-            $('.modal-informes').modal('show');
-            $('span').tooltip({placement: 'bottom'})
-            $('.carousel').carousel();
-            $('.chosen-select').chosen();
-            
-            // Mascara de CPF
-            $('#usucpf').keyup(function(){
-                mascara(this, mcpf);
-            });
-            
-            $(".menu-close").click(function(e) {
-                e.preventDefault();
-                $("." + $(this).data('toggle')).toggleClass("active");
-            });
-            $(".menu-toggle").click(function(e) {
-                e.preventDefault();
-                $("." + $(this).data('toggle')).toggleClass("active");
-            });
-            $('#baselogincheck').change(function(){
-                if($(this).is(':checked')){
-                    $('#baselogin').val('simec_espelho_producao');
-                } else {
-                    $('#baselogin').val('simec_desenvolvimento');
-                }
-            });
-        });
+    $(function(){
+		$('[data-tooltip="left"]').tooltip({placement : 'left'});
+        $('.modal-informes').modal('show');
+		$('span').tooltip({placement: 'bottom'})
+		$('.carousel').carousel();
+		$('.chosen-select').chosen();
+		$('.cpf').mask('999.999.999-99');
+		$(".menu-close").click(function(e) {
+			e.preventDefault();
+			$("." + $(this).data('toggle')).toggleClass("active");
+		});
+		$(".menu-toggle").click(function(e) {
+			e.preventDefault();
+			$("." + $(this).data('toggle')).toggleClass("active");
+		});
+		$('#baselogincheck').change(function(){
+			if($(this).is(':checked')){
+				$('#baselogin').val('simec_espelho_producao');
+			} else {
+				$('#baselogin').val('simec_desenvolvimento');
+			}
+		});
+	});
         
-        function dinfo(id){
-            var url = 'login.php?download=' + id;
-            var iframe;
-            iframe = document.getElementById("download-container");
-            if (iframe === null){
-                iframe = document.createElement('iframe');  
-                iframe.id = "download-container";
-                iframe.style.visibility = 'hidden';
-                document.body.appendChild(iframe);
-            }
-            iframe.src = url;
-        }
-
+	function dinfo(id){
+		var url = 'login.php?download=' + id;
+		var iframe;
+		iframe = document.getElementById("download-container");
+		if (iframe === null)
+		{
+			iframe = document.createElement('iframe');  
+			iframe.id = "download-container";
+			iframe.style.visibility = 'hidden';
+			document.body.appendChild(iframe);
+		}
+		iframe.src = url;
+	}	
     </script>
 
 </body>

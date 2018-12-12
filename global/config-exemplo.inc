@@ -1,9 +1,9 @@
 <?php
     
-    define('SIGLA_SISTEMA', 'SIMINC2-DESENVOLVIMENTO');
-    define('DESCRICAO_SISTEMA', 'Sistema de Informa&ccedil;&otilde;es do Minist&eacute;rio da Cultura');
+    define('SIGLA_SISTEMA', 'SIMEC-DESENVOLVIMENTO');
+    define('DESCRICAO_SISTEMA', 'Sistema Integrado de Monitoramento Execu&ccedil;&atilde;o e Controle');
     define('NOME_SISTEMA', SIGLA_SISTEMA. ' - '. DESCRICAO_SISTEMA);
-    define('URL_SISTEMA', 'http://localhost:8082/');
+    define('URL_SISTEMA', 'http://localhost:8083/');
     define('EMAIL_SISTEMA_NOREPLY', 'noreply@cultura.gov.br');
     define('IP_CLI_AUTORIZADO', '172.17.0.2');
 
@@ -19,7 +19,7 @@
     header('content-type: text/html; charset=ISO-8859-1');
 
     defined('AUTHSSD') || define('AUTHSSD', false);
-    defined('APPRAIZ') || define('APPRAIZ', '/var/www/siminc2/');
+    defined('APPRAIZ') || define('APPRAIZ', '/var/www/simec/');
     defined('DIRFILES') || define('DIRFILES', APPRAIZ. 'arquivos/');
     defined('SISRAIZ') || define('SISRAIZ', APPRAIZ . $_SESSION['sisdiretorio'] . '/');
     defined('MAXONLINETIME') || define('MAXONLINETIME', 3600);

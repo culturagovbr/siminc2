@@ -10,7 +10,7 @@ com o github e torna o processo de desenvolvimento mais fácil.
 
 ## Entendendo o processo
 
-No projeto SIMINC2, as demandas são solicitadas e entregues por Sprints, da
+No projeto SIMEC, as demandas são solicitadas e entregues por Sprints, da
 metodologia Scrum, geralmente, quinzenalmente.
 <br>Cada Sprint contém um pacote de demandas que o demandante faz
 para o Time de Desenvolvimento.
@@ -64,7 +64,6 @@ que não participou do desenvolvimento da demanda.<br>
 Após a correção, o responsável pelo teste deverá mover a demanda para a prateleira <b>Feito</b>
 e exibir a mensagem 'Testado em Homologação : ', informando também a url de onde ele realizou o teste <br>
 
-<b>Eg:</b> Testado em Homologação :http://homologasiminc2.cultura.gov.br/planacomorc/planacomorc.php?modulo=apoio/unidadegestora-limite&acao=A
 
 
 ### Feito
