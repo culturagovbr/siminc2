@@ -151,12 +151,13 @@ $(function(){
         transitionEffect: "slide",
         startIndex: 0,
         width: 50,
+        
         //enableFinishButton: exibirBotaoEnviar(),
         <?php
         if (!$_REQUEST['pedid']){
-            echo 'enablePagination: false,';
+            echo 'enablePagination: false, enableAllSteps: false,';
         }else{
-            echo 'enablePagination: true,';
+            echo 'enablePagination: true, enableAllSteps: true,';
         }
         ?>
         labels: {
