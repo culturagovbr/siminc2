@@ -6,7 +6,7 @@
 class EmailPrazoProvidenciaRestricao extends Modelo{
     
     const NOME_REMETENTE = 'EQUIPE ' SIGLA_SISTEMA;
-    const EMAIL_REMETENTE = 'noreply@mec.gov.br';
+    const EMAIL_REMETENTE = EMAIL_SISTEMA_NOREPLY;
 
     public function enviarEmailPrazoProvidenciaRestricao(){
         $arrCpf = $this->buscarCpfRestricao();

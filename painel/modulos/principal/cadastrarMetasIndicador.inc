@@ -63,6 +63,7 @@ print '<br/>';
 if($arrDados && $arrDados['metid']){
 	$_REQUEST['metid'] = $metid;
 	$_SESSION['painel']['metid'] = $metid;
+
 	$menu[0] = array("descricao" => "Lista de Indicadores", "link"=> "/painel/painel.php?modulo=principal/lista&acao=A");
 	$menu[1] = array("descricao" => "Cadastro de Indicadores", "link"=> "/painel/painel.php?modulo=principal/cadastro&acao=A");
 	$menu[2] = array("descricao" => "Série Histórica", "link"=> "/painel/painel.php?modulo=principal/listaSerieHistorica&acao=A");

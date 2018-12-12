@@ -16,9 +16,6 @@ require_once APPRAIZ . "includes/classes_simec.inc";
 require_once APPRAIZ . "includes/funcoes.inc";
 require_once APPRAIZ . "includes/library/simec/funcoes.inc";
 
-// abre conexão com o servidor de banco de dados
-$db = new cls_banco();
-
 //faz download do arquivo informes
 if($_REQUEST['download']){
 	$arqid = $_REQUEST['download'];
@@ -32,11 +29,15 @@ if($_POST['usucpf'] && !validaCPF($_POST['usucpf'])) {
 
 // executa a rotina de autenticação quando o formulário for submetido
 if ( $_POST['usucpf'] ) {
+    $db = new cls_banco();
+    
     if(AUTHSSD) {
         include_once APPRAIZ . "includes/autenticarssd.inc";
     } else {
         include_once APPRAIZ . "includes/autenticar.inc";
     }
+    
+    $db->close();
 }
 
 if ( $_REQUEST['expirou'] ) {
@@ -58,6 +59,7 @@ function DownloadArquivoInfo($arqid){
     header( 'Content-type: '. $arquivo[0]['arqtipo'] );
     header( 'Content-Disposition: attachment; filename='.$filename);
     readfile( $caminho );
+    $db->close();
     exit();
 }
 ?>
@@ -257,4 +259,3 @@ function DownloadArquivoInfo($arqid){
 </body>
 
 </html>
-<?php $db->close(); ?>

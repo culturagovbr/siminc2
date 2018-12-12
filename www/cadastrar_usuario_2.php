@@ -347,19 +347,62 @@
         $tpocod_banco = $tpocod ? (integer) $tpocod : "null";
 
         if (!$cpf_cadastrado) {
-            // insere informações gerais do usuário
-            $sql = sprintf(
-                    "INSERT INTO seguranca.usuario (
-                                            usucpf, usunome, usuemail, usufoneddd, usufonenum,
-                                            usufuncao, carid, unicod, usuchaveativacao, regcod,
-                                            ususexo, ungcod, ususenha, suscod, orgao,
-                                            muncod, tpocod
-                                    ) values (
-                                            '%s', '%s', '%s', '%s', '%s',
-                                            '%s', '%s', '%s', '%s', '%s',
-                                            '%s', '%s', '%s', '%s', '%s',
-                                            '%s', %s
-                                    )", $cpf, str_to_upper($usunome), strtolower($usuemail), $usufoneddd, $usufonenum, $usufuncao, $carid, $unicod, 'f', $regcod, $ususexo, $_POST['ungcod_disable'], md5_encrypt_senha($senhageral, ''), 'P', $orgao, $muncod, $tpocod_banco
+            # Insere informações gerais do usuário
+            $sql = sprintf("
+                INSERT INTO seguranca.usuario (
+                    usucpf,
+                    usunome,
+                    usuemail,
+                    usufoneddd,
+                    usufonenum,
+                    usufuncao,
+                    carid,
+                    unicod,
+                    usuchaveativacao,
+                    regcod,
+                    ususexo,
+                    ungcod,
+                    ususenha,
+                    suscod,
+                    orgao,
+                    muncod,
+                    tpocod
+                ) VALUES (
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    %s
+                )",
+                $cpf, 
+                str_to_upper($usunome),
+                strtolower($usuemail),
+                $usufoneddd,
+                $usufonenum, 
+                $usufuncao, 
+                $carid, 
+                $unicod, 
+                'f',
+                $regcod,
+                $ususexo,
+                $_POST['ungcod_disable'],
+                md5_encrypt_senha($senhageral, ''),
+                'P',
+                $orgao,
+                $muncod,
+                $tpocod_banco
             );
 
             $db->executar($sql);
@@ -370,15 +413,16 @@
         $db->executar($sql);
 
         // modifica o status do usuário (no módulo) para pendente
-        $descricao = "Usuário solicitou cadastro e apresentou as seguintes observações: " . $htudsc;
+        $descricao = "O usuário que solicitou o acesso apresentou as seguintes observações: " . $htudsc;
         $db->alterar_status_usuario($cpf, 'P', $descricao, $sisid);
 
-        $sql = "SELECT
-                             s.sisid, lower(s.sisdiretorio) as sisdiretorio
-                            FROM
-                             seguranca.sistema s
-                            WHERE
-                             sisid = " . $sisid . "";
+        $sql = "
+            SELECT
+                s.sisid,
+                lower(s.sisdiretorio) AS sisdiretorio
+            FROM seguranca.sistema s
+            WHERE
+                sisid = ". $sisid;
 
         $sistema = (object) $db->pegaLinha($sql);
 
@@ -426,73 +470,85 @@
             }
         }
 
-        $sql = sprintf("SELECT pflcod FROM seguranca.perfil WHERE sisid=%s and pflpadrao='t'", $sisid);
+        $sql = sprintf("SELECT pflcod FROM seguranca.perfil WHERE sisid = %s AND pflpadrao IS TRUE", $sisid);
         $pflcodpadrao = (array) $db->carregarColuna($sql);
-
-        // Se for o Demandas, então envia e-mail para o gestor. -- Atílio Emanuel
-        if ($sisid == 44) {
-            //dados do usuário solicitante
-            $sqlUsu = sprintf("
-                SELECT
-                    usucpf,
-                    usuemail,
-                    ususexo,
-                    usunome,
-                    ususenha
-                FROM seguranca.usuario
-                WHERE
-                    usucpf = '%s'
-                ", $cpf);
-
-            $usuariod = (object) $db->pegaLinha($sqlUsu);
-
-            //validando e recuperando descrição do perfil solicitado no cadastro.
-            if (!empty($_REQUEST['pflcod'])) {
-                $nmPerfil = $db->pegaUm("SELECT pfldsc FROM seguranca.perfil WHERE pflcod = " . $_REQUEST['pflcod']);
-            }
-
-            //recuperando dados para enviar email para o gestor #Atilio, somente o mesmo poderá ativar o usuário.
-            $emailCopia = "";
-            $remetente = array("nome" => SIGLA_SISTEMA, "email" => 'noreply@mec.gov.br');
-            $destinatario = array("nome" => SIGLA_SISTEMA, "email" => $_SESSION['email_sistema']);
-            $assunto = "Solicitação de acesso";
-            $nmusu = !empty($_REQUEST['usunome']) ? ", <b>" . $usuariod->usunome . "</b>" : "";
-            $perfil = !empty($nmPerfil) ? ", para o perfil <b>" . $nmPerfil . "</b>" : "";
-            $conteudo = "Houve uma solicitação de acesso ao demandas para o CPF: <b>" . formatar_cpf($cpf) . "</b>" . $nmusu . "" . $perfil . " em <b>" . date('d/m/Y H:i:s') . "</b>.";
-            # $corpoEmailV3 Variavel inserida dentro do template.
-            $corpoEmailV3 = '<p>' . $conteudo . '</p>';
-            # $textoEmailV3 é a variavel que terá o template com a msg principal do e-mail.
-            include APPRAIZ . "includes/email-template.php";
-            enviar_email($remetente, $destinatario, $assunto, $textoEmailV3, $emailCopia);
-        }
 
         // VERIFICA SE HÁ REGRA PARA ENVIO DE EMAIL/SMS
         if ($_REQUEST['pflcod']) {
-            $sql = "select r.mreid, r.sisid, mretextoemail, mretextocelular, mreenviaemail, mreenviasms, mretituloemail, mrestatus, mredescricao,
-                           p.pfldsc, s.sisabrev, pu.pflcod, pu.usucpf, u.usunome, usuemail, 55 || usufoneddd || usufonenum as celular, usufoneddd, usufonenum
-                    from seguranca.mensagemregra r
-                        inner join seguranca.mensagemcampo cs on cs.mreid  = r.mreid and cs.mctid = 2 -- Perfil solicitado
-                        inner join seguranca.mensagemcampo ca on ca.mreid  = r.mreid and ca.mctid = 1 -- Perfil a ser avisado
-                        inner join seguranca.perfil         p on p.pflcod::text  = cs.mcavalor
-                        inner join seguranca.sistema        s on s.sisid   = r.sisid
-                        inner join seguranca.perfilusuario pu on pu.pflcod::text = ca.mcavalor
-                        inner join seguranca.usuario        u on u.usucpf  = pu.usucpf
-                    where r.sisid = {$_REQUEST['sisid']}
-                    and cs.mcavalor = '{$_REQUEST['pflcod']}'
-                    and mretipo = 'A'
-                    union
-                    select r.mreid, r.sisid, mretextoemail, mretextocelular, mreenviaemail, mreenviasms, mretituloemail, mrestatus, mredescricao,
-                           p.pfldsc, s.sisabrev, 0, u.usucpf, u.usunome, usuemail, 55 || usufoneddd || usufonenum as celular, usufoneddd, usufonenum
-                    from seguranca.mensagemregra r
-                        inner join seguranca.mensagemcampo cs on cs.mreid  = r.mreid and cs.mctid = 2 -- Perfil solicitado
-                        inner join seguranca.mensagemcampo ca on ca.mreid  = r.mreid and ca.mctid = 3 -- Usuário a ser avisado
-                        inner join seguranca.perfil         p on p.pflcod::text  = cs.mcavalor
-                        inner join seguranca.sistema        s on s.sisid   = r.sisid
-                        inner join seguranca.usuario        u on u.usucpf  = ca.mcavalor
-                    where r.sisid = {$_REQUEST['sisid']}
-                    and cs.mcavalor = '{$_REQUEST['pflcod']}'
-                    and mretipo = 'A';
-                    ";
+            $sql = "
+                SELECT
+                    r.mreid,
+                    r.sisid,
+                    mretextoemail,
+                    mretextocelular,
+                    mreenviaemail,
+                    mreenviasms,
+                    mretituloemail,
+                    mrestatus,
+                    mredescricao,
+                    p.pfldsc,
+                    s.sisabrev,
+                    pu.pflcod,
+                    pu.usucpf,
+                    u.usunome,
+                    usuemail,
+                    55 || usufoneddd || usufonenum AS celular,
+                    usufoneddd,
+                    usufonenum
+                FROM seguranca.mensagemregra r
+                    JOIN seguranca.mensagemcampo cs ON(
+                        cs.mreid = r.mreid
+                        AND cs.mctid = 2 -- Perfil solicitado
+                    )
+                    JOIN seguranca.mensagemcampo ca ON(
+                        ca.mreid = r.mreid
+                        AND ca.mctid = 1
+                    ) -- Perfil a ser avisado
+                    JOIN seguranca.perfil p ON p.pflcod::text = cs.mcavalor
+                    JOIN seguranca.sistema s ON s.sisid = r.sisid
+                    JOIN seguranca.perfilusuario pu ON pu.pflcod::text = ca.mcavalor
+                    JOIN seguranca.usuario u ON u.usucpf = pu.usucpf
+                WHERE
+                    r.sisid = {$_REQUEST['sisid']}
+                    AND cs.mcavalor = '{$_REQUEST['pflcod']}'
+                    AND mretipo = 'A'
+                UNION
+                SELECT
+                    r.mreid,
+                    r.sisid,
+                    mretextoemail,
+                    mretextocelular,
+                    mreenviaemail,
+                    mreenviasms,
+                    mretituloemail,
+                    mrestatus,
+                    mredescricao,
+                    p.pfldsc,
+                    s.sisabrev,
+                    0,
+                    u.usucpf,
+                    u.usunome,
+                    usuemail,
+                    55 || usufoneddd || usufonenum AS celular,
+                    usufoneddd,
+                    usufonenum
+                FROM seguranca.mensagemregra r
+                    JOIN seguranca.mensagemcampo cs ON(
+                        cs.mreid = r.mreid
+                        AND cs.mctid = 2
+                    )
+                    JOIN seguranca.mensagemcampo ca ON(
+                        ca.mreid = r.mreid
+                        AND ca.mctid = 3 -- Usuário a ser avisado
+                    )
+                    JOIN seguranca.perfil p ON p.pflcod::text = cs.mcavalor
+                    JOIN seguranca.sistema s ON s.sisid = r.sisid
+                    JOIN seguranca.usuario u ON u.usucpf = ca.mcavalor
+                WHERE
+                    r.sisid = {$_REQUEST['sisid']}
+                    AND cs.mcavalor = '{$_REQUEST['pflcod']}'
+                    AND mretipo = 'A'
+            ";
 
             $mensagemRegra = $db->carregar($sql);
 
@@ -523,7 +579,7 @@
             if (count($aEnvio)) {
                 foreach ($aEnvio as $envioRegra) {
                     if (isset($envioRegra['emails'])) {
-                        $remetente = array("nome" => SIGLA_SISTEMA, "email" => "noreply@mec.gov.br");
+                        $remetente = array("nome" => SIGLA_SISTEMA, "email" => EMAIL_SISTEMA_NOREPLY);
 
                         $destinatariosBcc = $envioRegra['emails'];
                         $assunto = $envioRegra['assunto'];
@@ -540,6 +596,7 @@
                             <p><b>CPF:</b> {$_POST['usucpf']}</p>
                             <p><b>E-mail:</b> {$_POST['usuemail']}</p>
                             <p><b>Telefone:</b> ({$_POST['usufoneddd']}) {$_POST['usufonenum']}</p>
+                            <p><b>O usuário que solicitou o acesso apresentou as seguintes observações:</b> {$htudsc}</p>
                             <br />
                             <p>
                             Atenciosamente,

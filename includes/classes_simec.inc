@@ -1221,6 +1221,7 @@ inner join elabrev.ppaacao_proposta  ap on ap.acaid = ua.acaid and ua.acaid=".$_
 					   ) $filtro
 				  order by menu.mnucod";
 //ver($sql,d);
+                        unset($_SESSION['abamenu']);
 			if (isset($_SESSION['abamenu'][$abacod_tela]))
 			{
 				$RS = $_SESSION['abamenu'][$abacod_tela];

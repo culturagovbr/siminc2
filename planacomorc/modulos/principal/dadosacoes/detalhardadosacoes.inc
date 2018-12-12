@@ -131,7 +131,7 @@ function enviarEmailExtratoAcoes($params) {
             break;
     }
     $destinatarios[] = $_SESSION['email_sistema'];
-    $paransEmail['remetente'] = array("nome" => SIGLA_SISTEMA, "email" => "noreply@mec.gov.br");
+    $paransEmail['remetente'] = array("nome" => SIGLA_SISTEMA, "email" => EMAIL_SISTEMA_NOREPLY);
     $paransEmail['assunto'] = "Reportar Divergência em um valor no quadro - '{$origem}'";
     $paransEmail['mensagem'] = "<pre>Prezado,
         Na Ação <span style='color: red;'>{$_REQUEST['acacod']}</span> e Unidade <span style='color: red;'>{$_REQUEST['unicod']} </span> existem alterações para serem feitas.
