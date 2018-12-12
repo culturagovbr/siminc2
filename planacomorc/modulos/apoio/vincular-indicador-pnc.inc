@@ -44,20 +44,24 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($aIndicadorPnc as $dados){ ?>
-                                    <tr>
-                                        <td>
-                                            <span title="Meta <?php echo $dados['mpncod'] . ' - ' . $dados['mpndsc']; ?>">Meta <?php echo $dados['mpncod']; ?></span><br>
-                                            <?php echo $dados['ipncod'] . ' - ' . $dados['ipndsc']; ?>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            $vinculados = !empty($aVinculos[$dados['ipnid']]) ?  $aVinculos[$dados['ipnid']]: [];
-                                            echo $simec->select("vinculos[{$dados['ipnid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
+                                <?php
+                                    if($aIndicadorPnc):
+                                        foreach($aIndicadorPnc as $dados):
+                                ?>
+                                            <tr>
+                                                <td>
+                                                    <span title="Meta <?php echo $dados['mpncod'] . ' - ' . $dados['mpndsc']; ?>">Meta <?php echo $dados['mpncod']; ?></span><br>
+                                                    <?php echo $dados['ipncod'] . ' - ' . $dados['ipndsc']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    $vinculados = !empty($aVinculos[$dados['ipnid']]) ?  $aVinculos[$dados['ipnid']]: [];
+                                                    echo $simec->select("vinculos[{$dados['ipnid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

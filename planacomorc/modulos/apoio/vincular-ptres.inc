@@ -105,19 +105,23 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach($aPtresSubunidade as $dados){ ?>
-                                        <tr>
-                                            <td>
-                                                <?php $checked = (!empty($aVinculos[$dados['ptrid']]) && (in_array($dados['suoid'], $aVinculos[$dados['ptrid']])) || isset($aVinculos[$dados['ptrid']]['t'])) ? 'checked' : '' ; ?>
-                                                <input type="checkbox" class="vincular check_<?php echo $tipo; ?>" data-ptrid="<?php echo $dados['ptrid']; ?>" data-unofundo="<?php echo $dados['unofundo']; ?>" data-suoid="<?php echo $dados['suoid']; ?>" <?php echo $checked; ?> />
-                                            </td>
-                                            <td><?php echo $dados['prgcod']; ?></td>
-                                            <td><?php echo $dados['acacod']; ?></td>
-                                            <td><?php echo $dados['loccod']; ?></td>
-                                            <td><?php echo $dados['plocod']; ?></td>
-                                            <td><?php echo $dados['unosigla'] . ' - ' . $dados['suonome']; ?></td>
-                                        </tr>
-                                    <?php } ?>
+                                    <?php
+                                        if($aPtresSubunidade):
+                                            foreach($aPtresSubunidade as $dados):
+                                    ?>
+                                                <tr>
+                                                    <td>
+                                                        <?php $checked = (!empty($aVinculos[$dados['ptrid']]) && (in_array($dados['suoid'], $aVinculos[$dados['ptrid']])) || isset($aVinculos[$dados['ptrid']]['t'])) ? 'checked' : '' ; ?>
+                                                        <input type="checkbox" class="vincular check_<?php echo $tipo; ?>" data-ptrid="<?php echo $dados['ptrid']; ?>" data-unofundo="<?php echo $dados['unofundo']; ?>" data-suoid="<?php echo $dados['suoid']; ?>" <?php echo $checked; ?> />
+                                                    </td>
+                                                    <td><?php echo $dados['prgcod']; ?></td>
+                                                    <td><?php echo $dados['acacod']; ?></td>
+                                                    <td><?php echo $dados['loccod']; ?></td>
+                                                    <td><?php echo $dados['plocod']; ?></td>
+                                                    <td><?php echo $dados['unosigla'] . ' - ' . $dados['suonome']; ?></td>
+                                                </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>

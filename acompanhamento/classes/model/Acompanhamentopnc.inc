@@ -149,12 +149,11 @@ class Acompanhamento_Model_Acompanhamentopnc extends Modelo
                 FROM public.metapnc m
                 LEFT JOIN spo.subunidademetapnc sm ON(
                     m.mpnid = sm.mpnid
-                    AND m.prsano = '". (int)$filtro->exercicio. "'
-                    AND m.mpnstatus = 'A'
                 )
                 WHERE
                     sm.mpnid IS NULL
                     AND m.prsano = '". (int)$filtro->exercicio. "'
+                    AND m.mpnstatus = 'A'
             ) AS x
             ORDER BY
                 mpncod::int

@@ -585,4 +585,4 @@ munpoligono as poli from territoriosgeo.municipio ".($arrrWhere ? " where ".impl
 
 $arrCabecalho = array("Ação","Muncod","Município","UF");
 
-$db->monta_lista($sql,$arrCabecalho,50,10,"N","center","N");?>
+//$db->monta_lista($sql,$arrCabecalho,50,10,"N","center","N");?>

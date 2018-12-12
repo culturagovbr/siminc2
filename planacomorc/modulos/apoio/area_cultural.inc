@@ -36,17 +36,17 @@ $listaAreaCultural = (new Monitora_Model_PiModalidadeEnsino())->recuperarTodos('
                             </thead>
                             <tbody>
                             <?php
-                            if($listaAreaCultural){
-                            foreach($listaAreaCultural as $dados){
-                                ?>
-                                <tr>
-                                    <td class="text-center">
-                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/area_cultural_form&acao=A&mdeid=<?php echo $dados['mdeid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
-                                    </td>
-                                    <td><?php echo $dados['mdecod']; ?></td>
-                                    <td><?php echo $dados['mdedsc']; ?></td>
-                                </tr>
-                            <?php } } ?>
+                                if($listaAreaCultural):
+                                    foreach($listaAreaCultural as $dados):?>
+                                        <tr>
+                                            <td class="text-center">
+                                                <a title="Alterar" href="planacomorc.php?modulo=apoio/area_cultural_form&acao=A&mdeid=<?php echo $dados['mdeid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                            </td>
+                                            <td><?php echo $dados['mdecod']; ?></td>
+                                            <td><?php echo $dados['mdedsc']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>

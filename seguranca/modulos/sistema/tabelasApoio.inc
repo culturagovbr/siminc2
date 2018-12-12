@@ -395,34 +395,34 @@ function marcarTodas(obj,local){
 		<?php if($tbl->getMessage()): ?>
 			<tr id="tr_msg_sucess" class="center SubtituloTabela" >
 				<td colspan="2">
-					<?php echo $tbl->getMessage() ?>
+					<?= $tbl->getMessage() ?>
 				</td>
 			</tr>
-		<?php endif; ?>
-		<?php if($html): ?>
-			<?php echo $html ?>
-		<?php endif; ?>
-		<?php if(!$schema): ?>
+		<?php endif;
+            if($html):
+			    echo $html;
+            endif;
+		    if(!$schema): ?>
 			<tr>
 				<td width="25%" class="SubTituloDireita" >Selecione o schema:</td>
 				<td id="td_combo_sch" >
-					<?php $combo_sch = $_POST['combo_sch']; $db->monta_combo('combo_sch',$tbl->getShemasDB(),'S','Selecione o Schema','selecionaSchema','');?>
+<!--					--><?php /*$combo_sch = $_POST['combo_sch']; $db->monta_combo('combo_sch',$tbl->getShemasDB(),'S','Selecione o Schema','selecionaSchema','');*/?>
 				</td>
 			</tr>
-		<?php endif; ?>
-		<?php if(!$table || !$schema): ?>
-			<?php if($_POST['combo_sch']): ?>
+		<?php endif;
+		    if(!$table || !$schema):
+                if($_POST['combo_sch']): ?>
 			<tr>
 				<td width="25%" class="SubTituloDireita" >Selecione a tabela:</td>
 				<td id="td_combo_tbl" >
 					<?php $combo_tbl = $_POST['combo_tbl']; $db->monta_combo('combo_tbl',$tbl->getShemaTablesPorSisid(),'S','Selecione a Tabela','selecionaTabelaApoio','','','','','combo_tbl');?>
 				</td>
 			</tr>
-			<?php endif; ?>
-		<?php endif; ?>
-		<?php if($_POST['combo_tbl']): ?>
-			<?php $arrColunas = $tbl->getTableColumns();?>
-			<?php if(!$table || !$schema): ?>
+			<?php endif;
+		    endif;
+		    if($_POST['combo_tbl']):
+                $arrColunas = $tbl->getTableColumns();
+                if(!$table || !$schema): ?>
 				<tr>
 					<td colspan="2" class="SubTituloEsquerda" >Colunas da tabela '<?php echo $tbl->getTableName(); ?>' do schema '<?php echo $tbl->getSchemaName(); ?>'</td>
 				</tr>

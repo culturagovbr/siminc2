@@ -36,17 +36,20 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach($Enquadramento as $dados){ ?>
-                                <tr>
-                                    <td class="text-center">
-                                        <a title="Alterar" href="planacomorc.php?modulo=apoio/enquadramento_despesa_form&acao=A&eqdid=<?php echo $dados['eqdid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
-                                    </td>
-                                    <td class="text-center"><?php echo $dados['eqdcod']; ?></td>
-                                    <td><?php echo $dados['eqddsc']; ?></td>
-                                    <td class="text-center"><?php echo $dados['eqdstreduzido'] == 'S' ? 'Sim' : 'Não'; ?></td>
-                                    <td class="text-center"><?php echo $dados['lista_rp']; ?></td>
-                                </tr>
-                            <?php } ?>
+                            <?php
+                                if($Enquadramento):
+                                    foreach($Enquadramento as $dados): ?>
+                                        <tr>
+                                            <td class="text-center">
+                                                <a title="Alterar" href="planacomorc.php?modulo=apoio/enquadramento_despesa_form&acao=A&eqdid=<?php echo $dados['eqdid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                            </td>
+                                            <td class="text-center"><?php echo $dados['eqdcod']; ?></td>
+                                            <td><?php echo $dados['eqddsc']; ?></td>
+                                            <td class="text-center"><?php echo $dados['eqdstreduzido'] == 'S' ? 'Sim' : 'Não'; ?></td>
+                                            <td class="text-center"><?php echo $dados['lista_rp']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
