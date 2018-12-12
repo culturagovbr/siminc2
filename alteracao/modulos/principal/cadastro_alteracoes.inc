@@ -76,7 +76,7 @@ if ($_REQUEST['req']){
             die;
         case 'seleciona_dados_funcional':
             $mPedido = new Alteracao_Model_RemanejamentoLoa();
-            echo json_encode($mPedido->selecionaDadosFuncional($_REQUEST['pliselid']));
+            echo json_encode($mPedido->selecionaDadosFuncional($_REQUEST));
             die;
         case 'seleciona_dotacao':
             $mPedido = new Alteracao_Model_RemanejamentoLoa();

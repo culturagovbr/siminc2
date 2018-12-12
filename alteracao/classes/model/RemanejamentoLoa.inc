@@ -46,7 +46,8 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'pliselid' => array('tabela' => 'alteracao.plano_interno_selecionado', 'pk' => 'pliselid'),
+        'pedid'    => array('tabela' => 'alteracao.pedido',                    'pk' => 'pedid'),
+        'ptrid'    => array('tabela' => 'monitora.ptres',                      'pk' => 'ptrid'),
         'ctecod'   => array('tabela' => 'public.categoriaeconomica',           'pk' => 'ctecod'),
         'gndcod'   => array('tabela' => 'public.gnd',                          'pk' => 'gndcod'),
         'mapcod'   => array('tabela' => 'public.modalidadeaplicacao',          'pk' => 'mapcod'),
@@ -63,7 +64,8 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
      */
     protected $arAtributos = array(
         'rlid' => null,
-        'pliselid' => null,
+        'pedid' => null,
+        'ptrid' => null,
         'ctecod' => null,
         'gndcod' => null,
         'mapcod' => null,
@@ -88,7 +90,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     public function recuperaFuncionalSelecionada($pedid)
     {
         $sql = "select distinct 
-                    pis.pliselid AS codigo,
+                    ptr.ptrid AS codigo,
                     TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (
                         CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN
                             '-'
@@ -99,14 +101,12 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                             '-'
                         ELSE
                             COALESCE(ptr.plocod, '-')
-                        END) || ' PI: ' || pis.pliid AS descricao
+                        END) AS descricao
                     from public.vw_subunidadeorcamentaria vs 
-                   inner join alteracao.pedido_unidade pu on vs.suoid = pu.suoid and pu.pedid = 3  and vs.suostatus = 'A' and vs.prsano = '2018'
+                   inner join alteracao.pedido_unidade pu on vs.suoid = pu.suoid and pu.pedid = {$pedid}  and vs.suostatus = 'A' and vs.prsano = '{$_SESSION['exercicio']}'
                    inner JOIN monitora.ptres ptr ON (vs.unocod = ptr.unicod AND vs.prsano = ptr.ptrano and ptr.ptrstatus = 'A')
-                     inner JOIN monitora.pi_planointernoptres ppt ON ptr.ptrid = ppt.ptrid
                    inner JOIN monitora.acao aca ON ptr.acaid = aca.acaid
-                   inner join alteracao.plano_interno_selecionado pis on pu.pedid = pis.pedid
-                   where pu.pedid = {$pedid}
+                   order by 2
          ";
 
         return $this->carregar($sql);
@@ -250,8 +250,8 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     
     public function recuperarTodosPorPedido($pedid)
     {
-        $sql = "select rl.rlid,
-                       rl.pliselid,
+        $sql = "select distinct rl.rlid,
+                       rl.ptrid,
                        rl.ctecod,
                        rl.gndcod,
                        rl.mapcod,
@@ -267,32 +267,24 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                        rl.vlsuplementarsuperavit,
                        ptr.unicod
                   from alteracao.remanejamento_loa rl
-                 inner join alteracao.plano_interno_selecionado pis
-                    on rl.pliselid = pis.pliselid
-                    JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
-                    LEFT JOIN monitora.pi_planointernoptres ppt ON pis.pliid = ppt.pliid
-                    LEFT JOIN monitora.ptres ptr ON (ppt.ptrid = ptr.ptrid
-                            AND pli.pliano = ptr.ptrano)
-                    LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid                    
-                 where pedid = ".$pedid;
+                  LEFT JOIN monitora.ptres ptr on rl.ptrid = ptr.ptrid
+                  left join public.vw_subunidadeorcamentaria vs on ptr.unicod = vs.unocod
+                 where vs.suoid in (select suoid from alteracao.pedido_unidade where pedid = {$pedid})
+                   and pedid = {$pedid} order by 1";
         return $this->carregar($sql);
     }
     
-    public function selecionaDadosFuncional($pliselid)
+    public function selecionaDadosFuncional($dados)
     {
         $sql = "SELECT 
                     ptr.ptrid,
                     ptr.unicod,
-                    ptr.irpcod
-                FROM
-                    alteracao.plano_interno_selecionado pis
-                    JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
-                    LEFT JOIN monitora.pi_planointernoptres ppt ON pis.pliid = ppt.pliid
-                    LEFT JOIN monitora.ptres ptr ON (ppt.ptrid = ptr.ptrid
-                            AND pli.pliano = ptr.ptrano)
-                    LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid
-                WHERE
-                    pis.pliselid = {$pliselid}
+                    ptr.irpcod,
+                    pis.pliselid
+                FROM monitora.ptres ptr 
+                LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.ptrid = ptr.ptrid
+                left join alteracao.plano_interno_selecionado pis on ppt.pliid = pis.pliid and pis.pedid = {$dados['pedid']}
+               WHERE ptr.ptrid = {$dados['ptrid']}
          ";
 
         return $this->pegaLinha($sql);

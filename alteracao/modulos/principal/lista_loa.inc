@@ -1,5 +1,3 @@
-<input type="hidden" id="ptrid" name="ptrid">
-<input type="hidden" id="unicod" name="unicod">
 <?php
 $req = '<span style="color: #ff0000">*</span>';
 $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table-hover" >
@@ -28,10 +26,9 @@ $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table
                                   <a href="#" class="btnSalvarLoa" id="btnSalvarLoa" rlid="'.$loa['rlid'].'"><i class="fa fa-check"></i></a>
                               </td>';
                 $linha .= '<td class="combo">';
-                $linha .= '<input type="hidden" id="ptrid'.$loa['rlid'].'" name="ptrid">';
                 $linha .= '<input type="hidden" id="unicod'.$loa['rlid'].'" name="unicod" value="'.$loa['unicod'].'">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid']);
-                $linha .= montaListaLoa('pliselid',$options, $loa['pliselid'], $loa['rlid'], 'SelecionaPtrid(this, '.$loa['rlid'].');');
+                $linha .= montaListaLoa('ptrid',$options, $loa['ptrid'], $loa['rlid'], 'SelecionaPtrid(this, '.$loa['rlid'].');');
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboCategoria();
@@ -82,9 +79,10 @@ echo $linha;
                                  '<a href="#" class="btnRemoverLoa" id="btnRemoverLoa" rlid=""><i style="font-weight: 20px" class="fa fa-close"></i></a>&nbsp;&nbsp;&nbsp;\n' +
                                  '<a href="#" class="btnSalvarLoa" id="btnSalvarLoa" rlid=""><i class="fa fa-check"></i></a>' +
                          '</th>' +
-                '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid']);
-                                echo montaListaLoa('pliselid',$options, null, '', 'SelecionaPtrid(this, );');
-                             ?>'+
+                '        <th class="combo"> <input type="hidden" id="unicod" name="unicod">\n\
+                             <?php $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid']);
+                                echo montaListaLoa('ptrid',$options, null, '', 'SelecionaPtrid(this, );');
+                             ?> '+
                          '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboCategoria();
                                echo montaListaLoa('ctecod', $options, null, '',  'SelecionaDotacao();');
@@ -183,7 +181,7 @@ echo $linha;
 
     function SalvarLoa(rlid){
 
-        var ptrid = $("#pliselid"+rlid).val();
+        var ptrid = $("#ptrid"+rlid).val();
         var vlDotacao = acertaNumero($("#vlDotacao"+rlid).html());
         var vlSuplementar = acertaNumero($("#vlSuplementar"+rlid).val());
         var vlCancelado = acertaNumero($("#vlCancelado"+rlid).val());
@@ -192,7 +190,8 @@ echo $linha;
         $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_loa',
         {
             rlid: rlid,
-            pliselid: $("#pliselid"+rlid).val(),
+            pedid: $("#pedid").val(),
+            ptrid: $("#ptrid"+rlid).val(),
             ctecod: $("#ctecod"+rlid).val(),
             gndcod: $("#gndcod"+rlid).val(),
             mapcod: $("#mapcod"+rlid).val(),
@@ -255,7 +254,7 @@ echo $linha;
 
         var msg = '';
 
-        if($('#pliselid'+rlid).val() == '' || $('#pliselid'+rlid).val() == null){
+        if($('#ptrid'+rlid).val() == '' || $('#ptrid'+rlid).val() == null){
             msg += "O preenchimento do campo \"Funcional\" é obrigatório.";
         }
         if($('#ctecod'+rlid).val() == '' || $('#ctecod'+rlid).val() == null){
@@ -289,18 +288,19 @@ echo $linha;
 
     }
     
-    function SelecionaPtrid(pliselid, rlid){
+    function SelecionaPtrid(ptrid, rlid){
         if (rlid==undefined){
             rlid='';
         }
         $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=seleciona_dados_funcional',
         {
-            pliselid: pliselid.value
+            ptrid: ptrid.value,
+            pedid: $("#pedid").val()
         },
             function(dados){
                 dados = JSON.parse(dados);
                 if (dados){
-                    $("#ptrid"+rlid).val(dados.ptrid);
+                    $("#pliselid"+rlid).val(dados.pliselid);
                     $("#unicod"+rlid).val(dados.unicod);
                     $("#rpcod"+rlid).val(dados.irpcod);
                     $("#rpcod"+rlid).trigger('chosen:updated');
@@ -315,7 +315,7 @@ echo $linha;
             rlid='';
         }
         var unicod = $("#unicod"+rlid).val();
-        var funcional = $("#pliselid"+rlid+" option:selected").text();
+        var funcional = $("#ptrid"+rlid+" option:selected").text();
         var prgcod = funcional.substring(0,4);
         var acacod = funcional.substring(5,9);
         var loccod = funcional.substring(10,14);
@@ -324,6 +324,15 @@ echo $linha;
         var gndcod = $("#gndcod"+rlid).val();
         var mapcod = $("#mapcod"+rlid).val();
         var categoria = $("#ctecod"+rlid).val();
+        console.log("funcional: "+funcional);
+        console.log("unicod: "+unicod);
+        console.log("prgcod: "+prgcod);
+        console.log("acacod: "+acacod);
+        console.log("loccod: "+loccod);
+        console.log("plocod: "+plocod);
+        console.log("mapcod: "+mapcod);
+        console.log("gndcod: "+gndcod);
+        console.log("categoria: "+categoria);
         if (unicod && prgcod && acacod && loccod && plocod && mapcod && gndcod && categoria){
             var natureza = categoria.concat(gndcod,mapcod);
             $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=seleciona_dotacao',
