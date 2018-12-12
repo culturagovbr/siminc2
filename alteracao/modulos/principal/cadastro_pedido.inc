@@ -85,8 +85,8 @@
 
     function verificaCampos(){
         var retorno = true;
-        $("#filtroalteracao input,select").each(function(){
-            if ($(this).attr('required') && $(this).val()==''){
+        $("#filtroalteracao input, select").each(function(){
+            if ($(this).attr('required') && ( $.trim( $(this).val() ) == '' || $.trim( $(this).val() ) == null )){
                 retorno = false;
             }
         });
