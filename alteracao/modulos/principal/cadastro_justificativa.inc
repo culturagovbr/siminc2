@@ -24,61 +24,69 @@
             <input type="hidden" name="pedid" id="pedid" value="<?= $_REQUEST['pedid']; ?>">
             <input type="hidden" name="jstid" id="jstid" value="<?= $justificativa->jstid; ?>">
             <div class="col-md-6">
-                <div class="ibox float-e-margins">
+                <div class="ibox">
                     <div class="ibox-title">
-                        <?php
-                            $simec->setFormTipo(Simec_View_Helper::K_FORM_TIPO_VERTICAL);
-                            echo $simec->textarea('jstnecessidade', 'Necessidade de Alteração <i class="fa fa-info-circle size" id="necessidade"></i>',
-                                                $justificativa->jstnecessidade,
-                                                ['cols' => 50, 'rows' => 6, 'required']
-                            );
-                            echo $simec->textarea('jstfinanciamento',
-                                                'Formas de financiamento de Crédito e adequação da proposta à meta fiscal e ao limite de gastos <i class="fa fa-info-circle size" id="formas"></i>',
-                                                $justificativa->jstfinanciamento,
-                                                ['cols' => 50, 'rows' => 6]
-                            );
-                            echo $simec->textarea('jstmedida',
-                                                'Medida Provisória <i class="fa fa-info-circle size" id="medida"></i>',
-                                                $justificativa->jstmedida,
-                                                ['cols' => 50, 'rows' => 6]
-                            );
-                        ?>
+                        <div class="ibox-content">
+                            <?php
+                                $simec->setFormTipo(Simec_View_Helper::K_FORM_TIPO_VERTICAL);
+                                echo $simec->textarea('jstnecessidade',
+                                    'Necessidade de Alteração <i class="fa fa-info-circle size" id="necessidade"></i>',
+                                    $justificativa->jstnecessidade,
+                                    ['cols' => 50, 'rows' => 6, 'required']
+                                );
+                                echo $simec->textarea('jstfinanciamento',
+                                    'Formas de financiamento de Crédito e adequação da proposta à meta fiscal e ao limite de gastos <i class="fa fa-info-circle size" id="formas"></i>',
+                                    $justificativa->jstfinanciamento,
+                                    ['cols' => 50, 'rows' => 6]
+                                );
+                                echo $simec->textarea('jstmedida',
+                                    'Medida Provisória <i class="fa fa-info-circle size" id="medida"></i>',
+                                    $justificativa->jstmedida,
+                                    ['cols' => 50, 'rows' => 6]
+                                );
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="ibox float-e-margins">
+                <div class="ibox">
                     <div class="ibox-title">
-                        <?php
-                            echo $simec->textarea('jstcausa',
-                                'Causa da Demanda <i class="fa fa-info-circle size" id="causa"></i>',
-                                $justificativa->jstcausa,
-                                ['cols' => 50, 'rows' => 6, 'required']
-                            );
-                            echo $simec->textarea('jstfontes',
-                                                'Verificação das fontes, dos Identificadores de uso - Iduso e dos identificadores de Resultado Primário - RP <i class="fa fa-info-circle size" id="verificacao"></i>',
-                                                $justificativa->jstfontes,
-                                                ['cols' => 50, 'rows' => 6]
-                            );
-                            echo $simec->textarea('jstlegislacao',
-                                                'Legislação Específica <i class="fa fa-info-circle size" id="legislacao"></i>',
-                                                $justificativa->jstlegislacao,
-                                                ['cols' => 50, 'rows' => 6]
-                            );
-                        ?>
+                        <div class="ibox-content">
+                            <?php
+                                echo $simec->textarea('jstcausa',
+                                    'Causa da Demanda <i class="fa fa-info-circle size" id="causa"></i>',
+                                    $justificativa->jstcausa,
+                                    ['cols' => 50, 'rows' => 6, 'required']
+                                );
+                                echo $simec->textarea('jstfontes',
+                                                    'Verificação das fontes, dos Identificadores de uso - Iduso e dos identificadores de Resultado Primário - RP <i class="fa fa-info-circle size" id="verificacao"></i>',
+                                                    $justificativa->jstfontes,
+                                                    ['cols' => 50, 'rows' => 6]
+                                );
+                                echo $simec->textarea('jstlegislacao',
+                                                    'Legislação Específica <i class="fa fa-info-circle size" id="legislacao"></i>',
+                                                    $justificativa->jstlegislacao,
+                                                    ['cols' => 50, 'rows' => 6]
+                                );
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-md-12">
-                <div class="ibox-title">
-                    <?php
-                        echo $simec->textarea('jstoutros',
-                            'Outras Informações <i class="fa fa-info-circle size" id="info"></i>',
-                            $justificativa->jstoutros,
-                            ['cols' => 50, 'rows' => 6]
-                        );
-                    ?>
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <div class="ibox-content">
+                            <?php
+                                echo $simec->textarea('jstoutros',
+                                    'Outras Informações <i class="fa fa-info-circle size" id="info"></i>',
+                                    $justificativa->jstoutros,
+                                    ['cols' => 50, 'rows' => 6]
+                                );
+                            ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
