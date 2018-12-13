@@ -17,7 +17,7 @@ services:
 
   web:
     container_name: simec-web
-    image: culturagovbr/simec
+    image: culturagovbr/simec:1.1
     ports:
         - 8083:80
         - 9003:9000
