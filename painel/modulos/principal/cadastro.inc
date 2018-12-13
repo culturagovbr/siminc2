@@ -81,26 +81,27 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 		$_REQUEST['indid'] = $_SESSION['indid'];
 	}
 	switch($_REQUEST[evento]) {
-		
-		case 'I':	
+
+		case 'I':
 						
-				$indid = $_REQUEST['indid'];
-				$exoid 			= $_REQUEST['exoid'];
-				$unmid 			= $_REQUEST['unmid']; 
-				$cliid 			= $_REQUEST['cliid'];
-				$tpiid 			= $_REQUEST['tpiid'];  
-				$secid  		= $_REQUEST['secid'];  
-				$secidgestora		= $_REQUEST['secidgestora'];
-				$acaid   		= $_REQUEST['acaid'];
-                $produto		= $_REQUEST['indprod'];
-				$perid  		= $_REQUEST['perid'];  
-				$peridatual		= $_REQUEST['peridatual'];
-				$estid  		= $_REQUEST['estid'];
-				$regid			= $_REQUEST['regid'];
-				$umeid			= $_REQUEST['umeid'];
-				$colid  		= $_REQUEST['colid'];  
-				$usucpf  		= $_REQUEST['usucpf'];  
-				$indnome  		= $_REQUEST['indnome'];  
+				$indid              = $_REQUEST['indid'];
+				$exoid 			    = $_REQUEST['exoid'];
+				$unmid 			    = $_REQUEST['unmid'];
+				$cliid 			    = $_REQUEST['cliid'];
+				$tpiid 			    = $_REQUEST['tpiid'];
+				$secid  		    = $_REQUEST['secid'];
+				$secidgestora	    = $_REQUEST['secidgestora'];
+				$acaid   		    = $_REQUEST['acaid'];
+                $produto		    = $_REQUEST['indprod'];
+                $peso	    	    = $_REQUEST['indpeso'];
+				$perid  		    = $_REQUEST['perid'];
+				$peridatual		    = $_REQUEST['peridatual'];
+				$estid  		    = $_REQUEST['estid'];
+				$regid			    = $_REQUEST['regid'];
+				$umeid			    = $_REQUEST['umeid'];
+				$colid  		    = $_REQUEST['colid'];
+				$usucpf  		    = $_REQUEST['usucpf'];
+				$indnome  		    = $_REQUEST['indnome'];
 				$indobjetivo  		= $_REQUEST['indobjetivo']; 
 				$indformula  		= $_REQUEST['indformula'];  
 				$indtermos  		= $_REQUEST['indtermos'];  
@@ -132,19 +133,19 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				if($indpublicado=='true'){
 					$indhomologado = true;
 				}
-				
-			if($indid){						
-				
+
+			if($indid){
+
 				$sql = "
 				SELECT 
-					indid				
-				FROM  painel.indicador i
-				WHERE 
-				i.indid = ".$indid."
-				";					
+					indid
+				FROM painel.indicador i
+				WHERE
+				    i.indid = ".$indid."
+				";
 				$dados = $db->pegaUm($sql);
 			}
-			
+
 			//Campos Não obrigatorios
 				(!$cliid)? $cliid = 'null' : $cliid = $cliid;
 				($umeid == "")? $umeid = 'null' : $umeid = $umeid;
@@ -159,38 +160,57 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				($indmetavalor == "")? 		$indmetavalor 		= "null" : $indmetavalor	 	= $indmetavalor;
 				($secidgestora == "")? 		$secidgestora 		= "null" : $secidgestora	 	= $secidgestora;
 				$mtiid = $mtiid ? $mtiid : "NULL";
-				
+
 				$usucpf = $_SESSION['usucpf'];
-			
+
 			// caso não exista o indicador insere um novo
 			if(!$dados){
 				if($indhomologado=='f'){
 					$indhomologado='false';
 				}
-				$sql_I = "INSERT 
-						  INTO painel.indicador
-							  (unmid, cliid, tpiid, secid, secidgestora,acaid, perid, estid, colid, usucpf, indnome, indobjetivo,
-							  indformula, indtermos, indfontetermo, indnormalinicio, indnormalfinal, indatencaoinicio,
-							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,
-                                                          indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,
-                                                          indhomologado,mtiid,indshformula,formulash,indencerrado, indprod)
-						  VALUES 
-						  	   (".$unmid.", ".$cliid.", ".$tpiid.", ".$secid.", ".$secidgestora.", ".$acaid.", ".$perid.", ".$estid.", ".$colid.", '".$usucpf."', '".$indnome."', '".$indobjetivo."',
-							  '".$indformula."', '".$indtermos."', '".$indfontetermo."', ".$indnormalinicio.", ".$indnormalfinal.", ".$indatencaoinicio.",
-							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',"
-                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado, '".$produto."')
+				$sql_I = "INSERT INTO painel.indicador
+							  (unmid, cliid, tpiid, secid,
+							  secidgestora, acaid, perid,
+							  estid, colid, usucpf, indnome,
+							  indobjetivo, indformula, indtermos,
+							  indfontetermo, indnormalinicio,
+							  indnormalfinal, indatencaoinicio,
+							  indatencaofinal, indcriticoinicio,
+							  indcriticofinal, indmetavalor,
+							  indmetadatalimite, exoid, regid, umeid,
+                              indqtdevalor, indcumulativo, indpublicado,
+                              indescala, indobservacao, peridatual,
+                              indcumulativovalor, indpublico,
+                              indhomologado, mtiid, indshformula,
+                              formulash, indencerrado, indprod, indpeso)
+						  VALUES
+						  	   (".$unmid.", ".$cliid.", ".$tpiid.",
+						  	   ".$secid.", ".$secidgestora.", ".$acaid.",
+						  	   ".$perid.", ".$estid.", ".$colid.",
+						  	   '".$usucpf."', '".$indnome."', '".$indobjetivo."',
+							   '".$indformula."', '".$indtermos."',
+							   '".$indfontetermo."', ".$indnormalinicio.",
+							   ".$indnormalfinal.", ".$indatencaoinicio.",
+							   ".$indatencaofinal.", ".$indcriticoinicio.",
+							   ".$indcriticofinal.", ".$indmetavalor.",
+							   '".$indmetadatalimite."', '".$exoid."', $regid,
+							   $umeid, $indqtdevalor, '$indcumulativo',
+							   $indpublicado, $indescala, '$indobservacao',
+							   '$peridatual', '$indcumulativovalor', $indpublico,
+							   $indhomologado, $mtiid, $indshformula, '$formulash',
+							   $indencerrado, '".$produto."', '".$peso."')
 						  RETURNING	indid
 						  ";
 
 				$indid = $db->pegaUm($sql_I);
-				
+
 				//OBJETIVO
 				$_REQUEST['obeid'] = array();
 				foreach($_REQUEST['obeid'] as $obeid) {
 					$sql = "INSERT INTO painel.indicadorobjetivo(obeid, indid) VALUES (". $obeid .", ". $indid .")";			
 					$db->executar($sql);
 				}
-				
+
 				//AGENDA DE GOVERNO
 				foreach($_REQUEST['aggid'] as $aggid) {
 					if($aggid){
@@ -223,6 +243,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
                                          secidgestora =			".$secidgestora.",
                                          acaid = 				".$acaid.",
                                          indprod =              '".$produto."',
+                                         indpeso =              '".$peso."',
                                          perid = 				".$perid.",
                                          peridatual =			'".$peridatual."',
                                          colid = 				".$colid.",
@@ -251,10 +272,11 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
                                          indpublico = 			".($indpublico=='' ? 'indpublico' : "'".$indpublico."'").",
                                          indhomologado = 		".($indhomologado=='' ? 'indhomologado' : "'".$indhomologado."'").",
                                          indencerrado = 		".($indencerrado=='' ? 'indencerrado' : "'".$indencerrado."'").",
-                                         mtiid = $mtiid,
+                                         mtiid = '".$mtiid."',
                                          indshformula = $indshformula,
                                          formulash = '$formulash'
-                                        WHERE indid = 			".$indid."	
+                                        WHERE
+                                            indid = ".$indid."
                                 ";
 
                                 $db->executar($sql_U);
@@ -287,7 +309,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 			}
 		exit;
 		break;
-		
+
 		case 'A': 
 			$indid = $_REQUEST['indid']; 			
 			$sql = "
@@ -306,27 +328,27 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 					indhomologado,
 					indencerrado,
 					mtiid,
-                                        indavalgestor,
-                                        indobsgestor
-				FROM  painel.indicador i
-				WHERE 
-				i.indid = ".$indid."
-				";
+                    indavalgestor,
+                    indobsgestor,
+                    indpeso
+				FROM painel.indicador i
+				WHERE
+				    i.indid = ".$indid."
+            ";
 			$dados = $db->pegaLinha($sql);
-			
+
 			//OBJETIVO
-			$sql_obj = "SELECT 
+			$sql_obj = "SELECT
 							o.obeid AS codigo,
 							o.obenome AS descricao				
-						FROM 
-							painel.objetivoestrategico o
-						INNER JOIN  
+						FROM painel.objetivoestrategico o
+						JOIN
 							painel.indicadorobjetivo io On io.obeid = o.obeid  AND io.indid = ".$indid." 
 						WHERE
 							obestatus = 'A' ";
-			
+
 			$obeid = $db->carregar($sql_obj);
-			
+
 			//AGENDA DE GOVERNO
 			$sql_age = "SELECT 
 							agg.aggid AS codigo,
@@ -337,37 +359,38 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 							painel.agendaindicador agi ON agi.aggid = agg.aggid AND agi.indid = ".$indid." 
 						WHERE
 							aggstatus = 'A' ";
-			
+
 			$aggid = $db->carregar($sql_age);
-			
+
 			if($dados){
 				$exoid 				= $dados['exoid'];
-				$unmid 				= $dados['unmid'];				 
+				$unmid 				= $dados['unmid'];
 				$cliid 				= $dados['cliid'];
-				$tpiid 				= $dados['tpiid'];  
+				$tpiid 				= $dados['tpiid'];
 				$secid  			= $dados['secid'];
-				$secidgestora		= $dados['secidgestora']; 
-				$acaid   			= $dados['acaid']; 
+				$secidgestora		= $dados['secidgestora'];
+				$acaid   			= $dados['acaid'];
 				$indprod   			= $dados['indprod'];
+				$indpeso   			= $dados['indpeso'];
 				$perid  			= $dados['perid'];
 				$peridatual			= $dados['peridatual'];
 				$regid				= $dados['regid'];
-				$umeid				= $dados['umeid'];  
-				$estid  			= $dados['estid'];  
-				$colid  			= $dados['colid'];  
-				$usucpf  			= $dados['usucpf'];  
-				$indnome  			= $dados['indnome'];  
-				$indobjetivo  		= $dados['indobjetivo']; 
-				$indformula  		= $dados['indformula'];  
-				$indtermos  		= $dados['indtermos'];  
-				$indfontetermo  	= $dados['indfontetermo'];  
-				$indnormalinicio  	= $dados['indnormalinicio'];  
-				$indnormalfinal  	= $dados['indnormalfinal'];  
-				$indatencaoinicio  	= $dados['indatencaoinicio']; 
-				$indatencaofinal  	= $dados['indatencaofinal'];  
-				$indcriticoinicio  	= $dados['indcriticoinicio'];  
-				$indcriticofinal  	= $dados['indcriticofinal'];  
-				$indmetavalor  		= $dados['indmetavalor']; 
+				$umeid				= $dados['umeid'];
+				$estid  			= $dados['estid'];
+				$colid  			= $dados['colid'];
+				$usucpf  			= $dados['usucpf'];
+				$indnome  			= $dados['indnome'];
+				$indobjetivo  		= $dados['indobjetivo'];
+				$indformula  		= $dados['indformula'];
+				$indtermos  		= $dados['indtermos'];
+				$indfontetermo  	= $dados['indfontetermo'];
+				$indnormalinicio  	= $dados['indnormalinicio'];
+				$indnormalfinal  	= $dados['indnormalfinal'];
+				$indatencaoinicio  	= $dados['indatencaoinicio'];
+				$indatencaofinal  	= $dados['indatencaofinal'];
+				$indcriticoinicio  	= $dados['indcriticoinicio'];
+				$indcriticofinal  	= $dados['indcriticofinal'];
+				$indmetavalor  		= $dados['indmetavalor'];
 				$indmetadatalimite 	= $dados['indmetadatalimite'];
 				$indqtdevalor		= $dados['indqtdevalor'];
 				$indcumulativo 		= $dados['indcumulativo'];
@@ -381,8 +404,8 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid				= $dados['mtiid'];
 				$indshformula		= $dados['indshformula'];
 				$formulash			= $dados['formulash'];
-				$indavalgestor			= $dados['indavalgestor'];
-				$indobsgestor			= $dados['indobsgestor'];
+				$indavalgestor		= $dados['indavalgestor'];
+				$indobsgestor		= $dados['indobsgestor'];
 			}		
 		break;	
 	}
@@ -396,6 +419,7 @@ if ($_SESSION['indid']){
         }
     }
 }
+$formatoinput = array('mascara' => '#####');
 ?>
 <script language="javascript" type="text/javascript" src="../includes/calendario.js"></script>
 <script language="JavaScript" src="../includes/wz_tooltip.js"></script>
@@ -419,7 +443,7 @@ function openIndPopUp()
 	var perid = jQuery("[name='perid']").val();
 	var regid = jQuery("[name='regid']").val();
 	var erro = 0;
-	
+
 	if(!perid){
 		alert('Favor selecionar a Periodicidade do Indicador');
 		erro = 1;
@@ -430,7 +454,7 @@ function openIndPopUp()
 		erro = 1;
 		return false;
 	}
-	
+
 	if(erro == 0){
 		janela("painel.php?modulo=principal/cadastro&acao=A&requisicao=listaIndicadorFormulaSHPopup&perid="+perid+"&regid="+regid,800,600,"Indicadores");
 	}
@@ -441,7 +465,7 @@ function testarFormulaSHIndicador()
 	var perid = jQuery("[name='perid']").val();
 	var regid = jQuery("[name='regid']").val();
 	var erro = 0;
-	
+
 	if(!perid){
 		alert('Favor selecionar a Periodicidade do Indicador');
 		erro = 1;
@@ -452,7 +476,7 @@ function testarFormulaSHIndicador()
 		erro = 1;
 		return false;
 	}
-	
+
 	if(erro == 0){
 		var parametros = jQuery("#formulario").serialize();
 		jQuery("#btn_formula_testar").val("Carregando...");
@@ -471,7 +495,7 @@ function testarFormulaSHIndicador()
 }
 
 function exibeValorAcumulado(){
-	
+
 	if(document.getElementById('indqtdevalor_t').checked == true){
 		document.getElementById('cumulatividadevalormonetario').style.display = "";
 	}if(document.getElementById('indqtdevalor_f').checked == true){
@@ -516,7 +540,7 @@ function validaUnidadeMedicao(valor) {
 			document.formulario.indqtdevalor[0].checked=true;
 			document.getElementById('coletarvalormonetario').style.display = 'none';
 			document.formulario.indescala[0].checked=true;
-			
+
 			document.getElementById('indicarEscala').style.display = 'none';
 			document.formulario.indcumulativo[0].disabled=false;
 			document.formulario.indcumulativo[1].disabled=false;
@@ -586,7 +610,7 @@ function validaUnidadeMedicao(valor) {
 		order by
 			 descricao
 		";
-		
+
 		$display_botoes = "none";
 	}
 
@@ -596,15 +620,14 @@ function validaUnidadeMedicao(valor) {
 </tr>
 <tr>
 	<?php 
-		$sql= "SELECT 
-			secdsc AS descricao, 
-			secid AS codigo
-		FROM 		
-			painel.secretaria
-		WHERE
-			secstatus = 'A'
-		order by
-			 descricao	 
+		$sql= "SELECT
+                   secdsc AS descricao,
+                   secid AS codigo
+               FROM painel.secretaria
+               WHERE
+                   secstatus = 'A'
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Secretaria/Autarquia Executora:</td>
@@ -613,13 +636,13 @@ function validaUnidadeMedicao(valor) {
 
 <tr style="display: none" >
 	<?php 
-		$sql= "SELECT 
-			u.usunome AS descricao, 
-			u.usucpf AS codigo
-			FROM 		
-			seguranca.usuario u	
-			INNER JOIN seguranca.usuario_sistema us ON us.usucpf = u.usucpf  
-			WHERE us.sisid = ".$_SESSION['sisid']."		
+		$sql= "SELECT
+                   u.usunome AS descricao,
+                   u.usucpf AS codigo
+			   FROM seguranca.usuario u
+			   JOIN seguranca.usuario_sistema us ON us.usucpf = u.usucpf
+			   WHERE
+			       us.sisid = ".$_SESSION['sisid']."
 		";
 	?>
     <td align='right' class="SubTituloDireita">Responsável - Usuário:</td>
@@ -628,16 +651,16 @@ function validaUnidadeMedicao(valor) {
 <tr>
 	<td align='right' class="SubTituloDireita">Agenda(s) de Governo(s):</td>
 	<td>
-	<?php 
-	$Sql = "SELECT 
-				aggdsc AS descricao, 
-				aggid AS codigo
-			FROM 
-				painel.agendagoverno
-			WHERE aggstatus = 'A'
-			order by
-				 descricao";
-	combo_popup( 'aggid', $Sql, 'Selecione a(s) Agenda(s) de Governo(s)', '360x460', 0, array(), "", (($acesso)?'S':'N'), false, false, 5, 400);
+	<?php
+        $Sql = "SELECT
+                    aggdsc AS descricao,
+                    aggid AS codigo
+                FROM painel.agendagoverno
+                WHERE aggstatus = 'A'
+                ORDER BY
+                    descricao
+        ";
+	    combo_popup( 'aggid', $Sql, 'Selecione a(s) Agenda(s) de Governo(s)', '360x460', 0, array(), "", (($acesso)?'S':'N'), false, false, 5, 400);
 	?>
 	</td>
 </tr>
@@ -645,45 +668,43 @@ function validaUnidadeMedicao(valor) {
 		//Verifica se o usuário é do tipo Super Usuário, se não for, só exibe as Ações permitidas.
 		if(!in_array(PAINEL_PERFIL_ADM_ACAO,$arrPflcod) || $db->testa_superuser()  || in_array(PAINEL_PERFIL_ATUALIZA_SH,$arrPflcod) || in_array(PAINEL_PERFIL_CONSULTA,$arrPflcod)  ){
 		
-			$sql= "SELECT 
-						acadsc AS descricao, 
-						acaid AS codigo
-					FROM 		
-						painel.acao
-					WHERE
-						acastatus = 'A'
-					order by
-						 descricao";
+            $sql= "SELECT
+                       acadsc AS descricao,
+				       acaid AS codigo
+				   FROM painel.acao
+				   WHERE
+                       acastatus = 'A'
+				   ORDER BY
+				       descricao
+            ";
 		}else{
 			$sql= "SELECT 
-				acadsc AS descricao, 
-				acaid AS codigo
-			FROM 
-				painel.acao
-			WHERE
-				acaid in (
-							select 
-								distinct acaid
-							from
-								painel.usuarioresponsabilidade
-							where
-								usucpf = '{$_SESSION['usucpf']}'
-							and
-								rpustatus = 'A'
-							)
-				and acastatus = 'A'	
-			order by
-				 descricao";
+                       acadsc AS descricao,
+                       acaid AS codigo
+                   FROM painel.acao
+                   WHERE
+                       acaid in (
+                                 SELECT DISTINCT
+                                     acaid
+                                 FROM painel.usuarioresponsabilidade
+                                 WHERE
+                                     usucpf = '{$_SESSION['usucpf']}'
+                                     AND rpustatus = 'A'
+                                )
+                       AND acastatus = 'A'
+                   ORDER BY
+                       descricao
+            ";
 		}
 
 		$arrAcoes = $db->carregar($sql);
-		
+
 		!$arrAcoes? $arrAcoes = array() : $arrAcoes = $arrAcoes;
-	
+
 		foreach($arrAcoes as $acoes){
 			$arrAcaid[] = $acoes['codigo'];
 		}
-		
+
 		if($arrAcoes && $acaid && in_array(PAINEL_PERFIL_ADM_ACAO,$arrPflcod) && !in_array($acaid,$arrAcaid)){
 			$sql= "SELECT 
 						acadsc AS descricao, 
@@ -706,14 +727,13 @@ function validaUnidadeMedicao(valor) {
 <tr>
 	<?php 
 		$sql= "SELECT 
-			secdsc AS descricao, 
-			secid AS codigo
-		FROM 		
-			painel.secretaria
-		WHERE
-			secstatus = 'A'
-		order by
-			 descricao	 
+                   secdsc AS descricao,
+                   secid AS codigo
+               FROM painel.secretaria
+               WHERE
+                   secstatus = 'A'
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Secretaria/Autarquia Gestora:</td>
@@ -721,13 +741,12 @@ function validaUnidadeMedicao(valor) {
 </tr> 
 <tr style='display:none'>
 	<?php 
-		$sql= "SELECT 
-			tpidsc AS descricao, 
-			tpiid AS codigo
-		FROM 		
-			painel.tipoindicador
-		order by
-			 descricao	 
+		$sql= "SELECT
+                   tpidsc AS descricao,
+                   tpiid AS codigo
+               FROM painel.tipoindicador
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Tipo Indicador:</td>
@@ -747,29 +766,41 @@ function validaUnidadeMedicao(valor) {
 </tr> 
 <tr>
 	<?php 
-		$sql= "SELECT 
-			mtidsc AS descricao, 
-			mtiid AS codigo
-		FROM 
-			pde.monitoratipoindicador 
-		order by
-			 descricao";
+		$sql= "SELECT
+                   mtidsc AS descricao,
+                   mtiid AS codigo
+               FROM pde.monitoratipoindicador
+               ORDER BY
+                   descricao
+        ";
 	?>
     <td align='right' class="SubTituloDireita">Tipo de Indicador:</td>
     <td><?=$db->monta_combo('mtiid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','N','','',$mtiid);?></td>
-</tr> 
+</tr>
+<tr>
+	<?php
+		$sql= "SELECT
+                   mtidsc AS descricao,
+                   mtiid AS codigo
+               FROM pde.monitoratipoindicador
+               ORDER BY
+                   descricao
+        ";
+	?>
+    <td align='right' class="SubTituloDireita">Peso:</td>
+    <td><?= campo_texto('indpeso','S',"S",'',20,'', $formatoinput['mascara'],'');?></td>
+</tr>
 <tr>
 	<td class="SubTituloEsquerda" colspan="2">Dados de exibição</td>
 </tr>
 <tr>
 	<?php 
-		$sql= "SELECT 
-			unmdesc AS descricao, 
-			unmid AS codigo
-		FROM 
-			painel.unidademedicao
-		order by
-			 descricao
+		$sql= "SELECT
+                   unmdesc AS descricao,
+                   unmid AS codigo
+               FROM painel.unidademedicao
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Unidade de Medição:</td>
@@ -777,15 +808,14 @@ function validaUnidadeMedicao(valor) {
 </tr>  
 <tr>
 	<?php 
-		$sql= "SELECT 
-			umedesc AS descricao, 
-			umeid AS codigo
-		FROM 		
-			painel.unidademeta	
-		where 
-			umestatus = 'A'
-		order by
-			 descricao	 
+		$sql= "SELECT
+                   umedesc AS descricao,
+                   umeid AS codigo
+               FROM painel.unidademeta
+               WHERE
+                   umestatus = 'A'
+               ORDER BY
+                   descricao
 		";
 	?>
     <td style="display: none;" align='right' class="SubTituloDireita">Exibir produto da unidade como:</td>
@@ -797,13 +827,12 @@ function validaUnidadeMedicao(valor) {
 
 <tr style="display: none" >
 	<?php 
-		$sql= "SELECT 
-			clidsc AS descricao, 
-			cliid AS codigo
-		FROM 		
-			painel.classeindicador
-		order by
-			 descricao		 
+		$sql= "SELECT
+                   clidsc AS descricao,
+                   cliid AS codigo
+               FROM painel.classeindicador
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Classe do Indicador:</td>
@@ -837,14 +866,14 @@ $indescala != "t" ? $checkNaoEsc = "checked=checked" : $checkSimEsc = "checked=c
 		$indcumulativo == "S" ? $checkSimAc = "checked=checked" : (($indcumulativo == "N")? $checkNaoAc = "checked=checked": $checkAnoAc = "checked=checked");
 		!$indcumulativo ? $checkNaoAc = "checked=checked" : "";
 		!$indcumulativo ? $checkAnoAc = "" : "";
-		
+
 		if($unmid == UNIDADEMEDICAO_PERCENTUAL || $unmid == UNIDADEMEDICAO_NUM_INDICE){
 			$checkNaoAc = "checked=checked";
 			$checkSimAc = "";
 			$checkAnoAc = "";
 			$disabledCheck = "disabled=disabled";
 		}
-		
+
 	?>
     <td align='right' class="SubTituloDireita">Exibir dados acumulados entre os períodos?</td>
     <td><input type="radio" <?=$disabledCheck?> value="N" <?=$checkNaoAc?> name="indcumulativo" />Não <input type="radio" <?=$checkSimAc?> value="S" <?=$disabledCheck?> name="indcumulativo" />Sim <input type="radio" <?=$checkAnoAc?> value="A" <?=$disabledCheck?> name="indcumulativo" />Por ano</td>
@@ -885,7 +914,7 @@ $indpublicado != "t" || !$indpublicado ? $checkNaoPub = "checked=checked" : $che
  * 17/03/2010 - Solicitado por Cristiano Cabral - Se for novo indicador, a publicação sempre devera ser FALSE.
  * 17/03/2010 - Solicitado por Vitor Sad -  Se for novo indicador, a opção publicado deve vir marcado com FALSE
  */
-		
+
 if($permite>0 && (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod) || in_array(GESTOR_PDE,$arrPflcod) || in_array(EQUIPE_APOIO_GESTOR_PDE,$arrPflcod))){
 ?>
 	<tr>	
@@ -941,9 +970,9 @@ if (in_array(PAINEL_PERFIL_SUPER_USUARIO,$arrPflcod))
 		<input type="radio" value="true"  name="indencerrado" id="indencerrado1" <?= ($indencerrado == 't') ? 'checked="checked"' : '' ?>/>Sim
 	</td>
 </tr>
-<?php 
+<?php
 }
-else 
+else
 {
 	echo "<input type='hidden' name='indencerrado' value='$indencerrado'>";
 }
@@ -1036,13 +1065,12 @@ else
 </tr>
 <tr style="display:none" >
 	<?php 
-		$sql= "SELECT 
-			pesdsc AS descricao, 
-			pesid AS codigo
-		FROM 		
-			painel.perspectiva
-		order by
-			 descricao
+		$sql= "SELECT
+                   pesdsc AS descricao,
+                   pesid AS codigo
+               FROM painel.perspectiva
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Perspectiva:</td>
@@ -1050,13 +1078,12 @@ else
 </tr>
 <tr style="display:none" >
 	<?php 
-		$sql= "SELECT 
-			temdsc AS descricao, 
-			temid AS codigo
-		FROM 		
-			painel.tema
-		order by
-			 descricao 
+		$sql= "SELECT
+                   temdsc AS descricao,
+                   temid AS codigo
+               FROM painel.tema
+               ORDER BY
+                   descricao
 		";
 	?>
     <td width="25%" align='right' class="SubTituloDireita">Elemento Estratégico:</td>
@@ -1075,17 +1102,16 @@ else
     <td><?= campo_textarea( 'indfontetermo', 'N', (($acesso)?'S':'N'), '', 98, 5, 1000 );?></td>
 </tr>
 <tr>
-	<?php 
-		$sql= "SELECT 
-			perdsc AS descricao, 
-			perid AS codigo
-		FROM 
-			painel.periodicidade
-		WHERE
-			perstatus = 'A'	
-		and perid in (1,2,3)
-		order by
-			 descricao		 
+	<?php
+		$sql= "SELECT
+                   perdsc AS descricao,
+                   perid AS codigo
+               FROM painel.periodicidade
+               WHERE
+                   perstatus = 'A'
+                   AND perid IN (1,2,3)
+               ORDER BY
+                   descricao
 		";
 	?>
     <td width="25%" align='right' class="SubTituloDireita">Periodicidade do Indicador:</td>
@@ -1094,27 +1120,26 @@ else
 <tr>
 	<?php 
 		$sql= "SELECT 
-			estdsc AS descricao, 
-			estid AS codigo
-		FROM 		
-			painel.estilo
-		order by
-			 descricao	 
+                   estdsc AS descricao,
+                   estid AS codigo
+               FROM painel.estilo
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Estilo:</td>
     <td><?=$db->monta_combo('estid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','','S','esdid','',$estid);?></td>
 </tr> 
 <tr>
-	<?php 
-		$sql= "SELECT 
-			regdescricao AS descricao, 
-			regid AS codigo
-		FROM 		
-			painel.regionalizacao
-                where regid in (1,6,4,16)
-		order by
-			 descricao		 
+	<?php
+		$sql= "SELECT
+                   regdescricao AS descricao,
+                   regid AS codigo
+               FROM painel.regionalizacao
+               WHERE
+                   regid IN (1,6,4,16)
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Regionalização:</td>
@@ -1124,17 +1149,16 @@ else
 	<td align='right' class="SubTituloDireita">Objetivo Estratégico:</td>
     <td>
     	<?php
-    	
-    	$sqlobj= " SELECT
-						obeid AS codigo,
-						obenome AS descricao
-					FROM 
-						painel.objetivoestrategico
-					WHERE
-						obestatus = 'A'
-					order by
-			 			descricao
-					";
+
+    	$sqlobj= "SELECT
+				      obeid AS codigo,
+				      obenome AS descricao
+				  FROM painel.objetivoestrategico
+				  WHERE
+				      obestatus = 'A'
+				  ORDER BY
+			 	      descricao
+        ";
 		combo_popup( "obeid", $sqlobj, "Objetivos Estratégicos", "192x400", 0, array(), "", "S", false, false, 5, 400 );
 		?>
 	</td>
@@ -1144,16 +1168,15 @@ else
 </tr>
 <tr>
 	<?php 
-		$sql= "SELECT 
-			perdsc AS descricao, 
-			perid AS codigo
-		FROM 
-			painel.periodicidade
-		WHERE
-			perstatus = 'A'	
-                    and perid in (1,2,3)
-		order by
-			 descricao		 
+		$sql= "SELECT
+                   perdsc AS descricao,
+                   perid AS codigo
+               FROM painel.periodicidade
+               WHERE
+                   perstatus = 'A'
+                   AND perid IN (1,2,3)
+               ORDER BY
+                   descricao
 		";
 	?>
     <td width="25%" align='right' class="SubTituloDireita">Periodicidade de atualização:</td>
@@ -1161,13 +1184,12 @@ else
 </tr> 
 <tr>
 	<?php 
-		$sql= "SELECT 
-			coldsc AS descricao, 
-			colid AS codigo
-		FROM 		
-			painel.coleta
-		order by
-			 descricao		 
+		$sql= "SELECT
+                   coldsc AS descricao,
+                   colid AS codigo
+               FROM painel.coleta
+               ORDER BY
+                   descricao
 		";
 	?>
     <td align='right' class="SubTituloDireita">Coleta:</td>
@@ -1344,6 +1366,9 @@ function validar(){
 	}
 	if(document.formulario.indprod.value == ''){
 		msg+="O preenchimento do campo \"Produto\" é obrigatório.\n";
+	}
+	if(document.formulario.indpeso.value == ''){
+		msg+="O preenchimento do campo \"Peso\" é obrigatório.\n";
 	}
 
 	if(msg != "") {
