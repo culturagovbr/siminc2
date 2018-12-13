@@ -471,7 +471,7 @@ class ErrorHandler {
             } else {
                 $_SESSION ['MSG_AVISO'] = 'Não foi possível conectar à base de dados! Por favor, entre em contato com o suporte.';
             }
-            header ( 'Location: login.php' );
+            header('Location: '. URL_SISTEMA. 'login.php');
             exit ();
         }
 
