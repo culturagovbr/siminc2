@@ -162,7 +162,7 @@ class Alteracao_Model_Pedido extends Modelo
     }
     
     public function listaPisSelecionados($pedid){
-        $sql = "select pis.pliselid,
+        $sql = "select distinct pis.pliselid,
                        pis.pedid,
                        pis.pliid,
                        pli.plicod,
@@ -207,8 +207,7 @@ class Alteracao_Model_Pedido extends Modelo
                   LEFT JOIN monitora.pi_planointernoptres ppt on pis.pliid = ppt.pliid
                   LEFT JOIN monitora.ptres ptr ON( ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
                   LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
-                  LEFT JOIN planacomorc.pi_delegacao pd ON(pli.pliid = pd.pliid)
-		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(pd.suoid = suo.suoid)                          
+		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(ptr.unicod = suo.unocod)                          
                  where pis.pedid = $pedid
                    and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid)
                  order by pis.pliselid";
