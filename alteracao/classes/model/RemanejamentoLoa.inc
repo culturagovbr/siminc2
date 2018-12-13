@@ -120,11 +120,12 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     public function montaComboCategoria()
     {
         $sql = "SELECT
-                    ctecod as codigo,
-                    ctecod as descricao
+                    ctecod AS codigo,
+                    ctecod AS descricao
                 FROM public.categoriaeconomica
                 WHERE
                     ctestatus = 'A'
+                    AND ctecod in(3, 4)
                 ORDER BY
                     descricao
                 ";
