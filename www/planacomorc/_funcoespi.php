@@ -2152,8 +2152,9 @@ function carregarPiComDetalhes(stdclass $filtros) {
         SELECT
             pli.pliid,
             pli.mdeid,
-            suo.suonome || '(' || suo.suosigla || ')' AS unidade,
-            suodel.suonome || '(' || suodel.suosigla || ')' AS sub_unidade,
+            suo.unocod || ' - ' || suo.unonome AS uo,
+            suo.suocod || ' - ' || suo.suonome || '(' || suo.suosigla || ')' AS unidade,
+            suodel.suocod || ' - ' || suodel.suonome || '(' || suodel.suosigla || ')' AS sub_unidade,
             mde.mdecod,
             pli.eqdid,
             eqd.eqddsc,

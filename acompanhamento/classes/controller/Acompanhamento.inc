@@ -90,7 +90,7 @@ class Acompanhamento_Controller_Acompanhamento
     public function recuperarPiPorMetaESubunidade($mppid, $suoid)
     {
         $mPi = new Pi_PlanoInterno();
-        $aPis = $mPi->recuperarPiPorMetaESubunidade($mppid, $suoid);
+        $listaPi = $mPi->recuperarPiPorMetaESubunidade($mppid, $suoid);
 
         include_once APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi.inc';
     }
