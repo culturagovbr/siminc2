@@ -29,7 +29,7 @@
             <td><?= $dados['cnc']; ?></td>
             <td><?= $dados['soap']; ?></td>
             <td><?= $dados['pedtitulo']; ?></td>
-            <td><?= $dados['cad']; ?></td>
+            <td><?= $dados['dtalteracao'] .' às '. $dados['hralteracao']; ?></td>
         </tr>
     <?php endforeach ?>
     </tbody>
