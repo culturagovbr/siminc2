@@ -182,7 +182,7 @@ $db->cria_aba(57105,$url,'');
             }
             ?>
             <td align="right" width="25%" class="SubTituloDireita">Observação do Gestor:</td>
-            <td><?=campo_textarea( 'indobsgestor', 'N', $acessoGestor, '', 98, 5, 125 );?></td>
+            <td><?=campo_textarea( 'indobsgestor', 'N', $acessoGestor, '', 98, 5, 255 );?></td>
         </tr>
         <tr>
             <?php

@@ -4,7 +4,6 @@ class Painel_Controller_AvaliacaoGestor
 {
     public function salvar($dados)
     {
-//        ver($dados,d);
         $url = '?modulo=principal/avaliacaoGestor&acao=A';
         try {
             $mAvaliacaoGestor = new Painel_Model_AvaliacaoGestor($dados['agid']);
@@ -12,7 +11,7 @@ class Painel_Controller_AvaliacaoGestor
             $mAvaliacaoGestor->nucpf = $_SESSION['usucpf'];
             $mAvaliacaoGestor->indobsgestor = utf8_decode($dados['indobsgestor']);
             $mAvaliacaoGestor->indobsgestorindicador = utf8_decode($dados['indobsgestorindicador']);
-            $mAvaliacaoGestor->salvar(null, null, ['indavalgestor', 'indobsgestor', 'indobsgestorindicador']);
+            $mAvaliacaoGestor->salvar(null, null, ['indavalgestor']);
             $mAvaliacaoGestor->commit();
             return true;
         } catch (Exception $e){
