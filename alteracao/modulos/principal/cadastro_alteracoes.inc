@@ -1,6 +1,8 @@
 <?php
 require_once APPRAIZ . 'includes/workflow.php';
 
+$disabled = ['required'];
+
 $mAlteracaoPedido = new Alteracao_Model_Pedido($_REQUEST['pedid']);
 if ($_REQUEST['pedid']){
     $arrPedidos= $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);

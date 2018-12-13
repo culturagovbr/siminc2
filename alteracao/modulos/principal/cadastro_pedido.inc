@@ -11,20 +11,20 @@
                         $arrSuoid[]=$value['suoid'];
                     }
                 }
-                echo $simec->select('suoid[]', 'Unidade', $arrSuoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), ['required'], ['input-size' => 9, 'label-size' => 2]); 
+                echo $simec->select('suoid[]', 'Unidade', $arrSuoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), $disabled, ['input-size' => 9, 'label-size' => 2]); 
                 ?>
             </div>
             <div class="col-lg-3">
-                <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), ['required'],  ['input-size' => 8, 'label-size' => 3]); ?>
+                <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), $disabled,  ['input-size' => 8, 'label-size' => 3]); ?>
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-8">
-                <?= $simec->input('pedtitulo',  'Título', $mAlteracaoPedido->pedtitulo, ['required'], ['input-size' => 9, 'label-size' => 2]); ?>
+                <?= $simec->input('pedtitulo',  'Título', $mAlteracaoPedido->pedtitulo, $disabled, ['input-size' => 9, 'label-size' => 2]); ?>
             </div>
             <div class="col-lg-3">
-                <?= $simec->select('janid', 'Janela', $mAlteracaoPedido->janid, (new Alteracao_Model_Janela())->recuperarSqlCombo(), ['required'],  ['input-size' => 8, 'label-size' => 3]); ?>
+                <?= $simec->select('janid', 'Janela', $mAlteracaoPedido->janid, (new Alteracao_Model_Janela())->recuperarSqlCombo(), $disabled,  ['input-size' => 8, 'label-size' => 3]); ?>
             </div>
         </div>
 
