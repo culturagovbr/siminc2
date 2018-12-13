@@ -127,7 +127,7 @@ function DownloadArquivoInfo($arqid){
 </head>
 
 <body class="page-index">
-   <?php // require_once 'navegacao.php'; ?>
+   <?php require_once 'navegacao.php'; ?>
 
     <!-- Login -->
     <section id="login" class="login">
