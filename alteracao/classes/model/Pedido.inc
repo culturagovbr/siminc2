@@ -49,6 +49,7 @@ class Alteracao_Model_Pedido extends Modelo
         'docid' => array('tabela' => 'workflow.documento', 'pk' => 'docid'),
         'tpaid' => array('tabela' => 'alteracao.tipo', 'pk' => 'tpaid'),
         'janid' => array('tabela' => 'alteracao.janela', 'pk' => 'janid'),
+        'usucpf' => array('tabela' => 'seguranca.usuario', 'pk' => 'usucpf'),
     );
 
     /**
@@ -64,6 +65,7 @@ class Alteracao_Model_Pedido extends Modelo
         'janid' => null,
         'pedstatus' => null,
         'pedano' => null,
+        'usucpf' => null,
     );
 
     /**
@@ -162,7 +164,7 @@ class Alteracao_Model_Pedido extends Modelo
     }
     
     public function listaPisSelecionados($pedid){
-        $sql = "select pis.pliselid,
+        $sql = "select distinct pis.pliselid,
                        pis.pedid,
                        pis.pliid,
                        pli.plicod,
@@ -207,11 +209,152 @@ class Alteracao_Model_Pedido extends Modelo
                   LEFT JOIN monitora.pi_planointernoptres ppt on pis.pliid = ppt.pliid
                   LEFT JOIN monitora.ptres ptr ON( ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
                   LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
-                  LEFT JOIN planacomorc.pi_delegacao pd ON(pli.pliid = pd.pliid)
-		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(pd.suoid = suo.suoid)                          
+		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(ptr.unicod = suo.unocod)                          
                  where pis.pedid = $pedid
                    and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid)
                  order by pis.pliselid";
         return $this->carregar($sql);
+    }
+    
+    /**
+     * Cria sql da lista principal de PIs.
+     * 
+     * @param stdClass $filtros
+     * @return string
+     */
+    public static function listarPis(stdClass $filtros){
+        $where = self::montarFiltro($filtros);
+        if (isset($filtros->pedid)){
+            $pedid = isset($filtros->pedid)?$filtros->pedid:0;
+            $where .= " and pdsuo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid)";
+        }
+        $sql = "
+            SELECT DISTINCT
+                pli.pliid::VARCHAR AS pliid,
+                ben.benid::VARCHAR AS benid,
+                pli.pliid::VARCHAR AS id,
+                pli.plicod,
+                ed.esdid,
+                ed.esddsc,
+                '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || pli.plicod || '</a>' AS codigo_pi,
+                pli.ungcod || '-' || suo.suonome AS sub_unidade,
+                '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || COALESCE(pli.plititulo, 'N/A') || '</a>' AS plititulo,
+                TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional,
+		ed.esddsc AS situacao,
+		pc.picvalorcusteio AS custeio,
+		pc.picvalorcapital AS capital,
+                (select coalesce(pliselid,0) from alteracao.plano_interno_selecionado pis where pis.pliid=pli.pliid and pis.pedid = ".(int)$pedid.") as pliselid,
+		coalesce((SELECT 
+			sum(coalesce(se.vlrautorizado,0::numeric)) AS vlrautorizado
+		   FROM spo.siopexecucao se
+		  where se.plicod = pli.plicod
+		    and se.exercicio = pli.pliano
+		    ),0.00) as autorizado,
+		coalesce((SELECT 
+			sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhado
+		   FROM spo.siopexecucao se
+		  where se.plicod = pli.plicod
+		    and se.exercicio = pli.pliano
+		    ),0.00) as empenhado,
+		coalesce((SELECT 
+			sum(coalesce(se.vlrliquidado,0::numeric)) AS vlrliquidado
+		   FROM spo.siopexecucao se
+		  where se.plicod = pli.plicod
+		    and se.exercicio = pli.pliano
+		    ),0.00) as liquidado,		    
+		coalesce((SELECT 
+			sum(coalesce(se.vlrpago,0::numeric)) AS vlrpago
+		   FROM spo.siopexecucao se
+		  where se.plicod = pli.plicod
+		    and se.exercicio = pli.pliano
+		    ),0.00) as pago,
+                pli.plistatus
+            FROM monitora.pi_planointerno pli
+		JOIN planacomorc.pi_complemento pc USING(pliid)
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suo.suostatus = 'A'
+                    AND pli.unicod = suo.unocod
+                    AND pli.ungcod = suo.suocod
+                    AND suo.prsano = pli.pliano
+		)
+                LEFT JOIN monitora.pi_planointernoptres ppt USING(pliid)
+                LEFT JOIN monitora.ptres ptr ON(
+                    ppt.ptrid = ptr.ptrid
+                    AND pli.pliano = ptr.ptrano)
+	        LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
+		LEFT JOIN workflow.documento wd ON(pli.docid = wd.docid)
+		LEFT JOIN workflow.estadodocumento ed ON(wd.esdid = ed.esdid)
+		LEFT JOIN public.vw_subunidadeorcamentaria pdsuo ON(ptr.unicod = pdsuo.unocod)
+		LEFT JOIN emendas.beneficiario ben ON(ben.pliid = pli.pliid)
+            WHERE
+                (pli.plistatus = 'A' OR (pli.plistatus = 'I' AND ed.esdid = ". (int)ESD_PI_CANCELADO. "))
+                AND pli.pliano = '". (int)$filtros->exercicio. "'
+                $where
+            ORDER BY
+                codigo_pi
+        ";
+        return $sql;
+    }
+    
+    /**
+     * Monta filtros para a consulta do método listar.
+     * 
+     * @param stdClass $filtros
+     * @return string
+     */
+    public static function montarFiltro(stdClass $filtros){
+        $where = "";
+        # Sub-Unidades e Sub-Unidades Delegadas do Usuário.
+        $where .= self::montarFiltroSubUnidadeUsuario($filtros);
+        # Código do PI.
+        $where .= $filtros->plicod? "\n AND (pli.plicod = '". pg_escape_string($filtros->plicod). "' OR pli.pliid = '". (int)pg_escape_string($filtros->plicod). "') ": NULL;
+        # Unidade Orçamentária.
+        $where .= $filtros->unicod && !empty(join_simec(',', $filtros->unicod))? "\n AND pli.unicod::INTEGER IN(". join_simec(',', $filtros->unicod). ") ": NULL;
+        # Sub-Unidade Orçamentária.
+        $where .= $filtros->ungcod && !empty(join_simec(',', $filtros->ungcod))? "\n AND pli.ungcod::INTEGER IN(". join_simec(',', $filtros->ungcod). ") ": NULL;
+        # PTRES - Plano de trabalho resumido.
+        $where .= $filtros->ptres && !empty(join_simec(',', $filtros->ptres))? "\n AND ptr.ptres::INTEGER IN(". join_simec(',', $filtros->ptres). ") ": NULL;
+        # Título ou Descrição.
+        $where .= $filtros->descricao? "\n AND ( pli.plititulo ILIKE('%". pg_escape_string($filtros->descricao). "%') OR pli.plidsc ILIKE('%". pg_escape_string($filtros->descricao). "%') ) ": NULL;
+        # Enquadramento.
+        $where .= $filtros->eqdid && !empty(join_simec(',', $filtros->eqdid))? "\n AND pli.eqdid::INTEGER IN(". join_simec(',', $filtros->eqdid). ") ": NULL;
+        # Opção da Situação.
+        $where .= $filtros->esdid && !empty(join_simec(',', $filtros->esdid))? "\n AND ed.esdid::INTEGER IN(". join_simec(',', $filtros->esdid). ") ": NULL;
+        # Descrição da situação.
+        $where .= $filtros->esddsc? "\n AND ed.esddsc ILIKE('%". pg_escape_string($filtros->esddsc). "%') ": NULL;
+        # Emenda.
+        if ($filtros->pliemenda == 't') {
+            $where .= "\n AND ben.pliid IS NOT NULL ";
+        } elseif ($filtros->pliemenda == 'f') {
+            $where .= "\n AND ben.pliid IS NULL ";
+        }
+        # FNC
+        $where .= $filtros->unofundo? "\n AND suo.unofundo = ". $filtros->unofundo: NULL;
+        # Busca pelo ID do Beneficiário
+        $where .= $filtros->benid ? "\n AND ben.benid = " . $filtros->benid : NULL;
+
+        return $where;
+    }
+
+    /**
+     * Monta o filtro de Sub-Unidades vinculadas aos perfis do Usuário da sessão.
+     * 
+     * @param stdClass $filtros
+     * @return string
+     */
+    public static function montarFiltroSubUnidadeUsuario(stdClass $filtros){
+        $where = "";
+        # Sub-Unidades e Sub-Unidades Delegadas do Usuário.
+        $listaSubUnidadeUsuario = buscarSubUnidadeUsuario($filtros);
+        if($listaSubUnidadeUsuario){
+            $where .= "\n AND (
+                    pli.ungcod::INTEGER IN(". join(',', $listaSubUnidadeUsuario). ")
+                    OR 
+                    pdsuo.suocod::INTEGER IN(". join(',', $listaSubUnidadeUsuario). ")
+                )
+            ";
+        }
+        
+        return $where;
     }
 }

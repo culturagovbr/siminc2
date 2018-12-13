@@ -32,9 +32,8 @@ if ($_REQUEST['req']){
             $filtropi['pedid'] = $_REQUEST['pedid']?$_REQUEST['pedid']:0;
             $filtropi['esdid'] = array(ESD_PI_APROVADO);
 
-            $mPlanointerno = new Spo_Model_Planointerno();
-            $sql = $mPlanointerno->listar((object) $filtropi);
-            $aDadosPi = $mPlanointerno->carregar($sql);
+            $sql = $mAlteracaoPedido->listarPis((object) $filtropi);
+            $aDadosPi = $mAlteracaoPedido->carregar($sql);
             include_once APPRAIZ.'alteracao/modulos/principal/lista_pis.inc';
             die;
         case 'carrega_justificativa':

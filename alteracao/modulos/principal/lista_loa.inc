@@ -2,11 +2,11 @@
 $req = '<span style="color: #ff0000">*</span>';
 $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table-hover" >
         <tr class="text-center">
-            <th width="5%">Ação</th>
+            <th width="10%">Ação</th>
             <th class="tdpliselid">Funcional'.$req.'</th>
             <th>Categoria'.$req.'</th>
             <th>GND'.$req.'</th>
-            <th>Modalidade'.$req.'</th>
+            <th>Modalidade de Aplicação'.$req.'</th>
             <th>Fonte'.$req.'</th>
             <th>IDOC'.$req.'</th>
             <th>IDUSO'.$req.'</th>
