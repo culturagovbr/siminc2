@@ -49,6 +49,7 @@ class Alteracao_Model_Pedido extends Modelo
         'docid' => array('tabela' => 'workflow.documento', 'pk' => 'docid'),
         'tpaid' => array('tabela' => 'alteracao.tipo', 'pk' => 'tpaid'),
         'janid' => array('tabela' => 'alteracao.janela', 'pk' => 'janid'),
+        'usucpf' => array('tabela' => 'seguranca.usuario', 'pk' => 'usucpf'),
     );
 
     /**
@@ -64,6 +65,7 @@ class Alteracao_Model_Pedido extends Modelo
         'janid' => null,
         'pedstatus' => null,
         'pedano' => null,
+        'usucpf' => null,
     );
 
     /**

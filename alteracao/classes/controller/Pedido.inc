@@ -10,6 +10,7 @@ class Alteracao_Controller_Pedido
             $mPedido->pedano = $_SESSION['exercicio'];
             $mPedido->pedstatus = 'A';
             $mPedido->pedtitulo = utf8_decode($dados['pedtitulo']);
+            $mPedido->usucpf = $_SESSION['usucpf'];
             $mPedido->salvar(null, null, ['docid']);
             $this->removerUnidades($mPedido->pedid);
             $this->salvarUnidades($mPedido->pedid, $dados['suoid']);
