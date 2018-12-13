@@ -1,3 +1,11 @@
+/*
+    componente hr estilizado alteraçoes
+*/
+.ruptura_tematica
+{
+    border-top: 1px solid #1AB394;
+}
+
 th.tabela__header--acao
 {
   width: 89px;

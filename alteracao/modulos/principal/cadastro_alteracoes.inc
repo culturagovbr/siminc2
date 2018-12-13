@@ -131,7 +131,9 @@ include APPRAIZ. "includes/cabecalho.inc";
                 <div class="div_justificativa"></div>
                 
                 <h1>ESPELHO</h1>
-                <div class="div_espelho"></div>
+                <div class="div_espelho">
+                    <?php include_once APPRAIZ.'alteracao/modulos/principal/espelho_alteracao.inc'; ?>
+                </div>
 
             </div>
         </div>
