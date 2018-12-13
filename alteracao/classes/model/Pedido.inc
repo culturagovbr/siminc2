@@ -83,7 +83,9 @@ class Alteracao_Model_Pedido extends Modelo
                     ped.janid,
                     tpa.tpacod,
                     esd.esddsc,
-                    jan.jannome
+                    jan.jannome,
+                    to_char(ped.dtalteracao, 'dd/mm/yyyy') as dtalteracao,
+                    to_char(ped.dtalteracao, 'hh:mi') as hralteracao
                 FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
