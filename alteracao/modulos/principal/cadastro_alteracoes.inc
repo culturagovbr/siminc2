@@ -81,6 +81,9 @@ if ($_REQUEST['req']){
             $mPedido = new Alteracao_Model_RemanejamentoLoa();
             echo json_encode($mPedido->selecionaDotacao($_REQUEST));
             die;
+        case 'carrega_espelho':
+            include_once APPRAIZ.'alteracao/modulos/principal/espelho_alteracao.inc';
+            die;
         default:
             break;
     }
@@ -130,9 +133,7 @@ include APPRAIZ. "includes/cabecalho.inc";
                 <div class="div_justificativa"></div>
                 
                 <h1>ESPELHO</h1>
-                <div class="div_espelho">
-                    <?php include_once APPRAIZ.'alteracao/modulos/principal/espelho_alteracao.inc'; ?>
-                </div>
+                <div class="div_espelho"></div>
 
             </div>
         </div>
@@ -204,6 +205,10 @@ $(function(){
                     break;
                 case 3:
                     $(".div_justificativa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_justificativa&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
+                    $(".divDadosCredito").show('fast');
+                    break;
+                case 4:
+                    $(".div_espelho").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_espelho&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
                     $(".divDadosCredito").show('fast');
                     break;
             }
