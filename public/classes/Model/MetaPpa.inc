@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Classe de mapeamento da entidade public.metappa
  *
@@ -10,9 +11,7 @@
  * @link     no link
  */
 
-
 require_once APPRAIZ .'includes/classes/Modelo.class.inc';
-
 
 /**
  * Public_Model_Metappa
@@ -154,5 +153,5 @@ class Public_Model_MetaPpa extends Modelo
         return $this->pegaLinha($sql);
     }
 
-}//end Class
-?>
+}
+
