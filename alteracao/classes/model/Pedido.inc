@@ -200,7 +200,7 @@ class Alteracao_Model_Pedido extends Modelo
 		                  where se.plicod = pli.plicod
 		                    and se.exercicio = pli.pliano),0.00) as empenhado,
                        pp.pprnome,
-                       suo.unonome,
+                       suo.suonome AS unidade,
                        pc.picquantidade,
                        COALESCE(pli.plititulo, 'N/A') AS plititulo,
                        TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional

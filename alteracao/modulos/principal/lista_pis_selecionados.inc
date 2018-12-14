@@ -26,7 +26,7 @@
             <td ><?= $dados['pliid']; ?></td>
             <td >
                 <?= $dados['plititulo']; ?><br>
-                <b>Unidade:</b> <?= $dados['unonome']; ?><br>
+                <b>Unidade:</b> <?= $dados['unidade']; ?><br>
                 <b>Produto:</b> <?= $dados['pprnome']; ?>
             </td>
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
