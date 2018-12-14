@@ -123,20 +123,33 @@ class Public_Model_MetaPpa extends Modelo
     {
         $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
 
-        $sql = "select  opm.oppid, opp.oppdsc, opp.oppcod, mpp.mppid, mpp.mppcod, mpp.mppnome, mpp.mppdsc, mpp.mppquantificavel, mpp.mppquantidade, mpp.mppanualizavel, 
-                        case 
-                            when  (select count(1) from spo.subunidademetappa m where m.mppid = mpp.mppid) = 0 then true
-                            when  (select count(1) from spo.subunidademetappa m where m.mppid = mpp.mppid) > 2 then true
-                            else false      
-                        end as compartilhada,
-
-                        -- Cálculo para verificar quantidade anualizada: (valor previsto dividido por 4 e vezes o ano do monitoramento)
-                        mpp.mppquantidade / 4 * ((to_char(now(), 'YYYY')::int % 4)+1) mppquantidadeanualizada
-                from public.objetivometappa opm
-                        inner join public.objetivoppa opp on opp.oppid = opm.oppid
-                        inner join public.metappa mpp on mpp.mppid = opm.mppid
-                where opm.mppid = " . (int) $this->mppid . "
-                and opp.prsano = '$exercicio'";
+        $sql = "
+            SELECT
+                opm.oppid,
+                opp.oppdsc,
+                opp.oppcod,
+                mpp.mppid,
+                mpp.mppcod,
+                mpp.mppnome,
+                mpp.mppdsc,
+                mpp.mppquantificavel,
+                mpp.mppquantidade,
+                mpp.mppanualizavel,
+                CASE WHEN (SELECT count(1) FROM spo.subunidademetappa m WHERE m.mppid = mpp.mppid) = 0 THEN
+                    TRUE
+                WHEN (SELECT count(1) FROM spo.subunidademetappa m WHERE m.mppid = mpp.mppid) > 2 THEN
+                    TRUE
+                ELSE
+                    FALSE
+                END AS compartilhada,
+                -- Cálculo para verificar quantidade anualizada: (valor previsto dividido por 4 e vezes o ano do monitoramento)
+                mpp.mppquantidade / 4 * ((to_char(now(), 'YYYY')::int % 4) + 1) mppquantidadeanualizada
+            FROM public.objetivometappa opm
+                JOIN public.objetivoppa opp ON opp.oppid = opm.oppid
+                JOIN public.metappa mpp ON mpp.mppid = opm.mppid
+            WHERE
+                opm.mppid = ". (int)$this->mppid. "
+                AND opp.prsano = '". (int)$exercicio. "'";
 
         return $this->pegaLinha($sql);
     }
