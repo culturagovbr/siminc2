@@ -38,7 +38,7 @@
         <div class="col-md-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Pesquisa avançada por PI</h5>
+                    <h5>Tramitação em lote</h5>
                 </div>
                 <div class="ibox-content">
                     <form id="filtropi" name="filtropi" method="POST" role="form" class="form-horizontal">
