@@ -44,7 +44,7 @@
         <div class="float-e-margins">
             <div class="ibox-content">
                 <?php
-                    include_once APPRAIZ.'alteracao/modulos/principal/espelho_pi_selecionados.inc';
+                    include_once APPRAIZ.'alteracao/modulos/principal/espelho_remanejamento_loa.inc';
                 ?>
             </div>
         </div>

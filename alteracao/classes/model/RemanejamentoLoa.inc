@@ -266,9 +266,11 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                        rl.vlcancelado,
                        rl.vlsuplementarexcesso,
                        rl.vlsuplementarsuperavit,
-                       ptr.unicod
+                       ptr.unicod,
+                       TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
                   from alteracao.remanejamento_loa rl
                   LEFT JOIN monitora.ptres ptr on rl.ptrid = ptr.ptrid
+                  LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
                   left join public.vw_subunidadeorcamentaria vs on ptr.unicod = vs.unocod
                  where vs.suoid in (select suoid from alteracao.pedido_unidade where pedid = {$pedid})
                    and pedid = {$pedid} order by 1";
