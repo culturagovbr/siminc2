@@ -61,5 +61,4 @@ class Acompanhamento_Model_Medida extends Modelo
         'claid' => null,
     );
 
-}//end Class
-?>
+}

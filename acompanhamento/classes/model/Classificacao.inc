@@ -62,5 +62,4 @@ class Acompanhamento_Model_Classificacao extends Modelo
         'clamedida' => null,
     );
 
-}//end Class
-?>
+}
