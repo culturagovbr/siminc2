@@ -231,7 +231,7 @@
                         <div class="ibox-content">
 
                             <div class="form-group ">
-                                <label for="acoquantidade" class="col-sm-3 col-md-3 col-lg-3 control-label">Executado: <span class="campo-obrigatorio" title="Campo obrigatório">*</span></label>
+                                <label for="acoquantidade" class="col-sm-3 col-md-3 col-lg-3 control-label" id="qntd">Quantidade Alcançada: <span class="campo-obrigatorio" title="Campo obrigatório">*</span></label>
                                 <div class="col-sm-3 col-md-3 col-lg-3 ">
                                     <?php $acoquantidade = is_numeric($mAcompanhamento->acoquantidade) ? number_format($mAcompanhamento->acoquantidade, 2, ',', '.') : null; ?>
                                     <?php if($podeEditar){ ?>
@@ -257,8 +257,12 @@
                             </div>
 
                             <?php
+                                echo '<span id="analise">';
                                 echo $simec->textarea('acoanalise', 'Análise Situacional', $mAcompanhamento->acoanalise, ['rows'=>6]);
-                                echo $simec->select('claid', 'Classificação', $mAcompanhamento->claid, (new Acompanhamento_Model_Classificacao())->recuperarSqlCombo(null, ['tipid = ' . Acompanhamento_Model_Tipo::K_TIPO_META_PPA]), ['required']);
+                                echo '</span>';
+                                echo '<span id="classificacao">';
+                                echo $simec->select('claid', 'Classificação da Meta', $mAcompanhamento->claid, (new Acompanhamento_Model_Classificacao())->recuperarSqlCombo(null, ['tipid = ' . Acompanhamento_Model_Tipo::K_TIPO_META_PPA]), ['required']);
+                                echo '</span>';
 
                                 $aMedidasSelecionadas = $mAcompanhamento->recuperarMedidas();
                                 echo '<span class="span-medida" id="span-medida" ' . (!count($aMedidasSelecionadas) ? 'style="display: none"' : '') . '>' . $simec->select('medidas[]', 'Medidas a serem adotadas', $aMedidasSelecionadas, (new Acompanhamento_Model_Medida())->recuperarSqlCombo(null, ['claid = ' . (int)$mAcompanhamento->claid])) . '</span>';
@@ -384,6 +388,13 @@
 
 <script>
     $(function(){
+
+        $('#qntd').prop('title', 'Valor apurado para a meta considerando sua respectiva unidade de medida, cumulativo desde o início do PPA.');
+        $('#analise').prop('title', 'Avaliação da execução da meta, quantificando, sempre que possível, o valor alcançado acumulado para o período ' +
+            'do Plano, destacando-se, em especial, o executado no ano corrente e a projeção para o ano seguinte, o motivo da frustração ou da superação da ' +
+            'expectativa, as necessidades existentes para que a meta seja atendida, e/ou outras informações pactuadas.'
+        );
+        $('#classificacao').prop('title', 'Classificação da meta quanto ao seu andamento.');
 
         $('#claid').change(function(){
             $.ajax({
