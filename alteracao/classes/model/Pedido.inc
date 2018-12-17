@@ -140,7 +140,7 @@ class Alteracao_Model_Pedido extends Modelo
         $sql = "update workflow.documento set tpdid = ".$tpdid." where docid = ".$docid;
         $this->executar($sql);
     }
-    
+
     public function recuperarPedidoPorId($pedid){
         $sql = "SELECT
                     ped.pedid,
@@ -151,20 +151,24 @@ class Alteracao_Model_Pedido extends Modelo
                     tpa.tpadsc,
                     esd.esddsc,
                     jan.jannome,
-                    case when tpa.tpafluxo='I' then 269 
-                         when tpa.tpafluxo='E' then 270
-                    end as tpdid
+                    usr.usunome,
+                    '(' || usr.usufoneddd || ') ' || usr.usufonenum as usufone,
+                    usr.usuemail,
+                    CASE WHEN tpa.tpafluxo='I' THEN 269
+                         WHEN tpa.tpafluxo='E' THEN 270
+                    END AS tpdid
                 FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
+                JOIN seguranca.usuario AS usr ON usr.usucpf = ped.usucpf
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 WHERE
                     ped.pedstatus = 'A'
-                and ped.pedid = ".$pedid;
+                AND ped.pedid = ".$pedid;
         return $this->pegaLinha($sql);
     }
-    
+
     public function listaPisSelecionados($pedid){
         $sql = "select distinct pis.pliselid,
                        pis.pedid,
@@ -217,7 +221,7 @@ class Alteracao_Model_Pedido extends Modelo
                  order by pis.pliselid";
         return $this->carregar($sql);
     }
-    
+
     /**
      * Cria sql da lista principal de PIs.
      * 
