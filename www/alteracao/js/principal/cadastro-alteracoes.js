@@ -81,7 +81,7 @@ function initCadastroAlteracoes() {
  */
 function exibirEspelhoPi(pliid){
     window.open(
-        '?modulo=inicio&acao=C&req=espelho-pi&pliid='+ pliid,
+        '?modulo=principal/cadastro_alteracoes&acao=C&req=espelho-pi&pliid='+ pliid,
         'popup_espelho_pi',
         'width=780,height=1000,status=1,menubar=1,toolbar=0,scrollbars=1,resizable=1');
 }

@@ -26,9 +26,6 @@
                 $cPedido = new Alteracao_Controller_Pedido();
                 $cPedido->excluir($_REQUEST['pedid']);
             die;
-            case 'espelho-pi':
-                include APPRAIZ. 'planacomorc/modulos/principal/unidade/espelho-pi.inc';
-            die;
         }
     }
     $filtroalteracao['tpdid'] = $_REQUEST['tpdid'] ? $_REQUEST['tpdid'] : WF_TPDID_INTERNO;

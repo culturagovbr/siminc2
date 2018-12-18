@@ -16,10 +16,18 @@
     <?php
     foreach($aDadosPiSelecionados as $dados): ?>
         <tr>
-            <td ><?= $dados['funcional']; ?></td>
-            <td ><?= $dados['pliid']; ?></td>
-            <td ><?= $dados['plicod']; ?></td>
-            <td ><?= $dados['plititulo']; ?></td>
+            <td>
+                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['pliid']?>"><?= $dados['funcional']; ?></a>
+            </td>
+            <td>
+                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['pliid']?>"><?= $dados['pliid']; ?></a>
+            </td>
+            <td>
+                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['pliid']?>"><?= $dados['plicod']; ?></a>
+            </td>
+            <td>
+                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['pliid']?>"><?= $dados['plititulo']; ?></a>
+            </td>
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>

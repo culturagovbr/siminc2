@@ -10,23 +10,20 @@ if ($_REQUEST['pedid']){
         $mAlteracaoPedido->docid = $mAlteracaoPedido->pegarDocidPedido($arrPedidos['pedid'], $arrPedidos['tpdid']);
     }
 }
+
 if ($_REQUEST['req']){
     switch ($_REQUEST['req']) {
         case 'carrega_pedidos':
             include_once APPRAIZ.'alteracao/modulos/principal/cadastro_pedido.inc';
-            die;   
+            die;
         case 'carrega_seleciona_pis':
             $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
             include_once APPRAIZ.'alteracao/modulos/principal/selecionar_pi.inc';
-            die;   
-        case 'carrega_remanejamento_loa':
-            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
-            include_once APPRAIZ.'alteracao/modulos/principal/remanejamento_loa.inc';
-            die;   
+            die;
         case 'carrega_lista_pis_selecionados':
             $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
             include_once APPRAIZ.'alteracao/modulos/principal/lista_pis_selecionados.inc';
-            die;   
+            die;
         case 'carrega_lista_pis':
             $filtropi['exercicio'] = $_SESSION['exercicio'];
             $filtropi['usucpf'] = $_SESSION['usucpf'];
@@ -37,6 +34,10 @@ if ($_REQUEST['req']){
             $sql = $mAlteracaoPedido->listarPis((object) $filtropi);
             $aDadosPi = $mAlteracaoPedido->carregar($sql);
             include_once APPRAIZ.'alteracao/modulos/principal/lista_pis.inc';
+            die;
+        case 'carrega_remanejamento_loa':
+            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
+            include_once APPRAIZ.'alteracao/modulos/principal/remanejamento_loa.inc';
             die;
         case 'carrega_justificativa':
             include_once APPRAIZ.'alteracao/modulos/principal/cadastro_justificativa.inc';
@@ -70,7 +71,7 @@ if ($_REQUEST['req']){
         case 'salvar_justificativa':
             $cJustificativa = new Alteracao_Controller_Justificativa();
             $cJustificativa->salvar($_REQUEST);
-        die;
+            die;
         case 'remover_loa':
             $cPedido = new Alteracao_Controller_RemanejamentoLoa();
             $cPedido->excluir($_REQUEST['rlid']);
@@ -85,6 +86,9 @@ if ($_REQUEST['req']){
             die;
         case 'carrega_espelho':
             include_once APPRAIZ.'alteracao/modulos/principal/espelho_alteracao.inc';
+            die;
+        case 'espelho-pi':
+            include APPRAIZ. 'planacomorc/modulos/principal/unidade/espelho-pi.inc';
             die;
         default:
             break;

@@ -21,13 +21,20 @@
             <td style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;" align="center">
                 <button class="btn btn-danger btnRemovePi" type="button" title="Excluir pedido" pliselid="<?=$dados['pliselid'];?>" name="btnSelecionarPi">
                     <span class="glyphicon glyphicon-trash"></span>
+                </button>
             </td>
-            <td ><?= $dados['funcional']; ?></td>
-            <td ><?= $dados['pliid']; ?></td>
-            <td >
-                <?= $dados['plititulo']; ?><br>
-                <b>Unidade:</b> <?= $dados['unidade']; ?><br>
-                <b>Produto:</b> <?= $dados['pprnome']; ?>
+            <td>
+                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['pliid']?>"><?= $dados['funcional']; ?></a>
+            </td>
+            <td>
+                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['pliid']?>"><?= $dados['pliid']; ?></a>
+            </td>
+            <td>
+                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['pliid']?>">
+                    <?= $dados['plititulo']; ?><br>
+                    <b>Unidade:</b> <?= $dados['unidade']; ?><br>
+                    <b>Produto:</b> <?= $dados['pprnome']; ?>
+                </a>
             </td>
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">

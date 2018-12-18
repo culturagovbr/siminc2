@@ -16,11 +16,21 @@
             <?php
             foreach($aDadosPi as $dados): ?>
                 <tr>
-                    <td align="center"><input type="checkbox" <?= $dados['pliselid']>0?'checked="true"':''; ?> class="check checkbox-success" id="chk<?=$dados['id'];?>" esdid="<?=$dados['esdid'];?>" pliselid="<?=$dados["pliselid"];?>" value="<?=$dados['id'];?>" name="chkPliid"></td>
-                    <td align="center"><?= $dados['id']; ?></td>
-                    <td align="center"><?= $dados['funcional']; ?></td>
-                    <td align="center"><?= $dados['plicod']; ?></td>
-                    <td align="left"><?= $dados['plititulo']; ?></td>
+                    <td align="center">
+                        <input type="checkbox" <?= $dados['pliselid']>0?'checked="true"':''; ?> class="check checkbox-success" id="chk<?=$dados['id'];?>" esdid="<?=$dados['esdid'];?>" pliselid="<?=$dados["pliselid"];?>" value="<?=$dados['id'];?>" name="chkPliid" />
+                    </td>
+                    <td align="center">
+                        <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['id']?>"><?= $dados['id']; ?></a>
+                    </td>
+                    <td align="center">
+                        <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['id']?>"><?= $dados['funcional']; ?></a>
+                    </td>
+                    <td align="center">
+                        <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['id']?>"><?= $dados['plicod']; ?></a>
+                    </td>
+                    <td align="left">
+                        <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['id']?>"><?= $dados['plititulo']; ?></a>
+                    </td>
                     <td align="right">R$ <?= number_format($dados['custeio'],0,',','.'); ?></td>
                     <td align="right">R$ <?= number_format($dados['capital'],0,',','.'); ?></td>
                 </tr>
