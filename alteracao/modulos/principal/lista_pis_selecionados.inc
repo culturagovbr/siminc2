@@ -18,10 +18,10 @@
     <?php
     foreach($aDadosPiSelecionados as $dados): ?>
         <tr>
-            <td style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;" align="center">
-                <button class="btn btn-danger btnRemovePi" type="button" title="Excluir pedido" pliselid="<?=$dados['pliselid'];?>" name="btnSelecionarPi">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </button>
+            <td align="center">
+                <a href="#" title="Excluir PI" class="btnRemovePi" pliselid="<?=$dados['pliselid'];?>">
+                    <i style="font-weight: 20px" class="fa fa-close"></i>
+                </a>
             </td>
             <td>
                 <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['pliid']?>"><?= $dados['funcional']; ?></a>

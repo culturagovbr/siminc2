@@ -6,7 +6,7 @@ $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table
             <th class="tdpliselid">Funcional'.$req.'</th>
             <th>Categoria'.$req.'</th>
             <th>GND'.$req.'</th>
-            <th>Modalidade de Aplicação'.$req.'</th>
+            <th><span title="Modalidade de Aplicação">Mod'.$req.'</span></th>
             <th>Fonte'.$req.'</th>
             <th>IDOC'.$req.'</th>
             <th>IDUSO'.$req.'</th>
@@ -40,7 +40,7 @@ $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboModalidade();
-                $linha .= montaListaLoa('mapcod', $options, $loa['mapcod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');');
+                $linha .= montaListaLoa('mapcod', $options, $loa['mapcod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');', 'Modalidade de Aplicação');
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboFonte();
@@ -93,7 +93,7 @@ echo $linha;
                            ?>'+
                         '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboModalidade();
-                               echo montaListaLoa('mapcod', $options, null, '',  'SelecionaDotacao();');
+                               echo montaListaLoa('mapcod', $options, null, '',  'SelecionaDotacao();', 'Modalidade de Aplicação');
                            ?>'+
                         '</th>' +
                 '        <th class="combo"><?php $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboFonte();

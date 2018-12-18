@@ -1,26 +1,25 @@
 <div id="divAlerta" class="alert alert-danger alert-dismissable">
     <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
     <span id="divAlertaContent">Teste de alerta</span>
-</div>  
-<div class="wrapper wrapper-content animated fadeInRight">  
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <button class="btn btn-primary" type="button" id="btnSelecionarPi" name="btnSelecionarPi">
-                        <span class="glyphicon glyphicon-plus"></span> Selecionar PI
-                    </button>
-                </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <button class="btn btn-primary" type="button" id="btnSelecionarPi" name="btnSelecionarPi">
+                    <span class="glyphicon glyphicon-plus"></span> Selecionar PI
+                </button>
             </div>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title" id="listaPisSelecionados">
-                    <?php include_once APPRAIZ.'alteracao/modulos/principal/lista_pis_selecionados.inc';?>
-                </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title" id="listaPisSelecionados">
+                <?php include_once APPRAIZ.'alteracao/modulos/principal/lista_pis_selecionados.inc';?>
             </div>
         </div>
     </div>

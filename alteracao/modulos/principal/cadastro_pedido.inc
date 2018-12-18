@@ -1,46 +1,52 @@
-<div class="ibox-content">
-    <form id="filtroalteracao" name="filtroalteracao" method="POST" role="form" action="?modulo=principal/cadastro_alteracoes&acao=C" class="form-horizontal">
-        <input name="req" id="req" value="" type="hidden">
-        <div class="row">
-            <div class="col-lg-8">
-                <?php
-                $suoid = array();
-                if ($_REQUEST['pedid']){
-                    $suoid = (new Alteracao_Model_PedidoUnidade())->carregarPorPedido($_REQUEST['pedid']);
-                    foreach($suoid as $value){
-                        $arrSuoid[]=$value['suoid'];
+<div class="row">
+    <div class="ibox-title">
+        <h5>DADOS GERAIS</h5>
+    </div>
+    <div class="ibox-content">
+        <form id="filtroalteracao" name="filtroalteracao" method="POST" role="form" action="?modulo=principal/cadastro_alteracoes&acao=C" class="form-horizontal">
+            <input name="req" id="req" value="" type="hidden">
+            <div class="row">
+                <div class="col-lg-8">
+                    <?php
+                    $suoid = array();
+                    if ($_REQUEST['pedid']){
+                        $suoid = (new Alteracao_Model_PedidoUnidade())->carregarPorPedido($_REQUEST['pedid']);
+                        foreach($suoid as $value){
+                            $arrSuoid[]=$value['suoid'];
+                        }
                     }
-                }
-                echo $simec->select('suoid[]', 'Unidade', $arrSuoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), $disabled, ['input-size' => 9, 'label-size' => 2]); 
-                ?>
+                    echo $simec->select('suoid[]', 'Unidade', $arrSuoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), $disabled, ['input-size' => 9, 'label-size' => 2]); 
+                    ?>
+                </div>
+                <div class="col-lg-3">
+                    <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), $disabled,  ['input-size' => 8, 'label-size' => 3]); ?>
+                </div>
             </div>
-            <div class="col-lg-3">
-                <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), $disabled,  ['input-size' => 8, 'label-size' => 3]); ?>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-lg-8">
-                <?= $simec->input('pedtitulo',  'Título', $mAlteracaoPedido->pedtitulo, $disabled, ['input-size' => 9, 'label-size' => 2]); ?>
+            <div class="row">
+                <div class="col-lg-8">
+                    <?= $simec->input('pedtitulo',  'Título', $mAlteracaoPedido->pedtitulo, $disabled, ['input-size' => 9, 'label-size' => 2]); ?>
+                </div>
+                <div class="col-lg-3">
+                    <?= $simec->select('janid', 'Janela', $mAlteracaoPedido->janid, (new Alteracao_Model_Janela())->recuperarSqlCombo(), $disabled,  ['input-size' => 8, 'label-size' => 3]); ?>
+                </div>
             </div>
-            <div class="col-lg-3">
-                <?= $simec->select('janid', 'Janela', $mAlteracaoPedido->janid, (new Alteracao_Model_Janela())->recuperarSqlCombo(), $disabled,  ['input-size' => 8, 'label-size' => 3]); ?>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="text-center">
-                <button class="btn btn-primary btn-buscar" type="button" id="btnSalvarPedido">
-                    <span class="glyphicon glyphicon-saved"></span> Salvar
-                </button>
-                <a href="?modulo=inicio&acao=C" class="btn btn-warning" id="btn-voltar" type="button">
-                    <i class="fa fa-arrow-left"></i> Voltar
-                </a>
+            <div class="form-group">
+                <div class="text-center">
+                    <button class="btn btn-primary btn-buscar" type="button" id="btnSalvarPedido">
+                        <span class="glyphicon glyphicon-saved"></span> Salvar
+                    </button>
+                    <a href="?modulo=inicio&acao=C" class="btn btn-warning" id="btn-voltar" type="button">
+                        <i class="fa fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
             </div>
-        </div>
 
-    </form>
+        </form>
+    </div>
 </div>
+
 <script>
     $(function(){
         $("#btnSalvarPedido").click(function(){

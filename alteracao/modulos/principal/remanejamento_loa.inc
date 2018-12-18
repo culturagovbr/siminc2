@@ -16,20 +16,28 @@
 </style>
 <div class="row">
     <div class="col-lg-12">
-        <div style="text-align: center; color: #1AB394;">
-            <h3>PLANOS INTERNOS</h3>
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>PLANOS INTERNOS</h5>
+            </div>
+            <div class="ibox-content">
+                <?php include APPRAIZ.'alteracao/modulos/principal/lista_pi_loa.inc';?>
+            </div>
         </div>
-        <div class="ibox-title">
-            <?php include APPRAIZ.'alteracao/modulos/principal/lista_pi_loa.inc';?>
-        </div>
-        <span class="glyphicon glyphicon-plus btn btn-primary" id="btnloa"> Adicionar</span>
     </div>
+</div>
+<div class="row">
     <div class="col-lg-12">
-        <div style="text-align: center; color: #1AB394;">
-            <h3>LOA</h3>
-        </div>
-        <div class="ibox-title">
-            <?php include APPRAIZ.'alteracao/modulos/principal/lista_loa.inc';?>
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>LOA</h5>
+            </div>
+            <div class="ibox-content">
+                <button class="btn btn-primary" type="button" id="btnloa">
+                    <span class="glyphicon glyphicon-plus"></span> Adicionar
+                </button>
+                <?php include APPRAIZ.'alteracao/modulos/principal/lista_loa.inc';?>
+            </div>
         </div>
     </div>
 </div>
