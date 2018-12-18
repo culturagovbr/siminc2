@@ -33,6 +33,9 @@
                 <button class="btn btn-primary btn-buscar" type="button" id="btnSalvarPedido">
                     <span class="glyphicon glyphicon-saved"></span> Salvar
                 </button>
+                <a href="?modulo=inicio&acao=C" class="btn btn-warning" id="btn-voltar" type="button">
+                    <i class="fa fa-arrow-left"></i> Voltar
+                </a>
             </div>
         </div>
 
@@ -47,6 +50,7 @@
                 swal('Atenção!', 'Favor Preencher os campos obrigatórios', 'warning');
             }
         });
+        
     });
 
     function salvarPedido(showAlert){

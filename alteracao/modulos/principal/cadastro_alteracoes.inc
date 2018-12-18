@@ -117,7 +117,8 @@ include APPRAIZ. "includes/cabecalho.inc";
         <div class="ibox-content">
             <div id="wizard">
                 <h1>PEDIDO</h1>
-                <div class="div_lista_indicadores">
+                
+                <div class="div_pedido">
                     <?php include_once APPRAIZ.'alteracao/modulos/principal/cadastro_pedido.inc'; ?>
                 </div>
 
