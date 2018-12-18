@@ -34,16 +34,19 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach($aMetapnc as $dados){ ?>
-                                <tr>
-                                    <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/metapnc_form&acao=A&mpnid=<?php echo $dados['mpnid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
-                                    </td>
-                                    <td><?php echo $dados['mpncod']; ?></td>
-                                    <td><?php echo $dados['mpnnome']; ?></td>
-                                    <td><?php echo $dados['mpndsc']; ?></td>
-                                </tr>
-                            <?php } ?>        
+                            <?php
+                                if($aMetapnc):
+                                    foreach($aMetapnc as $dados): ?>
+                                        <tr>
+                                            <td class="text-center">
+                                                <a title="Alterar" href="?modulo=apoio/metapnc_form&acao=A&mpnid=<?php echo $dados['mpnid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                            </td>
+                                            <td><?php echo $dados['mpncod']; ?></td>
+                                            <td><?php echo $dados['mpnnome']; ?></td>
+                                            <td><?php echo $dados['mpndsc']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>

@@ -3,7 +3,7 @@
     define('SIGLA_SISTEMA', 'SIMINC2-DESENVOLVIMENTO');
     define('DESCRICAO_SISTEMA', 'Sistema de Informa&ccedil;&otilde;es do Minist&eacute;rio da Cultura');
     define('NOME_SISTEMA', SIGLA_SISTEMA. ' - '. DESCRICAO_SISTEMA);
-    define('URL_SISTEMA', 'http://local.siminc2:8082/');
+    define('URL_SISTEMA', 'http://localhost:8082/');
     define('EMAIL_SISTEMA_NOREPLY', 'noreply@cultura.gov.br');
     define('IP_CLI_AUTORIZADO', '172.17.0.2');
 

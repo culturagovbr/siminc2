@@ -44,17 +44,21 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($aMetaPnc as $dados){ ?>
-                                    <tr>
-                                        <td><?php echo $dados['mpncod'] . ' - ' . $dados['mpnnome']; ?></td>
-                                        <td>
-                                            <?php
-                                            $vinculados = !empty($aVinculos[$dados['mpnid']]) ?  $aVinculos[$dados['mpnid']]: [];
-                                            echo $simec->select("vinculos[{$dados['mpnid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
+                                <?php
+                                    if($aMetaPnc):
+                                        foreach($aMetaPnc as $dados):
+                                ?>
+                                            <tr>
+                                                <td><?php echo $dados['mpncod'] . ' - ' . $dados['mpnnome']; ?></td>
+                                                <td>
+                                                    <?php
+                                                    $vinculados = !empty($aVinculos[$dados['mpnid']]) ?  $aVinculos[$dados['mpnid']]: [];
+                                                    echo $simec->select("vinculos[{$dados['mpnid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach;
+                                    endif; ?>
                                 </tbody>
                             </table>
                         </div>

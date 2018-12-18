@@ -20,20 +20,25 @@
 <script type="text/javascript">
     $(function(){
         
-        $('#btn-salvar-medida').click(function(){
-            options = {
-                success: function() {
-                    // Carregar a listagem
-                    jQuery("#div_listagem_medida").load('?modulo=apoio/classificacao_form&acao=A&req=listar-medida&claid='+$('#claid').val());
+        $('#btn-salvar-medida').click(function() {
 
-                    // Zerar o formulário
-                    jQuery("#div_formulario_medida").load('?modulo=apoio/classificacao_form&acao=A&req=formulario-medida&claid='+$('#claid').val());
-                }
+            // Valida a obrigatoriedade do campo.
+            if ($('#meddsc').val() !== null && $('#meddsc').val() !== '') {
+
+                options = {
+                    success: function () {
+                        // Carregar a listagem
+                        $("#div_listagem_medida").load('?modulo=apoio/classificacao_form&acao=A&req=listar-medida&claid=' + $('#claid').val());
+
+                        // Zerar o formulário
+                        $("#div_formulario_medida").load('?modulo=apoio/classificacao_form&acao=A&req=formulario-medida&claid=' + $('#claid').val());
+                    }
+                };
+
+                jQuery("#formulario-medida").ajaxForm(options).submit();
+                return false;
             }
-
-            jQuery("#formulario-medida").ajaxForm(options).submit();
-            return false;
         });
-        
+
     });
 </script>

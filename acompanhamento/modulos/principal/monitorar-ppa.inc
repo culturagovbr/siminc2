@@ -231,13 +231,15 @@
                         <div class="ibox-content">
 
                             <div class="form-group ">
-                                <label for="acoquantidade" class="col-sm-3 col-md-3 col-lg-3 control-label">Executado: <span class="campo-obrigatorio" title="Campo obrigatório">*</span></label>
+                                <label for="acoquantidade" class="col-sm-3 col-md-3 col-lg-3 control-label" title="Valor apurado para a meta considerando sua respectiva unidade de medida, cumulativo desde o início do PPA.">Quantidade Alcançada: <span class="campo-obrigatorio" title="Campo obrigatório">*</span></label>
                                 <div class="col-sm-3 col-md-3 col-lg-3 ">
                                     <?php $acoquantidade = is_numeric($mAcompanhamento->acoquantidade) ? number_format($mAcompanhamento->acoquantidade, 2, ',', '.') : null; ?>
                                     <?php if($podeEditar){ ?>
-                                        <input name="acoquantidade" id="acoquantidade" type="text" class="form-control  valor " value="<?php echo $acoquantidade; ?>" required="required">
+                                        <input name="acoquantidade" id="acoquantidade" type="text" class="form-control valor" value="<?php echo $acoquantidade; ?>" required="required" title="Valor apurado para a meta considerando sua respectiva unidade de medida, cumulativo desde o início do PPA.">
                                     <?php } else { ?>
-                                        <p class="form-control-static" id="acoquantidade"><?php echo $acoquantidade; ?></p>
+                                        <p class="form-control-static" id="acoquantidade" title="Valor apurado para a meta considerando sua respectiva unidade de medida, cumulativo desde o início do PPA.">
+                                            <?php echo $acoquantidade; ?>
+                                        </p>
                                     <?php } ?>
 
                                 </div>
@@ -257,8 +259,14 @@
                             </div>
 
                             <?php
-                                echo $simec->textarea('acoanalise', 'Análise Situacional', $mAcompanhamento->acoanalise, ['rows'=>6]);
-                                echo $simec->select('claid', 'Classificação', $mAcompanhamento->claid, (new Acompanhamento_Model_Classificacao())->recuperarSqlCombo(null, ['tipid = ' . Acompanhamento_Model_Tipo::K_TIPO_META_PPA]), ['required']);
+                                echo '<span title="Avaliação da execução da meta, quantificando, sempre que possível, o valor alcançado acumulado para o período do Plano, destacando-se, em especial, o executado no ano corrente e a projeção para o ano seguinte, o motivo da frustração ou da superação da expectativa, as necessidades existentes para que a meta seja atendida, e/ou outras informações pactuadas.">';
+                                echo $simec->textarea('acoanalise', 'Análise Situacional', $mAcompanhamento->acoanalise, ['title' => 'Avaliação da execução da meta, quantificando, sempre que possível, o valor alcançado acumulado para o período do Plano, destacando-se, em especial, o executado no ano corrente e a projeção para o ano seguinte, o motivo da frustração ou da superação da expectativa, as necessidades existentes para que a meta seja atendida, e/ou outras informações pactuadas.'
+                                                                                                                         ,'rows'=>6]);
+                                echo '</span>';
+                                
+                                echo '<span title="Classificação da meta quanto ao seu andamento.">';
+                                echo $simec->select('claid', 'Classificação da Meta', $mAcompanhamento->claid, (new Acompanhamento_Model_Classificacao())->recuperarSqlCombo(null, ['tipid = ' . Acompanhamento_Model_Tipo::K_TIPO_META_PPA]), ['title' => 'Classificação da meta quanto ao seu andamento.','required']);
+                                echo '</span>';
 
                                 $aMedidasSelecionadas = $mAcompanhamento->recuperarMedidas();
                                 echo '<span class="span-medida" id="span-medida" ' . (!count($aMedidasSelecionadas) ? 'style="display: none"' : '') . '>' . $simec->select('medidas[]', 'Medidas a serem adotadas', $aMedidasSelecionadas, (new Acompanhamento_Model_Medida())->recuperarSqlCombo(null, ['claid = ' . (int)$mAcompanhamento->claid])) . '</span>';
@@ -384,7 +392,6 @@
 
 <script>
     $(function(){
-
         $('#claid').change(function(){
             $.ajax({
                 url: '?modulo=principal/monitorar-ppa&acao=A&req=carregarMedida&claid=' + $(this).val(),

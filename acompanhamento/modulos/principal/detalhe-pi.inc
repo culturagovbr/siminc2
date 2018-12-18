@@ -1,10 +1,4 @@
-<?php
-    $mpnid = $_REQUEST['mpnid'];
-    $suoid = $_REQUEST['suoid'];
-    $mPi = new Pi_PlanoInterno();
-    $aPis = $mPi->recuperarPiPorMetaPncESubunidade($mpnid, $suoid);
-    if(count($aPis)):
-?>
+<?php if(count($listaPi)): ?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover bedidTables" >
             <thead>
@@ -21,45 +15,43 @@
             </thead>
             <tbody>
             <?php
-                $aTotal = [];
-                foreach($aPis as $dados){
-                    $aTotal['previsto'] += $dados['previsto'];
-                    $aTotal['autorizado'] += $dados['autorizado'];
-                    $aTotal['empenhado'] += $dados['empenhado'];
-                    $aTotal['liquidado'] += $dados['liquidado'];
-                    $aTotal['pago'] += $dados['pago'];
+                $totais = [];
+                foreach($listaPi as $pi){
+                    $totais['previsto'] += $pi['previsto'];
+                    $totais['autorizado'] += $pi['autorizado'];
+                    $totais['empenhado'] += $pi['empenhado'];
+                    $totais['liquidado'] += $pi['liquidado'];
+                    $totais['pago'] += $pi['pago'];
                 ?>
                 <tr>
                     <td>
-                        <a href="#" class="a_espelho btn btn-primary btn-sm glyphicon glyphicon-eye-open" data-pi="<?php echo $dados['pliid']; ?>"></a>
+                        <a href="#" class="a_espelho btn btn-primary btn-sm glyphicon glyphicon-eye-open" data-pi="<?php echo $pi['pliid']; ?>"></a>
                     </td>
-                    <td><?php echo $dados['plicod']; ?></td>
-                    <td><?php echo $dados['plititulo']; ?></td>
-                    <td class="text-right"><?php echo number_format($dados['previsto'], 2, ',', '.'); ?></td>
-                    <td class="text-right"><?php echo number_format($dados['autorizado'], 2, ',', '.'); ?></td>
-                    <td class="text-right"><?php echo number_format($dados['empenhado'], 2, ',', '.'); ?></td>
-                    <td class="text-right"><?php echo number_format($dados['liquidado'], 2, ',', '.'); ?></td>
-                    <td class="text-right"><?php echo number_format($dados['pago'], 2, ',', '.'); ?></td>
+                    <td><?php echo $pi['plicod']; ?></td>
+                    <td><?php echo $pi['plititulo']; ?></td>
+                    <td class="text-right"><?php echo number_format($pi['previsto'], 2, ',', '.'); ?></td>
+                    <td class="text-right"><?php echo number_format($pi['autorizado'], 2, ',', '.'); ?></td>
+                    <td class="text-right"><?php echo number_format($pi['empenhado'], 2, ',', '.'); ?></td>
+                    <td class="text-right"><?php echo number_format($pi['liquidado'], 2, ',', '.'); ?></td>
+                    <td class="text-right"><?php echo number_format($pi['pago'], 2, ',', '.'); ?></td>
                 </tr>
             <?php } ?>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="3">TOTAL</th>
-                    <th class="text-right"><?php echo number_format($aTotal['previsto'], 2, ',', '.'); ?></th>
-                    <th class="text-right"><?php echo number_format($aTotal['autorizado'], 2, ',', '.'); ?></th>
-                    <th class="text-right"><?php echo number_format($aTotal['empenhado'], 2, ',', '.'); ?></th>
-                    <th class="text-right"><?php echo number_format($aTotal['liquidado'], 2, ',', '.'); ?></th>
-                    <th class="text-right"><?php echo number_format($aTotal['pago'], 2, ',', '.'); ?></th>
+                    <th class="text-right"><?php echo number_format($totais['previsto'], 2, ',', '.'); ?></th>
+                    <th class="text-right"><?php echo number_format($totais['autorizado'], 2, ',', '.'); ?></th>
+                    <th class="text-right"><?php echo number_format($totais['empenhado'], 2, ',', '.'); ?></th>
+                    <th class="text-right"><?php echo number_format($totais['liquidado'], 2, ',', '.'); ?></th>
+                    <th class="text-right"><?php echo number_format($totais['pago'], 2, ',', '.'); ?></th>
                 </tr>
             </tfoot>
         </table>
     </div>
-<?php
-    else:
-        echo '<div class="alert alert-danger">Nenhum PI vinculado</div>';
-    endif;
-?>
+<?php else: ?>
+    <div class="alert alert-danger">Nenhum PI vinculado</div>
+<?php endif; ?>
 
 <script>
     $(function(){

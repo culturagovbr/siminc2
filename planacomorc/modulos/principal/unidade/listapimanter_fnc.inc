@@ -95,7 +95,7 @@
                             echo $simec->input('plicod', 'Código ou ID do PI', $filtropi['plicod'], ['maxlength' => 11]);
                             # Se o usuário tiver Sub-Unidades vinculadas ao seu perfil o sistema não mostra opção de selecionar UO.
                             if(!$listaSubUnidadeUsuario) {
-                                echo $simec->select('unicod', 'Unidade', current($listaUO), $sqlListaUO, array('multiple' => 'true'));
+                                echo $simec->select('unicod', 'Unidade', null, $sqlListaUO, array('multiple' => 'true'));
                             }
                             echo '<div id=div_ungcod >';
                             echo $simec->select('ungcod', 'SubUnidade', $filtropi['ungcod'], Public_Model_SubUnidadeOrcamentaria::queryCombo((object) array(

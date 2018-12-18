@@ -122,7 +122,7 @@ $sql = "SELECT
 		<td>
 	<?
 		$cabecalho = array( "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ações&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", "CPF", "Publicador", "Email", "Pasta Desenvolvimento", "Pasta Produção");
-		$db->monta_lista_simples($sql, $cabecalho, 100000, 1, 'N', '100%', 'N', false, false, false, true);
+		/*$db->monta_lista_simples($sql, $cabecalho, 100000, 1, 'N', '100%', 'N', false, false, false, true);*/
 		?></td>
 	</tr>
 </table>

@@ -45,17 +45,21 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($aEnquadramento as $dados){ ?>
-                                    <tr>
-                                        <td><?php echo $dados['eqddsc']; ?></td>
-                                        <td>
-                                            <?php
-                                            $vinculados = !empty($aVinculos[$dados['eqdid']]) ?  $aVinculos[$dados['eqdid']]: [];
-                                            echo $simec->select("vinculos[{$dados['eqdid']}][]", null, $vinculados, $aRp, null, ['input-size'=>12]);
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
+                                <?php
+                                    if($aEnquadramento):
+                                        foreach($aEnquadramento as $dados):
+                                    ?>
+                                            <tr>
+                                                <td><?php echo $dados['eqddsc']; ?></td>
+                                                <td>
+                                                    <?php
+                                                    $vinculados = !empty($aVinculos[$dados['eqdid']]) ?  $aVinculos[$dados['eqdid']]: [];
+                                                    echo $simec->select("vinculos[{$dados['eqdid']}][]", null, $vinculados, $aRp, null, ['input-size'=>12]);
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

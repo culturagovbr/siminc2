@@ -107,19 +107,20 @@ $_SESSION['sislayoutbootstrap'] = 'false';
                 </thead>
                 <tbody>
                 <?php
+                if($dados):
+                    foreach ($dados as $classes) {
+                        foreach ($classes as $metodo) {
 
-                foreach ($dados as $classes) {
-                    foreach ($classes as $metodo) {
+                            ?>
+                            <tr>
+                                <td><?php echo $metodo['classe']; ?></td>
+                                <td><?php echo $metodo['metodo']; ?></td>
+                                <td style="overflow: hidden;max-width: 500px;"><?php echo "<pre>" . $metodo['comentario'] . "</pre>"; ?></td>
+                            </tr>
 
-                        ?>
-                        <tr>
-                            <td><?php echo $metodo['classe']; ?></td>
-                            <td><?php echo $metodo['metodo']; ?></td>
-                            <td style="overflow: hidden;max-width: 500px;"><?php echo "<pre>" . $metodo['comentario'] . "</pre>"; ?></td>
-                        </tr>
-
+                        <?php } ?>
                     <?php } ?>
-                <?php } ?>
+                <?php endif; ?>
                 </tbody>
             </table>
 

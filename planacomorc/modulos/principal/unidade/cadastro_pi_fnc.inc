@@ -137,9 +137,14 @@ $perfis = pegaPerfilGeral();
 $sqlListaUO = Spo_Model_Unidade::queryCombo((object)array(
     'prsano::INTEGER = '. (int)$_SESSION['exercicio'],
     'suo.unofundo = TRUE'));
-
 $listaUO = $db->carregar($sqlListaUO);
-$uoFnc = current($listaUO);
+
+$listaUO = $listaUO ? $listaUO : [0];
+
+if($listaUO){
+    $uoFnc = current($listaUO);
+}
+
 $codigoUoFnc = $uoFnc['codigo'];
 
 // ******* Ao carregar a listagem de PTRES, sempre filtrar pela UO selecionada, independentemente do Perfil ; *****

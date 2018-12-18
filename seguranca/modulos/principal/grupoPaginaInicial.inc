@@ -33,7 +33,7 @@ echo '<br>';
 		<td class="subtitulodireita">Sistema</td>
 		<td><?
 		$sisid = $_REQUEST['sisid'];
-		$sql = "select distinct sisid as CODIGO,sisdsc as DESCRICAO from seguranca.sistema order by DESCRICAO ";
+		$sql = "select distinct sisid as CODIGO,sisdsc as DESCRICAO from seguranca.sistema where sisstatus = 'A' order by DESCRICAO ";
 	  	//Monta a combo
 	  	$db->monta_combo("sisid",$sql,'S',"Selecione o Sistema",'submete_sistema',''); ?></td>
 	</tr>

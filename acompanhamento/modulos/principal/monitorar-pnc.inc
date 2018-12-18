@@ -52,7 +52,7 @@
             include APPRAIZ. 'acompanhamento/modulos/principal/listar-anexos-pnc.inc';
         die;
         case 'detalhe-pi':
-            include APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi.inc';
+            include APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi-pnc.inc';
         die;
         case 'exibir-grafico':
             include APPRAIZ. 'acompanhamento/modulos/principal/modal-grafico-pnc.inc';

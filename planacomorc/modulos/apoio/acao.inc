@@ -37,19 +37,22 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach($aAcao as $dados){ ?>
-                                <tr>
-                                    <td class="text-center">
-                                        <a title="Alterar" href="?modulo=apoio/acao_form&acao=A&acaid=<?php echo $dados['acaid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
-                                    </td>
-                                    <td><?php echo $dados['prgcod']; ?></td>
-                                    <td><?php echo $dados['acacod']; ?></td>
-                                    <td><?php echo $dados['loccod']; ?></td>
-                                    <td><?php echo $dados['acaobjetivocod']? $dados['acaobjetivocod']: '-'; ?></td>
-                                    <td><?php echo $dados['unidade']; ?></td>
-                                    <td><?php echo $dados['acatitulo']; ?></td>
-                                </tr>
-                            <?php } ?>
+                            <?php
+                                if($aAcao):
+                                    foreach($aAcao as $dados): ?>
+                                        <tr>
+                                            <td class="text-center">
+                                                <a title="Alterar" href="?modulo=apoio/acao_form&acao=A&acaid=<?php echo $dados['acaid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                            </td>
+                                            <td><?php echo $dados['prgcod']; ?></td>
+                                            <td><?php echo $dados['acacod']; ?></td>
+                                            <td><?php echo $dados['loccod']; ?></td>
+                                            <td><?php echo $dados['acaobjetivocod']? $dados['acaobjetivocod']: '-'; ?></td>
+                                            <td><?php echo $dados['unidade']; ?></td>
+                                            <td><?php echo $dados['acatitulo']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>

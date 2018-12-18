@@ -13,7 +13,8 @@
             secordem
     ";
     $listaSecretarias = $db->carregar($sqlConsultaSecretarias);
-
+    $nuanoreferencia = $_REQUEST['nuanoreferencia']?$_REQUEST['nuanoreferencia']:date("Y");
+    $numesreferencia = $_REQUEST['numesreferencia']?$_REQUEST['numesreferencia']:date("m");
     # Filtro(s)
     $parametros = (object)$_REQUEST;
     # Monta SQL da consulta de indicadores
@@ -131,7 +132,7 @@
         -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
         box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
     }
-    #h2_secid, select {
+    .h2_hand, select {
         cursor: hand;
         cursor: pointer;
     }
@@ -142,12 +143,13 @@
         {
             display: none !important;
         }
-        #h2_secid {
+        #h2_secid, h2_nuanoreferencia {
             display: block;
         }
     }
 
 </style>
+
 <div class="alert alert-warning alert-dismissable aria-hidden noprint" align="center" style="font-size: 14px">
     Para uma melhor impressão dos dados utilize o navegador FireFox
 </div>
@@ -157,13 +159,66 @@
     </h1>
     
     <hr/>
-    
-    <h2 id="h2_secid" title="Clique aqui para escolher uma Secretaria">
-        <?=($secdsc? $secdsc: 'Todas Secretarias');?>
-    </h2>
-    <span class="span_secid noprint">
-        <?=$db->monta_combo('secid', $sqlConsultaSecretarias, 'S', 'Todas Secretarias', 'filtraSecretaria', '', '', '', 'S', '', '', $parametros->secid, '', '', 'noprint');?>
-    </span>
+    <div class="row">
+        <div class="col-lg-4">
+            <h2 id="h2_secid" class="h2_hand" title="Clique aqui para escolher uma Secretaria">
+                <?=($secdsc? $secdsc: 'Todas Secretarias');?>
+            </h2>
+            <span class="span_secid noprint">
+                <?=$db->monta_combo('secid', $sqlConsultaSecretarias, 'S', 'Todas Secretarias', 'filtraSecretaria', '', '', '', 'S', '', '', $parametros->secid, '', '', 'noprint');?>
+            </span>            
+        </div>
+        <div class="col-lg-4">
+            <h2 id="h2_nuanoreferencia" class="h2_hand" title="Clique aqui para escolher o ano">
+                <?=($nuanoreferencia);?>
+            </h2>
+            <span class="span_nuanoreferencia noprint">
+                <?php
+                    $anoInicial = date("Y")-7;
+                    $anoFinal = date("Y")+5;
+                    $j=0;
+                    for ($i=$anoInicial;$i<=$anoFinal;$i++){
+                        $listaAnos[$j]['codigo']=$i;
+                        $listaAnos[$j]['descricao']=$i;
+                        $j++;
+                    }
+                    $db->monta_combo('nuanoreferencia', $listaAnos, 'S', 'Selecione', 'filtraSecretaria', '', '', '200', 'S', 'nuanoreferencia','',$nuanoreferencia);
+                ?>
+            </span>                
+        </div>
+        <div class="col-lg-2">
+            <?php
+                $listaMeses = Array(
+                                    array('codigo' => 1, 'descricao'=>'Janeiro'),
+                                    array('codigo' => 2, 'descricao'=>'Fevereiro'),
+                                    array('codigo' => 3, 'descricao'=>'Março'),
+                                    array('codigo' => 4, 'descricao'=>'Abril'),
+                                    array('codigo' => 5, 'descricao'=>'Maio'),
+                                    array('codigo' => 6, 'descricao'=>'Junho'),
+                                    array('codigo' => 7, 'descricao'=>'Julho'),
+                                    array('codigo' => 8, 'descricao'=>'Agosto'),
+                                    array('codigo' => 9, 'descricao'=>'Setembro'),
+                                    array('codigo' => 10, 'descricao'=>'Outubro'),
+                                    array('codigo' => 11, 'descricao'=>'Novembro'),
+                                    array('codigo' => 12, 'descricao'=>'Dezembro')
+                                   );            
+            ?>
+            <h2 id="h2_numesreferencia" class="h2_hand" title="Clique aqui para escolher o mês">
+                <?php
+                foreach($listaMeses as $value){
+                    if ($value['codigo']==$numesreferencia){
+                        echo $value['descricao'];
+                    }
+                }
+                ?>
+            </h2>  
+            <span class="span_numesreferencia noprint">
+                <?php
+                    $db->monta_combo('numesreferencia', $listaMeses, 'S', 'Selecione', 'filtraSecretaria', '', '', '200', 'S', 'numesreferencia','',$numesreferencia);
+                ?>
+            </span>
+        </div>
+    </div>
 
     <a href="javascript:window.history.go(-1)" class="voltar" >  <i class="material-icons">arrow_back</i> </a>
     <?php if($parametros->secid): ?>
@@ -243,9 +298,10 @@
     <?php else: ?>
         <hr />
         <?php
-            foreach($listaSecretarias as $secretaria):
-            $sqlListaIndicadores = montarSqlRelIndicadoresSecretaria((object)array('secid' => $secretaria['codigo']));
-            $listaIndicadores = $db->carregar($sqlListaIndicadores);
+            if($listaSecretarias) :
+                foreach($listaSecretarias as $secretaria):
+                $sqlListaIndicadores = montarSqlRelIndicadoresSecretaria((object)array('secid' => $secretaria['codigo'], 'nuanoreferencia' => $nuanoreferencia, 'numesreferencia' => $numesreferencia));
+                $listaIndicadores = $db->carregar($sqlListaIndicadores);
         ?>
             <h2>
                 <?=$secretaria['descricao']?>
@@ -253,12 +309,13 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col" width="20%">Nome</th>
-                        <th scope="col" width="10%"style="text-align: center;">Produto</th>
-                        <th scope="col" width="5%"style="text-align: center;">Orçamento</th>
-                        <th scope="col" width="5%"style="text-align: center;">Previsto</th>
-                        <th scope="col" width="5%"style="text-align: center;">Realizado</th>
-                        <th scope="col" width="40%"style="text-align: left;">Observações</th>
+                        <!--<th >indid</th>-->
+                        <th >Nome</th>
+                        <th style="text-align: center;">Produto</th>
+                        <th style="text-align: center;">Orçamento</th>
+                        <th style="text-align: center;">Previsto</th>
+                        <th style="text-align: center;">Realizado</th>
+                        <th style="text-align: left;">Observações</th>
                     </tr>
                 </thead>
                 <?php if($listaIndicadores): ?>
@@ -277,26 +334,29 @@
                             }
                             ?>                        
                             <tr>
-                                <td>
+<!--                                <td style="width: 400px;">
+                                    <?=$indicadores['indid']; ?>
+                                </td>-->
+                                <td style="width: 400px;">
                                     <?=$indicadores['nome']; ?>
                                 </td>
-                                <td align="center">
+                                <td style="width: 400px;" align="center">
                                     <?= $indicadores['produto'] ? $indicadores['produto'] : '-' ;?>
                                 </td>
-                                <td align="center">
+                                <td style="width: 50px;" align="center">
                                     <?=number_format($indicadores['orcamento'], 0, ',', '.')?>
                                 </td>
-                                <td align="center">
+                                <td style="width: 50px;" align="center">
                                     <?=$indicadores['meta']; ?>
                                 </td>
-                                <td style='color: <?= $bgColor;?>' align="center">
+                                <td style='color: <?= $bgColor;?> width: 50px;' align="center">
                                     <?=$indicadores['realizado']; ?>
                                     <br/>
                                     <div class="progress" style="height: 6px;">
                                         <div class="progress-bar" role="progressbar" style="width: <?=$indicadores['realizado']; ?>%; background-color: <?= $bgColor;?>; aria-valuenow="<?=$indicadores['realizado']; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>                                    
                                 </td>
-                                <td>
+                                <td style="width: 400px;">
                                     <?php
                                     $class='';
                                     if ($indicadores['parecer_gestor_a']=='S'){
@@ -326,7 +386,8 @@
             </table>
             <!-- Quebra de pagina no documento impresso. -->
             <br style='page-break-before:always; page-break-inside: avoid;' />        
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
 
@@ -335,16 +396,28 @@
     jQuery(document).ready(function(){
         
         jQuery('.span_secid').hide();
+        jQuery('.span_nuanoreferencia').hide();
+        jQuery('.span_numesreferencia').hide();
         
         jQuery('#h2_secid').click(function(){
             jQuery(this).hide();
             jQuery('.span_secid').show();
+        });
+        jQuery('#h2_nuanoreferencia').click(function(){
+            jQuery(this).hide();
+            jQuery('.span_nuanoreferencia').show();
+        });
+        jQuery('#h2_numesreferencia').click(function(){
+            jQuery(this).hide();
+            jQuery('.span_numesreferencia').show();
         });
         
     });
     
     function filtraSecretaria(){
         var secid = jQuery('select[name=secid]').val();
-        window.location.href = '?modulo=relatorio/indicadores-secretaria&acao=A&secid='+ secid;
+        var nuanoreferencia = jQuery('select[name=nuanoreferencia]').val();
+        var numesreferencia = jQuery('select[name=numesreferencia]').val();
+        window.location.href = '?modulo=relatorio/indicadores-secretaria&acao=A&secid='+ secid+'&nuanoreferencia='+ nuanoreferencia+'&numesreferencia='+ numesreferencia;
     }
 </script>

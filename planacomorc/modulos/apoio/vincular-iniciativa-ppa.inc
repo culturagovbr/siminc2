@@ -45,17 +45,20 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($aIniciativaPpa as $dados){ ?>
-                                    <tr>
-                                        <td><?php echo $dados['ippcod'] . ' - ' . $dados['ippnome']; ?></td>
-                                        <td>
-                                            <?php
-                                            $vinculados = !empty($aVinculos[$dados['ippid']]) ?  $aVinculos[$dados['ippid']]: [];
-                                            echo $simec->select("vinculos[{$dados['ippid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
+                                <?php
+                                    if($aIniciativaPpa):
+                                        foreach($aIniciativaPpa as $dados): ?>
+                                            <tr>
+                                                <td><?php echo $dados['ippcod'] . ' - ' . $dados['ippnome']; ?></td>
+                                                <td>
+                                                    <?php
+                                                    $vinculados = !empty($aVinculos[$dados['ippid']]) ?  $aVinculos[$dados['ippid']]: [];
+                                                    echo $simec->select("vinculos[{$dados['ippid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

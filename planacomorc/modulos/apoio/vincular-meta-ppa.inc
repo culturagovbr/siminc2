@@ -45,17 +45,21 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($aMetaPpa as $dados){ ?>
-                                    <tr>
-                                        <td><?php echo $dados['mppcod'] . ' - ' . $dados['mppnome']; ?></td>
-                                        <td>
-                                            <?php
-                                            $vinculados = !empty($aVinculos[$dados['mppid']]) ?  $aVinculos[$dados['mppid']]: [];
-                                            echo $simec->select("vinculos[{$dados['mppid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
+                                <?php
+                                    if($aMetaPpa):
+                                        foreach($aMetaPpa as $dados):
+                                ?>
+                                            <tr>
+                                                <td><?php echo $dados['mppcod'] . ' - ' . $dados['mppnome']; ?></td>
+                                                <td>
+                                                    <?php
+                                                    $vinculados = !empty($aVinculos[$dados['mppid']]) ?  $aVinculos[$dados['mppid']]: [];
+                                                    echo $simec->select("vinculos[{$dados['mppid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach;
+                                    endif; ?>
                                 </tbody>
                             </table>
                         </div>
