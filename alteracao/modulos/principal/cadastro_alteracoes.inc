@@ -92,14 +92,13 @@ if ($_REQUEST['req']){
 }
 include APPRAIZ. "includes/cabecalho.inc";
 ?>
-
+<script src="js/principal/cadastro-alteracoes.js?v=1"></script>
 <style>
-.wizard > .steps > ul > li {
-    width: 210px;
-}
+    .wizard > .steps > ul > li {
+        width: 210px;
+    }
 </style>
 <input name="pedid" id="pedid" value="<?=$arrPedidos['pedid'];?>" type="hidden">
-<input name="tpdid" id="tpdid" value="<?=$_REQUEST['tpdid'];?>" type="hidden">
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-8">
         <h2><?= $titulo_modulo;?></h2>
@@ -127,10 +126,7 @@ include APPRAIZ. "includes/cabecalho.inc";
 
                 <h1>REMANEJAMENTO LOA</h1>
                 <div class="div_remanejamento_loa"></div>
-                
-<!--                <h1>NATUREZA DA RECEITA</h1>-->
-<!--                <div class="div_natureza_receita"></div>-->
-                
+
                 <h1>JUSTIFICATIVA</h1>
                 <div class="div_justificativa"></div>
                 
@@ -149,72 +145,7 @@ include APPRAIZ. "includes/cabecalho.inc";
 </div>
 
 <script>
-$(function(){
-        
-    var wizard = $("#wizard").steps({
-        transitionEffect: "slide",
-        startIndex: 0,
-        width: 50,
-        
-        //enableFinishButton: exibirBotaoEnviar(),
-        <?php
-        if (!$_REQUEST['pedid']){
-            echo 'enablePagination: false, enableAllSteps: false,';
-        }else{
-            echo 'enablePagination: true, enableAllSteps: true,';
-        }
-        ?>
-        labels: {
-            cancel: "Cancelar",
-            current: "Passo atual:",
-            pagination: "Paginação",
-            next: "Próximo",
-            previous: "Anterior",
-            finish: "Enviar",
-            loading: "Carregando ..."
-        },
-        onStepChanging: function(event, currentIndex, newIndex){
-            var permitirAvancarPasso = true;
-            switch(currentIndex) {
-                case 0:
-                    permitirAvancarPasso = verificaCampos();
-                    if (permitirAvancarPasso) {
-                        salvarPedido();
-                    }
-                    break;
-                case 4:
-                    salvarPedido();
-                    break;
-            }
-            return permitirAvancarPasso;
-        },
-        onFinished: function(event, currentIndex){
-            enviarAcompanhamento();
-        },
-        onStepChanged: function(event, currentIndex, priorIndex){
-            switch(currentIndex){
-                case 0:
-                    $(".div_lista_atividades").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_pedidos&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
-                    $(".divDadosCredito").hide('fast');
-                    break;
-                case 1:
-                    $(".div_selecionar_pi").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_seleciona_pis&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
-                    $(".divDadosCredito").show('fast');
-                    break;
-                case 2:
-                    $(".div_remanejamento_loa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_remanejamento_loa&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
-                    $(".divDadosCredito").show('fast');
-                    break;
-                case 3:
-                    $(".div_justificativa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_justificativa&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
-                    $(".divDadosCredito").show('fast');
-                    break;
-                case 4:
-                    $(".div_espelho").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_espelho&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
-                    $(".divDadosCredito").show('fast');
-                    break;
-            }
-        }
-    }); 
-});
+    $(function(){
+        initCadastroAlteracoes();
+    });
 </script>
