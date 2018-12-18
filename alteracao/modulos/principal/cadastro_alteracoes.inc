@@ -106,6 +106,7 @@ include APPRAIZ. "includes/cabecalho.inc";
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-8">
         <h2><?= $titulo_modulo;?></h2>
+        <h6><span style="color: #ff0000"> Os campos com * são de preenchimento obrigatório</span></h6>
     </div>
 </div>
 <div class="divDadosCredito row wrapper border-bottom white-bg page-heading" style="display: none;">
