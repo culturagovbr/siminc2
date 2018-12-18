@@ -12,7 +12,7 @@ if($_REQUEST['requisicaoAjax']){
     switch ($_REQUEST['requisicaoAjax']) {
         case "getComboPeriodoPorPerid":
             if(!$_REQUEST['perid'] && $_REQUEST['dpeid']){
-                    $perid = $db->pegaUm("select perid from painel.detalheperiodicidade where dpeid = {$_REQUEST['dpeid']}");
+                    $perid = $db->pegaUm("select perid from painel.detalheperiodicidade where dpeid = {$_REQUEST['dpeid']} and dpeanoref= '".$_SESSION['exercicio']."'");
             }else{
                     $perid = $_REQUEST['perid'];
             }

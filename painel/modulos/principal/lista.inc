@@ -632,7 +632,7 @@ $sql = "SELECT  '<center><a href=\"painel.php?modulo=principal/cadastro&acao=A&i
 					sh.indid
 				FROM painel.seriehistorica sh
 				WHERE sh.sehdtcoleta is not null and sh.sehstatus <> 'I' GROUP BY sh.indid) dt on dt.indid = i.indid
-	    ".(($filtroprocesso)?"WHERE ".implode(" AND ", $filtroprocesso):"")." 
+	    ".(($filtroprocesso)?"WHERE ".implode(" AND ", $filtroprocesso):"")."  AND i.indano = '".$_SESSION['exercicio']."'
             group by i.indid, col.coldsc, reg.regdescricao, dt1.tdidsc, dt2.tdidsc, s.secdsc, a.acadsc, unm.unmdesc, dt.dtcoleta
 	    ORDER BY (select s1.secordem from painel.secretaria s1 where s1.secid = i.secid and s1.secstatus = 'A')";
 $cabecalho = array("&nbsp;Ações&nbsp;&nbsp;&nbsp;&nbsp;", "Metas do Indicador", "Identificador do Indicador", "Nome", "Homologado", "Publicado", "Coleta", "Regionalização", "Detalhe", "Autarquia / Secretaria Executora" , "Ação", "Unidade de Medição", "Objetivo", "Última Atualização");
