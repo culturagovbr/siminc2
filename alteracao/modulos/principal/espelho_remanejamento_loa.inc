@@ -1,5 +1,5 @@
 <h2 style="color: #1AB394">3. Remanejamento Loa
-    <a href="javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'" tittle="Editar">
+    <a href="#" id="btnRemanejamentoLoa" tittle="Editar">
         <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
     </a>
 </h2>
@@ -61,3 +61,10 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
+    $("#btnRemanejamentoLoa").click(function(){
+        $("#wizard-t-2").click();
+    });
+});
+</script>

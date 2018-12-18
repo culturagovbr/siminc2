@@ -3,7 +3,8 @@
 ?>
 
 <h2 style="color: #1AB394">4. Justificativa
-    <a href="javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'" title="Editar">
+    <!--javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'-->
+    <a href="#" id="btnJustificativa" title="Editar">
         <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
     </a>
 </h2>
@@ -39,3 +40,10 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
+    $("#btnJustificativa").click(function(){
+        $("#wizard-t-3").click();
+    });
+});
+</script>

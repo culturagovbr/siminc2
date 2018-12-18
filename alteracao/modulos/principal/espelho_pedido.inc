@@ -1,5 +1,6 @@
 <h2 style="color: #1AB394">1. Dados do Pedido
-    <a href="javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'" title="Editar">
+    <!--javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'-->
+    <a href="#" id="btnPedido" title="Editar">
         <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
     </a>
 </h2>
@@ -29,3 +30,10 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
+    $("#btnPedido").click(function(){
+        $("#wizard-t-0").click();
+    });
+});
+</script>

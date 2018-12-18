@@ -1,5 +1,6 @@
 <h2 style="color: #1AB394">2. Plano Interno
-    <a href="javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'" title="Editar">
+    <!--javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'-->
+    <a href="#" id="btnPi" title="Editar">
         <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
     </a>
 </h2>
@@ -185,3 +186,10 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
+    $("#btnPi").click(function(){
+        $("#wizard-t-1").click();
+    });
+});
+</script>
