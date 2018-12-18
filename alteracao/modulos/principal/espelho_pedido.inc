@@ -12,7 +12,7 @@
                     $simec->setPodeEditar($podeEditar);
                     echo $simec->input('pedid', 'Nº Pedido', $arrPedidos['pedid'], null, ['input-size' => 9, 'label-size' => 2]);
                     echo $simec->input('tpaid', 'Tipo de Crédito', $arrPedidos['tpacod'].' - '.$arrPedidos['tpadsc'], null, ['input-size' => 9, 'label-size' => 2]);
-                    echo $simec->select('suoid[]', 'Unidade', $arrSuoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), $disabled, ['input-size' => 9, 'label-size' => 2]);
+                    echo $simec->select('suoid', 'Unidade', $arrSuoid, (new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('exercicio' => $_SESSION['exercicio'], 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), null, ['input-size' => 9, 'label-size' => 2]);
                     echo $simec->input('jannome', 'Janela', $arrPedidos['jannome'], null, ['input-size' => 9, 'label-size' => 2]);
                     echo $simec->input('pedtitulo', 'Título', $arrPedidos['pedtitulo'], null, ['input-size' => 9, 'label-size' => 2]);
                 ?>

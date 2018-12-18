@@ -5,11 +5,15 @@
 </h2>
 <div class="tabs-container tabs">
     <ul class="nav nav-tabs prodTabs">
-        <li class="active "><a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-tabela">Tabela</a></li>
-        <li class=" "><a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-grafico">Gráfico</a></li>
+        <li class="active " style="list-style-type: none;">
+            <a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-tabela-loa">Tabela</a>
+        </li>
+        <li class=" " style="list-style-type: none;">
+            <a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-grafico-loa">Gráfico</a>
+        </li>
     </ul>
     <div class="tab-content">
-        <div id="tab-tabela" class="tab-pane active">
+        <div id="tab-tabela-loa" class="tab-pane active">
             <table class="table table-striped table-bordered table-hover dataTables">
                 <thead>
                     <tr class="text-center">
@@ -52,7 +56,7 @@
             </table>
         </div>
 
-        <div id="tab-grafico" class="tab-pane">
+        <div id="tab-grafico-loa" class="tab-pane">
 
         </div>
     </div>

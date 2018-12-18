@@ -50,3 +50,26 @@
         </div>
     </div>
 </div>
+<!--<div class="wrapper wrapper-content animated fadeInRight row">
+    <div class="col-lg-12">
+        <div class="float-e-margins">
+            <div class="ibox-content">
+                <?php /*
+                    # Natureza de Despesa
+                    include_once APPRAIZ.'alteracao/modulos/principal/espelho_natureza_receita.inc';
+                */?>
+            </div>
+        </div>
+    </div>
+</div>-->
+<div class="wrapper wrapper-content animated fadeInRight row">
+    <div class="col-lg-12">
+        <div class="float-e-margins">
+            <div class="ibox-content">
+                <?php
+                    include_once APPRAIZ.'alteracao/modulos/principal/espelho_justificativa.inc';
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,15 +1,19 @@
 <h2 style="color: #1AB394">2. Plano Interno
-    <a href="javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'" tittle="Editar">
+    <a href="javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'" title="Editar">
         <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
     </a>
 </h2>
 <div class="tabs-container tabs">
     <ul class="nav nav-tabs prodTabs">
-        <li class="active "><a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-tabela">Tabela</a></li>
-        <li class=" "><a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-grafico">Gráfico</a></li>
+        <li class="active " style="list-style-type: none;">
+            <a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-tabela-pi">Tabela</a>
+        </li>
+        <li class=" " style="list-style-type: none;">
+            <a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-grafico-pi">Gráfico</a>
+        </li>
     </ul>
     <div class="tab-content">
-        <div id="tab-tabela" class="tab-pane active">
+        <div id="tab-tabela-pi" class="tab-pane active">
             <table class="table table-striped table-bordered table-hover dataTables">
                 <thead>
                     <tr class="text-center">
@@ -176,7 +180,7 @@
             </table>
         </div>
 
-        <div id="tab-grafico" class="tab-pane">
+        <div id="tab-grafico-pi" class="tab-pane">
 
         </div>
     </div>
