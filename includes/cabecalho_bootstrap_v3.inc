@@ -397,7 +397,7 @@ $paginic = $db->pegaUm($sql);
                     $(function(){
                         $('#chosen-exercicio').change(function(){
                             $('#exercicio').val($(this).val());
-                            document.getElementById('setperfil').submit();
+                            $('#setperfil').submit();
                         });
                     })
                 </script>
