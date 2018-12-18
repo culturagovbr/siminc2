@@ -58,6 +58,10 @@ switch ( $_SESSION['sisdiretorio'] ){
         require_once APPRAIZ. 'www/proporc/_funcoesgestaoploa.php';
         require_once APPRAIZ. 'www/proporc/_funcoes.php';
     break;
+    case 'alteracao':
+        include_once APPRAIZ. "www/alteracao/_constantes.php";
+        require_once APPRAIZ. 'www/alteracao/_funcoes.php';
+    break;
     case 'progfin':
         require_once APPRAIZ. 'www/progfin/_funcoessolicitacoesrecursos.php';
         break;
