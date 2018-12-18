@@ -230,10 +230,6 @@ class Alteracao_Model_Pedido extends Modelo
      */
     public static function listarPis(stdClass $filtros){
         $where = self::montarFiltro($filtros);
-        if (isset($filtros->pedid)){
-            $pedid = isset($filtros->pedid)?$filtros->pedid:0;
-            $where .= " and pdsuo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid)";
-        }
         $sql = "
             SELECT DISTINCT
                 pli.pliid::VARCHAR AS pliid,
@@ -290,7 +286,6 @@ class Alteracao_Model_Pedido extends Modelo
 	        LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
 		LEFT JOIN workflow.documento wd ON(pli.docid = wd.docid)
 		LEFT JOIN workflow.estadodocumento ed ON(wd.esdid = ed.esdid)
-		LEFT JOIN public.vw_subunidadeorcamentaria pdsuo ON(ptr.unicod = pdsuo.unocod)
 		LEFT JOIN emendas.beneficiario ben ON(ben.pliid = pli.pliid)
             WHERE
                 (pli.plistatus = 'A' OR (pli.plistatus = 'I' AND ed.esdid = ". (int)ESD_PI_CANCELADO. "))
@@ -299,6 +294,7 @@ class Alteracao_Model_Pedido extends Modelo
             ORDER BY
                 codigo_pi
         ";
+
         return $sql;
     }
     
@@ -337,7 +333,9 @@ class Alteracao_Model_Pedido extends Modelo
         # FNC
         $where .= $filtros->unofundo? "\n AND suo.unofundo = ". $filtros->unofundo: NULL;
         # Busca pelo ID do Beneficiário
-        $where .= $filtros->benid ? "\n AND ben.benid = " . $filtros->benid : NULL;
+        $where .= $filtros->benid ? "\n AND ben.benid = ". $filtros->benid: NULL;
+        # Busca pelas subunidades vinculadas ao código do Pedido
+        $where .= $filtros->subunidade_pedido? " AND suo.suoid IN(SELECT suoid FROM alteracao.pedido_unidade WHERE pedid = ". (int)$filtros->subunidade_pedido. ")": NULL;
 
         return $where;
     }

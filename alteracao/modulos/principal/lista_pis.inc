@@ -4,10 +4,11 @@
             <thead>
                 <tr class="text-center">
                     <th width="5%">Ações</th>
-                    <th width="5%">Id Planejamento</th>
+                    <th width="25%">Unidade</th>
+                    <th width="5%">Id</th>
                     <th width="5%">Funcional</th>
-                    <th width="5%">Número do PI</th>
-                    <th width="50%">Título</th>
+                    <th width="5%">Código</th>
+                    <th width="25%">Título</th>
                     <th width="15%">Custeio</th>
                     <th width="15%">Capital</th>
                 </tr>
@@ -18,6 +19,9 @@
                 <tr>
                     <td align="center">
                         <input type="checkbox" <?= $dados['pliselid']>0?'checked="true"':''; ?> class="check checkbox-success" id="chk<?=$dados['id'];?>" esdid="<?=$dados['esdid'];?>" pliselid="<?=$dados["pliselid"];?>" value="<?=$dados['id'];?>" name="chkPliid" />
+                    </td>
+                    <td align="left">
+                        <?= $dados['sub_unidade']; ?>
                     </td>
                     <td align="center">
                         <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$dados['id']?>"><?= $dados['id']; ?></a>
