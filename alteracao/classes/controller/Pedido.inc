@@ -90,5 +90,18 @@ class Alteracao_Controller_Pedido
             $mPedidoUnidade->commit();
         }
     }
+    public function alterarEstadoAlteracao($pedid)
+    {
+        $mPedido = new Alteracao_Model_Pedido($pedid);
+        ver($mPedido->docid,d);
+        if($this->retornaTpdid($mPedido->tpaid) == WF_TPDID_INTERNO)
+        {
+            wf_alterarEstado($mPedido->docid, ESD_ALTERACAO_INTERNO_EM_ANALISE, '', array());
 
+        }
+        else if ($this->retornaTpdid($mPedido->tpaid) == WF_TPDID_EXTERNO)
+        {
+            wf_alterarEstado($mPedido->docid, ESD_ALTERACAO_EXTERNO_EM_ANALISE, '', array());
+        }
+    }
 }
