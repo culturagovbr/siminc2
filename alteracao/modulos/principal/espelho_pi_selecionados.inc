@@ -36,12 +36,22 @@
                     $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
                     foreach($aDadosPiSelecionados as $piSelecionado): ?>
                         <tr>
-                            <td><?= $piSelecionado['funcional']; ?></td>
-                            <td><?= $piSelecionado['pliid']; ?></td>
                             <td>
-                                <?= $piSelecionado['plititulo']; ?><br>
-                                <b>Unidade:</b> <?= $piSelecionado['unonome']; ?><br>
-                                <b>Produto:</b> <?= $piSelecionado['pprnome']; ?>
+                                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$piSelecionado['pliid'];?>">
+                                    <?= $piSelecionado['funcional']; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$piSelecionado['pliid'];?>">
+                                    <?= $piSelecionado['pliid']; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$piSelecionado['pliid'];?>">
+                                    <?= $piSelecionado['plititulo']; ?><br>
+                                    <b>Unidade:</b> <?= $piSelecionado['unonome']; ?><br>
+                                    <b>Produto:</b> <?= $piSelecionado['pprnome']; ?>
+                                </a>
                             </td>
                             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">

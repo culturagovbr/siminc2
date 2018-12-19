@@ -1,6 +1,6 @@
 <?php
 
-    if ( $_REQUEST['req'] == 'espelho-pedido' ) {
+    if($_REQUEST['req'] == 'espelho-pedido'){
         include_once APPRAIZ.'alteracao/modulos/principal/popup-espelho-pedido.inc';
         die;
     }
