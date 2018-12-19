@@ -16,7 +16,7 @@
             <div class="ibox-content">
                 <div class="row">
                     <form id="form-justificativa" name="form-justificativa" method="post" class="form-horizontal">
-                        <input type="hidden" name="pedid" id="pedid" value="<?= $_REQUEST['pedid']; ?>">
+<!--                        <input type="hidden" name="pedid" id="pedid" value="<?= $_REQUEST['pedid']; ?>">-->
                         <input type="hidden" name="jstid" id="jstid" value="<?= $justificativa->jstid; ?>">
                         <div class="col-md-6">
                             <div class="ibox float-e-margins">

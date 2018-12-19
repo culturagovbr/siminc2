@@ -169,7 +169,7 @@ class Alteracao_Model_Pedido extends Modelo
                 FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
-                JOIN seguranca.usuario AS usr ON usr.usucpf = ped.usucpf
+                left JOIN seguranca.usuario AS usr ON usr.usucpf = ped.usucpf
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 WHERE

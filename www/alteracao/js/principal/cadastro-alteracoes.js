@@ -87,11 +87,26 @@ function exibirEspelhoPi(pliid){
 }
 
 function alterarEstadoAlteracao(){
-            $.post('?modulo=principal/cadastro_alteracoes&acao=C',
-            {
-                req: 'alterar_estado',
-                pedid: $("#pedid").val()
-            }, function () {
-                window.location.href='?modulo=inicio&acao=C';
-            });
+    $.post('?modulo=principal/cadastro_alteracoes&acao=C',
+    {
+        req: 'alterar_estado',
+        pedid: $("#pedid").val()
+    }, function (result) {
+        console.log(result);
+        result = JSON.parse(result);
+        if (result){
+            swal({
+                title: "",
+                text: "Registro salvo com sucesso!",
+                type: "success",
+                confirmButtonText: 'OK'
+            }, function(isConfirm){
+                if (isConfirm){
+                    window.location.href='?modulo=inicio&acao=C';
+                }
+            });            
+        }else{
+            swal('', 'Erro ao realizar operação!', 'warning');
+        }
+    });
 }
