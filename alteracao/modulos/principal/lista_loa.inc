@@ -27,7 +27,7 @@ $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table
                               </td>';
                 $linha .= '<td class="combo">';
                 $linha .= '<input type="hidden" id="unicod'.$loa['rlid'].'" name="unicod" value="'.$loa['unicod'].'">';
-                        $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid']);
+                        $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid'], $_SESSION['exercicio']);
                 $linha .= montaListaLoa('ptrid',$options, $loa['ptrid'], $loa['rlid'], 'SelecionaPtrid(this, '.$loa['rlid'].');');
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
@@ -73,14 +73,13 @@ echo $linha;
 
         $('#btnloa').click(function () {
             $('#btnloa').attr('disabled', 'true');
-            // recuperaFuncionalSelecionada
             var tr = '<tr class="text-center">' +
                 '        <th width="5% ">' +
                                  '<a href="#" class="btnRemoverLoa" id="btnRemoverLoa" rlid=""><i style="font-weight: 20px" class="fa fa-close"></i></a>&nbsp;&nbsp;&nbsp;\n' +
                                  '<a href="#" class="btnSalvarLoa" id="btnSalvarLoa" rlid=""><i class="fa fa-check"></i></a>' +
                          '</th>' +
                 '        <th class="combo"> <input type="hidden" id="unicod" name="unicod">\n\
-                             <?php $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid']);
+                             <?php $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid'], $_SESSION['exercicio']);
                                 echo montaListaLoa('ptrid',$options, null, '', 'SelecionaPtrid(this, );');
                              ?> '+
                          '</th>' +
@@ -324,15 +323,7 @@ echo $linha;
         var gndcod = $("#gndcod"+rlid).val();
         var mapcod = $("#mapcod"+rlid).val();
         var categoria = $("#ctecod"+rlid).val();
-        console.log("funcional: "+funcional);
-        console.log("unicod: "+unicod);
-        console.log("prgcod: "+prgcod);
-        console.log("acacod: "+acacod);
-        console.log("loccod: "+loccod);
-        console.log("plocod: "+plocod);
-        console.log("mapcod: "+mapcod);
-        console.log("gndcod: "+gndcod);
-        console.log("categoria: "+categoria);
+
         if (unicod && prgcod && acacod && loccod && plocod && mapcod && gndcod && categoria){
             var natureza = categoria.concat(gndcod,mapcod);
             $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=seleciona_dotacao',
