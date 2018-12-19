@@ -204,11 +204,6 @@ class Alteracao_Model_Pedido extends Modelo
                        pis.vldotacaocusteio,
                        pis.vldotacaocapital,
                        pis.vldotacaofisico,
-                       --coalesce(pis.plisuplementarquantidade,0) as plisuplementarquantidade,
-                       --coalesce(pis.plicancelarquantidade,0) as plicancelarquantidade,
-                       --coalesce(pis.plisuplementarexcessoquantidade,0) as plisuplementarexcessoquantidade,
-                       --coalesce(pis.plisuplementarsuperavitquantidade,0) as plisuplementarsuperavitquantidade,
-                       --coalesce(pis.plisuplementarsuperavitquantidade,0)+coalesce(pis.plisuplementarexcessoquantidade,0)+coalesce(pis.plisuplementarquantidade,0)-coalesce(pis.plicancelarquantidade,0) as vlrprovavel,
                        coalesce((SELECT sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhado
 		                   FROM spo.siopexecucao se
 		                  where se.plicod = pli.plicod
@@ -374,10 +369,10 @@ class Alteracao_Model_Pedido extends Modelo
     
     public function atualizaValoresPI($pliid, $picvalorcusteio, $picvalorcapital, $picquantidade){
         $sql = "UPDATE planacomorc.pi_complemento 
-                   SET picvalorcusteio = '".$picvalorcusteio."',
-                       picvalorcapital = '".$picvalorcapital."',
-                       picquantidade = '".$picquantidade."
-                 WHERE pliid = ".$pliid;
+                   SET picvalorcusteio = ".(int)$picvalorcusteio.",
+                       picvalorcapital = ".(int)$picvalorcapital.",
+                       picquantidade = ".(int)$picquantidade."
+                 WHERE pliid = ".(int)$pliid;
         $this->executar($sql);
     }
 }

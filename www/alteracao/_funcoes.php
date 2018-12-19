@@ -244,11 +244,13 @@ function montaListaLoa($name, $option, $default = NULL, $rlid = '', $funcaoJS = 
     return $select;
 }
 
-function AtualizaValoresPi($pedid){
+function AtualizaValoresPi($pedid)
+{
     $mPedido = new Alteracao_Model_Pedido();
     $listaPisSelecionados = $mPedido->listaPisSelecionados($pedid);
+
     foreach ($listaPisSelecionados as $pis) {
-        $mPedido->atualizaValoresPI($pis->pliid, $pis->vldotacaocusteio, $pis->vldotacaocapital, $pis->vldotacaofisico);
+        $mPedido->atualizaValoresPI($pis['pliid'], $pis['vldotacaocusteio'], $pis['vldotacaocapital'], $pis['vldotacaofisico']);
     }
     return true;
 }
