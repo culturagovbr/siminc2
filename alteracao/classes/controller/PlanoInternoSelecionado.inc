@@ -35,12 +35,16 @@ class Alteracao_Controller_PlanoInternoSelecionado
     public function salvarCampo($dados)
     {
         try {
+            include_once APPRAIZ . "planacomorc/classes/Pi_Complemento.class.inc";
+
             $mPedido = new Alteracao_Model_PlanoInternoSelecionado($dados['pliselid']);
+            $mPiComplemento = new Pi_Complemento($mPedido->pliid);
+
             $mPedido->popularDadosObjeto($dados);
             $mPedido->{$dados['campo']} = $dados['valor'];
-            $mPedido->vldotacaocusteio = $mPedido->vlsuplementarcusteio+$mPedido->vlsuplementarexcessocusteio+$mPedido->vlsuplementarsuperavitcusteio-$mPedido->vlcancelarcusteio;
-            $mPedido->vldotacaocapital = $mPedido->vlsuplementarcapital+$mPedido->vlsuplementarexcessocapital+$mPedido->vlsuplementarsuperavitcapital-$mPedido->vlcancelarcapital;
-            $mPedido->vldotacaofisico = $mPedido->vlsuplementarfisico+$mPedido->vlsuplementarexcessofisico+$mPedido->vlsuplementarsuperavitfisico-$mPedido->vlcancelarfisico;
+            $mPedido->vldotacaocusteio = $mPiComplemento->picvalorcusteio + ($mPedido->vlsuplementarcusteio + $mPedido->vlsuplementarexcessocusteio + $mPedido->vlsuplementarsuperavitcusteio - $mPedido->vlcancelarcusteio);
+            $mPedido->vldotacaocapital = $mPiComplemento->picvalorcapital + ($mPedido->vlsuplementarcapital + $mPedido->vlsuplementarexcessocapital + $mPedido->vlsuplementarsuperavitcapital - $mPedido->vlcancelarcapital);
+            $mPedido->vldotacaofisico = $mPiComplemento->picquantidade + ($mPedido->vlsuplementarfisico+$mPedido->vlsuplementarexcessofisico + $mPedido->vlsuplementarsuperavitfisico - $mPedido->vlcancelarfisico);
             $mPedido->salvar(null, null, ['vlsaldoempenhocusteio','vlsaldoempenhocapital','vlsuplementarcusteio','vlsuplementarcapital','vlcancelarcusteio','vlcancelarcapital','vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vldotacaocusteio','vldotacaocapital']);
             $mPedido->commit();
             echo json_encode(true);

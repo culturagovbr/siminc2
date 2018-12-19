@@ -148,13 +148,13 @@
                     <tr>
                         <td style="border: none;">
                             <input type="hidden" size="10" class="input_valor" name="vldotacaocusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocusteio<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocusteio'];?>">
-                            <?=$dados['vldotacaocusteio']?$dados['vldotacaocusteio']:'0';?>
+                            <?= $dados['vldotacaocusteio'] ? number_format($dados['vldotacaocusteio'], 0, ',', '.') : '0';?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <input type="hidden" size="10" class="input_valor" name="vldotacaocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocapital<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocapital'];?>">
-                            <?=$dados['vldotacaocapital']?$dados['vldotacaocapital']:'0';?>
+                            <?= $dados['vldotacaocapital'] ? number_format($dados['vldotacaocapital'], 0, ',', '.') : '0';?>
                         </td>
                     </tr>
                     <tr>
@@ -203,71 +203,69 @@
     });
 
     function salvarCampo(nomeCampo, pliselid, valor, tipo){
-        if (valor!=''){
-            var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
-            var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
-            
-            if (parseInt(vlrCancelado)>parseInt(vlrPic)){
-                swal({
-                    title: "",
-                    text: "Valor de "+tipo+" maior que o do "+tipo+" PI",
-                    type: "warning",
-                    confirmButtonText: 'Ok',
-                    closeOnConfirm: true
-                },
-                function(isConfirm){
-                    if(isConfirm){
-                        var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-                        $('#listaPisSelecionados').load(url);
-                    }
-               });
-            }else{
-                var vlrCampo=0;
-                var vlrcancelado=0;
-                var vlrsuplementar=0;
-                $('.input_valor').each(function(){
-                    vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
-                    if ($(this).attr('name')=='vlsuplementarcusteio' || $(this).attr('name')=='vlsuplementarcapital' || 
-                        $(this).attr('name')=='vlsuplementarsuperavitcusteio' || $(this).attr('name')=='vlsuplementarsuperavitcapital' ||
-                        $(this).attr('name')=='vlsuplementarexcessocusteio' || $(this).attr('name')=='vlsuplementarexcessocapital'){
-                        vlrsuplementar = parseFloat(vlrsuplementar)+parseFloat(vlrCampo);
-                    }else if ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital'){
-                        vlrcancelado = parseFloat(vlrcancelado)+parseFloat(vlrCampo);
-                    }
-                });
-                vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
-                if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
-                    $("#divAlertaContent").html("Valor cancelado divergente do suplementado!");
-                    $("#divAlerta").show();
-                    setTimeout(function(){$("#divAlerta").hide("fade");}, 5000);
-                    $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
-                        {
-                            pliselid: pliselid,
-                            campo: nomeCampo,
-                            valor: vlrCampo
-                        },
-                        function(retorno){
-                            if (retorno){
-                                var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-                                $('#listaPisSelecionados').load(url);
-                            }
-                        }
-                    );
-                }else{
-                    $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+        var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
+        var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
+
+        if (parseInt(vlrCancelado)>parseInt(vlrPic)){
+            swal({
+                title: "",
+                text: "Valor de "+tipo+" maior que o do "+tipo+" PI",
+                type: "warning",
+                confirmButtonText: 'Ok',
+                closeOnConfirm: true
+            },
+            function(isConfirm){
+                if(isConfirm){
+                    var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                    $('#listaPisSelecionados').load(url);
+                }
+           });
+        }else{
+            var vlrCampo=0;
+            var vlrcancelado=0;
+            var vlrsuplementar=0;
+            $('.input_valor').each(function(){
+                vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
+                if ($(this).attr('name')=='vlsuplementarcusteio' || $(this).attr('name')=='vlsuplementarcapital' ||
+                    $(this).attr('name')=='vlsuplementarsuperavitcusteio' || $(this).attr('name')=='vlsuplementarsuperavitcapital' ||
+                    $(this).attr('name')=='vlsuplementarexcessocusteio' || $(this).attr('name')=='vlsuplementarexcessocapital'){
+                    vlrsuplementar = parseFloat(vlrsuplementar)+parseFloat(vlrCampo);
+                }else if ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital'){
+                    vlrcancelado = parseFloat(vlrcancelado)+parseFloat(vlrCampo);
+                }
+            });
+            vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
+            if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
+                $("#divAlertaContent").html("Valor cancelado divergente do suplementado!");
+                $("#divAlerta").show();
+                setTimeout(function(){$("#divAlerta").hide("fade");}, 5000);
+                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
                     {
                         pliselid: pliselid,
                         campo: nomeCampo,
                         valor: vlrCampo
                     },
-                        function(retorno){
-                            if (retorno){
-                                var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-                                $('#listaPisSelecionados').load(url);
-                            }
+                    function(retorno){
+                        if (retorno){
+                            var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                            $('#listaPisSelecionados').load(url);
                         }
-                    );                
-                }
+                    }
+                );
+            }else{
+                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+                {
+                    pliselid: pliselid,
+                    campo: nomeCampo,
+                    valor: vlrCampo
+                },
+                    function(retorno){
+                        if (retorno){
+                            var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                            $('#listaPisSelecionados').load(url);
+                        }
+                    }
+                );
             }
         }
     }

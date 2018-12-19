@@ -74,7 +74,7 @@ Final da modal de listar pis disponíveis
             }
         );
     }
-    
+
     function removePiPedido(pedid, pliselid){
         $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=remove_pi_pedido',
         {
