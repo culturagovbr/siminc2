@@ -2,7 +2,6 @@
     $acpid = $_REQUEST['acpid'];
     $acompanhamentopnc = new Acompanhamento_Model_Acompanhamentopnc($acpid);
     $listaDeAnexos = $acompanhamentopnc->buscarAnexos();
-
 ?>
 
 <div class="row">
