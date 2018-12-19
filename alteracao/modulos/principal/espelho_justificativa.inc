@@ -3,10 +3,11 @@
 ?>
 
 <h2 style="color: #1AB394">4. Justificativa
-    <!--javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'-->
-    <a href="#" id="btnJustificativa" title="Editar">
-        <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
-    </a>
+    <?php if ($podeEditarAlteracao === TRUE): ?>
+        <a href="#" id="btnJustificativa" title="Editar">
+            <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
+        </a>
+    <?php endif; ?>
 </h2>
 <div class="tabs-container tabs">
     <div class="tab-content">

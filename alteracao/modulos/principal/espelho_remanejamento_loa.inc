@@ -1,7 +1,9 @@
 <h2 style="color: #1AB394">3. Remanejamento Loa
-    <a href="#" id="btnRemanejamentoLoa" tittle="Editar">
-        <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
-    </a>
+    <?php if ($podeEditarAlteracao === TRUE): ?>
+        <a href="#" id="btnRemanejamentoLoa" title="Editar">
+            <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
+        </a>
+    <?php endif; ?>
 </h2>
 <div class="tabs-container tabs">
     <ul class="nav nav-tabs prodTabs">

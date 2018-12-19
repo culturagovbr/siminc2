@@ -1,8 +1,14 @@
+<?php
+    $mAlteracaoPedido = new Alteracao_Model_Pedido($_REQUEST['pedid']);
+    $arrPedidos = $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);
+?>
+
 <h2 style="color: #1AB394">1. Dados do Pedido
-    <!--javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'-->
-    <a href="#" id="btnPedido" title="Editar">
-        <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
-    </a>
+    <?php if ($podeEditarAlteracao === TRUE): ?>
+        <a href="#" id="btnPedido" title="Editar">
+            <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
+        </a>
+    <?php endif; ?>
 </h2>
 <div class="ibox-content">
     <div class="row">

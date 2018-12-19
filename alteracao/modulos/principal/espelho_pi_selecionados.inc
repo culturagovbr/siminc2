@@ -1,8 +1,9 @@
 <h2 style="color: #1AB394">2. Plano Interno
-    <!--javascript:window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$_REQUEST['pedid']?>&tpdid=<?=$_REQUEST['tpdid']?>'-->
-    <a href="#" id="btnPi" title="Editar">
-        <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
-    </a>
+    <?php if ($podeEditarAlteracao === TRUE): ?>
+        <a href="#" id="btnPi" title="Editar">
+            <span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span>
+        </a>
+    <?php endif; ?>
 </h2>
 <div class="tabs-container tabs">
     <ul class="nav nav-tabs prodTabs">
