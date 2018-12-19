@@ -30,6 +30,7 @@ if ($_REQUEST['req']){
             $filtropi['usucpf'] = $_SESSION['usucpf'];
             $filtropi['unofundo'] = 'FALSE';
             $filtropi['esdid'] = array(ESD_PI_APROVADO);
+            $filtropi['pedid'] = $_REQUEST['pedid']? $_REQUEST['pedid']: 0;
             $filtropi['subunidade_pedido'] = $_REQUEST['pedid']? $_REQUEST['pedid']: 0;
 
             $sql = $mAlteracaoPedido->listarPis((object) $filtropi);
