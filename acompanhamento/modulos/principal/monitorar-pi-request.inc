@@ -19,6 +19,8 @@
             echo json_encode($retorno);
         die;
         case 'uploadAnexoAcompanhamento':
+            $_FILES['file']['name'] = utf8_decode($_FILES['file']['name']);
+            $_REQUEST['arqdescricao'] = utf8_decode($_REQUEST['arqdescricao']);
             $file = new FilesSimec();
             $file->setEsquema('acompanhamento');
             if($file->setUpload($_REQUEST['arqdescricao'], '', false)){
