@@ -38,7 +38,7 @@ function initCadastroAlteracoes() {
             return permitirAvancarPasso;
         },
         onFinished: function(event, currentIndex){
-            enviarAcompanhamento();
+            alterarEstadoAlteracao();
         },
         onStepChanged: function(event, currentIndex, priorIndex){
             switch(currentIndex){
@@ -84,4 +84,14 @@ function exibirEspelhoPi(pliid){
         '?modulo=principal/cadastro_alteracoes&acao=C&req=espelho-pi&pliid='+ pliid,
         'popup_espelho_pi',
         'width=780,height=1000,status=1,menubar=1,toolbar=0,scrollbars=1,resizable=1');
+}
+
+function alterarEstadoAlteracao(){
+            $.post('?modulo=principal/cadastro_alteracoes&acao=C',
+            {
+                req: 'alterar_estado',
+                pedid: $("#pedid").val()
+            }, function () {
+                window.location.href='?modulo=inicio&acao=C';
+            });
 }

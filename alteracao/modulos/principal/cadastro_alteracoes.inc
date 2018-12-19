@@ -91,6 +91,10 @@ if ($_REQUEST['req']){
         case 'espelho-pi':
             include APPRAIZ. 'planacomorc/modulos/principal/unidade/espelho-pi.inc';
             die;
+        case 'alterar_estado':
+            $cPedido = new Alteracao_Controller_Pedido();
+            $cPedido->alterarEstadoAlteracao($_REQUEST['pedid']);
+            die;
         default:
             break;
     }
