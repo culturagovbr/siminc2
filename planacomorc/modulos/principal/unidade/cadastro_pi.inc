@@ -1372,7 +1372,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         </div>
                                         <div class="ibox-content">
                                             <div id="div-principal">
-                                                <?php include_once APPRAIZ.'alteracao/modulos/principal/lista_incio.inc'; ?>
+                                                <?php
+                                                    $filtroalteracao = ['pliid' => $dadosPI['pliid']];
+                                                    include_once APPRAIZ.'alteracao/modulos/principal/lista_incio.inc';
+                                                ?>
                                             </div>
                                         </div>
                                     </div>

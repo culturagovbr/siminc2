@@ -22,8 +22,8 @@ $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table
             foreach($loas as $loa){
                 $linha .= '<tr class="text-center">
                               <td width="5% ">
-                                  <a href="#" class="btnRemoverLoa" id="btnRemoverLoa" rlid="'.$loa['rlid'].'"><i style="font-weight: 20px" class="fa fa-close"></i></a>&nbsp;&nbsp;&nbsp;
-                                  <a href="#" class="btnSalvarLoa" id="btnSalvarLoa" rlid="'.$loa['rlid'].'"><i class="fa fa-check"></i></a>
+                                  <a href="#" class="btnRemoverLoa" id="btnRemoverLoa" title="Excluir registro" rlid="'.$loa['rlid'].'"><i style="font-weight: 20px" class="fa fa-close"></i></a>&nbsp;&nbsp;&nbsp;
+                                  <a href="#" class="btnSalvarLoa" id="btnSalvarLoa" title="Salvar registro" rlid="'.$loa['rlid'].'"><i class="fa fa-check"></i></a>
                               </td>';
                 $linha .= '<td class="combo">';
                 $linha .= '<input type="hidden" id="unicod'.$loa['rlid'].'" name="unicod" value="'.$loa['unicod'].'">';

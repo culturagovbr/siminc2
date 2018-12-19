@@ -89,6 +89,7 @@ class Alteracao_Model_Pedido extends Modelo
                 FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
+                LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 left join alteracao.pedido_unidade pu on ped.pedid = pu.pedid
@@ -97,6 +98,9 @@ class Alteracao_Model_Pedido extends Modelo
                     AND doc.tpdid IS NOT NULL
         ";
 
+        if ($filtroprop['pliid']){
+            $sql .= " and pis.pliid = ".$filtroprop['pliid'];
+        }
         if ($filtroprop['tpdid']){
             $sql .= " and doc.tpdid = ".$filtroprop['tpdid'];
         }
@@ -125,7 +129,7 @@ class Alteracao_Model_Pedido extends Modelo
 //        ver($sql, d);
         return $this->carregar($sql);
     }
-    
+
     function pegarDocidPedido($pedid, $tipoFluxo){
         global $db;
         $sql = "select docid from alteracao.pedido where pedid = {$pedid}";
