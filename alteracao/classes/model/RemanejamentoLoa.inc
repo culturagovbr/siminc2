@@ -81,33 +81,40 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     );
 
     /**
-     * Busca array de funcionais selecionadas.
+     * Busca array de funcionais selecionadas das Subunidades vinculadas ao pedido de alteração.
      *
-     * @param $pedid
-     * @return array|string
+     * @param int $pedid
+     * @param int $exercicio Ano
+     * @return array|string Lista com Funcionais
      * @since 28-11-2018
      */
-    public function recuperaFuncionalSelecionada($pedid)
+    public function recuperaFuncionalSelecionada($pedid, $exercicio)
     {
-        $sql = "select distinct 
-                    ptr.ptrid AS codigo,
-                    TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (
-                        CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN
-                            '-'
-                        ELSE
-                            COALESCE(aca.acaobjetivocod, '-')
-                        END) || '.' || (
-                        CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN
-                            '-'
-                        ELSE
-                            COALESCE(ptr.plocod, '-')
-                        END) AS descricao
-                    from public.vw_subunidadeorcamentaria vs 
-                   inner join alteracao.pedido_unidade pu on vs.suoid = pu.suoid and pu.pedid = {$pedid}  and vs.suostatus = 'A' and vs.prsano = '{$_SESSION['exercicio']}'
-                   inner JOIN monitora.ptres ptr ON (vs.unocod = ptr.unicod AND vs.prsano = ptr.ptrano and ptr.ptrstatus = 'A')
-                   inner JOIN monitora.acao aca ON ptr.acaid = aca.acaid
-                   order by 2
-         ";
+        $sql = "
+            SELECT
+                ptr.ptrid AS codigo,
+                ptr.funcional AS descricao
+            FROM public.vw_subunidadeorcamentaria suo
+                JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
+                JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = psu.ptrid
+                    AND ptr.ptrano = suo.prsano
+		)
+                JOIN alteracao.pedido_unidade pu ON(
+                    suo.suoid = pu.suoid
+                )
+            WHERE
+                suo.prsano = '". (int)$exercicio. "'
+		AND suo.unofundo = FALSE
+		AND suo.suostatus = 'A'
+		AND pu.pedid = ". (int)$pedid. "
+            GROUP BY
+                ptr.ptrid,
+                ptr.funcional
+            ORDER BY
+                ptr.funcional,
+                ptr.ptrid
+        ";
 
         return $this->carregar($sql);
     }
@@ -251,29 +258,35 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
     
     public function recuperarTodosPorPedido($pedid)
     {
-        $sql = "select distinct rl.rlid,
-                       rl.ptrid,
-                       rl.ctecod,
-                       rl.gndcod,
-                       rl.mapcod,
-                       rl.fonid,
-                       rl.idoid,
-                       rl.idoid,
-                       rl.iduid,
-                       rl.rpcod,
-                       rl.vldotacao,
-                       rl.vlsuplementar,
-                       rl.vlcancelado,
-                       rl.vlsuplementarexcesso,
-                       rl.vlsuplementarsuperavit,
-                       ptr.unicod,
-                       TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
-                  from alteracao.remanejamento_loa rl
-                  LEFT JOIN monitora.ptres ptr on rl.ptrid = ptr.ptrid
-                  LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
-                  left join public.vw_subunidadeorcamentaria vs on ptr.unicod = vs.unocod
-                 where vs.suoid in (select suoid from alteracao.pedido_unidade where pedid = {$pedid})
-                   and pedid = {$pedid} order by 1";
+        $sql = "
+            SELECT DISTINCT
+                rl.rlid,
+                rl.ptrid,
+                rl.ctecod,
+                rl.gndcod,
+                rl.mapcod,
+                rl.fonid,
+                rl.idoid,
+                rl.idoid,
+                rl.iduid,
+                rl.rpcod,
+                rl.vldotacao,
+                rl.vlsuplementar,
+                rl.vlcancelado,
+                rl.vlsuplementarexcesso,
+                rl.vlsuplementarsuperavit,
+                ptr.unicod,
+                TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
+            FROM alteracao.remanejamento_loa rl
+                LEFT JOIN monitora.ptres ptr on rl.ptrid = ptr.ptrid
+                LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
+                left join public.vw_subunidadeorcamentaria vs on ptr.unicod = vs.unocod
+            WHERE
+                vs.suoid IN(SELECT suoid FROM alteracao.pedido_unidade WHERE pedid = ". (int)$pedid. ")
+                AND pedid = ". (int)$pedid. "
+            ORDER BY
+                1
+        ";
         return $this->carregar($sql);
     }
     

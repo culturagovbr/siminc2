@@ -94,8 +94,12 @@ class Alteracao_Model_Pedido extends Modelo
                 left join alteracao.pedido_unidade pu on ped.pedid = pu.pedid
                 WHERE
                     ped.pedstatus = 'A'
-                    AND doc.tpdid = ".$filtroprop['tpdid'];
+                    AND doc.tpdid IS NOT NULL
+        ";
 
+        if ($filtroprop['tpdid']){
+            $sql .= " and doc.tpdid = ".$filtroprop['tpdid'];
+        }
         if ($filtroprop['pedid']){
             $sql .= " and ped.pedid = ".$filtroprop['pedid'];
         }
@@ -141,7 +145,8 @@ class Alteracao_Model_Pedido extends Modelo
         $this->executar($sql);
     }
 
-    public function recuperarPedidoPorId($pedid){
+    public function recuperarPedidoPorId($pedid)
+    {
         $sql = "SELECT
                     ped.pedid,
                     ped.pedtitulo,

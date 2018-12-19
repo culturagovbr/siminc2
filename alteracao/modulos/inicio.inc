@@ -1,5 +1,10 @@
 <?php
 
+    if ( $_REQUEST['req'] == 'espelho-pedido' ) {
+        include_once APPRAIZ.'alteracao/modulos/principal/popup-espelho-pedido.inc';
+        die;
+    }
+
     include_once APPRAIZ. "includes/library/simec/Grafico.php";
 
     require_once APPRAIZ. 'includes/workflow.php';
@@ -29,7 +34,8 @@
         }
     }
     $filtroalteracao['tpdid'] = $_REQUEST['tpdid'] ? $_REQUEST['tpdid'] : WF_TPDID_INTERNO;
-    $aAlteracao = (new Alteracao_Model_Pedido())->recuperarListagem($filtroalteracao);
+    $podeEditarAlteracao = TRUE;
+
     /**
      * Cabeçalho padrão do sistema.
      * @see cabecalho.inc

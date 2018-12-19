@@ -2,10 +2,11 @@
 require_once APPRAIZ . 'includes/workflow.php';
 
 $disabled = ['required'];
+$podeEditarAlteracao = TRUE;
 
 $mAlteracaoPedido = new Alteracao_Model_Pedido($_REQUEST['pedid']);
 if ($_REQUEST['pedid']){
-    $arrPedidos= $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);
+    $arrPedidos = $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);
     if (!$mAlteracaoPedido->docid){
         $mAlteracaoPedido->docid = $mAlteracaoPedido->pegarDocidPedido($arrPedidos['pedid'], $arrPedidos['tpdid']);
     }

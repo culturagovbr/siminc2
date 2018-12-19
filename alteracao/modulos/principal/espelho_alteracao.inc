@@ -11,7 +11,11 @@
 <div class="wrapper wrapper-content animated fadeInRight alteracao-wrapper">
     <div class="col-lg-12">
         <div class="float-e-margins">
-            <h2>Verifique se as informações estão corretas e clique no botão enviar</h2>
+            <?php if ($podeEditarAlteracao === TRUE): ?>
+                <h2>Verifique se as informações estão corretas e clique no botão enviar</h2>
+            <?php else: ?>
+                <h2>Informações do Pedido de Alteração Orçamentária</h2>
+            <?php endif; ?>
             <hr class="ruptura_tematica">
         </div>
     </div>
