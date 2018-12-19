@@ -194,6 +194,7 @@ class Alteracao_Model_Pedido extends Modelo
                        pis.vlsuplementarsuperavitfisico,
                        pis.vldotacaocusteio,
                        pis.vldotacaocapital,
+                       pis.vldotacaofisico,
                        --coalesce(pis.plisuplementarquantidade,0) as plisuplementarquantidade,
                        --coalesce(pis.plicancelarquantidade,0) as plicancelarquantidade,
                        --coalesce(pis.plisuplementarexcessoquantidade,0) as plisuplementarexcessoquantidade,
@@ -360,5 +361,14 @@ class Alteracao_Model_Pedido extends Modelo
         }
         
         return $where;
+    }
+    
+    public function atualizaValoresPI($pliid, $picvalorcusteio, $picvalorcapital, $picquantidade){
+        $sql = "UPDATE planacomorc.pi_complemento 
+                   SET picvalorcusteio = '".$picvalorcusteio."',
+                       picvalorcapital = '".$picvalorcapital."',
+                       picquantidade = '".$picquantidade."
+                 WHERE pliid = ".$pliid;
+        $this->executar($sql);
     }
 }

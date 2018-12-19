@@ -133,7 +133,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcusteio" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcapital'];?>">
+                            <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcapital'];?>">
                         </td>
                     </tr>
                     <tr>
@@ -147,24 +147,27 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="text" size="10" class="input_valor" name="vldotacaocusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocusteio<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocusteio'];?>">
+                            <input type="hidden" size="10" class="input_valor" name="vldotacaocusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocusteio<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocusteio'];?>">
+                            <?=$dados['vldotacaocusteio']?$dados['vldotacaocusteio']:'0';?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="text" size="10" class="input_valor" name="vldotacaocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocapital<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocapital'];?>">
+                            <input type="hidden" size="10" class="input_valor" name="vldotacaocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vldotacaocapital<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaocapital'];?>">
+                            <?=$dados['vldotacaocapital']?$dados['vldotacaocapital']:'0';?>
                         </td>
                     </tr>
                     <tr>
                         <?php
-                        if ($dados['vlrprovavel']<0){
+                        if ($dados['vldotacaofisico']<0){
                             $color='red';
                         }else{
                             $color='';
                         }
                         ?>
                         <td style="color: <?=$color;?>; border: none; border-top: 1px solid #e7eaec;" id="fisico<?=$dados['pliselid'];?>">
-                            <?=$dados['vlrprovavel']?$dados['vlrprovavel']:'0';?>
+                            <input type="hidden" size="10" class="input_valor" name="vldotacaofisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vldotacaofisico<?=$dados['pliselid'];?>" value="<?=$dados['vldotacaofisico'];?>">
+                            <?=$dados['vldotacaofisico']?$dados['vldotacaofisico']:'0';?>
                         </td>
                     </tr>
                 </table>
@@ -223,13 +226,12 @@
                 var vlrcancelado=0;
                 var vlrsuplementar=0;
                 $('.input_valor').each(function(){
+                    vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
                     if ($(this).attr('name')=='vlsuplementarcusteio' || $(this).attr('name')=='vlsuplementarcapital' || 
                         $(this).attr('name')=='vlsuplementarsuperavitcusteio' || $(this).attr('name')=='vlsuplementarsuperavitcapital' ||
                         $(this).attr('name')=='vlsuplementarexcessocusteio' || $(this).attr('name')=='vlsuplementarexcessocapital'){
-                        vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
                         vlrsuplementar = parseFloat(vlrsuplementar)+parseFloat(vlrCampo);
                     }else if ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital'){
-                        vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
                         vlrcancelado = parseFloat(vlrcancelado)+parseFloat(vlrCampo);
                     }
                 });

@@ -76,5 +76,6 @@ class Alteracao_Model_PlanoInternoSelecionado extends Modelo
         'vlsuplementarsuperavitfisico' => null,
         'vldotacaocusteio' => null,
         'vldotacaocapital' => null,
+        'vldotacaofisico' => null,
     );
 }
