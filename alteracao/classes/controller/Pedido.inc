@@ -105,7 +105,7 @@ class Alteracao_Controller_Pedido
         }
         else if ($this->retornaTpdid($mPedido->tpaid) == WF_TPDID_EXTERNO)
         {
-            if ($estadoAtual['esdid']==ESD_EM_CADASTRAMENTO_INTERNO){
+            if ($estadoAtual['esdid']==ESD_EM_CADASTRAMENTO_EXTERNO){
                 $aedid = AED_ALTERACAO_EXTERNO_CADASTRAMENTO_EM_ANALISE;
             }else{
                 $aedid = AED_ALTERACAO_EXTERNO_CORRECAO_EM_ANALISE;
