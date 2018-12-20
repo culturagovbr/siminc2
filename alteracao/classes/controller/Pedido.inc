@@ -93,15 +93,25 @@ class Alteracao_Controller_Pedido
     public function alterarEstadoAlteracao($pedid)
     {
         $mPedido = new Alteracao_Model_Pedido($pedid);
+        $estadoAtual = wf_pegarEstadoAtual($mPedido->docid);
         if($this->retornaTpdid($mPedido->tpaid) == WF_TPDID_INTERNO)
         {
-            $return = wf_alterarEstado($mPedido->docid, AED_ALTERACAO_INTERNO_EM_ANALISE, '', array());
+            if ($estadoAtual['esdid']==ESD_EM_CADASTRAMENTO_INTERNO){
+                $aedid = AED_ALTERACAO_INTERNO_CADASTRAMENTO_EM_ANALISE;
+            }else{
+                $aedid = AED_ALTERACAO_INTERNO_CORRECAO_EM_ANALISE;
+            }
 
         }
         else if ($this->retornaTpdid($mPedido->tpaid) == WF_TPDID_EXTERNO)
         {
-            $return = wf_alterarEstado($mPedido->docid, AED_ALTERACAO_EXTERNO_EM_ANALISE, '', array());
+            if ($estadoAtual['esdid']==ESD_EM_CADASTRAMENTO_INTERNO){
+                $aedid = AED_ALTERACAO_EXTERNO_CADASTRAMENTO_EM_ANALISE;
+            }else{
+                $aedid = AED_ALTERACAO_EXTERNO_CORRECAO_EM_ANALISE;
+            }
         }
+        $return = wf_alterarEstado($mPedido->docid, $aedid, '', array());
         echo json_encode($return);
     }
 }
