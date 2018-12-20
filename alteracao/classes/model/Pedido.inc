@@ -112,6 +112,7 @@ class Alteracao_Model_Pedido extends Modelo
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
                 LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid
+                LEFT JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 LEFT join alteracao.pedido_unidade pu on ped.pedid = pu.pedid
@@ -122,6 +123,12 @@ class Alteracao_Model_Pedido extends Modelo
 
         if ($filtroprop['pliid']){
             $sql .= " AND pis.pliid = ".$filtroprop['pliid'];
+        }
+        if ($filtroprop['plicod']){
+            $sql .= " AND pli.plicod = '". $filtroprop['plicod']. "'";
+        }
+        if ($filtroprop['plititulo']){
+            $sql .= " AND pli.plititulo ILIKE '%". $filtroprop['plititulo']. "%'";
         }
         if ($filtroprop['tpdid']){
             $sql .= " AND doc.tpdid = ".$filtroprop['tpdid'];
