@@ -1,47 +1,107 @@
 <?php
 
     $cabecalho = [
-        'ID Proposta',
-        'Subunidade',
-        'Enquadramento da Despesa',
-        'RP',
-        'Funcional',
-        'Ação',
-        'PO',
-        'Quantidade Localizador',
-        'Quantidade PO',
-        'Quantidade Expansão PO',
-        'Justificativa',
-        'Justificativa Expansão',
-        'Nat. Desp.',
-        'IDUSO',
-        'Fonte',
-        'IDOC',
-        'Valor',
-        'Valor Expansão',
+        'ID Pedido',
+        'Código da UO',
+        'Sigla da UO',
+        'Nome da UO',
+        'Código da Unidade',
+        'Sigla da Unidade',
+        'Nome da Unidade',
+        'Título',
+        'Tipo',
+        'Situação',
+        'Janela',
+        'Data de Cadastro',
+        'Total Cancelado',
+        'Total Suplementado',
+        'Identificador do PI',
+        'Funcional do PI',
+        'Código PI',
+        'Título do PI',
+        'Produto do PI',
+        'Valor Custeio',
+        'Valor Capital',
+        'Físico',
+        'Suplementar Custeio',
+        'Suplementar Capital',
+        'Suplementar Físico',
+        'Cancelar Custeio',
+        'Cancelar Capital',
+        'Cancelar Físico',
+        'Suplementar por Excesso Custeio',
+        'Suplementar por Excesso Capital',
+        'Suplementar por Excesso Físico',
+        'Suplementar por Superávit Custeio',
+        'Suplementar por Superávit Capital',
+        'Suplementar por Superávit Físico',
+        'Resultado Provável Custeio',
+        'Resultado Provável Capital',
+        'Resultado Provável Físico',
+        'LOA Funcional',
+        'LOA Categoria',
+        'LOA GND',
+        'LOA Modalidade de Aplicação',
+        'LOA Fonte',
+        'LOA IDOC',
+        'LOA IDUSO',
+        'LOA RP',
+        'LOA Suplementar',
+        'LOA Cancelado',
+        'LOA Suplementar por excesso',
+        'LOA Suplementar por Superávit',
+        'Justificativa Necessidade de Alteração',
+        'Justificativa Causa da Demanda',
+        'Justificativa formas de financiamento de Crédito e adequação da proposta à meta fiscal e ao limite de gastos',
+        'Justificativa Verificação das fontes, dos Identificadores de uso - Iduso e dos identificadores de Resultado Primário - RP',
+        'Justificativa Medida Provisória',
+        'Justificativa Legislação Específica',
+        'Justificativa Outras Informações'
     ];
 
     # Lista de colunas que terão formatação de moeda.
     $listaColunaMoeda = array(
-        'prdvalor',
-        'prdvalorexpansao'
+        'cancelado',
+        'suplementado',
+        
+        'vlcusteio',
+        'vlcapital',
+        'vlfisico',
+        'vlsuplementarcusteio',
+        'vlsuplementarcapital',
+        'vlsuplementarfisico',
+        'vlcancelarcusteio',
+        'vlcancelarcapital',
+        'vlcancelarfisico',
+        'vlsuplementarexcessocusteio',
+        'vlsuplementarexcessocapital',
+        'vlsuplementarexcessofisico',
+        'vlsuplementarsuperavitcusteio',
+        'vlsuplementarsuperavitcapital',
+        'vlsuplementarsuperavitfisico',
+        'vldotacaocusteio',
+        'vldotacaocapital',
+        'vldotacaofisico',
+        
+        'vlsuplementar',
+        'vlcancelado',
+        'vlsuplementarexcesso',
+        'vlsuplementarsuperavit'
     );
     
     $listaPerfil = pegaPerfilGeral();
     $listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf']));
-    $listaSubUnidadeUsuario = implode("', '", $listaSubUnidadeUsuario);
-    if(in_array(PFL_SUBUNIDADE, $listaPerfil) && ($listaSubUnidadeUsuario)){
-        $filtro = array('prsano' => $_SESSION['exercicio']);
+    $parametro = array('pedano' => $_SESSION['exercicio']);
+    if(in_array(PFL_SUBUNIDADE, $listaPerfil) && $listaSubUnidadeUsuario){
         if($listaSubUnidadeUsuario){
-            $filtro['suocod']=$listaSubUnidadeUsuario;
+            $parametro['suocod'] = $listaSubUnidadeUsuario;
         }
-        $sql = montarSqlRelatorioGeralProposta((object) $filtro);
-    } else if (in_array(PFL_ADMINISTRADOR, $listaPerfil) || in_array(PFL_SUPERUSUARIO, $listaPerfil)){
-        $filtro = array('prsano' => $_SESSION['exercicio']);
-        $sql = montarSqlRelatorioGeralProposta((object) $filtro);
+        $sql = montarSqlRelatorioGeralAlteracao((object) $parametro);
+    } else {
+        $sql = montarSqlRelatorioGeralAlteracao((object) $parametro);
     }
     $lista = $db->carregar($sql);
-ver($sql, $lista, d);
+//ver($sql, $lista, d);
 ?>
 
 <table width="100%" cellspacing="0">
