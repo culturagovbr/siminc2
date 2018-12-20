@@ -6,8 +6,8 @@
 function initCadastroAlteracoes() {
 
     var permitirTodosPassos = $('#pedid').val()? true: false;
-    var permitirBotaoFinalizar = ($('#esdid').val()==1791 || $('#esdid').val()==1798)? true : false;
-    
+    var permitirBotaoFinalizar = verificarEstadoEdicao($('#esdid').val());
+
     var wizard = $("#wizard").steps({
         transitionEffect: "slide",
         startIndex: 0,
@@ -76,6 +76,23 @@ function initCadastroAlteracoes() {
 
 }
 
+/**
+ * Verifica o Estado do Documento Atual para permitir visualizar o botão de 'Enviar'.
+ *
+ * @param esdid -> Estado documento.
+ */
+function verificarEstadoEdicao(esdid) {
+
+    if( esdid == ESD_EM_CADASTRAMENTO_INTERNO ||
+        esdid == ESD_EM_CADASTRAMENTO_EXTERNO ||
+        esdid == ESD_AGURADANDO_CORRECAO_INTERNO ||
+        esdid == ESD_AGURADANDO_CORRECAO_EXTERNO
+    ){
+        return true;
+    }else{
+        return false;
+    }
+}
 /**
  * Exibe popup com Detalhes do pi. Tela de Espelho de PI.
  *

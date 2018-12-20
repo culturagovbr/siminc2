@@ -158,6 +158,12 @@ include APPRAIZ. "includes/cabecalho.inc";
 </div>
 
 <script>
+
+    ESD_EM_CADASTRAMENTO_INTERNO = '<?= ESD_EM_CADASTRAMENTO_INTERNO; ?>';
+    ESD_EM_CADASTRAMENTO_EXTERNO = '<?= ESD_EM_CADASTRAMENTO_EXTERNO; ?>';
+    ESD_AGURADANDO_CORRECAO_INTERNO = '<?= ESD_AGURADANDO_CORRECAO_INTERNO; ?>';
+    ESD_AGURADANDO_CORRECAO_EXTERNO = '<?= ESD_AGURADANDO_CORRECAO_EXTERNO; ?>';
+
     $(function(){
         initCadastroAlteracoes();
     });
