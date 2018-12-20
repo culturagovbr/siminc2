@@ -40,20 +40,20 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" name="vlsaldoempenhocusteio" value="<?= number_format($dados['custeio'],0,',','.'); ?>">
+                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" name="vlcusteio" value="<?= number_format($dados['custeio'],0,',','.'); ?>">
                             Custeio: R$ <?= number_format($dados['custeio'],0,',','.'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" name="vlsaldoempenhocapital" value="<?= number_format($dados['capital'],0,',','.'); ?>">
+                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" name="vlcapital" value="<?= number_format($dados['capital'],0,',','.'); ?>">
                             Capital: R$ <?= number_format($dados['capital'],0,',','.'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <input type="hidden" id="pifisico<?=$dados['pliselid'];?>" name="vlsaldoempenhofisico" value="<?= number_format($dados['picquantidade'],0,',','.'); ?>">
-                            Físico: <?= number_format($dados['picquantidade'],0,',','.'); ?>
+                            <input type="hidden" id="pifisico<?=$dados['pliselid'];?>" name="vlfisico" value="<?= number_format($dados['fisico'],0,',','.'); ?>">
+                            Físico: <?= number_format($dados['fisico'],0,',','.'); ?>
                         </td>
                     </tr>
                 </table>

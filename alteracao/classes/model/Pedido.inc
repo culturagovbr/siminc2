@@ -148,7 +148,19 @@ class Alteracao_Model_Pedido extends Modelo
                 $sql .= " AND pu.suoid in ".$filtroprop['suoid'];
             }
         }
-
+        
+        # Ordenação
+        $sql .= "
+            GROUP BY
+                ped.pedid,
+                ped.pedtitulo,
+                ped.tpaid,
+                ped.janid,
+                tpa.tpacod,
+                esd.esddsc,
+                jan.jannome
+        ";
+        
         return $this->carregar($sql);
     }
 
@@ -180,6 +192,7 @@ class Alteracao_Model_Pedido extends Modelo
                     ped.janid,
                     tpa.tpacod,
                     tpa.tpadsc,
+                    esd.esdid,
                     esd.esddsc,
                     jan.jannome,
                     usr.usunome,
@@ -205,12 +218,9 @@ class Alteracao_Model_Pedido extends Modelo
                        pis.pedid,
                        pis.pliid,
                        pli.plicod,
-                       coalesce(pc.picvalorcusteio,0.00) AS custeio,
-                       coalesce(pc.picvalorcapital,0.00) AS capital,
-                       coalesce(pc.picquantidade,0.00) AS fisico,
-                       pis.vlsaldoempenhocusteio,
-                       pis.vlsaldoempenhocapital,
-                       pis.vlsaldoempenhofisico,
+                       coalesce(pis.vlcusteio,0.00) AS custeio,
+                       coalesce(pis.vlcapital,0.00) AS capital,
+                       coalesce(pis.vlfisico,0.00) AS fisico,
                        pis.vlsuplementarcusteio,
                        pis.vlsuplementarcapital,
                        pis.vlsuplementarfisico,
@@ -232,7 +242,6 @@ class Alteracao_Model_Pedido extends Modelo
 		                    and se.exercicio = pli.pliano),0.00) as empenhado,
                        pp.pprnome,
                        suo.suonome AS unidade,
-                       pc.picquantidade,
                        COALESCE(pli.plititulo, 'N/A') AS plititulo,
                        TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
                   from alteracao.plano_interno_selecionado pis
@@ -272,6 +281,7 @@ class Alteracao_Model_Pedido extends Modelo
 		ed.esddsc AS situacao,
 		pc.picvalorcusteio AS custeio,
 		pc.picvalorcapital AS capital,
+                pc.picquantidade as fisico,
                 (select coalesce(pliselid,0) from alteracao.plano_interno_selecionado pis where pis.pliid=pli.pliid and pis.pedid = ".(int)$filtros->pedid.") as pliselid,
 		coalesce((SELECT 
 			sum(coalesce(se.vlrautorizado,0::numeric)) AS vlrautorizado
