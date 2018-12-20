@@ -5,14 +5,16 @@
  */
 function initCadastroAlteracoes() {
 
-    permitirTodosPassos = $('#pedid').val()? true: false;
-
+    var permitirTodosPassos = $('#pedid').val()? true: false;
+    var permitirBotaoFinalizar = ($('#esdid').val()==1791 || $('#esdid').val()==1798)? true : false;
+    
     var wizard = $("#wizard").steps({
         transitionEffect: "slide",
         startIndex: 0,
         width: 50,
         enablePagination: permitirTodosPassos,
         enableAllSteps: permitirTodosPassos,
+        enableFinishButton: permitirBotaoFinalizar,
         labels: {
             cancel: "Cancelar",
             current: "Passo atual:",

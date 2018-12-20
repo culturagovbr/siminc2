@@ -109,6 +109,7 @@ include APPRAIZ. "includes/cabecalho.inc";
     }
 </style>
 <input name="pedid" id="pedid" value="<?=$arrPedidos['pedid'];?>" type="hidden">
+<input name="esdid" id="esdid" value="<?=$arrPedidos['esdid'];?>" type="hidden">
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-8">
         <h2><?= $titulo_modulo;?></h2>

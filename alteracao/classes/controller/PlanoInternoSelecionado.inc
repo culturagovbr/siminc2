@@ -7,10 +7,14 @@ class Alteracao_Controller_PlanoInternoSelecionado
         try {
             $mPedido = new Alteracao_Model_PlanoInternoSelecionado();
             $mPedido->popularDadosObjeto($dados);
+            $arrDadosPI = $mPedido->RetornaValoresPI($dados['pliid']);
+            $mPedido->vlcusteio = $arrDadosPI['custeio'];
+            $mPedido->vlcapital = $arrDadosPI['capital'];
+            $mPedido->vlfisico = $arrDadosPI['fisico'];
             $mPedido->vldotacaocusteio = $mPedido->vlsuplementarcusteio+$mPedido->vlsuplementarexcessocusteio+$mPedido->vlsuplementarsuperavitcusteio-$mPedido->vlcancelarcusteio;
             $mPedido->vldotacaocapital = $mPedido->vlsuplementarcapital+$mPedido->vlsuplementarexcessocapital+$mPedido->vlsuplementarsuperavitcapital-$mPedido->vlcancelarcapital;
             $mPedido->vldotacaofisico = $mPedido->vlsuplementarfisico+$mPedido->vlsuplementarexcessofisico+$mPedido->vlsuplementarsuperavitfisico-$mPedido->vlcancelarfisico;
-            $mPedido->salvar(null, null, ['vlsaldoempenhocusteio','vlsaldoempenhocapital','vlsuplementarcusteio','vlsuplementarcapital','vlcancelarcusteio','vlcancelarcapital','vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vldotacaocusteio','vldotacaocapital','vldotacaofisico']);
+            $mPedido->salvar(null, null, ['vlcusteio','vlcapital', 'vlfisico', 'vlsuplementarcusteio','vlsuplementarcapital','vlcancelarcusteio','vlcancelarcapital','vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vldotacaocusteio','vldotacaocapital','vldotacaofisico']);
             $mPedido->commit();
             echo json_encode(true);
         } catch (Exception $e){
@@ -45,7 +49,7 @@ class Alteracao_Controller_PlanoInternoSelecionado
             $mPedido->vldotacaocusteio = $mPiComplemento->picvalorcusteio + ($mPedido->vlsuplementarcusteio + $mPedido->vlsuplementarexcessocusteio + $mPedido->vlsuplementarsuperavitcusteio - $mPedido->vlcancelarcusteio);
             $mPedido->vldotacaocapital = $mPiComplemento->picvalorcapital + ($mPedido->vlsuplementarcapital + $mPedido->vlsuplementarexcessocapital + $mPedido->vlsuplementarsuperavitcapital - $mPedido->vlcancelarcapital);
             $mPedido->vldotacaofisico = $mPiComplemento->picquantidade + ($mPedido->vlsuplementarfisico+$mPedido->vlsuplementarexcessofisico + $mPedido->vlsuplementarsuperavitfisico - $mPedido->vlcancelarfisico);
-            $mPedido->salvar(null, null, ['vlsaldoempenhocusteio','vlsaldoempenhocapital','vlsuplementarcusteio','vlsuplementarcapital','vlcancelarcusteio','vlcancelarcapital','vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vldotacaocusteio','vldotacaocapital']);
+            $mPedido->salvar(null, null, ['vlcusteio','vlcapital', 'vlfisico', 'vlsuplementarcusteio','vlsuplementarcapital','vlcancelarcusteio','vlcancelarcapital','vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vldotacaocusteio','vldotacaocapital','vldotacaofisico']);
             $mPedido->commit();
             echo json_encode(true);
         } catch (Exception $e){

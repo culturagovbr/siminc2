@@ -59,9 +59,9 @@ class Alteracao_Model_PlanoInternoSelecionado extends Modelo
         'pliselid' => null,
         'pedid' => null,
         'pliid' => null,
-        'vlsaldoempenhocusteio' => null,
-        'vlsaldoempenhocapital' => null,
-        'vlsaldoempenhofisico' => null,
+        'vlcusteio' => null,
+        'vlcapital' => null,
+        'vlfisico' => null,
         'vlsuplementarcusteio' => null,
         'vlsuplementarcapital' => null,
         'vlsuplementarfisico' => null,
@@ -78,4 +78,13 @@ class Alteracao_Model_PlanoInternoSelecionado extends Modelo
         'vldotacaocapital' => null,
         'vldotacaofisico' => null,
     );
+    
+    function RetornaValoresPI($pliid){
+        $sql = "SELECT pc.picvalorcusteio AS custeio,
+		       pc.picvalorcapital AS capital,
+                       pc.picquantidade as fisico 
+                  from planacomorc.pi_complemento pc
+                 where pc.pliid = ".$pliid;
+        return $this->pegaLinha($sql);
+    }
 }
