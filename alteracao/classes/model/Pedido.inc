@@ -76,57 +76,79 @@ class Alteracao_Model_Pedido extends Modelo
      */
     public function recuperarListagem($filtroprop)
     {
-        $sql = "SELECT distinct 
-                    ped.pedid,
-                    ped.pedtitulo,
-                    ped.tpaid,
-                    ped.janid,
-                    tpa.tpacod,
-                    esd.esddsc,
-                    jan.jannome,
-                    to_char(ped.dtalteracao, 'dd/mm/yyyy') as dtalteracao,
-                    to_char(ped.dtalteracao, 'hh:mi') as hralteracao
-                FROM alteracao.pedido AS ped
+        $sql = "
+            SELECT DISTINCT
+                ped.pedid,
+                ped.pedtitulo,
+                ped.tpaid,
+                ped.janid,
+                tpa.tpacod,
+                esd.esddsc,
+                jan.jannome,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(pisvalor.vlcancelarcusteio, 0)+ COALESCE(pisvalor.vlcancelarcapital, 0)) AS cancelado
+                    FROM alteracao.plano_interno_selecionado pisvalor
+                    WHERE
+                        pisvalor.pedid = ped.pedid
+		), 0) AS cancelado,
+                COALESCE((
+                    SELECT
+                        SUM(
+                            COALESCE(pisvalor.vlsuplementarcusteio, 0)+
+                            COALESCE(pisvalor.vlsuplementarcapital, 0)+
+                            COALESCE(pisvalor.vlsuplementarexcessocusteio, 0)+
+                            COALESCE(pisvalor.vlsuplementarexcessocapital, 0)+
+                            COALESCE(pisvalor.vlsuplementarsuperavitcusteio, 0)+
+                            COALESCE(pisvalor.vlsuplementarsuperavitcapital, 0)
+                        ) AS suplementado
+                    FROM alteracao.plano_interno_selecionado pisvalor
+                    WHERE
+                        pisvalor.pedid = ped.pedid
+		), 0) AS suplementado,
+                to_char(ped.dtalteracao, 'dd/mm/yyyy') as dtalteracao,
+                to_char(ped.dtalteracao, 'hh:mi') as hralteracao
+            FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
                 LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
-                left join alteracao.pedido_unidade pu on ped.pedid = pu.pedid
-                WHERE
-                    ped.pedstatus = 'A'
-                    AND doc.tpdid IS NOT NULL
+                LEFT join alteracao.pedido_unidade pu on ped.pedid = pu.pedid
+            WHERE
+                ped.pedstatus = 'A'
+                AND doc.tpdid IS NOT NULL
         ";
 
         if ($filtroprop['pliid']){
-            $sql .= " and pis.pliid = ".$filtroprop['pliid'];
+            $sql .= " AND pis.pliid = ".$filtroprop['pliid'];
         }
         if ($filtroprop['tpdid']){
-            $sql .= " and doc.tpdid = ".$filtroprop['tpdid'];
+            $sql .= " AND doc.tpdid = ".$filtroprop['tpdid'];
         }
         if ($filtroprop['pedid']){
-            $sql .= " and ped.pedid = ".$filtroprop['pedid'];
+            $sql .= " AND ped.pedid = ".$filtroprop['pedid'];
         }
         if ($filtroprop['esdid']){
-            $sql .= " and doc.esdid = ".$filtroprop['esdid'];
+            $sql .= " AND doc.esdid = ".$filtroprop['esdid'];
         }
         if ($filtroprop['tpaid']){
-            $sql .= " and ped.tpaid = ".$filtroprop['tpaid'];
+            $sql .= " AND ped.tpaid = ".$filtroprop['tpaid'];
         }
         if ($filtroprop['janid']){
-            $sql .= " and ped.janid = ".$filtroprop['janid'];
+            $sql .= " AND ped.janid = ".$filtroprop['janid'];
         }
         if ($filtroprop['pedtitulo']){
-            $sql .= " and ped.pedtitulo like '".$filtroprop['pedtitulo']."'";
+            $sql .= " AND ped.pedtitulo like '".$filtroprop['pedtitulo']."'";
         }
         if ($filtroprop['suoid']){
             if (is_array($filtroprop['suoid'])){
-                $sql .= " and pu.suoid in (".implode(' , ',$filtroprop['suoid']).')';
+                $sql .= " AND pu.suoid in (".implode(' , ',$filtroprop['suoid']).')';
             }else{
-                $sql .= " and pu.suoid in ".$filtroprop['suoid'];
+                $sql .= " AND pu.suoid in ".$filtroprop['suoid'];
             }
         }
-//        ver($sql, d);
+
         return $this->carregar($sql);
     }
 

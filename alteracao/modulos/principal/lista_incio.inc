@@ -32,8 +32,8 @@
             <td><?= $dados['jannome']; ?></td>
             <td><?= $dados['esddsc']; ?></td>
             <td><?= $dados['suoid'].' - '.$dados['suonome']; ?></td>
-            <td><?= $dados['cnc']; ?></td>
-            <td><?= $dados['soap']; ?></td>
+            <td><?= number_format($dados['cancelado'], 0, ',', '.'); ?></td>
+            <td><?= number_format($dados['suplementado'], 0, ',', '.'); ?></td>
             <td><?= $dados['pedtitulo']; ?></td>
             <td><?= $dados['dtalteracao'] .' às '. $dados['hralteracao']; ?></td>
         </tr>

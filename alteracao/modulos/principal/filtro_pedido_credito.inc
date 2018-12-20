@@ -26,6 +26,18 @@
                 <?= $simec->input('pedtitulo',  'Título', $filtroalteracao['pedtitulo'], NULL, ['input-size' => 9, 'label-size' => 2]); ?>
             </div>
         </div>
+        
+        <div class="row">
+            <div class="col-lg-3">
+                <?= $simec->input('pliid',  'Id do PI', $filtroalteracao['pliid'], NULL, ['input-size' => 6, 'label-size' => 5]); ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $simec->input('plicod',  'Código do PI', $filtroalteracao['plicod'], NULL, ['input-size' => 9, 'label-size' => 2]); ?>
+            </div>
+            <div class="col-lg-6">
+                <?= $simec->input('plititulo',  'Título do PI', $filtroalteracao['plititulo'], NULL, ['input-size' => 9, 'label-size' => 2]); ?>
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="text-center">
