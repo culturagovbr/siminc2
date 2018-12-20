@@ -29,7 +29,7 @@
         
         <div class="row">
             <div class="col-lg-3">
-                <?= $simec->input('pliid',  'Id do PI', $filtroalteracao['pliid'], NULL, ['input-size' => 6, 'label-size' => 5]); ?>
+                <?= $simec->input('pliid',  'Id do PI', $filtroalteracao['pliid'], ['maxlength' => 12, 'class' => 'inteiro'], ['input-size' => 6, 'label-size' => 5]); ?>
             </div>
             <div class="col-lg-3">
                 <?= $simec->input('plicod',  'Código do PI', $filtroalteracao['plicod'], NULL, ['input-size' => 9, 'label-size' => 2]); ?>

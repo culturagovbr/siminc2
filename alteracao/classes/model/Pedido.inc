@@ -85,6 +85,14 @@ class Alteracao_Model_Pedido extends Modelo
                 tpa.tpacod,
                 esd.esddsc,
                 jan.jannome,
+		REPLACE(REPLACE(REPLACE(REPLACE(ARRAY(
+			SELECT
+				lista_suo.suocod || ' - ' || lista_suo.suonome
+			FROM public.vw_subunidadeorcamentaria lista_suo
+				JOIN alteracao.pedido_unidade lista_suo_pu ON(lista_suo.suoid = lista_suo_pu.suoid)
+			WHERE
+				lista_suo_pu.pedid = ped.pedid
+		)::TEXT, '{', ''), '}', ''), '\"', ''), ',', ', ') AS lista_subunidades,
                 COALESCE((
                     SELECT
                         SUM(COALESCE(pisvalor.vlcancelarcusteio, 0)+ COALESCE(pisvalor.vlcancelarcapital, 0)) AS cancelado
@@ -121,34 +129,17 @@ class Alteracao_Model_Pedido extends Modelo
                 AND doc.tpdid IS NOT NULL
         ";
 
-        if ($filtroprop['pliid']){
-            $sql .= " AND pis.pliid = ".$filtroprop['pliid'];
-        }
-        if ($filtroprop['plicod']){
-            $sql .= " AND pli.plicod = '". $filtroprop['plicod']. "'";
-        }
-        if ($filtroprop['plititulo']){
-            $sql .= " AND pli.plititulo ILIKE '%". $filtroprop['plititulo']. "%'";
-        }
-        if ($filtroprop['tpdid']){
-            $sql .= " AND doc.tpdid = ".$filtroprop['tpdid'];
-        }
-        if ($filtroprop['pedid']){
-            $sql .= " AND ped.pedid = ".$filtroprop['pedid'];
-        }
-        if ($filtroprop['esdid']){
-            $sql .= " AND doc.esdid = ".$filtroprop['esdid'];
-        }
-        if ($filtroprop['tpaid']){
-            $sql .= " AND ped.tpaid = ".$filtroprop['tpaid'];
-        }
-        if ($filtroprop['janid']){
-            $sql .= " AND ped.janid = ".$filtroprop['janid'];
-        }
-        if ($filtroprop['pedtitulo']){
-            $sql .= " AND ped.pedtitulo like '".$filtroprop['pedtitulo']."'";
-        }
-        if ($filtroprop['suoid']){
+        # Filtros
+        $sql .= $filtroprop['pliid']? " AND pis.pliid = ". (int)$filtroprop['pliid']: NULL;
+        $sql .= $filtroprop['plicod']? " AND pli.plicod = '". strtoupper($filtroprop['plicod']). "'": NULL;
+        $sql .= $filtroprop['plititulo']? " AND pli.plititulo ILIKE '%". $filtroprop['plititulo']. "%'": NULL;
+        $sql .= $filtroprop['tpdid']? " AND doc.tpdid = ". (int)$filtroprop['tpdid']: NULL;
+        $sql .= $filtroprop['pedid']? " AND ped.pedid = ". (int)$filtroprop['pedid']: NULL;
+        $sql .= $filtroprop['esdid']? " AND doc.esdid = ". (int)$filtroprop['esdid']: NULL;
+        $sql .= $filtroprop['tpaid']? " AND ped.tpaid = ". (int)$filtroprop['tpaid']: NULL;
+        $sql .= $filtroprop['janid']? " AND ped.janid = ". (int)$filtroprop['janid']: NULL;
+        $sql .= $filtroprop['pedtitulo']? " AND ped.pedtitulo like '".$filtroprop['pedtitulo']."'": NULL;
+        if($filtroprop['suoid']){
             if (is_array($filtroprop['suoid'])){
                 $sql .= " AND pu.suoid in (".implode(' , ',$filtroprop['suoid']).')';
             }else{
