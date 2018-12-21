@@ -58,6 +58,7 @@ class Alteracao_Model_PedidoUnidade extends Modelo
         'peduniid' => null,
         'pedid'  => null,
         'suoid'  => null,
+        'pedunistatus' => null,
     );
 
     /**
@@ -69,13 +70,14 @@ class Alteracao_Model_PedidoUnidade extends Modelo
     {
         $sql = "SELECT suoid
                   FROM alteracao.pedido_unidade
-                 WHERE pedid = ".$pedid;
+                 WHERE pedid = ".$pedid."
+                   and pedunistatus = 'A'";
 
         return $this->carregar($sql);
     }
     
     public function removerUnidades($pedid){
-        $sql = "delete from alteracao.pedido_unidade where pedid = ".$pedid;
+        $sql = "update alteracao.pedido_unidade set pedunistatus = 'I' where pedid = ".$pedid;
         $this->executar($sql);
     }
 

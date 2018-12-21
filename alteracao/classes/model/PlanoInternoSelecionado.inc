@@ -77,6 +77,7 @@ class Alteracao_Model_PlanoInternoSelecionado extends Modelo
         'vldotacaocusteio' => null,
         'vldotacaocapital' => null,
         'vldotacaofisico' => null,
+        'pliselstatus' => null,
     );
     
     function RetornaValoresPI($pliid){

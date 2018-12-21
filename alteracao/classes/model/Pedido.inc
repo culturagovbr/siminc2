@@ -89,7 +89,7 @@ class Alteracao_Model_Pedido extends Modelo
 			SELECT
 				lista_suo.suocod || ' - ' || lista_suo.suonome
 			FROM public.vw_subunidadeorcamentaria lista_suo
-				JOIN alteracao.pedido_unidade lista_suo_pu ON(lista_suo.suoid = lista_suo_pu.suoid)
+	                JOIN alteracao.pedido_unidade lista_suo_pu ON(lista_suo.suoid = lista_suo_pu.suoid and lista_suo_pu.pedunistatus='A')
 			WHERE
 				lista_suo_pu.pedid = ped.pedid
 		)::TEXT, '{', ''), '}', ''), '\"', ''), ',', ', ') AS lista_subunidades,
@@ -99,6 +99,7 @@ class Alteracao_Model_Pedido extends Modelo
                     FROM alteracao.plano_interno_selecionado pisvalor
                     WHERE
                         pisvalor.pedid = ped.pedid
+                      and pliselstatus = 'A'
 		), 0) AS cancelado,
                 COALESCE((
                     SELECT
@@ -113,17 +114,18 @@ class Alteracao_Model_Pedido extends Modelo
                     FROM alteracao.plano_interno_selecionado pisvalor
                     WHERE
                         pisvalor.pedid = ped.pedid
+                      and pliselstatus = 'A'
 		), 0) AS suplementado,
                 to_char(ped.dtalteracao, 'dd/mm/yyyy') as dtalteracao,
                 to_char(ped.dtalteracao, 'hh:mi') as hralteracao
             FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
-                LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid
+                LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid and pis.pliselstatus = 'A'
                 LEFT JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
-                LEFT join alteracao.pedido_unidade pu on ped.pedid = pu.pedid
+                LEFT join alteracao.pedido_unidade pu on ped.pedid = pu.pedid and pu.pedunistatus='A'
             WHERE
                 ped.pedstatus = 'A'
                 AND doc.tpdid IS NOT NULL
@@ -251,7 +253,8 @@ class Alteracao_Model_Pedido extends Modelo
                   LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
 		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(ptr.unicod = suo.unocod)                          
                  where pis.pedid = $pedid
-                   and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid)
+                   and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid and pedunistatus='A')
+                   and pis.pliselstatus = 'A'
                  order by pis.pliselid";
         return $this->carregar($sql);
     }
@@ -280,7 +283,7 @@ class Alteracao_Model_Pedido extends Modelo
 		pc.picvalorcusteio AS custeio,
 		pc.picvalorcapital AS capital,
                 pc.picquantidade as fisico,
-                (select coalesce(pliselid,0) from alteracao.plano_interno_selecionado pis where pis.pliid=pli.pliid and pis.pedid = ".(int)$filtros->pedid.") as pliselid,
+                (select coalesce(pliselid,0) from alteracao.plano_interno_selecionado pis where pis.pliid=pli.pliid and pis.pedid = ".(int)$filtros->pedid." and pis.pliselstatus = 'A') as pliselid,
 		coalesce((SELECT 
 			sum(coalesce(se.vlrautorizado,0::numeric)) AS vlrautorizado
 		   FROM spo.siopexecucao se
@@ -370,7 +373,7 @@ class Alteracao_Model_Pedido extends Modelo
         # Busca pelo ID do Beneficiário
         $where .= $filtros->benid ? "\n AND ben.benid = ". $filtros->benid: NULL;
         # Busca pelas subunidades vinculadas ao código do Pedido
-        $where .= $filtros->subunidade_pedido? " AND suo.suoid IN(SELECT suoid FROM alteracao.pedido_unidade WHERE pedid = ". (int)$filtros->subunidade_pedido. ")": NULL;
+        $where .= $filtros->subunidade_pedido? " AND suo.suoid IN(SELECT suoid FROM alteracao.pedido_unidade WHERE pedid = ". (int)$filtros->subunidade_pedido. " and pedunistatus = 'A')": NULL;
 
         return $where;
     }

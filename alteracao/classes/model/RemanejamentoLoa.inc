@@ -101,7 +101,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                     AND ptr.ptrano = suo.prsano
 		)
                 JOIN alteracao.pedido_unidade pu ON(
-                    suo.suoid = pu.suoid
+                    suo.suoid = pu.suoid and pu.pedunistatus = 'A'
                 )
             WHERE
                 suo.prsano = '". (int)$exercicio. "'
@@ -282,8 +282,9 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                 LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
                 left join public.vw_subunidadeorcamentaria vs on ptr.unicod = vs.unocod
             WHERE
-                vs.suoid IN(SELECT suoid FROM alteracao.pedido_unidade WHERE pedid = ". (int)$pedid. ")
+                vs.suoid IN(SELECT suoid FROM alteracao.pedido_unidade WHERE pedid = ". (int)$pedid. " and pedunistatus = 'A')
                 AND pedid = ". (int)$pedid. "
+                and rl.rlstatus = 'A'
             ORDER BY
                 1
         ";
@@ -299,7 +300,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                     pis.pliselid
                 FROM monitora.ptres ptr 
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.ptrid = ptr.ptrid
-                left join alteracao.plano_interno_selecionado pis on ppt.pliid = pis.pliid and pis.pedid = {$dados['pedid']}
+                left join alteracao.plano_interno_selecionado pis on ppt.pliid = pis.pliid and pis.pedid = {$dados['pedid']} and pis.pliselstatus = 'A'
                WHERE ptr.ptrid = {$dados['ptrid']}
          ";
 
