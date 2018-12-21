@@ -94,12 +94,12 @@ function montarSqlRelatorioGeralAlteracao(stdClass $parametro){
             jst.jstoutros
         FROM alteracao.pedido AS ped
             JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
-            JOIN alteracao.janela AS jan ON ped.janid = jan.janid
-            LEFT JOIN alteracao.pedido_unidade pu on ped.pedid = pu.pedid
+            JOIN alteracao.janela AS jan ON ped.janid = jan.janid and janstatus = 'A'
+            LEFT JOIN alteracao.pedido_unidade pu on ped.pedid = pu.pedid and pu.pedunistatus = 'A'
             LEFT JOIN public.vw_subunidadeorcamentaria suo ON pu.suoid = suo.suoid
-            LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid -- SELECT * FROM alteracao.plano_interno_selecionado
+            LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid and pis.pliselstatus = 'A' -- SELECT * FROM alteracao.plano_interno_selecionado
             LEFT JOIN monitora.vw_planointerno pli ON pis.pliid = pli.pliid -- SELECT * FROM monitora.vw_planointerno 
-            LEFT JOIN alteracao.remanejamento_loa rl ON ped.pedid = rl.pedid -- SELECT * FROM alteracao.remanejamento_loa 
+            LEFT JOIN alteracao.remanejamento_loa rl ON ped.pedid = rl.pedid and rl.rlstatus = 'A' -- SELECT * FROM alteracao.remanejamento_loa 
             LEFT JOIN monitora.vw_ptres rl_ptr ON rl.ptrid = rl_ptr.ptrid
             LEFT JOIN public.fonterecurso rl_fo ON rl.fonid = rl_fo.fonid
             LEFT JOIN public.idoc rl_ido ON rl.idoid = rl_ido.idoid

@@ -96,10 +96,8 @@
         if($listaSubUnidadeUsuario){
             $parametro['suocod'] = $listaSubUnidadeUsuario;
         }
-        $sql = montarSqlRelatorioGeralAlteracao((object) $parametro);
-    } else {
-        $sql = montarSqlRelatorioGeralAlteracao((object) $parametro);
     }
+    $sql = montarSqlRelatorioGeralAlteracao((object) $parametro);
     $lista = $db->carregar($sql);
 //ver($sql, $lista, d);
 ?>
