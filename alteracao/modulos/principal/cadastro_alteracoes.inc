@@ -11,8 +11,10 @@ if ($_REQUEST['pedid']){
         $mAlteracaoPedido->docid = $mAlteracaoPedido->pegarDocidPedido($arrPedidos['pedid'], $arrPedidos['tpdid']);
     }
 }
-
-$podeEditar = $mAlteracaoPedido::podeEditarPedido($arrPedidos['esdid']);
+$podeEditar = TRUE;
+if($arrPedidos['esdid']){
+    $podeEditar = $mAlteracaoPedido::podeEditarPedido($arrPedidos['esdid']);
+}
 $simec->setPodeEditar($podeEditar);
 
 if ($_REQUEST['req']){
