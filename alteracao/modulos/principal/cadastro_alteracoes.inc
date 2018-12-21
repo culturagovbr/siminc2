@@ -12,6 +12,9 @@ if ($_REQUEST['pedid']){
     }
 }
 
+$podeEditar = $mAlteracaoPedido::podeEditarPedido($arrPedidos['esdid']);
+$simec->setPodeEditar($podeEditar);
+
 if ($_REQUEST['req']){
     switch ($_REQUEST['req']) {
         case 'carrega_pedidos':

@@ -112,11 +112,13 @@
                             </div>
                         </div>
                     </form>
-                    <div class="text-center">
-                        <button class="btn btn-primary btn-buscar" type="button" id="salvar-justificativa">
-                            <span class="glyphicon glyphicon-saved"></span> Salvar
-                        </button>
-                    </div>
+                    <?php if($podeEditar):  ?>
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-buscar" type="button" id="salvar-justificativa">
+                                <span class="glyphicon glyphicon-saved"></span> Salvar
+                            </button>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

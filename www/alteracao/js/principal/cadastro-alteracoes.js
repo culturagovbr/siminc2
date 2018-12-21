@@ -7,6 +7,7 @@ function initCadastroAlteracoes() {
 
     var permitirTodosPassos = $('#pedid').val()? true: false;
     var permitirBotaoFinalizar = verificarEstadoEdicao($('#esdid').val());
+    var permitirEditar = permiteEditar($('#esdid').val());
 
     var wizard = $("#wizard").steps({
         transitionEffect: "slide",
@@ -30,11 +31,15 @@ function initCadastroAlteracoes() {
                 case 0:
                     permitirAvancarPasso = verificaCampos();
                     if (permitirAvancarPasso) {
-                        salvarPedido();
+                        if(permitirEditar == true){
+                            salvarPedido();
+                        }
                     }
                     break;
                 case 4:
-                    salvarPedido();
+                    if(permitirEditar == true){
+                        salvarPedido();
+                    }
                     break;
             }
             return permitirAvancarPasso;
@@ -74,6 +79,25 @@ function initCadastroAlteracoes() {
         return false;
     });
 
+}
+
+/**
+ * Permite Editar somente quando o estado do Pedido estiver em 'Em cadastramento' ou em 'Aguardando Correção'.
+ *
+ * @param esdid -> Estado do documento
+ * @returns {boolean}
+ */
+function permiteEditar(esdid) {
+
+    if( esdid == ESD_EM_CADASTRAMENTO_INTERNO ||
+        esdid == ESD_EM_CADASTRAMENTO_EXTERNO ||
+        esdid == ESD_AGURADANDO_CORRECAO_INTERNO ||
+        esdid == ESD_AGURADANDO_CORRECAO_EXTERNO
+    ){
+        return true;
+    }else{
+        return false;
+    }
 }
 
 /**

@@ -408,4 +408,25 @@ class Alteracao_Model_Pedido extends Modelo
                  WHERE pliid = ".(int)$pliid;
         $this->executar($sql);
     }
+
+    /**
+     * Verifica se o pedido está no estado do documento que pode ser editado.
+     *
+     * @param $esdid -> estado do documento.
+     * @return bool
+     */
+    public static function podeEditarPedido($esdid)
+    {
+        if(
+            (int)$esdid === ESD_EM_CADASTRAMENTO_INTERNO ||
+            (int)$esdid === ESD_EM_CADASTRAMENTO_EXTERNO ||
+            (int)$esdid === ESD_AGURADANDO_CORRECAO_INTERNO ||
+            (int)$esdid === ESD_AGURADANDO_CORRECAO_EXTERNO
+        ){
+            $podeEditar = true;
+        }else{
+            $podeEditar = false;
+        }
+        return $podeEditar;
+    }
 }

@@ -1,9 +1,11 @@
 <?php
 $req = '<span style="color: #ff0000">*</span>';
 $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table-hover" >
-        <tr class="text-center">
-            <th width="10%">Ação</th>
-            <th class="tdpliselid">Funcional'.$req.'</th>
+        <tr class="text-center">';
+            if ($podeEditar):
+                $linha .= '<th width="10%">Ação</th>';
+            endif;
+$linha .= '<th class="tdpliselid">Funcional'.$req.'</th>
             <th>Categoria'.$req.'</th>
             <th>GND'.$req.'</th>
             <th><span title="Modalidade de Aplicação">Mod'.$req.'</span></th>
@@ -20,49 +22,108 @@ $linha = '<table id="tbListaLoa" class="table table-striped table-bordered table
 
             $loas = (new Alteracao_Model_RemanejamentoLoa())->recuperarTodosPorPedido($_REQUEST['pedid']);
             foreach($loas as $loa){
+                if ($podeEditar):
                 $linha .= '<tr class="text-center">
                               <td width="5% ">
                                   <a href="#" class="btnRemoverLoa" id="btnRemoverLoa" title="Excluir registro" rlid="'.$loa['rlid'].'"><i style="font-weight: 20px" class="fa fa-close"></i></a>&nbsp;&nbsp;&nbsp;
                                   <a href="#" class="btnSalvarLoa" id="btnSalvarLoa" title="Salvar registro" rlid="'.$loa['rlid'].'"><i class="fa fa-check"></i></a>
                               </td>';
-                $linha .= '<td class="combo">';
-                $linha .= '<input type="hidden" id="unicod'.$loa['rlid'].'" name="unicod" value="'.$loa['unicod'].'">';
-                        $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid'], $_SESSION['exercicio']);
-                $linha .= montaListaLoa('ptrid',$options, $loa['ptrid'], $loa['rlid'], 'SelecionaPtrid(this, '.$loa['rlid'].');');
+                endif;
+                $linha .= '<td class="combo" style="vertical-align: middle">';
+
+                    if($podeEditar):
+                        $linha .= '<input type="hidden" id="unicod'.$loa['rlid'].'" name="unicod" value="'.$loa['unicod'].'">';
+                                $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid'], $_SESSION['exercicio']);
+                        $linha .= montaListaLoa('ptrid',$options, $loa['ptrid'], $loa['rlid'], 'SelecionaPtrid(this, '.$loa['rlid'].');');
+                    else:
+                        $linha .= $loa['funcional'];
+                    endif;
                 $linha .= '</td>';
-                $linha .= '<td class="combo">';
-                        $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboCategoria();
-                $linha .= montaListaLoa('ctecod', $options, $loa['ctecod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');');
+                $linha .= '<td class="combo" style="vertical-align: middle">';
+                    if($podeEditar):
+                            $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboCategoria();
+                    $linha .= montaListaLoa('ctecod', $options, $loa['ctecod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');');
+                    else:
+                        $linha .= $loa['ctecod'];
+                    endif;
                 $linha .= '</td>';
-                $linha .= '<td class="combo">';
-                        $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboGND();
-                $linha .= montaListaLoa('gndcod', $options, $loa['gndcod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');');
+                $linha .= '<td class="combo" style="vertical-align: middle">';
+                    if($podeEditar):
+                            $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboGND();
+                    $linha .= montaListaLoa('gndcod', $options, $loa['gndcod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');');
+                    else:
+                        $linha .= $loa['gndcod'];
+                    endif;
                 $linha .= '</td>';
-                $linha .= '<td class="combo">';
-                        $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboModalidade();
-                $linha .= montaListaLoa('mapcod', $options, $loa['mapcod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');', 'Modalidade de Aplicação');
+                $linha .= '<td class="combo" style="vertical-align: middle">';
+                    if($podeEditar):
+                            $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboModalidade();
+                    $linha .= montaListaLoa('mapcod', $options, $loa['mapcod'], $loa['rlid'], 'SelecionaDotacao('.$loa['rlid'].');', 'Modalidade de Aplicação');
+                    else:
+                        $linha .= $loa['mapcod'];
+                    endif;
                 $linha .= '</td>';
-                $linha .= '<td class="combo">';
+                $linha .= '<td class="combo" style="vertical-align: middle">';
+                    if($podeEditar):
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboFonte();
-                $linha .= montaListaLoa('fonid', $options, $loa['fonid'], $loa['rlid']);
+                        $linha .= montaListaLoa('fonid', $options, $loa['fonid'], $loa['rlid']);
+                    else:
+                        $linha .= $loa['foncod'];
+                    endif;
                 $linha .= '</td>';
-                $linha .= '<td class="combo">';
+                $linha .= '<td class="combo" style="vertical-align: middle">';
+                    if($podeEditar):
                         $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboIdoc();
-                $linha .= montaListaLoa('idoid', $options, $loa['idoid'], $loa['rlid']);
+                        $linha .= montaListaLoa('idoid', $options, $loa['idoid'], $loa['rlid']);
+                    else:
+                        $linha .= $loa['idocod'];
+                    endif;
+                $linha .= '</td>';
+                $linha .= '<td class="combo" style="vertical-align: middle">';
+                    if($podeEditar):
+                            $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboIduso();
+                            $linha .= montaListaLoa('iduid', $options, $loa['iduid'], $loa['rlid']);
+                    else:
+                        $linha .= $loa['iducod'];
+                    endif;
                 $linha .= '</td>';
                 $linha .= '<td class="combo">';
-                        $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboIduso();
-                $linha .= montaListaLoa('iduid', $options, $loa['iduid'], $loa['rlid']);
+                if($podeEditar):
+                    $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboRP();
+                    $linha .= montaListaLoa('rpcod', $options, $loa['rpcod'], $loa['rlid']);
+                else:
+                    $linha .= $loa['rpcod'];
+                endif;
                 $linha .= '</td>';
-                $linha .= '<td class="combo">';
-                        $options = (new Alteracao_Model_RemanejamentoLoa())->montaComboRP();
-                $linha .= montaListaLoa('rpcod', $options, $loa['rpcod'], $loa['rlid']);
-                $linha .= '</td>';
-                $linha .= '        <td class="combo" style="vertical-align: middle" id="vlDotacao'.$loa['rlid'].'">'.$loa['vldotacao'].'</td>';
-                $linha .= '        <td class="combo"><input type="text" id="vlSuplementar'.$loa['rlid'].'" name="vlSuplementar" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementar'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento"></td>';
-                $linha .= '        <td class="combo"><input type="text" id="vlCancelado'.$loa['rlid'].'" name="vlCancelado" rlid="'.$loa['rlid'].'" value="'.$loa['vlcancelado'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento"></td>';
-                $linha .= '        <td class="combo"><input type="text" id="vlSuplementarExcesso'.$loa['rlid'].'" name="vlSuplementarExcesso" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementarexcesso'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento"></td>';
-                $linha .= '        <td class="combo"><input type="text" id="vlSuplementarSuperavit'.$loa['rlid'].'" name="vlSuplementarSuperavit" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementarsuperavit'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento"></td>';
+                $linha .= '         <td class="combo" style="vertical-align: middle" id="vlDotacao'.$loa['rlid'].'">'.$loa['vldotacao'].'</td>';
+                $linha .= '         <td class="combo" style="vertical-align: middle">';
+                                    if($podeEditar){
+                                        $linha .= '<input type="text" id="vlSuplementar'.$loa['rlid'].'" name="vlSuplementar" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementar'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento">';
+                                    }else{
+                                        $linha .= number_format($loa['vlsuplementar'], 0, ',','.');
+                                    }
+                $linha .=           '</td>';
+                $linha .=           '<td class="combo" style="vertical-align: middle">';
+                                    if($podeEditar){
+                                        $linha .= '<input type="text" id="vlCancelado'.$loa['rlid'].'" name="vlCancelado" rlid="'.$loa['rlid'].'" value="'.$loa['vlcancelado'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento">';
+                                    }else{
+                                        $linha .= number_format($loa['vlcancelado'], 0, ',','.');
+                                    }
+                $linha .=           '</td>';
+                $linha .=           '<td class="combo" style="vertical-align: middle">';
+                                    if($podeEditar){
+                                        $linha .= '<input type="text" id="vlSuplementarExcesso'.$loa['rlid'].'" name="vlSuplementarExcesso" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementarexcesso'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento">';
+                                    }else{
+                                        $linha .= number_format($loa['vlsuplementarexcesso'], 0, ',','.');
+                                    }
+                $linha .=           '</td>';
+                $linha .=           '<td class="combo" style="vertical-align: middle">';
+                                    if($podeEditar){
+                                        $linha .= '<input type="text" id="vlSuplementarSuperavit'.$loa['rlid'].'" name="vlSuplementarSuperavit" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementarsuperavit'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento">';
+                                    }else{
+                                        $linha .= number_format($loa['vlsuplementarsuperavit'], 0, ',','.');
+                                    }
+                $linha .=           '</td>';
                 $linha .= '     </tr>';
             }
 $linha .= '</table>';

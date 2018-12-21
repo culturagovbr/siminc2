@@ -3,6 +3,7 @@
     <span id="divAlertaContent">Teste de alerta</span>
 </div>
 
+<?php if($podeEditar): ?>
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
@@ -15,6 +16,7 @@
     </div>
 </div>
 
+<?php endif; ?>
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">

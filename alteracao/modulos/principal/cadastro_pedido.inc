@@ -3,7 +3,7 @@
         <h5>DADOS GERAIS</h5>
     </div>
     <div class="ibox-content">
-        <form id="filtroalteracao" name="filtroalteracao" method="POST" role="form" action="?modulo=principal/cadastro_alteracoes&acao=C" class="form-horizontal">
+        <form id="cadastro-pedido" name="cadastro-pedido" method="POST" role="form" action="?modulo=principal/cadastro_alteracoes&acao=C" class="form-horizontal">
             <input name="req" id="req" value="" type="hidden">
             <div class="row">
                 <div class="col-lg-8">
@@ -34,9 +34,11 @@
 
             <div class="form-group">
                 <div class="text-center">
-                    <button class="btn btn-primary btn-buscar" type="button" id="btnSalvarPedido">
-                        <span class="glyphicon glyphicon-saved"></span> Salvar
-                    </button>
+                    <?php if($podeEditar): ?>
+                        <button class="btn btn-primary btn-buscar" type="button" id="btnSalvarPedido">
+                            <span class="glyphicon glyphicon-saved"></span> Salvar
+                        </button>
+                    <?php endif; ?>
                     <a href="?modulo=inicio&acao=C" class="btn btn-warning" id="btn-voltar" type="button">
                         <i class="fa fa-arrow-left"></i> Voltar
                     </a>
@@ -95,7 +97,7 @@
 
     function verificaCampos(){
         var retorno = true;
-        $("#filtroalteracao input, select").each(function(){
+        $("#cadastro-pedido input, select").each(function(){
             if ($(this).attr('required') && ( $.trim( $(this).val() ) == '' || $.trim( $(this).val() ) == null )){
                 retorno = false;
             }

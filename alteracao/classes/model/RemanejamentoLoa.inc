@@ -276,11 +276,18 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                 rl.vlsuplementarexcesso,
                 rl.vlsuplementarsuperavit,
                 ptr.unicod,
+                ptr.funcional,
+                fon.foncod,
+                ido.idocod,
+                idu.iducod,
                 TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
             FROM alteracao.remanejamento_loa rl
-                LEFT JOIN monitora.ptres ptr on rl.ptrid = ptr.ptrid
-                LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
-                left join public.vw_subunidadeorcamentaria vs on ptr.unicod = vs.unocod
+                LEFT JOIN monitora.vw_ptres ptr ON rl.ptrid = ptr.ptrid
+                LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid
+                LEFT JOIN public.vw_subunidadeorcamentaria vs ON ptr.unicod = vs.unocod
+                JOIN public.fonterecurso AS fon ON rl.fonid = fon.fonid
+                LEFT JOIN public.idoc AS ido ON rl.idoid = ido.idoid
+                JOIN public.identifuso AS idu ON rl.iduid = idu.iduid
             WHERE
                 vs.suoid IN(SELECT suoid FROM alteracao.pedido_unidade WHERE pedid = ". (int)$pedid. " and pedunistatus = 'A')
                 AND pedid = ". (int)$pedid. "

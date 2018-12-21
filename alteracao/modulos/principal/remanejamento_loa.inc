@@ -33,10 +33,13 @@
                 <h5>LOA</h5>
             </div>
             <div class="ibox-content">
-                <button class="btn btn-primary" type="button" id="btnloa">
-                    <span class="glyphicon glyphicon-plus"></span> Adicionar
-                </button>
-                <?php include APPRAIZ.'alteracao/modulos/principal/lista_loa.inc';?>
+                <?php if ($podeEditar): ?>
+                    <button class="btn btn-primary" type="button" id="btnloa">
+                        <span class="glyphicon glyphicon-plus"></span> Adicionar
+                    </button>
+                <?php endif;
+                    include APPRAIZ.'alteracao/modulos/principal/lista_loa.inc';
+                ?>
             </div>
         </div>
     </div>
