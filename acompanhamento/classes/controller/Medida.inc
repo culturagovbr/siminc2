@@ -9,27 +9,27 @@ class Acompanhamento_Controller_Medida
         try {
             $mMedida = new Acompanhamento_Model_Medida($dados['medid']);
             $mMedida->popularDadosObjeto($dados);
-            
-            $mMedida->salvar(null, null, []);
+            $mMedida->meddsc = utf8_decode($dados['meddsc']);
+            $mMedida->salvar(null, null);
             $mMedida->commit();
             simec_redirecionar($url, 'success');
         } catch (Exception $e){
             $mMedida->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
-    
+    }
+
     public function excluir($medid)
     {
         try {
             $mMedida = new Acompanhamento_Model_Medida($medid);
-            
-            $mMedida->excluir($medid);
+            $mMedida->medstatus = 'I';
+            $mMedida->salvar();
             $mMedida->commit();
             return $mMedida->claid;
         } catch (Exception $e){
             $mMedida->rollback();
             return false;
         }
-    } //end salvar()
-}            
+    }
+}

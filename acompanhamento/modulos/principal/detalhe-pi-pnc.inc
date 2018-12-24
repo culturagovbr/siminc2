@@ -1,4 +1,10 @@
-<?php if(count($listaPi)): ?>
+<?php
+    $mpnid = $_REQUEST['mpnid'];
+    $suoid = $_REQUEST['suoid'];
+    $mPi = new Pi_PlanoInterno();
+    $listaPi = $mPi->recuperarPiPorMetaPncESubunidade($mpnid, $suoid);
+    if(count($listaPi)):
+?>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover bedidTables" >
             <thead>

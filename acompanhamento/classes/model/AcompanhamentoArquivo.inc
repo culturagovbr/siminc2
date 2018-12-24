@@ -76,6 +76,5 @@ class Acompanhamento_Model_AcompanhamentoArquivo extends Modelo
         $dados = $this->carregar($sql);
         return $dados ? $dados : [];
     }
-    
-}//end Class
-?>
+
+}

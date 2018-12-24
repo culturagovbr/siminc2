@@ -11,7 +11,7 @@ $sql = "SELECT p.pflcod FROM seguranca.perfil p
 		ORDER BY pflnivel ASC LIMIT 1";
 
 $perfilcod = $db->pegaUm($sql);
-
+$_SESSION['exercicio'] = $_REQUEST['exercicio']?$_REQUEST['exercicio']:$_SESSION['exercicio'];
 header('Location: ?modulo=principal/lista&acao=A');
 die;
 

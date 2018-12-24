@@ -281,6 +281,14 @@
                                     </tr>
                                     <tr>
                                         <td>
+                                            <b>UO:</b>
+                                        </td>
+                                        <td align="left">
+                                            <span><?php echo $dadosPI['uo']; ?></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             <b>Programa:</b>
                                         </td>
                                         <td align="left">

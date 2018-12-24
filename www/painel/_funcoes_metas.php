@@ -356,7 +356,7 @@ function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$
 
 	if($perid == 5){
 		if($dpeid && $removeUtilizados == false){
-			$data = $db->pegaUm("select dpedsc from painel.detalheperiodicidade where dpeid = $dpeid");
+			$data = $db->pegaUm("select dpedsc from painel.detalheperiodicidade where dpeid = $dpeid  and dpeanoref= '".$_SESSION['exercicio']."'");
 		}
 		echo campo_data2("dpeid","S","S","","","","",$data);
 		return true;
@@ -370,6 +370,7 @@ function getComboPeriodoPorPerid($perid,$removeUtilizados = true,$dmiid = null,$
 				painel.detalheperiodicidade
 			where
 				dpestatus = 'A'
+                        and dpeanoref= '".$_SESSION['exercicio']."'
 			and
 				perid = $perid
 			".($removeUtilizados===true ? "and dpeid not in (select distinct dpe.dpeid

@@ -8955,15 +8955,21 @@ function criaGraficoHighCharts($tipoGrafico,$arrDadosIndicador = array(),$arrVal
  */
 function montarSqlRelIndicadoresSecretaria(stdClass $dto){
     $where = '';
+    $wherePeriodo = '';
     $where .= $dto->secid? "AND s.secid = ". (int)$dto->secid. "\n": NULL;
+    
+    $dto->nuanoreferencia = $dto->nuanoreferencia? (int)$dto->nuanoreferencia : date("Y");
+    $wherePeriodo .= "AND ag.nuanoreferencia = ". (int)$dto->nuanoreferencia. "\n";
+    $dto->numesreferencia = $dto->numesreferencia? (int)$dto->numesreferencia : date("m");
+    $wherePeriodo .= "AND ag.numesreferencia = ". (int)$dto->numesreferencia. "\n";
     $sql = "
         SELECT DISTINCT
 	    i.indid,
 	    s.secordem,
             i.indnome AS nome,
             i.indprod AS produto,
-            indavalgestor AS parecer_gestor_a,
-            indobsgestor AS observacao_gestor_i,
+            ag.indavalgestor AS parecer_gestor_a,
+            ag.indobsgestor AS observacao_gestor_i,
             (
 		SELECT
 --		    TO_CHAR(NOW(), 'YYYY') ano,
@@ -8976,8 +8982,8 @@ function montarSqlRelIndicadoresSecretaria(stdClass $dto){
 		WHERE
 		    dmi.dmistatus = 'A'
 		    -- Ano igual ou menor
-		    AND dpe.dpeanoref::INTEGER <= TO_CHAR(NOW(), 'YYYY')::INTEGER
-		    AND dpe.dpemesref::INTEGER <= TO_CHAR(NOW(), 'mm')::INTEGER
+		    AND dpe.dpeanoref::INTEGER <= {$dto->nuanoreferencia}::INTEGER
+		    AND dpe.dpemesref::INTEGER <= {$dto->numesreferencia}::INTEGER
 		    AND mi.indid = i.indid --3329
 		ORDER BY
 			dpe.dpeanoref DESC,
@@ -8996,6 +9002,8 @@ function montarSqlRelIndicadoresSecretaria(stdClass $dto){
                         OR
                         sehstatus='H'
                     )
+                    and dpe.dpeanoref = '{$dto->nuanoreferencia}'
+                    and dpe.dpemesref = '{$dto->numesreferencia}'                    
                     AND seh.indid = i.indid --3329
             )::INTEGER AS realizado,
             a.acaorcamento AS orcamento
@@ -9004,13 +9012,14 @@ function montarSqlRelIndicadoresSecretaria(stdClass $dto){
             LEFT JOIN painel.acao a ON a.acaid = i.acaid
             LEFT JOIN painel.secretaria s ON i.secid = s.secid
             LEFT JOIN painel.unidademeta ume ON i.umeid = ume.umeid
+            LEFT JOIN painel.avaliacao_gestor ag on i.indid = ag.indid $wherePeriodo
         WHERE
             i.indstatus = 'A'
             $where
         ORDER BY
             s.secordem ASC
     ";
-    
+//    ver($sql,d);
     return $sql;
 }
 
