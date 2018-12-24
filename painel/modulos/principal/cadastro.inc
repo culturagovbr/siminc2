@@ -92,7 +92,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$secid  		= $_REQUEST['secid'];  
 				$secidgestora		= $_REQUEST['secidgestora'];
 				$acaid   		= $_REQUEST['acaid'];
-                $produto		= $_REQUEST['indprod'];
+                                $produto		= $_REQUEST['indprod'];
 				$perid  		= $_REQUEST['perid'];  
 				$peridatual		= $_REQUEST['peridatual'];
 				$estid  		= $_REQUEST['estid'];
@@ -129,6 +129,7 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 				$mtiid 				= $_REQUEST['mtiid'];
 				$indshformula		= $_REQUEST['indshformula'];
 				$formulash			= $_REQUEST['formulash'];
+                                $indano                = $_SESSION['exercicio'];
 				if($indpublicado=='true'){
 					$indhomologado = true;
 				}
@@ -173,12 +174,12 @@ if( (isset($_REQUEST[evento]) && ($_REQUEST[evento] != '')) || $_SESSION['indid'
 							  indformula, indtermos, indfontetermo, indnormalinicio, indnormalfinal, indatencaoinicio,
 							  indatencaofinal, indcriticoinicio, indcriticofinal, indmetavalor, indmetadatalimite,exoid,regid,umeid,
                                                           indqtdevalor,indcumulativo,indpublicado,indescala,indobservacao,peridatual,indcumulativovalor,indpublico,
-                                                          indhomologado,mtiid,indshformula,formulash,indencerrado, indprod)
+                                                          indhomologado,mtiid,indshformula,formulash,indencerrado, indprod, indano)
 						  VALUES 
 						  	   (".$unmid.", ".$cliid.", ".$tpiid.", ".$secid.", ".$secidgestora.", ".$acaid.", ".$perid.", ".$estid.", ".$colid.", '".$usucpf."', '".$indnome."', '".$indobjetivo."',
 							  '".$indformula."', '".$indtermos."', '".$indfontetermo."', ".$indnormalinicio.", ".$indnormalfinal.", ".$indatencaoinicio.",
 							  ".$indatencaofinal.", ".$indcriticoinicio.", ".$indcriticofinal.", ".$indmetavalor.", '".$indmetadatalimite."','".$exoid."',$regid,$umeid,$indqtdevalor,'$indcumulativo',"
-                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado, '".$produto."')
+                                        . "               $indpublicado,$indescala,'$indobservacao','$peridatual','$indcumulativovalor',$indpublico,$indhomologado,$mtiid,$indshformula,'$formulash',$indencerrado, '".$produto."', '".$indano."')
 						  RETURNING	indid
 						  ";
 
