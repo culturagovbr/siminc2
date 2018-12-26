@@ -163,7 +163,7 @@
                             <div class="col-md-8">
 
                                     <div class="form-group ">
-                                        <label for="acoquantidade" class="col-sm-2 col-md-2 col-lg-2 control-label">Executado: <span class="campo-obrigatorio" title="Campo obrigatório">*</span></label>
+                                        <label for="acoquantidade" class="col-sm-2 col-md-2 col-lg-2 control-label">Quantidade alcançada: <span class="campo-obrigatorio" title="Campo obrigatório">*</span></label>
                                         <div class="col-sm-2 col-md-2 col-lg-2 ">
                                             <?php $acoquantidade = is_numeric($mAcompanhamento->acoquantidade) ? number_format($mAcompanhamento->acoquantidade, 2, ',', '.') : null; ?>
                                             <?php if($podeEditar){ ?>
