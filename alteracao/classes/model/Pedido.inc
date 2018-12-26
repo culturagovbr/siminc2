@@ -251,11 +251,12 @@ class Alteracao_Model_Pedido extends Modelo
                   LEFT JOIN monitora.pi_planointernoptres ppt on pis.pliid = ppt.pliid
                   LEFT JOIN monitora.ptres ptr ON( ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
                   LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
-		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(ptr.unicod = suo.unocod)                          
+		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(pli.unicod = suo.unocod and pli.ungcod = suo.suocod and suo.unostatus = 'A' and suo.prsano='".$_SESSION['exercicio']."')                          
                  where pis.pedid = $pedid
                    and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid and pedunistatus='A')
                    and pis.pliselstatus = 'A'
                  order by pis.pliselid";
+//ver($sql,d);
         return $this->carregar($sql);
     }
 

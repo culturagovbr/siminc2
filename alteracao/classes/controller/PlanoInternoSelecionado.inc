@@ -27,7 +27,8 @@ class Alteracao_Controller_PlanoInternoSelecionado
     {
         try {
             $mPedido = new Alteracao_Model_PlanoInternoSelecionado($dados['pliselid']);
-            $mPedido->excluir();
+            $mPedido->pliselstatus = 'I';
+            $mPedido->salvar();
             $mPedido->commit();
             echo json_encode(array("return" => true));
         } catch (Exception $e){
