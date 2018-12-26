@@ -5,13 +5,13 @@ class Alteracao_Controller_RemanejamentoLoa
     public function salvar($dados)
     {
         try {
-            $mPedido = new Alteracao_Model_RemanejamentoLoa();
-            $mPedido->popularDadosObjeto($dados);
-            $mPedido->salvar(null, null, null);
-            $mPedido->commit();
+            $mLoa = new Alteracao_Model_RemanejamentoLoa();
+            $mLoa->popularDadosObjeto($dados);
+            $mLoa->salvar(null, null, null);
+            $mLoa->commit();
             echo json_encode(true);
         } catch (Exception $e){
-            $mPedido->rollback();
+            $mLoa->rollback();
             echo json_encode(false);
         }
     }
@@ -19,12 +19,13 @@ class Alteracao_Controller_RemanejamentoLoa
     public function excluir($rlid)
     {
         try {
-            $mPedido = new Alteracao_Model_RemanejamentoLoa();
-            $mPedido->excluir($rlid);
-            $mPedido->commit();
+            $mLoa = new Alteracao_Model_RemanejamentoLoa($rlid);
+            $mLoa->rlstatus = 'I';
+            $mLoa->salvar();
+            $mLoa->commit();
             echo json_encode(true);
         } catch (Exception $e){
-            $mPedido->rollback();
+            $mLoa->rollback();
             echo json_encode(false);
         }
     }

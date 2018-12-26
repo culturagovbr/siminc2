@@ -78,6 +78,7 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
         'vlcancelado' => null,
         'vlsuplementarexcesso' => null,
         'vlsuplementarsuperavit' => null,
+        'rlstatus' => null,
     );
 
     /**
