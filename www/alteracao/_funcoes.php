@@ -17,7 +17,7 @@ function montarSqlRelatorioGeralAlteracao(stdClass $parametro){
 
     $sql = "
         SELECT DISTINCT
-            ped.pedid
+            ped.pedid,
             suo.unocod,
             suo.unosigla,
             suo.unonome,
@@ -95,18 +95,17 @@ function montarSqlRelatorioGeralAlteracao(stdClass $parametro){
         FROM alteracao.pedido AS ped
             JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
             JOIN alteracao.janela AS jan ON ped.janid = jan.janid and janstatus = 'A'
-            LEFT JOIN alteracao.pedido_unidade pu on ped.pedid = pu.pedid and pu.pedunistatus = 'A'
-            LEFT JOIN public.vw_subunidadeorcamentaria suo ON pu.suoid = suo.suoid
-            LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid and pis.pliselstatus = 'A'
-            LEFT JOIN monitora.vw_planointerno pli ON pis.pliid = pli.pliid
-            LEFT JOIN alteracao.remanejamento_loa rl ON ped.pedid = rl.pedid and rl.rlstatus = 'A'
-            LEFT JOIN monitora.vw_ptres rl_ptr ON rl.ptrid = rl_ptr.ptrid
-            LEFT JOIN public.fonterecurso rl_fo ON rl.fonid = rl_fo.fonid
-            LEFT JOIN public.idoc rl_ido ON rl.idoid = rl_ido.idoid
-            LEFT JOIN public.identifuso rl_idu ON rl.iduid = rl_idu.iduid
-            LEFT JOIN alteracao.justificativa jst ON ped.pedid = jst.pedid
-            LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
-            LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
+            JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid and pis.pliselstatus = 'A'
+            JOIN monitora.vw_planointerno pli ON pis.pliid = pli.pliid
+            JOIN alteracao.remanejamento_loa rl ON ped.pedid = rl.pedid and rl.rlstatus = 'A'
+            JOIN monitora.vw_ptres rl_ptr ON rl.ptrid = rl_ptr.ptrid
+            JOIN public.vw_subunidadeorcamentaria suo ON pli.unocod = suo.unocod and pli.suocod = suo.suocod and suo.unostatus = 'A' and suo.prsano=ped.pedano
+            JOIN public.fonterecurso rl_fo ON rl.fonid = rl_fo.fonid
+            JOIN public.idoc rl_ido ON rl.idoid = rl_ido.idoid
+            JOIN public.identifuso rl_idu ON rl.iduid = rl_idu.iduid
+            JOIN alteracao.justificativa jst ON ped.pedid = jst.pedid
+            JOIN workflow.documento AS doc ON ped.docid = doc.docid
+            JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
         WHERE
             ped.pedstatus = 'A'
             AND doc.tpdid IS NOT NULL
