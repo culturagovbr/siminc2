@@ -52,7 +52,7 @@
             include APPRAIZ. 'acompanhamento/modulos/principal/listar-anexos-pnc.inc';
         die;
         case 'detalhe-pi':
-            include APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi.inc';
+            include APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi-pnc.inc';
         die;
         case 'exibir-grafico':
             include APPRAIZ. 'acompanhamento/modulos/principal/modal-grafico-pnc.inc';
@@ -62,6 +62,8 @@
         die;
         case 'anexar-arquivos-monitoramento-Pnc':
             $acpid = $_REQUEST['acpid'];
+            $_FILES['file']['name']   = utf8_decode($_FILES['file']['name']);
+            $_REQUEST['arqdescricao'] = utf8_decode($_REQUEST['arqdescricao']);
             $file = new FilesSimec();
             if($file->setUpload($_REQUEST['arqdescricao'], '', FALSE)){
                 $arqid = $file->getIdArquivo();
@@ -89,11 +91,11 @@
             echo $simec->select('muncod', 'Município', $atividade->muncod, (new Territorios_Model_Municipio())->recuperarSqlCombo(['estuf', 'mundescricao'], ["estuf='". $_REQUEST['estuf']."'"]));
         die;
     }
-    
+
     if($mpnid){
         # Busca acompanhamento Ativo de acordo com a Unidade, Janela e Meta.
         $stdAcompanhamento = Acompanhamento_Controller_Acompanhamentopnc::buscarAcompanhamentoJanelaSubunidadeMeta($suoid, $janid, $mpnid);
-        
+
         # Verifica se existe acompanhamento da meta selecionada
         if($stdAcompanhamento->acpid){
             # Carrega dados do acompanhamento da Meta
@@ -107,7 +109,7 @@
             $acompanhamentopnc->salvar();
             $acompanhamentopnc->commit();
         }
-        
+
         # Usado no formulário modal de upload de arquivos do acompanhamento da Meta PNC
         $acpid = $acompanhamentopnc->acpid;
 
@@ -120,7 +122,7 @@
         # Verifica se o usuário pode modificar o acompanhamento de acordo com o perfil e estado do acompanhamento
         $podeEditar = Acompanhamento_Controller_Acompanhamentopnc::verificarPermissaoEditar($acompanhamentopnc->acpid);
     }
-    
+
     include APPRAIZ . "includes/cabecalho.inc";
 
 ?>

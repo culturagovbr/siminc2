@@ -10,16 +10,14 @@ class Acompanhamento_Controller_Classificacao
             $mClassificacao = new Acompanhamento_Model_Classificacao($dados['claid']);
             $mClassificacao->popularDadosObjeto($dados);
             $mClassificacao->clamedida = $dados['clamedida']? 't': 'f';
-            
-            $mClassificacao->salvar(null, null, []);
-
+            $mClassificacao->salvar(null, null);
             $mClassificacao->commit();
             simec_redirecionar($url. '&claid='. $mClassificacao->claid, 'success');
         } catch (Exception $e){
             $mClassificacao->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 
     public function excluir($claid)
     {
@@ -27,13 +25,6 @@ class Acompanhamento_Controller_Classificacao
 
         try {
             $mClassificacao = new Acompanhamento_Model_Classificacao($claid);
-            
-            if($mClassificacao->existeVinculo()){
-                $mensagem = 'O registro não pode ser excluído pois possui vínculo com algum PI.';
-                $url = '?modulo=apoio/modalidade-pactuacao-form&acao=A&capid=' . $mClassificacao->claid;
-                simec_redirecionar($url, 'error', $mensagem);
-            }            
-            
             $mClassificacao->clastatus = 'I';
             $mClassificacao->salvar();
             $mClassificacao->commit();
@@ -42,7 +33,7 @@ class Acompanhamento_Controller_Classificacao
             $mClassificacao->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 
     public function montarFormularioMedida($claid = null, $medid = null)
     {
@@ -74,10 +65,8 @@ class Acompanhamento_Controller_Classificacao
          * @todo colcoar a constante correta do acompanhamento para atualizar a regra.
          */
         $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
-        
-        $listaMedida = (new Acompanhamento_Model_Medida)->recuperarTodos('*', ['claid = ' . (int)$claid]);
+        $listaMedida = (new Acompanhamento_Model_Medida)->recuperarTodos('*', ['claid = ' . (int)$claid, "medstatus = 'A'"]);
         include_once APPRAIZ . 'acompanhamento/modulos/apoio/medida.inc';
     }
-
 
 }

@@ -66,6 +66,7 @@ class Simec_View_Helper_Element extends Zend_View_Helper_FormElement
         if ($label) {
             $required = is_array($attribs) && in_array('required', $attribs) ? '<span class="campo-obrigatorio" title="Campo obrigatório">*</span>' : '';
 
+            $titleOfLabel = $attribs['title']? 'title="'. $attribs['title']. '"': NULL;
             return '               
                 <style>
                     .dropdown-menu{
@@ -74,7 +75,7 @@ class Simec_View_Helper_Element extends Zend_View_Helper_FormElement
                 </style>
 
                 <div class="form-group ' . $classErro . $classGroup . '">
-                    <label for="' . $config['label-for'] . '" class="' . $classLabel . '">' . $label . ': ' . $required . '</label>
+                    <label for="' . $config['label-for'] . '" class="' . $classLabel . '" '. $titleOfLabel. '>' . $label . ': ' . $required . '</label>
                     <div class="' . $classInput . '">
                         '. $xhtml .'
                         '. $labelErros .'

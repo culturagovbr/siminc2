@@ -508,7 +508,7 @@ for ($i=$anoInicial;$i<=$anoFinal;$i++){
     $listaAnos[$j]['descricao']=$i;
     $j++;
 }
-$nroAnoReferencia = $_REQUEST['nroAnoReferencia'];
+$nroAnoReferencia = $_REQUEST['nroAnoReferencia']?$_REQUEST['nroAnoReferencia']:$_SESSION['exercicio'];
 $tabeladefiltros[] = array("descricao"	       => "Ano Referência:",
                             "nome"  	       => "nroAnoReferencia",
                             "editavel"	       => "S",
@@ -521,7 +521,7 @@ if($tabeladefiltros) {
 		echo "<td class='SubTituloDireita' style='width:150px;'>".$tbl['descricao']."</td>";
 		echo "<td ".(($tbl['td_id'])?"id='".$tbl['td_id']."'":"").">";
 		echo "<span style='display:none' id='".$tbl['span_id']."'>".base64_encode($tbl['sqldin'])."</span>";
-		$db->monta_combo($tbl['nome'], (($tbl['sql'])?$tbl['sql']:array()), $tbl['editavel'], 'Selecione', $tbl['funcaojavascript'], '', '', '200', 'S', $tbl['nome']);
+		$db->monta_combo($tbl['nome'], (($tbl['sql'])?$tbl['sql']:array()), $tbl['editavel'], '', $tbl['funcaojavascript'], '', '', '200', 'S', $tbl['nome']);
 		echo "</td>";
 	}
 } else {

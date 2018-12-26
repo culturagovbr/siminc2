@@ -1910,7 +1910,7 @@ function enviarEmailAprovacao($pliid){
     $usuario = wf_pegarUltimoUsuarioModificacao($pi['docid']);
 
     # $textoEmail
-    include_once APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
+    include APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
 
     $listaUsuariosPlanejamento = buscarUsuarioPerfilPlanejamento((object) array(
         'sisid' => SISID_PLANEJAMENTO,
@@ -1973,7 +1973,7 @@ function enviarEmailCorrecao($pliid){
     $textoDevolucao = wf_pegarComentarioEstadoAtual($pi['docid']);
 
     # $textoEmail
-    include_once APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
+    include APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
 
     $listaUsuariosUnidadeDoPi = buscarUsuarioPerfilPlanejamento((object) array(
         'sisid' => SISID_PLANEJAMENTO,
@@ -2035,7 +2035,7 @@ function enviarEmailAprovado($pliid){
     $usuario = wf_pegarUltimoUsuarioModificacao($pi['docid']);
 
     # $textoEmail
-    include_once APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
+    include APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
 
     $listaUsuariosPlanejamento = buscarUsuarioPerfilPlanejamento((object) array(
         'sisid' => SISID_PLANEJAMENTO,
@@ -2062,7 +2062,7 @@ function enviarEmailAprovado($pliid){
 //),
 //array(
 //# Destinatario
-//'email' => $listaResponsaveis
+//'email' => $listaDestinatario
 //),
 //'PI - '. ($pi['plicod']? $pi['plicod']: $pi['pliid']). ' - '. $acao, # Titulo do e-mail
 //$textoEmail,

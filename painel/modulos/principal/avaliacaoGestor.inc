@@ -56,9 +56,8 @@ switch ($requisicao) {
     default:
         break;
 }
-# Ano e Mês atual.
-$nuanoreferencia = $_REQUEST['nuanoreferencia']?$_REQUEST['nuanoreferencia']:date("Y");
-$numesreferencia = $_REQUEST['numesreferencia']?$_REQUEST['numesreferencia']:date("m");
+$nuanoreferencia = $_REQUEST['nuanoreferencia']?$_REQUEST['nuanoreferencia']:$_SESSION['exercicio'];
+$numesreferencia = $_REQUEST['numesreferencia']?$_REQUEST['numesreferencia']:date("m");    
 
 if($_REQUEST['agid']){
     $dados = $mAvaliacaoGestor->RetornaRegistro($_REQUEST['agid']);

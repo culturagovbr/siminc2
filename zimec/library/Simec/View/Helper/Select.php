@@ -56,6 +56,7 @@ class Simec_View_Helper_Select extends Simec_View_Helper_Element
         $id = isset($attribs['id']) ? $attribs['id'] : $name;
         $attribs['class'] = isset($attribs['class']) ? 'form-control chosen-select' .  $attribs['class'] : 'form-control chosen-select';
         $attribs['data-placeholder'] = isset($attribs['data-placeholder']) ? $attribs['data-placeholder'] : 'Selecione';
+        $config['label-for'] = isset($config['label-for']) ? $config['label-for'] : $id;
         
         $config['visible'] = isset($config['visible']) ? $config['visible'] : true;
         $complemento = empty($config['texto-padrao']) ? array('' => '') : $config['texto-padrao'];
