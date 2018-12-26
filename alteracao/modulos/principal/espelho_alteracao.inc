@@ -8,7 +8,7 @@
         }
     }
 ?>
-<div class="wrapper wrapper-content animated fadeInRight alteracao-wrapper">
+<div class="wrapper wrapper-content animated fadeInRight alteracao-wrapper" style="margin-top: -4em;">
     <div class="col-lg-12">
         <div class="float-e-margins">
             <?php if ($podeEditarAlteracao === TRUE): ?>
