@@ -64,27 +64,35 @@ class Painel_Model_AvaliacaoGestor extends Modelo
         'indobsgestorindicador' => null,
     );
 
-    public function retornaListaAvaliacoes(){
-        $sql = "select '<center>
+    /**
+     * Retorna array de Avaliações.
+     *
+     * @param $indid => Indicador atual gravado na sessão.
+     * @return array|string
+     */
+    public function retornaListaAvaliacoes($indid){
+
+        $sql = "SELECT '<center>
                             <a href=\"javascript:alterarAvaliacao('||ag.agid||');\"><img src=\"/imagens/alterar.gif \" border=0 title=\"Visualizar\"></a>
                             <a href=\"javascript:excluirAvaliacao('||ag.agid||');\"><img src=\"/imagens/excluir.gif \" border=0 title=\"Excluir\"></a>
                         </center>',
                        ag.nuanoreferencia,
-                       '' as dsmesreferencia,
-                       case when ag.indavalgestor='S' then '<i style=\"font-size:2.5em\" class=\"fa fa-thumbs-up corAzul\"></i>'
-                            when ag.indavalgestor='N' then '<i style=\"font-size:2.5em\" class=\"fa fa-thumbs-down corAzul\"></i>'
-                            when ag.indavalgestor='E' then '<i style=\"font-size:2.5em\" class=\"fa fa-exclamation-circle corAzul\"></i>'
-                       else 'Não Avaliado'
-                       end as indavalgestor, 
+                       '' AS dsmesreferencia,
+                       CASE WHEN ag.indavalgestor='S' THEN '<i style=\"font-size:2.5em\" class=\"fa fa-thumbs-up corAzul\"></i>'
+                            WHEN ag.indavalgestor='N' THEN '<i style=\"font-size:2.5em\" class=\"fa fa-thumbs-down corAzul\"></i>'
+                            WHEN ag.indavalgestor='E' THEN '<i style=\"font-size:2.5em\" class=\"fa fa-exclamation-circle corAzul\"></i>'
+                       ELSE 'Não Avaliado'
+                       END AS indavalgestor,
                        ag.indobsgestor,
                        ag.indobsgestorindicador,
                        ag.agid,
                        ag.indid,
                        ag.numesreferencia,
                        ag.nucpf
-                  from painel.avaliacao_gestor ag
-                 where ag.indid = ".$_SESSION['indid'];
-//        ver($sql,d);
+                FROM painel.avaliacao_gestor ag
+                WHERE
+                    ag.indid = ".$indid;
+
         return $this->carregar($sql);
     }
 
@@ -92,5 +100,4 @@ class Painel_Model_AvaliacaoGestor extends Modelo
         $sql = " SELECT * FROM $this->stNomeTabela WHERE {$this->arChavePrimaria[0]} = '$agid'; ";
         return $this->pegaLinha($sql);
     }
-}//end Class
-?>
+}
