@@ -37,7 +37,7 @@
             <td><?= $dados['pedtitulo']; ?></td>
             <td><?= $dados['dtalteracao'] .' às '. $dados['hralteracao']; ?></td>
         </tr>
-    <?php endforeach ?>
+    <?php endforeach; ?>
     </tbody>
 </table>
 

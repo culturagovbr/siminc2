@@ -71,10 +71,10 @@ class Alteracao_Model_Pedido extends Modelo
     /**
      * Carrega a lista de pedidos de Alteração Orçamentária.
      *
-     * @param $filtroprop
+     * @param $filtroalteracao
      * @return array|string
      */
-    public function recuperarListagem($filtroprop)
+    public function recuperarListagem($filtroalteracao)
     {
         $sql = "
             SELECT DISTINCT
@@ -126,29 +126,34 @@ class Alteracao_Model_Pedido extends Modelo
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 LEFT join alteracao.pedido_unidade pu on ped.pedid = pu.pedid and pu.pedunistatus='A'
+                JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pu.suoid
+                JOIN alteracao.usuarioresponsabilidade rpu on rpu.ungcod = suo.suocod
             WHERE
                 ped.pedstatus = 'A'
                 AND doc.tpdid IS NOT NULL
         ";
 
         # Filtros
-        $sql .= $filtroprop['pliid']? " AND pis.pliid = ". (int)$filtroprop['pliid']: NULL;
-        $sql .= $filtroprop['plicod']? " AND pli.plicod = '". strtoupper($filtroprop['plicod']). "'": NULL;
-        $sql .= $filtroprop['plititulo']? " AND pli.plititulo ILIKE '%". $filtroprop['plititulo']. "%'": NULL;
-        $sql .= $filtroprop['tpdid']? " AND doc.tpdid = ". (int)$filtroprop['tpdid']: NULL;
-        $sql .= $filtroprop['pedid']? " AND ped.pedid = ". (int)$filtroprop['pedid']: NULL;
-        $sql .= $filtroprop['esdid']? " AND doc.esdid = ". (int)$filtroprop['esdid']: NULL;
-        $sql .= $filtroprop['tpaid']? " AND ped.tpaid = ". (int)$filtroprop['tpaid']: NULL;
-        $sql .= $filtroprop['janid']? " AND ped.janid = ". (int)$filtroprop['janid']: NULL;
-        $sql .= $filtroprop['pedtitulo']? " AND ped.pedtitulo like '".$filtroprop['pedtitulo']."'": NULL;
-        if($filtroprop['suoid']){
-            if (is_array($filtroprop['suoid'])){
-                $sql .= " AND pu.suoid in (".implode(' , ',$filtroprop['suoid']).')';
+        $sql .= $filtroalteracao['pliid']? " AND pis.pliid = ". (int)$filtroalteracao['pliid']: NULL;
+        $sql .= $filtroalteracao['plicod']? " AND pli.plicod = '". strtoupper($filtroalteracao['plicod']). "'": NULL;
+        $sql .= $filtroalteracao['plititulo']? " AND pli.plititulo ILIKE '%". $filtroalteracao['plititulo']. "%'": NULL;
+        $sql .= $filtroalteracao['tpdid']? " AND doc.tpdid = ". (int)$filtroalteracao['tpdid']: NULL;
+        $sql .= $filtroalteracao['pedid']? " AND ped.pedid = ". (int)$filtroalteracao['pedid']: NULL;
+        $sql .= $filtroalteracao['esdid']? " AND doc.esdid = ". (int)$filtroalteracao['esdid']: NULL;
+        $sql .= $filtroalteracao['tpaid']? " AND ped.tpaid = ". (int)$filtroalteracao['tpaid']: NULL;
+        $sql .= $filtroalteracao['janid']? " AND ped.janid = ". (int)$filtroalteracao['janid']: NULL;
+        $sql .= $filtroalteracao['pedtitulo']? " AND ped.pedtitulo like '".$filtroalteracao['pedtitulo']."'": NULL;
+        if($filtroalteracao['suoid']){
+            if (is_array($filtroalteracao['suoid'])){
+                $sql .= " AND pu.suoid in (".implode(' , ',$filtroalteracao['suoid']).')';
             }else{
-                $sql .= " AND pu.suoid in ".$filtroprop['suoid'];
+                $sql .= " AND pu.suoid in ".$filtroalteracao['suoid'];
             }
         }
-        
+        if($filtroalteracao['listaSubUnidadeUsuario']){
+            $sql .=  "AND rpu.ungcod in ('". implode("' , '", $filtroalteracao['listaSubUnidadeUsuario'])."')";
+        }
+
         # Ordenação
         $sql .= "
             GROUP BY
@@ -160,7 +165,7 @@ class Alteracao_Model_Pedido extends Modelo
                 esd.esddsc,
                 jan.jannome
         ";
-        
+
         return $this->carregar($sql);
     }
 

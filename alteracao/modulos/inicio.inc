@@ -18,6 +18,7 @@
     # Filtro de Situação na sessão do usuário
     $filtroalteracao = $_SESSION['filtroalteracao'] = (isset($_REQUEST['esdid']) ? $_REQUEST : $_SESSION['filtroalteracao']);
     $requisicao = $_REQUEST['requisicao'];
+    $filtroalteracao['listaSubUnidadeUsuario'] = $listaSubUnidadeUsuario;
 
     if($requisicao){
         switch ($requisicao) {
