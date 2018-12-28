@@ -317,26 +317,36 @@ class Monitora_Model_Ptres extends Modelo
         $sql = "
             SELECT DISTINCT
                 ptr.ptrid,
-                suo.unocod || '(' || suo.unonome || ')' AS unidade_orcamentaria,
+                ptr.ptres,
+                uo.unocod,
                 vptr.acacod,
                 vptr.acatitulo,
-                ptr.ptres,
                 vptr.funcional,
                 vptr.plocod,
                 vptr.plodsc,
                 vptr.irpcod,
                 ptr.ptrdotacaocusteio,
-                ptr.ptrdotacaocapital
+                ptr.ptrdotacaocapital,
+                uo.unocod || '-' || uo.unonome AS unidade_orcamentaria
             FROM monitora.ptres ptr
-                JOIN public.vw_subunidadeorcamentaria suo ON(
-                    ptr.unicod = suo.unocod
-                    AND ptr.ptrano = suo.prsano
-                    AND suo.suostatus = 'A'
+                JOIN public.vw_subunidadeorcamentaria uo ON(
+                    uo.suostatus = 'A'
+                    AND ptr.unicod = uo.unocod
+                    AND ptr.ptrano = uo.prsano
                 )
-                JOIN monitora.vw_ptres vptr ON ptr.ptrid = vptr.ptrid-- SELECT * FROM monitora.vw_ptres 
+                JOIN monitora.vw_ptres vptr ON ptr.ptrid = vptr.ptrid
             WHERE
                 ptr.ptrstatus = 'A'
                 AND ptr.ptrano = '". (int)$param->exercicio. "'
+            ORDER BY
+                ptr.ptres DESC,
+                uo.unocod,
+                vptr.acacod,
+                vptr.acatitulo,
+                vptr.funcional,
+                vptr.plocod,
+                vptr.plodsc,
+                vptr.irpcod
         ";
         
         $listaResultado = $this->carregar($sql);

@@ -218,6 +218,7 @@ class Monitora_Model_Acao extends Modelo
     public function recuperarDados(){
         $sql = "
             SELECT DISTINCT
+                acao.unicod,
                 prgcod,
                 prgcod || '-' || prgdsc AS programa,
                 acastatus,
@@ -232,7 +233,16 @@ class Monitora_Model_Acao extends Modelo
                 JOIN public.unidade uni ON uni.unicod = acao.unicod
             WHERE
                 acastatus = 'A'
-                AND prgano = '". $_SESSION['exercicio']. "'";
+                AND prgano = '". $_SESSION['exercicio']. "'
+            ORDER BY
+                acao.unicod,
+                prgcod,
+                acacod,
+                loccod,
+                acaobjetivocod,
+                unidade,
+                acatitulo
+            ";
 //ver($sql, d);
         $resultado = $this->carregar($sql);
 

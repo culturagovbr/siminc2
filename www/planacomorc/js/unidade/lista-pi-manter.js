@@ -119,6 +119,14 @@
        });
     }
     
+    function initLinkEspelhoPi(){
+        $('body').on('click', '.a_espelho', function(){
+            var pliid = $(this).attr('data-pi');
+            exibirEspelhoPi(pliid);
+            return false;
+        });
+    }
+    
     /**
      * Exibe popup com Detalhes do pi. Tela de Espelho de PI.
      * 

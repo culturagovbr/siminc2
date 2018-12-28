@@ -78,8 +78,8 @@ $aPropostas = $oPlanoInterno->recuperarExecucaoOrcamentaria($filtros);
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script src="js/unidade/lista-pi-manter.js?v=4"></script>
-<script src="js/painel.js?v=1"></script>
+<script src="js/unidade/lista-pi-manter.js?v=5"></script>
+<script src="js/painel.js?v=2"></script>
 <style>
     .detalhe-subunidade, .detalhe-funcional{
         cursor: pointer;
@@ -294,14 +294,16 @@ include APPRAIZ . "includes/cabecalho.inc";
 </div>
 
 <?php
-// -- popup de detalhamento do PI
-bootstrapPopup("PI's da Unidade", 'detalhe-subunidade', '', array('fechar'), array('tamanho' => 'lg'));
-bootstrapPopup("PI's da Funcional na Unidade", 'detalhe-funcional', '', array('fechar'), array('tamanho' => 'lg'));
-bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), array('tamanho' => 'lg'));
+    // -- popup de detalhamento do PI
+    bootstrapPopup("PI's da Unidade", 'detalhe-subunidade', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup("PI's da Funcional na Unidade", 'detalhe-funcional', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), array('tamanho' => 'lg'));
 ?>
 
 <script>
     $(document).ready(function(){
+
+        initLinkEspelhoPi();
 
         $('#btn-atualizar-siop').click(function(){
             atualizarSIOP();

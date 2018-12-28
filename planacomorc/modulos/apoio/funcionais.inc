@@ -29,10 +29,10 @@
                             <thead>
                                 <tr class="text-center">
                                     <th width="5%">Ação</th>
+                                    <th>PTRES</th>
                                     <th>Unidade Orçamentária</th>
                                     <th>Cód. Ação</th>
                                     <th>Ação</th>
-                                    <th>PTRES</th>
                                     <th>funcional</th>
                                     <th>Cod. PO</th>
                                     <th>PO</th>
@@ -47,10 +47,10 @@
                                             <td class="text-center">
                                                 <a title="Alterar" href="?modulo=apoio/funcionais_form&acao=A&ptrid=<?php echo $dados['ptrid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                             </td>
+                                            <td><?php echo $dados['ptres']; ?></td>
                                             <td><?php echo $dados['unidade_orcamentaria']; ?></td>
                                             <td><?php echo $dados['acacod']; ?></td>
                                             <td><?php echo $dados['acatitulo']; ?></td>
-                                            <td><?php echo $dados['ptres']; ?></td>
                                             <td><?php echo $dados['funcional']; ?></td>
                                             <td><?php echo $dados['plocod']; ?></td>
                                             <td><?php echo $dados['plodsc']; ?></td>
