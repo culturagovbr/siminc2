@@ -95,30 +95,56 @@ class Spo_Model_Ptres extends Modelo
     public function recuperarPtresSubunidade($prsano, $tipo = null)
     {
         switch ($tipo){
-            // Somente Vinculadas
+            # Somente Vinculadas
             case 'V':
-                $where = "and uo.unocod not in ('42101', '42902')";
+                $where = "AND uo.unocod NOT IN('". (int)UNICOD_MINC. "', '". (int)UNICOD_FNC. "')";
                 break;
-            // Somente Administração Direta
+            # Somente Administração Direta
             case 'D':
-                $where = "and uo.unocod in ('42101')";
+                $where = "AND uo.unocod IN('". (int)UNICOD_MINC. "')";
                 break;
-            // Somente Fundo
+            # Somente Fundo
             case 'F':
-                $where = "and uo.unocod in ('42902') 
-                          and uo.unofundo = false
-                          union all
-                          select distinct p.ptrid, p.ptres, p.acaid, p.ptrano, p.funcod, p.sfucod, p.prgcod, p.acacod, p.loccod, p.plocod, p.esfcod,  
-                                  uo.unocod, uo.unonome, uo.unocod, uo.unonome,  uo.unofundo, uo.unosigla, uo.unosigla, uo.unoid, uo.unoid
-                          from monitora.ptres p
-                                  inner join public.vw_subunidadeorcamentaria uo on uo.unocod = p.unicod and uo.prsano = '2018' and uo.suostatus = 'A'
-                          where ptrano = '$prsano'
-                          and p.ptrstatus = 'A'
-                          and p.plocod not like 'E%'
-                          and uo.unocod in ('42902')
-                          and uo.unofundo = true";
+                $where = "
+                    AND uo.unocod IN('". (int)UNICOD_FNC. "')
+                    AND uo.unofundo IS FALSE
+                    UNION ALL
+                    SELECT DISTINCT
+                        p.ptrid,
+                        p.ptres, 
+                        p.acaid, 
+                        p.ptrano, 
+                        p.funcod, 
+                        p.sfucod, 
+                        p.prgcod, 
+                        p.acacod, 
+                        p.loccod, 
+                        p.plocod, 
+                        p.esfcod,  
+                        uo.unocod,
+                        uo.unonome,
+                        uo.suocod,
+                        uo.suonome,
+                        uo.unofundo,
+                        uo.suosigla,
+                        uo.unosigla,
+                        uo.unoid,
+                        uo.suoid
+                    FROM monitora.ptres p
+                        JOIN public.vw_subunidadeorcamentaria uo ON(
+                            uo.unocod = p.unicod 
+                            AND uo.prsano = '". (int)$prsano. "' 
+                            AND uo.suostatus = 'A'
+                        )
+                    WHERE
+                        ptrano = '". (int)$prsano. "'
+                        AND p.ptrstatus = 'A'
+                        AND p.plocod NOT LIKE 'E%'
+                        AND uo.unocod IN('". (int)UNICOD_FNC. "')
+                        AND uo.unofundo IS TRUE
+                ";
                 break;
-            // Todas
+            # Todas
             default:
                 $where = '';
         }
@@ -157,7 +183,15 @@ class Spo_Model_Ptres extends Modelo
                 AND p.plocod NOT LIKE 'E%'
                 $where
             ORDER BY
-                unofundo, unonome, suonome, acacod, prgcod, loccod, plocod
+                unofundo,
+                suocod,
+                suonome,
+                unosigla,
+                ptres DESC,
+                prgcod,
+                acacod,
+                loccod,
+                plocod
         ";
 //ver($sql,d);
         $dados = $this->carregar($sql);

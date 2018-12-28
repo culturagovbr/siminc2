@@ -98,15 +98,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function(){
-
-        $('.a_espelho').click(function(){
-            var pliid = $(this).attr('data-pi');
-            exibirEspelhoPi(pliid);
-            return false;
-        });
-
-    });
-</script>
