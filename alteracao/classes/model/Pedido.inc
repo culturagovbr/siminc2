@@ -122,17 +122,23 @@ class Alteracao_Model_Pedido extends Modelo
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
                 LEFT JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid and pis.pliselstatus = 'A'
-                LEFT JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
+                LEFT JOIN monitora.vw_planointerno pli ON pis.pliid = pli.pliid
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 LEFT join alteracao.pedido_unidade pu on ped.pedid = pu.pedid and pu.pedunistatus='A'
-                JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pu.suoid
-                JOIN alteracao.usuarioresponsabilidade rpu on rpu.ungcod = suo.suocod
-            WHERE
-                ped.pedstatus = 'A'
-                AND doc.tpdid IS NOT NULL
-        ";
-
+                JOIN public.vw_subunidadeorcamentaria suo ON pli.unocod = suo.unocod and pli.suocod = suo.suocod and suo.unostatus = 'A' and suo.prsano=ped.pedano
+                --JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pu.suoid
+                ";
+        $lista = pegaPerfilPorUsuario($_SESSION['usucpf']);
+        foreach($lista as $value){
+            $listaPerfis[] = $value['pflcod'];
+        }
+        if (in_array(PFL_SUBUNIDADE, $listaPerfis)){
+            $sql .= " JOIN alteracao.usuarioresponsabilidade rpu on rpu.ungcod = suo.suocod and rpu.rpustatus='A' and rpu.usucpf = '".$_SESSION['usucpf']."'
+                    ";
+        }
+        $sql .= " WHERE ped.pedstatus = 'A'
+                    AND doc.tpdid IS NOT NULL \n";
         # Filtros
         $sql .= $filtroalteracao['pliid']? " AND pis.pliid = ". (int)$filtroalteracao['pliid']: NULL;
         $sql .= $filtroalteracao['plicod']? " AND pli.plicod = '". strtoupper($filtroalteracao['plicod']). "'": NULL;
@@ -151,7 +157,7 @@ class Alteracao_Model_Pedido extends Modelo
             }
         }
         if($filtroalteracao['listaSubUnidadeUsuario']){
-            $sql .=  "AND rpu.ungcod in ('". implode("' , '", $filtroalteracao['listaSubUnidadeUsuario'])."')";
+            $sql .=  " AND rpu.ungcod in ('". implode("' , '", $filtroalteracao['listaSubUnidadeUsuario'])."')";
         }
 
         # Ordenação
@@ -246,6 +252,8 @@ class Alteracao_Model_Pedido extends Modelo
 		                  where se.plicod = pli.plicod
 		                    and se.exercicio = pli.pliano),0.00) as empenhado,
                        pp.pprnome,
+                       (select sum(coalesce(vldotacaocusteio,0)) as vldotacaocusteio from alteracao.plano_interno_selecionado where pliid = pis.pliid and pedid<>$pedid) as vldotacaocusteiototal,
+                       (select sum(coalesce(vldotacaocapital,0)) as vldotacaocapital from alteracao.plano_interno_selecionado where pliid = pis.pliid and pedid<>$pedid) as vldotacaocapitaltotal,
                        suo.suonome AS unidade,
                        COALESCE(pli.plititulo, 'N/A') AS plititulo,
                        TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
@@ -258,10 +266,10 @@ class Alteracao_Model_Pedido extends Modelo
                   LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
 		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(pli.unicod = suo.unocod and pli.ungcod = suo.suocod and suo.unostatus = 'A' and suo.prsano='".$_SESSION['exercicio']."')                          
                  where pis.pedid = $pedid
-                   and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid and pedunistatus='A')
+                   --and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid and pedunistatus='A')
                    and pis.pliselstatus = 'A'
                  order by pis.pliselid";
-//ver($sql,d);
+//ver($sql);
         return $this->carregar($sql);
     }
 
@@ -317,13 +325,13 @@ class Alteracao_Model_Pedido extends Modelo
                 pli.plistatus
             FROM monitora.pi_planointerno pli
 		JOIN planacomorc.pi_complemento pc USING(pliid)
+                LEFT JOIN monitora.pi_planointernoptres ppt USING(pliid)
                 JOIN public.vw_subunidadeorcamentaria suo ON(
                     suo.suostatus = 'A'
                     AND pli.unicod = suo.unocod
                     AND pli.ungcod = suo.suocod
                     AND suo.prsano = pli.pliano
 		)
-                LEFT JOIN monitora.pi_planointernoptres ppt USING(pliid)
                 LEFT JOIN monitora.ptres ptr ON(
                     ppt.ptrid = ptr.ptrid
                     AND pli.pliano = ptr.ptrano)
@@ -351,7 +359,7 @@ class Alteracao_Model_Pedido extends Modelo
     public static function montarFiltro(stdClass $filtros){
         $where = "";
         # Sub-Unidades e Sub-Unidades Delegadas do Usuário.
-        $where .= self::montarFiltroSubUnidadeUsuario($filtros);
+        //$where .= self::montarFiltroSubUnidadeUsuario($filtros);
         # Código do PI.
         $where .= $filtros->plicod? "\n AND (pli.plicod = '". pg_escape_string($filtros->plicod). "' OR pli.pliid = '". (int)pg_escape_string($filtros->plicod). "') ": NULL;
         # Unidade Orçamentária.
@@ -395,11 +403,7 @@ class Alteracao_Model_Pedido extends Modelo
         # Sub-Unidades e Sub-Unidades Delegadas do Usuário.
         $listaSubUnidadeUsuario = buscarSubUnidadeUsuario($filtros);
         if($listaSubUnidadeUsuario){
-            $where .= "\n AND (
-                    pli.ungcod::INTEGER IN(". join(',', $listaSubUnidadeUsuario). ")
-                    OR 
-                    pdsuo.suocod::INTEGER IN(". join(',', $listaSubUnidadeUsuario). ")
-                )
+            $where .= "\n AND suo.suocod::INTEGER IN(". join(',', $listaSubUnidadeUsuario). ")
             ";
         }
         

@@ -64,7 +64,7 @@
             </td>
             <td style="vertical-align: middle;">
                 <?php
-                    $empenhado = $dados['custeio']+$dados['capital']-$dados['empenhado'];
+                    $empenhado = $dados['custeio']+$dados['capital']-($dados['empenhado']+$dados['vldotacaocapitaltotal']+$dados['vldotacaocusteiototal']);
                     $empenhado = number_format($empenhado,0,',','.');
                     echo "R$ ".$empenhado;
                 ?>
@@ -284,6 +284,7 @@
     function salvarCampo(nomeCampo, pliselid, valor, tipo){
         var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
         var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
+        var vlrEmpenhado = $("#empenhado"+pliselid).val()? str_replace(['.', ','], ['', '.'], $("#empenhado"+pliselid).val()) : 0;
 
         if (parseInt(vlrCancelado)>parseInt(vlrPic)){
             swal({
@@ -322,7 +323,8 @@
                     {
                         pliselid: pliselid,
                         campo: nomeCampo,
-                        valor: vlrCampo
+                        valor: vlrCampo,
+                        empenhado: vlrEmpenhado
                     },
                     function(retorno){
                         if (retorno){

@@ -276,26 +276,30 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                 rl.vlcancelado,
                 rl.vlsuplementarexcesso,
                 rl.vlsuplementarsuperavit,
-                ptr.unicod,
-                ptr.funcional,
-                fon.foncod,
-                ido.idocod,
-                idu.iducod,
-                TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
-            FROM alteracao.remanejamento_loa rl
-                LEFT JOIN monitora.vw_ptres ptr ON rl.ptrid = ptr.ptrid
-                LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid
-                LEFT JOIN public.vw_subunidadeorcamentaria vs ON ptr.unicod = vs.unocod
-                JOIN public.fonterecurso AS fon ON rl.fonid = fon.fonid
-                LEFT JOIN public.idoc AS ido ON rl.idoid = ido.idoid
-                JOIN public.identifuso AS idu ON rl.iduid = idu.iduid
-            WHERE
-                vs.suoid IN(SELECT suoid FROM alteracao.pedido_unidade WHERE pedid = ". (int)$pedid. " and pedunistatus = 'A')
-                AND pedid = ". (int)$pedid. "
+                pli.unocod,
+                rl_ptr.funcional,
+                rl_fo.foncod,
+                rl_ido.idocod,
+                rl_idu.iducod,
+                TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(rl_ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(rl_ptr.plocod, '-') END) AS funcional
+            FROM alteracao.pedido AS ped
+            JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
+            JOIN alteracao.janela AS jan ON ped.janid = jan.janid and janstatus = 'A'
+            JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid and pis.pliselstatus = 'A'
+            JOIN monitora.vw_planointerno pli ON pis.pliid = pli.pliid
+            JOIN alteracao.remanejamento_loa rl ON ped.pedid = rl.pedid and rl.rlstatus = 'A'
+            JOIN monitora.vw_ptres rl_ptr ON rl.ptrid = rl_ptr.ptrid
+            JOIN public.vw_subunidadeorcamentaria suo ON pli.unocod = suo.unocod and pli.suocod = suo.suocod and suo.unostatus = 'A' and suo.prsano=ped.pedano
+            JOIN public.fonterecurso rl_fo ON rl.fonid = rl_fo.fonid
+            JOIN public.idoc rl_ido ON rl.idoid = rl_ido.idoid
+            JOIN public.identifuso rl_idu ON rl.iduid = rl_idu.iduid            
+            JOIN monitora.acao aca ON rl_ptr.acaid = aca.acaid
+            WHERE ped.pedid = ". (int)$pedid. "
                 and rl.rlstatus = 'A'
             ORDER BY
                 1
         ";
+//        ver($sql,d);
         return $this->carregar($sql);
     }
     

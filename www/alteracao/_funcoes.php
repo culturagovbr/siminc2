@@ -10,7 +10,8 @@ function montarSqlRelatorioGeralAlteracao(stdClass $parametro){
     # Filtros
     $where = '';
     $where .= $parametro->pedano? "\n AND ped.pedano = '". (int)$parametro->pedano. "'": NULL;
-    $where .= $parametro->suocod? "\n AND suo.suocod IN(".join($parametro->suocod, ','). ")": NULL;
+    $where .= $parametro->suocod? "\n AND suo.suocod IN('".join($parametro->suocod, "','"). "')": NULL;    
+    $ungcod = $parametro->suocod? "\n AND rpu.ungcod IN('".join($parametro->suocod, "','"). "')": NULL;    
 //    $where .= $parametro->suoid? "\n AND suo.suoid IN(".join($parametro->suoid, ','). ")": NULL;
 //    $where .= $parametro->eqdid? "\n AND pro.eqdid IN(".join($parametro->eqdid, ','). ")": NULL;
 //    $where .= $parametro->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($parametro->irpcod, ','). ")": NULL;
@@ -93,19 +94,28 @@ function montarSqlRelatorioGeralAlteracao(stdClass $parametro){
             jst.jstlegislacao,
             jst.jstoutros
         FROM alteracao.pedido AS ped
-            JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
-            JOIN alteracao.janela AS jan ON ped.janid = jan.janid and janstatus = 'A'
-            JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid and pis.pliselstatus = 'A'
-            JOIN monitora.vw_planointerno pli ON pis.pliid = pli.pliid
-            JOIN alteracao.remanejamento_loa rl ON ped.pedid = rl.pedid and rl.rlstatus = 'A'
-            JOIN monitora.vw_ptres rl_ptr ON rl.ptrid = rl_ptr.ptrid
-            JOIN public.vw_subunidadeorcamentaria suo ON pli.unocod = suo.unocod and pli.suocod = suo.suocod and suo.unostatus = 'A' and suo.prsano=ped.pedano
-            JOIN public.fonterecurso rl_fo ON rl.fonid = rl_fo.fonid
-            JOIN public.idoc rl_ido ON rl.idoid = rl_ido.idoid
-            JOIN public.identifuso rl_idu ON rl.iduid = rl_idu.iduid
-            JOIN alteracao.justificativa jst ON ped.pedid = jst.pedid
-            JOIN workflow.documento AS doc ON ped.docid = doc.docid
-            JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
+        JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
+        JOIN alteracao.janela AS jan ON ped.janid = jan.janid and janstatus = 'A'
+        JOIN alteracao.plano_interno_selecionado AS pis ON ped.pedid = pis.pedid and pis.pliselstatus = 'A'
+        JOIN monitora.vw_planointerno pli ON pis.pliid = pli.pliid
+        JOIN public.vw_subunidadeorcamentaria suo ON pli.unocod = suo.unocod and pli.suocod = suo.suocod and suo.unostatus = 'A' and suo.prsano=ped.pedano
+        ";
+        $lista = pegaPerfilPorUsuario($_SESSION['usucpf']);
+        foreach($lista as $value){
+            $listaPerfis[] = $value['pflcod'];
+        }
+        if (in_array(PFL_SUBUNIDADE, $listaPerfis)){
+            $sql .= " JOIN alteracao.usuarioresponsabilidade rpu on rpu.ungcod = suo.suocod and rpu.rpustatus = 'A' and rpu.usucpf = '".$_SESSION['usucpf']."' $ungcod
+                    ";
+        }
+        $sql .= " LEFT JOIN alteracao.remanejamento_loa rl ON ped.pedid = rl.pedid and rl.rlstatus = 'A'
+        JOIN monitora.vw_ptres rl_ptr ON rl.ptrid = rl_ptr.ptrid  
+        JOIN public.fonterecurso rl_fo ON rl.fonid = rl_fo.fonid
+        JOIN public.idoc rl_ido ON rl.idoid = rl_ido.idoid
+        JOIN public.identifuso rl_idu ON rl.iduid = rl_idu.iduid
+        left JOIN alteracao.justificativa jst ON ped.pedid = jst.pedid
+        JOIN workflow.documento AS doc ON ped.docid = doc.docid
+        JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
         WHERE
             ped.pedstatus = 'A'
             AND doc.tpdid IS NOT NULL
