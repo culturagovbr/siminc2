@@ -240,5 +240,4 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
         }
     }
 
-
 </script>
