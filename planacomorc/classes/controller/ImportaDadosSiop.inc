@@ -105,8 +105,8 @@ class Planacomorc_Controller_ImportaDadosSiop{
                 <th>Funcional</th>
                 <th>Unidade</th>
                 <th>Tipo</th>
-                <th>Vl. Antigo</th>
-                <th>Vl. Atual</th>
+                <th style='text-align: right;'>Vl. Antigo</th>
+                <th style='text-align: right;'>Vl. Atual</th>
             </tr>   
             </thead>
             <tbody>       
