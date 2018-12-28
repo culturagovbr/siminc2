@@ -99,6 +99,9 @@ class Emendas_Model_Emenda extends Modelo
         if($filtro->suoid_delegada){
             $where .= "\n AND suoed.suoid =  ". (int)$filtro->suoid_delegada;
         }
+        if($filtro->ptrid){
+            $where .= "\n AND ptr.ptrid =  ". (int)$filtro->ptrid;
+        }
         if($filtro->lista_esdid){
             $where .= "\n AND doce.esdid IN(". join(',', $filtro->lista_esdid). ")";
         }
