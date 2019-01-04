@@ -2418,12 +2418,19 @@ class Pi_PlanoInterno extends Modelo
                 ped.janid,
                 ped.pedano,
                 ped.docid,
-                tpd.tpddsc
+                tpd.tpddsc,
+                coalesce(plise.vlcapital, 0) vldotacaocapital,
+                coalesce(plise.vlcusteio, 0) vldotacaocusteio,
+                coalesce(plise.vlfisico, 0) vldotacaofisico,
+                coalesce(pc.picvalorcapital, 0) picvalorcapital,
+                coalesce(pc.picvalorcusteio, 0) picvalorcusteio,
+                coalesce(pc.picquantidade, 0) picquantidade
             FROM alteracao.pedido ped
                 JOIN workflow.documento doc ON(ped.docid = doc.docid)
                 JOIN workflow.estadodocumento esd ON(doc.esdid = esd.esdid)
                 JOIN workflow.tipodocumento tpd ON(esd.tpdid = tpd.tpdid)
-                JOIN alteracao.plano_interno_selecionado plise ON(ped.pedid = plise.pedid)
+                JOIN alteracao.plano_interno_selecionado plise ON(ped.pedid = plise.pedid and plise.pliselstatus = 'A')
+                JOIN planacomorc.pi_complemento pc on plise.pliid = pc.pliid
             WHERE
                 ped.pedstatus = 'A'
                 AND doc.esdid IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ",". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")

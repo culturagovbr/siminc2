@@ -2961,7 +2961,9 @@ function alterarCodigoPi($request){
 function controlarAvisoPedidoAlteracao($pliid){
     $modelPi = new Pi_PlanoInterno();
     $pedidoAlteracaoOrcamentaria = $pliid? $modelPi->consultarPedidoAlteracaoEfetivado((object)array('pliid' => (int)$pliid)): new stdClass();
-    if($pedidoAlteracaoOrcamentaria->pedid){
+    if(($pedidoAlteracaoOrcamentaria->vldotacaocapital != $pedidoAlteracaoOrcamentaria->picvalorcapital) ||
+       ($pedidoAlteracaoOrcamentaria->vldotacaocusteio != $pedidoAlteracaoOrcamentaria->picvalorcusteio) ||
+       ($pedidoAlteracaoOrcamentaria->vldotacaofisico != $pedidoAlteracaoOrcamentaria->picquantidade)){
         exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria);
     }
 }
