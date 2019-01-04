@@ -24,16 +24,19 @@ class Planacomorc_Controller_ImportaDadosSiop{
         ini_set("memory_limit", "2048M");
         session_start();
         
-        $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-        $this->exercicio = date('Y');
-        $this->filtro = array('anoExercicio' => $this->exercicio);
-        
-        $mImportaDadosSiop->excluiDadosWsOrcamentario($this->exercicio);
-        $this->ConsultaDadosWs();
-        $mImportaDadosSiop->commit();
-        $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
-        $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
-        $mImportaDadosSiop->commit();
+        for($ano=2018;$ano<=2019;$ano++){
+            $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
+//            $this->exercicio = date('Y');
+            $this->exercicio = $ano;
+            $this->filtro = array('anoExercicio' => $this->exercicio);
+
+            $mImportaDadosSiop->excluiDadosWsOrcamentario($this->exercicio);
+            $this->ConsultaDadosWs();
+            $mImportaDadosSiop->commit();
+            $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
+            $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
+            $mImportaDadosSiop->commit();
+        }
     }
     
     private function ConsultaDadosWs(){
@@ -66,33 +69,36 @@ class Planacomorc_Controller_ImportaDadosSiop{
     }
 
     public function AtualizarDotacao(){
-        $this->exercicio = date('Y');
-        $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-        $listaResultadoFuncionaisSIOP = $mImportaDadosSiop->RetornaFuncionais($this->exercicio);
-        $listaFuncionaisSiop = [];
-        foreach($listaResultadoFuncionaisSIOP as $funcionalSIOP){
-            $listaFuncionaisSiop[$funcionalSIOP['funcional']][$funcionalSIOP['categoriaeconomica']] = $funcionalSIOP['dotatual'];
-        }
-        
-        $listaResultadoFuncionaisSubunidadeSiminc = $mImportaDadosSiop->RetornaDadosSiminc($this->exercicio);
-        $listaFuncionaisSubunidadeSiminc = [];
-        foreach($listaResultadoFuncionaisSubunidadeSiminc as $funcionalSubunidadeSiminc){
-            $listaFuncionaisSubunidadeSiminc[$funcionalSubunidadeSiminc['funcional']][] = $funcionalSubunidadeSiminc;
-        }
-        $this->GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop);
-        
-        $dadosProvisionado = $mImportaDadosSiop->RetornaDadosProvisionados($this->exercicio);
-        $this->GeraTabelaProvisionado($dadosProvisionado);
-        
-        $listaDivergenciaPlanejada = $mImportaDadosSiop->RetornaDivergenciaPlanejado($this->exercicio);
-        $this->GeraTabelaDivergenciaPlanejado($listaDivergenciaPlanejada);
-        if($this->boAlteracao){$this->corpoEmailV3 .= $this->htmlTabela1;}
-        if($this->boAlteracaoCompartilhada){$this->corpoEmailV3 .= $this->htmlTabela2;}
-        if($this->boAlteracaoProvisionado){$this->corpoEmailV3 .= $this->htmlTabela3;}
-        if($this->boDivergenciaPlanejada){$this->corpoEmailV3 .= $this->htmlTabela4;}
+        for($ano=2018;$ano<=2019;$ano++){
+//            $this->exercicio = date('Y');
+            $this->exercicio = $ano;
+            $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
+            $listaResultadoFuncionaisSIOP = $mImportaDadosSiop->RetornaFuncionais($this->exercicio);
+            $listaFuncionaisSiop = [];
+            foreach($listaResultadoFuncionaisSIOP as $funcionalSIOP){
+                $listaFuncionaisSiop[$funcionalSIOP['funcional']][$funcionalSIOP['categoriaeconomica']] = $funcionalSIOP['dotatual'];
+            }
 
-        $this->destinatarios = $mImportaDadosSiop->RetornaEmailsSuperUsuarios();
-        $this->EnviaEmail();
+            $listaResultadoFuncionaisSubunidadeSiminc = $mImportaDadosSiop->RetornaDadosSiminc($this->exercicio);
+            $listaFuncionaisSubunidadeSiminc = [];
+            foreach($listaResultadoFuncionaisSubunidadeSiminc as $funcionalSubunidadeSiminc){
+                $listaFuncionaisSubunidadeSiminc[$funcionalSubunidadeSiminc['funcional']][] = $funcionalSubunidadeSiminc;
+            }
+            $this->GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop);
+
+            $dadosProvisionado = $mImportaDadosSiop->RetornaDadosProvisionados($this->exercicio);
+            $this->GeraTabelaProvisionado($dadosProvisionado);
+
+            $listaDivergenciaPlanejada = $mImportaDadosSiop->RetornaDivergenciaPlanejado($this->exercicio);
+            $this->GeraTabelaDivergenciaPlanejado($listaDivergenciaPlanejada);
+            if($this->boAlteracao){$this->corpoEmailV3 .= $this->htmlTabela1;}
+            if($this->boAlteracaoCompartilhada){$this->corpoEmailV3 .= $this->htmlTabela2;}
+            if($this->boAlteracaoProvisionado){$this->corpoEmailV3 .= $this->htmlTabela3;}
+            if($this->boDivergenciaPlanejada){$this->corpoEmailV3 .= $this->htmlTabela4;}
+
+            $this->destinatarios = $mImportaDadosSiop->RetornaEmailsSuperUsuarios();
+            $this->EnviaEmail();
+        }
     }
     
     private function GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop){
