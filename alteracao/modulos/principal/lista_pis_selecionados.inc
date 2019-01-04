@@ -64,7 +64,7 @@
             </td>
             <td style="vertical-align: middle;">
                 <?php
-                    $empenhado = $dados['custeio']+$dados['capital']-($dados['empenhado']+$dados['vldotacaocapitaltotal']+$dados['vldotacaocusteiototal']);
+                    $empenhado = $dados['custeio']+$dados['capital']-($dados['vldotacaocapitaltotal']+$dados['vldotacaocusteiototal'])+$dados['empenhado'];
                     $empenhado = number_format($empenhado,0,',','.');
                     echo "R$ ".$empenhado;
                 ?>
@@ -285,8 +285,7 @@
         var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
         var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
         var vlrEmpenhado = $("#empenhado"+pliselid).val()? str_replace(['.', ','], ['', '.'], $("#empenhado"+pliselid).val()) : 0;
-
-        if (parseInt(vlrCancelado)>parseInt(vlrPic)){
+        if (parseInt(vlrCancelado)>parseInt(vlrPic) && ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital')){
             swal({
                 title: "",
                 text: "Valor de "+tipo+" maior que o do "+tipo+" PI",
