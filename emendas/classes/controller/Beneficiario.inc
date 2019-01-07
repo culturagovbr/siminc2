@@ -8,7 +8,6 @@ class Emendas_Controller_Beneficiario
 
         try {
             $mBeneficiario = new Emendas_Model_Beneficiario($dados['benid']);
-            
             # Verifica se é alteração(update) pra gerar histórico de alterações
             if($mBeneficiario->benid){
                 $mBeneficiario->gravarHistorico($dados);
@@ -20,7 +19,7 @@ class Emendas_Controller_Beneficiario
             $mBeneficiario->benconveniado = $dados['benconveniado'] == 't' ? 't' : 'f';
             $mBeneficiario->benpago = $dados['benpago'] == 't' ? 't' : 'f';
             $mBeneficiario->bented = $dados['bented'] == 't' ? 't' : 'f';
-            $mBeneficiario->plititulo = substr($dados['plititulo'], 0, 230);
+            $mBeneficiario->plititulo = substr($dados['plititulo']?$dados['plititulo']:$mBeneficiario->plititulo, 0, 230);
 
             $aCamposNulos = [
                 # Cadastro Inicial
