@@ -84,19 +84,18 @@ class Planacomorc_Controller_ImportaDadosSiop{
             foreach($listaResultadoFuncionaisSubunidadeSiminc as $funcionalSubunidadeSiminc){
                 $listaFuncionaisSubunidadeSiminc[$funcionalSubunidadeSiminc['funcional']][] = $funcionalSubunidadeSiminc;
             }
+            $this->GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop);
+
+            $dadosProvisionado = $mImportaDadosSiop->RetornaDadosProvisionados($this->exercicio);
+            $this->GeraTabelaProvisionado($dadosProvisionado);
+
+            $listaDivergenciaPlanejada = $mImportaDadosSiop->RetornaDivergenciaPlanejado($this->exercicio);
+            $this->GeraTabelaDivergenciaPlanejado($listaDivergenciaPlanejada);
+            if($this->boAlteracao){$this->corpoEmailV3 .= $this->htmlTabela1;}
+            if($this->boAlteracaoCompartilhada){$this->corpoEmailV3 .= $this->htmlTabela2;}
+            if($this->boAlteracaoProvisionado){$this->corpoEmailV3 .= $this->htmlTabela3;}
+            if($this->boDivergenciaPlanejada){$this->corpoEmailV3 .= $this->htmlTabela4;}
         }
-        $this->GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop);
-
-        $dadosProvisionado = $mImportaDadosSiop->RetornaDadosProvisionados($this->exercicio);
-        $this->GeraTabelaProvisionado($dadosProvisionado);
-
-        $listaDivergenciaPlanejada = $mImportaDadosSiop->RetornaDivergenciaPlanejado($this->exercicio);
-        $this->GeraTabelaDivergenciaPlanejado($listaDivergenciaPlanejada);
-        if($this->boAlteracao){$this->corpoEmailV3 .= $this->htmlTabela1;}
-        if($this->boAlteracaoCompartilhada){$this->corpoEmailV3 .= $this->htmlTabela2;}
-        if($this->boAlteracaoProvisionado){$this->corpoEmailV3 .= $this->htmlTabela3;}
-        if($this->boDivergenciaPlanejada){$this->corpoEmailV3 .= $this->htmlTabela4;}
-
         $this->destinatarios = $mImportaDadosSiop->RetornaEmailsSuperUsuarios();
         $this->EnviaEmail();
     }
