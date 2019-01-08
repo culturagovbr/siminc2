@@ -86,7 +86,7 @@ class Pi_PlanoInterno extends Modelo
                 ) AS compartilhada
             FROM public.vw_subunidadeorcamentaria suo
                 JOIN spo.ptressubunidade psu on psu.suoid = suo.suoid
-                JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano
+                JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano and ptr.ptrstatus = 'A'
                 LEFT JOIN monitora.pi_planointernoptres ppt on ppt.ptrid = ptr.ptrid
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.pliid = ppt.pliid
