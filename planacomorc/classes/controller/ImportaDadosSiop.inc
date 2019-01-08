@@ -27,6 +27,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
         for($ano=2018;$ano<=2019;$ano++){
             $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
 //            $this->exercicio = date('Y');
+            $this->pagina = 0;
             $this->exercicio = $ano;
             $this->filtro = array('anoExercicio' => $this->exercicio);
 
@@ -50,7 +51,6 @@ class Planacomorc_Controller_ImportaDadosSiop{
                 ->setRegistrosPorPagina(2000)
             ;
             $resultados = $service->configure()->request();
-
             if($resultados){
                 include_once APPRAIZ. 'wssof/classes/Ws_ExecucaoOrcamentariaDto.inc';
                 foreach ($resultados as $resultado){
