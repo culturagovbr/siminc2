@@ -14,7 +14,7 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
     $where .= $Objwhere->eqdid? "\n AND pro.eqdid IN(".join($Objwhere->eqdid, ','). ")": NULL;
     $where .= $Objwhere->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($Objwhere->irpcod, ','). ")": NULL;
     $where .= $Objwhere->tpdid? "\n AND eqd.tpdid IN(".join($Objwhere->tpdid, ','). ")": NULL;
-    $where .= $Objwhere->suocod? "\n AND suo.suocod IN(".join($Objwhere->suocod, ','). ")": NULL;
+    $where .= $Objwhere->suocod? "\n AND suo.suocod IN('".join($Objwhere->suocod, "','"). "')": NULL;
 
     $sql = "
         SELECT
@@ -61,6 +61,7 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
             ptr.acatitulo,
             ptr.plodsc
     ";
+
     return $sql;
 }
 
