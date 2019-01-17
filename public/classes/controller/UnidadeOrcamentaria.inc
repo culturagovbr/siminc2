@@ -7,6 +7,8 @@ class Public_Controller_UnidadeOrcamentaria
         $url = '?modulo=apoio/unidadeOrcamentaria_form&acao=A&unoid=';
         try {
             $mUnidadeOrcamentaria = new Public_Model_UnidadeOrcamentaria($dados['unoid']);
+//            $dados['unonome'] = strtoupper($dados['unonome']);
+            $dados['unosigla'] = strtoupper($dados['unosigla']);
             $mUnidadeOrcamentaria->popularDadosObjeto($dados);
             $mUnidadeOrcamentaria->prsano = $mUnidadeOrcamentaria->prsano ? $mUnidadeOrcamentaria->prsano : $_SESSION['exercicio'];
 

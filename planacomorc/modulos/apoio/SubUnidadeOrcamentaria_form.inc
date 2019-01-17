@@ -1,5 +1,5 @@
 <form id="formulario" name="formulario" method="post" class="form-horizontal">
-    <input type="hidden" name="req" id="req" value="salvar-medida" />
+    <input type="hidden" name="req" id="req" value="salvar-sub-unidade" />
     <input name="suoid" id="suoid" type="hidden" value="<?php echo $mSubUnidade->suoid;?>">
     <input name="unoid" id="unoid" type="hidden" value="<?php echo $mSubUnidade->unoid; ?>">
 
@@ -13,7 +13,7 @@
 
     <div class="form-group">
         <div class="text-center">
-            <button class="btn btn-primary" id="#btn-salvar-medida" type="submit"><i class="fa fa-check"></i>&nbsp;Salvar</button>
+            <button class="btn btn-primary" id="#btn-salvar-sub-unidade" type="submit"><i class="fa fa-check"></i>&nbsp;Salvar</button>
         </div>
     </div>
 </form>
@@ -21,18 +21,18 @@
 <script type="text/javascript">
     $(function(){
 
-        $('#btn-salvar-medida').click(function(){
+        $('#btn-salvar-sub-unidade').click(function(){
             options = {
                 success: function() {
                     // Carregar a listagem
-                    jQuery("#div_listagem_medida").load('?modulo=apoio/unidadeOrcamentaria_form&acao=A&req=listar-medida&$unoid='+$('#$unoid').val());
+                    jQuery("#div_listagem_sub_unidade").load('?modulo=apoio/unidadeOrcamentaria_form&acao=A&req=listar-sub-unidade&$unoid='+$('#$unoid').val());
 
                     // Zerar o formulário
-                    jQuery("#div_formulario_medida").load('?modulo=apoio/unidadeOrcamentaria_form&acao=A&req=formulario-medida&$unoid='+$('#$unoid').val());
+                    jQuery("#div_formulario_sub_unidade").load('?modulo=apoio/unidadeOrcamentaria_form&acao=A&req=formulario-sub-unidade&$unoid='+$('#$unoid').val());
                 }
             }
 
-            jQuery("#formulario-medida").ajaxForm(options).submit();
+            jQuery("#formulario-sub-unidade").ajaxForm(options).submit();
             return false;
         });
 
