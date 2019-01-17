@@ -2403,7 +2403,7 @@ class Pi_PlanoInterno extends Modelo
     }
     
     /**
-     * Consulta os dados de pedido de Alteração Orçamentária.
+     * Consulta os dados de pedido de Alteração Orçamentária do PI.
      * 
      * @param stdClass $params
      * @return stdClass
@@ -2414,29 +2414,73 @@ class Pi_PlanoInterno extends Modelo
             SELECT
                 ped.pedid,
                 ped.pedtitulo,
-                ped.tpaid,
-                ped.janid,
-                ped.pedano,
-                ped.docid,
                 tpd.tpddsc,
-                coalesce(plise.vlcapital, 0) vldotacaocapital,
-                coalesce(plise.vlcusteio, 0) vldotacaocusteio,
-                coalesce(plise.vlfisico, 0) vldotacaofisico,
-                coalesce(pc.picvalorcapital, 0) picvalorcapital,
-                coalesce(pc.picvalorcusteio, 0) picvalorcusteio,
-                coalesce(pc.picquantidade, 0) picquantidade
+                COALESCE(plise.vldotacaofisico, 0) AS resultado_provavel_fisico,
+                COALESCE(plise.vldotacaocusteio, 0) AS resultado_provavel_custeio,
+                COALESCE(plise.vldotacaocapital, 0) AS resultado_provavel_capital,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(pcrvalor, 0)) AS total
+                    FROM planacomorc.pi_cronograma crv
+                    WHERE
+                        crv.crvid = ". (int)Cronograma::K_FISICO. "
+                        AND crv.pliid = plise.pliid
+                ), 0) AS total_fisico,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(pcrvalor, 0)) AS total
+                    FROM planacomorc.pi_cronograma crv
+                    WHERE
+                        crv.crvid = ". (int)Cronograma::ORCAMENTO_CUSTEIO. "
+                        AND crv.pliid = plise.pliid
+                ), 0) AS total_orcamentario_custeio,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(pcrvalor, 0)) AS total
+                    FROM planacomorc.pi_cronograma crv
+                    WHERE
+                        crv.crvid = ". (int)Cronograma::ORCAMENTO_CAPITAL. "
+                        AND crv.pliid = plise.pliid
+                ), 0) AS total_orcamentario_capital,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(pcrvalor, 0)) AS total
+                    FROM planacomorc.pi_cronograma crv
+                    WHERE
+                        crv.crvid = ". (int)Cronograma::FINANCEIRO_CUSTEIO. "
+                        AND crv.pliid = plise.pliid
+                ), 0) AS total_financeiro_custeio,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(pcrvalor, 0)) AS total
+                    FROM planacomorc.pi_cronograma crv
+                    WHERE
+                        crv.crvid = ". (int)Cronograma::FINANCEIRO_CAPITAL. "
+                        AND crv.pliid = plise.pliid
+                ), 0) AS total_financeiro_capital,
+                (
+                    SELECT
+                        htd.htddata
+                    FROM workflow.historicodocumento htd
+                    WHERE
+                        doc.docid = htd.docid
+                    ORDER BY
+                        htd.htddata DESC
+                    LIMIT 1
+                ) AS quando_fez
             FROM alteracao.pedido ped
                 JOIN workflow.documento doc ON(ped.docid = doc.docid)
                 JOIN workflow.estadodocumento esd ON(doc.esdid = esd.esdid)
                 JOIN workflow.tipodocumento tpd ON(esd.tpdid = tpd.tpdid)
                 JOIN alteracao.plano_interno_selecionado plise ON(ped.pedid = plise.pedid and plise.pliselstatus = 'A')
-                JOIN planacomorc.pi_complemento pc on plise.pliid = pc.pliid
             WHERE
                 ped.pedstatus = 'A'
                 AND doc.esdid IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ",". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")
                 $where
+            ORDER BY
+                quando_fez DESC
         ";
-
+//ver($sql, d);
         $pedido = $this->pegaLinha($sql);
         return $pedido? (object)$pedido: new stdClass();
     }

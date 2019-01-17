@@ -2953,7 +2953,7 @@ function alterarCodigoPi($request){
 }
 
 /**
- * Consulta se o PI passou por alteração orçamentária e exibe o aviso na tela.
+ * Controla a exibição de Aviso de que o PI passou por alteração Orçamentária e precisa ajustar os Cronogramas.
  * 
  * @param int $pliid
  * @return VOID
@@ -2961,15 +2961,19 @@ function alterarCodigoPi($request){
 function controlarAvisoPedidoAlteracao($pliid){
     $modelPi = new Pi_PlanoInterno();
     $pedidoAlteracaoOrcamentaria = $pliid? $modelPi->consultarPedidoAlteracaoEfetivado((object)array('pliid' => (int)$pliid)): new stdClass();
-    if(($pedidoAlteracaoOrcamentaria->vldotacaocapital != $pedidoAlteracaoOrcamentaria->picvalorcapital) ||
-       ($pedidoAlteracaoOrcamentaria->vldotacaocusteio != $pedidoAlteracaoOrcamentaria->picvalorcusteio) ||
-       ($pedidoAlteracaoOrcamentaria->vldotacaofisico != $pedidoAlteracaoOrcamentaria->picquantidade)){
+    if(
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_fisico != $pedidoAlteracaoOrcamentaria->total_fisico) ||
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_custeio != (int)$pedidoAlteracaoOrcamentaria->total_orcamentario_custeio) ||
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_custeio != (int)$pedidoAlteracaoOrcamentaria->total_financeiro_custeio) ||
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_capital != (int)$pedidoAlteracaoOrcamentaria->total_orcamentario_capital) ||
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_capital != (int)$pedidoAlteracaoOrcamentaria->total_financeiro_capital)
+    ){
         exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria);
     }
 }
 
 /**
- * Renderiza o aviso na tela de que o PI passou por Alteração Orçamentária.
+ * Renderiza o aviso na tela de que o PI passou por Alteração Orçamentária e necessita ajustar os valores dos Cronogramas.
  * 
  * @param stdClass $pedidoAlteracaoOrcamentaria
  * @return VOID Mostra na tela o aviso com funcionalidade de ocultar após 10 segundos.
@@ -2979,7 +2983,9 @@ function exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria){
         <div class="row div_row_aviso_pedido">
             <div class="alert alert-danger alert-dismissable">
                 Atenção! Esse PI teve alteração de valores de Custeio e Capital, por favor adeque-os preenchimentos dos Cronogramas Físico, Orçamentário e Financeiro.
-                <b>N° do Pedido: '. $pedidoAlteracaoOrcamentaria->pedid. '</b>
+                <a href="#" class="a_espelho_pedido" title="Visualizar Pedido de Alteração" data-pedid="'. (int)$pedidoAlteracaoOrcamentaria->pedid. '">
+                    <b>N° do Pedido: '. (int)$pedidoAlteracaoOrcamentaria->pedid. '</b>
+                </a>
                 <b>Tipo: '. $pedidoAlteracaoOrcamentaria->tpddsc. '</b>
                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="align-self: " title="Fechar aviso">X</button>
             </div>
@@ -2988,7 +2994,7 @@ function exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria){
         <script>
             setTimeout(function(){
                 $(".div_row_aviso_pedido").hide("slow");
-            }, 10000);
+            }, 17000);
         </script>
     ';
     
