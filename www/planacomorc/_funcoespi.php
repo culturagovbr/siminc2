@@ -2875,12 +2875,10 @@ function gerarCodigosPi($pliid)
 		suo.suocodigopi ||
 		LPAD((
                     SELECT
-                        (COUNT(seq_pi.pliid)+1) AS numero
+                        (COUNT(DISTINCT seq_pi.pliid)+1) AS numero
                     FROM monitora.pi_planointerno seq_pi
                         JOIN public.vw_subunidadeorcamentaria seq_suo ON(
                             seq_pi.ungcod = seq_suo.suocod
-                            AND seq_pi.unicod = seq_suo.unocod
-                            AND seq_pi.pliano = seq_suo.prsano
                         )
                     WHERE
                         seq_pi.plistatus = 'A'
@@ -2889,18 +2887,16 @@ function gerarCodigosPi($pliid)
 		)::TEXT, 3, '0')
             ) AS plicod,
             LPAD((
-		SELECT
-			(COUNT(seq_pi.pliid)+1) AS numero
-		FROM monitora.pi_planointerno seq_pi
-			JOIN public.vw_subunidadeorcamentaria seq_suo ON(
-				seq_pi.ungcod = seq_suo.suocod
-				AND seq_pi.unicod = seq_suo.unocod
-				AND seq_pi.pliano = seq_suo.prsano
-		)
-		WHERE
-			seq_pi.plistatus = 'A'
-			AND seq_pi.plicod ILIKE 'C%' -- TODOS QUE COMEÇAM COM 'C'
-			AND seq_suo.suocodigopi = suo.suocodigopi
+                SELECT
+                    (COUNT(DISTINCT seq_pi.pliid)+1) AS numero
+                FROM monitora.pi_planointerno seq_pi
+                    JOIN public.vw_subunidadeorcamentaria seq_suo ON(
+                        seq_pi.ungcod = seq_suo.suocod
+                    )
+                WHERE
+                    seq_pi.plistatus = 'A'
+                    AND seq_pi.plicod ILIKE 'C%' -- TODOS QUE COMEÇAM COM 'C'
+                    AND seq_suo.suocodigopi = suo.suocodigopi
             )::TEXT, 4, '0') AS plicodsubacao,
             SUBSTR(pliano, 3, 2) AS plilivre
         FROM monitora.pi_planointerno pi
