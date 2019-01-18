@@ -2766,16 +2766,17 @@ function pegarDocidPi($pliid, $tipoFluxo)
 function posAcaoAprovarPi($pliid)
 {
     global $db;
-
-    $dadosPI = $db->pegaLinha("select * from monitora.pi_planointerno where pliid = $pliid");
+    $dadosPI = $db->pegaLinha("SELECT * FROM monitora.pi_planointerno WHERE pliid = ". (int)$pliid);
 
     if(!$dadosPI['plicod']){
         $codigos = gerarCodigosPi($pliid);
-        $sql = "update monitora.pi_planointerno set 
-                    plicod = '{$codigos['plicod']}', 
-                    plilivre = '{$codigos['plilivre']}', 
-                    plicodsubacao = '{$codigos['plicodsubacao']}'
-                where pliid = $pliid";
+        $sql = "
+            UPDATE monitora.pi_planointerno SET
+                plicod = '{$codigos['plicod']}',
+                plilivre = '{$codigos['plilivre']}',
+                plicodsubacao = '{$codigos['plicodsubacao']}'
+            WHERE
+                pliid = ". (int)$pliid;
 
         $db->executar($sql);
         $db->commit();
@@ -2849,28 +2850,69 @@ function gerarCodigosPi($pliid)
 
     $sql = "
         SELECT
-            SUBSTR(pliano, 3, 2) ||
-            CASE WHEN pi.pliemenda = TRUE THEN
-                'E'
-            ELSE
-                eqd.eqdcod
-            END ||
-            LPAD(pi.pliid::TEXT, 5, '0') ||
-            suo.suocodigopi ||
-            CASE WHEN pic.picted = TRUE THEN
-                'T'
-            ELSE
-                cap.capcod
-            END AS plicod,
-            LPAD(pi.pliid::TEXT, 4, '0') plicodsubacao,
-            SUBSTR(pliano, 3, 2) plilivre
-        FROM
-            monitora.pi_planointerno pi
+	    (
+		'C' ||
+		ptr.acacod ||
+		(
+                    CASE WHEN ptr.plocod = 'EIND' THEN
+                        'I'
+                    WHEN ptr.plocod = 'ECOM' THEN
+                        'C'
+                    WHEN ptr.plocod = 'EREL' THEN
+                        'R'
+                    WHEN ptr.plocod = 'EBAN' THEN
+                        'B'
+                    WHEN eqd.eqdcod IN('F', 'P', 'O', 'I') THEN
+                        '1'
+                    WHEN eqd.eqdcod IN('P', 'M', 'B', 'C') THEN
+                        '4'
+                    WHEN eqd.eqdcod IN('N') THEN
+                        'N'
+                    ELSE
+                        'X'
+                    END
+		) ||
+		suo.suocodigopi ||
+		LPAD((
+                    SELECT
+                        (COUNT(seq_pi.pliid)+1) AS numero
+                    FROM monitora.pi_planointerno seq_pi
+                        JOIN public.vw_subunidadeorcamentaria seq_suo ON(
+                            seq_pi.ungcod = seq_suo.suocod
+                            AND seq_pi.unicod = seq_suo.unocod
+                            AND seq_pi.pliano = seq_suo.prsano
+                        )
+                    WHERE
+                        seq_pi.plistatus = 'A'
+                        AND seq_pi.plicod ILIKE 'C%' -- TODOS QUE COMEÇAM COM 'C'
+                        AND seq_suo.suocodigopi = suo.suocodigopi
+		)::TEXT, 3, '0')
+            ) AS plicod,
+            LPAD((
+		SELECT
+			(COUNT(seq_pi.pliid)+1) AS numero
+		FROM monitora.pi_planointerno seq_pi
+			JOIN public.vw_subunidadeorcamentaria seq_suo ON(
+				seq_pi.ungcod = seq_suo.suocod
+				AND seq_pi.unicod = seq_suo.unocod
+				AND seq_pi.pliano = seq_suo.prsano
+		)
+		WHERE
+			seq_pi.plistatus = 'A'
+			AND seq_pi.plicod ILIKE 'C%' -- TODOS QUE COMEÇAM COM 'C'
+			AND seq_suo.suocodigopi = suo.suocodigopi
+            )::TEXT, 4, '0') AS plicodsubacao,
+            SUBSTR(pliano, 3, 2) AS plilivre
+        FROM monitora.pi_planointerno pi
             JOIN planacomorc.pi_complemento pic ON pic.pliid = pi.pliid
             JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pi.eqdid
-            JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pi.ungcod
+            JOIN public.vw_subunidadeorcamentaria suo ON(
+                suo.suocod = pi.ungcod
                 AND suo.unocod = pi.unicod
                 AND suo.prsano = pi.pliano
+            )
+            JOIN monitora.pi_planointernoptres ppt ON(pi.pliid = ppt.pliid)
+            JOIN monitora.vw_ptres ptr ON(ppt.ptrid = ptr.ptrid)
             LEFT JOIN monitora.pi_categoriaapropriacao cap ON cap.capid = pi.capid
         WHERE
              pi.pliid = ". (int)$pliid;
