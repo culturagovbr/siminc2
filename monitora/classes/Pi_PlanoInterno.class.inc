@@ -885,13 +885,16 @@ class Pi_PlanoInterno extends Modelo
                 sum(COALESCE (lmu.lmuvlr, 0)::DECIMAL) AS valor
             FROM
                 public.vw_subunidadeorcamentaria suo
-                LEFT JOIN planacomorc.unidadegestora_limite lmu ON suo.suocod = lmu.ungcod
-                AND suo.prsano = lmu.prsano
+                LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
+			        suo.suocod = lmu.ungcod
+			        AND suo.prsano = lmu.prsano
+			        AND lmu.lmustatus = 'A'
+                )
             WHERE
                 suo.prsano = '$filtro->exercicio' {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
-                and {$filtro->unidades}
-                and suo.suostatus = 'A'
+                AND {$filtro->unidades}
+                AND suo.suostatus = 'A'
             GROUP BY
                 ordem,
                 descricao,
