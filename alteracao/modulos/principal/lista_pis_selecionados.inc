@@ -77,7 +77,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                                                         <?php
-                            $vlrAEmpenharCapital = $dados['capital'] - $dados['vlrempenhadocapital']-$dados['vldotacaocapitaltotal'];
+                            $vlrAEmpenharCapital = $dados['capital'] - $dados['vlrempenhadocapital'];
                             ?>
                             <input type="hidden" id="picapital<?=$dados['pliselid'];?>" name="vlcapital" value="<?= number_format($vlrAEmpenharCapital,0,',','.'); ?>">
                             Capital: R$ <?= number_format($vlrAEmpenharCapital,0,',','.'); ?>
