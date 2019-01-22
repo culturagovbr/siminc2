@@ -247,13 +247,28 @@ class Alteracao_Model_Pedido extends Modelo
                        pis.vldotacaocusteio,
                        pis.vldotacaocapital,
                        pis.vldotacaofisico,
+                       coalesce((select sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhadocapital FROM spo.siopexecucao se where se.plicod = pli.plicod and se.exercicio = pli.pliano and gndcod >= '4'),0.00) AS vlrempenhadocapital,
+                       coalesce((select sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhadocusteio FROM spo.siopexecucao se where se.plicod = pli.plicod and se.exercicio = pli.pliano and gndcod < '4'),0.00) AS vlrempenhadocusteio,
                        coalesce((SELECT sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhado
 		                   FROM spo.siopexecucao se
 		                  where se.plicod = pli.plicod
 		                    and se.exercicio = pli.pliano),0.00) as empenhado,
                        pp.pprnome,
-                       (select sum(coalesce(vldotacaocusteio,0)) as vldotacaocusteio from alteracao.plano_interno_selecionado where pliid = pis.pliid and pedid<>$pedid) as vldotacaocusteiototal,
-                       (select sum(coalesce(vldotacaocapital,0)) as vldotacaocapital from alteracao.plano_interno_selecionado where pliid = pis.pliid and pedid<>$pedid) as vldotacaocapitaltotal,
+                       (select sum(coalesce(vlcancelarcusteio,0)) as vldotacaocusteio
+                          from alteracao.plano_interno_selecionado pis
+                         inner join alteracao.pedido p on pis.pedid = p.pedid
+                         inner join workflow.documento d on p.docid = p.docid and esdid not in (1794, 1802) 
+                         where pliid = pis.pliid and pis.pedid<>$pedid) as vldotacaocusteiototal,
+                       (select sum(coalesce(vlcancelarcapital,0)) as vldotacaocapital
+                          from alteracao.plano_interno_selecionado pis
+                         inner join alteracao.pedido p on pis.pedid = p.pedid
+                         inner join workflow.documento d on p.docid = p.docid and esdid not in (1794, 1802) 
+                         where pliid = pis.pliid and pis.pedid<>$pedid) as vldotacaocapitaltotal,
+                       (select sum(coalesce(vlcancelarfisico,0)) as vldotacaofisico
+                          from alteracao.plano_interno_selecionado pis
+                         inner join alteracao.pedido p on pis.pedid = p.pedid
+                         inner join workflow.documento d on p.docid = p.docid and esdid not in (1794, 1802) 
+                         where pliid = pis.pliid and pis.pedid<>$pedid) as vldotacaofisicototal,
                        suo.suonome AS unidade,
                        COALESCE(pli.plititulo, 'N/A') AS plititulo,
                        TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional

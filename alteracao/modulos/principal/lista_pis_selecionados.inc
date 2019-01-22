@@ -63,12 +63,32 @@
                 </table>
             </td>
             <td style="vertical-align: middle;">
-                <?php
-                    $empenhado = $dados['custeio']+$dados['capital']-($dados['vldotacaocapitaltotal']+$dados['vldotacaocusteiototal'])+$dados['empenhado'];
-                    $empenhado = number_format($empenhado,0,',','.');
-                    echo "R$ ".$empenhado;
-                ?>
-                <input type="hidden" id="empenhado<?=$dados['pliselid'];?>" value="<?=$empenhado;?>">
+                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
+                    <tr>
+                        <td style="border: none;">
+                            <?php
+                            $vlrAEmpenharCusteio = $dados['custeio'] - $dados['vlrempenhadocusteio'];
+                            $vlrAEmpenharFisico = $dados['fisico'];
+                            ?>
+                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" name="vlcusteio" value="<?= number_format($vlrAEmpenharCusteio-$dados['vldotacaocusteiototal'],0,',','.'); ?>">
+                            Custeio: R$ <?= number_format($vlrAEmpenharCusteio,0,',','.'); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                                                        <?php
+                            $vlrAEmpenharCapital = $dados['capital'] - $dados['vlrempenhadocapital']-$dados['vldotacaocapitaltotal'];
+                            ?>
+                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" name="vlcapital" value="<?= number_format($vlrAEmpenharCapital,0,',','.'); ?>">
+                            Capital: R$ <?= number_format($vlrAEmpenharCapital,0,',','.'); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <br>
+                        </td>
+                    </tr>
+                </table>                
             </td>
             
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
@@ -76,7 +96,7 @@
                     <tr>
                         <td style="border: none;">
                             <?php if ($podeEditar): ?>
-                                    <input type="text" size="10" class="input_valor" name="vlsuplementarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcusteio'];?>">
+                                    <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharCusteio+$dados['vlsuplementarcusteio']+$dados['vlsuplementarexcessocusteio']+$dados['vlsuplementarsuperavitcusteio']-$dados['vldotacaocusteiototal']-$dados['vlcancelarcusteio'],0,',','.'); ?>" name="vlsuplementarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcusteio'];?>">
                                 <?php else:
                                     echo number_format($dados['vlsuplementarcusteio'], 0, ',', '.');
                                 endif;
@@ -86,7 +106,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlsuplementarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcapital'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharCapital+$dados['vlsuplementarcapital']+$dados['vlsuplementarexcessocapital']+$dados['vlsuplementarsuperavitcapital']-$dados['vldotacaocapitaltotal']-$dados['vlcancelarcapital'],0,',','.'); ?>" name="vlsuplementarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcapital'];?>">
                             <?php else:
                                     echo number_format($dados['vlsuplementarcapital'], 0, ',', '.');
                                 endif;
@@ -96,7 +116,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlsuplementarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarfisico'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharFisico+$dados['vlsuplementarfisico']+$dados['vlsuplementarexcessofisico']+$dados['vlsuplementarsuperavitfisico']-$dados['vldotacaofisicototal']-$dados['vlcancelarfisico'],0,',','.'); ?>" name="vlsuplementarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarfisico'];?>">
                             <?php else:
                                     echo number_format($dados['vlsuplementarfisico'], 0, ',', '.');
                                 endif;
@@ -110,7 +130,7 @@
                     <tr>
                         <td style="border: none;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlcancelarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarcusteio'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharCusteio+$dados['vlsuplementarcusteio']+$dados['vlsuplementarexcessocusteio']+$dados['vlsuplementarsuperavitcusteio']-$dados['vldotacaocusteiototal']-$dados['vlcancelarcusteio'],0,',','.'); ?>" name="vlcancelarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarcusteio'];?>">
                             <?php else:
                                     echo number_format($dados['vlcancelarcusteio'], 0, ',', '.');
                                 endif;
@@ -120,7 +140,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlcancelarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarcapital'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharCapital+$dados['vlsuplementarcapital']+$dados['vlsuplementarexcessocapital']+$dados['vlsuplementarsuperavitcapital']-$dados['vldotacaocapitaltotal']-$dados['vlcancelarcapital'],0,',','.'); ?>" name="vlcancelarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarcapital'];?>">
                             <?php else:
                                     echo number_format($dados['vlcancelarcapital'], 0, ',', '.');
                                 endif;
@@ -130,7 +150,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlcancelarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarfisico'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharFisico+$dados['vlsuplementarfisico']+$dados['vlsuplementarexcessofisico']+$dados['vlsuplementarsuperavitfisico']-$dados['vldotacaofisicototal']-$dados['vlcancelarfisico'],0,',','.'); ?>" name="vlcancelarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarfisico'];?>">
                             <?php else:
                                     echo number_format($dados['vlcancelarfisico'], 0, ',', '.');
                                 endif;
@@ -144,7 +164,7 @@
                     <tr>
                         <td style="border: none;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlsuplementarexcessocusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessocusteio'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharCusteio+$dados['vlsuplementarcusteio']+$dados['vlsuplementarexcessocusteio']+$dados['vlsuplementarsuperavitcusteio']-$dados['vldotacaocusteiototal']-$dados['vlcancelarcusteio'],0,',','.'); ?>" name="vlsuplementarexcessocusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessocusteio'];?>">
                             <?php else:
                                     echo number_format($dados['vlsuplementarexcessocusteio'], 0, ',', '.');
                                 endif;
@@ -154,7 +174,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlsuplementarexcessocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessocapital'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharCapital+$dados['vlsuplementarcapital']+$dados['vlsuplementarexcessocapital']+$dados['vlsuplementarsuperavitcapital']-$dados['vldotacaocapitaltotal']-$dados['vlcancelarcapital'],0,',','.'); ?>" name="vlsuplementarexcessocapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessocapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessocapital'];?>">
                             <?php else:
                                     echo number_format($dados['vlsuplementarexcessocapital'], 0, ',', '.');
                                 endif;
@@ -164,7 +184,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlsuplementarexcessofisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessofisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessofisico'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharFisico+$dados['vlsuplementarfisico']+$dados['vlsuplementarexcessofisico']+$dados['vlsuplementarsuperavitfisico']-$dados['vldotacaofisicototal']-$dados['vlcancelarfisico'],0,',','.'); ?>" name="vlsuplementarexcessofisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarexcessofisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarexcessofisico'];?>">
                             <?php else:
                                     echo number_format($dados['vlsuplementarexcessofisico'], 0, ',', '.');
                                 endif;
@@ -178,7 +198,7 @@
                     <tr>
                         <td style="border: none;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcusteio'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharCusteio+$dados['vlsuplementarcusteio']+$dados['vlsuplementarexcessocusteio']+$dados['vlsuplementarsuperavitcusteio']-$dados['vldotacaocusteiototal']-$dados['vlcancelarcusteio'],0,',','.'); ?>" name="vlsuplementarsuperavitcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcusteio'];?>">
                             <?php else:
                                     echo number_format($dados['vlsuplementarsuperavitcusteio'], 0, ',', '.');
                                 endif;
@@ -188,7 +208,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcapital'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharCapital+$dados['vlsuplementarcapital']+$dados['vlsuplementarexcessocapital']+$dados['vlsuplementarsuperavitcapital']-$dados['vldotacaocapitaltotal']-$dados['vlcancelarcapital'],0,',','.'); ?>" name="vlsuplementarsuperavitcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitcapital'];?>">
                             <?php else:
                                     echo number_format($dados['vlsuplementarsuperavitcapital'], 0, ',', '.');
                                 endif;
@@ -198,7 +218,7 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" name="vlsuplementarsuperavitfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitfisico'];?>">
+                                <input type="text" size="10" class="input_valor" title="Disponível <?= number_format($vlrAEmpenharFisico+$dados['vlsuplementarfisico']+$dados['vlsuplementarexcessofisico']+$dados['vlsuplementarsuperavitfisico']-$dados['vldotacaofisicototal']-$dados['vlcancelarfisico'],0,',','.'); ?>" name="vlsuplementarsuperavitfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarsuperavitfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarsuperavitfisico'];?>">
                             <?php else:
                                     echo number_format($dados['vlsuplementarsuperavitfisico'], 0, ',', '.');
                                 endif;
@@ -314,25 +334,25 @@
                 }
             });
             vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
-            if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
-                $("#divAlertaContent").html("Valor cancelado divergente do suplementado!");
-                $("#divAlerta").show();
-                setTimeout(function(){$("#divAlerta").hide("fade");}, 5000);
-                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
-                    {
-                        pliselid: pliselid,
-                        campo: nomeCampo,
-                        valor: vlrCampo,
-                        empenhado: vlrEmpenhado
-                    },
-                    function(retorno){
-                        if (retorno){
-                            var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-                            $('#listaPisSelecionados').load(url);
-                        }
-                    }
-                );
-            }else{
+//            if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
+//                $("#divAlertaContent").html("Valor cancelado divergente do suplementado!");
+//                $("#divAlerta").show();
+//                setTimeout(function(){$("#divAlerta").hide("fade");}, 5000);
+//                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+//                    {
+//                        pliselid: pliselid,
+//                        campo: nomeCampo,
+//                        valor: vlrCampo,
+//                        empenhado: vlrEmpenhado
+//                    },
+//                    function(retorno){
+//                        if (retorno){
+//                            var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+//                            $('#listaPisSelecionados').load(url);
+//                        }
+//                    }
+//                );
+//            }else{
                 $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
                 {
                     pliselid: pliselid,
@@ -346,7 +366,7 @@
                         }
                     }
                 );
-            }
+//            }
         }
     }
 </script>
