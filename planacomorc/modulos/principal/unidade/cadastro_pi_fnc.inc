@@ -217,8 +217,6 @@ $listaJanelasDeAlteracao = (new Planacomorc_Model_PiJanela)->buscarTodos((object
 $mPiPlanoInterno = new Pi_PlanoInterno();
 $podeEditar = $mPiPlanoInterno->verificarPermissaoEditarFnc($estadoAtual, $perfis, $listaJanelasDeAlteracao);
 
-$pedidoAlteracaoOrcamentaria = $dadosPI['pliid']? $mPiPlanoInterno->consultarPedidoAlteracaoEfetivado((object)array('pliid' => (int)$dadosPI['pliid'])): new stdClass();
-
 /**
  * Cabeçalho padrão do sistema.
  * @see cabecalho.inc

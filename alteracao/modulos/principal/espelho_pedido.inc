@@ -1,4 +1,7 @@
 <?php
+
+    require_once APPRAIZ. 'includes/workflow.php';
+    
     $mAlteracaoPedido = new Alteracao_Model_Pedido($_REQUEST['pedid']);
     $arrPedidos = $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);
 ?>
@@ -10,6 +13,7 @@
         </a>
     <?php endif; ?>
 </h2>
+
 <div class="ibox-content">
     <div class="row">
         <div class="col-lg-6 b-r">
@@ -34,6 +38,13 @@
                 echo $simec->input('usuemail', 'E-mail', $arrPedidos['usuemail'], null, ['input-size' => 9, 'label-size' => 2]);
             ?>
         </div>
+        <?php if($_REQUEST['req'] == 'espelho-pedido'): ?>
+            <div class="col-lg-1" style="position: absolute; right: 0; top: 10px;">
+                <div class="col-md-1">
+                    <?php wf_desenhaBarraNavegacao($arrPedidos['docid'], array('pedid' => $arrPedidos['pedid'])); ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 <script>

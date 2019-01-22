@@ -36,19 +36,23 @@ class Pi_Cronograma extends Modelo{
      * @access protected
      */
     protected $arAtributos     = array(
-                                        'pcrid' => null,
-                                        'pliid' => null,
-                                        'mescod' => null,
-                                        'pcrvalor' => null,
-                                        'crvid' => null,
+        'pcrid' => null,
+        'pliid' => null,
+        'mescod' => null,
+        'pcrvalor' => null,
+        'crvid' => null,
     );
 
     public function recuperarCronogramas()
     {
-        $sql = "select * 
-                from planacomorc.cronograma_valor cv
-                    inner join planacomorc.cronograma c on c.croid = cv.croid
-                order by crvid";
+        $sql = "
+            SELECT
+                * 
+            FROM planacomorc.cronograma_valor cv
+                JOIN planacomorc.cronograma c on c.croid = cv.croid
+            ORDER BY
+                crvid
+        ";
 
         $dados = $this->carregar($sql);
         return $dados ? $dados : [];

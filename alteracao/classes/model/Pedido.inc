@@ -211,7 +211,8 @@ class Alteracao_Model_Pedido extends Modelo
                     usr.usuemail,
                     CASE WHEN tpa.tpafluxo='I' THEN 269
                          WHEN tpa.tpafluxo='E' THEN 270
-                    END AS tpdid
+                    END AS tpdid,
+                    ped.docid
                 FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
