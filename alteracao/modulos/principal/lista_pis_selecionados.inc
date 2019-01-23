@@ -305,7 +305,7 @@
         var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
         var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
         var vlrEmpenhado = $("#empenhado"+pliselid).val()? str_replace(['.', ','], ['', '.'], $("#empenhado"+pliselid).val()) : 0;
-        if (parseInt(vlrCancelado)>parseInt(vlrPic) && ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital')){
+        if (parseInt(vlrCancelado)>parseInt(vlrPic) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital')){
             swal({
                 title: "",
                 text: "Valor de "+tipo+" maior que o do "+tipo+" PI",
@@ -334,25 +334,25 @@
                 }
             });
             vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
-//            if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
-//                $("#divAlertaContent").html("Valor cancelado divergente do suplementado!");
-//                $("#divAlerta").show();
-//                setTimeout(function(){$("#divAlerta").hide("fade");}, 5000);
-//                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
-//                    {
-//                        pliselid: pliselid,
-//                        campo: nomeCampo,
-//                        valor: vlrCampo,
-//                        empenhado: vlrEmpenhado
-//                    },
-//                    function(retorno){
-//                        if (retorno){
-//                            var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
-//                            $('#listaPisSelecionados').load(url);
-//                        }
-//                    }
-//                );
-//            }else{
+            if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
+                $("#divAlertaContent").html("Valor cancelado divergente do suplementado!");
+                $("#divAlerta").show();
+                setTimeout(function(){$("#divAlerta").hide("fade");}, 5000);
+                $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
+                    {
+                        pliselid: pliselid,
+                        campo: nomeCampo,
+                        valor: vlrCampo,
+                        empenhado: vlrEmpenhado
+                    },
+                    function(retorno){
+                        if (retorno){
+                            var url = '?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_lista_pis_selecionados&pedid='+$("#pedid").val();
+                            $('#listaPisSelecionados').load(url);
+                        }
+                    }
+                );
+            }else{
                 $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
                 {
                     pliselid: pliselid,
@@ -366,7 +366,7 @@
                         }
                     }
                 );
-//            }
+            }
         }
     }
 </script>
