@@ -70,7 +70,7 @@
                             $vlrAEmpenharCusteio = $dados['custeio'] - $dados['vlrempenhadocusteio'];
                             $vlrAEmpenharFisico = $dados['fisico'];
                             ?>
-                            <input type="hidden" id="picusteio<?=$dados['pliselid'];?>" name="vlcusteio" value="<?= number_format($vlrAEmpenharCusteio-$dados['vldotacaocusteiototal'],0,',','.'); ?>">
+                            <input type="hidden" id="vlempenharecusteio<?=$dados['pliselid'];?>" name="vlempenharecusteio" value="<?= number_format($vlrAEmpenharCusteio-$dados['vldotacaocusteiototal'],0,',','.'); ?>">
                             Custeio: R$ <?= number_format($vlrAEmpenharCusteio,0,',','.'); ?>
                         </td>
                     </tr>
@@ -79,7 +79,7 @@
                                                         <?php
                             $vlrAEmpenharCapital = $dados['capital'] - $dados['vlrempenhadocapital'];
                             ?>
-                            <input type="hidden" id="picapital<?=$dados['pliselid'];?>" name="vlcapital" value="<?= number_format($vlrAEmpenharCapital,0,',','.'); ?>">
+                            <input type="hidden" id="vlempenharcapital<?=$dados['pliselid'];?>" name="vlempenharcapital" value="<?= number_format($vlrAEmpenharCapital-$dados['vldotacaocapitaltotal'],0,',','.'); ?>">
                             Capital: R$ <?= number_format($vlrAEmpenharCapital,0,',','.'); ?>
                         </td>
                     </tr>
@@ -304,11 +304,11 @@
     function salvarCampo(nomeCampo, pliselid, valor, tipo){
         var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
         var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
-        var vlrEmpenhado = $("#empenhado"+pliselid).val()? str_replace(['.', ','], ['', '.'], $("#empenhado"+pliselid).val()) : 0;
-        if (parseInt(vlrCancelado)>parseInt(vlrPic) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital')){
+        var vlrEmpenhado = $("#vlempenhar"+tipo+pliselid).val()? str_replace(['.', ','], ['', '.'], $("#vlempenhar"+pliselid).val()) : 0;
+        if (parseInt(vlrCancelado)>parseInt(vlrEmpenhado) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital')){
             swal({
                 title: "",
-                text: "Valor de "+tipo+" maior que o do "+tipo+" PI",
+                text: "O valor cancelado de "+tipo+" não pode ser maior que o Saldo a Empenhar de "+tipo+" do próprio PI.",
                 type: "warning",
                 confirmButtonText: 'Ok',
                 closeOnConfirm: true
