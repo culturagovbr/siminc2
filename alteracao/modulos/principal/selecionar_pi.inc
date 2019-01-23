@@ -1,6 +1,6 @@
 <div id="divAlerta" class="alert alert-warning alert-dismissable">
-    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-    <span id="divAlertaContent">Teste de alerta</span>
+    <button aria-hidden="true" class="close" type="button" onclick="$('#divAlerta').hide('fade');" title="Fechar aviso!">×</button>
+    <span id="divAlertaContent"></span>
 </div>
 
 <?php if($podeEditar): ?>

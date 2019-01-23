@@ -46,7 +46,7 @@ class Alteracao_Controller_PlanoInternoSelecionado
             $mPiComplemento = new Pi_Complemento($mPedido->pliid);
 
             $mPedido->popularDadosObjeto($dados);
-            $mPedido->{$dados['campo']} = $dados['valor'];
+            $mPedido->{$dados['campo']} = $dados['valor']? $dados['valor']: NULL;
             $mPedido->vldotacaocusteio = $mPedido->vlcusteio+$mPedido->vlsuplementarcusteio+$mPedido->vlsuplementarexcessocusteio+$mPedido->vlsuplementarsuperavitcusteio-$mPedido->vlcancelarcusteio;
             $mPedido->vldotacaocapital = $mPedido->vlcapital+$mPedido->vlsuplementarcapital+$mPedido->vlsuplementarexcessocapital+$mPedido->vlsuplementarsuperavitcapital-$mPedido->vlcancelarcapital;
             $mPedido->vldotacaofisico = $mPedido->vlfisico+$mPedido->vlsuplementarfisico+$mPedido->vlsuplementarexcessofisico+$mPedido->vlsuplementarsuperavitfisico-$mPedido->vlcancelarfisico;

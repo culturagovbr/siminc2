@@ -232,9 +232,9 @@ class Alteracao_Model_Pedido extends Modelo
                 pis.pedid,
                 pis.pliid,
                 pli.plicod,
-                coalesce(pis.vlcusteio,0.00) AS custeio,
-                coalesce(pis.vlcapital,0.00) AS capital,
-                coalesce(pis.vlfisico,0.00) AS fisico,
+                COALESCE(pis.vlcusteio,0.00) AS custeio,
+                COALESCE(pis.vlcapital,0.00) AS capital,
+                COALESCE(pis.vlfisico,0.00) AS fisico,
                 pis.vlsuplementarcusteio,
                 pis.vlsuplementarcapital,
                 pis.vlsuplementarfisico,
@@ -288,7 +288,7 @@ class Alteracao_Model_Pedido extends Modelo
                         AND pliid = pis.pliid
                         AND pis.pedid <> ". (int)$params->pedid. "
                         AND d.esdid NOT IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ", ". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")
-                ) AS vldotacaocusteiototal,
+                ) AS vltotalcancelarcusteio,
                 (
                     SELECT
                         SUM(COALESCE(vlcancelarcapital,0)) AS vldotacaocapital
@@ -300,7 +300,7 @@ class Alteracao_Model_Pedido extends Modelo
                         AND pliid = pis.pliid
                         AND pis.pedid <> ". (int)$params->pedid. "
                         AND d.esdid NOT IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ", ". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")
-                ) AS vldotacaocapitaltotal,
+                ) AS vltotalcancelarcapital,
                 (
                     SELECT
                         SUM(COALESCE(vlcancelarfisico,0)) AS vldotacaofisico
@@ -312,7 +312,7 @@ class Alteracao_Model_Pedido extends Modelo
                         AND pliid = pis.pliid
                         AND pis.pedid <> ". (int)$params->pedid. "
                         AND d.esdid NOT IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ", ". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")
-                ) AS vldotacaofisicototal,
+                ) AS vltotalcancelarfisico,
                 suo.suonome AS unidade,
                 COALESCE(pli.plititulo, 'N/A') AS plititulo,
                 ptr.funcional
