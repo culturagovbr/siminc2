@@ -280,8 +280,8 @@ class Alteracao_Model_Pedido extends Modelo
                 (
                     SELECT
                         SUM(COALESCE(vlcancelarcusteio,0)) AS vldotacaocusteio
-                    FROM alteracao.plano_interno_selecionado pis
-                        JOIN alteracao.pedido p ON pis.pedid = p.pedid
+                    FROM alteracao.plano_interno_selecionado pisi
+                        JOIN alteracao.pedido p ON pisi.pedid = p.pedid
                         JOIN workflow.documento d ON p.docid = p.docid
                     WHERE
                         p.pedstatus = 'A'
@@ -292,8 +292,8 @@ class Alteracao_Model_Pedido extends Modelo
                 (
                     SELECT
                         SUM(COALESCE(vlcancelarcapital,0)) AS vldotacaocapital
-                    FROM alteracao.plano_interno_selecionado pis
-                        JOIN alteracao.pedido p ON pis.pedid = p.pedid
+                    FROM alteracao.plano_interno_selecionado pisi
+                        JOIN alteracao.pedido p ON pisi.pedid = p.pedid
                         JOIN workflow.documento d ON p.docid = p.docid
                     WHERE
                         p.pedstatus = 'A'
@@ -304,8 +304,8 @@ class Alteracao_Model_Pedido extends Modelo
                 (
                     SELECT
                         SUM(COALESCE(vlcancelarfisico,0)) AS vldotacaofisico
-                    FROM alteracao.plano_interno_selecionado pis
-                        JOIN alteracao.pedido p ON pis.pedid = p.pedid
+                    FROM alteracao.plano_interno_selecionado pisi
+                        JOIN alteracao.pedido p ON pisi.pedid = p.pedid
                         JOIN workflow.documento d ON p.docid = p.docid
                     WHERE
                         p.pedstatus = 'A'

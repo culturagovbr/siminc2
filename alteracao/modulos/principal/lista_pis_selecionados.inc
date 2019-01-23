@@ -70,7 +70,7 @@
                             $vlrAEmpenharCusteio = $dados['custeio'] - $dados['vlrempenhadocusteio'];
                             $vlrAEmpenharFisico = $dados['fisico'];
                             ?>
-                            <input type="hidden" id="vlempenharecusteio<?=$dados['pliselid'];?>" name="vlempenharecusteio" value="<?= number_format($vlrAEmpenharCusteio-$dados['vldotacaocusteiototal'],0,',','.'); ?>">
+                            <input type="hidden" id="vlempenharcusteio<?=$dados['pliselid'];?>" name="vlempenharcusteio" value="<?= number_format($vlrAEmpenharCusteio-$dados['vldotacaocusteiototal'],0,',','.'); ?>">
                             Custeio: R$ <?= number_format($vlrAEmpenharCusteio,0,',','.'); ?>
                         </td>
                     </tr>
@@ -304,7 +304,7 @@
     function salvarCampo(nomeCampo, pliselid, valor, tipo){
         var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
         var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
-        var vlrEmpenhado = $("#vlempenhar"+tipo+pliselid).val()? str_replace(['.', ','], ['', '.'], $("#vlempenhar"+pliselid).val()) : 0;
+        var vlrEmpenhado = $("#vlempenhar"+tipo+pliselid).val()? str_replace(['.', ','], ['', '.'], $("#vlempenhar"+tipo+pliselid).val()) : 0;
         if (parseInt(vlrCancelado)>parseInt(vlrEmpenhado) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital')){
             swal({
                 title: "",
