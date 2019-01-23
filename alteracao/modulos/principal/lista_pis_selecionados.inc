@@ -35,9 +35,9 @@
             $vlrAEmpenharCusteio = $dados['custeio']-$dados['vlrempenhadocusteio'];
             $vlrAEmpenharCapital = $dados['capital']-$dados['vlrempenhadocapital'];
             
-            $vlDisponivelSuplementarCusteio = $vlTotalCancelarCusteio-$dados['vltotalcancelarcusteio']-$dados['vlsuplementarcusteio']-$dados['vlsuplementarexcessocusteio']-$dados['vlsuplementarsuperavitcusteio'];
-            $vlDisponivelSuplementarCapital = $vlTotalCancelarCapital-$dados['vltotalcancelarcapital']-$dados['vlsuplementarcapital']-$dados['vlsuplementarexcessocapital']-$dados['vlsuplementarsuperavitcapital'];
-            $vlDisponivelSuplementarFisico = $vlTotalCancelarFisico-$dados['vltotalcancelarfisico']-$dados['vlsuplementarfisico']-$dados['vlsuplementarexcessofisico']-$dados['vlsuplementarsuperavitfisico'];
+            $vlDisponivelSuplementarCusteio = $vlTotalCancelarCusteio-$dados['vlsuplementarcusteio']-$dados['vlsuplementarexcessocusteio']-$dados['vlsuplementarsuperavitcusteio'];
+            $vlDisponivelSuplementarCapital = $vlTotalCancelarCapital-$dados['vlsuplementarcapital']-$dados['vlsuplementarexcessocapital']-$dados['vlsuplementarsuperavitcapital'];
+            $vlDisponivelSuplementarFisico = $vlTotalCancelarFisico-$dados['vlsuplementarfisico']-$dados['vlsuplementarexcessofisico']-$dados['vlsuplementarsuperavitfisico'];
 
             if($dados['vldotacaofisico'] < 0){
                 $color='red';
