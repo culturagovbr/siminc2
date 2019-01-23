@@ -33,7 +33,10 @@
                 </thead>
                 <tbody>
                 <?php
-                    $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
+                    $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados( (object)[
+                        'pedid' => $_REQUEST['pedid'],
+                        'exercicio' => $_SESSION['exercicio']
+                    ]);
                     foreach($aDadosPiSelecionados as $piSelecionado): ?>
                         <tr>
                             <td>

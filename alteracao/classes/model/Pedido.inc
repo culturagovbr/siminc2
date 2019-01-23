@@ -225,66 +225,116 @@ class Alteracao_Model_Pedido extends Modelo
         return $this->pegaLinha($sql);
     }
 
-    public function listaPisSelecionados($pedid){
-        $sql = "select distinct pis.pliselid,
-                       pis.pedid,
-                       pis.pliid,
-                       pli.plicod,
-                       coalesce(pis.vlcusteio,0.00) AS custeio,
-                       coalesce(pis.vlcapital,0.00) AS capital,
-                       coalesce(pis.vlfisico,0.00) AS fisico,
-                       pis.vlsuplementarcusteio,
-                       pis.vlsuplementarcapital,
-                       pis.vlsuplementarfisico,
-                       pis.vlcancelarcusteio,
-                       pis.vlcancelarcapital,
-                       pis.vlcancelarfisico,
-                       pis.vlsuplementarexcessocusteio,
-                       pis.vlsuplementarexcessocapital,
-                       pis.vlsuplementarexcessofisico,
-                       pis.vlsuplementarsuperavitcusteio,
-                       pis.vlsuplementarsuperavitcapital,
-                       pis.vlsuplementarsuperavitfisico,
-                       pis.vldotacaocusteio,
-                       pis.vldotacaocapital,
-                       pis.vldotacaofisico,
-                       coalesce((select sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhadocapital FROM spo.siopexecucao se where se.plicod = pli.plicod and se.exercicio = pli.pliano and gndcod >= '4'),0.00) AS vlrempenhadocapital,
-                       coalesce((select sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhadocusteio FROM spo.siopexecucao se where se.plicod = pli.plicod and se.exercicio = pli.pliano and gndcod < '4'),0.00) AS vlrempenhadocusteio,
-                       coalesce((SELECT sum(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhado
-		                   FROM spo.siopexecucao se
-		                  where se.plicod = pli.plicod
-		                    and se.exercicio = pli.pliano),0.00) as empenhado,
-                       pp.pprnome,
-                       (select sum(coalesce(vlcancelarcusteio,0)) as vldotacaocusteio
-                          from alteracao.plano_interno_selecionado pis
-                         inner join alteracao.pedido p on pis.pedid = p.pedid
-                         inner join workflow.documento d on p.docid = p.docid and esdid not in (1794, 1802) 
-                         where pliid = pis.pliid and pis.pedid<>$pedid) as vldotacaocusteiototal,
-                       (select sum(coalesce(vlcancelarcapital,0)) as vldotacaocapital
-                          from alteracao.plano_interno_selecionado pis
-                         inner join alteracao.pedido p on pis.pedid = p.pedid
-                         inner join workflow.documento d on p.docid = p.docid and esdid not in (1794, 1802) 
-                         where pliid = pis.pliid and pis.pedid<>$pedid) as vldotacaocapitaltotal,
-                       (select sum(coalesce(vlcancelarfisico,0)) as vldotacaofisico
-                          from alteracao.plano_interno_selecionado pis
-                         inner join alteracao.pedido p on pis.pedid = p.pedid
-                         inner join workflow.documento d on p.docid = p.docid and esdid not in (1794, 1802) 
-                         where pliid = pis.pliid and pis.pedid<>$pedid) as vldotacaofisicototal,
-                       suo.suonome AS unidade,
-                       COALESCE(pli.plititulo, 'N/A') AS plititulo,
-                       TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional
-                  from alteracao.plano_interno_selecionado pis
-                 inner join monitora.pi_planointerno pli on pis.pliid = pli.pliid 
-                 inner JOIN planacomorc.pi_complemento pc on pis.pliid = pc.pliid 
-                 inner join monitora.pi_produto pp on pc.pprid = pp.pprid
-                  LEFT JOIN monitora.pi_planointernoptres ppt on pis.pliid = ppt.pliid
-                  LEFT JOIN monitora.ptres ptr ON( ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
-                  LEFT JOIN monitora.acao aca on ptr.acaid = aca.acaid
-		  LEFT JOIN public.vw_subunidadeorcamentaria suo ON(pli.unicod = suo.unocod and pli.ungcod = suo.suocod and suo.unostatus = 'A' and suo.prsano='".$_SESSION['exercicio']."')                          
-                 where pis.pedid = $pedid
-                   --and suo.suoid in (select suoid from alteracao.pedido_unidade where pedid = $pedid and pedunistatus='A')
-                   and pis.pliselstatus = 'A'
-                 order by pis.pliselid";
+    public function listaPisSelecionados(stdClass $params){
+        $sql = "
+            SELECT DISTINCT
+                pis.pliselid,
+                pis.pedid,
+                pis.pliid,
+                pli.plicod,
+                coalesce(pis.vlcusteio,0.00) AS custeio,
+                coalesce(pis.vlcapital,0.00) AS capital,
+                coalesce(pis.vlfisico,0.00) AS fisico,
+                pis.vlsuplementarcusteio,
+                pis.vlsuplementarcapital,
+                pis.vlsuplementarfisico,
+                pis.vlcancelarcusteio,
+                pis.vlcancelarcapital,
+                pis.vlcancelarfisico,
+                pis.vlsuplementarexcessocusteio,
+                pis.vlsuplementarexcessocapital,
+                pis.vlsuplementarexcessofisico,
+                pis.vlsuplementarsuperavitcusteio,
+                pis.vlsuplementarsuperavitcapital,
+                pis.vlsuplementarsuperavitfisico,
+                pis.vldotacaocusteio,
+                pis.vldotacaocapital,
+                pis.vldotacaofisico,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(se.vlrempenhado,0::NUMERIC)) AS vlrempenhadocusteio
+                    FROM spo.siopexecucao se
+                    WHERE
+                        se.plicod = pli.plicod
+                        AND se.exercicio = pli.pliano
+                        AND gndcod::INTEGER <= 3
+                ),0.00) AS vlrempenhadocusteio,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(se.vlrempenhado,0::NUMERIC)) AS vlrempenhadocapital
+                    FROM spo.siopexecucao se
+                    WHERE
+                        se.plicod = pli.plicod
+                        AND se.exercicio = pli.pliano
+                        AND gndcod::INTEGER >= 4
+                ),0.00) AS vlrempenhadocapital,
+                COALESCE((
+                    SELECT
+                        SUM(COALESCE(se.vlrempenhado,0::NUMERIC)) AS vlrempenhado
+                    FROM spo.siopexecucao se
+                    WHERE
+                        se.plicod = pli.plicod
+                        AND se.exercicio = pli.pliano
+                ),0.00) AS empenhado,
+                pp.pprnome,
+                (
+                    SELECT
+                        SUM(COALESCE(vlcancelarcusteio,0)) AS vldotacaocusteio
+                    FROM alteracao.plano_interno_selecionado pis
+                        JOIN alteracao.pedido p ON pis.pedid = p.pedid
+                        JOIN workflow.documento d ON p.docid = p.docid
+                    WHERE
+                        p.pedstatus = 'A'
+                        AND pliid = pis.pliid
+                        AND pis.pedid <> ". (int)$params->pedid. "
+                        AND d.esdid NOT IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ", ". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")
+                ) AS vldotacaocusteiototal,
+                (
+                    SELECT
+                        SUM(COALESCE(vlcancelarcapital,0)) AS vldotacaocapital
+                    FROM alteracao.plano_interno_selecionado pis
+                        JOIN alteracao.pedido p ON pis.pedid = p.pedid
+                        JOIN workflow.documento d ON p.docid = p.docid
+                    WHERE
+                        p.pedstatus = 'A'
+                        AND pliid = pis.pliid
+                        AND pis.pedid <> ". (int)$params->pedid. "
+                        AND d.esdid NOT IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ", ". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")
+                ) AS vldotacaocapitaltotal,
+                (
+                    SELECT
+                        SUM(COALESCE(vlcancelarfisico,0)) AS vldotacaofisico
+                    FROM alteracao.plano_interno_selecionado pis
+                        JOIN alteracao.pedido p ON pis.pedid = p.pedid
+                        JOIN workflow.documento d ON p.docid = p.docid
+                    WHERE
+                        p.pedstatus = 'A'
+                        AND pliid = pis.pliid
+                        AND pis.pedid <> ". (int)$params->pedid. "
+                        AND d.esdid NOT IN(". (int)ESDID_ALTERACAO_EFETIVADO_INTERNO. ", ". (int)ESDID_ALTERACAO_EFETIVADO_EXTERNO. ")
+                ) AS vldotacaofisicototal,
+                suo.suonome AS unidade,
+                COALESCE(pli.plititulo, 'N/A') AS plititulo,
+                ptr.funcional
+            FROM alteracao.plano_interno_selecionado pis
+                JOIN monitora.pi_planointerno pli ON pis.pliid = pli.pliid
+                JOIN planacomorc.pi_complemento pc ON pis.pliid = pc.pliid
+                JOIN monitora.pi_produto pp ON pc.pprid = pp.pprid
+                LEFT JOIN monitora.pi_planointernoptres ppt ON pis.pliid = ppt.pliid
+                LEFT JOIN monitora.vw_ptres ptr ON(ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
+                LEFT JOIN monitora.acao aca ON ptr.acaid = aca.acaid
+                LEFT JOIN public.vw_subunidadeorcamentaria suo ON(
+                    pli.unicod = suo.unocod
+                    AND pli.ungcod = suo.suocod
+                    AND suo.unostatus = 'A'
+                    AND suo.prsano = '". (int)$params->exercicio. "'
+                )
+            WHERE
+                pis.pedid = ". (int)$params->pedid. "
+                AND pis.pliselstatus = 'A'
+            ORDER BY
+                pis.pliselid
+        ";
 //ver($sql);
         return $this->carregar($sql);
     }

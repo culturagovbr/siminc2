@@ -23,11 +23,17 @@ if ($_REQUEST['req']){
             include_once APPRAIZ.'alteracao/modulos/principal/cadastro_pedido.inc';
             die;
         case 'carrega_seleciona_pis':
-            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
+            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados( (object)[
+                'pedid' => $_REQUEST['pedid'],
+                'exercicio' => $_SESSION['exercicio']
+            ]);
             include_once APPRAIZ.'alteracao/modulos/principal/selecionar_pi.inc';
             die;
         case 'carrega_lista_pis_selecionados':
-            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
+            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados( (object)[
+                'pedid' => $_REQUEST['pedid'],
+                'exercicio' => $_SESSION['exercicio']
+            ]);
             include_once APPRAIZ.'alteracao/modulos/principal/lista_pis_selecionados.inc';
             die;
         case 'carrega_lista_pis':
@@ -43,7 +49,10 @@ if ($_REQUEST['req']){
             include_once APPRAIZ.'alteracao/modulos/principal/lista_pis.inc';
             die;
         case 'carrega_remanejamento_loa':
-            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados($_REQUEST['pedid']);
+            $aDadosPiSelecionados = $mAlteracaoPedido->listaPisSelecionados((object)[
+                'pedid' => $_REQUEST['pedid'],
+                'exercicio' => $_SESSION['exercicio']
+            ]);
             include_once APPRAIZ.'alteracao/modulos/principal/remanejamento_loa.inc';
             die;
         case 'carrega_justificativa':

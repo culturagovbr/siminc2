@@ -164,7 +164,10 @@ function montaListaLoa($name, $option, $default = NULL, $rlid = '', $funcaoJS = 
 function AtualizaValoresPi($pedid)
 {
     $mPedido = new Alteracao_Model_Pedido();
-    $listaPisSelecionados = $mPedido->listaPisSelecionados($pedid);
+    $listaPisSelecionados = $mPedido->listaPisSelecionados((object)[
+        'pedid' => $pedid,
+        'exercicio' => $_SESSION['exercicio']
+    ]);
 
     foreach ($listaPisSelecionados as $pis) {
         $mPedido->atualizaValoresPI($pis['pliid'], $pis['vldotacaocusteio'], $pis['vldotacaocapital'], $pis['vldotacaofisico']);
