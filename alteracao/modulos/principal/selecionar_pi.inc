@@ -1,4 +1,4 @@
-<div id="divAlerta" class="alert alert-danger alert-dismissable">
+<div id="divAlerta" class="alert alert-warning alert-dismissable">
     <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
     <span id="divAlertaContent">Teste de alerta</span>
 </div>

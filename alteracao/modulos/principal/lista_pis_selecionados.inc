@@ -309,7 +309,7 @@
             swal({
                 title: "",
                 text: "O valor cancelado de "+tipo+" não pode ser maior que o Saldo a Empenhar de "+tipo+" do próprio PI.",
-                type: "warning",
+                type: "error",
                 confirmButtonText: 'Ok',
                 closeOnConfirm: true
             },
@@ -335,9 +335,9 @@
             });
             vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
             if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
-                $("#divAlertaContent").html("Valor cancelado divergente do suplementado!");
+                $("#divAlertaContent").html("A soma de todos os valores cancelados está diferente da soma de todos os valores suplementados! Por favor, preencha os campos de uma forma que todos valores cancelados sejam suplementados entre os PIs.");
                 $("#divAlerta").show();
-                setTimeout(function(){$("#divAlerta").hide("fade");}, 5000);
+                setTimeout(function(){$("#divAlerta").hide("fade");}, 13000);
                 $.post('?modulo=principal/cadastro_alteracoes&acao=C&req=salvar_campo',
                     {
                         pliselid: pliselid,
