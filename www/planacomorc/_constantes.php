@@ -33,8 +33,8 @@ define("ESD_EMAPROVACAO", 751);
 define("ESD_ENVIADOSIOP", 753); // -- tah errado, não corrigir
 define("ESD_FINALIZADO", 752);
 
-define("ESDID_ALTERACAO_EFETIVADO_INTERNO", 1794);
-define("ESDID_ALTERACAO_EFETIVADO_EXTERNO", 1802);
+define("ESDID_ALTERACAO_EFETIVADO_INTERNO", 1791);
+define("ESDID_ALTERACAO_EFETIVADO_EXTERNO", 1795);
 
 //--constantes workflow Fluxo de monitoramento da subação ##select * from workflow.estadodocumento where tpdid = 265#
 //Tipo de Documento WORKFLOW PI CONVENCIONAL
