@@ -126,7 +126,7 @@ class Alteracao_Model_Pedido extends Modelo
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
                 LEFT join alteracao.pedido_unidade pu on ped.pedid = pu.pedid and pu.pedunistatus='A'
-                JOIN public.vw_subunidadeorcamentaria suo ON pli.unocod = suo.unocod and pli.suocod = suo.suocod and suo.unostatus = 'A' and suo.prsano=ped.pedano
+                JOIN public.vw_subunidadeorcamentaria suo ON pu.suoid = suo.suoid and suo.unostatus = 'A' and suo.prsano=ped.pedano
                 --JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pu.suoid
                 ";
         $lista = pegaPerfilPorUsuario($_SESSION['usucpf']);
