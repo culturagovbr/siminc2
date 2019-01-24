@@ -32,8 +32,8 @@
     <tbody>
     <?php
         foreach($aDadosPiSelecionados as $dados):
-            $vlrAEmpenharCusteio = $dados['custeio']-$dados['vlrempenhadocusteio'];
-            $vlrAEmpenharCapital = $dados['capital']-$dados['vlrempenhadocapital'];
+            $vlrAEmpenharCusteio = (int)$dados['custeio'] - (int)$dados['vlrempenhadocusteio'];
+            $vlrAEmpenharCapital = (int)$dados['capital'] - (int)$dados['vlrempenhadocapital'];
             
             $vlDisponivelSuplementarCusteio = $vlTotalCancelarCusteio-$dados['vlsuplementarcusteio']-$dados['vlsuplementarexcessocusteio']-$dados['vlsuplementarsuperavitcusteio'];
             $vlDisponivelSuplementarCapital = $vlTotalCancelarCapital-$dados['vlsuplementarcapital']-$dados['vlsuplementarexcessocapital']-$dados['vlsuplementarsuperavitcapital'];
