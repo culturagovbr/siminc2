@@ -19,7 +19,7 @@
                     ?>
                 </div>
                 <div class="col-lg-3">
-                    <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpacod'), $disabled,  ['input-size' => 8, 'label-size' => 3]); ?>
+                    <?= $simec->select('tpaid', 'Tipo', $mAlteracaoPedido->tpaid, (new Alteracao_Model_Tipo())->recuperarSqlCombo('tpadsc'), $disabled,  ['input-size' => 8, 'label-size' => 3]); ?>
                 </div>
             </div>
 

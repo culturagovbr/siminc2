@@ -50,7 +50,12 @@ class Alteracao_Controller_PlanoInternoSelecionado
             $mPedido->vldotacaocusteio = $mPedido->vlcusteio+$mPedido->vlsuplementarcusteio+$mPedido->vlsuplementarexcessocusteio+$mPedido->vlsuplementarsuperavitcusteio-$mPedido->vlcancelarcusteio;
             $mPedido->vldotacaocapital = $mPedido->vlcapital+$mPedido->vlsuplementarcapital+$mPedido->vlsuplementarexcessocapital+$mPedido->vlsuplementarsuperavitcapital-$mPedido->vlcancelarcapital;
             $mPedido->vldotacaofisico = $mPedido->vlfisico+$mPedido->vlsuplementarfisico+$mPedido->vlsuplementarexcessofisico+$mPedido->vlsuplementarsuperavitfisico-$mPedido->vlcancelarfisico;
-            $mPedido->salvar(null, null, ['vlcusteio','vlcapital', 'vlfisico', 'vlsuplementarcusteio','vlsuplementarcapital','vlcancelarcusteio','vlcancelarcapital','vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vldotacaocusteio','vldotacaocapital','vldotacaofisico']);
+            $mPedido->salvar(null, null, ['vlcusteio','vlcapital', 'vlfisico', 
+                                          'vlsuplementarcusteio','vlsuplementarcapital','vlsuplementarfisico',
+                                          'vlcancelarcusteio','vlcancelarcapital','vlcancelarfisico',
+                                          'vlsuplementarexcessocusteio','vlsuplementarexcessocapital','vlsuplementarexcessofisico',
+                                          'vlsuplementarsuperavitcusteio','vlsuplementarsuperavitcapital','vlsuplementarsuperavitfisico',
+                                          'vldotacaocusteio','vldotacaocapital','vldotacaofisico']);
             $mPedido->commit();
             echo json_encode(true);
         } catch (Exception $e){

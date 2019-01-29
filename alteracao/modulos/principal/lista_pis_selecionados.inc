@@ -317,7 +317,7 @@
         var vlrCancelado = $("#"+nomeCampo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#"+nomeCampo+pliselid).val()) : 0;
         var vlrPic = $("#pi"+tipo+pliselid).val() ? str_replace(['.', ','], ['', '.'], $("#pi"+tipo+pliselid).val()) : 0;
         var vlrEmpenhado = $("#vlempenhar"+tipo+pliselid).val()? str_replace(['.', ','], ['', '.'], $("#vlempenhar"+tipo+pliselid).val()) : 0;
-        if (parseInt(vlrCancelado)>parseInt(vlrEmpenhado) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital')){
+        if (parseInt(vlrCancelado)>parseInt(vlrEmpenhado) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital' || nomeCampo=='vlcancelarfisico')){
             swal({
                 title: "",
                 text: "O valor cancelado de "+tipo+" não pode ser maior que o Saldo a Empenhar de "+tipo+" do próprio PI.",
@@ -337,11 +337,11 @@
             var vlrsuplementar=0;
             $('.input_valor').each(function(){
                 vlrCampo = $(this).val() ? str_replace(['.', ','], ['', '.'], $(this).val()) : 0;
-                if ($(this).attr('name')=='vlsuplementarcusteio' || $(this).attr('name')=='vlsuplementarcapital' ||
-                    $(this).attr('name')=='vlsuplementarsuperavitcusteio' || $(this).attr('name')=='vlsuplementarsuperavitcapital' ||
-                    $(this).attr('name')=='vlsuplementarexcessocusteio' || $(this).attr('name')=='vlsuplementarexcessocapital'){
+                if ($(this).attr('name')=='vlsuplementarcusteio' || $(this).attr('name')=='vlsuplementarcapital' || $(this).attr('name')=='vlsuplementarfisico' ||
+                    $(this).attr('name')=='vlsuplementarsuperavitcusteio' || $(this).attr('name')=='vlsuplementarsuperavitcapital' || $(this).attr('name')=='vlsuplementarsuperavitfisico' ||
+                    $(this).attr('name')=='vlsuplementarexcessocusteio' || $(this).attr('name')=='vlsuplementarexcessocapital' || $(this).attr('name')=='vlsuplementarexcessofisico'){
                     vlrsuplementar = parseFloat(vlrsuplementar)+parseFloat(vlrCampo);
-                }else if ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital'){
+                }else if ($(this).attr('name')=='vlcancelarcusteio' || $(this).attr('name')=='vlcancelarcapital' || $(this).attr('name')=='vlcancelarfisico'){
                     vlrcancelado = parseFloat(vlrcancelado)+parseFloat(vlrCampo);
                 }
             });

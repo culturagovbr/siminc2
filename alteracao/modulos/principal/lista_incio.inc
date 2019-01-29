@@ -25,7 +25,7 @@
                     <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>&tpdid=<?=$tpdid;?>" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
                     <a class="btn-excluir-pedido" data-pedid="<?= $dados['pedid']; ?>" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
                 <?php endif; ?>
-                    <a href="#" class="a_espelho_pedido" title="Visualizar Pedido de Alteração" data-pedid="<?=$dados['pedid'];?>"><span class="btn btn-success btn-sm glyphicon glyphicon-search"></span></a>
+                    <a href="" class="a_espelho_pedido" title="Visualizar Pedido de Alteração" data-pedid="<?=$dados['pedid'];?>"><span class="btn btn-success btn-sm glyphicon glyphicon-search"></span></a>
             </td>
             <td><?= $dados['pedid']; ?></td>
             <td><?= $dados['tpacod']; ?></td>

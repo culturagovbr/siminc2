@@ -3,7 +3,7 @@ require_once APPRAIZ . 'includes/workflow.php';
 
 $disabled = ['required'];
 $podeEditarAlteracao = TRUE;
-
+$listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object)array('usucpf'=>$_SESSION['usucpf']));
 $mAlteracaoPedido = new Alteracao_Model_Pedido($_REQUEST['pedid']);
 if ($_REQUEST['pedid']){
     $arrPedidos = $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);
@@ -121,6 +121,9 @@ include APPRAIZ. "includes/cabecalho.inc";
     .wizard > .steps > ul > li {
         width: 210px;
     }
+    .wizard > .content{
+        overflow: visible;
+    }    
 </style>
 <input name="pedid" id="pedid" value="<?=$arrPedidos['pedid'];?>" type="hidden">
 <input name="esdid" id="esdid" value="<?=$arrPedidos['esdid'];?>" type="hidden">

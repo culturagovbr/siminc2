@@ -19,7 +19,7 @@ function initListaAlteracao() {
         $('#filtroalteracao').submit();
     });
 
-    $('body').on('click', '.a_espelho_pedido', function(){
+    $('.a_espelho_pedido').click(function(){
         var pedid = $(this).attr('data-pedid');
         exibirEspelhoPedido(pedid);
         return false;
@@ -38,7 +38,7 @@ function initListaAlteracao() {
  */
 function exibirEspelhoPedido(pedid){
     window.open(
-        window.location.href + '&req=espelho-pedido&pedid='+ pedid,
+        '?modulo=inicio&acao=C&req=espelho-pedido&pedid='+ pedid,
         'popup_espelho_pedido',
         'width=980,height=1000,status=1,menubar=1,toolbar=0,scrollbars=1,resizable=1');
 }
