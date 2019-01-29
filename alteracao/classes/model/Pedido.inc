@@ -84,6 +84,7 @@ class Alteracao_Model_Pedido extends Modelo
                 ped.janid,
                 tpa.tpacod,
                 esd.esddsc,
+                esd.esdid,
                 jan.jannome,
 		REPLACE(REPLACE(REPLACE(REPLACE(ARRAY(
 			SELECT
@@ -169,6 +170,7 @@ class Alteracao_Model_Pedido extends Modelo
                 ped.janid,
                 tpa.tpacod,
                 esd.esddsc,
+                esd.esdid,
                 jan.jannome
         ";
 
