@@ -330,6 +330,6 @@ class Alteracao_Model_RemanejamentoLoa extends Modelo
                    AND planoorcamentario = '".$dados['plocod']."' -- PLOCOD
                    AND SUBSTR(natureza::TEXT, 1, 4) = '".$dados['natureza']."' -- CATEGORIA+GND+MODALIDADE";
         $dados = $this->carregar($sql);
-        return $dados[0]['dotacao_inicial'];
+        return number_format($dados[0]['dotacao_inicial'],0,',','.');
     }
 }

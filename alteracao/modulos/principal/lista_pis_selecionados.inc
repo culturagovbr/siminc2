@@ -21,9 +21,9 @@
             <th>ID Planejamento</th>
             <th>Título</th>
             <th width="11%">Tipo</th>
-            <th width="11%">Saldo a Empenhar</th>
-            <th>Suplementar</th>
+            <th width="11%">Disponível</th>
             <th>Cancelar</th>
+            <th>Suplementar</th>
             <th>Suplementar por Excesso</th>
             <th>Suplementar por Superávit</th>
             <th>Resultado Provável</th>
@@ -115,40 +115,6 @@
                     <tr>
                         <td style="border: none;">
                             <?php if ($podeEditar): ?>
-                                    <input type="text" size="10" class="input_valor" title="Disponível: R$ <?= number_format($vlDisponivelSuplementarCusteio,0,',','.'); ?>" name="vlsuplementarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcusteio'];?>">
-                                <?php else:
-                                    echo number_format($dados['vlsuplementarcusteio'], 0, ',', '.');
-                                endif;
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" title="Disponível: R$ <?= number_format($vlDisponivelSuplementarCapital,0,',','.'); ?>" name="vlsuplementarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcapital'];?>">
-                            <?php else:
-                                    echo number_format($dados['vlsuplementarcapital'], 0, ',', '.');
-                                endif;
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <?php if ($podeEditar): ?>
-                                <input type="text" size="10" class="input_valor" title="Disponível: R$ <?= number_format($vlDisponivelSuplementarFisico,0,',','.'); ?>" name="vlsuplementarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarfisico'];?>">
-                            <?php else:
-                                    echo number_format($dados['vlsuplementarfisico'], 0, ',', '.');
-                                endif;
-                            ?>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
-                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
-                    <tr>
-                        <td style="border: none;">
-                            <?php if ($podeEditar): ?>
                                 <input type="text" size="10" class="input_valor" title="Disponível: R$ <?= number_format($vlrAEmpenharCusteio-$dados['vltotalcancelarcusteio']-$dados['vlcancelarcusteio'],0,',','.'); ?>" name="vlcancelarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarcusteio'];?>">
                             <?php else:
                                     echo number_format($dados['vlcancelarcusteio'], 0, ',', '.');
@@ -172,6 +138,40 @@
                                 <input type="text" size="10" class="input_valor" title="Disponível: R$ <?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>" name="vlcancelarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlcancelarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlcancelarfisico'];?>">
                             <?php else:
                                     echo number_format($dados['vlcancelarfisico'], 0, ',', '.');
+                                endif;
+                            ?>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
+                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
+                    <tr>
+                        <td style="border: none;">
+                            <?php if ($podeEditar): ?>
+                                    <input type="text" size="10" class="input_valor" title="Disponível: R$ <?= number_format($vlDisponivelSuplementarCusteio,0,',','.'); ?>" name="vlsuplementarcusteio" tipo="custeio" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcusteio<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcusteio'];?>">
+                                <?php else:
+                                    echo number_format($dados['vlsuplementarcusteio'], 0, ',', '.');
+                                endif;
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <?php if ($podeEditar): ?>
+                                <input type="text" size="10" class="input_valor" title="Disponível: R$ <?= number_format($vlDisponivelSuplementarCapital,0,',','.'); ?>" name="vlsuplementarcapital" tipo="capital" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarcapital<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarcapital'];?>">
+                            <?php else:
+                                    echo number_format($dados['vlsuplementarcapital'], 0, ',', '.');
+                                endif;
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <?php if ($podeEditar): ?>
+                                <input type="text" size="10" class="input_valor" title="Disponível: R$ <?= number_format($vlDisponivelSuplementarFisico,0,',','.'); ?>" name="vlsuplementarfisico" tipo="fisico" pliselid="<?=$dados['pliselid'];?>" id="vlsuplementarfisico<?=$dados['pliselid'];?>" value="<?=$dados['vlsuplementarfisico'];?>">
+                            <?php else:
+                                    echo number_format($dados['vlsuplementarfisico'], 0, ',', '.');
                                 endif;
                             ?>
                         </td>

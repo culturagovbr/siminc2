@@ -13,9 +13,9 @@ $linha .= '<th class="tdpliselid">Funcional'.$req.'</th>
             <th>IDOC'.$req.'</th>
             <th>IDUSO'.$req.'</th>
             <th>RP'.$req.'</th>
-            <th>Dotação Inicial</th>
-            <th>Suplementar</th>
+            <th>Dotação</th>
             <th>Cancelado</th>
+            <th>Suplementar</th>
             <th>Suplementar por excesso</th>
             <th>Suplementar por Superávit</th>
         </tr>';
@@ -95,19 +95,19 @@ $linha .= '<th class="tdpliselid">Funcional'.$req.'</th>
                     $linha .= $loa['rpcod'];
                 endif;
                 $linha .= '</td>';
-                $linha .= '         <td class="combo" style="vertical-align: middle" id="vlDotacao'.$loa['rlid'].'">'.$loa['vldotacao'].'</td>';
-                $linha .= '         <td class="combo" style="vertical-align: middle">';
-                                    if($podeEditar){
-                                        $linha .= '<input type="text" id="vlSuplementar'.$loa['rlid'].'" name="vlSuplementar" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementar'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento">';
-                                    }else{
-                                        $linha .= number_format($loa['vlsuplementar'], 0, ',','.');
-                                    }
-                $linha .=           '</td>';
+                $linha .= '         <td class="combo" style="vertical-align: middle" id="vlDotacao'.$loa['rlid'].'">'.number_format($loa['vldotacao'],0,',','.').'</td>';
                 $linha .=           '<td class="combo" style="vertical-align: middle">';
                                     if($podeEditar){
                                         $linha .= '<input type="text" id="vlCancelado'.$loa['rlid'].'" name="vlCancelado" rlid="'.$loa['rlid'].'" value="'.$loa['vlcancelado'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento">';
                                     }else{
                                         $linha .= number_format($loa['vlcancelado'], 0, ',','.');
+                                    }
+                $linha .=           '</td>';
+                $linha .= '         <td class="combo" style="vertical-align: middle">';
+                                    if($podeEditar){
+                                        $linha .= '<input type="text" id="vlSuplementar'.$loa['rlid'].'" name="vlSuplementar" rlid="'.$loa['rlid'].'" value="'.$loa['vlsuplementar'].'" size="15" maxlength="15" class="form-control input_valor_remanejamento">';
+                                    }else{
+                                        $linha .= number_format($loa['vlsuplementar'], 0, ',','.');
                                     }
                 $linha .=           '</td>';
                 $linha .=           '<td class="combo" style="vertical-align: middle">';
@@ -376,11 +376,12 @@ echo $linha;
         }
         var unicod = $("#unicod"+rlid).val();
         var funcional = $("#ptrid"+rlid+" option:selected").text();
-        var prgcod = funcional.substring(0,4);
-        var acacod = funcional.substring(5,9);
-        var loccod = funcional.substring(10,14);
-        var objcod = funcional.substring(15,19);
-        var plocod = funcional.substring(20,24);
+        var arrFuncional = funcional.split('.');
+        var prgcod = arrFuncional[0];
+        var acacod = arrFuncional[1];
+        var loccod = arrFuncional[2];
+        var objcod = arrFuncional[3];
+        var plocod = arrFuncional[4];
         var gndcod = $("#gndcod"+rlid).val();
         var mapcod = $("#mapcod"+rlid).val();
         var categoria = $("#ctecod"+rlid).val();

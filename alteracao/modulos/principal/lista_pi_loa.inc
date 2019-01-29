@@ -6,8 +6,8 @@
         <th>Número do PI</th>
         <th>Título</th>
         <th width="11%">Tipo</th>
-        <th>Suplementar</th>
         <th>Cancelado</th>
+        <th>Suplementar</th>
         <th>Suplementar por Excesso</th>
         <th>Suplementar por Superávit</th>
     </tr>
@@ -54,25 +54,6 @@
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
-                            <?=number_format($dados['vlsuplementarcusteio'],0,',','.');?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <?=number_format($dados['vlsuplementarcapital'],0,',','.');?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: none; border-top: 1px solid #e7eaec;">
-                            <?=number_format($dados['plisuplementarquantidade'],0,',','.');?>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
-                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
-                    <tr>
-                        <td style="border: none;">
                             <?=number_format($dados['vlcancelarcusteio'],0,',','.');?>
                         </td>
                     </tr>
@@ -84,6 +65,25 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <?=number_format($dados['plicancelarquantidade'],0,',','.');?>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
+                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
+                    <tr>
+                        <td style="border: none;">
+                            <?=number_format($dados['vlsuplementarcusteio'],0,',','.');?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <?=number_format($dados['vlsuplementarcapital'],0,',','.');?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <?=number_format($dados['plisuplementarquantidade'],0,',','.');?>
                         </td>
                     </tr>
                 </table>
