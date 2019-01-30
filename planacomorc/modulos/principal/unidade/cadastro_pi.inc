@@ -730,10 +730,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         </div>
                                         <div class="form-group div_quantidade_produto">
                                             <div class="col-md-3 text-right">
-                                                <label for="picquantidade" class="control-label">Quantidade: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+                                                <label for="picquantidade" class="control-label">Quantidade: </label>
                                             </div>
                                             <div class="col-lg-9">
-                                                <input type="text" value="<?php echo !empty($dadosPI['picquantidade']) ? $dadosPI['picquantidade'] : ''; ?>" class="CampoEstilo normal inteiro form-control obrigatorio" title="Quantidade" id="picquantidade" name="picquantidade" maxlength="50" />
+                                                <input type="text" value="<?php echo !empty($dadosPI['picquantidade']) ? $dadosPI['picquantidade'] : ''; ?>" class="CampoEstilo normal inteiro form-control" title="Quantidade" id="picquantidade" name="picquantidade" maxlength="50" />
                                             </div>
                                         </div>
                                     </div>
@@ -779,7 +779,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-3 text-right">
-                                                <label class="control-label" for="capid">Modalidade de Pactuação:</label>
+                                                <label class="control-label" for="capid">Modalidade de Pactuação: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                                             </div>
                                             <div class="col-lg-9">
                                                 <?php
@@ -1153,13 +1153,13 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                         <td style="text-align: center;" id="td_disponivel_funcional_capital" >0,00</td>
                                                     </tr>
                                                     <tr>
-                                                        <td id="" style="text-align: left;">Valor do Projeto: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></td>
+                                                        <td id="" style="text-align: left;">Valor do Projeto: </td>
                                                         <td style="text-align: left;">
-                                                            <input type="text" id="picvalorcusteio" name="picvalorcusteio" value="<?php echo !empty($dadosPI['picvalorcusteio']) ? number_format($dadosPI['picvalorcusteio'], 2, ',', '.') : ''; ?>" class="CampoEstilo normal form-control obrigatorio" />
+                                                            <input type="text" id="picvalorcusteio" name="picvalorcusteio" value="<?php echo !empty($dadosPI['picvalorcusteio']) ? number_format($dadosPI['picvalorcusteio'], 2, ',', '.') : ''; ?>" class="CampoEstilo normal form-control" />
                                                             <input type="hidden" id="vlrPiCusteio" value="<?php echo !empty($dadosPI['picvalorcusteio']) && !$_REQUEST['replicarProposta']? number_format($dadosPI['picvalorcusteio'], 2, ',', '.') : ''; ?>" />
                                                         </td>
                                                         <td style="text-align: center;">
-                                                            <input type="text" id="picvalorcapital" name="picvalorcapital" value="<?php echo !empty($dadosPI['picvalorcapital']) ? number_format($dadosPI['picvalorcapital'], 2, ',', '.') : ''; ?>" class="CampoEstilo normal form-control obrigatorio" />
+                                                            <input type="text" id="picvalorcapital" name="picvalorcapital" value="<?php echo !empty($dadosPI['picvalorcapital']) ? number_format($dadosPI['picvalorcapital'], 2, ',', '.') : ''; ?>" class="CampoEstilo normal form-control" />
                                                             <input type="hidden" id="vlrPiCapital" value="<?php echo !empty($dadosPI['picvalorcapital']) && !$_REQUEST['replicarProposta']? number_format($dadosPI['picvalorcapital'], 2, ',', '.') : ''; ?>" />
                                                         </td>
                                                     </tr>
@@ -1209,7 +1209,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title">
-                                        <h5>Cronogramas <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></h5>
+                                        <h5>Cronogramas </h5>
                                     </div>
                                     <div class="ibox-content">
 
