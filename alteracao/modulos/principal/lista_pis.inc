@@ -18,7 +18,7 @@
             foreach($aDadosPi as $dados): ?>
                 <tr>
                     <td align="center">
-                        <input type="checkbox" <?= $dados['pliselid']>0?'checked="true"':''; ?> class="check checkbox-success" id="chk<?=$dados['id'];?>" esdid="<?=$dados['esdid'];?>" pliselid="<?=$dados["pliselid"];?>" value="<?=$dados['id'];?>" name="chkPliid" />
+                        <input type="checkbox" <?= $dados['pliselid']>0?'checked="true" title="Excluir PI"':'title="Selecionar PI"'; ?> class="check checkbox-success link" id="chk<?=$dados['id'];?>" esdid="<?=$dados['esdid'];?>" pliselid="<?=$dados["pliselid"];?>" value="<?=$dados['id'];?>" name="chkPliid" />
                     </td>
                     <td align="left">
                         <?= $dados['sub_unidade']; ?>
