@@ -109,4 +109,24 @@ class Alteracao_Model_Tipo extends Modelo
         return $this->carregar($sql);
     }
 
+    /**
+     * Recupera os registros para montar a combo de tipos.
+     * @return string
+     */
+    public function recuperarCombo()
+    {
+        $sql = "SELECT DISTINCT
+                    tpaid AS codigo,
+                    tpacod || ' - ' ||
+                    tpadsc || ' (' ||
+                    CASE tpafluxo
+                        WHEN 'I' THEN 'Interno'
+                        ELSE 'Externo'
+                    END || ')' AS descricao
+                FROM alteracao.tipo
+                WHERE
+                    tpastatus = 'A';
+        ";
+        return $sql;
+    }
 }

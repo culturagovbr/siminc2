@@ -93,19 +93,20 @@
                     <tr>
                         <td style="border: none;">
                             <input type="hidden" id="vlempenharcusteio<?=$dados['pliselid'];?>" name="vlempenharcusteio" value="<?= number_format($vlrAEmpenharCusteio-$dados['vltotalcancelarcusteio'],0,',','.'); ?>">
-                            Custeio: R$ <?= number_format($vlrAEmpenharCusteio,0,',','.'); ?>
+                            Custeio: R$ <?= number_format($vlrAEmpenharCusteio-$dados['vltotalcancelarcusteio']-$dados['vlcancelarcusteio'],0,',','.'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <input type="hidden" id="vlempenharcapital<?=$dados['pliselid'];?>" name="vlempenharcapital" value="<?= number_format($vlrAEmpenharCapital-$dados['vltotalcancelarcapital'],0,',','.'); ?>">
-                            Capital: R$ <?= number_format($vlrAEmpenharCapital,0,',','.'); ?>
+                            Capital: R$ <?= number_format($vlrAEmpenharCapital-$dados['vltotalcancelarcapital']-$dados['vlcancelarcapital'],0,',','.'); ?>
                         </td>
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <input type="hidden" id="vlempenharfisico<?=$dados['pliselid'];?>" name="vlempenharfisico" value="<?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>">
                             <br>
+                            Físico: <?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>
                         </td>
                     </tr>
                 </table>                
@@ -321,7 +322,7 @@
         if (parseInt(vlrCancelado)>parseInt(vlrEmpenhado) && (nomeCampo=='vlcancelarcusteio' || nomeCampo=='vlcancelarcapital' || nomeCampo=='vlcancelarfisico')){
             swal({
                 title: "",
-                text: "O valor cancelado de "+tipo+" não pode ser maior que o Saldo a Empenhar de "+tipo+" do próprio PI.",
+                text: "O valor cancelado de "+ tipo+ " não pode ser maior que o Disponível de "+ tipo+ " do próprio PI.",
                 type: "error",
                 confirmButtonText: 'Ok',
                 closeOnConfirm: true
@@ -348,7 +349,7 @@
             });
             vlrCampo = valor ? str_replace(['.', ','], ['', '.'], valor) : 0;
             if (parseFloat(vlrsuplementar)!=parseFloat(vlrcancelado)){
-                $("#divAlertaContent").html("A soma de todos os valores cancelados está diferente da soma de todos os valores suplementados! Por favor, preencha os campos de uma forma que todos valores cancelados sejam suplementados entre os PIs.");
+                $("#divAlertaContent").html("A soma de todos os valores cancelados do "+ tipo+ " está diferente da soma de todos os valores suplementados do "+ tipo+ "! Por favor, preencha os campos de uma forma que todos valores cancelados sejam suplementados entre os PIs.");
                 $("#divAlerta").show();
                 setTimeout(function(){
                     $("#divAlerta").hide("fade");
