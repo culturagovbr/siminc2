@@ -24,8 +24,8 @@
                         <th>Título</th>
                         <th width="11%">Tipo</th>
                         <th width="11%">Saldo a Empenhar</th>
-                        <th>Suplementar</th>
                         <th>Cancelar</th>
+                        <th>Suplementar</th>
                         <th>Suplementar por Excesso</th>
                         <th>Suplementar por Superávit</th>
                         <th>Resultado Provável</th>
@@ -37,7 +37,10 @@
                         'pedid' => $_REQUEST['pedid'],
                         'exercicio' => $_SESSION['exercicio']
                     ]);
-                    foreach($aDadosPiSelecionados as $piSelecionado): ?>
+                    foreach($aDadosPiSelecionados as $piSelecionado): 
+                        $vlrAEmpenharCusteio = (int)$piSelecionado['custeio'] - (int)$piSelecionado['vlrempenhadocusteio'];
+                        $vlrAEmpenharCapital = (int)$piSelecionado['capital'] - (int)$piSelecionado['vlrempenhadocapital'];
+                        ?>
                         <tr>
                             <td>
                                 <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?=$piSelecionado['pliid'];?>">
@@ -79,33 +82,28 @@
                                 </table>
                             </td>
                             <td style="vertical-align: middle;">
-                                <?php
-                                    $empenhado = $piSelecionado['custeio']+$piSelecionado['capital']-$piSelecionado['empenhado'];
-                                    $empenhado = number_format($empenhado,0,',','.');
-                                    echo "R$ ".$empenhado;
-                                ?>
-                                <input type="hidden" id="empenhado<?= $piSelecionado['pliselid']; ?>" value="<?= $empenhado; ?>">
-                            </td>
-
-                            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                                     <tr>
                                         <td style="border: none;">
-                                            <p><?= $piSelecionado['vlsuplementarcusteio'] ? number_format($piSelecionado['vlsuplementarcusteio'], 0, '', '.') : '-'; ?></p>
+                                            <input type="hidden" id="vlempenharcusteio<?=$dados['pliselid'];?>" name="vlempenharcusteio" value="<?= number_format($vlrAEmpenharCusteio-$dados['vltotalcancelarcusteio'],0,',','.'); ?>">
+                                            Custeio: R$ <?= number_format($vlrAEmpenharCusteio,0,',','.'); ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlsuplementarcapital'] ? number_format($piSelecionado['vlsuplementarcapital'], 0, '', '.') : '-'; ?></p>
+                                            <input type="hidden" id="vlempenharcapital<?=$dados['pliselid'];?>" name="vlempenharcapital" value="<?= number_format($vlrAEmpenharCapital-$dados['vltotalcancelarcapital'],0,',','.'); ?>">
+                                            Capital: R$ <?= number_format($vlrAEmpenharCapital,0,',','.'); ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlsuplementarfisico'] ? number_format($piSelecionado['vlsuplementarfisico'], 0, '', '.') : '-'; ?></p>
+                                            <input type="hidden" id="vlempenharfisico<?=$dados['pliselid'];?>" name="vlempenharfisico" value="<?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>">
+                                            <br>
                                         </td>
                                     </tr>
-                                </table>
-                            </td>
+                                </table>                
+                            </td>                            
+
                             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                                     <tr>
@@ -121,6 +119,25 @@
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
                                             <p><?= $piSelecionado['vlcancelarfisico'] ? number_format($piSelecionado['vlcancelarfisico'], 0, '', '.') : '-'; ?></p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
+                                <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
+                                    <tr>
+                                        <td style="border: none;">
+                                            <p><?= $piSelecionado['vlsuplementarcusteio'] ? number_format($piSelecionado['vlsuplementarcusteio'], 0, '', '.') : '-'; ?></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                                            <p><?= $piSelecionado['vlsuplementarcapital'] ? number_format($piSelecionado['vlsuplementarcapital'], 0, '', '.') : '-'; ?></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none; border-top: 1px solid #e7eaec;">
+                                            <p><?= $piSelecionado['vlsuplementarfisico'] ? number_format($piSelecionado['vlsuplementarfisico'], 0, '', '.') : '-'; ?></p>
                                         </td>
                                     </tr>
                                 </table>

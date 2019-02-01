@@ -27,9 +27,9 @@
                         <th>Idoc</th>
                         <th>Iduso</th>
                         <th>RP</th>
-                        <th>Dotação Inicial</th>
-                        <th>Suplementar</th>
+                        <th>Dotação</th>
                         <th>Cancelado</th>
+                        <th>Suplementar</th>
                         <th>Suplementar por Excesso</th>
                         <th>Suplementar por Superávit</th>
                     </tr>
@@ -48,8 +48,8 @@
                             <td align="center"><?= $loa['iduid']; ?></td>
                             <td align="center"><?= $loa['rpcod']; ?></td>
                             <td align="center"><?= $loa['vldotacao'] ? number_format($loa['vldotacao'], 0, '', '.') : '-'; ?></td>
-                            <td align="center"><?= $loa['vlsuplementar'] ? number_format($loa['vlsuplementar'], 0, '', '.') : '-'; ?></td>
                             <td align="center"><?= $loa['vlcancelado'] ? number_format($loa['vlcancelado'], 0, '', '.') : '-'; ?></td>
+                            <td align="center"><?= $loa['vlsuplementar'] ? number_format($loa['vlsuplementar'], 0, '', '.') : '-'; ?></td>
                             <td align="center"><?= $loa['vlsuplementarexcesso'] ? number_format($loa['vlsuplementarexcesso'], 0, '', '.') : '-'; ?></td>
                             <td align="center"><?= $loa['vlsuplementarsuperavit'] ? number_format($loa['vlsuplementarsuperavit'], 0, '', '.') : '-'; ?></td>
                         </tr>

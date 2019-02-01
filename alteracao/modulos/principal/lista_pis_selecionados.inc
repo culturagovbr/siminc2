@@ -104,6 +104,7 @@
                     </tr>
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
+                            <input type="hidden" id="vlempenharfisico<?=$dados['pliselid'];?>" name="vlempenharfisico" value="<?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>">
                             <br>
                         </td>
                     </tr>

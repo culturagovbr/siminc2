@@ -1,5 +1,7 @@
 <?php
-
+    
+    $permiteEditar=true; //Flag para não mostrar botões de editar e excluir na listagem de pedidos.
+    
     if($_REQUEST['req'] == 'espelho-pedido'){
         include_once APPRAIZ.'alteracao/modulos/principal/popup-espelho-pedido.inc';
         die;

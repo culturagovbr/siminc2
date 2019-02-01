@@ -1374,6 +1374,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             <div id="div-principal">
                                                 <?php
                                                     $filtroalteracao = ['pliid' => $dadosPI['pliid']];
+                                                    $permiteEditar = false;
                                                     include_once APPRAIZ.'alteracao/modulos/principal/lista_incio.inc';
                                                 ?>
                                             </div>

@@ -21,9 +21,12 @@
     foreach($aAlteracao as $dados): ?>
         <tr>
             <td class="text-center" nowrap="nowrap">
-                <?php if(!in_array($dados['esdid'], array(ESDID_ALTERACAO_EFETIVADO_INTERNO, ESDID_ALTERACAO_EFETIVADO_EXTERNO))): ?>
-                    <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>&tpdid=<?=$tpdid;?>" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
-                    <a class="btn-excluir-pedido" data-pedid="<?= $dados['pedid']; ?>" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
+                <?php 
+                if ($permiteEditar):
+                    if(!in_array($dados['esdid'], array(ESDID_ALTERACAO_EFETIVADO_INTERNO, ESDID_ALTERACAO_EFETIVADO_EXTERNO))): ?>
+                        <a href="?modulo=principal/cadastro_alteracoes&acao=C&pedid=<?=$dados['pedid'];?>&tpdid=<?=$tpdid;?>" title="Editar"><span class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></span></a>
+                        <a class="btn-excluir-pedido" data-pedid="<?= $dados['pedid']; ?>" title="Apagar"><span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span></a>
+                    <?php endif; ?>
                 <?php endif; ?>
                     <a href="" class="a_espelho_pedido" title="Visualizar Pedido de Alteração" data-pedid="<?=$dados['pedid'];?>"><span class="btn btn-success btn-sm glyphicon glyphicon-search"></span></a>
             </td>
