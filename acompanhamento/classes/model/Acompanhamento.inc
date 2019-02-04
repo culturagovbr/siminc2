@@ -297,7 +297,7 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         $where .= $param->mppid? "\n AND mpp.mppid = ". (int)$param->mppid: '';
 
         $sql = "
-            SELECT
+            SELECT DISTINCT
                 aco.acoid,
                 aco.suoid,
                 aco.janid,
