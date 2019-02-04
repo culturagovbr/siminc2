@@ -33,6 +33,7 @@
         'oppid' => $param['oppid'],
         'mppid' => $param['mppid'],
     ));
+    
     /**
      * Cabeçalho padrão do sistema.
      */
@@ -276,7 +277,7 @@
      */
     function carregarUG(unicod) {
         $.post(
-            '?modulo=relatorio/relatorio-ppa&acao=A&req=carregarComboUG', { unicod: $('#unicod').val() }, function(response) {
+            '?modulo=relatorio/relatorio-ppa-grafico&acao=A&req=carregarComboUG', { unicod: $('#unicod').val() }, function(response) {
                 $('#div_ungcod').remove('slow');
                 $('#div_ungcod').html(response);
                 $(".chosen-select").chosen();
@@ -287,7 +288,7 @@
      * Carrega novo conteúdo para o select de Metas PPA via requisição ajax.
      */
     function carregarMetasPPA(oppid, mppid, suocod) {
-        $.post('?modulo=relatorio/relatorio-ppa&acao=A&req=carregarMetasPPA&oppid=' +oppid +'&suocod='+ suocod, function(response) {
+        $.post('?modulo=relatorio/relatorio-ppa-grafico&acao=A&req=carregarMetasPPA&oppid=' +oppid +'&suocod='+ suocod, function(response) {
             $('#mppid').remove();
             $('.div_mppid').html(response);
             $(".chosen-select").chosen();
