@@ -227,7 +227,7 @@ class Alteracao_Model_Pedido extends Modelo
             WHERE
                 ped.pedstatus = 'A'
                 AND ped.pedid = ". (int)$pedid;
-ver($sql, d);
+
         return $this->pegaLinha($sql);
     }
 
