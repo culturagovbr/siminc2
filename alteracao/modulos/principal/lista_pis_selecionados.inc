@@ -20,7 +20,7 @@
             <th>Funcional</th>
             <th>ID Planejamento</th>
             <th>Título</th>
-            <th width="11%">Tipo</th>
+            <th width="11%">Valor do Projeto</th>
             <th width="11%">Disponível</th>
             <th>Cancelar</th>
             <th>Suplementar</th>
@@ -88,7 +88,7 @@
                     </tr>
                 </table>
             </td>
-            <td style="vertical-align: middle;">
+            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>
                         <td style="border: none;">
@@ -105,13 +105,12 @@
                     <tr>
                         <td style="border: none; border-top: 1px solid #e7eaec;">
                             <input type="hidden" id="vlempenharfisico<?=$dados['pliselid'];?>" name="vlempenharfisico" value="<?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>">
-                            <br>
                             Físico: <?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>
                         </td>
                     </tr>
                 </table>                
             </td>
-            
+
             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                     <tr>

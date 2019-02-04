@@ -22,8 +22,8 @@
                         <th>Funcional</th>
                         <th>ID Planejamento</th>
                         <th>Título</th>
-                        <th width="11%">Tipo</th>
-                        <th width="11%">Saldo a Empenhar</th>
+                        <th width="11%">Valor do Projeto</th>
+                        <th width="11%">Disponível</th>
                         <th>Cancelar</th>
                         <th>Suplementar</th>
                         <th>Suplementar por Excesso</th>
@@ -81,44 +81,43 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="vertical-align: middle;">
+                            <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                                     <tr>
                                         <td style="border: none;">
                                             <input type="hidden" id="vlempenharcusteio<?=$dados['pliselid'];?>" name="vlempenharcusteio" value="<?= number_format($vlrAEmpenharCusteio-$dados['vltotalcancelarcusteio'],0,',','.'); ?>">
-                                            Custeio: R$ <?= number_format($vlrAEmpenharCusteio,0,',','.'); ?>
+                                            Custeio: R$ <?= number_format($vlrAEmpenharCusteio-$dados['vltotalcancelarcusteio']-$dados['vlcancelarcusteio'],0,',','.'); ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
                                             <input type="hidden" id="vlempenharcapital<?=$dados['pliselid'];?>" name="vlempenharcapital" value="<?= number_format($vlrAEmpenharCapital-$dados['vltotalcancelarcapital'],0,',','.'); ?>">
-                                            Capital: R$ <?= number_format($vlrAEmpenharCapital,0,',','.'); ?>
+                                            Capital: R$ <?= number_format($vlrAEmpenharCapital-$dados['vltotalcancelarcapital']-$dados['vlcancelarcapital'],0,',','.'); ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
                                             <input type="hidden" id="vlempenharfisico<?=$dados['pliselid'];?>" name="vlempenharfisico" value="<?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>">
-                                            <br>
+                                            Físico: <?= number_format($dados['fisico']-$dados['vltotalcancelarfisico']-$dados['vlcancelarfisico'],0,',','.'); ?>
                                         </td>
                                     </tr>
                                 </table>                
-                            </td>                            
-
+                            </td>
                             <td align="left" style="padding: 0;font-size: 0;margin: 0;vertical-align: middle;">
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                                     <tr>
                                         <td style="border: none;">
-                                            <p><?= $piSelecionado['vlcancelarcusteio'] ? number_format($piSelecionado['vlcancelarcusteio'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlcancelarcusteio'] ? number_format($piSelecionado['vlcancelarcusteio'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlcancelarcapital'] ? number_format($piSelecionado['vlcancelarcapital'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlcancelarcapital'] ? number_format($piSelecionado['vlcancelarcapital'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlcancelarfisico'] ? number_format($piSelecionado['vlcancelarfisico'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlcancelarfisico'] ? number_format($piSelecionado['vlcancelarfisico'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                 </table>
@@ -127,17 +126,17 @@
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                                     <tr>
                                         <td style="border: none;">
-                                            <p><?= $piSelecionado['vlsuplementarcusteio'] ? number_format($piSelecionado['vlsuplementarcusteio'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarcusteio'] ? number_format($piSelecionado['vlsuplementarcusteio'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlsuplementarcapital'] ? number_format($piSelecionado['vlsuplementarcapital'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarcapital'] ? number_format($piSelecionado['vlsuplementarcapital'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlsuplementarfisico'] ? number_format($piSelecionado['vlsuplementarfisico'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarfisico'] ? number_format($piSelecionado['vlsuplementarfisico'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                 </table>
@@ -146,17 +145,17 @@
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                                     <tr>
                                         <td style="border: none;">
-                                            <p><?= $piSelecionado['vlsuplementarexcessocusteio'] ? number_format($piSelecionado['vlsuplementarexcessocusteio'], 0 , '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarexcessocusteio'] ? number_format($piSelecionado['vlsuplementarexcessocusteio'], 0 , '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlsuplementarexcessocapital'] ? number_format($piSelecionado['vlsuplementarexcessocapital'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarexcessocapital'] ? number_format($piSelecionado['vlsuplementarexcessocapital'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlsuplementarexcessofisico'] ? number_format($piSelecionado['vlsuplementarexcessofisico'], 0,'', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarexcessofisico'] ? number_format($piSelecionado['vlsuplementarexcessofisico'], 0,'', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                 </table>
@@ -165,17 +164,17 @@
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                                     <tr>
                                         <td style="border: none;">
-                                            <p><?= $piSelecionado['vlsuplementarsuperavitcusteio'] ? number_format($piSelecionado['vlsuplementarsuperavitcusteio'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarsuperavitcusteio'] ? number_format($piSelecionado['vlsuplementarsuperavitcusteio'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlsuplementarsuperavitcapital'] ? number_format($piSelecionado['vlsuplementarsuperavitcapital'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarsuperavitcapital'] ? number_format($piSelecionado['vlsuplementarsuperavitcapital'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vlsuplementarsuperavitfisico'] ? number_format($piSelecionado['vlsuplementarsuperavitfisico'], 0, '','.') : '-'; ?></p>
+                                            <?= $piSelecionado['vlsuplementarsuperavitfisico'] ? number_format($piSelecionado['vlsuplementarsuperavitfisico'], 0, '','.') : '-'; ?>
                                         </td>
                                     </tr>
                                 </table>
@@ -184,12 +183,12 @@
                                 <table class="table table-striped table-bordered table-hover" border="0" style="border: none;font-size: 10px; height: 100%; margin: 0">
                                     <tr>
                                         <td style="border: none;">
-                                            <p><?= $piSelecionado['vldotacaocusteio'] ? number_format($piSelecionado['vldotacaocusteio'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vldotacaocusteio'] ? number_format($piSelecionado['vldotacaocusteio'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="border: none; border-top: 1px solid #e7eaec;">
-                                            <p><?= $piSelecionado['vldotacaocapital'] ? number_format($piSelecionado['vldotacaocapital'], 0, '', '.') : '-'; ?></p>
+                                            <?= $piSelecionado['vldotacaocapital'] ? number_format($piSelecionado['vldotacaocapital'], 0, '', '.') : '-'; ?>
                                         </td>
                                     </tr>
                                     <tr>
@@ -218,9 +217,9 @@
     </div>
 </div>
 <script>
-$(document).ready(function(){
-    $("#btnPi").click(function(){
-        $("#wizard-t-1").click();
+    $(document).ready(function(){
+        $("#btnPi").click(function(){
+            $("#wizard-t-1").click();
+        });
     });
-});
 </script>
