@@ -92,6 +92,6 @@ Final da modal de listar pis disponíveis
                     swal('Atenção!', retorno.msg, 'warning');
                 }
             }
-        );        
+        );
     }    
 </script>

@@ -196,7 +196,21 @@ echo $linha;
 
             $(".btnRemoverLoa").click(function(){
                 var rlid = $(this).attr('rlid');
-                RemoverLoa(rlid);
+                swal({
+                    title: "Cuidado!",
+                    text: "Tem certeza que deseja excluir o registro ?",
+                    type: "warning",
+                    confirmButtonText: 'Sim',
+                    cancelButtonText: 'Não',
+                    confirmButtonColor: "#DD6B55",
+                    cancelButtonColor: "#DD6B55",
+                    showCancelButton: true,
+                    closeOnConfirm: true
+                    },
+                    function(){
+                        RemoverLoa(rlid);
+                    }
+                );
             });
 
         });

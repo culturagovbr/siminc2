@@ -303,7 +303,19 @@
         });
 
         $(".btnRemovePi").click(function(){
-            removePiPedido($("#pedid").val(), $(this).attr('pliselid'));
+            swal({
+                    title: "Atenção!",
+                    text: "Deseja realmente excluir o registro ?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Sim, estou certo!",
+                    closeOnConfirm: true
+                },
+                function(){
+                    removePiPedido($("#pedid").val(), $('.btnRemovePi').attr('pliselid'));
+                }
+            );
         });
 
         $(".input_valor").blur(function(){
