@@ -136,8 +136,8 @@ echo $linha;
             $('#btnloa').attr('disabled', 'true');
             var tr = '<tr class="text-center">' +
                 '        <th width="5% ">' +
-                                 '<a href="#" class="btnRemoverLoa" id="btnRemoverLoa" rlid=""><i style="font-weight: 20px" class="fa fa-close"></i></a>&nbsp;&nbsp;&nbsp;\n' +
-                                 '<a href="#" class="btnSalvarLoa" id="btnSalvarLoa" rlid=""><i class="fa fa-check"></i></a>' +
+                                 '<a href="#" class="btnRemoverLoa" id="btnRemoverLoa" title="Excluir registro" rlid=""><i style="font-weight: 20px" class="fa fa-close"></i></a>&nbsp;&nbsp;&nbsp;\n' +
+                                 '<a href="#" class="btnSalvarLoa" id="btnSalvarLoa" title="Salvar registro" rlid=""><i class="fa fa-check"></i></a>' +
                          '</th>' +
                 '        <th class="combo"> <input type="hidden" id="unicod" name="unicod">\n\
                              <?php $options = (new Alteracao_Model_RemanejamentoLoa())->recuperaFuncionalSelecionada($_REQUEST['pedid'], $_SESSION['exercicio']);

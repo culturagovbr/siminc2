@@ -62,7 +62,7 @@ if ($_REQUEST['req']){
             if ($_REQUEST['pedid']){
                 $arrPedidos= $mAlteracaoPedido->recuperarPedidoPorId($_REQUEST['pedid']);
             }
-            include_once APPRAIZ.'alteracao/modulos/principal/dados_credito.inc';
+            include_once APPRAIZ. 'alteracao/modulos/principal/dados_credito.inc';
             die;
         case 'salvar_pedido':
             $cPedido = new Alteracao_Controller_Pedido();

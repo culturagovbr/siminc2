@@ -19,7 +19,7 @@ class Alteracao_Controller_Pedido
                 $mPedido->alterarTpdidDocumento($tpdid, $mPedido->docid);
             }
             $mPedido->commit();
-            echo json_encode(["result" => true, "pedid" => $mPedido->pedid, "tpdid" => $tpdid]);
+            echo json_encode(["result" => true, "pedid" => $mPedido->pedid]);
         } catch (Exception $e){
             $mPedido->rollback();
             echo json_encode(["result" => false]);

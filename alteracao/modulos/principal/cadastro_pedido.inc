@@ -69,14 +69,12 @@
                 suoid: $("#suoid").val(),
                 pedtitulo: $("#pedtitulo").val(),
                 tpaid: $("#tpaid").val(),
-                janid: $("#janid").val(),
-                tpdid: $("#tpdid").val()
+                janid: $("#janid").val()
             }, function (result) {
                 result = JSON.parse(result);
                 if (result['result']) {
                     $("#pedid").val(result['pedid']);
-                    $("#tpdid").val(result['tpdid']);
-                    $("#divDadosCredito").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_dados_credito&pedid='+result['pedid']+'&tpdid='+result['tpdid']);
+                    $("#divDadosCredito").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_dados_credito&pedid='+ result['pedid']);
                     if (showAlert) {
                         swal({
                             title: "",
@@ -85,7 +83,7 @@
                             confirmButtonText: 'OK'
                         }, function(isConfirm){
                             if (isConfirm){
-                                window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid='+result['pedid']+'&tpdid='+result['tpdid'];
+                                window.location.href='?modulo=principal/cadastro_alteracoes&acao=C&pedid='+ result['pedid'];
                             }
                         });
                     }
