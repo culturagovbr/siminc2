@@ -74,8 +74,8 @@
                                 $activeExterno = 'active';
                             }
                         ?>
-                        <li class="<?=$activeInterno?>"><a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-interno" tipo="269">Interno</a></li>
-                        <li class="<?=$activeExterno?>"><a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-externo" tipo="270">Externo</a></li>
+                        <li class="<?=$activeInterno?>"><a class="tab-tipo" data-toggle="tab" id="tp_interno" href="#tab-interno" tipo="<?= WF_TPDID_INTERNO ?>">Interno</a></li>
+                        <li class="<?=$activeExterno?>"><a class="tab-tipo" data-toggle="tab" id="tp_externo" href="#tab-externo" tipo="<?= WF_TPDID_EXTERNO ?>">Externo</a></li>
                     </ul>
                     <div class="ibox-title">
                         <h5>Pesquisa avançada por Pedidos de Altera&ccedil;&atilde;o</h5>

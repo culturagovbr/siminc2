@@ -198,32 +198,36 @@ class Alteracao_Model_Pedido extends Modelo
 
     public function recuperarPedidoPorId($pedid)
     {
-        $sql = "SELECT
-                    ped.pedid,
-                    ped.pedtitulo,
-                    ped.tpaid,
-                    ped.janid,
-                    tpa.tpacod,
-                    tpa.tpadsc,
-                    esd.esdid,
-                    esd.esddsc,
-                    jan.jannome,
-                    usr.usunome,
-                    '(' || usr.usufoneddd || ') ' || usr.usufonenum as usufone,
-                    usr.usuemail,
-                    CASE WHEN tpa.tpafluxo='I' THEN 269
-                         WHEN tpa.tpafluxo='E' THEN 270
-                    END AS tpdid,
-                    ped.docid
-                FROM alteracao.pedido AS ped
+        $sql = "
+            SELECT
+                ped.pedid,
+                ped.pedtitulo,
+                ped.tpaid,
+                ped.janid,
+                tpa.tpacod,
+                tpa.tpadsc,
+                esd.esdid,
+                esd.esddsc,
+                jan.jannome,
+                usr.usunome,
+                '(' || usr.usufoneddd || ') ' || usr.usufonenum AS usufone,
+                usr.usuemail,
+                CASE WHEN tpa.tpafluxo= 'I' THEN
+                    ". (int)WF_TPDID_INTERNO. "
+                WHEN tpa.tpafluxo='E' THEN
+                    ". (int)WF_TPDID_EXTERNO. "
+                END AS tpdid,
+                ped.docid
+            FROM alteracao.pedido AS ped
                 JOIN alteracao.tipo AS tpa ON ped.tpaid = tpa.tpaid
                 JOIN alteracao.janela AS jan ON ped.janid = jan.janid
-                left JOIN seguranca.usuario AS usr ON usr.usucpf = ped.usucpf
+                LEFT JOIN seguranca.usuario AS usr ON usr.usucpf = ped.usucpf
                 LEFT JOIN workflow.documento AS doc ON ped.docid = doc.docid
                 LEFT JOIN workflow.estadodocumento AS esd ON esd.esdid = doc.esdid
-                WHERE
-                    ped.pedstatus = 'A'
-                AND ped.pedid = ".$pedid;
+            WHERE
+                ped.pedstatus = 'A'
+                AND ped.pedid = ". (int)$pedid;
+ver($sql, d);
         return $this->pegaLinha($sql);
     }
 
