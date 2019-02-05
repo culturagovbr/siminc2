@@ -207,8 +207,12 @@ echo $linha;
                     showCancelButton: true,
                     closeOnConfirm: true
                     },
-                    function(){
-                        RemoverLoa(rlid);
+                    function () {
+                        if (rlid !== null && rlid !== '') {
+                            RemoverLoa(rlid);
+                        }else{
+                            $(".div_remanejamento_loa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_remanejamento_loa&pedid='+$("#pedid").val());
+                        }
                     }
                 );
             });
@@ -290,7 +294,7 @@ echo $linha;
                             closeOnConfirm: true
                         },
                         function(){
-                            $(".div_remanejamento_loa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_remanejamento_loa&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
+                            $(".div_remanejamento_loa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_remanejamento_loa&pedid='+$("#pedid").val());
                         })
                 }else{
                     swal({
@@ -310,7 +314,7 @@ echo $linha;
         },
             function(retorno){
                 if (retorno){
-                    $(".div_remanejamento_loa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_remanejamento_loa&pedid='+$("#pedid").val()+'&tpdid='+$("#tpdid").val());
+                    $(".div_remanejamento_loa").load('?modulo=principal/cadastro_alteracoes&acao=C&req=carrega_remanejamento_loa&pedid='+$("#pedid").val());
                 }
             }
         );        
@@ -329,32 +333,36 @@ echo $linha;
         var msg = '';
 
         if($('#ptrid'+rlid).val() == '' || $('#ptrid'+rlid).val() == null){
-            msg += "O preenchimento do campo \"Funcional\" é obrigatório.";
+            msg += "O preenchimento do campo \"Funcional\" é obrigatório.\n";
         }
         if($('#ctecod'+rlid).val() == '' || $('#ctecod'+rlid).val() == null){
-            msg+="<br>O preenchimento do campo \"Categoria\" é obrigatório.";
+            msg += "O preenchimento do campo \"Categoria\" é obrigatório.\n";
         }
         if($('#gndcod'+rlid).val() == '' || $('#gndcod'+rlid).val() == null){
-            msg+="<br>O preenchimento do campo \"GND\" é obrigatório.";
+            msg += "O preenchimento do campo \"GND\" é obrigatório.\n";
         }
         if($('#mapcod'+rlid).val() == '' || $('#mapcod'+rlid).val() == null){
-            msg+="<br>O preenchimento do campo \"Modalidade\" é obrigatório.";
+            msg += "O preenchimento do campo \"Modalidade\" é obrigatório.\n";
         }
         if($('#fonid'+rlid).val() == '' || $('#fonid'+rlid).val() == null){
-            msg+="<br>O preenchimento do campo \"Fonte\" é obrigatório.";
+            msg += "O preenchimento do campo \"Fonte\" é obrigatório.\n";
         }
         if($('#idoid'+rlid).val() == '' || $('#idoid'+rlid).val() == null){
-            msg+="<br>O preenchimento do campo \"IDOC\" é obrigatório.";
+            msg += "O preenchimento do campo \"IDOC\" é obrigatório.\n";
         }
         if($('#iduid'+rlid).val() == '' || $('#iduid'+rlid).val() == null){
-            msg+="<br>O preenchimento do campo \"IDUSO\" é obrigatório.";
+            msg += "O preenchimento do campo \"IDUSO\" é obrigatório.\n";
         }
         if($('#rpcod'+rlid).val() == '' || $('#rpcod'+rlid).val() == null){
-            msg+="<br>O preenchimento do campo \"RP\" é obrigatório.";
+            msg += "O preenchimento do campo \"RP\" é obrigatório.\n";
         }
 
         if(msg !== '') {
-            alert(msg);
+            swal({
+                title: "Atenção!",
+                text: msg,
+                type: "warning"
+            });
             return false;
         } else {
             return true;
