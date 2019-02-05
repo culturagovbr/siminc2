@@ -83,7 +83,7 @@
                                 <label for="mppid" class=" control-label">Metas PPA: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                             </div>
                             <div class="col-lg-9 div_mppid">
-                                <?php carregarMetasPPA($param['oppid'], $param['mppid']); ?>
+                                <?php carregarMetasPPA($param['oppid'], $param['mppid'], $param['suocod']); ?>
                             </div>
                         </div>
 
@@ -253,7 +253,7 @@
 
         // Evento ao mudar opção de Objetivos PPA
         $('#oppid').change(function(){
-            carregarMetasPPA($(this).val(), null, $('#ungcod').val());
+            carregarMetasPPA($(this).val(), null, $('#unicod').val());
         });
 
         $('.percentual-empenhado').liquidMeter({
