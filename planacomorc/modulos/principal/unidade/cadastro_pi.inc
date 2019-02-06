@@ -25,6 +25,11 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 
 require_once APPRAIZ. 'proposta/classes/model/PrePlanoInterno.inc';
 
+if ( $_REQUEST['req'] == 'espelho-pedido' ) {
+    include_once APPRAIZ.'alteracao/modulos/principal/popup-espelho-pedido.inc';
+    die;
+}
+
 if($_REQUEST['uploadAnexo']){
     $file = new FilesSimec();
     if($file->setUpload($_REQUEST['arqdescricao'], '', false)){
@@ -119,7 +124,6 @@ if ($_REQUEST['alterarCodigoPi']) {
     die();
 }
 
-
 /**
  * Processa as requições enviadas a esta página.
  * @see cadastropi_requisicoes.inc
@@ -199,6 +203,7 @@ $podeEditar = $mPiPlanoInterno->verificarPermissaoEditar($estadoAtual, $perfis);
 $aba = $_REQUEST['aba'];
 $classTab0 = empty($aba)? 'active': NULL;
 $classTab1 = $aba? 'active': NULL;
+$classTab2 = $aba? 'active': NULL;
 
 /**
  * Cabeçalho padrão do sistema.
@@ -223,6 +228,8 @@ include APPRAIZ . "includes/cabecalho.inc";
         display: none;
     }
 </style>
+
+<?php controlarAvisoPedidoAlteracao($dadosPI['pliid']); ?>
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-5">
@@ -259,6 +266,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                 <?php if($dadosPI['plicod']): ?>
                     <li class="<?php echo $classTab1; ?>">
                         <a data-toggle="tab" href="#tab-1">Monitoramento</a>
+                    </li>
+                    <li class="<?= $classTab2; ?>">
+                        <a data-toggle="tab" href="#tab-2">Alterações Orçamentárias</a>
                     </li>
                 <?php endif; ?>
             </ul>
@@ -1348,6 +1358,30 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <div class="panel-body">
 
                             <?php include_once APPRAIZ. "acompanhamento/modulos/principal/monitorar-pi-cad.inc"; ?>
+
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane <?php echo $classTab1; ?>">
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Lista de Pedidos de Alterações Orçamentárias</h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <div id="div-principal">
+                                                <?php
+                                                    $filtroalteracao = ['pliid' => $dadosPI['pliid']];
+                                                    $permiteEditar = false;
+                                                    include_once APPRAIZ.'alteracao/modulos/principal/lista_incio.inc';
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>

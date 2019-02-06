@@ -45,7 +45,7 @@ class Cronograma extends Modelo{
      * @access protected
      */
     protected $arAtributos     = array(
-                                        'croid' => null,
-                                        'crodsc' => null,
+        'croid' => null,
+        'crodsc' => null,
     );
 }

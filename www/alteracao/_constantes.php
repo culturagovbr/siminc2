@@ -1,0 +1,44 @@
+<?php
+/**
+ * Constantes do Módulo Alterações Orçamentárias.
+ * @author $douglas santana fontes <douglas.fontes@cultura.gov.br>
+ * @since 25-10-2018
+ *
+ */
+
+define('SISID_PLANEJAMENTO', 256);
+
+define('PFL_SUPERUSUARIO', 1517);
+define("PFL_SUBUNIDADE", 1518);
+define("PFL_ADMINISTRADOR", 1519);
+
+define("WF_TPDID_INTERNO", 273);
+define("WF_TPDID_EXTERNO", 274);
+
+define("AED_ALTERACAO_INTERNO_CADASTRAMENTO_EM_ANALISE", 4344);
+define("AED_ALTERACAO_INTERNO_CORRECAO_EM_ANALISE", 4341);
+define("AED_ALTERACAO_EXTERNO_CADASTRAMENTO_EM_ANALISE", 4349);
+define("AED_ALTERACAO_EXTERNO_CORRECAO_EM_ANALISE", 4346);
+
+# Constantes do Wokflow do Alterações Orçamentárias.
+define("ESD_EM_CADASTRAMENTO_INTERNO", 1794);
+define("ESD_AGURADANDO_CORRECAO_INTERNO", 1792);
+define("ESD_EM_CADASTRAMENTO_EXTERNO", 1799);
+define("ESD_AGURADANDO_CORRECAO_EXTERNO", 1797);
+
+define("ESDID_ALTERACAO_EFETIVADO_INTERNO", 1791);
+define("ESDID_ALTERACAO_EFETIVADO_EXTERNO", 1795);
+
+define("ESD_PREPI_CADASTRAMENTO", 1790);
+define("ESD_PREPI_AGUARDANDO_APROVACAO", 1789);
+define("ESD_PREPI_AGUARDANDO_CORRECAO", 1788);
+define("ESD_PREPI_APROVADO", 1787);
+define("ESD_PI_APROVADO", 1771);
+define("ESD_PI_CANCELADO", 1772);
+
+# Código SIOP de subunidades
+define("SUOCOD_COGEP", 420008);
+define("SUOCOD_CGCON", 420009);
+
+# Código SIOP de UOs
+define("UNOCOD_FNC", 42902);

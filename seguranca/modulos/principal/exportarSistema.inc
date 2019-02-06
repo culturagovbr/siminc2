@@ -2,23 +2,6 @@
 
 ini_set("memory_limit", "1024M");
 
-$arCpfsAutorizados = array('', '','','', '', '', '', '', '','', '', '', '', '', '', '', '', '');
-
-if(!in_array($_SESSION['usucpf'], $arCpfsAutorizados)){
-	echo "<br/><br/><center><p><font color=\"red\">Voce não tem permissão para visualizar esta tela.</font></p></center>";
-	die;
-}
-
-global $servidor_bd, $porta_bd, $nome_bd, $usuario_db, $senha_bd;
-
-$nome_bd     = '';
-$servidor_bd = '';
-$porta_bd    = '';
-$usuario_db  = '';
-$senha_bd    = '';
-
-$db2 = new cls_banco();
-
 function montaSqlDadosTabela($shema, $table)
 {
 	$sql = "SELECT
@@ -55,7 +38,16 @@ if($_REQUEST['req'] == 'exportar'){
 			}
 		}
 		if(is_array($arCampos) && is_array($arValores)){
-			$insertSistema = "INSERT INTO seguranca.sistema<br/>&nbsp;&nbsp;(".implode(',', $arCampos).")<br/>VALUES<br/>&nbsp;&nbsp;(".implode(',', $arValores).");<br/><br/>";
+                    $insertSistema = "
+                        INSERT INTO seguranca.sistema<br/>&nbsp;&nbsp;(".implode(',', $arCampos).")<br/>VALUES<br/>&nbsp;&nbsp;(".implode(',', $arValores).");<br/><br/>
+
+                        -- CORREÇÃO DE SEQUENCE da tabela seguranca.sistema
+                        SELECT setval('seguranca.sistema_sisid_seq', (
+                        SELECT
+                            max(sisid)
+                        FROM seguranca.sistema));
+                        <br/><br/>
+                    ";
 		}
 	}
 	
@@ -188,10 +180,17 @@ if($_REQUEST['req'] == 'exportar'){
 	}
 	
 	// Monta INSERT seguranca.perfilmenu
-	$sql = "select pm.*, pf.pfldsc, mn.mnucod, mn.mnudsc, mn.mnulink from seguranca.perfilmenu pm 
-			join seguranca.perfil pf on pf.pflcod = pm.pflcod
-			join seguranca.menu mn on mn.mnuid = pm.mnuid
-			where pf.sisid = {$_REQUEST['sisid']} and mn.sisid = {$_REQUEST['sisid']}";
+	$sql = "
+            select
+                pm.*,
+                pf.pfldsc,
+                mn.mnucod,
+                mn.mnudsc,
+                mn.mnulink
+            from seguranca.perfilmenu pm 
+                join seguranca.perfil pf on pf.pflcod = pm.pflcod
+                join seguranca.menu mn on mn.mnuid = pm.mnuid
+            where pf.sisid = {$_REQUEST['sisid']} and mn.sisid = {$_REQUEST['sisid']}";
 	$dataPerfilMenu = $db->carregar($sql);
 	
 	// Recupera campos do banco de destino, definido com a variavel $db2
@@ -317,11 +316,19 @@ if($_REQUEST['req'] == 'exportar'){
 	}
 	
 	// Monta INSERT workflow.acaoestadodoc
-	$sql = "SELECT aed.*, eso.esddsc as esddscorigem, esd.esddsc as esddscdestino, tpd.tpddsc FROM workflow.acaoestadodoc aed
-			JOIN workflow.estadodocumento eso ON eso.esdid = aed.esdidorigem
-			JOIN workflow.estadodocumento esd ON esd.esdid = aed.esdiddestino
-			JOIN workflow.tipodocumento tpd ON tpd.tpdid = eso.tpdid AND tpd.tpdid = esd.tpdid
-			WHERE tpd.sisid = {$_REQUEST['sisid']}";
+	$sql = "
+            SELECT
+                aed.*,
+                eso.esddsc AS esddscorigem,
+                esd.esddsc AS esddscdestino,
+                tpd.tpddsc
+            FROM workflow.acaoestadodoc aed
+                JOIN workflow.estadodocumento eso ON eso.esdid = aed.esdidorigem
+                JOIN workflow.estadodocumento esd ON esd.esdid = aed.esdiddestino
+                JOIN workflow.tipodocumento tpd ON tpd.tpdid = eso.tpdid AND tpd.tpdid = esd.tpdid
+            WHERE
+                tpd.sisid = {$_REQUEST['sisid']}
+        ";
 	$dataWfAcaoEstadoDocumento = $db->carregar($sql);
 	
 	// Recupera campos do banco de destino, definido com a variavel $db2
@@ -339,13 +346,35 @@ if($_REQUEST['req'] == 'exportar'){
 					if($table['column_name'] == $column_name && $table['column_name'] != 'aedid'){
 						$arCampos[]  = $table['column_name'];
 						if($table['column_name'] == 'esdidorigem'){
-							$arValores[] = "(SELECT esdid FROM workflow.estadodocumento esd
-											JOIN workflow.tipodocumento tpd ON tpd.tpdid = esd.tpdid
-											WHERE tpd.sisid = {$_REQUEST['sisid']} AND esd.esddsc = '{$data['esddscorigem']}')";
+                                                    $arValores[] = "
+                                                        (
+                                                            SELECT
+                                                                esdid
+                                                            FROM workflow.estadodocumento esd
+                                                                JOIN workflow.tipodocumento tpd ON tpd.tpdid = esd.tpdid
+                                                            WHERE
+                                                                esd.esdstatus = 'A'
+                                                                AND tpd.tpdstatus = 'A'
+                                                                AND tpd.sisid = {$_REQUEST['sisid']}
+                                                                AND esd.esddsc = '{$data['esddscorigem']}'
+                                                                AND tpd.tpddsc = '{$data['tpddsc']}'
+                                                        )
+                                                    ";
 						}else if($table['column_name'] == 'esdiddestino'){
-							$arValores[] = "(SELECT esdid FROM workflow.estadodocumento esd
-											JOIN workflow.tipodocumento tpd ON tpd.tpdid = esd.tpdid
-											WHERE tpd.sisid = {$_REQUEST['sisid']} AND esd.esddsc = '{$data['esddscdestino']}')";
+                                                    $arValores[] = "
+                                                        (
+                                                            SELECT
+                                                                esdid
+                                                            FROM workflow.estadodocumento esd
+                                                                JOIN workflow.tipodocumento tpd ON tpd.tpdid = esd.tpdid
+                                                            WHERE
+                                                                esd.esdstatus = 'A'
+                                                                AND tpd.tpdstatus = 'A'
+                                                                AND tpd.sisid = {$_REQUEST['sisid']}
+                                                                AND esd.esddsc = '{$data['esddscdestino']}'
+                                                                AND tpd.tpddsc = '{$data['tpddsc']}'
+                                                        )
+                                                    ";
 						}else{
 							$arValores[] = empty($data[$table['column_name']]) ? 'null' : "'".simec_htmlentities($data[$table['column_name']])."'";
 						}
@@ -359,14 +388,24 @@ if($_REQUEST['req'] == 'exportar'){
 	}
 	
 	// Monta INSERT workflow.estadodocumentoperfil
-	$sql = "SELECT edp.*, pfl.pfldsc, eso.esddsc as esddscorigem, esd.esddsc as esddscdestino, tpd.tpddsc, 
-			aeddscrealizar, aeddscrealizada FROM workflow.estadodocumentoperfil edp
-			JOIN workflow.acaoestadodoc aed ON aed.aedid = edp.aedid
-			JOIN workflow.estadodocumento eso ON eso.esdid = aed.esdidorigem
-			JOIN workflow.estadodocumento esd ON esd.esdid = aed.esdiddestino
-			JOIN seguranca.perfil pfl ON pfl.pflcod = edp.pflcod
-			JOIN workflow.tipodocumento tpd ON tpd.tpdid = eso.tpdid AND tpd.tpdid = esd.tpdid
-			WHERE tpd.sisid = {$_REQUEST['sisid']}";
+	$sql = "
+            SELECT
+                edp.*,
+                pfl.pfldsc,
+                eso.esddsc AS esddscorigem,
+                esd.esddsc AS esddscdestino,
+                tpd.tpddsc,
+                aeddscrealizar,
+                aeddscrealizada
+            FROM workflow.estadodocumentoperfil edp
+                JOIN workflow.acaoestadodoc aed ON aed.aedid = edp.aedid
+                JOIN workflow.estadodocumento eso ON eso.esdid = aed.esdidorigem
+                JOIN workflow.estadodocumento esd ON esd.esdid = aed.esdiddestino
+                JOIN seguranca.perfil pfl ON pfl.pflcod = edp.pflcod
+                JOIN workflow.tipodocumento tpd ON tpd.tpdid = eso.tpdid AND tpd.tpdid = esd.tpdid
+            WHERE
+                tpd.sisid = {$_REQUEST['sisid']}
+        ";
 	$dataWfEstadoDocumentoPerfil = $db->carregar($sql);
 	
 	// Recupera campos do banco de destino, definido com a variavel $db2
@@ -383,25 +422,48 @@ if($_REQUEST['req'] == 'exportar'){
 					if($table['column_name'] == $column_name){
 						$arCampos[]  = $table['column_name'];
 						if($table['column_name'] == 'aedid'){
-							$arValores[] = "(
-											SELECT aedid FROM workflow.acaoestadodoc 
-											WHERE esdidorigem = (SELECT esdid FROM workflow.estadodocumento esd
-																JOIN workflow.tipodocumento tpd ON tpd.tpdid = esd.tpdid
-																WHERE tpd.sisid = {$_REQUEST['sisid']} AND esd.esddsc = '{$data['esddscorigem']}') 
-											AND esdiddestino = (SELECT esdid FROM workflow.estadodocumento esd
-																JOIN workflow.tipodocumento tpd ON tpd.tpdid = esd.tpdid
-																WHERE tpd.sisid = {$_REQUEST['sisid']} AND esd.esddsc = '{$data['esddscdestino']}')
-											AND aeddscrealizar = '{$data['aeddscrealizar']}'
-											AND aeddscrealizada = '{$data['aeddscrealizada']}'
-											)";
+                                                    $arValores[] = "
+                                                        (
+                                                            SELECT
+                                                                aedid
+                                                            FROM workflow.acaoestadodoc 
+                                                            WHERE
+                                                                esdidorigem = (
+                                                                    SELECT
+                                                                        esdid
+                                                                    FROM workflow.estadodocumento esd
+                                                                        JOIN workflow.tipodocumento tpd ON tpd.tpdid = esd.tpdid
+                                                                    WHERE
+                                                                        esd.esdstatus = 'A'
+                                                                        AND tpd.tpdstatus = 'A'
+                                                                        AND tpd.sisid = {$_REQUEST['sisid']}
+                                                                        AND esd.esddsc = '{$data['esddscorigem']}'
+                                                                        AND tpd.tpddsc = '{$data['tpddsc']}'
+                                                                )
+                                                                AND esdiddestino = (
+                                                                    SELECT
+                                                                        esdid
+                                                                    FROM workflow.estadodocumento esd
+                                                                        JOIN workflow.tipodocumento tpd ON tpd.tpdid = esd.tpdid
+                                                                    WHERE
+                                                                        esd.esdstatus = 'A'
+                                                                        AND tpd.tpdstatus = 'A'
+                                                                        AND tpd.sisid = {$_REQUEST['sisid']}
+                                                                        AND esd.esddsc = '{$data['esddscdestino']}'
+                                                                        AND tpd.tpddsc = '{$data['tpddsc']}'
+                                                                )
+                                                                AND aeddscrealizar = '{$data['aeddscrealizar']}'
+                                                                AND aeddscrealizada = '{$data['aeddscrealizada']}'
+                                                        )
+                                                    ";
 						}else if($table['column_name'] == 'pflcod'){
-							$arValores[] = "(SELECT pflcod FROM seguranca.perfil WHERE sisid = {$_REQUEST['sisid']} AND pfldsc = '{$data['pfldsc']}')";
+                                                    $arValores[] = "(SELECT pflcod FROM seguranca.perfil WHERE sisid = {$_REQUEST['sisid']} AND pfldsc = '{$data['pfldsc']}')";
 						}
 					}
 				}
 			}
 			if(is_array($arCampos) && is_array($arValores)){
-				$insertWfEstadoDocumentoPerfil .= "INSERT INTO workflow.estadodocumentoperfil<br/>&nbsp;&nbsp;(".implode(',', $arCampos).")<br/>VALUES<br/>&nbsp;&nbsp;(".implode(',', $arValores).");<br/><br/>";
+                            $insertWfEstadoDocumentoPerfil .= "INSERT INTO workflow.estadodocumentoperfil<br/>&nbsp;&nbsp;(".implode(',', $arCampos).")<br/>VALUES<br/>&nbsp;&nbsp;(".implode(',', $arValores).");<br/><br/>";
 			}
 		}
 	}
@@ -449,31 +511,32 @@ if($_REQUEST['req'] == 'exportar'){
 
 	// IMPRIME OS SCRIPTS
 	echo "<pre>";
-	echo "<BR/><BR/><BR/>--INSERE SISTEMA <BR/><BR/><BR/>";
+	echo "<br /><br /><br />BEGIN; -- ROLLBACK; COMMIT;";
+	echo "<br /><br /><br />--INSERE SISTEMA <br /><br /><br />";
 	echo $insertSistema;
-	echo "<BR/><BR/><BR/>--INSERE PERFIL<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE PERFIL<br /><br /><br />";
 	echo $insertPerfil;
-	echo "<BR/><BR/><BR/>--INSERE ABA<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE ABA<br /><br /><br />";
 	echo $insertAba;
-	echo "<BR/><BR/><BR/>--INSERE MENU<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE MENU<br /><br /><br />";
 	echo $insertMenu;
-	echo "<BR/><BR/><BR/>--ATUALIZAR MENU IDPAI<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--ATUALIZAR MENU IDPAI<br /><br /><br />";
 	echo $updateMenuPai;
-	echo "<BR/><BR/><BR/>--INSERE ABA MENU<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE ABA MENU<br /><br /><br />";
 	echo $insertAbaMenu;
-	echo "<BR/><BR/><BR/>--INSERE PERFIL MENU<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE PERFIL MENU<br /><br /><br />";
 	echo $insertPerfilMenu;
-	echo "<BR/><BR/><BR/>--INSERE PERFIL USUÁRIO<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE PERFIL USUÁRIO<br /><br /><br />";
 	echo $insertPerfilUsuario;
-	echo "<BR/><BR/><BR/>--INSERE WORKFLOW TIPO DOCUMENTO<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE WORKFLOW TIPO DOCUMENTO<br /><br /><br />";
 	echo $insertWfTipodocumento;
-	echo "<BR/><BR/><BR/>--INSERE WORKFLOW ESTADO DOCUMENTO<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE WORKFLOW ESTADO DOCUMENTO<br /><br /><br />";
 	echo $insertWfEstadoDocumento;
-	echo "<BR/><BR/><BR/>--INSERE WORKFLOW AÇÃO ESTADO DOCUMENTO<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE WORKFLOW AÇÃO ESTADO DOCUMENTO<br /><br /><br />";
 	echo $insertWfAcaoEstadoDocumento;
-	echo "<BR/><BR/><BR/>--INSERE WORKFLOW AÇÃO ESTADO DOCUMENTO PERFIL<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE WORKFLOW AÇÃO ESTADO DOCUMENTO PERFIL<br /><br /><br />";
 	echo $insertWfEstadoDocumentoPerfil;
-	echo "<BR/><BR/><BR/>--INSERE RESPONSABILIDADES<BR/><BR/><BR/>";
+	echo "<br /><br /><br />--INSERE RESPONSABILIDADES<br /><br /><br />";
 	echo $insertUsuarioResponsabilidade;
 	echo "</pre>";
 	
@@ -509,16 +572,20 @@ monta_titulo($linha1, $linha2);
 		<tr>
 			<td class="subtituloDireita">Escolha um sistema:</td>
 			<td>
-				<?php
-					$sql = "SELECT 
-								sisid as codigo,
-								sisid || ' - ' || sisdsc as descricao
-							FROM seguranca.sistema
-							ORDER BY sisid";
-					
-					unset($sisid);
-					$db->monta_combo('sisid', $sql, 'S', 'Selecione...', '', '', '');
-				?>
+                            <?php
+                                $sql = "
+                                    SELECT 
+                                        sisid AS codigo,
+                                        sisid || ' - ' || sisdsc AS descricao
+                                    FROM seguranca.sistema
+                                    WHERE
+                                        sisstatus = 'A'
+                                    ORDER BY
+                                        descricao
+                                ";
+                                unset($sisid);
+                                $db->monta_combo('sisid', $sql, 'S', 'Selecione...', '', '', '');
+                            ?>
 			</td>
 		</tr>
 		<tr>

@@ -5,7 +5,6 @@
      * @returns VOID
      */
     function initCadastroPi(){
-
         $('#modal-historico-pi').click(function(){
             $('#historico-pi .modal-body').load(urlPagina+'&req=historico-pi&pliid='+ $('#pliid').val());
             $('#historico-pi').modal();
@@ -502,5 +501,23 @@
                 window.location.href = '/planacomorc/planacomorc.php?modulo=principal/unidade/painel&acao=A';
             });
         }
+        
+        $('.a_espelho_pedido').click(function(){
+            var pedid = $(this).attr('data-pedid');
+            exibirEspelhoPedido(pedid);
+            return false;
+        });    
+    
     }
 
+/**
+ * Exibe popup com Detalhes do Pedido. Tela de Espelho de Pedido.
+ *
+ * @returns VOID
+ */
+function exibirEspelhoPedido(pedid){
+    window.open(
+        window.location.href + '&req=espelho-pedido&pedid='+ pedid,
+        'popup_espelho_pedido',
+        'width=980,height=1000,status=1,menubar=1,toolbar=0,scrollbars=1,resizable=1');
+}
