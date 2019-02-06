@@ -54,6 +54,9 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
+        <div class="col-md-12" id="box-metas-ppa">
+            <?php $cAcompanhamento->listarMetasPpa($suoid); ?>
+        </div>
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -196,9 +199,6 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
                     } ?>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12" id="box-metas-ppa">
-            <?php $cAcompanhamento->listarMetasPpa($suoid); ?>
         </div>
         <div class="col-md-12" id="box-metas-pnc">
             <?php include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc'; ?>

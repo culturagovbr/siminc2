@@ -33,6 +33,7 @@
         'oppid' => $param['oppid'],
         'mppid' => $param['mppid'],
     ));
+    
     /**
      * Cabeçalho padrão do sistema.
      */
@@ -82,7 +83,7 @@
                                 <label for="mppid" class=" control-label">Metas PPA: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                             </div>
                             <div class="col-lg-9 div_mppid">
-                                <?php carregarMetasPPA($param['oppid'], $param['mppid']); ?>
+                                <?php carregarMetasPPA($param['oppid'], $param['mppid'], $param['suocod']); ?>
                             </div>
                         </div>
 
@@ -163,7 +164,7 @@
                             <div class="col-md-8">
 
                                     <div class="form-group ">
-                                        <label for="acoquantidade" class="col-sm-2 col-md-2 col-lg-2 control-label">Executado: <span class="campo-obrigatorio" title="Campo obrigatório">*</span></label>
+                                        <label for="acoquantidade" class="col-sm-2 col-md-2 col-lg-2 control-label">Quantidade alcançada: <span class="campo-obrigatorio" title="Campo obrigatório">*</span></label>
                                         <div class="col-sm-2 col-md-2 col-lg-2 ">
                                             <?php $acoquantidade = is_numeric($mAcompanhamento->acoquantidade) ? number_format($mAcompanhamento->acoquantidade, 2, ',', '.') : null; ?>
                                             <?php if($podeEditar){ ?>
@@ -252,7 +253,7 @@
 
         // Evento ao mudar opção de Objetivos PPA
         $('#oppid').change(function(){
-            carregarMetasPPA($(this).val(), null, $('#ungcod').val());
+            carregarMetasPPA($(this).val(), null, $('#unicod').val());
         });
 
         $('.percentual-empenhado').liquidMeter({
@@ -276,7 +277,7 @@
      */
     function carregarUG(unicod) {
         $.post(
-            '?modulo=relatorio/relatorio-ppa&acao=A&req=carregarComboUG', { unicod: $('#unicod').val() }, function(response) {
+            '?modulo=relatorio/relatorio-ppa-grafico&acao=A&req=carregarComboUG', { unicod: $('#unicod').val() }, function(response) {
                 $('#div_ungcod').remove('slow');
                 $('#div_ungcod').html(response);
                 $(".chosen-select").chosen();
@@ -287,7 +288,7 @@
      * Carrega novo conteúdo para o select de Metas PPA via requisição ajax.
      */
     function carregarMetasPPA(oppid, mppid, suocod) {
-        $.post('?modulo=relatorio/relatorio-ppa&acao=A&req=carregarMetasPPA&oppid=' +oppid +'&suocod='+ suocod, function(response) {
+        $.post('?modulo=relatorio/relatorio-ppa-grafico&acao=A&req=carregarMetasPPA&oppid=' +oppid +'&suocod='+ suocod, function(response) {
             $('#mppid').remove();
             $('.div_mppid').html(response);
             $(".chosen-select").chosen();

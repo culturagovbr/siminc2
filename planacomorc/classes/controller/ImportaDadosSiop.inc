@@ -24,16 +24,20 @@ class Planacomorc_Controller_ImportaDadosSiop{
         ini_set("memory_limit", "2048M");
         session_start();
         
-        $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-        $this->exercicio = date('Y');
-        $this->filtro = array('anoExercicio' => $this->exercicio);
-        
-        $mImportaDadosSiop->excluiDadosWsOrcamentario($this->exercicio);
-        $this->ConsultaDadosWs();
-        $mImportaDadosSiop->commit();
-        $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
-        $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
-        $mImportaDadosSiop->commit();
+        for($ano=2018;$ano<=2019;$ano++){
+            $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
+//            $this->exercicio = date('Y');
+            $this->pagina = 0;
+            $this->exercicio = $ano;
+            $this->filtro = array('anoExercicio' => $this->exercicio);
+
+            $mImportaDadosSiop->excluiDadosWsOrcamentario($this->exercicio);
+            $this->ConsultaDadosWs();
+            $mImportaDadosSiop->commit();
+            $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
+            $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
+            $mImportaDadosSiop->commit();
+        }
     }
     
     private function ConsultaDadosWs(){
@@ -47,7 +51,6 @@ class Planacomorc_Controller_ImportaDadosSiop{
                 ->setRegistrosPorPagina(2000)
             ;
             $resultados = $service->configure()->request();
-
             if($resultados){
                 include_once APPRAIZ. 'wssof/classes/Ws_ExecucaoOrcamentariaDto.inc';
                 foreach ($resultados as $resultado){
@@ -73,24 +76,23 @@ class Planacomorc_Controller_ImportaDadosSiop{
         foreach($listaResultadoFuncionaisSIOP as $funcionalSIOP){
             $listaFuncionaisSiop[$funcionalSIOP['funcional']][$funcionalSIOP['categoriaeconomica']] = $funcionalSIOP['dotatual'];
         }
-        
+
         $listaResultadoFuncionaisSubunidadeSiminc = $mImportaDadosSiop->RetornaDadosSiminc($this->exercicio);
         $listaFuncionaisSubunidadeSiminc = [];
         foreach($listaResultadoFuncionaisSubunidadeSiminc as $funcionalSubunidadeSiminc){
             $listaFuncionaisSubunidadeSiminc[$funcionalSubunidadeSiminc['funcional']][] = $funcionalSubunidadeSiminc;
         }
         $this->GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop);
-        
+
         $dadosProvisionado = $mImportaDadosSiop->RetornaDadosProvisionados($this->exercicio);
         $this->GeraTabelaProvisionado($dadosProvisionado);
-        
+
         $listaDivergenciaPlanejada = $mImportaDadosSiop->RetornaDivergenciaPlanejado($this->exercicio);
         $this->GeraTabelaDivergenciaPlanejado($listaDivergenciaPlanejada);
         if($this->boAlteracao){$this->corpoEmailV3 .= $this->htmlTabela1;}
         if($this->boAlteracaoCompartilhada){$this->corpoEmailV3 .= $this->htmlTabela2;}
         if($this->boAlteracaoProvisionado){$this->corpoEmailV3 .= $this->htmlTabela3;}
         if($this->boDivergenciaPlanejada){$this->corpoEmailV3 .= $this->htmlTabela4;}
-
         $this->destinatarios = $mImportaDadosSiop->RetornaEmailsSuperUsuarios();
         $this->EnviaEmail();
     }
@@ -105,8 +107,8 @@ class Planacomorc_Controller_ImportaDadosSiop{
                 <th>Funcional</th>
                 <th>Unidade</th>
                 <th>Tipo</th>
-                <th>Vl. Antigo</th>
-                <th>Vl. Atual</th>
+                <th style='text-align: right;'>Vl. Antigo</th>
+                <th style='text-align: right;'>Vl. Atual</th>
             </tr>   
             </thead>
             <tbody>       
@@ -125,8 +127,8 @@ class Planacomorc_Controller_ImportaDadosSiop{
                 <th>Funcional</th>
                 <th>Unidade</th>
                 <th>Tipo</th>
-                <th>Soma</th>
-                <th>Dotação Atual</th>
+                <th style='text-align: right;'>Soma</th>
+                <th style='text-align: right;'>Dotação Atual</th>
             </tr>   
             </thead>
             <tbody>";  
@@ -143,7 +145,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
                     $this->htmlTabela1 .= "
                         <tr>
                             <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
-                            <td>{$funcionalSubunidadeSiminc[0]['unosigla']} - {$funcionalSubunidadeSiminc[0]['suosigla']}</td>
+                            <td>{$funcionalSubunidadeSiminc[0]['suocod']} - {$funcionalSubunidadeSiminc[0]['suosigla']}({$funcionalSubunidadeSiminc[0]['unosigla']})</td>
                             <td>3 - CUSTEIO</td>
                             <td style='text-align: right; color: red;'>" . number_format($funcionalSubunidadeSiminc[0]['ptrdotacaocusteio'], 0, ',', '.') . "</td>
                             <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][3], 0, ',', '.') . "</td>
@@ -160,7 +162,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
                     $this->htmlTabela1 .= "
                         <tr>
                             <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
-                            <td>{$funcionalSubunidadeSiminc[0]['unosigla']} - {$funcionalSubunidadeSiminc[0]['suosigla']}</td>
+                            <td>{$funcionalSubunidadeSiminc[0]['suocod']} - {$funcionalSubunidadeSiminc[0]['suosigla']}({$funcionalSubunidadeSiminc[0]['unosigla']})</td>
                             <td>4 - CAPITAL</td>
                             <td style='text-align: right; color: red;'>" . number_format($funcionalSubunidadeSiminc[0]['ptrdotacaocapital'], 0, ',', '.') . "</td>
                             <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][4], 0, ',', '.') . "</td>
@@ -180,7 +182,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
                         $this->htmlTabela1 .= "
                             <tr>
                                 <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
-                                <td>{$funcionalSubunidadeSiminc[0]['unosigla']} - {$funcionalSubunidadeSiminc[0]['unonome']}</td>
+                                <td>{$funcionalSubunidadeSiminc[0]['unocod']} - {$funcionalSubunidadeSiminc[0]['unonome']}({$funcionalSubunidadeSiminc[0]['unosigla']})</td>
                                 <td>3 - CUSTEIO</td>
                                 <td style='text-align: right; color: red;'>" . number_format($funcionalSubunidadeSiminc[0]['ptrdotacaocusteio'], 0, ',', '.') . "</td>
                                 <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][3], 0, ',', '.') . "</td>
@@ -202,7 +204,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
                         $this->htmlTabela1 .= "
                             <tr>
                                 <td>{$funcionalSubunidadeSiminc[0]['funcionalptres']}</td>
-                                <td>{$funcionalSubunidadeSiminc[0]['unosigla']} - {$funcionalSubunidadeSiminc[0]['unonome']}</td>
+                                <td>{$funcionalSubunidadeSiminc[0]['unocod']} - {$funcionalSubunidadeSiminc[0]['unonome']}({$funcionalSubunidadeSiminc[0]['unosigla']})</td>
                                 <td>4 - CAPITAL</td>
                                 <td style='text-align: right; color: red;'>" . number_format($funcionalSubunidadeSiminc[0]['ptrdotacaocapital'], 0, ',', '.') . "</td>
                                 <td style='text-align: right; color: green;'>" . number_format($listaFuncionaisSiop[$codigoFuncional][4], 0, ',', '.') . "</td>
@@ -224,8 +226,8 @@ class Planacomorc_Controller_ImportaDadosSiop{
                         $total[3] += $subunidade['ptrdotacaocusteio'];
                         $total[4] += $subunidade['ptrdotacaocapital'];
 
-                        $unidades[3][] .= "{$subunidade['unosigla']} - {$subunidade['suosigla']} (R$ " . number_format($subunidade['ptrdotacaocusteio'], 0, ',', '.') . ")";
-                        $unidades[4][] .= "{$subunidade['unosigla']} - {$subunidade['suosigla']} (R$ " . number_format($subunidade['ptrdotacaocapital'], 0, ',', '.') . ")";
+                        $unidades[3][] .= "{$subunidade['suocod']} - {$subunidade['suosigla']}({$subunidade['unosigla']}) (R$ " . number_format($subunidade['ptrdotacaocusteio'], 0, ',', '.') . ")";
+                        $unidades[4][] .= "{$subunidade['suocod']} - {$subunidade['suosigla']}({$subunidade['unosigla']}) (R$ " . number_format($subunidade['ptrdotacaocapital'], 0, ',', '.') . ")";
                     }
 
                     if(isset($listaFuncionaisSiop[$codigoFuncional][3]) && $total[3] != $listaFuncionaisSiop[$codigoFuncional][3]){
@@ -289,14 +291,14 @@ class Planacomorc_Controller_ImportaDadosSiop{
             $this->htmlTabela3 .= "
                 <tr>
                     <td class='mid'>{$dado['funcional']}</td>
-                    <td class='mid'>{$dado['unosigla']} - {$dado['suosigla']}</td>
+                    <td class='mid'>{$dado['suocod']} - {$dado['suosigla']}({$dado['unosigla']})</td>
                     <td class='mid'>{$dado['plicod']}</td>
                     <td class='mid'>{$dado['plititulo']}</td>
-                    <td class='mid'>". number_format($dado['previsto'], 0, ',', '.') . "</td>
-                    <td class='mid'>". number_format($dado['autorizado'], 0, ',', '.') . "</td>
-                    <td class='mid'>". number_format($dado['empenhado'], 0, ',', '.') . "</td>
-                    <td class='mid'>". number_format($dado['liquidado'], 0, ',', '.') . "</td>
-                    <td class='mid'>". number_format($dado['pago'], 0, ',', '.') . "</td>
+                    <td style='text-align: right; color: green;'>". number_format($dado['previsto'], 0, ',', '.') . "</td>
+                    <td style='text-align: right; color: red;'>". number_format($dado['autorizado'], 0, ',', '.') . "</td>
+                    <td style='text-align: right;'>". number_format($dado['empenhado'], 0, ',', '.') . "</td>
+                    <td style='text-align: right;'>". number_format($dado['liquidado'], 0, ',', '.') . "</td>
+                    <td style='text-align: right;'>". number_format($dado['pago'], 0, ',', '.') . "</td>
                 </tr>
             ";
             $this->boAlteracaoProvisionado = true;
@@ -316,8 +318,9 @@ class Planacomorc_Controller_ImportaDadosSiop{
             <table border='1' width='100%' style='font-size: 10px;'>
                 <thead>
                 <tr>
+                    <th>PTRES</th>
                     <th>Funcional</th>
-                    <th style='width: 75px'>Unidade</th>
+                    <th>Unidade</th>
                     <th style='text-align: right;'>Empenhado</th>
                     <th style='text-align: right;'>Liquidado</th>
                     <th style='text-align: right;'>Pago</th>
@@ -328,11 +331,12 @@ class Planacomorc_Controller_ImportaDadosSiop{
         foreach($listaDivergenciaPlanejada as $dado){
             $this->htmlTabela4 .= "
                 <tr>
+                    <td class='mid'>{$dado['ptres']}</td>
                     <td class='mid'>{$dado['funcional']}</td>
                     <td class='mid'>{$dado['subunidade']}</td>
-                    <td class='mid'>". number_format($dado['empenhado'], 0, ',', '.') . "</td>
-                    <td class='mid'>". number_format($dado['liquidado'], 0, ',', '.') . "</td>
-                    <td class='mid'>". number_format($dado['pago'], 0, ',', '.') . "</td>
+                    <td style='text-align: right;'>". number_format($dado['empenhado'], 0, ',', '.') . "</td>
+                    <td style='text-align: right;'>". number_format($dado['liquidado'], 0, ',', '.') . "</td>
+                    <td style='text-align: right;'>". number_format($dado['pago'], 0, ',', '.') . "</td>
                 </tr>
             ";
             $this->boDivergenciaPlanejada = true;
@@ -354,6 +358,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
             $remetente = '';
             $assunto = '[SIMINC2] Alterações de Dotação';
             $conteudo = $textoEmailV3;
+
             simec_email($remetente, $this->destinatarios, $assunto, $conteudo);
         }
     }

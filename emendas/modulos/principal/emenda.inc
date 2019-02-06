@@ -15,6 +15,22 @@ $filtroEmenda['exercicio'] = $_SESSION['exercicio'];
 $filtroEmenda['listaSubUnidadeUsuario'] = $listaSubUnidadeUsuario;
 
 switch ($requisicao) {
+    case 'carregarAcaoPorUo':
+        $sqlPtres = (new Monitora_Model_Ptres())->recuperarSqlCombo([
+            "'(Ptres: ' || ptres.ptres || ')'",
+            "coalesce(ptres.prgcod, '')",
+            "coalesce(ptres.acacod, '')",
+            "coalesce(ptres.loccod, '')",
+            "coalesce(acaobjetivocod, '')",
+            "coalesce(ptres.plocod, '')",
+            "acatitulo"
+            ], 
+            [
+                "plocod = 'EIND'",
+                "acao.unicod = '". (int)$_REQUEST['unicod']. "'"
+            ]);
+        echo $simec->select('ptrid', 'Funcional <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', null, $sqlPtres);
+        die;
     case 'proposta_modal':
         include 'proposta_modal.inc';
     die;
@@ -52,7 +68,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
 
-<script src="js/principal/emenda.js?v=4"></script>
+<script src="js/principal/emenda.js?v=5"></script>
 <style>
     .text-red {
         color: red !important;
@@ -95,6 +111,26 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario
                                 )));
                             echo '</div>';
+                            $sqlPtres = (new Monitora_Model_Ptres())->recuperarSqlCombo([
+                                "'(Ptres: ' || ptres.ptres || ')'",
+                                "coalesce(ptres.prgcod, '')",
+                                "coalesce(ptres.acacod, '')",
+                                "coalesce(ptres.loccod, '')",
+                                "coalesce(acaobjetivocod, '')",
+                                "coalesce(ptres.plocod, '')",
+                                "acatitulo"
+                                ], [
+                                    "plocod = 'EIND'",
+                                    "acao.unicod = '". (int)$filtroEmenda['unicod']. "'"
+                                ]);
+                            echo '<span id="span-funcional">'.
+                                $simec->select(
+                                    'ptrid',
+                                    'Funcional',
+                                    $filtroEmenda['ptrid'],
+                                    $sqlPtres
+                                ).
+                            '</span>';
                             echo $simec->select('lista_esdid', 'Situação', $filtroEmenda['lista_esdid'], Spo_Model_Unidade::queryComboEstados((object) array('tpdid' => WF_TPDID_BENEFICIARIO)), array('multiple' => 'true'));
                             $modelSiconvSituacao = new Emendas_Model_SiconvSituacao();
                             $sqlSituacaoSiconv = $modelSiconvSituacao->recuperarSqlCombo(['sitid', 'sitdsc'], NULL, 'sitid');

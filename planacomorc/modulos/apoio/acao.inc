@@ -28,6 +28,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <thead>
                             <tr class="text-center">
                                 <th style="width 5%">Ação</th>
+                                <th>Cod. UO</th>
                                 <th>Programa</th>
                                 <th>Ação</th>
                                 <th>Localizador</th>
@@ -44,6 +45,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             <td class="text-center">
                                                 <a title="Alterar" href="?modulo=apoio/acao_form&acao=A&acaid=<?php echo $dados['acaid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                             </td>
+                                            <td><?php echo $dados['unicod']; ?></td>
                                             <td><?php echo $dados['prgcod']; ?></td>
                                             <td><?php echo $dados['acacod']; ?></td>
                                             <td><?php echo $dados['loccod']; ?></td>

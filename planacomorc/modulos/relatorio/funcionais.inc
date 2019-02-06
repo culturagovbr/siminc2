@@ -24,6 +24,7 @@
     include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
+<script src="js/unidade/lista-pi-manter.js?v=5"></script>
 
 <style>
     
@@ -94,20 +95,22 @@
                                 <?php foreach($listaFuncionais as $dado): ?>
                                     <tr class="tr_<?php echo $dado['suoid']; ?> tr_detalhe">
                                         <td style="border-left: 1px black solid;">
-                                            <span class="detalhe-subunidade link" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar PIs dessa Unidade">
-                                                <?php echo $dado['unosigla']. ' (' . $dado['unocod'] . ')'; ?>
-                                            </span>
+                                            <?php echo $dado['unosigla']. ' (' . $dado['unocod'] . ')'; ?>
                                         </td>
                                         <td style="border-right: 1px black solid;">
-                                            <?php echo $dado['suonome']. ' ('. $dado['suocod']. ')'; ?>
+                                            <a class="detalhe-subunidade link" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar PIs dessa Unidade">
+                                                <?php echo $dado['suonome']. ' ('. $dado['suocod']. ')'; ?>
+                                            </a>
                                         </td>
                                         <td>
-                                            <?php echo $dado['ptres']; ?>
+                                            <a class="detalhe-funcional link" data-ptrid="<?php echo $dado['ptrid']; ?>" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar lista de PIs com essa funcional e nessa Unidade">
+                                                <?php echo $dado['ptres']; ?>
+                                            </a>
                                         </td>
                                         <td style="padding-left: 30px; border-right: 1px black solid;" >
-                                            <span class="detalhe-funcional link" data-ptrid="<?php echo $dado['ptrid']; ?>" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar lista de PIs com essa funcional">
+                                            <a class="detalhe-funcional link" data-ptrid="<?php echo $dado['ptrid']; ?>" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar lista de PIs com essa funcional e nessa Unidade">
                                                 <?php echo $dado['funcional'] . ' - ' . $dado['acatitulo'] . ': ' . $dado['plodsc'] . ' (RP ' . $dado['irpcod'] . ')'; ?>
-                                            </span>
+                                            </a>
                                             <?php if($dado['compartilhada'] > 1): ?>
                                                 &nbsp;<i class="fa fa-handshake-o link" title="Funcional Compartilhada com outras Subunidades."></i>
                                             <?php endif; ?>
@@ -155,14 +158,16 @@
 </div>
 
 <?php
-// -- popup de detalhamento do PI
-bootstrapPopup("PI's da Unidade", 'detalhe-subunidade', '', array('fechar'), array('tamanho' => 'lg'));
-bootstrapPopup("PI's da Funcional na Unidade", 'detalhe-funcional', '', array('fechar'), array('tamanho' => 'lg'));
-bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), array('tamanho' => 'lg'));
+    // -- popup de detalhamento do PI
+    bootstrapPopup("PI's da Unidade", 'detalhe-subunidade', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup("PI's da Funcional na Unidade", 'detalhe-funcional', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), array('tamanho' => 'lg'));
 ?>
 
 <script>
     $(document).ready(function(){
+
+        initLinkEspelhoPi();
 
         $('.dataTablesFuncionais').DataTable({
             bPaginate: false,
@@ -190,12 +195,12 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
         });
 
         $('.detalhe-subunidade').click(function(){
-            $('#detalhe-subunidade .modal-body').load('planacomorc.php?modulo=principal/unidade/painel&acao=A&req=detalhe-subunidade&suoid='+ $(this).data('suoid'));
+            $('#detalhe-subunidade .modal-body').load('planacomorc.php?modulo=inicio&acao=C&req=detalhe-subunidade&suoid='+ $(this).data('suoid'));
             $('#detalhe-subunidade').modal();
         });
 
         $('.detalhe-funcional').click(function(){
-            $('#detalhe-funcional .modal-body').load('planacomorc.php?modulo=principal/unidade/painel&acao=A&req=detalhe-funcional&ptrid='+ $(this).data('ptrid')+ '&suoid='+ $(this).data('suoid'));
+            $('#detalhe-funcional .modal-body').load('planacomorc.php?modulo=inicio&acao=C&req=detalhe-funcional&ptrid='+ $(this).data('ptrid')+ '&suoid='+ $(this).data('suoid'));
             $('#detalhe-funcional').modal();
         });
 
@@ -227,7 +232,7 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
     });
 
     function exibirModalDetalheGrafico(tipoGraficoSubunidade, tipoValor, sigla){
-        var urlBase = 'planacomorc.php?modulo=principal/unidade/painel&acao=A'
+        var urlBase = 'planacomorc.php?modulo=inicio&acao=C'
         if(tipoGraficoSubunidade === 1){
             var parametroTipoGrafico = '&req=detalhe-grafico-subunidade';
         } else {
@@ -239,6 +244,5 @@ bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), arr
             $('#detalhe-grafico').modal();
         }
     }
-
 
 </script>

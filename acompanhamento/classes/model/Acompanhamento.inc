@@ -104,6 +104,189 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         return [];
     }
     
+    /**
+     * Retorna lista de nomes de colunas que receberão formatação de moeda
+     * 
+     * @return array
+     */
+    public static function montarColunasFormatoMoedaRelatorioPPA(){
+        $listaColunaMoeda = array(
+            'mppquantidade',
+            'acoquantidade',
+            'previsto',
+            'provisionado',
+            'empenhado',
+            'liquidado',
+            'pago',
+        );
+        return $listaColunaMoeda;
+    }
+
+    /**
+     * Retorna lista de nomes de colunas do relatório de monitoramento PPA
+     * 
+     * @return array
+     */
+    public static function montarColunasRelatorioPPA(){
+        $listaCabecalho = array(
+            'Código da UO',
+            'Nome da UO',
+            'Código da Unidade',
+            'Nome da Unidade',
+            'Janela',
+            'Data de início da Janela',
+            'Data de encerramento da Janela',
+            'Código do Objetivo',
+            'Nome do Objetivo',
+            'Código da Meta',
+            'Nome da Meta',
+            'Descrição da Meta',
+            'Anualizável',
+            'Previsto Anualizável',
+            'Meta quantificável',
+            'Previsto PPA',
+            'Quantidade alcançada',
+            'Qtd PIs associados à Meta',
+            'Percentual de empenho',
+            'Análise Situacional',
+            'Dt. Referência',
+            'Classificação da Meta',
+            'Medidas a serem adotadas',
+            'Detalhamento das providências a serem adotadas'
+        );
+        return $listaCabecalho;
+    }
+    
+    public function consultarRelatorioAcompanhamentoPPA(stdClass $param){
+        $where = "";
+//        $where .= $param->suoid? "\n AND smp.suoid = ". (int)$param->suoid: '';
+        $where .= $param->unicod? "\n AND suo.unocod = '". $param->unicod. "'": '';
+        $where .= $param->suocod? "\n AND suo.suocod = '". $param->suocod. "'": '';
+        $where .= $param->janid? "\n AND aco.janid = ". (int)$param->janid: '';
+        $where .= $param->oppid? "\n AND om.oppid = ". (int)$param->oppid: '';
+        $where .= $param->mppid? "\n AND mpp.mppid = ". (int)$param->mppid: '';
+        
+        $sql = "
+            SELECT DISTINCT
+                suo.unocod,
+                suo.unonome,
+                suo.suocod,
+                suo.suonome,
+                jan.jandsc,
+                TO_CHAR(jan.janinicio, 'dd/mm/yyyy') AS janinicio,
+                TO_CHAR(jan.janfim, 'dd/mm/yyyy') AS janfim,
+                opp.oppcod,
+                opp.oppnome,
+                mpp.mppcod,
+                mpp.mppnome,
+                mpp.mppdsc,
+                CASE WHEN mpp.mppanualizavel IS TRUE THEN
+                    'Sim'
+		WHEN mpp.mppanualizavel IS FALSE THEN
+                    'Não'
+		ELSE
+                    NULL
+		END AS meta_anualizavel,
+		ROUND((mpp.mppquantidade / 4 * ((to_char(now(), 'YYYY')::int % 4) + 1))::NUMERIC, 2) AS mppquantidadeanualizada,
+                CASE WHEN mpp.mppquantificavel IS TRUE THEN
+                    'Sim'
+		WHEN mpp.mppquantificavel IS FALSE THEN
+                    'Não'
+		ELSE
+                    NULL
+		END AS meta_quantificavel,
+                mpp.mppquantidade AS previsto_ppa,
+                aco.acoquantidade AS quantidade_alcancada,
+                info_pi.qtd AS qtd_pis,
+		ROUND((CASE WHEN info_pi.previsto IS NOT NULL THEN
+			(info_pi.empenhado * 100) / info_pi.previsto
+		ELSE
+			0
+		END)::NUMERIC, 2) AS percentual,
+		aco.acoanalise,
+		TO_CHAR(aco.acodata, 'dd/mm/yyyy') AS acodata,
+		cla.cladsc,
+		med.meddsc,
+		aco.acoprovidencias
+            FROM public.metappa mpp
+                LEFT JOIN spo.subunidademetappa smp ON smp.mppid = mpp.mppid
+                JOIN acompanhamento.acompanhamento aco ON(
+                    aco.mppid = mpp.mppid
+                    AND acostatus = 'A'
+                )
+                JOIN public.vw_subunidadeorcamentaria suo ON aco.suoid = suo.suoid
+                JOIN public.objetivometappa om ON mpp.mppid = om.mppid -- SELECT * FROM public.objetivometappa
+                JOIN public.objetivoppa opp ON(
+                    om.oppid = opp.oppid
+                    AND opp.oppstatus = 'A'
+                    AND opp.prsano = mpp.prsano
+                    AND opp.oppcod != '0'
+                ) -- SELECT * FROM public.objetivoppa
+                LEFT JOIN acompanhamento.janela jan ON aco.janid = jan.janid -- SELECT * FROM acompanhamento.janela -- SELECT * FROM acompanhamento.tipo
+                LEFT JOIN acompanhamento.classificacao cla ON aco.claid = cla.claid
+                LEFT JOIN acompanhamento.acompanhamentomedida acm ON aco.acoid = acm.acoid
+		LEFT JOIN acompanhamento.medida med ON acm.medid = med.medid
+		LEFT JOIN(
+		    SELECT
+			pli.pliano,
+			pic.mppid,
+			suo.suoid,
+			count(pli.pliid) qtd,
+			sum(coalesce(pic.picvalorcapital, 0)) picvalorcapital,
+			sum(coalesce(pic.picvalorcusteio, 0)) picvalorcusteio,
+			sum(coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0)) previsto,
+			sum(coalesce(sex.vlrautorizado, 0)) AS provisionado,
+			sum(coalesce(sex.vlrempenhado, 0)) AS empenhado,
+			sum(coalesce(sex.vlrliquidado, 0)) AS liquidado,
+			sum(coalesce(sex.vlrpago, 0)) AS pago
+		    FROM monitora.pi_planointerno pli
+			JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+			JOIN public.vw_subunidadeorcamentaria suo ON(
+			    suo.unocod = pli.unicod
+			    AND suo.suocod = pli.ungcod
+			    AND suo.prsano = pli.pliano
+			)
+			LEFT JOIN (
+			    SELECT
+				sex.exercicio,
+				sex.plicod,
+				sum(sex.vlrautorizado) vlrautorizado,
+				sum(sex.vlrempenhado) vlrempenhado,
+				sum(sex.vlrliquidado) vlrliquidado,
+				sum(sex.vlrpago) vlrpago
+			    FROM
+				spo.siopexecucao sex
+			    WHERE
+				coalesce(sex.plicod, '') != ''
+			    GROUP BY
+				sex.exercicio,
+				sex.plicod) sex ON sex.plicod = pli.plicod
+			    AND sex.exercicio = pli.pliano
+			WHERE
+			    pli.plistatus = 'A'
+		    GROUP BY
+			pli.pliano,
+			pic.mppid,
+			suo.suoid
+		) info_pi ON(
+                    info_pi.pliano = mpp.prsano
+                    AND info_pi.mppid = mpp.mppid
+                    AND info_pi.suoid = suo.suoid
+		)
+            WHERE
+                mpp.prsano = '". (int)$param->exercicio. "'
+                AND mpp.mppstatus = 'A'
+                $where
+            ORDER BY
+                mppcod,
+                mppdsc
+        ";
+//ver($sql,d);
+        $listaResultado = $this->carregar($sql);
+
+        return $listaResultado? $listaResultado: array();
+    }
+
     public function getMetasPpaRelatorio(stdClass $param){
         $where = "";
 //        $where .= $param->suoid? "\n AND smp.suoid = ". (int)$param->suoid: '';
@@ -114,7 +297,7 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         $where .= $param->mppid? "\n AND mpp.mppid = ". (int)$param->mppid: '';
 
         $sql = "
-            SELECT
+            SELECT DISTINCT
                 aco.acoid,
                 aco.suoid,
                 aco.janid,

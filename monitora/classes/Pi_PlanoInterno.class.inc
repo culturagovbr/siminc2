@@ -86,7 +86,7 @@ class Pi_PlanoInterno extends Modelo
                 ) AS compartilhada
             FROM public.vw_subunidadeorcamentaria suo
                 JOIN spo.ptressubunidade psu on psu.suoid = suo.suoid
-                JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano
+                JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano and ptr.ptrstatus = 'A'
                 LEFT JOIN monitora.pi_planointernoptres ppt on ppt.ptrid = ptr.ptrid
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.pliid = ppt.pliid
@@ -885,13 +885,16 @@ class Pi_PlanoInterno extends Modelo
                 sum(COALESCE (lmu.lmuvlr, 0)::DECIMAL) AS valor
             FROM
                 public.vw_subunidadeorcamentaria suo
-                LEFT JOIN planacomorc.unidadegestora_limite lmu ON suo.suocod = lmu.ungcod
-                AND suo.prsano = lmu.prsano
+                LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
+			        suo.suocod = lmu.ungcod
+			        AND suo.prsano = lmu.prsano
+			        AND lmu.lmustatus = 'A'
+                )
             WHERE
                 suo.prsano = '$filtro->exercicio' {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
-                and {$filtro->unidades}
-                and suo.suostatus = 'A'
+                AND {$filtro->unidades}
+                AND suo.suostatus = 'A'
             GROUP BY
                 ordem,
                 descricao,
@@ -1699,14 +1702,14 @@ class Pi_PlanoInterno extends Modelo
 
         $sql = "
             SELECT
-                count(*) qtd,
-                sum(coalesce(pic.picvalorcapital, 0)) picvalorcapital,
-                sum(coalesce(pic.picvalorcusteio, 0)) picvalorcusteio,
-                sum(coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0)) previsto,
-                sum(coalesce(sex.vlrautorizado, 0)) AS provisionado,
-                sum(coalesce(sex.vlrempenhado, 0)) AS empenhado,
-                sum(coalesce(sex.vlrliquidado, 0)) AS liquidado,
-                sum(coalesce(sex.vlrpago, 0)) AS pago
+                COUNT(pli.pliid) qtd,
+                SUM(COALESCE(pic.picvalorcapital, 0)) picvalorcapital,
+                SUM(COALESCE(pic.picvalorcusteio, 0)) picvalorcusteio,
+                SUM(COALESCE(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0)) previsto,
+                SUM(COALESCE(sex.vlrautorizado, 0)) AS provisionado,
+                SUM(COALESCE(sex.vlrempenhado, 0)) AS empenhado,
+                SUM(COALESCE(sex.vlrliquidado, 0)) AS liquidado,
+                SUM(COALESCE(sex.vlrpago, 0)) AS pago
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
@@ -1716,25 +1719,25 @@ class Pi_PlanoInterno extends Modelo
                 )
                 LEFT JOIN (
                     SELECT
-                        sex.exercicio,
                         sex.plicod,
-                        sum(sex.vlrautorizado) vlrautorizado,
-                        sum(sex.vlrempenhado) vlrempenhado,
-                        sum(sex.vlrliquidado) vlrliquidado,
-                        sum(sex.vlrpago) vlrpago
-                    FROM
-                        spo.siopexecucao sex
+                        SUM(sex.vlrautorizado) vlrautorizado,
+                        SUM(sex.vlrempenhado) vlrempenhado,
+                        SUM(sex.vlrliquidado) vlrliquidado,
+                        SUM(sex.vlrpago) vlrpago
+                    FROM spo.siopexecucao sex
                     WHERE
-                        coalesce(sex.plicod, '') != ''
+                        sex.plicod IS NOT NULL
+                        AND sex.exercicio = '". (int)$exercicio. "'
                     GROUP BY
-                        sex.exercicio,
-                        sex.plicod) sex ON sex.plicod = pli.plicod
-                    AND sex.exercicio = pli.pliano
-                WHERE
-                    pli.plistatus = 'A'
-                    AND pli.pliano = '$exercicio'
-                    AND mppid = " . (int)$mppid . "
-                    AND suo.suoid = " . (int)$suoid;
+                        sex.plicod
+                ) sex ON(
+                    sex.plicod = pli.plicod
+                )
+            WHERE
+                pli.plistatus = 'A'
+                AND pli.pliano = '". (int)$exercicio. "'
+                AND pic.mppid = " . (int)$mppid . "
+                AND suo.suoid = " . (int)$suoid;
 
         return $this->pegaLinha($sql);
     }
