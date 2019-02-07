@@ -1,4 +1,6 @@
 <?php
+$meses = array("",  "Janeiro", "Fevereiro", "Março",  "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
+$mes = $meses[(int)date ( "m" )];
 
 include_once '../planacomorc/_funcoespi.php';
 require_once APPRAIZ . 'includes/workflow.php';
@@ -115,6 +117,12 @@ switch ($_REQUEST['req']) {
         die;
     case 'historico-alteracao':
         include APPRAIZ. 'emendas/modulos/principal/beneficiario_historico_modal.inc';
+        die;
+    case 'salvar-pedido-financeiro':
+        $cPedidoFinanceiro = new Emendas_Controller_PedidoFinanceiro();
+        echo $cPedidoFinanceiro->salvar($_REQUEST);
+    case 'historico-pedido':
+        include APPRAIZ. 'emendas/modulos/principal/pedido_financeiro_historico_modal.inc';
         die;
 }
 //ver('ok', d);
@@ -315,53 +323,73 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 </div>
                             </div>
                         </form>
-
-                        <div class="col-md-4">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h5>Observações</h5>
-                                </div>
-                                <div class="ibox-content">
-                                    <div id="div_formulario_observacao">
-                                        <?php if($mBeneficiario->benid){
-                                          $cBeneficiario->montarFormularioObservacao($mBeneficiario->benid);
-                                        } ?>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Observações</h5>
                                     </div>
-                                    <div id="div_listagem_observacao">
-                                        <?php
-                                        # Busca perfis do usuário logado
-                                        $cBeneficiario->montarListagemObservacao($mBeneficiario->benid, $podeEditar);
-                                         ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-8">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                        <h5> Dados Financeiros -
+                                    <div class="ibox-content">
+                                        <div id="div_formulario_observacao">
+                                            <?php if($mBeneficiario->benid){
+                                              $cBeneficiario->montarFormularioObservacao($mBeneficiario->benid);
+                                            } ?>
+                                        </div>
+                                        <div id="div_listagem_observacao">
                                             <?php
-                                                if($beneficiario->funcional){
-                                                    echo "<b>PTRES</b>: " .$beneficiario->ptres . "&nbsp; <b>Funcional</b>:" . $beneficiario->funcional ;
-                                                }
-                                            ?>
-                                            <span class="campo-obrigatorio" title="Campo obrigatório">*</span>
-                                        </h5>
-                                </div>
-                                <div class="ibox-content">
-                                    <div id="div_formulario_detalhe">
-                                        <?php if($podeEditar && $mBeneficiario->benid){
-                                            $cBeneficiario->montarFormularioDetalhe($mBeneficiario->emeid, $mBeneficiario->benid, null);
-                                        } ?>
+                                            # Busca perfis do usuário logado
+                                            $cBeneficiario->montarListagemObservacao($mBeneficiario->benid, $podeEditar);
+                                             ?>
+                                        </div>
                                     </div>
-                                    <div id="div_listagem_detalhe">
-                                        <?php $cBeneficiario->montarListagemDetalhe($mBeneficiario->benid, $podeEditar); ?>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                            <h5> Dados Financeiros -
+                                                <?php
+                                                    if($beneficiario->funcional){
+                                                        echo "<b>PTRES</b>: " .$beneficiario->ptres . "&nbsp; <b>Funcional</b>:" . $beneficiario->funcional ;
+                                                    }
+                                                ?>
+                                                <span class="campo-obrigatorio" title="Campo obrigatório">*</span>
+                                            </h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div id="div_formulario_detalhe">
+                                            <?php if($podeEditar && $mBeneficiario->benid){
+                                                $cBeneficiario->montarFormularioDetalhe($mBeneficiario->emeid, $mBeneficiario->benid, null);
+                                            } ?>
+                                        </div>
+                                        <div id="div_listagem_detalhe">
+                                            <?php $cBeneficiario->montarListagemDetalhe($mBeneficiario->benid, $podeEditar); ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        <?php if ($mBeneficiario->benid){?>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Pedido de Financeiro <?= strtoupper($mes);?></h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div id="div_formulario_observacao">
+                                            <?php if($mBeneficiario->benid){
+                                              $cBeneficiario->montarFormularioPedidoFinanceiro($mBeneficiario->benid);
+                                            } ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                        }
+                        ?>
                         <div class="col-md-12 dados-siconv">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">

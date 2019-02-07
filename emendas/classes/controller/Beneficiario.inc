@@ -77,6 +77,13 @@ class Emendas_Controller_Beneficiario
         $mBeneficiarioObservacao->bobdata = $mBeneficiarioObservacao->bobdata ? $mBeneficiarioObservacao->bobdata : date('d/m/Y');
         include_once APPRAIZ . 'emendas/modulos/principal/beneficiarioobservacao_form.inc';
     }
+    
+    public function montarFormularioPedidoFinanceiro($benid)
+    {
+        global $simec;
+        $mBeneficiarioPedidoFinanceiro = (new Emendas_Model_PedidoFinanceiro())->recuperaPedidoFinanceiroPorBenidPorPeriodo($benid);
+        include_once APPRAIZ . 'emendas/modulos/principal/beneficiario_pedidofinanceiro_form.inc';
+    }
 
     public function montarListagemObservacao($benid, $podeEditar)
     {
