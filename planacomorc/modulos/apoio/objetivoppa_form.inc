@@ -58,7 +58,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
                         <?php
                         echo $simec->input('oppcod', 'Código', $mObjetivoppa->oppcod, ['required', 'class'=>'inteiro','maxlength' => 4]);
-                        echo $simec->input('oppnome', 'Nome', $mObjetivoppa->oppnome , ['required', 'maxlength' => 250]);
+                        echo $simec->input('oppnome', 'Nome', $mObjetivoppa->oppnome , ['required', 'maxlength' => 200]);
                         echo $simec->input('oppdsc', 'Descricão', $mObjetivoppa->oppdsc, ['required', 'maxlength' => 250]);
                         ?>
                         <div class="form-group">
