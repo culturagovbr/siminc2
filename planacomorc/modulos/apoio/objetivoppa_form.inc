@@ -152,7 +152,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     </form>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
 </div>
 <div class="modal fade" id="cadastro-metas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

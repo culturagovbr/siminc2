@@ -88,10 +88,10 @@ class Public_Model_ObjetivoMetaPpa extends Modelo
         $sql = "delete from ".$this->stNomeTabela." where oppid = ".$oppid;
         return $this->executar($sql);
     }
-    
-    public function salvarMetas($mppid, $oppid){
+
+    public function salvarMetas($mppid, $oppid)
+    {
         $sql = "insert into ".$this->stNomeTabela." (oppid, mppid, mpodata) values(".$oppid.", ".$mppid.", now())";
         return $this->executar($sql);
     }
-}//end Class
-?>
+}
