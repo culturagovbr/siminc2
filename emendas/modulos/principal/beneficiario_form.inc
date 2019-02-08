@@ -375,7 +375,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <div class="col-md-4">
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title">
-                                        <h5>Pedido de Financeiro <?= strtoupper($mes);?></h5>
+                                        <h5>Pedido de Financeiro <?= strtoupper($mes);?></h5> <a style="font-size: 2.4em; margin-left: 10px;" class="fa fa-history"id="btn-historico-pedido" title="Histórico de alterações"></a>
                                     </div>
                                     <div class="ibox-content">
                                         <div id="div_formulario_observacao">

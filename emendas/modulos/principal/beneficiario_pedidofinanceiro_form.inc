@@ -57,7 +57,6 @@
         <div class="form-group col-sm-12">
             <div class="text-center">
                 <button class="btn btn-primary" type="button" id="btn-salvar-pedido"><i class="fa fa-check"></i>&nbsp;Salvar</button>
-                <button class="btn btn-primary" type="button" id="btn-historico-pedido"><i class="fa fa-history"></i>&nbsp;Histórico</button>
             </div>
         </div>
     </div>

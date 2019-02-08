@@ -105,6 +105,8 @@ class Emendas_Model_PedidoFinanceiro extends Modelo
                        pf.nromesreferencia,
                        pf.vinid,
                        u.usunome,
+                       u.usuemail,
+                       u.usufonenum,
                        v.vindsc
                   from emendas.pedido_financeiro pf
                  inner join seguranca.usuario u

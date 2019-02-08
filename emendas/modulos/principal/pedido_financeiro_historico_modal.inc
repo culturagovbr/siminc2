@@ -9,6 +9,8 @@ $historico = (new Emendas_Model_PedidoFinanceiro())->recuperaPedidoFinanceiroPor
                 <tr class="text-center">
                     <th width="5px" style="border-right: 1px black solid;">Data</th>
                     <th width="50px" style="border-right: 1px black solid;">Usuário</th>
+                    <th width="50px" style="border-right: 1px black solid;">e-mail</th>
+                    <th width="50px" style="border-right: 1px black solid;">Telefone</th>
                     <th width="1px" style="border-right: 1px black solid;">Vl. Custeio</th>
                     <th width="1px" style="border-right: 1px black solid;">Vl. Capital</th>
                     <th width="1px" style="border-right: 1px black solid;">Vinculação</th>
@@ -23,6 +25,12 @@ $historico = (new Emendas_Model_PedidoFinanceiro())->recuperaPedidoFinanceiroPor
                         </td>
                         <td style="border-right: 1px black solid; width: 30%; text-align: left;" class="text-right">
                             <?= $lista['usunome']; ?>
+                        </td>
+                        <td style="border-right: 1px black solid; width: 30%; text-align: left;" class="text-right">
+                            <?= $lista['usuemail']; ?>
+                        </td>
+                        <td style="border-right: 1px black solid; width: 30%; text-align: left;" class="text-right">
+                            <?= $lista['usufonenum']; ?>
                         </td>
                         <td style="border-right: 1px black solid; width: 30%; text-align: left;" class="text-right">
                             <?= $lista['vlcusteiopedido']; ?>
