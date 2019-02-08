@@ -17,9 +17,6 @@ switch ($_REQUEST['req']) {
     case 'excluir-iniciativa':
         $cIniciativappa->excluir($_REQUEST);
         die;
-    case 'carregar-listagem-metas':
-        $aMetappa = (new Public_Model_MetaPpa)->recuperarTodos('*' , ["prsano = '{$_SESSION['exercicio']}'"]);
-        die;
     case 'carregar-form-metappa':
         $mMetappa = new Public_Model_MetaPpa($_REQUEST['mppid']);
         include_once 'cadastro_meta_ppa.inc';
@@ -28,7 +25,7 @@ switch ($_REQUEST['req']) {
         $cObjetivoppa->salvarMetas($_REQUEST);
         die;
     case 'excluir-meta':
-        $cObjetivoppa->excluirMetas($_REQUEST['mppid']);
+        $cObjetivoppa->excluirMetas($_REQUEST);
         die;        
 }
 
@@ -73,7 +70,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     if ($mObjetivoppa->oppid!=''){
                                         $aVinculos = (new Public_Model_ObjetivoMetaPpa())->recuperarPorExercicio($_SESSION['exercicio'], $mObjetivoppa->oppid);
                                     }
-                                    $aMetaPpa = simec_preparar_array((new Public_Model_MetaPpa())->recuperarTodos("mppid as codigo, mppcod || ' - ' || mppnome as descricao", ["prsano = '{$_SESSION['exercicio']}'"]));
+                                    $aMetaPpa = simec_preparar_array((new Public_Model_MetaPpa())->recuperarTodos("mppid as codigo, mppcod || ' - ' || mppnome as descricao", ["mppstatus = 'A'","prsano = '{$_SESSION['exercicio']}'"]));
                                     echo $simec->select("mppid[]", null, $aVinculos, $aMetaPpa, null, ['input-size'=>12]);?>
                                 </div>                            
                                 <div class="col-md-3" style="text-align: right;">
@@ -106,11 +103,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <input name="oppid" id="oppid" type="hidden" value="<?php echo $mObjetivoppa->oppid; ?>">
 
                         <?php
-                        if ($mObjetivoppa->oppid!=''){
-                            echo $simec->input('ippcod', 'Código', $mIniciativappa->ippcod, ['required', 'class'=> 'upper-text', 'maxlength' => 4]);
-                            echo $simec->input('ippnome', 'Nome', $mIniciativappa->ippnome , ['required', 'maxlength' => 250]);
-                            echo $simec->input('ippdsc', 'Descricão', $mIniciativappa->ippdsc, ['maxlength' => 250]);
-                        }
+                            if ($mObjetivoppa->oppid!=''):
+                                echo $simec->input('ippcod', 'Código', $mIniciativappa->ippcod, ['required', 'class'=> 'upper-text', 'maxlength' => 4]);
+                                echo $simec->input('ippnome', 'Nome', $mIniciativappa->ippnome , ['required', 'maxlength' => 250]);
+                                echo $simec->input('ippdsc', 'Descricão', $mIniciativappa->ippdsc, ['maxlength' => 250]);
                         ?>
 
                         <div class="form-group">
@@ -119,6 +115,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </div>
                         </div>
                         <?php
+                            endif;
                         $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
                         if($mIniciativappa): ?>
                             <div class="table-responsive" id="lista-segmento">
@@ -136,7 +133,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             <td class="text-center">
                                                 <a title="Alterar" class="editar-iniciativa" href="javascript:alterarIniciativa(<?= $dados['ippid'];?>,'<?= $dados['ippcod'];?>','<?= $dados['ippdsc'];?>', '<?= $dados['ippnome'];?>')"><i class="fa fa-pencil"></i></a>
                                                 <?php if($podeEditar) { ?>
-                                                    <a title="excluir iniciativa" name="req" value="excluir-iniciativa" id="excluir-segmento" href="?modulo=apoio/objetivoppa_form&acao=A&req=excluir-iniciativa&ippid=<?= $dados['ippid'];?>&oppid=<?= $dados['oppid'];?>" style="margin-left: 5px;"><i class="fa fa-close"></i></a>
+                                                    <a class="excluir-iniciativa" title="excluir iniciativa" name="req" data-values="ippid=<?= $dados['ippid'];?>&oppid=<?= $dados['oppid'];?>" style="margin-left: 5px;"><i class="fa fa-close"></i></a>
                                                 <?php } ?>
                                             </td>
                                             <td style=" text-align: center"><?= $dados['ippcod']; ?></td>
@@ -196,5 +193,23 @@ include APPRAIZ . "includes/cabecalho.inc";
     function alterarCamposMeta(mppid, oppid) {
         $('#form_metappa').load('planacomorc.php?modulo=apoio/objetivoppa_form&acao=A&req=carregar-form-metappa&mppid='+ mppid+'&oppid='+ oppid);
     }
+
+    $('.excluir-iniciativa').click(function () {
+
+        var ippidoppid = $(this).attr('data-values');
+
+        swal({
+                title: "Atenção!",
+                text: "Deseja realmente excluir o registro?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim, estou certo!",
+                closeOnConfirm: true
+            },
+            function(){
+                window.location.href = '?modulo=apoio/objetivoppa_form&acao=A&req=excluir-iniciativa&' + ippidoppid;
+            });
+    });
 
 </script>

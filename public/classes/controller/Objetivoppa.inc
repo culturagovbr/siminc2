@@ -47,9 +47,11 @@ class Public_Controller_Objetivoppa
         $mdObjetivoMetappa = new Public_Model_ObjetivoMetaPpa();
         $mppid = $_REQUEST['mppid'];
         $mdObjetivoMetappa->excluirPorObjetivo($oppid);
-        foreach($mppid as $value){
-            $mdObjetivoMetappa->salvarMetas($value, $oppid);
-        }
+        if($mppid):
+            foreach($mppid as $value):
+                $mdObjetivoMetappa->salvarMetas($value, $oppid);
+            endforeach;
+        endif;
     }
 
     public function excluir($oppid)
@@ -67,4 +69,20 @@ class Public_Controller_Objetivoppa
             simec_redirecionar($url, 'error');
         }
     }
+
+    public function excluirMetas($dados)
+    {
+        $url = '?modulo=apoio/objetivoppa_form&acao=A&oppid='. $dados['oppid'];
+        try {
+            $mMetappa = new Public_Model_MetaPpa($dados['oppid']);
+            $mMetappa->mppstatus = 'I';
+            $mMetappa->salvar();
+            $mMetappa->commit();
+            simec_redirecionar($url, 'success');
+        } catch (Exception $e){
+            $mMetappa->rollback();
+            simec_redirecionar($url, 'error');
+        }
+    }
+
 }
