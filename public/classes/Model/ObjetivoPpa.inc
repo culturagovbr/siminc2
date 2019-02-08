@@ -74,9 +74,10 @@ class Public_Model_ObjetivoPpa extends Modelo
             FROM public.objetivoppa
             WHERE
                 oppstatus = 'A'
-                AND prsano = '{$where['exercicio']}'
+                AND prsano = '".(int)$where['exercicio']."'
             ORDER BY
-                oppcod";
+                oppcod
+        ";
         return $sql;
       }
 

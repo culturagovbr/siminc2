@@ -1,5 +1,5 @@
 <?php
-// ver($_REQUEST,d);
+
 $cObjetivoppa = new Public_Controller_Objetivoppa();
 $cIniciativappa = new Public_Controller_Iniciativappa();
 $cMetappa = new Public_Controller_Metappa();
@@ -32,7 +32,8 @@ switch ($_REQUEST['req']) {
         die;        
 }
 
-$mMetappa = (new Public_Model_MetaPpa)->recuperarTodos('*' , ["prsano = '{$_SESSION['exercicio']}'"]);
+$arrMetappa = (new Public_Model_MetaPpa)->recuperarTodos('*' , ["mppstatus = 'A'","prsano = '{$_SESSION['exercicio']}'"]);
+
 $mObjetivoppa = new Public_Model_ObjetivoPpa($_REQUEST['oppid']);
 if ($mObjetivoppa->oppid!=''){
     $mIniciativappa = (new Public_Model_IniciativaPpa())->recuperarTodos('*', ["prsano = '{$_SESSION['exercicio']}'", "ippstatus = 'A'", " oppid = {$_REQUEST['oppid']}"]);
@@ -71,7 +72,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     $aVinculos = [];
                                     if ($mObjetivoppa->oppid!=''){
                                         $aVinculos = (new Public_Model_ObjetivoMetaPpa())->recuperarPorExercicio($_SESSION['exercicio'], $mObjetivoppa->oppid);
-                                    }                        
+                                    }
                                     $aMetaPpa = simec_preparar_array((new Public_Model_MetaPpa())->recuperarTodos("mppid as codigo, mppcod || ' - ' || mppnome as descricao", ["prsano = '{$_SESSION['exercicio']}'"]));
                                     echo $simec->select("mppid[]", null, $aVinculos, $aMetaPpa, null, ['input-size'=>12]);?>
                                 </div>                            
@@ -109,7 +110,6 @@ include APPRAIZ . "includes/cabecalho.inc";
                             echo $simec->input('ippcod', 'Código', $mIniciativappa->ippcod, ['required', 'class'=> 'upper-text', 'maxlength' => 4]);
                             echo $simec->input('ippnome', 'Nome', $mIniciativappa->ippnome , ['required', 'maxlength' => 250]);
                             echo $simec->input('ippdsc', 'Descricão', $mIniciativappa->ippdsc, ['maxlength' => 250]);
-                            // ver($mObjetivoppa->oppid);
                         }
                         ?>
 
