@@ -8,7 +8,7 @@
 
 O SIMINC2 é uma customização do Sistema Integrado de Planejamento Orçamento e Finanças - [SIMEC](https://softwarepublico.gov.br/social/simec/), solução desenvolvida inicialmente pelo Ministério da Educação e compartilhada como Software Público com diversos órgãos públicos.
 
-Em 2012 o Ministério da Cultura implantou o SIMEC e realizou diversas customizações, batizando-o de SIMINC. Em 2015 o MinC viu a necessidade de atualizar a versão do software e de qualificar o processo de desenvolvimento, evitando futuros conflitos de versões. Para isso o MEC forneceu uma nova cópia do código mais atual e o MinC iniciou um novo ciclo de customizações de maneira a possibilitar o retorno do código novo ao MEC e reduzir o esforço de outros órgãos que também desejarem utilizá-lo. Esta versão foi batizada de [SIMINC2](http://siminc2.cultura.gov.br/) e desde então vem sendo desenvolvida abertamente aqui no Github.
+Em 2012 o Ministério da Cidadania implantou o SIMEC e realizou diversas customizações, batizando-o de SIMINC. Em 2015 o MC viu a necessidade de atualizar a versão do software e de qualificar o processo de desenvolvimento, evitando futuros conflitos de versões. Para isso o MEC forneceu uma nova cópia do código mais atual e o MC iniciou um novo ciclo de customizações de maneira a possibilitar o retorno do código novo ao MEC e reduzir o esforço de outros órgãos que também desejarem utilizá-lo. Esta versão foi batizada de [SIMINC2](http://siminc2.cultura.gov.br/) e desde então vem sendo desenvolvida abertamente aqui no Github.
 
 Estas são documentações sobre o processo de desenvolvimento do SIMINC2, versionameno e publicação:
 
