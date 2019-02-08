@@ -1,8 +1,6 @@
 <?php
 
-// $aObjetivoppa = (new Public_Model_ObjetivoPpa())->recuperarTodos('*', ["oppstatus = 'A'","prsano = '{$_SESSION['exercicio']}'"], 'oppdsc');
-$sqlObjetivo = (new Public_Model_ObjetivoPpa())->recuperarSqlCombo();
-$aObjetivoppa = $db->carregar($sqlObjetivo);
+ $aObjetivoppa = (new Public_Model_ObjetivoPpa())->recuperarTodos("oppid, oppcod || ' - ' || oppnome AS descricao, oppcod", ["oppstatus = 'A'","prsano = '{$_SESSION['exercicio']}'"], 'oppcod');
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
@@ -27,26 +25,28 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
-                            <tr class="text-center">
-                                <th width="5%">Ação</th>
-                                <th>Descrição</th>
-                            </tr>
+                                <tr class="text-center">
+                                    <th width="5%">Ação</th>
+                                    <th>Descrição</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <?php
+                                <?php
                                 if($aObjetivoppa):
                                     foreach ($aObjetivoppa as $dados):
-                            ?>
-                                        <tr>
-                                            <td class="text-center">
-                                                <a title="Alterar"
-                                                   href="planacomorc.php?modulo=apoio/objetivoppa_form&acao=A&oppid=<?php echo $dados['codigo']; ?>"><i
-                                                            class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
-                                            </td>
-                                            <td><?php echo $dados['descricao']; ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
+                                ?>
+                                    <tr>
+                                        <td class="text-center">
+                                            <a title="Alterar"
+                                               href="planacomorc.php?modulo=apoio/objetivoppa_form&acao=A&oppid=<?= $dados['oppid']; ?>">
+                                                <i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i>
+                                            </a>
+                                        </td>
+                                        <td><?= $dados['descricao']; ?></td>
+                                    </tr>
+                                <?php
+                                    endforeach;
+                                endif; ?>
                             </tbody>
                         </table>
                     </div>

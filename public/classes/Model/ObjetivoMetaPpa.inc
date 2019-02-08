@@ -64,14 +64,16 @@ class Public_Model_ObjetivoMetaPpa extends Modelo
 
     public function recuperarPorExercicio($exercicio, $oppid)
     {
-        $sql = "select m.mppid as codigo
-                  from public.metappa m
-                 inner join public.objetivometappa om
-                    on m.mppid = om.mppid
-                 inner join public.objetivoppa o
-                    on om.oppid = o.oppid
-                 where o.prsano = '2018'
-                   and o.oppid = ".$oppid;
+        $sql = "
+            SELECT
+                m.mppid as codigo
+            FROM public.metappa AS m
+            JOIN public.objetivometappa AS om ON (m.mppid = om.mppid)
+            JOIN public.objetivoppa AS o on (om.oppid = o.oppid)
+            WHERE
+                o.prsano = '". (int)$exercicio ."'
+                AND o.oppid = '". (int)$oppid ."'
+        ";
         $dados = $this->carregar($sql);
         $dados = $dados ? $dados : [];
 
@@ -86,10 +88,10 @@ class Public_Model_ObjetivoMetaPpa extends Modelo
         $sql = "delete from ".$this->stNomeTabela." where oppid = ".$oppid;
         return $this->executar($sql);
     }
-    
-    public function salvarMetas($mppid, $oppid){
+
+    public function salvarMetas($mppid, $oppid)
+    {
         $sql = "insert into ".$this->stNomeTabela." (oppid, mppid, mpodata) values(".$oppid.", ".$mppid.", now())";
         return $this->executar($sql);
     }
-}//end Class
-?>
+}

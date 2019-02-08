@@ -9,16 +9,20 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach($mMetappa as $dados){ ?>
-        <tr>
-            <td class="text-center">
-                <a title="Alterar" href="javascript:alterarCamposMeta(<?= $dados['mppid'] ?>,'<?= $_REQUEST['oppid'] ?>');"><i class="fa fa-pencil"></i></a>
-            </td>
-            <td><?php echo $dados['mppcod']; ?></td>
-            <td><?php echo $dados['mppnome']; ?></td>
-            <td><?php echo $dados['mppquantificavel'] == 't'? 'Sim': 'Não'; ?></td>
-            <td><?php echo $dados['mppquantidade']; ?></td>
-        </tr>
-    <?php } ?>
+    <?php
+        if($arrMetappa):
+            foreach($arrMetappa as $meta): ?>
+            <tr>
+                <td class="text-center">
+                    <a title="Alterar" href="javascript:alterarCamposMeta(<?= $meta['mppid'] ?>,'<?= $_REQUEST['oppid'] ?>');"><i class="fa fa-pencil"></i></a>
+                </td>
+                <td><?= $meta['mppcod']; ?></td>
+                <td><?= $meta['mppnome']; ?></td>
+                <td><?= $meta['mppquantificavel'] == 't'? 'Sim': 'Não'; ?></td>
+                <td><?= $meta['mppquantidade']; ?></td>
+            </tr>
+        <?php
+            endforeach;
+        endif; ?>
     </tbody>
 </table>

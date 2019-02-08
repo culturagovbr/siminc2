@@ -17,8 +17,8 @@ class Public_Controller_Iniciativappa
             $mdObjetivoppa->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
-    
+    }
+
     public function excluir($dados)
     {
         $url = "?modulo=apoio/objetivoppa_form&acao=A&oppid=".$dados['oppid'];
