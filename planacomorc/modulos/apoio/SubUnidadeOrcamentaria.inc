@@ -4,6 +4,7 @@
             <thead>
             <tr class="text-center">
                 <th width="10%">Ações</th>
+                <th>Código</th>
                 <th>Sub-Unidade Orçamentaria</th>
                 <th>Sigla</th>
                 <th>Cód. PI</th>
@@ -22,6 +23,7 @@
                           </a>
                         <?php endif; ?>
                     </td>
+                    <td><?php echo $dados['suocod']; ?></td>
                     <td><?php echo $dados['suonome']; ?></td>
                     <td><?php echo $dados['suosigla']; ?></td>
                     <td><?php echo $dados['suocodigopi']; ?></td>

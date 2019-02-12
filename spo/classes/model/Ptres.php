@@ -95,18 +95,18 @@ class Spo_Model_Ptres extends Modelo
     public function recuperarPtresSubunidade($prsano, $tipo = null)
     {
         switch ($tipo){
-            # Somente Vinculadas
-            case 'V':
-                $where = "AND uo.unocod NOT IN('". (int)UNICOD_MINC. "', '". (int)UNICOD_FNC. "')";
-                break;
             # Somente Administração Direta
             case 'D':
-                $where = "AND uo.unocod IN('". (int)UNICOD_MINC. "')";
+                $where = "AND uo.unocod IN('". (int)UNICOD_MC. "', '". (int)UNICOD_DS. "', '". (int)UNICOD_MINC. "', '". (int)UNICOD_ES. "')";
+                break;
+            # Somente Vinculadas
+            case 'V':
+                $where = "AND uo.unocod NOT IN('". (int)UNICOD_MC. "', '". (int)UNICOD_DS. "', '". (int)UNICOD_MINC. "', '". (int)UNICOD_ES. "')";
                 break;
             # Somente Fundo
             case 'F':
                 $where = "
-                    AND uo.unocod IN('". (int)UNICOD_FNC. "')
+                    AND uo.unocod IN('". (int)UNICOD_FNC. "', '". (int)UNICOD_FRGPS. "')
                     AND uo.unofundo IS FALSE
                     UNION ALL
                     SELECT DISTINCT
@@ -140,7 +140,7 @@ class Spo_Model_Ptres extends Modelo
                         ptrano = '". (int)$prsano. "'
                         AND p.ptrstatus = 'A'
                         AND p.plocod NOT LIKE 'E%'
-                        AND uo.unocod IN('". (int)UNICOD_FNC. "')
+                        AND uo.unocod IN('". (int)UNICOD_FNC. "', '". (int)UNICOD_FRGPS. "')
                         AND uo.unofundo IS TRUE
                 ";
                 break;
