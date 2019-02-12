@@ -9,7 +9,7 @@
             $cPtres->excluir($_REQUEST['ptrid']);
             die;
         case 'carregarAcaoPorUo':
-            echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(['prgcod', 'acacod', 'acaobjetivocod', 'loccod', 'acatitulo'], ["unicod = '". $_REQUEST['unicod']. "'"]), ['required']);
+            echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(["COALESCE(prgcod, '')", "COALESCE(acacod, '')", "COALESCE(acaobjetivocod, '')", "COALESCE(loccod, '')", "COALESCE(acatitulo, '')"], ["unicod = '". $_REQUEST['unicod']. "'"]), ['required']);
             die;
     }
 
