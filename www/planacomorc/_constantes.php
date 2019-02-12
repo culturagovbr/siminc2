@@ -77,7 +77,11 @@ define("EBSERH", 26443);
 define("FIES", 74902);
 define("SUPERVISAOMEC", 73107);
 define("UNICOD_FNC", 42902);
+define("UNICOD_FRGPS", 55902);
+define("UNICOD_MC", 55101);
+define("UNICOD_DS", 55101);
 define("UNICOD_MINC", 42101);
+define("UNICOD_ES", 51101);
 define("SUOCOD_ASCOM", 420017);
 define("SUOCOD_ANCINE", 203003);
 
