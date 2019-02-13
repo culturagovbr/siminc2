@@ -120,12 +120,13 @@ switch ($_REQUEST['req']) {
         die;
     case 'salvar-pedido-financeiro':
         $cPedidoFinanceiro = new Emendas_Controller_PedidoFinanceiro();
-        echo $cPedidoFinanceiro->salvar($_REQUEST);
-    case 'historico-pedido':
+        $cPedidoFinanceiro->salvar($_REQUEST);
+        die;
+    case 'historico-financeiro':
         include APPRAIZ. 'emendas/modulos/principal/pedido_financeiro_historico_modal.inc';
         die;
 }
-//ver('ok', d);
+
 $mBeneficiario = new Emendas_Model_Beneficiario($_REQUEST['benid']);
 $beneficiario = (object)$mBeneficiario->buscarBeneficiario($mBeneficiario->benid);
 $convenio = (new Monitora_Model_CategoriaApropriacao())->recuperarTodos('*', ["capstatus = 'A'",  "capdsc = 'Convênio'", "capano = '{$_SESSION['exercicio']}'"]);
@@ -375,7 +376,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <div class="col-md-4">
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title">
-                                        <h5>Pedido de Financeiro <?= strtoupper($mes);?></h5> <a style="font-size: 2.4em; margin-left: 10px;" class="fa fa-history"id="btn-historico-pedido" title="Histórico de alterações"></a>
+                                        <h5>Pedido de Financeiro <?= strtoupper($mes);?></h5> <a style="font-size: 2.4em; margin-left: 10px;" class="fa fa-history" id="btn-historico-financeiro" title="Histórico de alterações de Pedido Financeiro"></a>
                                     </div>
                                     <div class="ibox-content">
                                         <div id="div_formulario_observacao">

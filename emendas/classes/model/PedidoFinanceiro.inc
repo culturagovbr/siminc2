@@ -93,28 +93,29 @@ class Emendas_Model_PedidoFinanceiro extends Modelo
                    and benid = ".$benid;
         return $this->pegaUm($sql);
     }
-    
+
     Public Function recuperaPedidoFinanceiroPorBenid($benid){
-        $sql = "select pf.pefid,
-                       pf.benid,
-                       to_char(pf.dtcadastro,'DD/MM/YYYY') as dtcadastro,
-                       pf.usucpf,
-                       pf.vlcusteiopedido,
-                       pf.vlcapitalpedido,
-                       pf.nroanoreferencia,
-                       pf.nromesreferencia,
-                       pf.vinid,
-                       u.usunome,
-                       u.usuemail,
-                       u.usufonenum,
-                       v.vindsc
-                  from emendas.pedido_financeiro pf
-                 inner join seguranca.usuario u
-                    on pf.usucpf = u.usucpf
-                  left join emendas.vinculacao v
-                    on pf.vinid = v.vinid
-                 where pf.benid = ".$benid;
+        $sql = "
+            SELECT
+                pf.pefid,
+                pf.benid,
+                to_char(pf.dtcadastro,'DD/MM/YYYY') AS dtcadastro,
+                pf.usucpf,
+                pf.vlcusteiopedido,
+                pf.vlcapitalpedido,
+                pf.nroanoreferencia,
+                pf.nromesreferencia,
+                pf.vinid,
+                u.usunome,
+                u.usuemail,
+                '(' || u.usufoneddd ||') '|| u.usufonenum AS telefone,
+                v.vindsc
+            FROM emendas.pedido_financeiro AS pf
+            JOIN seguranca.usuario AS u
+                    ON pf.usucpf = u.usucpf
+            LEFT JOIN emendas.vinculacao v ON pf.vinid = v.vinid
+            WHERE
+                pf.benid = ".$benid;
         return (object)$this->carregar($sql);
     }
-}//end Class
-?>
+}

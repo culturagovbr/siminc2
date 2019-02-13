@@ -81,7 +81,7 @@ class Emendas_Controller_Beneficiario
     public function montarFormularioPedidoFinanceiro($benid)
     {
         global $simec;
-        $mBeneficiarioPedidoFinanceiro = (new Emendas_Model_PedidoFinanceiro())->recuperaPedidoFinanceiroPorBenidPorPeriodo($benid);
+        $PedidoFinanceiro = (new Emendas_Model_PedidoFinanceiro())->recuperaPedidoFinanceiroPorBenidPorPeriodo($benid);
         include_once APPRAIZ . 'emendas/modulos/principal/beneficiario_pedidofinanceiro_form.inc';
     }
 
