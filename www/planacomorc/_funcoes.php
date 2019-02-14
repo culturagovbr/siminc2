@@ -1497,7 +1497,7 @@ function buscarPTRES(stdClass $filtros) {
 	    JOIN monitora.pi_planointerno pi ON(pip.pliid = pi.pliid)
             JOIN monitora.acao aca ON(ptr.acaid = aca.acaid)
             JOIN public.vw_subunidadeorcamentaria uni ON(aca.unicod = uni.unocod AND uni.suocod = pi.ungcod AND uni.prsano = aca.prgano) -- SELECT * FROM public.vw_subunidadeorcamentaria
-            JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
+            LEFT JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
             LEFT JOIN (
                 SELECT
                     pip.ptrid,
