@@ -100,6 +100,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             <input type="checkbox" class="marcar-todos-ptres" marcar="check_<?php echo $tipo; ?>" checked>
                                         </th>
                                         <th>PTRES</th>
+                                        <th>UO</th>
                                         <th>Prog</th>
                                         <th>Ação</th>
                                         <th>Local.</th>
@@ -118,6 +119,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                         <input type="checkbox" class="vincular check_<?php echo $tipo; ?>" data-ptrid="<?php echo $dados['ptrid']; ?>" data-unofundo="<?php echo $dados['unofundo']; ?>" data-suoid="<?php echo $dados['suoid']; ?>" <?php echo $checked; ?> />
                                                     </td>
                                                     <td><?php echo $dados['ptres']; ?></td>
+                                                    <td><?php echo $dados['unicod']; ?></td>
                                                     <td><?php echo $dados['prgcod']; ?></td>
                                                     <td><?php echo $dados['acacod']; ?></td>
                                                     <td><?php echo $dados['loccod']; ?></td>
