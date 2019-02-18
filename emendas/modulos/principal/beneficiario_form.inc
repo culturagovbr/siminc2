@@ -5,10 +5,11 @@ require_once APPRAIZ . 'includes/workflow.php';
 
 $cBeneficiario = new Emendas_Controller_Beneficiario();
 $cBeneficiarioObservacao = new Emendas_Controller_BeneficiarioObservacao();
+$cBeneficiarioNotaEmpenho = new Emendas_Controller_NotaEmpenho();
 
 $perfis = pegaPerfilGeral();
 $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
-//$podeEditar = TRUE;
+//$podeEditar = FALSE;
 $configPodeEditar = array('pode-editar' => $podeEditar? 'S': 'N');
 
 switch ($_REQUEST['req']) {
@@ -32,6 +33,18 @@ switch ($_REQUEST['req']) {
         die;
     case 'excluir-observacao':
         echo $cBeneficiarioObservacao->excluir($_REQUEST['bobid']);
+        die;
+    case 'formulario-nota-empenho':
+        $cBeneficiario->montarFormularioNotaEmpenho($_REQUEST['benid'], $_REQUEST['neid']);
+        die;        
+    case 'listar-nota-empenho':
+        $cBeneficiario->montarListagemNotaEmpenho($_REQUEST['benid'], $podeEditar);
+        die;
+    case 'salvar-nota-empenho':
+        $cBeneficiarioNotaEmpenho->salvar($_POST);
+        die;
+    case 'excluir-nota-empenho':
+        echo $cBeneficiarioNotaEmpenho->excluir($_REQUEST['neid']);
         die;
     case 'formulario-detalhe':
         $cBeneficiario->montarFormularioDetalhe($_REQUEST['emeid'], $_REQUEST['benid'], $_REQUEST['bedid']);
@@ -315,7 +328,28 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 </div>
                             </div>
                         </form>
-
+                        <div class="row">
+                        <div class="col-md-4">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Nota de Empenho</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div id="div_formulario_nota_empenho">
+                                        <?php if($mBeneficiario->benid){
+                                          $cBeneficiario->montarFormularioNotaEmpenho($mBeneficiario->benid);
+                                        } ?>
+                                    </div>
+                                    <div id="div_listagem_nota_empenho">
+                                        <?php
+                                        # Busca perfis do usuário logado
+                                        $cBeneficiario->montarListagemNotaEmpenho($mBeneficiario->benid, $podeEditar);
+                                         ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">

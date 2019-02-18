@@ -83,7 +83,22 @@ class Emendas_Controller_Beneficiario
         $aBeneficiarioObservacao = (new Emendas_Model_BeneficiarioObservacao)->recuperarPorUnidade($benid);
         include_once APPRAIZ . 'emendas/modulos/principal/beneficiario_observacao.inc';
     }
+    
+    public function montarFormularioNotaEmpenho($benid = null, $neid= null)
+    {
+        global $simec;
+        $mBeneficiarioNotaEmpenho = new Emendas_Model_NotaEmpenho($neid);
+        $mBeneficiarioNotaEmpenho->benid = $benid;
+        $mBeneficiarioNotaEmpenho->numnotaempenho = $mBeneficiarioNotaEmpenho->numnotaempenho!='null' ? $mBeneficiarioNotaEmpenho->numnotaempenho : '';
+        include_once APPRAIZ . 'emendas/modulos/principal/beneficiarionotaempenho_form.inc';
+    }
 
+    public function montarListagemNotaEmpenho($benid, $podeEditar)
+    {
+        $mBeneficiarioNotaEmpenho = (new Emendas_Model_NotaEmpenho)->montarRecuperarPorBeneficiario($benid);
+        include_once APPRAIZ . 'emendas/modulos/principal/beneficiario_notaempenho.inc';
+    }
+    
     public function montarFormularioDetalhe($emeid, $benid = null, $bedid = null)
     {
         global $simec;
