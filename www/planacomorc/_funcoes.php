@@ -3376,9 +3376,9 @@ function carregarGraficoDireta($colors, $percentualPlanejamento=false){
     echo '<div class="panel-body">';
     $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
         'exercicio' => $_SESSION['exercicio'],
-        'unosigla' => 'MINC',
+        'unosigla' => 'SECULT',
         'unofundo' => 'FALSE',
-        'unidades'=>"suocod not in ('420009', '420008')"));
+        'unidades'=> "suocod NOT IN('". SUOCOD_CGCON. "', '". SUOCOD_COGEP. "')"));
     $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
     $grafico
         ->setWidth('85%')
@@ -3399,9 +3399,9 @@ function carregarGraficoCgconCogep($colors, $percentualPlanejamento=false){
     echo '<div class="panel-body">';
     $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
         'exercicio' => $_SESSION['exercicio'],
-        'unosigla' => 'MINC',
+        'unosigla' => 'SECULT',
         'unofundo' => 'FALSE',
-        'unidades'=>"suocod in ('420009', '420008')"));
+        'unidades'=>"suocod IN('". SUOCOD_CGCON. "', '". SUOCOD_COGEP. "')"));
     $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
     $grafico
         ->setWidth('85%')

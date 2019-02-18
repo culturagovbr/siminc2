@@ -87,6 +87,8 @@ define("SUOCOD_FCP", 344041);
 define("SUOCOD_IPHAN", 403101);
 define("SUOCOD_FUNARTE", 403201);
 define("SUOCOD_IBRAM", 423001);
+define("SUOCOD_CGCON", 420009);
+define("SUOCOD_COGEP", 420008);
 
 // -- E-mail de recebimento de notificações sobre
 define('EMAIL_NOTIFICACAO_SUBACAO', $_SESSION['email_sistema']);
