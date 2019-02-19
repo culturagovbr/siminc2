@@ -53,7 +53,7 @@
                     $.ajax({
                         url: href,
                         success: function (benid) {
-                            jQuery("#div_listagem_observacao").load('?modulo=principal/beneficiario_form&acao=A&req=listar-nota-empenho&benid=' + benid);
+                            jQuery("#div_listagem_nota_empenho").load('?modulo=principal/beneficiario_form&acao=A&req=listar-nota-empenho&benid=' + benid);
                         }
                     });
                 });

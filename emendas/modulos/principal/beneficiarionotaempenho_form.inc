@@ -4,9 +4,8 @@
     <input name="benid" type="hidden" value="<?= $mBeneficiarioNotaEmpenho->benid; ?>">
 
     <?php
-        echo $simec->input('numnotaempenho', 'Nº Nota de Empenho', $mBeneficiarioNotaEmpenho->numnotaempenho, ['required']);
+        echo $simec->input('numnotaempenho', 'Nº Nota de Empenho', $mBeneficiarioNotaEmpenho->numnotaempenho, ['required', 'maxlength' => 20]);
     ?>
-
     <div class="form-group">
         <div class="text-center">
             <button class="btn btn-primary" type="button" id="btn-salvar-nota-empenho"><i class="fa fa-check"></i>&nbsp;Salvar
