@@ -48,6 +48,9 @@
         'Vl. Priorizado Capital',
         'Vl. Contingenciado Custeio',
         'Vl. Contingenciado Capital',
+        'Vl. Pedido Custeio',
+        'Vl. Pedido Capital',
+        'Vinculação',
         # DADOS SICONV
         'Número Programa - SICONV',
         'Título Programa - SICONV',

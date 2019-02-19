@@ -749,8 +749,11 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
-                LEFT JOIN spo.siopexecucao sec ON sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano and sec.plicod = pli.plicod
-                AND sec.exercicio = ptr.ptrano
+                LEFT JOIN spo.siopexecucao sec ON(
+                    sec.exercicio = ptr.ptrano
+                    AND sec.plicod = pli.plicod
+                    AND sec.exercicio = ptr.ptrano
+                )
             WHERE
                 suo.prsano = '{$filtro->exercicio}'
                 AND suo.unofundo = {$filtro->unofundo}
@@ -776,8 +779,11 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
-                LEFT JOIN spo.siopexecucao sec ON sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano and sec.plicod = pli.plicod
-                AND sec.exercicio = ptr.ptrano
+                LEFT JOIN spo.siopexecucao sec ON(
+                    sec.exercicio = ptr.ptrano
+                    AND sec.plicod = pli.plicod
+                    AND sec.exercicio = ptr.ptrano
+                )
             WHERE
                 suo.prsano = '{$filtro->exercicio}'
                 AND suo.unofundo = {$filtro->unofundo}
@@ -799,8 +805,11 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
-                LEFT JOIN spo.siopexecucao sec ON sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano and sec.plicod = pli.plicod
-                AND sec.exercicio = ptr.ptrano
+                LEFT JOIN spo.siopexecucao sec ON(
+                    sec.exercicio = ptr.ptrano
+                    AND sec.plicod = pli.plicod
+                    AND sec.exercicio = ptr.ptrano
+                )
             WHERE
                 suo.prsano = '{$filtro->exercicio}'
                 AND suo.unofundo = {$filtro->unofundo}
@@ -826,8 +835,11 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
-                LEFT JOIN spo.siopexecucao sec ON sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano and sec.plicod = pli.plicod
-                AND sec.exercicio = ptr.ptrano
+                LEFT JOIN spo.siopexecucao sec ON(
+                    sec.exercicio = ptr.ptrano
+                    AND sec.plicod = pli.plicod
+                    AND sec.exercicio = ptr.ptrano
+                )
             WHERE
                 suo.prsano = '{$filtro->exercicio}'
                 AND suo.unofundo = {$filtro->unofundo}
@@ -841,7 +853,7 @@ class Pi_PlanoInterno extends Modelo
                 ordem,
                 categoria
         ";
-
+//ver($sql, d);
         $dados = $this->carregar($sql);
         return $dados ? $dados : [];
     }
@@ -865,8 +877,10 @@ class Pi_PlanoInterno extends Modelo
             FROM
                 public.vw_subunidadeorcamentaria suo
                 LEFT JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
-                LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = psu.ptrid
-                AND ptr.ptrano = suo.prsano
+                LEFT JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = psu.ptrid
+                    AND ptr.ptrano = suo.prsano
+                )
             WHERE
                 suo.prsano = '$filtro->exercicio' {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
@@ -886,9 +900,9 @@ class Pi_PlanoInterno extends Modelo
             FROM
                 public.vw_subunidadeorcamentaria suo
                 LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
-			        suo.suocod = lmu.ungcod
-			        AND suo.prsano = lmu.prsano
-			        AND lmu.lmustatus = 'A'
+                    suo.suocod = lmu.ungcod
+                    AND suo.prsano = lmu.prsano
+                    AND lmu.lmustatus = 'A'
                 )
             WHERE
                 suo.prsano = '$filtro->exercicio' {$filtroUO}
@@ -910,7 +924,8 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
-                    AND pli.plistatus = 'A')
+                    AND pli.plistatus = 'A'
+                )
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
             WHERE
@@ -934,12 +949,16 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
-                    AND pli.plistatus = 'A')
+                    AND pli.plistatus = 'A'
+                )
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
-                LEFT JOIN spo.siopexecucao sec ON sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano and sec.plicod = pli.plicod
-                AND sec.exercicio = ptr.ptrano
+                LEFT JOIN spo.siopexecucao sec ON(
+                    sec.exercicio = ptr.ptrano
+                    AND sec.plicod = pli.plicod
+                    AND sec.exercicio = ptr.ptrano
+                )
             WHERE
                 suo.prsano = '$filtro->exercicio' {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
@@ -965,8 +984,11 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
-                LEFT JOIN spo.siopexecucao sec ON sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano and sec.plicod = pli.plicod
-                AND sec.exercicio = ptr.ptrano
+                LEFT JOIN spo.siopexecucao sec ON(
+                    sec.exercicio = ptr.ptrano
+                    AND sec.plicod = pli.plicod
+                    AND sec.exercicio = ptr.ptrano
+                )
             WHERE
                 suo.prsano = '$filtro->exercicio' {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
@@ -992,8 +1014,11 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
-                LEFT JOIN spo.siopexecucao sec ON sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano and sec.plicod = pli.plicod
-                AND sec.exercicio = ptr.ptrano
+                LEFT JOIN spo.siopexecucao sec ON(
+                    sec.exercicio = ptr.ptrano
+                    AND sec.plicod = pli.plicod
+                    AND sec.exercicio = ptr.ptrano
+                )
             WHERE
                 suo.prsano = '$filtro->exercicio' {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
@@ -1019,8 +1044,11 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
-                LEFT JOIN spo.siopexecucao sec ON sec.ptres = ptr.ptres AND sec.exercicio = ptr.ptrano and sec.plicod = pli.plicod
-                AND sec.exercicio = ptr.ptrano
+                LEFT JOIN spo.siopexecucao sec ON(
+                    sec.exercicio = ptr.ptrano
+                    AND sec.plicod = pli.plicod
+                    AND sec.exercicio = ptr.ptrano
+                )
             WHERE
                 suo.prsano = '$filtro->exercicio' {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo

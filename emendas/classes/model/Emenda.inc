@@ -459,6 +459,26 @@ class Emendas_Model_Emenda extends Modelo
                         bed.benid = ben.benid
                         AND bed.bedstatus = 'A'
                 ), 0) AS contigenciadocapital,
+                COALESCE((
+                    SELECT pf.vlcusteiopedido
+                      from emendas.pedido_financeiro pf
+                     where pf.benid = ben.benid
+                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),0) as vlcusteiopedido,
+                COALESCE((
+                    SELECT pf.vlcapitalpedido
+                      from emendas.pedido_financeiro pf
+                     where pf.benid = ben.benid
+                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),0) as vlcapitalpedido,
+                COALESCE((
+                    SELECT v.vindsc
+                      from emendas.pedido_financeiro pf
+                     inner join emendas.vinculacao v
+                        on pf.vinid=v.vinid
+                     where pf.benid = ben.benid
+                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),'') as vindsc,
 		-- DADOS SICONV
 		CASE WHEN prg.prgcodigo IS NOT NULL THEN
                     substr(prg.prgcodigo::TEXT, 1, 6) || ' ' || substr(prg.prgcodigo::TEXT, 6, 4) || ' ' || substr(prg.prgcodigo::TEXT, 10, 4)
@@ -610,6 +630,8 @@ class Emendas_Model_Emenda extends Modelo
             'bedvalorcapital',
             'bedvalorpriorizadocusteio',
             'bedvalorpriorizadocapital',
+            'vlcusteiopedido',
+            'vlcapitalpedido',
             'contigenciadocusteio',
             'contigenciadocapital',
             'empenhado',

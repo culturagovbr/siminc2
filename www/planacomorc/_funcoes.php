@@ -1497,7 +1497,7 @@ function buscarPTRES(stdClass $filtros) {
 	    JOIN monitora.pi_planointerno pi ON(pip.pliid = pi.pliid)
             JOIN monitora.acao aca ON(ptr.acaid = aca.acaid)
             JOIN public.vw_subunidadeorcamentaria uni ON(aca.unicod = uni.unocod AND uni.suocod = pi.ungcod AND uni.prsano = aca.prgano) -- SELECT * FROM public.vw_subunidadeorcamentaria
-            JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
+            LEFT JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
             LEFT JOIN (
                 SELECT
                     pip.ptrid,
@@ -3376,9 +3376,9 @@ function carregarGraficoDireta($colors, $percentualPlanejamento=false){
     echo '<div class="panel-body">';
     $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
         'exercicio' => $_SESSION['exercicio'],
-        'unosigla' => 'MINC',
+        'unosigla' => 'SECULT',
         'unofundo' => 'FALSE',
-        'unidades'=>"suocod not in ('420009', '420008')"));
+        'unidades'=> "suocod NOT IN('". SUOCOD_CGCON. "', '". SUOCOD_COGEP. "')"));
     $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
     $grafico
         ->setWidth('85%')
@@ -3399,9 +3399,9 @@ function carregarGraficoCgconCogep($colors, $percentualPlanejamento=false){
     echo '<div class="panel-body">';
     $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
         'exercicio' => $_SESSION['exercicio'],
-        'unosigla' => 'MINC',
+        'unosigla' => 'SECULT',
         'unofundo' => 'FALSE',
-        'unidades'=>"suocod in ('420009', '420008')"));
+        'unidades'=>"suocod IN('". SUOCOD_CGCON. "', '". SUOCOD_COGEP. "')"));
     $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
     $grafico
         ->setWidth('85%')
