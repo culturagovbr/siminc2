@@ -186,6 +186,18 @@ function beneficiario_form_init(){
         toggleModadelidadeObrigatorio();
     });
 
+    $('.input_valor_financeiro').keyup(function(){
+        $(this).val(mascaraglobal('#.###.###.###', $(this).val()));
+    }).keyup();
+
+    $('#btn-salvar-financeiro').click(function(){
+        jQuery("#formulario-pedido").submit();
+    });
+
+    $('#btn-historico-financeiro').click(function(){
+        $('#historico-financeiro .modal-body').load('?modulo=principal/beneficiario_form&acao=A&req=historico-financeiro&benid='+ $("#benid").val());
+        $('#historico-financeiro').modal();
+    });
 }
 
 function toggleMotivo(){
