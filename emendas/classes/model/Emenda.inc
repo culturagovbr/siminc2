@@ -610,7 +610,10 @@ class Emendas_Model_Emenda extends Modelo
             array('codigo' => 'pliid',                      'descricao' => 'Id PI'),
             array('codigo' => 'plicod',                     'descricao' => 'Código PI'),
             array('codigo' => 'empenhado',                  'descricao' => 'Empenhado'),
-            array('codigo' => 'pago',                       'descricao' => 'Pago'));
+            array('codigo' => 'pago',                       'descricao' => 'Pago'),
+            array('codigo' => 'numnotaempenho',             'descricao' => 'Nota de Empenho'),
+            array('codigo' => 'vlcusteiopedido',            'descricao' => 'Custeio do Pedido'),
+            array('codigo' => 'vlcapitalpedido',            'descricao' => 'Capital do Pedido'));
 
         return $colunas;
     }
@@ -634,7 +637,9 @@ class Emendas_Model_Emenda extends Modelo
             'contigenciadocusteio',
             'contigenciadocapital',
             'empenhado',
-            'pago'
+            'pago',
+            'vlcusteiopedido',
+            'vlcapitalpedido'
         ];
         return $colunas;
     }
