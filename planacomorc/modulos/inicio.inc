@@ -255,7 +255,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <tr class="tr_<?php echo $dado['suoid']; ?> tr_detalhe" style="display: none;">
                                         <td style="padding-left: 30px; border-right: 1px black solid;" >
                                             <span class="detalhe-funcional" data-ptrid="<?php echo $dado['ptrid']; ?>" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar lista de PIs com essa funcional">
-                                                <?php echo $dado['funcional'] . ' - ' . $dado['acatitulo'] . ': ' . $dado['plodsc'] . ' (RP ' . $dado['irpcod'] . ')'; ?>
+                                                <?php echo $dado['funcional'] . ' - ' . $dado['acatitulo'] . ': ' . $dado['plodsc'] . ' (RP ' . $dado['irpcod'] . ') (PTRES:'.$dado['ptres'].')'; ?>
                                             </span>
                                             <?php if($dado['compartilhada'] > 1): ?>
                                                 &nbsp;<i class="fa fa-handshake-o link" title="Funcional Compartilhada com outras Subunidades."></i>
