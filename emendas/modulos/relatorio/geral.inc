@@ -66,6 +66,7 @@
         'Código PI',
         'Empenhado',
         'Pago',
+        'Nota(s) de Empenho'
     ];
 
     # Lista de colunas que terão formatação de moeda.

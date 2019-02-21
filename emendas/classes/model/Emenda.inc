@@ -497,7 +497,8 @@ class Emendas_Model_Emenda extends Modelo
                 pi.pliid,
                 pi.plicod,
                 pi.empenhado,
-                pi.pago
+                pi.pago,
+                (select string_agg(numnotaempenho,',') as numnotaempenho from emendas.nota_empenho ne where ne.benid = ben.benid and nestatus='A') as numnotaempenho
             FROM emendas.emenda eme
                 -- DADOS DA EMENDA
                 LEFT JOIN public.unidadeorcamentaria uno ON uno.unoid = eme.unoid
