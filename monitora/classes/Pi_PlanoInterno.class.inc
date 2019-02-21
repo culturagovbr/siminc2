@@ -1609,19 +1609,21 @@ class Pi_PlanoInterno extends Modelo
                 ptr.ptrdotacao,
                 eqd.eqddsc,
                 rp.irpcod
-            FROM
-                monitora.pi_planointerno pli
-                INNER JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+            FROM monitora.pi_planointerno pli
+                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 LEFT JOIN planacomorc.pi_delegacao pde ON pde.pliid = pli.pliid
-                INNER JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod
+                JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod
                     AND suo.unocod = pli.unicod
                     AND suo.prsano = pli.pliano
-                INNER JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
-                INNER JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
+                JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
+                JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
                 LEFT JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
-                LEFT JOIN spo.siopexecucao ex ON ptr.ptres = ex.ptres AND ex.exercicio = ptr.ptrano and ex.plicod = pli.plicod
+                LEFT JOIN spo.siopexecucao ex ON(
+                    ex.exercicio = ptr.ptrano
+                    AND ex.plicod = pli.plicod
+                )
             WHERE
                 pli.plistatus = 'A'
                 AND ptr.irpcod <> '6'
