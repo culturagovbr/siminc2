@@ -589,6 +589,7 @@ class Emendas_Model_Emenda extends Modelo
             array('codigo' => 'empedimento',                'descricao' => 'Impedimento'),
             array('codigo' => 'motivo',                     'descricao' => 'Motivo'),
             array('codigo' => 'justificativa',              'descricao' => 'Justivicativa'),
+            array('codigo' => 'vindsc',                     'descricao' => 'Vinculação'),
             # DADOS FINANCEIROS DO BENFICIÁRIO
             array('codigo' => 'bedvalorcusteio',            'descricao' => 'Vl. Beneficiário Custeio'),
             array('codigo' => 'bedvalorcapital',            'descricao' => 'Vl. Beneficiário Capital'),
