@@ -41,6 +41,24 @@ switch ($_REQUEST['req']) {
     case 'carregarGraficoCgconCogep':
         carregarGraficoCgconCogep($colors, true);
         die;
+    case 'atualizarSIMINC':
+        try{
+            $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
+            $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
+            $cImportaDadosSiop->AtualizarDadosSiminc();
+            $cImportaDadosSiop->AtualizarDotacao();
+            
+            echo simec_json_encode(array(
+                'success' => 1,
+                'message' => 'As informações de execução orçamentária(Aprovisionado, Empenhado, liquidado e Pago) foram Atualizadas com sucesso a partir da base de dados do '. SIGLA_SISTEMA. '!'
+            ));
+        } catch (Exception $e){
+            echo simec_json_encode(array(
+                'success' => 0,
+                'message' => 'Não foi possível atualizar as informações de execução orçamentária(Aprovisionado, Empenhado, liquidado e Pago). O sistema não conseguiu acessar os dados de execução orçamentária.'
+            ));
+        }
+        die;
     case 'atualizarSIOP':
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
@@ -101,23 +119,28 @@ include APPRAIZ . "includes/cabecalho.inc";
     </div>
     <div class="col-lg-8">
         <div style="padding-top: 10px;" class="text-right">
-            <?php if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
-            <a id="btn-atualizar-siop" class="btn btn-success">
-                <i class="fa fa-cloud-download"></i> Atualizar SIOP
-            </a>
+            <?php if((in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
+                <a id="btn-atualizar-siminc" class="btn btn-success" title="Atualiza os dados de Dotações das Funcionais e execução orçamentária da própria base de dados do <?= SIGLA_SISTEMA; ?>">
+                    <i class="fa fa-cloud-download"></i> Atualizar <?= SIGLA_SISTEMA; ?>
+                </a>
             <?php } ?>
-            <a class="btn btn-success" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A">
+            <?php if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
+                <a id="btn-atualizar-siop" class="btn btn-success" title="Busca os dados do sistema SIOP e atualiza os dados de Dotações das Funcionais e execução orçamentária">
+                    <i class="fa fa-cloud-download"></i> Atualizar SIOP
+                </a>
+            <?php } ?>
+            <a class="btn btn-success" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A" title="Painel de Acompanhamento do Fundo Nacional de Cultura">
                 <i class="fa fa-area-chart"></i> Painel FNC
             </a>
-            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A">
+            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" title="Listagem de PI">
                 <i class="fa fa-list"></i> Lista de PI
             </a>
             <?php if(!array_intersect($perfis, [PFL_CONSULTA, PFL_CONSULTA_UNIDADE])){ ?>
-                <a class="btn btn-warning" href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A">
+            <a class="btn btn-warning" href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A" title="Novo cadastro de PI">
                     <i class="fa fa-plus-circle"></i> Criar PI
                 </a>
             <?php }?>
-            <a class="btn btn-primary" href="planacomorc.php?modulo=relatorio/geral&acao=A&fundo=f">
+            <a class="btn btn-primary" href="planacomorc.php?modulo=relatorio/geral&acao=A&fundo=f" title="Relatório Geral em Planilha">
                 <i class="fa fa-file-excel-o"></i> Relatório Geral
             </a>
         </div>
@@ -307,6 +330,10 @@ include APPRAIZ . "includes/cabecalho.inc";
 
         $('#btn-atualizar-siop').click(function(){
             atualizarSIOP();
+        });
+        
+        $('#btn-atualizar-siminc').click(function(){
+            atualizarSiminc();
         });
 
         $('.tabs').on('click', '.tablink, .prodTabs a',function (e) {
