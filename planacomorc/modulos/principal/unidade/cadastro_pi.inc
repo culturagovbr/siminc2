@@ -361,7 +361,6 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                             and rpustatus = 'A'
                                                             and unofundo = 'f'
                                                             ORDER BY suo.unocod";
-
                                                     $dadosUsuario = $db->carregar($sql);
 
                                                     $unidadeUsuario = [];
@@ -387,7 +386,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                 $sql = "
                                                     SELECT DISTINCT
                                                         suo.unocod AS codigo,
-                                                        suo.unocod || ' - ' || suo.unonome AS descricao
+                                                        CASE WHEN suo.unocod='55101' THEN '55101 - MINSTERIO DA CIDADANIA - ADMINISTRAÇÃO DIRETA'
+                                                             ELSE suo.unocod || ' - ' || suo.unonome
+                                                        END AS descricao
                                                     FROM public.vw_subunidadeorcamentaria suo
                                                     WHERE
                                                         suo.prsano = '{$_SESSION['exercicio']}'
