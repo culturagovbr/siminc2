@@ -17,14 +17,14 @@ Estas são documentações sobre o processo de desenvolvimento do SIMINC2, versi
 * [Guia de operação e desenvolvimento](docs/Guia_de_operacao-desenvolvimento.md)
 * [Guia de fluxo de demandas do Kanban](docs/Fluxo_Kanban.md)
 
-Estas são documentações sobre o domínio de negócio do SIMINC2:
-#### Planejamento Orçamentário
+Estes são os documentos de Caso de Uso dos principais módulos do SIMINC2:
+#### Módulo Planejamento Orçamentário
 * [[UC001]Listar PI](https://docs.google.com/document/d/1C__jUY_Sd2e34Q98I_vRXDoljyNQlJBy8myWyE2HWyE/edit?usp=sharing)
 * [[UC002]Cadastrar PI](https://docs.google.com/document/d/1Tjv5MKW66fER0rpa6S28d94PDYkJCffmr7CB26uW3us/edit?usp=sharing)
 * [[UC003]Tramitar PI](https://docs.google.com/document/d/1R3NiUYxq_WB6mOB7UGw73nzgG1FMUzve0JI5rGv4_1Q/edit?usp=sharing)
 * [[UC004]Excluir PI](https://docs.google.com/document/d/14xLg2ZQDtsSzeSmM-S9e7BJoF09PDam_hB5Eo4hRzeM/edit?usp=sharing)
 
-#### Emendas Parlamentares
+#### Módulo Emendas Parlamentares
 * [[UC001]Listar Emenda](https://docs.google.com/document/d/1YYDxSPJ-QHQ_Iibv_n0pIqEXzOnzvVm7C0QYGXBHRDQ/edit?usp=sharing)
 * [[UC002]Cadastrar Emenda](https://docs.google.com/document/d/1CX6VK1uuI2112cwqQ7L6OK-BMIkiHtgzymbZTRBQ4BQ/edit?usp=sharing)
 * [[UC003]Cadastrar Beneficiário](https://docs.google.com/document/d/1ZpcmLDE6sdwCoHg_NUIhSEWUIqs15eHSIw9g8sjQVZ0/edit?usp=sharing)
