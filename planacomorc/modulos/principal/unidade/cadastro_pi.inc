@@ -645,6 +645,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <h5>Metas </h5>
                                     </div>
                                     <div class="ibox-content">
+                                        <?= $simec->select('pprid', 'Programas', $dadosPI['pprid'], (new Monitora_Model_Programa())->recuperarSqlCombo(['prgcod', 'prgdsc'], ["prgstatus = 'A'"], 'prgdsc')); ?>
                                         <div class="form-group">
                                             <div class="col-md-3 text-right">
                                                 <label for="oppid" class=" control-label">Objetivo PPA: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
