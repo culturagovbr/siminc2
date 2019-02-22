@@ -10,7 +10,9 @@
  * @link     no link
  */
 
+
 require_once APPRAIZ .'includes/classes/Modelo.class.inc';
+
 
 /**
  * Planacomorc_Model_Etapas
