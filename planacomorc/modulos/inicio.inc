@@ -97,7 +97,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
 <script src="js/unidade/lista-pi-manter.js?v=5"></script>
-<script src="js/painel.js?v=2"></script>
+<script src="js/painel.js?v=3"></script>
 <style>
     .detalhe-subunidade, .detalhe-funcional{
         cursor: pointer;
