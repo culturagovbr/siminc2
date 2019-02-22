@@ -84,50 +84,7 @@ class Spo_Model_PtresSubunidade extends Modelo
         return $dadosAgrupados;
 
     }
-
-    public function vincularPtres($dados)
-    {
-        if($dados['unofundo'] == 't'){
-            $unoid = $dados['suoid'];
-            $aSubUnidadeOrcamentaria = (new Public_Model_SubUnidadeOrcamentaria())->recuperarTodos('suoid', ["unoid = {$unoid}", "suostatus = 'A'"]);
-
-            foreach ($aSubUnidadeOrcamentaria as $subUnidade){
-                $mPtresSubunidade = new Spo_Model_PtresSubunidade();
-
-                // Excluindo para garantir unicidade no banco
-                $mPtresSubunidade->excluirVarios("ptrid = {$dados['ptrid']} and suoid = {$subUnidade['suoid']}");
-
-                $mPtresSubunidade->ptrid = $dados['ptrid'];
-                $mPtresSubunidade->suoid = $subUnidade['suoid'];
-
-                $mPtresSubunidade->salvar();
-                $mPtresSubunidade->commit();
-
-                unset($mPtresSubunidade);
-            }
-        } else {
-            $this->excluirVarios("ptrid = {$dados['ptrid']} and suoid = {$dados['suoid']}");
-            $this->popularDadosObjeto($dados)->salvar();
-            $this->commit();
-        }
-    }
-
-    public function desvincularPtres($dados)
-    {
-        if($dados['unofundo'] == 't'){
-            $unoid = $dados['suoid'];
-            $aSubUnidadeOrcamentaria = (new Public_Model_SubUnidadeOrcamentaria())->recuperarTodos('suoid', ["unoid = {$unoid}", "suostatus = 'A'"]);
-
-            foreach ($aSubUnidadeOrcamentaria as $subUnidade){
-                $this->excluirVarios("ptrid = {$dados['ptrid']} and suoid = {$subUnidade['suoid']}");
-                $this->commit();
-            }
-        } else {
-            $this->excluirVarios("ptrid = {$dados['ptrid']} and suoid = {$dados['suoid']}");
-            $this->commit();
-        }
-    }
-
+    
     public function recuperarPorUnidade($suoid)
     {
         $sql = "select ptr.funcional, ptr.plodsc

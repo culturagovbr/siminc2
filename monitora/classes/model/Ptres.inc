@@ -327,7 +327,7 @@ class Monitora_Model_Ptres extends Modelo
                 vptr.irpcod,
                 ptr.ptrdotacaocusteio,
                 ptr.ptrdotacaocapital,
-                uo.unocod || '-' || uo.unonome AS unidade_orcamentaria
+                case when uo.unocod = '55101' then '55101-MINISTÉRIO DA CIDADANIA' else uo.unocod || '-' || uo.unonome end AS unidade_orcamentaria
             FROM monitora.ptres ptr
                 JOIN public.vw_subunidadeorcamentaria uo ON(
                     uo.suostatus = 'A'
@@ -348,7 +348,6 @@ class Monitora_Model_Ptres extends Modelo
                 vptr.plodsc,
                 vptr.irpcod
         ";
-        
         $listaResultado = $this->carregar($sql);
         return $listaResultado? $listaResultado: [];
     }
