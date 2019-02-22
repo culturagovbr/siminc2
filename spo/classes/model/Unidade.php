@@ -104,7 +104,9 @@ class Spo_Model_Unidade extends Modelo
         $sql = "
             SELECT DISTINCT
                 suo.unocod AS codigo,
-                suo.unocod || ' - ' || unonome AS descricao
+                CASE WHEN suo.unocod='55101' THEN '55101 - MINISTERIO DA CIDADANIA - ADMINISTRAÇÃO DIRETA'
+                    ELSE suo.unocod || ' - ' || unonome
+                END AS descricao
             FROM vw_subunidadeorcamentaria suo
             WHERE
                 {$where}
