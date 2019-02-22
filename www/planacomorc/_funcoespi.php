@@ -2152,7 +2152,9 @@ function carregarPiComDetalhes(stdclass $filtros) {
         SELECT
             pli.pliid,
             pli.mdeid,
-            suo.unocod || ' - ' || suo.unonome AS uo,
+            CASE WHEN suo.unocod='55101' then '55101 - MINISTERIO DA CIDADANIA - ADMINISTRAÇÃO DIRETA'
+		        ELSE suo.unocod || ' - ' || suo.unonome
+	        END AS uo,
             suo.suocod || ' - ' || suo.suonome || '(' || suo.suosigla || ')' AS unidade,
             suodel.suocod || ' - ' || suodel.suonome || '(' || suodel.suosigla || ')' AS sub_unidade,
             mde.mdecod,
