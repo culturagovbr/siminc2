@@ -787,7 +787,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                 <?php carregarSegmentoCultural($dadosPI['mdeid'], $dadosPI['neeid']); ?>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" id="div_pactuacao">
                                             <div class="col-md-3 text-right">
                                                 <label class="control-label" for="capid">Modalidade de Pactuação: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                                             </div>
@@ -838,7 +838,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group" id="div_ted">
                                             <div class="col-md-3 text-right">
                                                 <label class="control-label" for="picted">TED:</label>
                                             </div>
@@ -1030,7 +1030,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     </div>
                                     <div class="ibox-content">
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-3" id="div_sniic">
                                                 Números SNIIC
                                                 <div class="form-group">
                                                     <div class="col-md-10" style="padding-right: 3px;">
@@ -1082,7 +1082,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-4" id="div_pronac">
                                                 Número Pronac
                                                 <div class="form-group">
                                                     <div class="col-md-10" style="padding-right: 3px;">

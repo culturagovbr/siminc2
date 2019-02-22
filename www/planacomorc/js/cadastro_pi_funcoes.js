@@ -1141,6 +1141,20 @@
             $('.td_cronograma_orcamentario').hide('slow');
             // Oculta as colunas e campos do Cronograma Financeiro.
             $('.td_cronograma_financeiro').hide('slow');
+            // Oculta os campos de Meta PNC e Indicador PNC.
+            $('.grupo_pnc').hide('slow');
+            // Oculta o campo de Area Cultural.
+            $('#div_area_cultural').hide('slow');
+            // Oculta o campo de Segmento Cultural.
+            $('#div_segmento_cultural').hide('slow');
+            // Oculta o campo de TED.
+            $('#div_ted').hide('slow');
+            // Oculta o campo de Números SNIIC.
+            $('#div_sniic').hide('slow');
+            // Oculta o campo de Número Pronac.
+            $('#div_pronac').hide('slow');
+            // Oculta a combo de Modalidade de Pactuação.
+            $('#div_pactuacao').hide('slow');
         } else {
             // Exibe a opções PTRES(Funcional).
             $('.div_ptres').show('slow');
@@ -1345,9 +1359,13 @@
                 
                 // Exibe os campos de metas PPA e PNC
                 $('.div_metas_ppa_pnc').show('slow');
-                $('#div_area_cultural').show('slow');
-                $('#div_segmento_cultural').show('slow');
                 $('#div_botao_edital').show('slow');
+
+                // Esconde as opções de Area Cultural e de Segmento quando o item é Não Orçamentária
+                if(!verificarFormularioNaoOrcamentario()) {
+                    $('#div_area_cultural').show('slow');
+                    $('#div_segmento_cultural').show('slow');
+                }
             }
         }
     }
