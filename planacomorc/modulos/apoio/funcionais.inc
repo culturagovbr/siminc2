@@ -31,11 +31,11 @@
                                     <th width="5%">Ação</th>
                                     <th>PTRES</th>
                                     <th>Unidade Orçamentária</th>
+                                    <th>Função</th>
+                                    <th>Subfunção</th>
                                     <th>funcional</th>
                                     <th>Ação</th>
                                     <th>RP</th>
-                                    <th>Função</th>
-                                    <th>Subfunção</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,11 +48,11 @@
                                             </td>
                                             <td><?= $funcional['ptres']; ?></td>
                                             <td><?= $funcional['unidade_orcamentaria']; ?></td>
+                                            <td><?= $funcional['codigo_funcao']; ?></td>
+                                            <td><?= $funcional['codigo_subfuncao']; ?></td>
                                             <td><?= $funcional['funcional']; ?></td>
                                             <td><?= $funcional['acatitulo']; ?></td>
                                             <td><?= $funcional['irpcod']; ?></td>
-                                            <td><?= $funcional['codigo_funcao']; ?></td>
-                                            <td><?= $funcional['codigo_subfuncao']; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
