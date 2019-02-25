@@ -7,10 +7,11 @@ require_once APPRAIZ . 'includes/workflow.php';
 
 $cBeneficiario = new Emendas_Controller_Beneficiario();
 $cBeneficiarioObservacao = new Emendas_Controller_BeneficiarioObservacao();
+$cBeneficiarioNotaEmpenho = new Emendas_Controller_NotaEmpenho();
 
 $perfis = pegaPerfilGeral();
 $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
-//$podeEditar = TRUE;
+//$podeEditar = FALSE;
 $configPodeEditar = array('pode-editar' => $podeEditar? 'S': 'N');
 
 switch ($_REQUEST['req']) {
@@ -34,6 +35,18 @@ switch ($_REQUEST['req']) {
         die;
     case 'excluir-observacao':
         echo $cBeneficiarioObservacao->excluir($_REQUEST['bobid']);
+        die;
+    case 'formulario-nota-empenho':
+        $cBeneficiario->montarFormularioNotaEmpenho($_REQUEST['benid'], $_REQUEST['neid']);
+        die;        
+    case 'listar-nota-empenho':
+        $cBeneficiario->montarListagemNotaEmpenho($_REQUEST['benid'], $podeEditar);
+        die;
+    case 'salvar-nota-empenho':
+        $cBeneficiarioNotaEmpenho->salvar($_POST);
+        die;
+    case 'excluir-nota-empenho':
+        echo $cBeneficiarioNotaEmpenho->excluir($_REQUEST['neid']);
         die;
     case 'formulario-detalhe':
         $cBeneficiario->montarFormularioDetalhe($_REQUEST['emeid'], $_REQUEST['benid'], $_REQUEST['bedid']);
@@ -190,136 +203,138 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="panel-body">
 
                         <form id="formulario-beneficiario" name="formulario-beneficiario" method="post" class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Dados Gerais</h5>
+                                            <a style="font-size: 2.4em; margin-left: 10px;" class="fa fa-history" id="modal-historico-beneficiario" data-benid="<?= $mBeneficiario->benid; ?>" title="Histórico de alterações"></a>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <input type="hidden" name="req" id="req" value="salvar" />
+                                            <input name="benid" id="benid" type="hidden" value="<?php echo $mBeneficiario->benid; ?>">
+                                            <input name="emeid" id="emeid" type="hidden" value="<?php echo $mBeneficiario->emeid; ?>">
 
-                            <div class="col-md-6">
-                                <div class="ibox float-e-margins">
-                                    <div class="ibox-title">
-                                        <h5>Dados Gerais</h5>
-                                        <a style="font-size: 2.4em; margin-left: 10px;" class="fa fa-history" id="modal-historico-beneficiario" data-benid="<?= $mBeneficiario->benid; ?>" title="Histórico de alterações"></a>
-                                    </div>
-                                    <div class="ibox-content">
-                                        <input type="hidden" name="req" id="req" value="salvar" />
-                                        <input name="benid" id="benid" type="hidden" value="<?php echo $mBeneficiario->benid; ?>">
-                                        <input name="emeid" id="emeid" type="hidden" value="<?php echo $mBeneficiario->emeid; ?>">
-
-                                        <?php
-                                            $sql = (new Public_Model_SubUnidadeOrcamentaria())->recuperarSqlCombo(['suocod', 'suonome'], ["unoid = ". (int)$mEmenda->unoid], 'suonome');
-                                            $options = simec_preparar_array($db->carregar($sql));
-                                            $mBeneficiario->suoid = (!empty($mBeneficiario->suoid) && count($options) == 1) ? key($options) : $mBeneficiario->suoid;
-                                            echo $simec->select('suoid', 'SubUnidade', $mBeneficiario->suoid, $options, ['required'], $configPodeEditar);
-
-                                            $listaSubUnidadesDelegadas = $mBeneficiario->recuperarDelegacao();
-                                        ?>
-
-                                        <div class="form-group">
-                                            <div class="col-md-3 text-right">
-                                                <label class="control-label" for="radioDelegacao">Delegação:</label>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input <?php echo $podeEditar? NULL: 'disabled="disabled"'; ?> type="checkbox" name="radioDelegacao" id="radioDelegacao" value="t" class="js-switch" <?php echo count($listaSubUnidadesDelegadas) ? 'checked="checked"' : ''; ?> />
-                                            </div>
-                                            <div class="col-md-7" id="div_unidades_delegadas" style="margin-left: 15px;">
                                             <?php
-                                                $aSubUnidadeOrcamentaria = simec_preparar_array((new Public_Model_SubUnidadeOrcamentaria())->recuperarTodos("suoid as codigo, unosigla || ' - ' || suonome as descricao", ["prsano = '{$_SESSION['exercicio']}'", "suostatus = 'A'"], 'descricao'));
-                                                echo $simec->select("delegacao[]", '', $listaSubUnidadesDelegadas, $aSubUnidadeOrcamentaria, [], $configPodeEditar);
+                                                $sql = (new Public_Model_SubUnidadeOrcamentaria())->recuperarSqlCombo(['suocod', 'suonome'], ["unoid = ". (int)$mEmenda->unoid], 'suonome');
+                                                $options = simec_preparar_array($db->carregar($sql));
+                                                $mBeneficiario->suoid = (!empty($mBeneficiario->suoid) && count($options) == 1) ? key($options) : $mBeneficiario->suoid;
+                                                echo $simec->select('suoid', 'SubUnidade', $mBeneficiario->suoid, $options, ['required'], $configPodeEditar);
+
+                                                $listaSubUnidadesDelegadas = $mBeneficiario->recuperarDelegacao();
+                                            ?>
+
+                                            <div class="form-group">
+                                                <div class="col-md-3 text-right">
+                                                    <label class="control-label" for="radioDelegacao">Delegação:</label>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <input <?php echo $podeEditar? NULL: 'disabled="disabled"'; ?> type="checkbox" name="radioDelegacao" id="radioDelegacao" value="t" class="js-switch" <?php echo count($listaSubUnidadesDelegadas) ? 'checked="checked"' : ''; ?> />
+                                                </div>
+                                                <div class="col-md-7" id="div_unidades_delegadas" style="margin-left: 15px;">
+                                                <?php
+                                                    $aSubUnidadeOrcamentaria = simec_preparar_array((new Public_Model_SubUnidadeOrcamentaria())->recuperarTodos("suoid as codigo, unosigla || ' - ' || suonome as descricao", ["prsano = '{$_SESSION['exercicio']}'", "suostatus = 'A'"], 'descricao'));
+                                                    echo $simec->select("delegacao[]", '', $listaSubUnidadesDelegadas, $aSubUnidadeOrcamentaria, [], $configPodeEditar);
+                                                ?>
+                                                </div>
+                                            </div>
+
+                                            <?php
+                                                echo $simec->select('proid', 'Proponente', $mBeneficiario->proid, (new Emendas_Model_Proponente())->recuperarSqlCombo(["replace(to_char(procnpj::numeric, '00:000:000/0000-00'), ':', '.')", 'pronome'], null,'pronome'), ['required'], $configPodeEditar);
+
+                                                echo $simec->select('esfid', 'Localização <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->esfid, (new Territorios_Model_Esfera())->recuperarSqlCombo());
+                                                $aLocalizacoes = (new Emendas_Model_BeneficiarioLocalizacao())->recuperarPorBeneficiario($mBeneficiario->benid);
+                                            ?>
+                                            <div class="select-localizacao"  id="div-localizacao_<?php echo Territorios_Model_Esfera::K_EXTERIOR ?>">
+                                                <?php echo $simec->select('paiid[]', 'País', $aLocalizacoes['paiid'], (new Territorios_Model_Pais())->recuperarSqlCombo()); ?>
+                                            </div>
+                                            <div class="select-localizacao" id="div-localizacao_<?php echo Territorios_Model_Esfera::K_ESTADUAL?>">
+                                                <?php echo $simec->select('estuf[]', 'UF', $aLocalizacoes['estuf'], (new Territorios_Model_Estado())->recuperarSqlCombo(['estuf', 'estdescricao'])); ?>
+                                            </div>
+                                            <div class="select-localizacao"  id="div-localizacao_<?php echo Territorios_Model_Esfera::K_MUNICIPAL ?>">
+                                                <?php echo $simec->select('muncod[]', 'Município', $aLocalizacoes['muncod'], (new Territorios_Model_Municipio())->recuperarSqlCombo(['estuf', 'mundescricao'])); ?>
+                                            </div>
+
+                                            <?php
+                                                echo $simec->input('bennumeroprocesso', 'Número do Processo', $mBeneficiario->bennumeroprocesso, ['maxlength' => 50]);
+                                                echo $simec->data('beninicio', 'Data de Início da Vigência', $mBeneficiario->beninicio);
+                                                echo $simec->select('capid', 'Modalidade de Pactuação', $mBeneficiario->capid, (new Monitora_Model_CategoriaApropriacao())->recuperarSqlCombo(null, ["capstatus = 'A'"]), ['required']);
+                                                echo $simec->radioBoolean('bented', 'TED', $mBeneficiario->bented);
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5">
+
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Informações Complementares</h5>
+                                        </div>
+                                        <div class="ibox-content">
+                                            <?php
+                                                echo $simec->select('mdeid', 'Área Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->mdeid, (new Monitora_Model_PiModalidadeEnsino())->recuperarSqlCombo(null, ["mdestatus = 'A'"]));
+                                                echo '<span id="span-segmento">' . $simec->select('neeid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$mBeneficiario->mdeid])) . '</span>';
+                                                echo $simec->select("alteracao[]", 'Alterações', $mBeneficiario->recuperarAlteracao(), (new Emendas_Model_AlteracaoOrcamentaria())->recuperarSqlCombo(), [], $configPodeEditar);
+                                                # Setar os campos para "não" por padrão.
+                                                $benparecertecnico = $mBeneficiario->benparecertecnico ? $mBeneficiario->benparecertecnico : 0;
+                                                $benparecerjuridico = $mBeneficiario->benparecerjuridico ? $mBeneficiario->benparecerjuridico : 0;
+                                                echo $simec->radio('benparecertecnico', 'Parecer Técnico', $benparecertecnico, $mBeneficiario->recuperarTiposParecer());
+                                                echo $simec->radio('benparecerjuridico', 'Parecer Jurídico', $benparecerjuridico, $mBeneficiario->recuperarTiposParecer());
+                                            ?>
+                                            <div class="form-group ">
+                                                <label for="benconveniado" class="col-sm-3 control-label">Conveniado: </label>
+                                                <div class="col-md-2 ">
+                                                    <input type="checkbox" name="benconveniado" id="benconveniado" value="t" class="js-switch" <?php echo 't' == $mBeneficiario->benconveniado ? 'checked="checked"' : ''; ?> />
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label class="col-sm-3 control-label">Empenhado: </label>
+                                                <label class="col-md-3 control-label labelTextLeft">R$ <?php echo number_format($beneficiario->empenhado, 2, ',', '.'); ?></label>
+                                                <label class="col-sm-2 control-label">Pago: </label>
+                                                <label class="col-md-3 control-label labelTextLeft">R$ <?php echo number_format($beneficiario->pago, 2, ',', '.'); ?></label>
+                                            </div>
+                                            <?php
+                                                $benimpedimento = $mBeneficiario->benimpedimento ? $mBeneficiario->benimpedimento : 0;
+                                            ?>
+                                            <div id="benimpedimento-group">
+                                            <?php
+                                                echo $simec->radio('benimpedimento', 'Impedimento', $benimpedimento, $mBeneficiario->recuperarTiposParecer());
                                             ?>
                                             </div>
-                                        </div>
-
-                                        <?php
-                                            echo $simec->select('proid', 'Proponente', $mBeneficiario->proid, (new Emendas_Model_Proponente())->recuperarSqlCombo(["replace(to_char(procnpj::numeric, '00:000:000/0000-00'), ':', '.')", 'pronome'], null,'pronome'), ['required'], $configPodeEditar);
-
-                                            echo $simec->select('esfid', 'Localização <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->esfid, (new Territorios_Model_Esfera())->recuperarSqlCombo());
-                                            $aLocalizacoes = (new Emendas_Model_BeneficiarioLocalizacao())->recuperarPorBeneficiario($mBeneficiario->benid);
-                                        ?>
-                                        <div class="select-localizacao"  id="div-localizacao_<?php echo Territorios_Model_Esfera::K_EXTERIOR ?>">
-                                            <?php echo $simec->select('paiid[]', 'País', $aLocalizacoes['paiid'], (new Territorios_Model_Pais())->recuperarSqlCombo()); ?>
-                                        </div>
-                                        <div class="select-localizacao" id="div-localizacao_<?php echo Territorios_Model_Esfera::K_ESTADUAL?>">
-                                            <?php echo $simec->select('estuf[]', 'UF', $aLocalizacoes['estuf'], (new Territorios_Model_Estado())->recuperarSqlCombo(['estuf', 'estdescricao'])); ?>
-                                        </div>
-                                        <div class="select-localizacao"  id="div-localizacao_<?php echo Territorios_Model_Esfera::K_MUNICIPAL ?>">
-                                            <?php echo $simec->select('muncod[]', 'Município', $aLocalizacoes['muncod'], (new Territorios_Model_Municipio())->recuperarSqlCombo(['estuf', 'mundescricao'])); ?>
-                                        </div>
-
-                                        <?php
-                                            echo $simec->input('bennumeroprocesso', 'Número do Processo', $mBeneficiario->bennumeroprocesso, ['maxlength' => 50]);
-                                            echo $simec->data('beninicio', 'Data de Início da Vigência', $mBeneficiario->beninicio);
-                                            echo $simec->select('capid', 'Modalidade de Pactuação', $mBeneficiario->capid, (new Monitora_Model_CategoriaApropriacao())->recuperarSqlCombo(null, ["capstatus = 'A'"]), ['required']);
-                                            echo $simec->radioBoolean('bented', 'TED', $mBeneficiario->bented);
-                                        ?>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-5">
-
-                                <div class="ibox float-e-margins">
-                                    <div class="ibox-title">
-                                        <h5>Informações Complementares</h5>
-                                    </div>
-                                    <div class="ibox-content">
-                                        <?php
-                                            echo $simec->select('mdeid', 'Área Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->mdeid, (new Monitora_Model_PiModalidadeEnsino())->recuperarSqlCombo(null, ["mdestatus = 'A'"]));
-                                            echo '<span id="span-segmento">' . $simec->select('neeid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$mBeneficiario->mdeid])) . '</span>';
-                                            echo $simec->select("alteracao[]", 'Alterações', $mBeneficiario->recuperarAlteracao(), (new Emendas_Model_AlteracaoOrcamentaria())->recuperarSqlCombo(), [], $configPodeEditar);
-                                            # Setar os campos para "não" por padrão.
-                                            $benparecertecnico = $mBeneficiario->benparecertecnico ? $mBeneficiario->benparecertecnico : 0;
-                                            $benparecerjuridico = $mBeneficiario->benparecerjuridico ? $mBeneficiario->benparecerjuridico : 0;
-                                            echo $simec->radio('benparecertecnico', 'Parecer Técnico', $benparecertecnico, $mBeneficiario->recuperarTiposParecer());
-                                            echo $simec->radio('benparecerjuridico', 'Parecer Jurídico', $benparecerjuridico, $mBeneficiario->recuperarTiposParecer());
-                                        ?>
-                                        <div class="form-group ">
-                                            <label for="benconveniado" class="col-sm-3 control-label">Conveniado: </label>
-                                            <div class="col-md-2 ">
-                                                <input type="checkbox" name="benconveniado" id="benconveniado" value="t" class="js-switch" <?php echo 't' == $mBeneficiario->benconveniado ? 'checked="checked"' : ''; ?> />
+                                            <div class="form-group ">
+                                                <label for="benimpedimento" class="col-sm-3 control-label div_motivo">Motivo: </label>
+                                                <div class="col-md-6 div_motivo">
+                                                    <?php echo $simec->select('impid', null, $mBeneficiario->impid, (new Emendas_Model_Impedimento())->recuperarSqlCombo(['impcod', 'impdsc'], ["impstatus = 'A'"], 'impcod'));; ?>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label class="col-sm-3 control-label">Empenhado: </label>
-                                            <label class="col-md-3 control-label labelTextLeft">R$ <?php echo number_format($beneficiario->empenhado, 2, ',', '.'); ?></label>
-                                            <label class="col-sm-2 control-label">Pago: </label>
-                                            <label class="col-md-3 control-label labelTextLeft">R$ <?php echo number_format($beneficiario->pago, 2, ',', '.'); ?></label>
-                                        </div>
-                                        <?php
-                                            $benimpedimento = $mBeneficiario->benimpedimento ? $mBeneficiario->benimpedimento : 0;
-                                        ?>
-                                        <div id="benimpedimento-group">
-                                        <?php
-                                            echo $simec->radio('benimpedimento', 'Impedimento', $benimpedimento, $mBeneficiario->recuperarTiposParecer());
-                                        ?>
-                                        </div>
-                                        <div class="form-group ">
-                                            <label for="benimpedimento" class="col-sm-3 control-label div_motivo">Motivo: </label>
-                                            <div class="col-md-6 div_motivo">
-                                                <?php echo $simec->select('impid', null, $mBeneficiario->impid, (new Emendas_Model_Impedimento())->recuperarSqlCombo(['impcod', 'impdsc'], ["impstatus = 'A'"], 'impcod'));; ?>
-                                            </div>
-                                        </div>
 
-                                        <div class="div_motivo">
-                                            <?php echo $simec->textarea('benmotivoimpedimento', 'Justificativa', $mBeneficiario->benmotivoimpedimento); ?>
+                                            <div class="div_motivo">
+                                                <?php echo $simec->textarea('benmotivoimpedimento', 'Justificativa', $mBeneficiario->benmotivoimpedimento); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-1">
-                                <?php
-                                  if($mBeneficiario->suoid){
-                                    wf_desenhaBarraNavegacao($mBeneficiario->docid, array('benid' => $mBeneficiario->benid));
-                                  }
-                                ?>
+                                <div class="col-md-1">
+                                    <?php
+                                      if($mBeneficiario->suoid){
+                                        wf_desenhaBarraNavegacao($mBeneficiario->docid, array('benid' => $mBeneficiario->benid));
+                                      }
+                                    ?>
+                                </div>
                             </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class="text-center">
-                                        <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
-                                        <a href="?modulo=principal/emenda&acao=A" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
-                                        <a href="?modulo=principal/emenda_form&acao=A&emeid=<?php echo $mBeneficiario->emeid; ?>" class="btn btn-success" id="btn-emenda" type="button"><i class="fa fa-file"></i>&nbsp;Ver Emenda</a>
-                                        <?php if($mBeneficiario->benid && $podeEditar){ ?>
-                                            <a href="?modulo=principal/beneficiario_form&acao=A&req=excluir&benid=<?php echo $mBeneficiario->benid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
-                                        <?php } ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="text-center">
+                                            <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
+                                            <a href="?modulo=principal/emenda&acao=A" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                                            <a href="?modulo=principal/emenda_form&acao=A&emeid=<?php echo $mBeneficiario->emeid; ?>" class="btn btn-success" id="btn-emenda" type="button"><i class="fa fa-file"></i>&nbsp;Ver Emenda</a>
+                                            <?php if($mBeneficiario->benid && $podeEditar){ ?>
+                                                <a href="?modulo=principal/beneficiario_form&acao=A&req=excluir&benid=<?php echo $mBeneficiario->benid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
+                                            <?php } ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -387,17 +402,37 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <?php
-                        }
-                        ?>
-                        <div class="col-md-12 dados-siconv">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                        <h5>Dados do SICONV</h5>
+                            <div class="col-md-4">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Nota de Empenho</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div id="div_formulario_nota_empenho">
+                                            <?php if($mBeneficiario->benid){
+                                              $cBeneficiario->montarFormularioNotaEmpenho($mBeneficiario->benid);
+                                            } ?>
+                                        </div>
+                                        <div id="div_listagem_nota_empenho">
+                                            <?php
+                                            # Busca perfis do usuário logado
+                                            $cBeneficiario->montarListagemNotaEmpenho($mBeneficiario->benid, $podeEditar);
+                                             ?>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="ibox-content">
-                                    <?php $cBeneficiario->montarListagemSiconv($mBeneficiario->benid); ?>
+                            </div>                            
+                        </div>
+                        <?php } ?>
+                        <div class="row">
+                            <div class="col-md-12 dados-siconv">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                            <h5>Dados do SICONV</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <?php $cBeneficiario->montarListagemSiconv($mBeneficiario->benid); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -409,7 +444,6 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="panel-body">
 
                         <form id="formulario-beneficiario-complemento" name="formulario-beneficiario-complemento" method="post" class="form-horizontal">
-
                             <div class="col-md-6">
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title">

@@ -497,7 +497,8 @@ class Emendas_Model_Emenda extends Modelo
                 pi.pliid,
                 pi.plicod,
                 pi.empenhado,
-                pi.pago
+                pi.pago,
+                (select string_agg(numnotaempenho,',') as numnotaempenho from emendas.nota_empenho ne where ne.benid = ben.benid and nestatus='A') as numnotaempenho
             FROM emendas.emenda eme
                 -- DADOS DA EMENDA
                 LEFT JOIN public.unidadeorcamentaria uno ON uno.unoid = eme.unoid
@@ -589,6 +590,7 @@ class Emendas_Model_Emenda extends Modelo
             array('codigo' => 'empedimento',                'descricao' => 'Impedimento'),
             array('codigo' => 'motivo',                     'descricao' => 'Motivo'),
             array('codigo' => 'justificativa',              'descricao' => 'Justivicativa'),
+            array('codigo' => 'vindsc',                     'descricao' => 'Vinculação'),
             # DADOS FINANCEIROS DO BENFICIÁRIO
             array('codigo' => 'bedvalorcusteio',            'descricao' => 'Vl. Beneficiário Custeio'),
             array('codigo' => 'bedvalorcapital',            'descricao' => 'Vl. Beneficiário Capital'),
@@ -610,7 +612,10 @@ class Emendas_Model_Emenda extends Modelo
             array('codigo' => 'pliid',                      'descricao' => 'Id PI'),
             array('codigo' => 'plicod',                     'descricao' => 'Código PI'),
             array('codigo' => 'empenhado',                  'descricao' => 'Empenhado'),
-            array('codigo' => 'pago',                       'descricao' => 'Pago'));
+            array('codigo' => 'pago',                       'descricao' => 'Pago'),
+            array('codigo' => 'numnotaempenho',             'descricao' => 'Nota de Empenho'),
+            array('codigo' => 'vlcusteiopedido',            'descricao' => 'Custeio do Pedido'),
+            array('codigo' => 'vlcapitalpedido',            'descricao' => 'Capital do Pedido'));
 
         return $colunas;
     }
@@ -634,7 +639,9 @@ class Emendas_Model_Emenda extends Modelo
             'contigenciadocusteio',
             'contigenciadocapital',
             'empenhado',
-            'pago'
+            'pago',
+            'vlcusteiopedido',
+            'vlcapitalpedido'
         ];
         return $colunas;
     }

@@ -1792,7 +1792,9 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."impedimento" TO "usr_si
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emenda"."sioptipoimpedimento" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emenda"."situacaoempenho" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emenda"."situacaopagamento" TO "usr_simec";
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."nota_empenho" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."partido" TO "usr_simec";
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."pedido_financeiro" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."programacaoexercicio" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."programaobjeto" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."programa" TO "usr_simec";
@@ -1809,6 +1811,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."tiporesponsabilidade" T
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."tprperfil" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."usuarioresponsabilidade" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."usuario_siconv" TO "usr_simec";
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emendas"."vinculacao" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emenda"."tabelas" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emenda"."tema" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "emenda"."tipoautor2012" TO "usr_simec";
@@ -6451,7 +6454,6 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "wssof"."ws_captacaodetalhebaseext
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "wssof"."ws_captacaovalorbaseexternadto" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "wssof"."ws_disponibilidadecaptacaobaseexternadto" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "wssof"."ws_esferasdto" TO "usr_simec";
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "wssof"."ws_execucaoorcamentariadto_carga" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "wssof"."ws_execucaoorcamentariadto" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "wssof"."ws_financeirodto" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "wssof"."ws_funcoesdto" TO "usr_simec";
@@ -7682,7 +7684,9 @@ GRANT USAGE, SELECT ON SEQUENCE "emenda"."sicempenhohistorico_sehid_seq" TO "usr
 GRANT USAGE, SELECT ON SEQUENCE "emenda"."siconvtpaemenda_speid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emendas"."impedimento_impid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emenda"."situacaoempenho_semid_seq" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "emendas"."nota_empenho_neid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emendas"."partido_parid_seq" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "emendas"."pedido_financeiro_pefid" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emendas"."programaobjeto_pobid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emendas"."programa_prgid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emendas"."pronac_proid_seq" TO "usr_simec";
@@ -7698,6 +7702,7 @@ GRANT USAGE, SELECT ON SEQUENCE "emendas"."tiporesponsabilidade_tprcod_seq" TO "
 GRANT USAGE, SELECT ON SEQUENCE "emendas"."tprperfil_prfid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emendas"."usuarioresponsabilidade_rpuid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emendas"."usuario_siconv_ussid" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "emendas"."vinculacao_vinid" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emenda"."tabelas_tabid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emenda"."tema_temid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "emenda"."tipoautor_tpa_seq" TO "usr_simec";
@@ -11293,3 +11298,4 @@ GRANT USAGE, SELECT ON SEQUENCE "workflow"."documento_docid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."estadodocumento_esdid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."historicodocumento_hstid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."tipodocumento_tpdid_seq" TO "usr_simec";
+

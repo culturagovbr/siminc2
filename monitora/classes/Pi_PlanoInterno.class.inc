@@ -70,6 +70,7 @@ class Pi_PlanoInterno extends Modelo
                 ptr.irpcod,
                 ptr.plodsc,
                 ptr.ptrid,
+                ptr.ptres,
                 lmu.lmuvlr,
                 lmu.lmuid,
                 psu.psuid,
@@ -112,6 +113,7 @@ class Pi_PlanoInterno extends Modelo
                 ptr.irpcod,
                 ptr.plodsc,
                 ptr.ptrid,
+                ptr.ptres,
                 lmu.lmuvlr,
                 lmu.lmuid,
                 psu.psuid,
@@ -686,6 +688,7 @@ class Pi_PlanoInterno extends Modelo
                 AND suo.unofundo = {$filtro->unofundo}
                 AND suo.suostatus = 'A'
                 AND ptr.irpcod <> '6'
+                AND suo.unocod NOT IN('". UNICOD_FNAS. "', '". UNICOD_MC. "')
             GROUP BY
                 ordem,
                 descricao,
@@ -703,7 +706,8 @@ class Pi_PlanoInterno extends Modelo
             WHERE
                 suo.prsano = '{$filtro->exercicio}'
                 AND suo.unofundo = {$filtro->unofundo}
-                and suo.suostatus = 'A'
+                AND suo.suostatus = 'A'
+                AND suo.unocod NOT IN('". UNICOD_FNAS. "', '". UNICOD_MC. "')
             GROUP BY
                 ordem,
                 descricao,
@@ -729,6 +733,7 @@ class Pi_PlanoInterno extends Modelo
                 AND suo.suostatus = 'A'
                 AND pli.plistatus = 'A'
                 AND ben.benid IS NULL
+                AND suo.unocod NOT IN('". UNICOD_FNAS. "', '". UNICOD_MC. "')
             GROUP BY
                 ordem,
                 descricao,
@@ -759,6 +764,7 @@ class Pi_PlanoInterno extends Modelo
                 AND suo.unofundo = {$filtro->unofundo}
                 AND suo.suostatus = 'A'
                 AND ben.benid IS NULL
+                AND suo.unocod NOT IN('". UNICOD_FNAS. "', '". UNICOD_MC. "')
             GROUP BY
                 ordem,
                 descricao,
@@ -789,6 +795,7 @@ class Pi_PlanoInterno extends Modelo
                 AND suo.unofundo = {$filtro->unofundo}
                 AND suo.suostatus = 'A'
                 AND ben.benid IS NULL
+                AND suo.unocod NOT IN('". UNICOD_FNAS. "', '". UNICOD_MC. "')
             GROUP BY
                 ordem,
                 descricao,
@@ -815,6 +822,7 @@ class Pi_PlanoInterno extends Modelo
                 AND suo.unofundo = {$filtro->unofundo}
                 AND suo.suostatus = 'A'
                 AND ben.benid IS NULL
+                AND suo.unocod NOT IN('". UNICOD_FNAS. "', '". UNICOD_MC. "')
             GROUP BY
                 ordem,
                 descricao,
@@ -845,6 +853,7 @@ class Pi_PlanoInterno extends Modelo
                 AND suo.unofundo = {$filtro->unofundo}
                 AND suo.suostatus = 'A'
                 AND ben.benid IS NULL
+                AND suo.unocod NOT IN('". UNICOD_FNAS. "', '". UNICOD_MC. "')
             GROUP BY
                 ordem,
                 descricao,
@@ -866,7 +875,7 @@ class Pi_PlanoInterno extends Modelo
      */
     public function recuperarEstatisticaPagamentoDetalhe(stdClass $filtro)
     {
-        $filtroUO = $filtro->unosigla? "AND suo.unosigla = '{$filtro->unosigla}'": NULL;
+        $filtroUO = $filtro->unosigla? "AND suo.unocod = '{$filtro->unocod}'": NULL;
 
         $sql = "
             SELECT DISTINCT
@@ -882,7 +891,8 @@ class Pi_PlanoInterno extends Modelo
                     AND ptr.ptrano = suo.prsano
                 )
             WHERE
-                suo.prsano = '$filtro->exercicio' {$filtroUO}
+                suo.prsano = '$filtro->exercicio'
+                {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
                 AND {$filtro->unidades}
                 AND suo.suostatus = 'A'
@@ -905,7 +915,8 @@ class Pi_PlanoInterno extends Modelo
                     AND lmu.lmustatus = 'A'
                 )
             WHERE
-                suo.prsano = '$filtro->exercicio' {$filtroUO}
+                suo.prsano = '$filtro->exercicio'
+                {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
                 AND {$filtro->unidades}
                 AND suo.suostatus = 'A'
@@ -929,7 +940,8 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
             WHERE
-                suo.prsano = '$filtro->exercicio' {$filtroUO}
+                suo.prsano = '$filtro->exercicio'
+                {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
                 AND {$filtro->unidades}
                 AND suo.suostatus = 'A'
@@ -960,7 +972,8 @@ class Pi_PlanoInterno extends Modelo
                     AND sec.exercicio = ptr.ptrano
                 )
             WHERE
-                suo.prsano = '$filtro->exercicio' {$filtroUO}
+                suo.prsano = '$filtro->exercicio'
+                {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
                 AND {$filtro->unidades}
                 AND suo.suostatus = 'A'
@@ -990,7 +1003,8 @@ class Pi_PlanoInterno extends Modelo
                     AND sec.exercicio = ptr.ptrano
                 )
             WHERE
-                suo.prsano = '$filtro->exercicio' {$filtroUO}
+                suo.prsano = '$filtro->exercicio'
+                {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
                 AND {$filtro->unidades}
                 AND suo.suostatus = 'A'
@@ -1020,7 +1034,8 @@ class Pi_PlanoInterno extends Modelo
                     AND sec.exercicio = ptr.ptrano
                 )
             WHERE
-                suo.prsano = '$filtro->exercicio' {$filtroUO}
+                suo.prsano = '$filtro->exercicio'
+                {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
                 AND {$filtro->unidades}
                 AND suo.suostatus = 'A'
@@ -1050,7 +1065,8 @@ class Pi_PlanoInterno extends Modelo
                     AND sec.exercicio = ptr.ptrano
                 )
             WHERE
-                suo.prsano = '$filtro->exercicio' {$filtroUO}
+                suo.prsano = '$filtro->exercicio'
+                {$filtroUO}
                 AND suo.unofundo = $filtro->unofundo
                 AND {$filtro->unidades}
                 AND suo.suostatus = 'A'
@@ -1607,19 +1623,21 @@ class Pi_PlanoInterno extends Modelo
                 ptr.ptrdotacao,
                 eqd.eqddsc,
                 rp.irpcod
-            FROM
-                monitora.pi_planointerno pli
-                INNER JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+            FROM monitora.pi_planointerno pli
+                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 LEFT JOIN planacomorc.pi_delegacao pde ON pde.pliid = pli.pliid
-                INNER JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod
+                JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod
                     AND suo.unocod = pli.unicod
                     AND suo.prsano = pli.pliano
-                INNER JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
-                INNER JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
+                JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
+                JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
                 LEFT JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
-                LEFT JOIN spo.siopexecucao ex ON ptr.ptres = ex.ptres AND ex.exercicio = ptr.ptrano and ex.plicod = pli.plicod
+                LEFT JOIN spo.siopexecucao ex ON(
+                    ex.exercicio = ptr.ptrano
+                    AND ex.plicod = pli.plicod
+                )
             WHERE
                 pli.plistatus = 'A'
                 AND ptr.irpcod <> '6'

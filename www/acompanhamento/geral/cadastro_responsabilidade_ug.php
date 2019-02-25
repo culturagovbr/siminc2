@@ -117,7 +117,7 @@ $pflcod = $_REQUEST['pflcod'];
                         AND urp.pflcod = '{$pflcod}')
                 WHERE
                     ung.suostatus = 'A'
-                    AND ung.prsano = '". (int)$_SESSION['exercicio']. "'
+                    AND ung.prsano = (select max(prsano) from acompanhamento.programacaoexercicio where prsexerccorrente = true)
                 ORDER BY
                     descricao
             ";
