@@ -327,6 +327,8 @@ class Monitora_Model_Ptres extends Modelo
                 vptr.irpcod,
                 ptr.ptrdotacaocusteio,
                 ptr.ptrdotacaocapital,
+                ptr.funcod as codigo_funcao,
+                ptr.sfucod as codigo_subfuncao,
                 uo.unocod || '-' || uo.unonome AS unidade_orcamentaria
             FROM monitora.ptres ptr
                 JOIN public.vw_subunidadeorcamentaria uo ON(
@@ -348,7 +350,7 @@ class Monitora_Model_Ptres extends Modelo
                 vptr.plodsc,
                 vptr.irpcod
         ";
-        
+
         $listaResultado = $this->carregar($sql);
         return $listaResultado? $listaResultado: [];
     }

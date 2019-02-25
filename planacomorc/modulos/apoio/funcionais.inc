@@ -31,30 +31,28 @@
                                     <th width="5%">Ação</th>
                                     <th>PTRES</th>
                                     <th>Unidade Orçamentária</th>
-                                    <th>Cód. Ação</th>
-                                    <th>Ação</th>
                                     <th>funcional</th>
-                                    <th>Cod. PO</th>
-                                    <th>PO</th>
+                                    <th>Ação</th>
                                     <th>RP</th>
+                                    <th>Função</th>
+                                    <th>Subfunção</th>
                                 </tr>
                             </thead>
                             <tbody>
                             <?php
                                 if($aPtres):
-                                    foreach($aPtres as $dados): ?>
+                                    foreach($aPtres as $funcional): ?>
                                         <tr>
                                             <td class="text-center">
-                                                <a title="Alterar" href="?modulo=apoio/funcionais_form&acao=A&ptrid=<?php echo $dados['ptrid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                                <a title="Alterar" href="?modulo=apoio/funcionais_form&acao=A&ptrid=<?= $funcional['ptrid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                             </td>
-                                            <td><?php echo $dados['ptres']; ?></td>
-                                            <td><?php echo $dados['unidade_orcamentaria']; ?></td>
-                                            <td><?php echo $dados['acacod']; ?></td>
-                                            <td><?php echo $dados['acatitulo']; ?></td>
-                                            <td><?php echo $dados['funcional']; ?></td>
-                                            <td><?php echo $dados['plocod']; ?></td>
-                                            <td><?php echo $dados['plodsc']; ?></td>
-                                            <td><?php echo $dados['irpcod']; ?></td>
+                                            <td><?= $funcional['ptres']; ?></td>
+                                            <td><?= $funcional['unidade_orcamentaria']; ?></td>
+                                            <td><?= $funcional['funcional']; ?></td>
+                                            <td><?= $funcional['acatitulo']; ?></td>
+                                            <td><?= $funcional['irpcod']; ?></td>
+                                            <td><?= $funcional['codigo_funcao']; ?></td>
+                                            <td><?= $funcional['codigo_subfuncao']; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
