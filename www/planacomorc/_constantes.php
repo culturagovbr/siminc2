@@ -82,6 +82,8 @@ define("UNICOD_MC", 55101);
 define("UNICOD_DS", 55101);
 define("UNICOD_MINC", 42101);
 define("UNICOD_ES", 51101);
+define("UNICOD_FNAS", 55901);
+
 define("SUOCOD_ASCOM", 420017);
 define("SUOCOD_ANCINE", 203003);
 

@@ -91,7 +91,7 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                 exo.localizador AS loccod,
                 exo.planoorcamentario AS plocod,
                 exo.numeroptres AS ptres,
-                exo.planointerno AS plicod,
+                SUBSTRING(exo.planointerno, 1, 11) AS plicod,
                 natureza AS natcod,
                 gruponaturezadespesa AS gndcod,
                 CASE WHEN exo.dotacaoinicial <> '' THEN

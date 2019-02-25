@@ -62,6 +62,7 @@ switch ($_REQUEST['req']) {
     case 'atualizarSIOP':
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
+            $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
             $cImportaDadosSiop->AtualizarDados();
             $cImportaDadosSiop->AtualizarDotacao();
             
