@@ -316,6 +316,7 @@ class Monitora_Model_Ptres extends Modelo
     public function recuperarTodosApoio(stdClass $param) {
         $sql = "
             SELECT DISTINCT
+                ptr.ptrid,
                 ptr.ptres,
                 uo.unocod,
 		uo.unocod || '-' || uo.unonome AS unonome,
