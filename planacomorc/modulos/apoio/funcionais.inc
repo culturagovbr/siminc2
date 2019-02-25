@@ -47,9 +47,9 @@
                                                 <a title="Alterar" href="?modulo=apoio/funcionais_form&acao=A&ptrid=<?= $funcional['ptrid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                             </td>
                                             <td><?= $funcional['ptres']; ?></td>
-                                            <td><?= $funcional['unidade_orcamentaria']; ?></td>
-                                            <td><?= $funcional['codigo_funcao']; ?></td>
-                                            <td><?= $funcional['codigo_subfuncao']; ?></td>
+                                            <td><?= $funcional['unonome']; ?></td>
+                                            <td><?= $funcional['funcod']; ?></td>
+                                            <td><?= $funcional['sfucod']; ?></td>
                                             <td><?= $funcional['funcional']; ?></td>
                                             <td><?= $funcional['acatitulo']; ?></td>
                                             <td><?= $funcional['irpcod']; ?></td>

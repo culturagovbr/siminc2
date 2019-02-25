@@ -316,41 +316,37 @@ class Monitora_Model_Ptres extends Modelo
     public function recuperarTodosApoio(stdClass $param) {
         $sql = "
             SELECT DISTINCT
-                ptr.ptrid,
                 ptr.ptres,
                 uo.unocod,
-                vptr.acacod,
-                vptr.acatitulo,
-                vptr.funcional,
-                vptr.plocod,
-                vptr.plodsc,
-                vptr.irpcod,
-                ptr.ptrdotacaocusteio,
-                ptr.ptrdotacaocapital,
-                ptr.funcod as codigo_funcao,
-                ptr.sfucod as codigo_subfuncao,
-                uo.unocod || '-' || uo.unonome AS unidade_orcamentaria
-            FROM monitora.ptres ptr
-                JOIN public.vw_subunidadeorcamentaria uo ON(
-                    uo.suostatus = 'A'
-                    AND ptr.unicod = uo.unocod
+		uo.unocod || '-' || uo.unonome AS unonome,
+                ptr.funcod,
+                ptr.sfucod,
+                ptr.funcional,
+                ptr.acatitulo,
+                ptr.acacod,
+                ptr.irpcod
+            FROM monitora.vw_ptres ptr
+                JOIN public.unidadeorcamentaria uo ON(
+                    uo.unostatus = 'A'
                     AND ptr.ptrano = uo.prsano
+	            AND ptr.unicod = uo.unocod
                 )
-                JOIN monitora.vw_ptres vptr ON ptr.ptrid = vptr.ptrid
             WHERE
                 ptr.ptrstatus = 'A'
                 AND ptr.ptrano = '". (int)$param->exercicio. "'
+                AND unoid NOT IN(
+                    ". Public_Model_UnidadeOrcamentaria::SUOID_ES. ",
+                    ". Public_Model_UnidadeOrcamentaria::SUOID_DS. ",
+                    ". Public_Model_UnidadeOrcamentaria::SUOID_CULTURA. "
+                )
             ORDER BY
                 ptr.ptres DESC,
                 uo.unocod,
-                vptr.acacod,
-                vptr.acatitulo,
-                vptr.funcional,
-                vptr.plocod,
-                vptr.plodsc,
-                vptr.irpcod
+                ptr.acacod,
+                ptr.funcional,
+                ptr.irpcod
         ";
-
+//ver($sql, d);
         $listaResultado = $this->carregar($sql);
         return $listaResultado? $listaResultado: [];
     }
