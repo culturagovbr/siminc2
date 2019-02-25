@@ -55,8 +55,7 @@ class Public_Model_Funcao extends Modelo
      */
     protected $arAtributos = array(
         'funcod' => null,
-        'fundsc' => null,
-        'funstatus' => null,
+        'fundsc' => null
     );
 
 }

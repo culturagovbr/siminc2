@@ -56,8 +56,7 @@ class Public_Model_SubFuncao extends Modelo
     protected $arAtributos = array(
         'sfucod' => null,
         'funcod' => null,
-        'sfudsc' => null,
-        'sfustatus' => null,
+        'sfudsc' => null
     );
 
 }
