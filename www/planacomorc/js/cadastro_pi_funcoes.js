@@ -1135,8 +1135,10 @@
         if(verificarFormularioNaoOrcamentario()){
             // Oculta a opções PTRES(Funcional).
             $('.div_ptres').hide('slow');
+            // Exibe as Etapas
+            $('.div_etapas_pi').show('slow');
             // Oculta o quadro de Custeio e Capital com a opção de Valor do Projeto.
-            $('.div_custeio_capital').hide('slow');
+//            $('.div_custeio_capital').hide('slow');
             // Oculta as colunas e campos do Cronograma Orçamentário.
             $('.td_cronograma_orcamentario').hide('slow');
             // Oculta as colunas e campos do Cronograma Financeiro.
@@ -1159,11 +1161,13 @@
             // Exibe a opções PTRES(Funcional).
             $('.div_ptres').show('slow');
             // Exibe o quadro de Custeio e Capital com a opção de Valor do Projeto.
-            $('.div_custeio_capital').show('slow');
+//            $('.div_custeio_capital').show('slow');
             // Exibe as colunas e campos do Cronograma Orçamentário.
             $('.td_cronograma_orcamentario').show('slow');
             // Exibe as colunas e campos do Cronograma Financeiro.
             $('.td_cronograma_financeiro').show('slow');
+            //Oculta as Etapas
+            $('.div_etapas_pi').hide('slow');
         }
     }
     

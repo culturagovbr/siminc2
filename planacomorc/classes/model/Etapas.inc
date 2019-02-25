@@ -63,4 +63,8 @@ class Planacomorc_Model_Etapas extends Modelo
 
     );
 
+    public function excluirPorPliid($pliid){
+        $sql = "update ".$this->stNomeTabela." set etastatus = 'I' where pliid = '".$pliid."'";
+        $this->executar($sql);
+    }
 }

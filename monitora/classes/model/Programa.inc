@@ -84,7 +84,7 @@ class Monitora_Model_Programa extends Modelo
         $order = $order ? $order : $descricao;
         $where = count($where) ? " where  " . implode(' and ', $where) : '';
 
-        $sql = "select prgcod AS codigo, {$descricao} AS descricao
+        $sql = "select prgid AS codigo, {$descricao} AS descricao
                 from {$this->stNomeTabela}
                 $where
                 order by $order   

@@ -25,11 +25,6 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 
 require_once APPRAIZ. 'proposta/classes/model/PrePlanoInterno.inc';
 
-if ( $_REQUEST['req'] == 'espelho-pedido' ) {
-    include_once APPRAIZ.'alteracao/modulos/principal/popup-espelho-pedido.inc';
-    die;
-}
-
 if($_REQUEST['uploadAnexo']){
     $file = new FilesSimec();
     if($file->setUpload($_REQUEST['arqdescricao'], '', false)){
@@ -149,7 +144,7 @@ if (validaRequisicao('pliid')) { // -- Edição de PI
     // -- Carrega dados do PI e libera apenas o titulo e a descrição para edição
     $dadosPI = carregarPI($_REQUEST['pliid']);
     $enquadramento_pi = carregarEnquadramentoPI($_REQUEST['pliid']);
-    //ver($dadosPI,d);
+//    ver($dadosPI,d);
     $habilitado = 'N';
     $ehSolicitacao = false;
     $obrigatorio = 'S';
@@ -198,7 +193,26 @@ $listaEqdidReduzido = simec_json_encode(buscarListaCodigoEnquadramentoReduzido((
 
 $mPiPlanoInterno = new Pi_PlanoInterno();
 $podeEditar = $mPiPlanoInterno->verificarPermissaoEditar($estadoAtual, $perfis);
-
+if ($_REQUEST['req']){
+    switch ($_REQUEST['req']) {
+        case 'espelho-pedido':
+            include_once APPRAIZ.'alteracao/modulos/principal/popup-espelho-pedido.inc';
+            die;
+        case 'listar-etapas':
+            include_once APPRAIZ.'planacomorc/modulos/principal/unidade/lista_etapas.inc';
+            die;
+        case 'salvar-etapa':
+            $cEtapas = new Planacomorc_Controller_Etapas();
+            echo $cEtapas->salvar($_REQUEST);
+            die;
+        case 'excluir-etapa':
+            $cEtapas = new Planacomorc_Controller_Etapas();
+            echo $cEtapas->excluir($_REQUEST['etaid']);
+            die;            
+        default:
+            break;
+    }
+}
 # Selecionando Aba pelo parametro do URL da pagina
 $aba = $_REQUEST['aba'];
 $classTab0 = empty($aba)? 'active': NULL;
@@ -319,6 +333,18 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                 <textarea class="obrigatorio txareanormal form-control" rows="6" cols="60" name="plidsc" id="plidsc" maxlength="1000"><?php
                                                     if ($dadosPI['plidsc']) {
                                                         echo $dadosPI['plidsc'];
+                                                    }
+                                                    ?></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-3 text-right">
+                                                <label class="control-label" for="plidsc">Recursos Necessários: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <textarea class="obrigatorio txareanormal form-control" rows="6" cols="60" name="plirecursosnecessarios" id="plirecursosnecessarios" maxlength="1000"><?php
+                                                    if ($dadosPI['plirecursosnecessarios']) {
+                                                        echo $dadosPI['plirecursosnecessarios'];
                                                     }
                                                     ?></textarea>
                                             </div>
@@ -645,7 +671,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <h5>Metas </h5>
                                     </div>
                                     <div class="ibox-content">
-                                        <?= $simec->select('pprid', 'Programas', $dadosPI['pprid'], (new Monitora_Model_Programa())->recuperarSqlCombo(['prgcod', 'prgdsc'], ["prgstatus = 'A'"], 'prgdsc')); ?>
+                                        <?= $simec->select('prgid', 'Programas', $dadosPI['prgid'], (new Monitora_Model_Programa())->recuperarSqlCombo(['prgcod', 'prgdsc'], ["prgstatus = 'A'"], 'prgdsc')); ?>
                                         <div class="form-group">
                                             <div class="col-md-3 text-right">
                                                 <label for="oppid" class=" control-label">Objetivo PPA: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
@@ -880,7 +906,27 @@ include APPRAIZ . "includes/cabecalho.inc";
 
                                     </div>
                                 </div>
-
+                                <div class="ibox float-e-margins div_etapas_pi">
+                                    <div class="ibox-title">
+                                        <h5>Etapas:</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <input type="hidden" id="etaid" name="etaid" value="<?=$etaid?>">
+                                        <?php
+                                        echo $simec->input('etadsci', 'Descrição', $etadsc, ['required', 'maxlength' => 250]);
+                                        echo $simec->data('etadatai', 'Data', $etadata, ['required']);
+                                        ?>
+                                        <div class="form-group">
+                                            <div class="text-center">
+                                                <button class="btn btn-primary" type="button" id="btn-salvar-etapa"><i class="fa fa-check"></i>&nbsp;Adicionar
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div id="div_listagem_etapas">
+                                            <?php include_once APPRAIZ.'planacomorc/modulos/principal/unidade/lista_etapas.inc';?>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-6">
 
