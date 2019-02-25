@@ -13,7 +13,7 @@
             die;
         case 'carregarSubfuncao':
             $funcod = $_REQUEST['funcod'];
-            echo $simec->select('sfucod', 'Subfunção', $mPtres->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], ["sfustatus = 'A'", "funcod = '".$funcod."'"]), ['required']);
+            echo $simec->select('sfucod', 'Subfunção', $mPtres->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], ["sfustatus = 'A'", "funcod = '".$funcod."'", "sfuano = '". (int)$_SESSION['exercicio'] ."'"]), ['required']);
             die;
     }
 
@@ -42,9 +42,9 @@
 
                         <?php
                             echo $simec->select('unicod', 'Unidade Orçamentária', $mPtres->unicod, (new Public_Model_UnidadeOrcamentaria())->recuperarSqlComboPorUnocod(['unocod', 'unonome'], null, 'unonome'), ['required']);
-                            echo $simec->select('funcod', 'Função', $mPtres->funcod, (new Public_Model_Funcao())->recuperarSqlCombo(['funcod', 'fundsc'], ["funstatus = 'A'"]), ['required']);
+                            echo $simec->select('funcod', 'Função', $mPtres->funcod, (new Public_Model_Funcao())->recuperarSqlCombo(['funcod', 'fundsc'], ["funstatus = 'A'", "funano = '". (int)$_SESSION['exercicio'] ."'"]), ['required']);
                             echo '<span id="span-subfuncao">';
-                            echo $simec->select('sfucod', 'Subfunção', $mPtres->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], ["sfustatus = 'A'"]), ['required']);
+                            echo $simec->select('sfucod', 'Subfunção', $mPtres->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], ["sfustatus = 'A'", "sfuano = '". (int)$_SESSION['exercicio'] ."'"]), ['required']);
                             echo '</span>';
                             # select de unidade para filtrar a ação com base do unicod.
                             echo '<span id="span-acao">';
