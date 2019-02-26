@@ -71,6 +71,9 @@ class Pi_PlanoInterno extends Modelo
                 ptr.plodsc,
                 ptr.ptrid,
                 ptr.ptres,
+                ptr.ptrdotacao,
+                ptr.ptrdotacaocapital,
+                ptr.ptrdotacaocusteio,
                 lmu.lmuvlr,
                 lmu.lmuid,
                 psu.psuid,
@@ -118,7 +121,10 @@ class Pi_PlanoInterno extends Modelo
                 lmu.lmuid,
                 psu.psuid,
                 ptrdotacao_capital,
-                ptrdotacao_custeio
+                ptrdotacao_custeio,
+                ptr.ptrdotacao,
+                ptr.ptrdotacaocapital,
+                ptr.ptrdotacaocusteio                
             ORDER BY
                 suo.unonome,
                 suo.suonome,
