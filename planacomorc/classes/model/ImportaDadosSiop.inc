@@ -52,6 +52,11 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         $this->executar($sql);
     }
     
+    public function excluiDadosWsOrcamentarioOrgaoAnterior(){
+        $sql = "DELETE FROM wssof.ws_execucaoorcamentariadto WHERE anoexercicio::NUMERIC >= 2019 AND unidadeorcamentaria ILIKE '42%';";
+        $this->executar($sql);
+    }
+    
     public function excluiDadosSiopExecucao($exercicio){
         $sql = "DELETE FROM spo.siopexecucao WHERE exercicio = '". (int)$exercicio. "'";
         $this->executar($sql);

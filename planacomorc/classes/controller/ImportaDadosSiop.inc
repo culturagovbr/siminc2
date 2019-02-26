@@ -30,7 +30,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
 
         $mImportaDadosSiop->excluiDadosWsOrcamentario($this->exercicio);
         $this->ConsultaDadosWs();
-        $mImportaDadosSiop->commit();
+        $mImportaDadosSiop->excluiDadosWsOrcamentarioOrgaoAnterior();
         $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
         $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
         $mImportaDadosSiop->commit();
@@ -47,6 +47,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
         $this->pagina = 0;
         $this->filtro = array('anoExercicio' => $this->exercicio);
 
+        $mImportaDadosSiop->excluiDadosWsOrcamentarioOrgaoAnterior();
         $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
         $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
         $mImportaDadosSiop->commit();
