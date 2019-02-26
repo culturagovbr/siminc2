@@ -87,13 +87,18 @@ class Pi_PlanoInterno extends Modelo
                 ) AS compartilhada
             FROM public.vw_subunidadeorcamentaria suo
                 JOIN spo.ptressubunidade psu on psu.suoid = suo.suoid
-                JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano and ptr.ptrstatus = 'A'
+                JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = psu.ptrid
+                    AND ptr.ptrano = suo.prsano
+                    AND ptr.ptrstatus = 'A'
+                )
                 LEFT JOIN monitora.pi_planointernoptres ppt on ppt.ptrid = ptr.ptrid
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.pliid = ppt.pliid
                     AND pli.ungcod = suo.suocod
                     AND pli.unicod = suo.unocod
-                    AND plistatus = 'A')
+                    AND plistatus = 'A'
+                )
                 LEFT JOIN planacomorc.pi_complemento pic on pic.pliid = pli.pliid
                 LEFT JOIN planacomorc.unidadegestora_limite lmu on lmu.ungcod = suo.suocod AND lmu.lmustatus = 'A' AND lmu.prsano = suo.prsano
             WHERE
@@ -124,7 +129,7 @@ class Pi_PlanoInterno extends Modelo
                 suo.suonome,
                 ptr.funcional
         ";
-
+//ver($sql, d);
         return $sql;
     }
     
