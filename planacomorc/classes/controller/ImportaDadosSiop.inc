@@ -110,6 +110,11 @@ class Planacomorc_Controller_ImportaDadosSiop{
         $this->EnviaEmail();
     }
     
+    public function AtualizarDotacaoInicial(){
+        $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
+        $mImportaDadosSiop->AtualizarDotacaoInicial();
+        $mImportaDadosSiop->commit();
+    }
     private function GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop){
         $this->sqls = [];
         $this->htmlTabela1 = "
