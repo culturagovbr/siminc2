@@ -3350,7 +3350,7 @@ function exibirLinkEspelho($pliid){
  * 
  * @param string $colors
  */
-function carregarGraficoUnidade($colors, $percentualPlanejamento=false){
+function carregarGraficoVinculadas($colors, $percentualPlanejamento=false){
     $oPlanoInterno = new Pi_PlanoInterno();
     echo '<div class="panel-body">';
     $estatistica = $oPlanoInterno->recuperarEstatisticaPagamento((object) array(

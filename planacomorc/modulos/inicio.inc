@@ -33,13 +33,13 @@ switch ($_REQUEST['req']) {
         $oPlanoInterno->recuperarDetalhesValoresGrafico(FALSE, $_REQUEST['tipo_valor'], $_REQUEST['sigla']);
         die;
     case 'carregarGraficoUnidade':
-        carregarGraficoUnidade($colors, true);
+        carregarGraficoVinculadas($colors, true);
         die;
     case 'carregarGraficoDireta':
-        carregarGraficoDireta($colors, true);
+//        carregarGraficoDireta($colors, true);
         die;
     case 'carregarGraficoCgconCogep':
-        carregarGraficoCgconCogep($colors, true);
+//        carregarGraficoCgconCogep($colors, true);
         die;
     case 'atualizarSIMINC':
         try{
@@ -160,20 +160,36 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="ibox-content">
                         <div class="tabs-container tabs">
                             <ul class="nav nav-tabs prodTabs">
-                                <li class="active"><a data-toggle="tab" href="#tab-1" data-url="?modulo=inicio&acao=C&req=carregarGraficoUnidade"> Gráficos das Unidades</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-2" data-url="?modulo=inicio&acao=C&req=carregarGraficoDireta"> Gráficos da Direta</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-3" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> Gráficos da CGCON/COGEP</a></li>
+                                <li class="active"><a data-toggle="tab" href="#tab-1" data-url="?modulo=inicio&acao=C&req=carregarGraficoVinculadas"> Vinculadas</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-2" data-url="?modulo=inicio&acao=C&req=carregarGraficoDireta"> Área Meio</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-3" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> Cultura</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-4" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> Esporte</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-5" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> Desenv. Social</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-6" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> SESAN e SNPDH</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-7" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> SNRC e FNAS</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
                                     <!--O grafico 1 será carregado aqui via ajax-->
-                                    <?php carregarGraficoUnidade($colors, true); ?>
+                                    <?php carregarGraficoVinculadas($colors, true); ?>
                                 </div>
                                 <div id="tab-2" class="tab-pane">
                                     <!--O grafico 2 será carregado aqui via ajax-->
                                 </div>
                                 <div id="tab-3" class="tab-pane">
                                     <!--O grafico 3 será carregado aqui via ajax-->
+                                </div>
+                                <div id="tab-4" class="tab-pane">
+                                    <!--O grafico 4 será carregado aqui via ajax-->
+                                </div>
+                                <div id="tab-5" class="tab-pane">
+                                    <!--O grafico 5 será carregado aqui via ajax-->
+                                </div>
+                                <div id="tab-6" class="tab-pane">
+                                    <!--O grafico 6 será carregado aqui via ajax-->
+                                </div>
+                                <div id="tab-7" class="tab-pane">
+                                    <!--O grafico 7 será carregado aqui via ajax-->
                                 </div>
                             </div>
                         </div>
