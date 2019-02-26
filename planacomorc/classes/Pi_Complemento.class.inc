@@ -60,6 +60,7 @@ class Pi_Complemento extends Modelo{
         'secid' => null,
         'maiid' => null,
         'masid' => null,
+        'prgid' => null,
     );
     
     /**

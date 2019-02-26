@@ -212,7 +212,9 @@
 
         // Se o TED não estiver marcado o sistema obriga a preencher a modalidade de Pactuação.
         if(!$('#picted').is(':checked')){
-            listaObrigatorios.push('capid');
+            if(!verificarFormularioNaoOrcamentario()){
+                listaObrigatorios.push('capid');
+            }
         }
 
         // Verifica se o formulário é reduzido ou completo.
@@ -223,7 +225,10 @@
             // Se o formulario não possui as opções de manutenção item o sistema lista como obrigatório as opções Objetivo PPA, Metas PPA, Iniciativa PPA
             }
         } else {
-            listaObrigatorios.push('oppid', 'mppid', 'mdeid', 'neeid', 'mpnid', 'ipnid');
+            listaObrigatorios.push('oppid', 'mppid');
+            if(!verificarFormularioNaoOrcamentario()){
+                listaObrigatorios.push('mdeid', 'neeid', 'mpnid', 'ipnid');
+            }
         }
         
         // Verifica se o usuário escolheu um produto diferente de não se aplica para verificar a validação do cronograma físico.
