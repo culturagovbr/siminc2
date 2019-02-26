@@ -47,6 +47,7 @@ switch ($_REQUEST['req']) {
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
             $cImportaDadosSiop->AtualizarDadosSiminc();
             $cImportaDadosSiop->AtualizarDotacao();
+            $cImportaDadosSiop->AtualizarDotacaoInicial();
             
             echo simec_json_encode(array(
                 'success' => 1,
@@ -65,6 +66,7 @@ switch ($_REQUEST['req']) {
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
             $cImportaDadosSiop->AtualizarDados();
             $cImportaDadosSiop->AtualizarDotacao();
+            $cImportaDadosSiop->AtualizarDotacaoInicial();
             
             echo simec_json_encode(array(
                 'success' => 1,
@@ -287,25 +289,27 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             <?php endif; ?>
                                         </td>
 
-                                        <td class="text-right"><?php echo number_format($dado['ptrdotacao_custeio'], 0, ',', '.'); ?></td>
+                                        <td class="text-right title-disponivel" 
+                                            title="<?php echo"Dotação Inicial Custeio: ".number_format($dado['ptrdotacaoinicialcusteio'],0,',','.');?>"><?php echo number_format($dado['ptrdotacao_custeio'], 0, ',', '.'); ?></td>
                                         <?php $disponivel = $dado['ptrdotacao_custeio'] - $dado['picvalorcusteio']; ?>
                                         <td style="color: #<?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>; border-right: 1px black solid;" class="text-right title-disponivel" 
-                                            title="<?php echo"Disponível: ".number_format($disponivel, 0, ',', '.')."\n".
-                                                             "Dotação Inicial: ".number_format($dado['ptrdotacao'],0,',','.');?>"
+                                            title="<?php echo"Disponível: ".number_format($disponivel, 0, ',', '.');?>"
                                             <?php echo number_format($dado['picvalorcusteio'], 0, ',', '.'); ?>
                                         </td>
 
-                                        <td class="text-right"><?php echo number_format($dado['ptrdotacao_capital'], 0, ',', '.'); ?></td>
+                                        <td class="text-right title-disponivel" 
+                                            title="<?php echo"Dotação Inicial Capital: ".number_format($dado['ptrdotacaoinicialcapital'],0,',','.');?>"><?php echo number_format($dado['ptrdotacao_capital'], 0, ',', '.'); ?></td>
                                         <?php $disponivel = $dado['ptrdotacao_capital'] - $dado['picvalorcapital']; ?>
                                         <td style="color: #<?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>; border-right: 1px black solid;" class="text-right title-disponivel" 
-                                            title="<?php echo"Disponível: ".number_format($disponivel, 0, ',', '.')."\n".
-                                                             "Dotação Inicial: ".number_format($dado['ptrdotacao'],0,',','.');?>">
+                                            title="<?php echo"Disponível: ".number_format($disponivel, 0, ',', '.');?>">
                                             <?php echo number_format($dado['picvalorcapital'], 0, ',', '.'); ?>
                                         </td>
 
-                                        <td class="text-right"><?php echo number_format(($dado['ptrdotacao_custeio'] + $dado['ptrdotacao_capital']), 0, ',', '.'); ?></td>
+                                        <td class="text-right title-disponivel" 
+                                            title="<?php echo"Dotação Inicial Total: ".number_format($dado['ptrdotacaoinicialcusteio']+$dado['ptrdotacaoinicialcapital'],0,',','.');?>"><?php echo number_format(($dado['ptrdotacao_custeio'] + $dado['ptrdotacao_capital']), 0, ',', '.'); ?></td>
                                         <?php $disponivel = ($dado['ptrdotacao_custeio'] + $dado['ptrdotacao_capital']) - ($dado['picvalorcusteio'] + $dado['picvalorcapital']); ?>
-                                        <td style="color: #<?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>; border-right: 1px black solid;" class="text-right title-disponivel" title="Disponível: <?php echo number_format($disponivel, 0, ',', '.'); ?>">
+                                        <td style="color: #<?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>; border-right: 1px black solid;" class="text-right title-disponivel" 
+                                            title="Disponível: <?php echo number_format($disponivel, 0, ',', '.'); ?>">
                                             <?php echo number_format(($dado['picvalorcusteio'] + $dado['picvalorcapital']), 0, ',', '.'); ?>
                                         </td>
                                         <td class="text-center" style="border-right: 1px black solid;"> - </td>

@@ -305,5 +305,24 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         return $this->carregar($sql);        
     }
 
+    public function AtualizarDotacaoInicial(){
+        $sql = " update monitora.ptres
+                    set ptrdotacaoinicialcapital = x.ptrdotacaoinicialcapital,
+                        ptrdotacaoinicialcusteio = x.ptrdotacaoinicialcusteio
+                 from 
+                 (select sum(case when exe.categoriaeconomica='4' then exe.dotacaoinicial::numeric else 0 end) as ptrdotacaoinicialcapital,
+                        sum(case when exe.categoriaeconomica='3' then exe.dotacaoinicial::numeric else 0 end) as ptrdotacaoinicialcusteio,
+                        ptres.ptrid
+                   from wssof.ws_execucaoorcamentariadto exe, monitora.ptres ptres
+                  where exe.acao = ptres.acacod
+                    and exe.planoorcamentario = ptres.plocod
+                    and exe.unidadeorcamentaria = ptres.unicod
+                    and exe.programa = ptres.prgcod
+                    and exe.anoexercicio::integer = ptres.ptrano::integer
+                    and exe.localizador = ptres.loccod
+                  group by ptres.ptrid) as x
+                  where monitora.ptres.ptrid = x.ptrid";
+        $this->executar($sql);
+    }
 }//end Class
 ?>

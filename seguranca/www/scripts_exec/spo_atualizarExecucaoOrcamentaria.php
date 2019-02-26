@@ -36,7 +36,9 @@ try{
     $cImportaDadosSiop->AtualizarDados();
     echo '2)Montando email para ser enviado! | ';
     $cImportaDadosSiop->AtualizarDotacao();
-    echo '3)Rotina Finalizada!';
+    echo '3)Atualizando Dotações Iniciais! | ';
+    $cImportaDadosSiop->AtualizarDotacaoInicial();
+    echo '4)Rotina Finalizada!';
 } catch (Exception $e){
     # Buscando Destinatários
     $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();

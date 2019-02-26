@@ -71,9 +71,8 @@ class Pi_PlanoInterno extends Modelo
                 ptr.plodsc,
                 ptr.ptrid,
                 ptr.ptres,
-                ptr.ptrdotacao,
-                ptr.ptrdotacaocapital,
-                ptr.ptrdotacaocusteio,
+                pt.ptrdotacaoinicialcapital,
+                pt.ptrdotacaoinicialcusteio,
                 lmu.lmuvlr,
                 lmu.lmuid,
                 psu.psuid,
@@ -91,6 +90,7 @@ class Pi_PlanoInterno extends Modelo
             FROM public.vw_subunidadeorcamentaria suo
                 JOIN spo.ptressubunidade psu on psu.suoid = suo.suoid
                 JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano and ptr.ptrstatus = 'A'
+                join monitora.ptres pt on ptr.ptrid = pt.ptrid
                 LEFT JOIN monitora.pi_planointernoptres ppt on ppt.ptrid = ptr.ptrid
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.pliid = ppt.pliid
@@ -122,9 +122,8 @@ class Pi_PlanoInterno extends Modelo
                 psu.psuid,
                 ptrdotacao_capital,
                 ptrdotacao_custeio,
-                ptr.ptrdotacao,
-                ptr.ptrdotacaocapital,
-                ptr.ptrdotacaocusteio                
+                pt.ptrdotacaoinicialcapital,
+                pt.ptrdotacaoinicialcusteio              
             ORDER BY
                 suo.unonome,
                 suo.suonome,
