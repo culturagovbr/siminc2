@@ -11,6 +11,10 @@
         case 'carregarAcaoPorUo':
             echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(["COALESCE(prgcod, '')", "COALESCE(acacod, '')", "COALESCE(acaobjetivocod, '')", "COALESCE(loccod, '')", "COALESCE(acatitulo, '')"], ["unicod = '". $_REQUEST['unicod']. "'"]), ['required']);
             die;
+        case 'carregarSubfuncao':
+            $funcod = $_REQUEST['funcod'];
+            echo $simec->select('sfucod', 'Subfunção', $mPtres->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], ["funcod = '".$funcod."'"]), ['required']);
+            die;
     }
 
     $mPtres = new Monitora_Model_Ptres($_REQUEST['ptrid']);
@@ -38,6 +42,10 @@
 
                         <?php
                             echo $simec->select('unicod', 'Unidade Orçamentária', $mPtres->unicod, (new Public_Model_UnidadeOrcamentaria())->recuperarSqlComboPorUnocod(['unocod', 'unonome'], null, 'unonome'), ['required']);
+                            echo $simec->select('funcod', 'Função', $mPtres->funcod, (new Public_Model_Funcao())->recuperarSqlCombo(['funcod', 'fundsc'], null), ['required']);
+                            echo '<span id="span-subfuncao">';
+                            echo $simec->select('sfucod', 'Subfunção', $mPtres->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], null), ['required']);
+                            echo '</span>';
                             # select de unidade para filtrar a ação com base do unicod.
                             echo '<span id="span-acao">';
                             echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(['prgcod', 'acacod', 'acaobjetivocod', 'loccod', 'acatitulo'], ["unicod = '". $mPtres->unicod. "'"]), ['required']);
@@ -74,6 +82,10 @@
 
         $('#unicod').change(function () {
             $('#span-acao').load('?modulo=apoio/funcionais_form&acao=A&req=carregarAcaoPorUo&unicod=' + $(this).val());
+        });
+
+        $('#funcod').change(function () {
+            $('#span-subfuncao').load('?modulo=apoio/funcionais_form&acao=A&req=carregarSubfuncao&funcod=' + $(this).val());
         });
 
     });

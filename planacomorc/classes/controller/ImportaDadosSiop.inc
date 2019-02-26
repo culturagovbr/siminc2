@@ -24,20 +24,33 @@ class Planacomorc_Controller_ImportaDadosSiop{
         ini_set("memory_limit", "2048M");
         session_start();
         
-        for($ano=2018;$ano<=2019;$ano++){
-            $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-//            $this->exercicio = date('Y');
-            $this->pagina = 0;
-            $this->exercicio = $ano;
-            $this->filtro = array('anoExercicio' => $this->exercicio);
+        $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
+        $this->pagina = 0;
+        $this->filtro = array('anoExercicio' => $this->exercicio);
 
-            $mImportaDadosSiop->excluiDadosWsOrcamentario($this->exercicio);
-            $this->ConsultaDadosWs();
-            $mImportaDadosSiop->commit();
-            $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
-            $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
-            $mImportaDadosSiop->commit();
-        }
+        $mImportaDadosSiop->excluiDadosWsOrcamentario($this->exercicio);
+        $this->ConsultaDadosWs();
+        $mImportaDadosSiop->excluiDadosWsOrcamentarioOrgaoAnterior();
+        $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
+        $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
+        $mImportaDadosSiop->commit();
+    }
+    
+    public function AtualizarDadosSiminc(){
+        ini_set('display_errors', 1);
+        ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+        set_time_limit(0);
+        ini_set("memory_limit", "2048M");
+        session_start();
+        
+        $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
+        $this->pagina = 0;
+        $this->filtro = array('anoExercicio' => $this->exercicio);
+
+        $mImportaDadosSiop->excluiDadosWsOrcamentarioOrgaoAnterior();
+        $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
+        $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
+        $mImportaDadosSiop->commit();
     }
     
     private function ConsultaDadosWs(){
@@ -51,6 +64,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
                 ->setRegistrosPorPagina(2000)
             ;
             $resultados = $service->configure()->request();
+
             if($resultados){
                 include_once APPRAIZ. 'wssof/classes/Ws_ExecucaoOrcamentariaDto.inc';
                 foreach ($resultados as $resultado){
@@ -69,7 +83,6 @@ class Planacomorc_Controller_ImportaDadosSiop{
     }
 
     public function AtualizarDotacao(){
-        $this->exercicio = date('Y');
         $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
         $listaResultadoFuncionaisSIOP = $mImportaDadosSiop->RetornaFuncionais($this->exercicio);
         $listaFuncionaisSiop = [];
