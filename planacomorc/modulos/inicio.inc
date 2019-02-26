@@ -32,14 +32,19 @@ switch ($_REQUEST['req']) {
     case 'detalhe-grafico-uo':
         $oPlanoInterno->recuperarDetalhesValoresGrafico(FALSE, $_REQUEST['tipo_valor'], $_REQUEST['sigla']);
         die;
-    case 'carregarGraficoUnidade':
-        carregarGraficoVinculadas($colors, true);
+    case 'carregarGraficoVinculadas':
+        montarGraficoVinculadas($colors, TRUE);
         die;
     case 'carregarGraficoDireta':
-//        carregarGraficoDireta($colors, true);
+        if((int)$_SESSION['exercicio'] > 2018){
+            $listaSubunidade = array(SUOCOD_MC_CGLC, SUOCOD_MC_SE, SUOCOD_MC_COGEP, SUOCOD_MC_STI, SUOCOD_MC_SAGI);
+        } else {
+            $listaSubunidade = array(SUOCOD_SPOA, SUOCOD_SADI, SUOCOD_ASCOM, SUOCOD_DDI, SUOCOD_SE, SUOCOD_SEC, SUOCOD_SAV, SUOCOD_SEFIC, SUOCOD_CGTEC, SUOCOD_SADIDEINT, SUOCOD_GM, SUOCOD_SCDCDLLLB, SUOCOD_SCDC, SUOCOD_SEINFRA);
+        }
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;
     case 'carregarGraficoCgconCogep':
-//        carregarGraficoCgconCogep($colors, true);
+        carregarGraficoCgconCogep($colors, TRUE);
         die;
     case 'atualizarSIMINC':
         try{
@@ -171,7 +176,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
                                     <!--O grafico 1 será carregado aqui via ajax-->
-                                    <?php carregarGraficoVinculadas($colors, true); ?>
+                                    <?php montarGraficoVinculadas($colors, true); ?>
                                 </div>
                                 <div id="tab-2" class="tab-pane">
                                     <!--O grafico 2 será carregado aqui via ajax-->

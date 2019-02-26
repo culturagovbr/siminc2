@@ -3346,18 +3346,18 @@ function exibirLinkEspelho($pliid){
 }
 
 /**
- * Exibe o grafico de unidades.
+ * Exibe o grafico de UOs vinculadas.
  * 
  * @param string $colors
+ * @param boolean $percentualPlanejamento
  */
-function carregarGraficoVinculadas($colors, $percentualPlanejamento=false){
+function montarGraficoVinculadas($colors, $percentualPlanejamento = FALSE){
     $oPlanoInterno = new Pi_PlanoInterno();
     echo '<div class="panel-body">';
-    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamento((object) array(
-        'exercicio' => $_SESSION['exercicio'],
-        'unofundo' => 'FALSE'
+    $estatistica = $oPlanoInterno->consultarExecucaoOrcamentariaUo((object) array(
+        'exercicio' => (int)$_SESSION['exercicio']
     ));
-    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
+    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, FALSE);
     $grafico
         ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
         ->setColors($colors)
@@ -3367,19 +3367,22 @@ function carregarGraficoVinculadas($colors, $percentualPlanejamento=false){
 }
 
 /**
- * Exibe o grafico de unidades.
+ * Exibe o grafico de Subunidades.
  * 
  * @param string $colors
+ * @param boolean $percentualPlanejamento
+ * @param array $listaSubunidade
  */
-function carregarGraficoDireta($colors, $percentualPlanejamento=false){
+function montarGraficoDireta($colors, $percentualPlanejamento = FALSE, $listaSubunidade = array()){
     $oPlanoInterno = new Pi_PlanoInterno();
     echo '<div class="panel-body">';
-    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
+    $estatistica = $oPlanoInterno->consultarExecucaoOrcamentariaSubunidade((object) array(
         'exercicio' => $_SESSION['exercicio'],
-        'unocod' => UNICOD_MC,
-        'unofundo' => 'FALSE',
-        'unidades'=> "suocod NOT IN('". SUOCOD_CGCON. "', '". SUOCOD_COGEP. "')"));
-    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
+        # Caso o exercicio seja superior a 2018(ano da unificação de Òrgãos), o sistema busca todas as vinculadas do MC
+        'unocod' => (int)$_SESSION['exercicio'] > 2018? UNICOD_MC: UNICOD_MINC,
+        'listaSubunidade' => $listaSubunidade
+    ));
+    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, FALSE);
     $grafico
         ->setWidth('85%')
         ->setColors($colors)
@@ -3394,21 +3397,21 @@ function carregarGraficoDireta($colors, $percentualPlanejamento=false){
  * 
  * @param string $colors
  */
-function carregarGraficoCgconCogep($colors, $percentualPlanejamento=false){
-    $oPlanoInterno = new Pi_PlanoInterno();
-    echo '<div class="panel-body">';
-    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
-        'exercicio' => $_SESSION['exercicio'],
-        'unocod' => UNICOD_MC,
-        'unofundo' => 'FALSE',
-        'unidades'=>"suocod IN('". SUOCOD_CGCON. "', '". SUOCOD_COGEP. "')"));
-    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
-    $grafico
-        ->setWidth('85%')
-        ->setColors($colors)
-        ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
-        ->setEvent(array('click' => "exibirModalDetalheGrafico(1, event.point.series.name, event.point.category);"))
-        ->gerarGrafico($estatistica, $percentualPlanejamento);
-    echo '</div>';
-}
+//function carregarGraficoCgconCogep($colors, $percentualPlanejamento=false){
+//    $oPlanoInterno = new Pi_PlanoInterno();
+//    echo '<div class="panel-body">';
+//    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
+//        'exercicio' => $_SESSION['exercicio'],
+//        'unocod' => UNICOD_MC,
+//        'unofundo' => 'FALSE',
+//        'unidades'=>"suocod IN('". SUOCOD_CGCON. "', '". SUOCOD_COGEP. "')"));
+//    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
+//    $grafico
+//        ->setWidth('85%')
+//        ->setColors($colors)
+//        ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
+//        ->setEvent(array('click' => "exibirModalDetalheGrafico(1, event.point.series.name, event.point.category);"))
+//        ->gerarGrafico($estatistica, $percentualPlanejamento);
+//    echo '</div>';
+//}
 
