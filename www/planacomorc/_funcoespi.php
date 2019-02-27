@@ -1401,7 +1401,7 @@ function salvarPiComplemento($pliid, $dados)
     $modelPiComplemento->picted = $dados['picted'] == 't' ? 't' : 'f';
     $modelPiComplemento->picedital = $dados['picedital'] == 't' ? 't' : 'f';
 //ver($modelPiComplemento,d);
-    $modelPiComplemento->salvar(NULL, NULL, array('ptaid', 'pijid', 'oppid', 'mppid', 'ippid', 'pprid', 'pumid', 'picpriorizacao', 'picquantidade', 'picpublico', 'picexecucao', 'picvalorcusteio', 'picvalorcapital'));
+    $modelPiComplemento->salvar(NULL, NULL, array('prgid', 'ptaid', 'pijid', 'oppid', 'mppid', 'ippid', 'pprid', 'pumid', 'picpriorizacao', 'picquantidade', 'picpublico', 'picexecucao', 'picvalorcusteio', 'picvalorcapital'));
     
     associarConvenio($pliid, $dados);
     associarSniic($pliid, $dados);
