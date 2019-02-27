@@ -76,6 +76,7 @@ define("FNDE", 26298);
 define("EBSERH", 26443);
 define("FIES", 74902);
 define("SUPERVISAOMEC", 73107);
+
 define("UNICOD_FNC", 42902);
 define("UNICOD_FRGPS", 55902);
 define("UNICOD_MC", 55101);
@@ -83,6 +84,26 @@ define("UNICOD_DS", 55101);
 define("UNICOD_MINC", 42101);
 define("UNICOD_ES", 51101);
 define("UNICOD_FNAS", 55901);
+
+# Novas UOs vinculadas do MC
+define("UNOCOD_ANCINE", 55208);
+define("UNOCOD_FSA", 55903);
+define("UNOCOD_FBN", 55204);
+define("UNOCOD_FCP", 55205);
+define("UNOCOD_FCRB", 55203);
+define("UNOCOD_FUNARTE", 55206);
+define("UNOCOD_IBRAM", 55209);
+define("UNOCOD_IPHAN", 55207);
+define("UNOCOD_RSFNC", 74912);
+define("UNOCOD_AGLO", 55202);
+
+# Novas Subunidades CIDADANIA(UGs da Direta)
+define("SUOCOD_MC_CGLC", 550005);
+define("SUOCOD_MC_SE", 550003);
+define("SUOCOD_MC_COGEP", 550006);
+define("SUOCOD_MC_STI", 550016);
+define("SUOCOD_MC_SAGI", 550010);
+
 
 define("SUOCOD_ASCOM", 420017);
 define("SUOCOD_ANCINE", 203003);
@@ -93,8 +114,40 @@ define("SUOCOD_FCP", 344041);
 define("SUOCOD_IPHAN", 403101);
 define("SUOCOD_FUNARTE", 403201);
 define("SUOCOD_IBRAM", 423001);
+
+# Antigas Subunidades da CULTURA(UGs da Direta)
+define('SUOCOD_SPOA', 420019);
+define('SUOCOD_SADI', 420032);
+define('SUOCOD_ASCOM', 420017);
+define('SUOCOD_DDI', 420046);
+define('SUOCOD_SE', 420010);
+define('SUOCOD_SEC', 420030);
+define('SUOCOD_SAV', 420006);
+define('SUOCOD_SEFIC', 420014);
+define('SUOCOD_CGTEC', 420020);
+define('SUOCOD_SADIDEINT', 420041);
+define('SUOCOD_GM', 420016);
+define('SUOCOD_SCDCDLLLB', 420048);
+define('SUOCOD_SCDC', 420029);
+define('SUOCOD_SEINFRA', 420044);
 define("SUOCOD_CGCON", 420009);
 define("SUOCOD_COGEP", 420008);
+
+# Novas Subunidades do ESPORTE(UGs da Direta)
+define('SUOCOD_ES_ABCD', 180016);
+define('SUOCOD_ES_SNDT', 180074);
+define('SUOCOD_ES_SNIS', 180073);
+define('SUOCOD_ES_SNAR', 180009);
+define('SUOCOD_ES_DIFE', 180076);
+
+# Novas Subunidades do DESENVOLVIMENTO SOCIAL(UGs da Direta)
+define('SUOCOD_DS_SENAS', 550011);
+define('SUOCOD_DS_SNPR', 550008);
+define('SUOCOD_DS_SNCPD', 550009);
+define('SUOCOD_DS_SNPU', 550018);
+define('SUOCOD_DS_SNPDH', 550023);
+define('SUOCOD_DS_SNRC', 550007);
+define('SUOCOD_DS_FNAS', 330013);
 
 // -- E-mail de recebimento de notificações sobre
 define('EMAIL_NOTIFICACAO_SUBACAO', $_SESSION['email_sistema']);

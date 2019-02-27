@@ -32,14 +32,89 @@ switch ($_REQUEST['req']) {
     case 'detalhe-grafico-uo':
         $oPlanoInterno->recuperarDetalhesValoresGrafico(FALSE, $_REQUEST['tipo_valor'], $_REQUEST['sigla']);
         die;
-    case 'carregarGraficoUnidade':
-        carregarGraficoUnidade($colors, true);
+    case 'carregarGraficoVinculadas':
+        montarGraficoVinculadas($colors, TRUE);
         die;
     case 'carregarGraficoDireta':
-        carregarGraficoDireta($colors, true);
+        if((int)$_SESSION['exercicio'] > 2018){
+            $listaSubunidade = array(
+                SUOCOD_MC_CGLC,
+                SUOCOD_MC_SE,
+                SUOCOD_MC_COGEP,
+                SUOCOD_MC_STI,
+                SUOCOD_MC_SAGI
+            );
+        } else {
+            $listaSubunidade = array(
+                SUOCOD_SPOA,
+                SUOCOD_SADI,
+                SUOCOD_ASCOM,
+                SUOCOD_DDI,
+                SUOCOD_SE,
+                SUOCOD_SEC,
+                SUOCOD_SAV,
+                SUOCOD_SEFIC,
+                SUOCOD_CGTEC,
+                SUOCOD_SADIDEINT,
+                SUOCOD_GM,
+                SUOCOD_SCDCDLLLB,
+                SUOCOD_SCDC,
+                SUOCOD_SEINFRA
+            );
+        }
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoCultura':
+        $listaSubunidade = array(
+            SUOCOD_DDI,
+            SUOCOD_SCDC,
+            SUOCOD_SEC,
+            SUOCOD_SCDCDLLLB,
+            SUOCOD_SEFIC,
+            SUOCOD_SEINFRA,
+            SUOCOD_SAV,
+            SUOCOD_SADIDEINT
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoEsporte':
+        $listaSubunidade = array(
+            SUOCOD_ES_ABCD,
+            SUOCOD_ES_SNDT,
+            SUOCOD_ES_SNIS,
+            SUOCOD_ES_SNAR,
+            SUOCOD_ES_DIFE
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoDesenvolvimento':
+        $listaSubunidade = array(
+            SUOCOD_DS_SENAS,
+            SUOCOD_DS_SNPR,
+            SUOCOD_DS_SNCPD
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoSesan':
+        $listaSubunidade = array(
+            SUOCOD_DS_SNPU,
+            SUOCOD_DS_SNPDH
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoSnrc':
+        $listaSubunidade = array(
+            SUOCOD_DS_SNRC,
+            SUOCOD_DS_FNAS
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;
     case 'carregarGraficoCgconCogep':
-        carregarGraficoCgconCogep($colors, true);
+        $listaSubunidade = array(
+            SUOCOD_CGCON,
+            SUOCOD_COGEP
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;
     case 'atualizarSIMINC':
         try{
@@ -123,9 +198,9 @@ include APPRAIZ . "includes/cabecalho.inc";
     <div class="col-lg-8">
         <div style="padding-top: 10px;" class="text-right">
             <?php if((in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
-                <a id="btn-atualizar-siminc" class="btn btn-success" title="Atualiza os dados de Dotações das Funcionais e execução orçamentária da própria base de dados do <?= SIGLA_SISTEMA; ?>">
+<!--                <a id="btn-atualizar-siminc" class="btn btn-success" title="Atualiza os dados de Dotações das Funcionais e execução orçamentária da própria base de dados do <?= SIGLA_SISTEMA; ?>">
                     <i class="fa fa-cloud-download"></i> Atualizar <?= SIGLA_SISTEMA; ?>
-                </a>
+                </a>-->
             <?php } ?>
             <?php if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
                 <a id="btn-atualizar-siop" class="btn btn-success" title="Busca os dados do sistema SIOP e atualiza os dados de Dotações das Funcionais e execução orçamentária">
@@ -162,20 +237,36 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="ibox-content">
                         <div class="tabs-container tabs">
                             <ul class="nav nav-tabs prodTabs">
-                                <li class="active"><a data-toggle="tab" href="#tab-1" data-url="?modulo=inicio&acao=C&req=carregarGraficoUnidade"> Gráficos das Unidades</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-2" data-url="?modulo=inicio&acao=C&req=carregarGraficoDireta"> Gráficos da Direta</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-3" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> Gráficos da CGCON/COGEP</a></li>
+                                <li class="active"><a data-toggle="tab" href="#tab-1" data-url="?modulo=inicio&acao=C&req=carregarGraficoVinculadas"> Vinculadas</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-2" data-url="?modulo=inicio&acao=C&req=carregarGraficoDireta"> Área Meio</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-3" data-url="?modulo=inicio&acao=C&req=carregarGraficoCultura"> Cultura</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-4" data-url="?modulo=inicio&acao=C&req=carregarGraficoEsporte"> Esporte</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-5" data-url="?modulo=inicio&acao=C&req=carregarGraficoDesenvolvimento"> Desenv. Social</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-6" data-url="?modulo=inicio&acao=C&req=carregarGraficoSesan"> SESAN e SNPDH</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-7" data-url="?modulo=inicio&acao=C&req=carregarGraficoSnrc"> SNRC e FNAS</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
                                     <!--O grafico 1 será carregado aqui via ajax-->
-                                    <?php carregarGraficoUnidade($colors, true); ?>
+                                    <?php montarGraficoVinculadas($colors, true); ?>
                                 </div>
                                 <div id="tab-2" class="tab-pane">
                                     <!--O grafico 2 será carregado aqui via ajax-->
                                 </div>
                                 <div id="tab-3" class="tab-pane">
                                     <!--O grafico 3 será carregado aqui via ajax-->
+                                </div>
+                                <div id="tab-4" class="tab-pane">
+                                    <!--O grafico 4 será carregado aqui via ajax-->
+                                </div>
+                                <div id="tab-5" class="tab-pane">
+                                    <!--O grafico 5 será carregado aqui via ajax-->
+                                </div>
+                                <div id="tab-6" class="tab-pane">
+                                    <!--O grafico 6 será carregado aqui via ajax-->
+                                </div>
+                                <div id="tab-7" class="tab-pane">
+                                    <!--O grafico 7 será carregado aqui via ajax-->
                                 </div>
                             </div>
                         </div>
