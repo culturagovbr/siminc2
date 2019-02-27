@@ -130,6 +130,7 @@ class Acompanhamento_Model_Acompanhamentopnc extends Modelo
                             AND a1.acpenviado IS TRUE
                             AND a1.acpstatus = 'A'
                             AND a1.janid = ". (int)$filtro->janid. "
+                            AND a1.suoid = '". (int)$filtro->suoid. "'
                     ) AS acompanhamento,
                     (
                         SELECT
