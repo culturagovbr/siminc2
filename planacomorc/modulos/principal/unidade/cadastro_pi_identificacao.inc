@@ -28,7 +28,7 @@
                         ?></textarea>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group recursos_necessarios">
                 <div class="col-md-3 text-right">
                     <label class="control-label" for="plidsc">Recursos Necessários: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                 </div>

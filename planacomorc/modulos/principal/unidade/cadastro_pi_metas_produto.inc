@@ -4,7 +4,9 @@
             <h5>Metas </h5>
         </div>
         <div class="ibox-content">
-            <?= $simec->select('prgid', 'Programas', $dadosPI['prgid'], (new Monitora_Model_Programa())->recuperarSqlCombo(['prgcod', 'prgdsc'], ["prgstatus = 'A'"], 'prgdsc')); ?>
+            <div class="div_programa">
+                <?= $simec->select('prgid', 'Programas', $dadosPI['prgid'], (new Monitora_Model_Programa())->recuperarSqlCombo(['prgcod', 'prgdsc'], ["prgstatus = 'A'"], 'prgdsc')); ?>
+            </div>
             <div class="form-group">
                 <div class="col-md-3 text-right">
                     <label for="oppid" class=" control-label">Objetivo PPA: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>

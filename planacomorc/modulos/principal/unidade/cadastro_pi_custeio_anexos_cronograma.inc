@@ -1,6 +1,6 @@
-<div class="col-md-6 div_custeio_capital">
+<div class="col-md-6">
 
-    <div class="ibox float-e-margins">
+    <div class="ibox float-e-margins div_custeio_capital">
         <div class="ibox-title">
             <h5>Custeio e Capital</h5>
         </div>
