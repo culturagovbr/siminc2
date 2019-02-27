@@ -1138,7 +1138,7 @@
             // Exibe as Etapas
             $('.div_etapas_pi').show('slow');
             // Oculta o quadro de Custeio e Capital com a opção de Valor do Projeto.
-//            $('.div_custeio_capital').hide('slow');
+            $('.div_custeio_capital').hide('slow');
             // Oculta as colunas e campos do Cronograma Orçamentário.
             $('.td_cronograma_orcamentario').hide('slow');
             // Oculta as colunas e campos do Cronograma Financeiro.
@@ -1157,17 +1157,33 @@
             $('#div_pronac').hide('slow');
             // Oculta a combo de Modalidade de Pactuação.
             $('#div_pactuacao').hide('slow');
+            // Exibe o campo Recursos Necessários
+            $(".recursos_necessarios").show('slow'); 
+            // Exibe o campo Programa
+            $(".div_programa").show('slow');            
         } else {
             // Exibe a opções PTRES(Funcional).
             $('.div_ptres').show('slow');
             // Exibe o quadro de Custeio e Capital com a opção de Valor do Projeto.
-//            $('.div_custeio_capital').show('slow');
+            $('.div_custeio_capital').show('slow');
             // Exibe as colunas e campos do Cronograma Orçamentário.
             $('.td_cronograma_orcamentario').show('slow');
             // Exibe as colunas e campos do Cronograma Financeiro.
             $('.td_cronograma_financeiro').show('slow');
-            //Oculta as Etapas
+            // Oculta as Etapas
             $('.div_etapas_pi').hide('slow');
+            // Exibe o campo de Area Cultural.
+            $('#div_area_cultural').show('slow');
+            // Exibe o campo de Segmento Cultural.
+            $('#div_segmento_cultural').show('slow');
+            // Exibe o campo de TED.
+            $('#div_ted').show('slow');            
+            // Exibe a combo de Modalidade de Pactuação.
+            $('#div_pactuacao').show('slow');
+            // Oculta o campo Recursos Necessários
+            $(".recursos_necessarios").hide('slow');
+            // Oculta o campo Programa
+            $(".div_programa").hide('slow');
         }
     }
     
