@@ -4490,6 +4490,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."dados_acao_exercici
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."dadosfinanceirossiafi" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."dotacao_subacao" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."esfera" TO "usr_simec";
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."etapas" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."exercicio" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."financeirosquantitativosof" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."funcao" TO "usr_simec";
@@ -9636,6 +9637,7 @@ GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."cronograma_valor_crvid_seq" TO "u
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."dadosfinanceirossiafi_dfsid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."dotacao_subacao_id_dotacao_subacao_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."esfera_id_esfera_seq" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."etapas_etaid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."financeirosquantitativosof_fqscod_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."funcao_id_funcao_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."historico_pi_hpiid" TO "usr_simec";
@@ -11298,4 +11300,3 @@ GRANT USAGE, SELECT ON SEQUENCE "workflow"."documento_docid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."estadodocumento_esdid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."historicodocumento_hstid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."tipodocumento_tpdid_seq" TO "usr_simec";
-
