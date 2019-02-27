@@ -89,22 +89,23 @@ switch ($_REQUEST['req']) {
         die;
     case 'carregarGraficoDesenvolvimento':
         $listaSubunidade = array(
+            SUOCOD_DS_SENAS,
             SUOCOD_DS_SNPR,
-            SUOCOD_DS_SNPD
+            SUOCOD_DS_SNCPD
         );
         montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;
     case 'carregarGraficoSesan':
         $listaSubunidade = array(
-            SUOCOD_DS_SNAS,
-            SUOCOD_DS_SENARC
+            SUOCOD_DS_SNPU,
+            SUOCOD_DS_SNPDH
         );
         montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;
     case 'carregarGraficoSnrc':
         $listaSubunidade = array(
-            SUOCOD_DS_SNPDH,
-            SUOCOD_DS_SNPD
+            SUOCOD_DS_SNRC,
+            SUOCOD_DS_FNAS
         );
         montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;

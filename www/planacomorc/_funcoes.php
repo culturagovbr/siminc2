@@ -3392,26 +3392,3 @@ function montarGraficoDireta($colors, $percentualPlanejamento = FALSE, $listaSub
     echo '</div>';
 }
 
-/**
- * Exibe o grafico de unidades.
- * 
- * @param string $colors
- */
-//function carregarGraficoCgconCogep($colors, $percentualPlanejamento=false){
-//    $oPlanoInterno = new Pi_PlanoInterno();
-//    echo '<div class="panel-body">';
-//    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
-//        'exercicio' => $_SESSION['exercicio'],
-//        'unocod' => UNICOD_MC,
-//        'unofundo' => 'FALSE',
-//        'unidades'=>"suocod IN('". SUOCOD_CGCON. "', '". SUOCOD_COGEP. "')"));
-//    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
-//    $grafico
-//        ->setWidth('85%')
-//        ->setColors($colors)
-//        ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
-//        ->setEvent(array('click' => "exibirModalDetalheGrafico(1, event.point.series.name, event.point.category);"))
-//        ->gerarGrafico($estatistica, $percentualPlanejamento);
-//    echo '</div>';
-//}
-

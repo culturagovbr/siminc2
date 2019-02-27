@@ -141,12 +141,13 @@ define('SUOCOD_ES_SNAR', 180009);
 define('SUOCOD_ES_DIFE', 180076);
 
 # Novas Subunidades do DESENVOLVIMENTO SOCIAL(UGs da Direta)
-define('SUOCOD_DS_SNAS', 550011);
-define('SUOCOD_DS_SNPU', 550018);
+define('SUOCOD_DS_SENAS', 550011);
 define('SUOCOD_DS_SNPR', 550008);
-define('SUOCOD_DS_SENARC', 550007);
+define('SUOCOD_DS_SNCPD', 550009);
+define('SUOCOD_DS_SNPU', 550018);
 define('SUOCOD_DS_SNPDH', 550023);
-define('SUOCOD_DS_SNPD', 550009);
+define('SUOCOD_DS_SNRC', 550007);
+define('SUOCOD_DS_FNAS', 330013);
 
 // -- E-mail de recebimento de notificações sobre
 define('EMAIL_NOTIFICACAO_SUBACAO', $_SESSION['email_sistema']);
