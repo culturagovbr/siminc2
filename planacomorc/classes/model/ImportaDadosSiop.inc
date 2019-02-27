@@ -123,27 +123,29 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
     public function RetornaFuncionais($exercicio){
         $sql = "
             SELECT
+                exe.unidadeorcamentaria,
                 exe.programa,
                 exe.acao,
+                exe.localizador,
                 exe.planoorcamentario,
-                exe.unidadeorcamentaria,
                 exe.anoexercicio,
                 exe.anoreferencia,
                 exe.categoriaeconomica,
-                exe.programa || '.' || exe.acao || '.' || exe.planoorcamentario || '.' || exe.unidadeorcamentaria AS funcional,
+                exe.unidadeorcamentaria || '.' || exe.programa || '.' || exe.acao || '.' || exe.localizador || '.' || exe.planoorcamentario AS funcional,
+                sum(exe.dotacaoinicial::numeric) AS dotacaoinicial,
                 sum(exe.dotatual::numeric) AS dotatual,
                 sum(exe.dotinicialsiafi::numeric) AS dotinicialsiafi,
-                sum(exe.dotacaoantecipada::numeric) AS dotacaoantecipada,
-                sum(exe.dotacaoinicial::numeric) AS dotacaoinicial
+                sum(exe.dotacaoantecipada::numeric) AS dotacaoantecipada
             FROM wssof.ws_execucaoorcamentariadto AS exe
             WHERE
-                exe.anoexercicio = '".(int)$exercicio. "'
-                AND exe.anoreferencia = '".(int)$exercicio. "'
+                exe.anoexercicio = '". (int)$exercicio. "'
+                AND exe.anoreferencia = '". (int)$exercicio. "'
             GROUP BY
-                exe.acao,
-                exe.planoorcamentario,
                 exe.unidadeorcamentaria,
                 exe.programa,
+                exe.acao,
+                exe.localizador,
+                exe.planoorcamentario,
                 exe.anoexercicio,
                 exe.anoreferencia,
                 exe.categoriaeconomica
@@ -164,8 +166,8 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                 psu.suoid,
                 coalesce(psu.ptrdotacaocapital, 0) AS ptrdotacaocapital,
                 coalesce(psu.ptrdotacaocusteio, 0) AS ptrdotacaocusteio,
-                funcional AS funcionalptres,
-                ptr.prgcod || '.' || ptr.acacod || '.' || ptr.plocod || '.' || ptr.unicod AS funcional,
+                ptr.funcional AS funcionalptres,
+                ptr.unicod || '.' || ptr.prgcod || '.' || ptr.acacod || '.' || ptr.loccod || '.' || ptr.plocod  AS funcional,
                 suo.unocod,
                 suo.unosigla,
                 suo.unonome,
