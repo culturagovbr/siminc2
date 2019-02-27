@@ -1168,6 +1168,14 @@
             $('.td_cronograma_financeiro').show('slow');
             //Oculta as Etapas
             $('.div_etapas_pi').hide('slow');
+            // Oculta o campo de Area Cultural.
+            $('#div_area_cultural').show('slow');
+            // Oculta o campo de Segmento Cultural.
+            $('#div_segmento_cultural').show('slow');
+            // Oculta o campo de TED.
+            $('#div_ted').show('slow');            
+            // Oculta a combo de Modalidade de Pactuação.
+            $('#div_pactuacao').show('slow');            
         }
     }
     
