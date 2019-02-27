@@ -97,7 +97,7 @@ define("UNOCOD_IPHAN", 55207);
 define("UNOCOD_RSFNC", 74912);
 define("UNOCOD_AGLO", 55202);
 
-# Novas Subunidades(UGs da Direta)
+# Novas Subunidades CIDADANIA(UGs da Direta)
 define("SUOCOD_MC_CGLC", 550005);
 define("SUOCOD_MC_SE", 550003);
 define("SUOCOD_MC_COGEP", 550006);
@@ -115,6 +115,7 @@ define("SUOCOD_IPHAN", 403101);
 define("SUOCOD_FUNARTE", 403201);
 define("SUOCOD_IBRAM", 423001);
 
+# Antigas Subunidades da CULTURA(UGs da Direta)
 define('SUOCOD_SPOA', 420019);
 define('SUOCOD_SADI', 420032);
 define('SUOCOD_ASCOM', 420017);
@@ -131,6 +132,21 @@ define('SUOCOD_SCDC', 420029);
 define('SUOCOD_SEINFRA', 420044);
 define("SUOCOD_CGCON", 420009);
 define("SUOCOD_COGEP", 420008);
+
+# Novas Subunidades do ESPORTE(UGs da Direta)
+define('SUOCOD_ES_ABCD', 180016);
+define('SUOCOD_ES_SNDT', 180074);
+define('SUOCOD_ES_SNIS', 180073);
+define('SUOCOD_ES_SNAR', 180009);
+define('SUOCOD_ES_DIFE', 180076);
+
+# Novas Subunidades do DESENVOLVIMENTO SOCIAL(UGs da Direta)
+define('SUOCOD_DS_SNAS', 550011);
+define('SUOCOD_DS_SNPU', 550018);
+define('SUOCOD_DS_SNPR', 550008);
+define('SUOCOD_DS_SENARC', 550007);
+define('SUOCOD_DS_SNPDH', 550023);
+define('SUOCOD_DS_SNPD', 550009);
 
 // -- E-mail de recebimento de notificações sobre
 define('EMAIL_NOTIFICACAO_SUBACAO', $_SESSION['email_sistema']);

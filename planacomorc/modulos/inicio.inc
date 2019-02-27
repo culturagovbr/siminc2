@@ -37,14 +37,83 @@ switch ($_REQUEST['req']) {
         die;
     case 'carregarGraficoDireta':
         if((int)$_SESSION['exercicio'] > 2018){
-            $listaSubunidade = array(SUOCOD_MC_CGLC, SUOCOD_MC_SE, SUOCOD_MC_COGEP, SUOCOD_MC_STI, SUOCOD_MC_SAGI);
+            $listaSubunidade = array(
+                SUOCOD_MC_CGLC,
+                SUOCOD_MC_SE,
+                SUOCOD_MC_COGEP,
+                SUOCOD_MC_STI,
+                SUOCOD_MC_SAGI
+            );
         } else {
-            $listaSubunidade = array(SUOCOD_SPOA, SUOCOD_SADI, SUOCOD_ASCOM, SUOCOD_DDI, SUOCOD_SE, SUOCOD_SEC, SUOCOD_SAV, SUOCOD_SEFIC, SUOCOD_CGTEC, SUOCOD_SADIDEINT, SUOCOD_GM, SUOCOD_SCDCDLLLB, SUOCOD_SCDC, SUOCOD_SEINFRA);
+            $listaSubunidade = array(
+                SUOCOD_SPOA,
+                SUOCOD_SADI,
+                SUOCOD_ASCOM,
+                SUOCOD_DDI,
+                SUOCOD_SE,
+                SUOCOD_SEC,
+                SUOCOD_SAV,
+                SUOCOD_SEFIC,
+                SUOCOD_CGTEC,
+                SUOCOD_SADIDEINT,
+                SUOCOD_GM,
+                SUOCOD_SCDCDLLLB,
+                SUOCOD_SCDC,
+                SUOCOD_SEINFRA
+            );
         }
         montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;
+    case 'carregarGraficoCultura':
+        $listaSubunidade = array(
+            SUOCOD_DDI,
+            SUOCOD_SCDC,
+            SUOCOD_SEC,
+            SUOCOD_SCDCDLLLB,
+            SUOCOD_SEFIC,
+            SUOCOD_SEINFRA,
+            SUOCOD_SAV,
+            SUOCOD_SADIDEINT
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoEsporte':
+        $listaSubunidade = array(
+            SUOCOD_ES_ABCD,
+            SUOCOD_ES_SNDT,
+            SUOCOD_ES_SNIS,
+            SUOCOD_ES_SNAR,
+            SUOCOD_ES_DIFE
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoDesenvolvimento':
+        $listaSubunidade = array(
+            SUOCOD_DS_SNPR,
+            SUOCOD_DS_SNPD
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoSesan':
+        $listaSubunidade = array(
+            SUOCOD_DS_SNAS,
+            SUOCOD_DS_SENARC
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
+    case 'carregarGraficoSnrc':
+        $listaSubunidade = array(
+            SUOCOD_DS_SNPDH,
+            SUOCOD_DS_SNPD
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
+        die;
     case 'carregarGraficoCgconCogep':
-        carregarGraficoCgconCogep($colors, TRUE);
+        $listaSubunidade = array(
+            SUOCOD_CGCON,
+            SUOCOD_COGEP
+        );
+        montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;
     case 'atualizarSIMINC':
         try{
@@ -126,9 +195,9 @@ include APPRAIZ . "includes/cabecalho.inc";
     <div class="col-lg-8">
         <div style="padding-top: 10px;" class="text-right">
             <?php if((in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
-                <a id="btn-atualizar-siminc" class="btn btn-success" title="Atualiza os dados de Dotações das Funcionais e execução orçamentária da própria base de dados do <?= SIGLA_SISTEMA; ?>">
+<!--                <a id="btn-atualizar-siminc" class="btn btn-success" title="Atualiza os dados de Dotações das Funcionais e execução orçamentária da própria base de dados do <?= SIGLA_SISTEMA; ?>">
                     <i class="fa fa-cloud-download"></i> Atualizar <?= SIGLA_SISTEMA; ?>
-                </a>
+                </a>-->
             <?php } ?>
             <?php if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
                 <a id="btn-atualizar-siop" class="btn btn-success" title="Busca os dados do sistema SIOP e atualiza os dados de Dotações das Funcionais e execução orçamentária">
@@ -167,11 +236,11 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <ul class="nav nav-tabs prodTabs">
                                 <li class="active"><a data-toggle="tab" href="#tab-1" data-url="?modulo=inicio&acao=C&req=carregarGraficoVinculadas"> Vinculadas</a></li>
                                 <li class=""><a data-toggle="tab" href="#tab-2" data-url="?modulo=inicio&acao=C&req=carregarGraficoDireta"> Área Meio</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-3" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> Cultura</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-4" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> Esporte</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-5" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> Desenv. Social</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-6" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> SESAN e SNPDH</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-7" data-url="?modulo=inicio&acao=C&req=carregarGraficoCgconCogep"> SNRC e FNAS</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-3" data-url="?modulo=inicio&acao=C&req=carregarGraficoCultura"> Cultura</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-4" data-url="?modulo=inicio&acao=C&req=carregarGraficoEsporte"> Esporte</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-5" data-url="?modulo=inicio&acao=C&req=carregarGraficoDesenvolvimento"> Desenv. Social</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-6" data-url="?modulo=inicio&acao=C&req=carregarGraficoSesan"> SESAN e SNPDH</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-7" data-url="?modulo=inicio&acao=C&req=carregarGraficoSnrc"> SNRC e FNAS</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
