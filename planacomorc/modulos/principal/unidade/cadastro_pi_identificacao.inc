@@ -30,14 +30,15 @@
             </div>
             <div class="form-group recursos_necessarios">
                 <div class="col-md-3 text-right">
-                    <label class="control-label" for="plidsc">Recursos Necessários: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+                    <label class="control-label" for="plirecursosnecessarios">Recursos Necessários:</label>
                 </div>
                 <div class="col-lg-9">
                     <textarea class="obrigatorio txareanormal form-control" rows="6" cols="60" name="plirecursosnecessarios" id="plirecursosnecessarios" maxlength="1000"><?php
                         if ($dadosPI['plirecursosnecessarios']) {
                             echo $dadosPI['plirecursosnecessarios'];
                         }
-                        ?></textarea>
+                        ?>
+                    </textarea>
                 </div>
             </div>
         </div>

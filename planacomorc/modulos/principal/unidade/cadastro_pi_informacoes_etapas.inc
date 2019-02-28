@@ -137,8 +137,8 @@
         <div class="ibox-content">
             <input type="hidden" id="etaid" name="etaid" value="<?=$etaid?>">
             <?php
-            echo $simec->input('etadsci', 'Descrição', $etadsc, ['required', 'maxlength' => 250]);
-            echo $simec->data('etadatai', 'Data', $etadata, ['required']);
+            echo $simec->input('etadsci', 'Descrição', $etadsc, ['maxlength' => 250]);
+            echo $simec->data('etadatai', 'Data', $etadata);
             ?>
             <div class="form-group">
                 <div class="text-center">
