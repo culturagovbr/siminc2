@@ -90,14 +90,14 @@ switch ($_REQUEST['req']) {
     case 'carregarGraficoDesenvolvimento':
         $listaSubunidade = array(
             SUOCOD_DS_SENAS,
-            SUOCOD_DS_SNPR,
+            SUOCOD_DS_SNPU,
             SUOCOD_DS_SNCPD
         );
         montarGraficoDireta($colors, TRUE, $listaSubunidade);
         die;
-    case 'carregarGraficoSesan':
+    case 'carregarGraficoSnpr':
         $listaSubunidade = array(
-            SUOCOD_DS_SNPU,
+            SUOCOD_DS_SNPR,
             SUOCOD_DS_SNPDH
         );
         montarGraficoDireta($colors, TRUE, $listaSubunidade);
@@ -242,8 +242,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <li class=""><a data-toggle="tab" href="#tab-3" data-url="?modulo=inicio&acao=C&req=carregarGraficoCultura"> Cultura</a></li>
                                 <li class=""><a data-toggle="tab" href="#tab-4" data-url="?modulo=inicio&acao=C&req=carregarGraficoEsporte"> Esporte</a></li>
                                 <li class=""><a data-toggle="tab" href="#tab-5" data-url="?modulo=inicio&acao=C&req=carregarGraficoDesenvolvimento"> Desenv. Social</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-6" data-url="?modulo=inicio&acao=C&req=carregarGraficoSesan"> SESAN e SNPDH</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-7" data-url="?modulo=inicio&acao=C&req=carregarGraficoSnrc"> SNRC e FNAS</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-6" data-url="?modulo=inicio&acao=C&req=carregarGraficoSnpr"> SNPR e SNPDH</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-7" data-url="?modulo=inicio&acao=C&req=carregarGraficoSnrc"> SENARC e FNAS</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
