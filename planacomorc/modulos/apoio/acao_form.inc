@@ -41,7 +41,7 @@
                             echo $simec->select('unicod', 'Unidade Orçamentária', $mAcao->unicod, $mUnidadeOrcamentaria->recuperarSqlComboUnocod(['unocod', 'unonome'], null, 'unocod'), ['required']);
                             echo $simec->input('acacod', 'Código', $mAcao->acacod, ['required', 'maxlength' => 4]);
                             echo $simec->input('acatitulo', 'Nome', $mAcao->acatitulo, ['required', 'maxlength' => 255]);
-                            echo $simec->select('prgcod', 'Programa', $mAcao->prgcod, $mPrograma->recuperarSqlCombo(['prgcod', 'prgdsc'], null, 'prgcod'), ['required']);
+                            echo $simec->select('prgcod', 'Programa', $mAcao->prgcod, $mPrograma->recuperaSqlComboPrgcod((object)['exercicio' => $_SESSION['exercicio']]));
                             echo $simec->select('loccod', 'Localizador', $mAcao->loccod, $mLocalizador->recuperarSqlCombo(['codigolocalizador', 'descricao'], ["exercicio = '". (int)$_SESSION['exercicio']. "'"], 'codigolocalizador'), ['required']);
                             echo $simec->select('acaobjetivocod', 'Objetivo', $mAcao->acaobjetivocod, $mObjetivo->recuperarSqlComboPorOppcod());
                             echo $simec->textarea('acanomeproduto', 'Nome do Produto', $mAcao->acanomeproduto, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
