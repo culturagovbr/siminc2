@@ -102,18 +102,20 @@ class Monitora_Model_Ptres extends Modelo
                 aca.identificadorunico,
                 aca.exercicio,
                 aca.codigomomento,
-                aca.baselegal,
-                aca.detalhamentoimplementacao,
-                aca.codigoacao,
                 aca.codigoorgao,
+                aca.codigofuncao,
+                aca.codigosubfuncao,
                 aca.codigoprograma,
+                aca.codigoacao,
                 aca.codigoobjetivo,
-                aca.descricao acadescricao,
-                aca.titulo acatitulo,
                 loc.codigolocalizador,
                 plo.planoorcamentario,
-                loc.descricao locdescricao,
-                plo.titulo plotitulo
+                aca.titulo AS acatitulo,
+                aca.descricao AS acadescricao,
+                loc.descricao AS locdescricao,
+                plo.titulo AS plotitulo,
+                aca.baselegal,
+                aca.detalhamentoimplementacao
             FROM wssof.ws_acoesdto aca
                 JOIN wssof.ws_localizadoresdto loc ON(
                     loc.identificadorunicoacao = aca.identificadorunico
