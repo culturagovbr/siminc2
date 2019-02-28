@@ -48,7 +48,7 @@
                             echo '</span>';
                             # select de unidade para filtrar a ação com base do unicod.
                             echo '<span id="span-acao">';
-                            echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(['prgcod', 'acacod', 'acaobjetivocod', 'loccod', 'acatitulo'], ["unicod = '". $mPtres->unicod. "'"]), ['required']);
+                            echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(['prgcod', 'acacod', "COALESCE(acaobjetivocod, '')", 'loccod', 'acatitulo'], ["unicod = '". $mPtres->unicod. "'"]), ['required']);
                             echo '</span>';
                             echo $simec->input('ptres', 'PTRES', $mPtres->ptres, ['required','maxlength' => 50]);
                             echo $simec->input('plocod', 'Código PO', $mPtres->plocod, ['maxlength' => 4]);
