@@ -385,7 +385,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             title="<?php echo"Dotação Inicial: ".number_format($dado['ptrdotacaoinicialcusteio'],0,',','.');?>"><?php echo number_format($dado['ptrdotacao_custeio'], 0, ',', '.'); ?></td>
                                         <?php $disponivel = $dado['ptrdotacao_custeio'] - $dado['picvalorcusteio']; ?>
                                         <td style="color: #<?php echo $oPlanoInterno->getCorPainelPorValorDisponivel($disponivel); ?>; border-right: 1px black solid;" class="text-right title-disponivel" 
-                                            title="<?php echo"Disponível: ".number_format($disponivel, 0, ',', '.');?>"
+                                            title="<?php echo"Disponível: ".number_format($disponivel, 0, ',', '.');?>">
                                             <?php echo number_format($dado['picvalorcusteio'], 0, ',', '.'); ?>
                                         </td>
 
