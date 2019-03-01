@@ -23,6 +23,6 @@ Isaias Montes                     | isaiassm1113@outlook.com         | Estagiár
 Leonardo Santos                   | leonardo.barreiros@cultura.gov.br| Estagiário - Desenvolvimento | 04/2018         | Atuando        | Estagiário do MC
 Orion Teles                       | orion.mesquita@cultura.gov.br    | Desenvolvedor Sênior         | ?               | 05/2018        | HEPTA - Sustentação
 Pedro Philipe Alves de Oliveira   | pedrophilipe.ti@gmail.com        | Desenvolvedor                | ?               | ?              | UFABC - LabLivre
-Rafael Carneiro                   | rafael.carneiro@cultura.gov.br   | Desenvolvedor Sênior         | 06/2018         | Atuando        | HEPTA - Sustentação
+Rafael Carneiro                   | rafael.carneiro@cultura.gov.br   | Desenvolvedor Sênior         | 06/2018         | 02/2019        | HEPTA - Sustentação
 Rafael José da Costa Gloria       | rafaeljcg20@gmail.com            | Analista de Sistemas e Dados | 03/2016         | Atuando        | HEPTA - Sustentação
 Ramon Canabarro                   | ramoncanabarro@gmail.com         | Estagiário - Desenvolvimento | 03/2018         | 04/2018        | Estagiário do MC
