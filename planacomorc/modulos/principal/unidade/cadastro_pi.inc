@@ -277,7 +277,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                 <li class="<?php echo $classTab0; ?>">
                     <a data-toggle="tab" href="#tab-0">Plano Interno( Projeto )</a>
                 </li>
-                <?php if($dadosPI['plicod']): ?>
+                <?php if( (int)$estadoAtual['esdid'] === (int)ESD_PI_APROVADO): ?>
                     <li class="<?php echo $classTab1; ?>">
                         <a data-toggle="tab" href="#tab-1">Monitoramento</a>
                     </li>
@@ -339,7 +339,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     </div>
                 </div>
 
-                <?php if($dadosPI['plicod']): ?>
+                <?php if( (int)$estadoAtual['esdid'] === (int)ESD_PI_APROVADO): ?>
                     <div id="tab-1" class="tab-pane <?php echo $classTab1; ?>">
                         <div class="panel-body">
 
