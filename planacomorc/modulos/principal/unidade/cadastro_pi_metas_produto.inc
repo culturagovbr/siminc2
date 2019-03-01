@@ -9,7 +9,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-3 text-right">
-                    <label for="oppid" class=" control-label">Objetivo PPA: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+                    <label for="oppid" class=" control-label">Objetivo PPA: </label>
                 </div>
                 <div class="col-lg-9">
                     <?php (new Public_Model_ObjetivoPpa())->monta_combo($dadosPI['oppid']); ?>
@@ -17,7 +17,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-3 text-right">
-                    <label for="mppid" class=" control-label">Metas PPA: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+                    <label for="mppid" class=" control-label">Metas PPA: </label>
                 </div>
                 <div class="col-lg-9 div_mppid">
                     <?php carregarMetasPPA($dadosPI['oppid'], $dadosPI['mppid']); ?>

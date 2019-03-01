@@ -107,7 +107,7 @@
 <div class="col-md-6">
     <div class="ibox float-e-margins" id="div_responsaveis">
         <div class="ibox-title">
-            <h5 class="legend_responsaveis">Responsáveis pelo Projeto <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></h5>
+            <h5 class="legend_responsaveis">Responsáveis pelo Projeto</h5>
         </div>
         <div class="ibox-content">
 

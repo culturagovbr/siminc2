@@ -56,12 +56,15 @@
         }
 
         if(!verificarFormularioEmenda()){
-            // Se não for inserido nenhum Responsável, o sistema acrescenta uma mensagem de erro.
-            if($('#table_responsaveis input[name="listaResponsaveis[]"]').size() == 0){
-                $('.legend_responsaveis').addClass('validateRedText');
-                addMsgCustom.push('Responsáveis pelo Projeto');
-            } else {
-                $('.legend_responsaveis').removeClass('validateRedText');
+            // Se for Não Orçamentário, não é obrigado informar responsáveis.
+            if(!verificarFormularioNaoOrcamentario()){
+                // Se não for inserido nenhum Responsável, o sistema acrescenta uma mensagem de erro.
+                if($('#table_responsaveis input[name="listaResponsaveis[]"]').size() == 0){
+                    $('.legend_responsaveis').addClass('validateRedText');
+                    addMsgCustom.push('Responsáveis pelo Projeto');
+                } else {
+                    $('.legend_responsaveis').removeClass('validateRedText');
+                }
             }
         }
 
@@ -225,9 +228,8 @@
             // Se o formulario não possui as opções de manutenção item o sistema lista como obrigatório as opções Objetivo PPA, Metas PPA, Iniciativa PPA
             }
         } else {
-            listaObrigatorios.push('oppid', 'mppid');
             if(!verificarFormularioNaoOrcamentario()){
-                listaObrigatorios.push('mdeid', 'neeid', 'mpnid', 'ipnid');
+                listaObrigatorios.push('mdeid', 'neeid', 'mpnid', 'ipnid', 'oppid', 'mppid');
             }
         }
         
