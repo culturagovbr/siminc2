@@ -284,18 +284,19 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <div class="tab-content">
                                 <div class="panel-body">
                                     <?php
-                                    $codigoUnidadesWhere = "'". join($listaSubUnidadeUsuario, "','"). "'";
-                                    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
-                                        'exercicio' => $_SESSION['exercicio'],
-                                        'unofundo' => 'FALSE',
-                                        'unidades' => "suocod IN(". $codigoUnidadesWhere. ")"));
-                                    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
-                                    $grafico
-                                        ->setWidth('85%')
-                                        ->setColors($colors)
-                                        ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
-                                        ->setEvent(array('click' => "exibirModalDetalheGrafico(1, event.point.series.name, event.point.category);"))
-                                        ->gerarGrafico($estatistica);
+                                        $estatistica = $oPlanoInterno->consultarExecucaoOrcamentariaSubunidade((object) array(
+                                            'exercicio' => $_SESSION['exercicio'],
+                                            # Caso o exercicio seja superior a 2018(ano da unificação de Òrgãos), o sistema busca todas as vinculadas do MC
+                                            'unocod' => (int)$_SESSION['exercicio'] > 2018? UNICOD_MC: UNICOD_MINC,
+                                            'listaSubunidade' => $listaSubUnidadeUsuario
+                                        ));
+                                        $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
+                                        $grafico
+                                            ->setWidth('85%')
+                                            ->setColors($colors)
+                                            ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
+                                            ->setEvent(array('click' => "exibirModalDetalheGrafico(1, event.point.series.name, event.point.category);"))
+                                            ->gerarGrafico($estatistica);
                                     ?>
                                 </div>
                             </div>
