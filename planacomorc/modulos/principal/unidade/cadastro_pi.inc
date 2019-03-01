@@ -226,13 +226,13 @@ $classTab2 = $aba? 'active': NULL;
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script language="JavaScript" src="../includes/funcoes.js?v=1"></script>
-<script language="JavaScript" src="../includes/funcoesspo.js?v=2"></script>
-<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=1">
-<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=1"></script>
-<script src="js/cadastro_pi_funcoes.js?v=12"></script>
-<script src="js/cadastro_pi_validacoes.js?v=10"></script>
-<script src="js/cadastro_pi_init.js?v=12"></script>
+<script language="JavaScript" src="../includes/funcoes.js?v=5"></script>
+<script language="JavaScript" src="../includes/funcoesspo.js?v=5"></script>
+<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=5">
+<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=5"></script>
+<script src="js/cadastro_pi_funcoes.js?v=15"></script>
+<script src="js/cadastro_pi_validacoes.js?v=15"></script>
+<script src="js/cadastro_pi_init.js?v=15"></script>
 <style>
     autorizadocapital {
         display: none;

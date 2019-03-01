@@ -33,12 +33,7 @@
                     <label class="control-label" for="plirecursosnecessarios">Recursos Necessários:</label>
                 </div>
                 <div class="col-lg-9">
-                    <textarea class="obrigatorio txareanormal form-control" rows="6" cols="60" name="plirecursosnecessarios" id="plirecursosnecessarios" maxlength="1000"><?php
-                        if ($dadosPI['plirecursosnecessarios']) {
-                            echo $dadosPI['plirecursosnecessarios'];
-                        }
-                        ?>
-                    </textarea>
+                    <textarea class="obrigatorio txareanormal form-control" rows="6" cols="60" name="plirecursosnecessarios" id="plirecursosnecessarios" maxlength="1000"><?php if ($dadosPI['plirecursosnecessarios']) {echo $dadosPI['plirecursosnecessarios'];}?></textarea>
                 </div>
             </div>
         </div>

@@ -79,46 +79,48 @@
 //        }
         
         // Se o usuário estiver abaixando o valor em relação ao valor salvo na base de dados o sistema não valida se o valor ultrapassou o limite permitindo ajuste entre os PIs.
-        if(!(buscarValorBaseDoProjeto() > buscarValorDoProjeto())){
-            // Verifica se o valor do projeto é superior ao limite disponível da Subunidade
-            if(buscarValorDisponivelSubUnidade() < 0){
+        if(!verificarFormularioNaoOrcamentario()){
+            if(!(buscarValorBaseDoProjeto() > buscarValorDoProjeto())){
+                // Verifica se o valor do projeto é superior ao limite disponível da Subunidade
                 if(buscarValorDisponivelSubUnidade() < 0){
-                    if(false === fnc){
-                        $('#picvalorcusteio').addClass('validateRedText');
-                        $('#picvalorcapital').addClass('validateRedText');
-                        addMsgCustom.push('Valor do projeto superior ao limite disponível da Unidade');
+                    if(buscarValorDisponivelSubUnidade() < 0){
+                        if(false === fnc){
+                            $('#picvalorcusteio').addClass('validateRedText');
+                            $('#picvalorcapital').addClass('validateRedText');
+                            addMsgCustom.push('Valor do projeto superior ao limite disponível da Unidade');
+                        }
                     }
-                }
-            } else if(buscarValorDisponivelFuncionalCusteio() < 0 || buscarValorDisponivelFuncionalCapital() < 0) {
-                if(buscarValorDisponivelFuncionalCusteio() < 0){
-                    $('#picvalorcusteio').addClass('validateRedText');
-                    addMsgCustom.push('Valor de Custeio do projeto superior ao limite disponível da Funcional');
+                } else if(buscarValorDisponivelFuncionalCusteio() < 0 || buscarValorDisponivelFuncionalCapital() < 0) {
+                    if(buscarValorDisponivelFuncionalCusteio() < 0){
+                        $('#picvalorcusteio').addClass('validateRedText');
+                        addMsgCustom.push('Valor de Custeio do projeto superior ao limite disponível da Funcional');
+                    }
+
+                    if(buscarValorDisponivelFuncionalCapital() < 0){
+                        $('#picvalorcapital').addClass('validateRedText');
+                        addMsgCustom.push('Valor de Capital do projeto superior ao limite disponível da Funcional');
+                    }
+                } else if(true === fnc){
+                    // Regra FnC - Quando o valor do projeto for maior que o valor Autorizado na Funcional FNC o sistema não permite gravar os dados.
+                    if(validarValorProjetoMenorAutorizadoFuncionalCusteio()){
+                        $('#picvalorcusteio').removeClass('validateRedText');
+                    } else {
+                        $('#picvalorcusteio').addClass('validateRedText');
+                        addMsgCustom.push('Valor de Custeio do projeto superior ao autorizado na Funcional');
+                    }
+
+                    if(validarValorProjetoMenorAutorizadoFuncionalCapital()){
+                        $('#picvalorcapital').removeClass('validateRedText');
+                    } else {
+                        $('#picvalorcapital').addClass('validateRedText');
+                        addMsgCustom.push('Valor de Capital do projeto superior ao limite autorizado na Funcional');
+                    }
+                } else {
+                    $('#picvalorcusteio').removeClass('validateRedText');
+                    $('#picvalorcapital').removeClass('validateRedText');
                 }
 
-                if(buscarValorDisponivelFuncionalCapital() < 0){
-                    $('#picvalorcapital').addClass('validateRedText');
-                    addMsgCustom.push('Valor de Capital do projeto superior ao limite disponível da Funcional');
-                }
-            } else if(true === fnc){
-                // Regra FnC - Quando o valor do projeto for maior que o valor Autorizado na Funcional FNC o sistema não permite gravar os dados.
-                if(validarValorProjetoMenorAutorizadoFuncionalCusteio()){
-                    $('#picvalorcusteio').removeClass('validateRedText');
-                } else {
-                    $('#picvalorcusteio').addClass('validateRedText');
-                    addMsgCustom.push('Valor de Custeio do projeto superior ao autorizado na Funcional');
-                }
-                
-                if(validarValorProjetoMenorAutorizadoFuncionalCapital()){
-                    $('#picvalorcapital').removeClass('validateRedText');
-                } else {
-                    $('#picvalorcapital').addClass('validateRedText');
-                    addMsgCustom.push('Valor de Capital do projeto superior ao limite autorizado na Funcional');
-                }
-            } else {
-                $('#picvalorcusteio').removeClass('validateRedText');
-                $('#picvalorcapital').removeClass('validateRedText');
             }
-            
         }
 
         // Verifica se o usuário escolheu um produto diferente de não se aplica e o enquadramento não é emenda para verificar a validação do cronograma físico.
