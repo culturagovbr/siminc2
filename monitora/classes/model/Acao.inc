@@ -224,6 +224,8 @@ class Monitora_Model_Acao extends Modelo
         $sql = "
             SELECT DISTINCT
                 acao.unicod,
+                funcod,
+                sfucod,
                 prgcod,
                 prgcod || '-' || prgdsc AS programa,
                 acastatus,
@@ -233,7 +235,15 @@ class Monitora_Model_Acao extends Modelo
                 acacod,
                 acaid,
                 acatitulo,
-                acao.unicod || '-' || uni.unonome AS unidade
+                acao.unicod || '-' || COALESCE((
+                    SELECT
+                        uni.unonome
+                    FROM public.unidadeorcamentaria uni
+                    WHERE
+                        uni.prsano = '". (int)$_SESSION['exercicio']. "'
+                        AND acao.unicod = uni.unocod
+                    LIMIT 1
+                ), '') AS unidade
             FROM monitora.acao acao
                 JOIN public.unidadeorcamentaria uni ON(
                     uni.unocod = acao.unicod
