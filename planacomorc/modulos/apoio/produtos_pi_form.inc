@@ -32,13 +32,12 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <form id="formulario" name="formulario" method="post" class="form-horizontal">
                         <input type="hidden" name="req" id="req" value="salvar" />
                         <input name="pprid" id="pprid" type="hidden" value="<?php echo $mProdutoPI->pprid; ?>">
-                        
+
                         <?php
-                        echo $simec->input('pprnome', 'Nome', $mProdutoPI->pprnome, ['required','maxlength' => 200]);
-                        echo $simec->input('pprdescricao', 'Descrição', $mProdutoPI->pprdescricao, ['maxlength' => 500]);
-                        echo $simec->radio('pprstatus', 'Status', ($mProdutoPI->pprstatus ? $mProdutoPI->pprstatus : 'A'), ['A' => 'Ativo', 'I' => 'Inativo']);
+                            echo $simec->input('pprnome', 'Nome', $mProdutoPI->pprnome, ['required','maxlength' => 200]);
+                            echo $simec->input('pprdescricao', 'Descrição', $mProdutoPI->pprdescricao, ['maxlength' => 500]);
                         ?>
-                        
+
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
