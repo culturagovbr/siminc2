@@ -56,6 +56,7 @@ class Public_Controller_ManutencaoItem
 		if(!$mSubItem->maiid){ $mSubItem->maiid = $maiid; }
 		include_once APPRAIZ. 'planacomorc/modulos/apoio/subitem-manutencao-form.inc';
 	}
+
 	public function montarListagem($maiid)
 	{
 		$perfis = pegaPerfilGeral();

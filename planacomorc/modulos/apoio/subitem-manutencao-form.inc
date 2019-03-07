@@ -7,7 +7,6 @@
     <?php
         echo $simec->input('masnome', 'Nome', $mSubItem->masnome, ['required','maxlength' => 200]);
         echo $simec->input('masdescricao', 'Descrição', $mSubItem->masdescricao, ['maxlength' => 500]);
-//        echo $simec->radio('masstatus', 'Status', ($mSubItem->masstatus ? $mSubItem->masstatus : 'A'), ['A' => 'Ativo', 'I' => 'Inativo']);
     ?>
 
     <div class="form-group">
