@@ -21,27 +21,27 @@ $operações = array(
     );
 if ($where){
     $sql = "
-                SELECT
-                    usu.usucpf AS cpf,
-                    usu.usunome AS nome,
-                    usu.usuemail AS email,
-                    usu.regcod AS uf,
-                    usu.usufoneddd AS ddd,
-                    usu.usufonenum AS telefone,
-                    usu.usufuncao AS funcao,
-                    CASE aud.audtipo
-                        WHEN 'I' THEN 'Inclução'
-                        WHEN 'U' THEN 'Alteração'
-                        WHEN 'D' THEN 'Exclusão'
-                        WHEN 'X' THEN 'Erro do Sistema'
-                    END AS tipo_acao,
-                    to_char(aud.auddata, 'dd/MM/yyyy HH:MM:SS') as data_evento,
-                    aba.abadsc AS menuutilizado
-                FROM seguranca.usuario usu
-                JOIN auditoria aud ON usu.usucpf = aud.usucpf
-                JOIN seguranca.aba aba ON aud.sisid = aba.sisid
-                    " . $where . "
-            ";
+        SELECT
+            usu.usucpf AS cpf,
+            usu.usunome AS nome,
+            usu.usuemail AS email,
+            usu.regcod AS uf,
+            usu.usufoneddd AS ddd,
+            usu.usufonenum AS telefone,
+            usu.usufuncao AS funcao,
+            CASE aud.audtipo
+                WHEN 'I' THEN 'Inclução'
+                WHEN 'U' THEN 'Alteração'
+                WHEN 'D' THEN 'Exclusão'
+                WHEN 'X' THEN 'Erro do Sistema'
+            END AS tipo_acao,
+            to_char(aud.auddata, 'dd/MM/yyyy HH:MM:SS') as data_evento,
+            aba.abadsc AS menuutilizado
+        FROM seguranca.usuario usu
+        JOIN auditoria aud ON usu.usucpf = aud.usucpf
+        JOIN seguranca.aba aba ON aud.sisid = aba.sisid
+                " . $where . "
+    ";
     global $db;
     $auditorias = $db->carregar($sql);
 }
