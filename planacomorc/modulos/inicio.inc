@@ -210,12 +210,12 @@ include APPRAIZ . "includes/cabecalho.inc";
             <a class="btn btn-success" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A" title="Painel de Acompanhamento do Fundo Nacional de Cultura">
                 <i class="fa fa-area-chart"></i> Painel FNC
             </a>
-            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" title="Listagem de PI">
-                <i class="fa fa-list"></i> Lista de PI
+            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" title="Listagem de PA">
+                <i class="fa fa-list"></i> Lista de PA
             </a>
             <?php if(!array_intersect($perfis, [PFL_CONSULTA, PFL_CONSULTA_UNIDADE])){ ?>
-            <a class="btn btn-warning" href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A" title="Novo cadastro de PI">
-                    <i class="fa fa-plus-circle"></i> Criar PI
+            <a class="btn btn-warning" href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A" title="Novo cadastro de PA">
+                    <i class="fa fa-plus-circle"></i> Criar PA
                 </a>
             <?php }?>
             <a class="btn btn-primary" href="planacomorc.php?modulo=relatorio/geral&acao=A&fundo=f" title="Relatório Geral em Planilha">

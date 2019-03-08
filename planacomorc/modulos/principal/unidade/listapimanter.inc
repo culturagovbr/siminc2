@@ -39,7 +39,7 @@
                 $filtropi = $_SESSION['filtropi'] = array();
             break;
             case 'listapimanter-xls':
-                # Lista de PIs
+                # Lista de PAs
                 $filtropi['exercicio'] = $_SESSION['exercicio'];
                 $filtropi['usucpf'] = $_SESSION['usucpf'];
                 $filtropi['unofundo'] = 'FALSE';
@@ -92,14 +92,14 @@
         <div class="col-md-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Pesquisa avançada por PI</h5>
+                    <h5>Pesquisa avançada por Planos de Ação</h5>
                 </div>
                 <div class="ibox-content">
                     <form id="filtropi" name="filtropi" method="POST" role="form" class="form-horizontal">
                         <input name="requisicao" id="requisicao" value="" type="hidden">
 
                         <?php
-                            echo $simec->input('plicod', 'Código ou ID do PI', $filtropi['plicod'], ['maxlength' => 11]);
+                            echo $simec->input('plicod', 'Código ou ID do PA', $filtropi['plicod'], ['maxlength' => 11]);
                             # Se o usuário tiver Sub-Unidades vinculadas ao seu perfil o sistema não mostra opção de selecionar UO.
                             if (!$listaSubUnidadeUsuario) {
                                 echo $simec->select('unicod', 'Unidade', $filtropi['unicod'], Spo_Model_Unidade::queryCombo((object)array(
@@ -151,7 +151,7 @@
 
 <div class="row col-md-12" style="margin-bottom: 30px;">
     <?php
-        # Lista de PIs
+        # Lista de PAs
         $filtropi['exercicio'] = $_SESSION['exercicio'];
         $filtropi['usucpf'] = $_SESSION['usucpf'];
         $filtropi['unofundo'] = 'FALSE';
@@ -164,7 +164,7 @@
 
     <div class="ibox float-e-margins">
     	<div class="ibox-title">
-    		<h5>Lista de PIs</h5>
+    		<h5>Lista de Planos de Ação</h5>
     	</div>
     	<div class="ibox-content">
             <div class="table-responsive">
@@ -221,7 +221,7 @@
                         <th rowspan="2">Título</th>
                         <th rowspan="2">Funcional</th>
                         <th rowspan="2">Situação</th>
-                        <th colspan="7">Orçamento do PI (R$)</th>
+                        <th colspan="7">Orçamento do PA (R$)</th>
                     </tr>
                     <tr class="text-center">
                         <th>Total</th>
