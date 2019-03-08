@@ -1,12 +1,12 @@
 <?php
 /**
- * Tela de cadastro de PIs
+ * Tela de cadastro de Plano de Ação
  * @see cadastro.inc
  * $Id: cadastro_pi.inc 101265 2015-08-14 13:05:26Z maykelbraz $
  */
 
 /**
- * Funções de apoio ao cadastro de PIs.
+ * Funções de apoio ao cadastro de Plano de Ação.
  * @see _funcoespi.php
  */
 include_once '_funcoespi.php';
@@ -162,11 +162,11 @@ DML;
 }*/
 
 $listaDeAnexos = $aSniic = $aSei = $aPronac = $aConvenio = $aLocalizacao = $aResponsavel = [];
-if (validaRequisicao('pliid')) { // -- Edição de PI
+if (validaRequisicao('pliid')) { // -- Edição de Plano de Ação
 
     $pliid = $_REQUEST['pliid'];
 
-    // -- Carrega dados do PI e libera apenas o titulo e a descrição para edição
+    // -- Carrega dados do Plano de Ação e libera apenas o titulo e a descrição para edição
     $dadosPI = carregarPI($_REQUEST['pliid']);
     $enquadramento_pi = carregarEnquadramentoPI($_REQUEST['pliid']);
     //ver($dadosPI,d);
@@ -187,7 +187,7 @@ if (validaRequisicao('pliid')) { // -- Edição de PI
     if (validaRequisicao('apagar')) {
         $tipoTransacao = '-';
     }
-} elseif (validaRequisicao('scpid')) { // -- Transações de cadastro de PI
+} elseif (validaRequisicao('scpid')) { // -- Transações de cadastro de Plano de Ação
     // -- Carrega os dados da transação de criação e, de acordo com o tipo:
     // -- E: apenas exibe os dados - read only de uma transação já executada
     // -- S: deixa o formulário aberto para edição e liga as regras de validação - edição de
@@ -246,7 +246,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
         <h2>
-            Cadastro de PI do FNC
+            Cadastro de Plano de Ação do FNC
             <?php if(!empty($dadosPI['plicod'])){ ?>
                 <span style="color: red; padding: 5px;" id="span-plicod"><?= strtoupper($dadosPI['plicod']) ?></span>
                 <input class="upper-text" maxlength="11" type="text" id="plicod" value="<?= $dadosPI['plicod'] ?> " style="display:none;">
@@ -259,7 +259,7 @@ include APPRAIZ . "includes/cabecalho.inc";
         <?php if(!$mPiPlanoInterno->verificarPermissaoEditarUnidade($perfis, $listaJanelasDeAlteracao)): ?>
             <h3>
                 <span style="color: red; padding: 5px;">
-                    Não há janelas de período vigente no momento para possibilitar a unidade cadastrar PI.
+                    Não há janelas de período vigente no momento para possibilitar a unidade cadastrar Plano de Ação.
                 </span>
             </h3>
         <?php endif; ?>
@@ -294,7 +294,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Dados do Plano Interno</h5>
+                        <h5>Dados do Plano de Ação</h5>
                     </div>
                     <div class="ibox-content">
 
@@ -1519,7 +1519,7 @@ DML;
 
     $(document).ready(function() {
 
-        // Ações efetuadas quando a tela de cadastro de PI é iniciada.
+        // Ações efetuadas quando a tela de cadastro de Plano de Ação é iniciada.
         initCadastroPi();
 
     });

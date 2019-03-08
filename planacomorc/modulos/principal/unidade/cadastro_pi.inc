@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Tela de cadastro de PIs
+ * Tela de cadastro de Plano de Ação
  * @see cadastro.inc
  * $Id: cadastro_pi.inc 101265 2015-08-14 13:05:26Z maykelbraz $
  */
 
 /**
- * Funções de apoio ao cadastro de PIs.
+ * Funções de apoio ao cadastro de Plano de Ação.
  * @see _funcoespi.php
  */
 include_once '_funcoespi.php';
@@ -247,9 +247,9 @@ include APPRAIZ . "includes/cabecalho.inc";
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-5">
-        <h2>
-            Cadastro de PI
-            <?php if(!empty($dadosPI['plicod'])){ ?>
+        <h2><?php
+            echo $titulo_modulo;
+            if(!empty($dadosPI['plicod'])){ ?>
                 <span style="color: red; padding: 5px;" id="span-plicod"><?= strtoupper($dadosPI['plicod']) ?></span>
                 <input class="upper-text" maxlength="11" type="text" id="plicod" value="<?= $dadosPI['plicod'] ?>" style="display:none;">
                 <a style="margin-left: 10px;" class="fa fa-history" id="modal-historico-pi" title="Histórico de alterações"></a>
@@ -261,7 +261,9 @@ include APPRAIZ . "includes/cabecalho.inc";
     </div>
     <div class="col-lg-7">
         <div style="padding-top: 10px;" class="text-right">
-            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listar_propostas_pi&acao=A"><i class="fa fa-plus-circle"></i> Criar PI por Proposta</a>
+            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listar_propostas_pi&acao=A" title="Criar um Plano de Ação a partir de uma proposta">
+                <i class="fa fa-plus-circle"></i> Criar PA por Proposta
+            </a>
         </div>
     </div>
 </div>
@@ -275,7 +277,7 @@ include APPRAIZ . "includes/cabecalho.inc";
         <div class="tabs-container col-lg-12">
             <ul class="nav nav-tabs">
                 <li class="<?php echo $classTab0; ?>">
-                    <a data-toggle="tab" href="#tab-0">Plano Interno( Projeto )</a>
+                    <a data-toggle="tab" href="#tab-0">Plano de Ação( Projeto )</a>
                 </li>
                 <?php if( (int)$estadoAtual['esdid'] === (int)ESD_PI_APROVADO): ?>
                     <li class="<?php echo $classTab1; ?>">
