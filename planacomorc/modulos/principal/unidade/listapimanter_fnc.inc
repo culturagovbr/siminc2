@@ -92,7 +92,7 @@
                         <input name="requisicao" id="requisicao" value="" type="hidden">
 
                         <?php
-                            echo $simec->input('plicod', 'Código ou ID do PA', $filtropi['plicod'], ['maxlength' => 11]);
+                            echo $simec->input('plicod', 'Código PI ou ID PA', $filtropi['plicod'], ['maxlength' => 11]);
                             # Se o usuário tiver Sub-Unidades vinculadas ao seu perfil o sistema não mostra opção de selecionar UO.
                             if(!$listaSubUnidadeUsuario) {
                                 echo $simec->select('unicod', 'Unidade', null, $sqlListaUO, array('multiple' => 'true'));
