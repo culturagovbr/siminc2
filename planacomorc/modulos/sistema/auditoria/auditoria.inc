@@ -4,12 +4,12 @@
 foreach($_REQUEST as $k=>$v) ${$k}=$v;
 
 # Montando a cláusula WHERE
-if ($usucpf) $where .= " and usu.usucpf like '%".$usucpf."%' ";
-if ($usunome) $where .= " and usu.usunome like '%".str_to_upper($usunome)."%' ";
-if ($audtipo) $where .= " and aud.audtipo = '".$audtipo."' ";
-if ($audtabela) $where .= " and aud.audtabela like '%".$audtabela."%' ";
-if ($audsql) $where .= " and aud.audsql like '%".$audsql."%' ";
-if ($auddata_ini and $auddata_fim) $where .=  " and aud.auddata <= '".formata_data_sql($auddata_fim)." 23:59:59' and aud.auddata >= '".formata_data_sql($auddata_ini)." 00:00:00' ";
+if ($usucpf) $where .= "\nAND usu.usucpf LIKE '%".$usucpf."%' ";
+if ($usunome) $where .= "\n AND usu.usunome LIKE '%".str_to_upper($usunome)."%' ";
+if ($audtipo) $where .= "\nAND aud.audtipo = '".$audtipo."' ";
+if ($audtabela) $where .= "\nAND aud.audtabela LIKE '%".$audtabela."%' ";
+if ($audsql) $where .= "\nAND aud.audsql LIKE '%".$audsql."%' ";
+if ($auddata_ini and $auddata_fim) $where .=  "\nAND aud.auddata <= '".formata_data_sql($auddata_fim)." 23:59:59' AND aud.auddata >= '".formata_data_sql($auddata_ini)." 00:00:00' ";
 if ($where) $where = " WHERE ".substr($where,4,strlen($where)); else $where = "";
 
 # Opções da compo de Operações.
