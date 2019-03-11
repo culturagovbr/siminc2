@@ -269,7 +269,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 </div>
 
 <?php bootstrapPopup("Histórico de Alterações", 'historico-pi', APPRAIZ. "planacomorc/modulos/principal/unidade/historico_pi_modal.inc", array('fechar'), array('tamanho' => 'lg')); ?>
-<?php bootstrapPopup("Registro do último usuário que alterou este pi", 'historico-pi-usuario', APPRAIZ. "planacomorc/modulos/principal/unidade/historico_pi_usuario_modal.inc", array('fechar'), array('tamanho' => 'lg')); ?>
+<?php bootstrapPopup("Registro do último usuário que alterou este PA", 'historico-pi-usuario', APPRAIZ. "planacomorc/modulos/principal/unidade/historico_pi_usuario_modal.inc", array('fechar'), array('tamanho' => 'lg')); ?>
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">

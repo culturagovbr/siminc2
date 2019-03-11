@@ -53,7 +53,7 @@
 <div class="col-md-6">
     <div class="ibox float-e-margins div_produto_pi">
         <div class="ibox-title">
-            <h5>Produto PI:</h5>
+            <h5>Produto PA:</h5>
         </div>
         <div class="ibox-content">
             <div class="form-group">

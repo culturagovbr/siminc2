@@ -190,7 +190,7 @@
                         </div>
                     </div>
                     <div class="ibox-title">
-                        <h5>Plano Interno
+                        <h5>Plano de Ação
                         <?php if($dadosPI['plicod']): ?>
                             <span style="color: red; padding: 5px;" id="span-plicod">(<?php echo $dadosPI['plicod']; ?>)</span>
                         <?php else: ?>
@@ -345,7 +345,7 @@
                                     </tr>
                                     <tr class="titulo_espelho">
                                         <td colspan="2">
-                                            <b>Dados do Plano Interno</b>
+                                            <b>Dados do Plano de Ação</b>
                                         </td>
                                     </tr>
                                     <tr>
