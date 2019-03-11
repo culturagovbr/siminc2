@@ -1,7 +1,7 @@
 <div class="col-md-6">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>Dados do Dados do Plano de Ação</h5>
+            <h5>Dados do Plano de Ação</h5>
         </div>
         <div class="ibox-content">
             <div class="form-group">

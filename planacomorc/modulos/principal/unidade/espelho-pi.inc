@@ -220,7 +220,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <b>Código do PI:</b>
+                                            <b>Código</b>
                                         </td>
                                         <td align="left">
                                             <span><?php echo $dadosPI['plicod']; ?></span>
@@ -366,7 +366,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <b>Produto PI:</b>
+                                            <b>Produto PA:</b>
                                         </td>
                                         <td align="left">
                                             <span><?php echo $dadosPI['produto']; ?></span>

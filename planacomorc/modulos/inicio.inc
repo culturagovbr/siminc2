@@ -341,7 +341,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <tr class="linha_subunidade">
                                     <td style="border-right: 1px black solid;">
                                         <i class="fa fa-plus detalhar-linha link" data-suoid="<?php echo $dado['suoid']; ?>"></i>&nbsp;&nbsp;
-                                        <span class="detalhe-subunidade" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar PIs dessa Unidade">
+                                        <span class="detalhe-subunidade" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar PAs dessa Unidade">
                                             <?php echo $dado['unosigla'] . ' - ' . $dado['suonome'] . ' (' . $dado['suocod'] . ')'; ?>
                                         </span>
                                     </td>
@@ -373,7 +373,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <tr class="tr_<?php echo $dado['suoid']; ?> tr_detalhe" style="display: none;">
                                         <td style="padding-left: 30px; border-right: 1px black solid;" >
                                             <span class="detalhe-funcional" data-ptrid="<?php echo $dado['ptrid']; ?>" data-suoid="<?php echo $dado['suoid']; ?>" 
-                                                  title="<?php echo"Visualizar lista de PIs com essa funcional"?>">
+                                                  title="<?php echo"Visualizar lista de PAs com essa funcional"?>">
                                                 <?php echo $dado['funcional'] . ' - ' . $dado['acatitulo'] . ': ' . $dado['plodsc'] . ' (RP ' . $dado['irpcod'] . ') (PTRES:'.$dado['ptres'].')'; ?>
                                             </span>
                                             <?php if($dado['compartilhada'] > 1): ?>
@@ -419,9 +419,9 @@ include APPRAIZ . "includes/cabecalho.inc";
 </div>
 
 <?php
-    // -- popup de detalhamento do PI
-    bootstrapPopup("PI's da Unidade", 'detalhe-subunidade', '', array('fechar'), array('tamanho' => 'lg'));
-    bootstrapPopup("PI's da Funcional na Unidade", 'detalhe-funcional', '', array('fechar'), array('tamanho' => 'lg'));
+    // -- popup de detalhamento do PA
+    bootstrapPopup("PA's da Unidade", 'detalhe-subunidade', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup("PA's da Funcional na Unidade", 'detalhe-funcional', '', array('fechar'), array('tamanho' => 'lg'));
     bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), array('tamanho' => 'lg'));
 ?>
 

@@ -34,7 +34,7 @@ $listaHistorico = (new Planacomorc_Model_HistoricoPi())->recuperarListagem($_REQ
                         </tbody>
                     </table>
                 <?php } else { ?>
-                    <div class="alert alert-danger">Não há Histórico de alterações nesse PI</div>
+                    <div class="alert alert-danger">Não há Histórico de alterações nesse PA</div>
                 <?php } ?>
             </div>
         </div>
