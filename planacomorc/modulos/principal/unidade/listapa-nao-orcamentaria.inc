@@ -91,7 +91,7 @@
                     <h5>Pesquisa avançada por Planos de Ação Não Orçamentários</h5>
                 </div>
                 <div class="ibox-content">
-                    <form id="filtropi" name="filtropi" method="POST" role="form" class="form-horizontal">
+                    <form id="filtropa" name="filtropa" method="POST" role="form" class="form-horizontal">
                         <input name="requisicao" id="requisicao" value="" type="hidden">
 
                         <?php
