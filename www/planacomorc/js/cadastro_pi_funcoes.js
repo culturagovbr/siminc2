@@ -1123,7 +1123,35 @@
             $('#div_edital').hide('slow');
         }
     }
-    
+
+    /**
+     * Muda o nome do box de Metas e os campos que contém na box.
+     *
+     */
+    function mudarNomesFormularioNaoOrcamentario(bool) {
+
+        if(bool === true){
+            // Muda o nome do box de "Metas" para "Planejamento Estratégico" quando for enquadramento Não Orçamentário
+            $(".div_metas_ppa_pnc h5").html("Planejamento Estratégico");
+            // Muda o nome do campo de "Objetivo PPA" para "Objetivo Estratégico" quando for enquadramento Não Orçamentário
+            $(".div-objetivo .control-label").html("Objetivo Estratégico");
+            // Muda o nome do campo de "Meta PPA" para "Diretriz Estratégica" quando for enquadramento Não Orçamentário
+            $(".div-metas .control-label").html("Diretriz Estratégica");
+            // Muda o nome do campo de "Iniciativa PPA" para "Meta" quando for enquadramento Não Orçamentário
+            $(".div-iniciativa .control-label").html("Meta");
+        }else {
+            // Troca o nome da label de Planejamento Estratégico para Metas quando não for enquadramento Não Orçamentário.
+            $(".div_metas_ppa_pnc h5").html("Metas");
+            // Muda o nome do campo de "Objetivo Estratégico" para "Objetivo PPA" quando não for enquadramento Não Orçamentário.
+            $(".div-objetivo .control-label").html("Objetivo PPA");
+            // Muda o nome do campo de "Diretriz Estratégica" para "Meta PPA" quando não for enquadramento Não Orçamentário.
+            $(".div-metas .control-label").html("Meta PPA");
+            // Muda o nome do campo de "Meta" para "Iniciativa PPA" quando não for enquadramento Não Orçamentário.
+            $(".div-iniciativa .control-label").html("Iniciativa PPA");
+        }
+
+    }
+
     /**
      * Controla a exibição do formulario se o enquadramento for não orçamentário.
      *
@@ -1133,6 +1161,8 @@
     function mudarFormularioNaoOrcamentario(codigo){
         // Se o código for Não Orçamentário, o sistema não exibe as opções PTRES(Funcional), Valor do Projeto, Cronograma Orçamentário e Financeiro.
         if(verificarFormularioNaoOrcamentario()){
+
+            mudarNomesFormularioNaoOrcamentario(true);
             // Oculta a opções PTRES(Funcional).
             $('.div_ptres').hide('slow');
             // Exibe as Etapas
@@ -1159,9 +1189,8 @@
             $('#div_pactuacao').hide('slow');
             // Exibe o campo Recursos Necessários
             $(".recursos_necessarios").show('slow'); 
-            // Exibe o campo Programa
-            $(".div_programa").show('slow');            
         } else {
+            mudarNomesFormularioNaoOrcamentario(false);
             // Exibe a opções PTRES(Funcional).
             $('.div_ptres').show('slow');
             // Exibe o quadro de Custeio e Capital com a opção de Valor do Projeto.
@@ -1182,8 +1211,6 @@
             $('#div_pactuacao').show('slow');
             // Oculta o campo Recursos Necessários
             $(".recursos_necessarios").hide('slow');
-            // Oculta o campo Programa
-            $(".div_programa").hide('slow');
         }
     }
     
