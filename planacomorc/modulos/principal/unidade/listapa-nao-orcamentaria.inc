@@ -47,7 +47,7 @@
 
                 $mPlanointerno = new Spo_Model_Planointerno();
                 $sql = $mPlanointerno->listarNaoOrcamentario((object) $filtropa);
-                $listaPi = $mPlanointerno->carregar($sql);
+                $listaPa = $mPlanointerno->carregar($sql);
 
                 include_once APPRAIZ. "planacomorc/modulos/principal/unidade/listapa-nao-orcamentaria-xls.inc";
                 die;

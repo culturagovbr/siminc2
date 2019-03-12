@@ -259,7 +259,6 @@ class Spo_Model_Planointerno extends Modelo
                 pli.plistatus
             FROM monitora.pi_planointerno pli
 		JOIN planacomorc.pi_complemento pc USING(pliid)
-		JOIN monitora.pi_enquadramentodespesa AS enq ON enq.eqdid = pli.eqdid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
                     suo.suostatus = 'A'
                     AND pli.unicod = suo.unocod

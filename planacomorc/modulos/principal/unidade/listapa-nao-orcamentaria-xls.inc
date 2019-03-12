@@ -27,29 +27,29 @@ $cabecalho = [
             </tr>
         </thead>
         <tbody>
-        <?php if($listaPi):
-            foreach($listaPi as $pi): ?>
+        <?php if($listaPa):
+            foreach($listaPa as $pa): ?>
                 <tr>
                     <td style="border: 1px #e5d9c5 solid;">
-                        <?= $pi['id']; ?>
+                        <?= $pa['id']; ?>
                     </td>
                     <td style="border: 1px #e5d9c5 solid;">
-                        <?= $pi['sub_unidade']; ?>
+                        <?= $pa['sub_unidade']; ?>
                     </td>
                     <td style="border: 1px #e5d9c5 solid;">
-                        <?= strip_tags($pi['plititulo']); ?>
+                        <?= strip_tags($pa['plititulo']); ?>
                     </td>
                     <td style="border: 1px #e5d9c5 solid;">
-                        <?= $pi['situacao']; ?>
+                        <?= $pa['situacao']; ?>
                     </td>
                     <td style="border: 1px #e5d9c5 solid; text-align: left">
-                        <?= $pi['quantidade']; ?>
+                        <?= $pa['quantidade']; ?>
                     </td>
                     <td style="border: 1px #e5d9c5 solid;">
-                        <?= $pi['unidademedida']; ?>
+                        <?= $pa['unidademedida']; ?>
                     </td>
                     <td style="border: 1px #e5d9c5 solid;">
-                        <?= $pi['produto']; ?>
+                        <?= $pa['produto']; ?>
                     </td>
                 </tr>
             <?php endforeach;
