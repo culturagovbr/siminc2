@@ -180,14 +180,14 @@
                                 if($infoMeta['mppanualizavel'] == 't'){
                                     echo $simec->input('Previstoa', 'Previsto Anualizado', number_format($infoMeta['mppquantidadeanualizada'], 2, ',', '.'));
                                 }
-                                echo $simec->input('qtd_pis', 'Planos Internos (PI´s)', '<a class="detalhe-pi" title="PI\'s Vinculados" href="?modulo=principal/monitorar-ppa&acao=A&req=detalhe-pi&mppid=' . $mppid . '&suoid=' . $suoid . '">' . number_format($infoPI['qtd'], 0, ',', '.') . '</a>');
+                                echo $simec->input('qtd_pis', "Planos de Ação (PA's)", '<a class="detalhe-pi" title="PA\'s Vinculados" href="?modulo=principal/monitorar-ppa&acao=A&req=detalhe-pi&mppid=' . $mppid . '&suoid=' . $suoid . '">' . number_format($infoPI['qtd'], 0, ',', '.') . '</a>');
                                 $simec->setLabelSize(3);
                                 $simec->setPodeEditar(1);
                                 ?>
 
                             </div>
                             <div class="col-md-5">
-                                <h3 class="text-center">PI's Associados à Meta</h3>
+                                <h3 class="text-center">PAs associados à Meta</h3>
                                 <?php
                                 $colors = "'#55BF3B', '#eeaaee', '#00BFFF', '#aaeeee', '#7798BF', '#DDDF0D', '#7CCD7C', '#DF5353', '#008000', '#CD0000', '#FF4500', '#ff0066', '#4B0082', '#808000', '#800000', '#2F4F4F', '#006400', '#FFA500'";
                                 $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);

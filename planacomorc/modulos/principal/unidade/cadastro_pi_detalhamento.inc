@@ -19,7 +19,7 @@
                                 <b>Dotação na Unidade(R$)</b>
                             </td>
                             <td colspan="2" nowrap>
-                                <b><span id="detPi">Detalhado em PI Pela Unidade(R$)</span></b>
+                                <b><span id="detPi">Detalhado em PA pela Unidade(R$)</span></b>
                             </td>
                             <td colspan="2">
                                 <b>Empenho na Funcional(R$)</b>
