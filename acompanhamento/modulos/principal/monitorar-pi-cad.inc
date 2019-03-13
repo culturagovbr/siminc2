@@ -34,7 +34,7 @@
                                     Informações do Projeto: 
                                     <?php
                                         if(!empty($aPlanoInterno['plicod'])){
-                                            echo '<span class="link" title="Exibir Espelho do PI" style="color: red; padding: 5px;" onclick="javascript: exibirEspelhoPi(\''. (int)$aPlanoInterno['pliid']. '\')">(' . $aPlanoInterno['plicod'] . ')</span>';
+                                            echo '<span class="link" title="Exibir Espelho do PA" style="color: red; padding: 5px;" onclick="javascript: exibirEspelhoPi(\''. (int)$aPlanoInterno['pliid']. '\')">(' . $aPlanoInterno['plicod'] . ')</span>';
                                         }
                                     ?>
                                 </h5>
