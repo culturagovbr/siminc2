@@ -179,5 +179,3 @@ define( 'CAPCOD_CONVENIO', 45);
 # Plano de Trabalho Anual
 define('PTAID_LINHAS_PROGRAMATICAS', 5);
 
-# Constante do Enquadramento de Despesa do Tipo Não Orçamentária.
-define('EQDID_NAO_ORCAMENTARIA', 389);
