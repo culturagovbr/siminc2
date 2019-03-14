@@ -153,7 +153,8 @@
                         $sql = "
                             SELECT
                                 eqdid AS codigo,
-                                eqddsc AS descricao
+                                eqddsc AS descricao,
+                                eqdcod AS codigo
                             FROM monitora.pi_enquadramentodespesa
                             WHERE
                                 eqdstatus = 'A'
@@ -162,7 +163,7 @@
                                 eqddsc
                         ";
                     # Traz checked para Não Orçamentário caso não seja edição.
-                    $checked = isset($dadosPI['eqdid']) ? $dadosPI['eqdid'] : EQDID_NAO_ORCAMENTARIA;
+                    $checked = isset($dadosPI['eqdid']) ? $dadosPI['eqdid'] : 'N';
                     $db->monta_combo('eqdid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'eqdid', null, $checked, null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($eqdid) ? $eqdid : null));                    ?>
                 </div>
             </div>
