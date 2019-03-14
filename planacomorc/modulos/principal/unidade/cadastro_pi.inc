@@ -26,6 +26,8 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 require_once APPRAIZ. 'proposta/classes/model/PrePlanoInterno.inc';
 
 if($_REQUEST['uploadAnexo']){
+    $_FILES['file']['name'] = utf8_decode($_FILES['file']['name']);
+    $_REQUEST['arqdescricao'] = utf8_decode($_REQUEST['arqdescricao']);
     $file = new FilesSimec();
     if($file->setUpload($_REQUEST['arqdescricao'], '', false)){
         echo simec_json_encode(array(
