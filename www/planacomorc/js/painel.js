@@ -22,7 +22,7 @@ function atualizarSIOP(){
                         closeOnConfirm: true
                     },
                     function(){
-                        window.location.href = window.location.href;
+                        window.location.href = window.location.href.replace('&req=atualizar-siop-ajax', '');
                     });
             } else {
                 swal({
@@ -34,7 +34,7 @@ function atualizarSIOP(){
                         closeOnConfirm: true
                     },
                     function(){
-                        window.location.href = window.location.href;
+                        window.location.href = window.location.href.replace('&req=atualizar-siop-ajax', '');
                     });
             }
         }

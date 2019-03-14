@@ -202,13 +202,16 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <i class="fa fa-cloud-download"></i> Atualizar <?= SIGLA_SISTEMA; ?>
                 </a>-->
             <?php } ?>
-            <?php if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
+<!--            <?php /*if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { */?>
                 <a id="btn-atualizar-siop" class="btn btn-success" title="Busca os dados do sistema SIOP e atualiza os dados de Dotações das Funcionais e execução orçamentária">
                     <i class="fa fa-cloud-download"></i> Atualizar SIOP
                 </a>
-            <?php } ?>
-            <a class="btn btn-success" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A" title="Painel de Acompanhamento do Fundo Nacional de Cultura">
+            --><?php /*} */?>
+            <!--<a class="btn btn-success" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A" title="Painel de Acompanhamento do Fundo Nacional de Cultura">
                 <i class="fa fa-area-chart"></i> Painel FNC
+            </a>-->
+            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapa-nao-orcamentaria&acao=A" title="Listagem de PA">
+                <i class="fa fa-list"></i> Ações não Orçamentárias
             </a>
             <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" title="Listagem de PA">
                 <i class="fa fa-list"></i> Lista de PA
@@ -429,6 +432,11 @@ include APPRAIZ . "includes/cabecalho.inc";
     $(document).ready(function(){
 
         initLinkEspelhoPi();
+
+        <?php if($_REQUEST['req'] == 'atualizar-siop-ajax' ): ?>
+            atualizarSIOP();
+        <?php endif; ?>
+
 
         $('#btn-atualizar-siop').click(function(){
             atualizarSIOP();
