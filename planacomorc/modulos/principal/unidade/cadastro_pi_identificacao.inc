@@ -1,7 +1,7 @@
 <div class="col-md-6">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>Dados do Plano Interno</h5>
+            <h5>Dados do Plano de Ação</h5>
         </div>
         <div class="ibox-content">
             <div class="form-group">
@@ -161,9 +161,9 @@
                             ORDER BY
                                 eqddsc
                         ";
-                        $eqdid = $dadosPI['eqdid'];
-                        $db->monta_combo('eqdid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'eqdid', null, '', null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($eqdid) ? $eqdid : null));
-                    ?>
+                    # Traz checked para Não Orçamentário caso não seja edição.
+                    $checked = isset($dadosPI['eqdid']) ? $dadosPI['eqdid'] : EQDID_NAO_ORCAMENTARIA;
+                    $db->monta_combo('eqdid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'eqdid', null, $checked, null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($eqdid) ? $eqdid : null));                    ?>
                 </div>
             </div>
 
