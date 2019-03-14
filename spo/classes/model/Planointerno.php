@@ -162,7 +162,7 @@ class Spo_Model_Planointerno extends Modelo
             SELECT DISTINCT
                 pli.pliid::VARCHAR AS pliid,
                 pli.pliid::VARCHAR AS id,
-                pli.ungcod || '-' || suo.suonome AS sub_unidade,
+                suo.suonome AS sub_unidade,
                 ed.esdid,
                 ed.esddsc,
                 pli.pliano,
