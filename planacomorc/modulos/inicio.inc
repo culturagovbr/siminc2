@@ -216,8 +216,8 @@ include APPRAIZ . "includes/cabecalho.inc";
             <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" title="Listagem de PA">
                 <i class="fa fa-list"></i> Lista de PA
             </a>
-            <?php if(!array_intersect($perfis, [PFL_CONSULTA, PFL_CONSULTA_UNIDADE])){ ?>
-            <a class="btn btn-warning" href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A" title="Novo cadastro de PA">
+            <?php if(!(in_array(PFL_CONSULTA, $perfis) || in_array(PFL_CONSULTA_UNIDADE, $perfis))){ ?>
+                <a class="btn btn-warning" href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A" title="Novo cadastro de PA">
                     <i class="fa fa-plus-circle"></i> Criar PA
                 </a>
             <?php }?>
