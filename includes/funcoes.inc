@@ -2572,6 +2572,19 @@ function desformata_valor( $valor )
 	return (float) $valor;
 }
 
+/**
+ * Formata um valor de float para inteiro, removendo ponto e virgula.
+ * @param $valor
+ * @return int
+ */
+function desformata_float($valor)
+{
+    $valor = str_replace('.', '', $valor);
+    $valor = str_replace(',', '.', $valor);
+
+    return (int)$valor;
+}
+
 function eof()
 {
 	?>
