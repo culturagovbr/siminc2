@@ -261,7 +261,7 @@ include APPRAIZ . "includes/cabecalho.inc";
         <?php echo $dadosPI['emenumero'] ? "<br /><span>Emenda: {$dadosPI['emenumero']}</span>": ''; ?>
         <?php echo $dadosPI['benid'] ? "<br /><span>Beneficiário: {$dadosPI['benid']}</span>": ''; ?>
     </div>
-    <div class="col-lg-7">
+    <div class="col-lg-7 div-proposta-pa">
         <div style="padding-top: 10px;" class="text-right">
             <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listar_propostas_pi&acao=A" title="Criar um Plano de Ação a partir de uma proposta">
                 <i class="fa fa-plus-circle"></i> Criar PA por Proposta
@@ -285,7 +285,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <li class="<?php echo $classTab1; ?>">
                         <a data-toggle="tab" href="#tab-1">Monitoramento</a>
                     </li>
-                    <li class="<?= $classTab2; ?>">
+                    <li class="<?= $classTab2; ?> aba-alteracoes">
                         <a data-toggle="tab" href="#tab-2">Alterações Orçamentárias</a>
                     </li>
                 <?php endif; ?>
