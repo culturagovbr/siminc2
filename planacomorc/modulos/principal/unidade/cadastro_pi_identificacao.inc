@@ -144,29 +144,10 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-3 text-right">
-                    <label class="control-label" for="eqdid">Enquadramento da Despesa: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
-                </div>
-                <div class="col-lg-9 carregaEnq">
-                    <?php
-                        $sql = "
-                            SELECT
-                                eqdid AS codigo,
-                                eqddsc AS descricao,
-                                eqdcod AS codigo
-                            FROM monitora.pi_enquadramentodespesa
-                            WHERE
-                                eqdstatus = 'A'
-                                AND eqdano = '{$_SESSION['exercicio']}'
-                            ORDER BY
-                                eqddsc
-                        ";
-                    # Traz checked para Não Orçamentário caso não seja edição.
-                    $checked = isset($dadosPI['eqdid']) ? $dadosPI['eqdid'] : 'N';
-                    $db->monta_combo('eqdid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'eqdid', null, $checked, null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($eqdid) ? $eqdid : null));                    ?>
-                </div>
-            </div>
+            <?php
+                $checked = $dadosPI['eqdid']? $dadosPI['eqdid']: $codigoEnquadramentoNaoOrcamentario;
+                echo $simec->select("eqdid", 'Enquadramento da Despesa', $checked, (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo('eqdid, eqddsc', null, 'eqddsc'), ['required']);
+            ?>
 
             <div class="form-group grupo_manutencao" style="display: none;">
                 <div class="col-md-3 text-right">
