@@ -1,7 +1,7 @@
 <?php
 
     include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
-    
+
     $mPlanoInterno = new Pi_PlanoInterno($_REQUEST['pliid']);
     $aPlanoInterno = current($mPlanoInterno->recuperarDados());
 
@@ -64,10 +64,10 @@
                                 if($ultimoHistorico){
                                     echo $simec->input('Monitorado', 'Monitorado em: ', "{$ultimoHistorico['hisdata']} por {$ultimoHistorico['usunome']}");
                                 }
-                                echo $simec->input('Quantidade', 'Quantidade', number_format($aPlanoInterno['picquantidade'], 2, ',', '.'));
+                                echo $simec->input('Quantidade', 'Quantidade', $aPlanoInterno['picquantidade']);
                                 echo $simec->input('Unidade', 'Unidade', $aPlanoInterno['pumnome']);
                                 echo $simec->input('Produto', 'Produto', $aPlanoInterno['pprnome']);
-                                echo $simec->input('Quantidadep', 'Quantidade prevista até a data', number_format($qtdPrevista, 2, ',', '.'));
+                                echo $simec->input('Quantidadep', 'Quantidade prevista até a data', $qtdPrevista);
                                 $simec->setLabelSize(3);
                                 $simec->setPodeEditar(1);
                                 ?>
@@ -118,7 +118,7 @@
                                 if(in_array(PFL_CONSULTA, $listaPerfis)){
                                     $simec->setPodeEditar(0);
                                 }
-                                echo $simec->valor('acoquantidade', 'Executado', $mAcompanhamento->acoquantidade, ['required']);
+                                echo $simec->moedaInteiro('acoquantidade', 'Executado', $mAcompanhamento->acoquantidade, ['required']);
                                 echo $simec->textarea('acoanalise', 'Análise Situacional', $mAcompanhamento->acoanalise, ['rows'=>6]);
                                 echo $simec->select('claid', 'Classificação', $mAcompanhamento->claid, (new Acompanhamento_Model_Classificacao())->recuperarSqlCombo(null, ['tipid = ' . Acompanhamento_Model_Tipo::K_TIPO_PI]));
 
