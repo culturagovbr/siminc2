@@ -16,7 +16,7 @@
     <div class="modal-footer">
         <button class="btn btn-primary" type="submit" id="btn-salvar-meta"><i class="fa fa-check"></i>&nbsp;Salvar</button>
         <?php if($mMetappa->mppid){ ?>
-            <a href="?modulo=apoio/objetivoppa_form&acao=A&req=excluir&mppid=<?php echo $mMetappa->mppid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
+            <a class="btn btn-danger link-excluir btn-excluir-meta" data-mppid="<?= $mMetappa->mppid ?>" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
         <?php } ?>
     </div>
 </form>
@@ -33,15 +33,31 @@ if ($mostra){
             $('#mppquantidade').val('');
          </script>";    
 }
-echo "<script>
-        $(document).ready(function(){
-            $('#btnNovaMeta').click(function(){
-                $('#cadastro-metas').modal();
-            });
-            toggleQuantidade();
-            $('#mppquantificavel').change(function(){
-                toggleQuantidade();
-            });
-        });
-    </script>";            
 ?>
+<script>
+    $(document).ready(function(){
+        $('#btnNovaMeta').click(function(){
+            $('#cadastro-metas').modal();
+        });
+        toggleQuantidade();
+        $('#mppquantificavel').change(function(){
+            toggleQuantidade();
+        });
+        $('.btn-excluir-meta').click(function () {
+            var meta = $(this).attr('data-mppid');
+            var oppid = $('#oppid').val();
+            swal({
+                    title: "Atenção!",
+                    text: "Deseja realmente excluir o registro?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Sim, estou certo!",
+                    closeOnConfirm: true
+                },
+                function(){
+                    window.location.href = '?modulo=apoio/objetivoppa_form&acao=A&req=excluir-meta&mppid=' + meta + '&oppid=' + oppid;
+                });
+        });
+    });
+</script>

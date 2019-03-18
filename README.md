@@ -8,7 +8,6 @@
 
 O [SIMEC](https://softwarepublico.gov.br/social/simec/) é uma ferramenta web escrita em linguagem PHP e com servidor de banco de dados PostgreSQL. O sistema em PHP é responsável pela lógica do servidor com interfaces do lado do cliente escritas em Javascript, enquanto o PostgreSQL faz o papel de repositório de dados.
 
-
 Estas são documentações sobre o processo de desenvolvimento do SIMEC, versionameno e publicação:
 
 * [Roteiro de publicação de releases](docs/Roteiro_de_publicacao_de_releases.md)

@@ -84,7 +84,7 @@ class Monitora_Model_Programa extends Modelo
         $order = $order ? $order : $descricao;
         $where = count($where) ? " where  " . implode(' and ', $where) : '';
 
-        $sql = "select prgcod AS codigo, {$descricao} AS descricao
+        $sql = "select prgid AS codigo, {$descricao} AS descricao
                 from {$this->stNomeTabela}
                 $where
                 order by $order   
@@ -98,11 +98,7 @@ class Monitora_Model_Programa extends Modelo
      * @param stdClass $dto
      * @return array
      */
-    public static function buscarTodos(stdClass $dto) {
-
-        global $db;
-
-        $exercicio = (int)$dto->exercicio;
+    public function buscarTodos(stdClass $dto) {
 
         $sql = "
             SELECT
@@ -112,9 +108,29 @@ class Monitora_Model_Programa extends Modelo
             FROM monitora.programa
             WHERE
                 prgstatus = 'A'
+                AND prgano = '". (int)$dto->exercicio. "'";
+
+        return $this->carregar($sql);
+    }
+
+    /**
+     * Recuperar programa vinculado à ação na tela de cadastro de ação
+     * @param stdClass $dto
+     * @return array
+     */
+    public static function recuperaSqlComboPrgcod(stdClass $dto)
+    {
+        $sql = "
+            SELECT
+                prgcod AS codigo,
+                prgcod || ' - ' || prgdsc AS descricao
+            FROM monitora.programa
+            WHERE
+                prgstatus = 'A'
+                AND prgano = '". $dto->exercicio ."'
         ";
 
-        return $db->carregar($sql);
+        return $sql;
     }
 
 }//end Class

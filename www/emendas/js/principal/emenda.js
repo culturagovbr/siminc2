@@ -48,6 +48,7 @@
         // Evento ao mudar opção de UO
         $('#unicod').change(function(){
             carregarUG($(this).val());
+            $('#span-funcional').load('?modulo=principal/emenda&acao=A&req=carregarAcaoPorUo&unicod=' + $(this).val());
         });
 
     }

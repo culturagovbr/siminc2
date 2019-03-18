@@ -8,7 +8,6 @@ class Emendas_Controller_Beneficiario
 
         try {
             $mBeneficiario = new Emendas_Model_Beneficiario($dados['benid']);
-            
             # Verifica se é alteração(update) pra gerar histórico de alterações
             if($mBeneficiario->benid){
                 $mBeneficiario->gravarHistorico($dados);
@@ -20,7 +19,7 @@ class Emendas_Controller_Beneficiario
             $mBeneficiario->benconveniado = $dados['benconveniado'] == 't' ? 't' : 'f';
             $mBeneficiario->benpago = $dados['benpago'] == 't' ? 't' : 'f';
             $mBeneficiario->bented = $dados['bented'] == 't' ? 't' : 'f';
-            $mBeneficiario->plititulo = substr($dados['plititulo'], 0, 230);
+            $mBeneficiario->plititulo = substr($dados['plititulo']?$dados['plititulo']:$mBeneficiario->plititulo, 0, 230);
 
             $aCamposNulos = [
                 # Cadastro Inicial
@@ -78,13 +77,35 @@ class Emendas_Controller_Beneficiario
         $mBeneficiarioObservacao->bobdata = $mBeneficiarioObservacao->bobdata ? $mBeneficiarioObservacao->bobdata : date('d/m/Y');
         include_once APPRAIZ . 'emendas/modulos/principal/beneficiarioobservacao_form.inc';
     }
+    
+    public function montarFormularioPedidoFinanceiro($benid)
+    {
+        global $simec;
+        $PedidoFinanceiro = (new Emendas_Model_PedidoFinanceiro())->recuperaPedidoFinanceiroPorBenidPorPeriodo($benid);
+        include_once APPRAIZ . 'emendas/modulos/principal/beneficiario_pedidofinanceiro_form.inc';
+    }
 
     public function montarListagemObservacao($benid, $podeEditar)
     {
         $aBeneficiarioObservacao = (new Emendas_Model_BeneficiarioObservacao)->recuperarPorUnidade($benid);
         include_once APPRAIZ . 'emendas/modulos/principal/beneficiario_observacao.inc';
     }
+    
+    public function montarFormularioNotaEmpenho($benid = null, $neid= null)
+    {
+        global $simec;
+        $mBeneficiarioNotaEmpenho = new Emendas_Model_NotaEmpenho($neid);
+        $mBeneficiarioNotaEmpenho->benid = $benid;
+        $mBeneficiarioNotaEmpenho->numnotaempenho = $mBeneficiarioNotaEmpenho->numnotaempenho!='null' ? $mBeneficiarioNotaEmpenho->numnotaempenho : '';
+        include_once APPRAIZ . 'emendas/modulos/principal/beneficiarionotaempenho_form.inc';
+    }
 
+    public function montarListagemNotaEmpenho($benid, $podeEditar)
+    {
+        $mBeneficiarioNotaEmpenho = (new Emendas_Model_NotaEmpenho)->montarRecuperarPorBeneficiario($benid);
+        include_once APPRAIZ . 'emendas/modulos/principal/beneficiario_notaempenho.inc';
+    }
+    
     public function montarFormularioDetalhe($emeid, $benid = null, $bedid = null)
     {
         global $simec;

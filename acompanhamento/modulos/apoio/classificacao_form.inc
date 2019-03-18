@@ -46,13 +46,13 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <form id="formulario" name="formulario" method="post" class="form-horizontal">
                         <input type="hidden" name="req" id="req" value="salvar" />
                         <input name="claid" id="claid" type="hidden" value="<?php echo $mClassificacao->claid; ?>">
-                        
+
                         <?php                         
                             echo $simec->input('cladsc', 'Classificação', $mClassificacao->cladsc, ['required', 'maxlength' => 200]);
                             echo $simec->select('tipid', 'Tipo', $mClassificacao->tipid, (new Acompanhamento_Model_Tipo())->recuperarSqlCombo(array(), null, 'tipdsc'), ['required']);
                             echo $simec->radioBoolean('clamedida', 'Possui medida a ser adotada', $mClassificacao->clamedida);
                         ?>
-                        
+
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
@@ -66,7 +66,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-4" id="div_medida">
             <div class="ibox float-e-margins">
             	<div class="ibox-title">
@@ -86,7 +86,7 @@ include APPRAIZ . "includes/cabecalho.inc";
             	</div>
             </div>
         </div>
-        
+
     </div>
 </div>
 

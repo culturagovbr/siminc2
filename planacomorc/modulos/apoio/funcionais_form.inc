@@ -9,7 +9,11 @@
             $cPtres->excluir($_REQUEST['ptrid']);
             die;
         case 'carregarAcaoPorUo':
-            echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(['prgcod', 'acacod', 'acaobjetivocod', 'loccod', 'acatitulo'], ["unicod = '". $_REQUEST['unicod']. "'"]), ['required']);
+            echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(["COALESCE(prgcod, '')", "COALESCE(acacod, '')", "COALESCE(acaobjetivocod, '')", "COALESCE(loccod, '')", "COALESCE(acatitulo, '')"], ["unicod = '". $_REQUEST['unicod']. "'"]), ['required']);
+            die;
+        case 'carregarSubfuncao':
+            $funcod = $_REQUEST['funcod'];
+            echo $simec->select('sfucod', 'Subfunção', $mPtres->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], ["funcod = '".$funcod."'"]), ['required']);
             die;
     }
 
@@ -38,9 +42,13 @@
 
                         <?php
                             echo $simec->select('unicod', 'Unidade Orçamentária', $mPtres->unicod, (new Public_Model_UnidadeOrcamentaria())->recuperarSqlComboPorUnocod(['unocod', 'unonome'], null, 'unonome'), ['required']);
+                            echo $simec->select('funcod', 'Função', $mPtres->funcod, (new Public_Model_Funcao())->recuperarSqlCombo(['funcod', 'fundsc'], null), ['required']);
+                            echo '<span id="span-subfuncao">';
+                            echo $simec->select('sfucod', 'Subfunção', $mPtres->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], null), ['required']);
+                            echo '</span>';
                             # select de unidade para filtrar a ação com base do unicod.
                             echo '<span id="span-acao">';
-                            echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(['prgcod', 'acacod', 'acaobjetivocod', 'loccod', 'acatitulo'], ["unicod = '". $mPtres->unicod. "'"]), ['required']);
+                            echo $simec->select('acaid', 'Ação', $mPtres->acaid, (new Monitora_Model_Acao())->recuperarSqlCombo(['prgcod', 'acacod', "COALESCE(acaobjetivocod, '')", 'loccod', 'acatitulo'], ["unicod = '". $mPtres->unicod. "'"]), ['required']);
                             echo '</span>';
                             echo $simec->input('ptres', 'PTRES', $mPtres->ptres, ['required','maxlength' => 50]);
                             echo $simec->input('plocod', 'Código PO', $mPtres->plocod, ['maxlength' => 4]);
@@ -74,6 +82,10 @@
 
         $('#unicod').change(function () {
             $('#span-acao').load('?modulo=apoio/funcionais_form&acao=A&req=carregarAcaoPorUo&unicod=' + $(this).val());
+        });
+
+        $('#funcod').change(function () {
+            $('#span-subfuncao').load('?modulo=apoio/funcionais_form&acao=A&req=carregarSubfuncao&funcod=' + $(this).val());
         });
 
     });

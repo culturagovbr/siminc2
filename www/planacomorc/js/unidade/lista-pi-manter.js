@@ -19,11 +19,13 @@
         $('.btn-limpar').click(function(){
             $('#requisicao').val('limpar');
             $('#filtropi').submit();
+            $('#filtropa').submit();
         });
         
         $('#btn-exportar-xls').click(function(){
             $('#requisicao').val('listapimanter-xls');
             $('#filtropi').submit();
+            $('#filtropa').submit();
             $('#requisicao').val('');
         });
         
@@ -117,6 +119,14 @@
                 $('#detalhepi .modal-body').html(html);
                 $('#detalhepi').modal();
        });
+    }
+    
+    function initLinkEspelhoPi(){
+        $('body').on('click', '.a_espelho', function(){
+            var pliid = $(this).attr('data-pi');
+            exibirEspelhoPi(pliid);
+            return false;
+        });
     }
     
     /**

@@ -99,6 +99,9 @@ class Emendas_Model_Emenda extends Modelo
         if($filtro->suoid_delegada){
             $where .= "\n AND suoed.suoid =  ". (int)$filtro->suoid_delegada;
         }
+        if($filtro->ptrid){
+            $where .= "\n AND ptr.ptrid =  ". (int)$filtro->ptrid;
+        }
         if($filtro->lista_esdid){
             $where .= "\n AND doce.esdid IN(". join(',', $filtro->lista_esdid). ")";
         }
@@ -456,6 +459,26 @@ class Emendas_Model_Emenda extends Modelo
                         bed.benid = ben.benid
                         AND bed.bedstatus = 'A'
                 ), 0) AS contigenciadocapital,
+                COALESCE((
+                    SELECT pf.vlcusteiopedido
+                      from emendas.pedido_financeiro pf
+                     where pf.benid = ben.benid
+                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),0) as vlcusteiopedido,
+                COALESCE((
+                    SELECT pf.vlcapitalpedido
+                      from emendas.pedido_financeiro pf
+                     where pf.benid = ben.benid
+                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),0) as vlcapitalpedido,
+                COALESCE((
+                    SELECT v.vindsc
+                      from emendas.pedido_financeiro pf
+                     inner join emendas.vinculacao v
+                        on pf.vinid=v.vinid
+                     where pf.benid = ben.benid
+                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),'') as vindsc,
 		-- DADOS SICONV
 		CASE WHEN prg.prgcodigo IS NOT NULL THEN
                     substr(prg.prgcodigo::TEXT, 1, 6) || ' ' || substr(prg.prgcodigo::TEXT, 6, 4) || ' ' || substr(prg.prgcodigo::TEXT, 10, 4)
@@ -474,7 +497,8 @@ class Emendas_Model_Emenda extends Modelo
                 pi.pliid,
                 pi.plicod,
                 pi.empenhado,
-                pi.pago
+                pi.pago,
+                (select string_agg(numnotaempenho,',') as numnotaempenho from emendas.nota_empenho ne where ne.benid = ben.benid and nestatus='A') as numnotaempenho
             FROM emendas.emenda eme
                 -- DADOS DA EMENDA
                 LEFT JOIN public.unidadeorcamentaria uno ON uno.unoid = eme.unoid
@@ -566,6 +590,7 @@ class Emendas_Model_Emenda extends Modelo
             array('codigo' => 'empedimento',                'descricao' => 'Impedimento'),
             array('codigo' => 'motivo',                     'descricao' => 'Motivo'),
             array('codigo' => 'justificativa',              'descricao' => 'Justivicativa'),
+            array('codigo' => 'vindsc',                     'descricao' => 'Vinculação'),
             # DADOS FINANCEIROS DO BENFICIÁRIO
             array('codigo' => 'bedvalorcusteio',            'descricao' => 'Vl. Beneficiário Custeio'),
             array('codigo' => 'bedvalorcapital',            'descricao' => 'Vl. Beneficiário Capital'),
@@ -587,7 +612,10 @@ class Emendas_Model_Emenda extends Modelo
             array('codigo' => 'pliid',                      'descricao' => 'Id PI'),
             array('codigo' => 'plicod',                     'descricao' => 'Código PI'),
             array('codigo' => 'empenhado',                  'descricao' => 'Empenhado'),
-            array('codigo' => 'pago',                       'descricao' => 'Pago'));
+            array('codigo' => 'pago',                       'descricao' => 'Pago'),
+            array('codigo' => 'numnotaempenho',             'descricao' => 'Nota de Empenho'),
+            array('codigo' => 'vlcusteiopedido',            'descricao' => 'Custeio do Pedido'),
+            array('codigo' => 'vlcapitalpedido',            'descricao' => 'Capital do Pedido'));
 
         return $colunas;
     }
@@ -606,10 +634,14 @@ class Emendas_Model_Emenda extends Modelo
             'bedvalorcapital',
             'bedvalorpriorizadocusteio',
             'bedvalorpriorizadocapital',
+            'vlcusteiopedido',
+            'vlcapitalpedido',
             'contigenciadocusteio',
             'contigenciadocapital',
             'empenhado',
-            'pago'
+            'pago',
+            'vlcusteiopedido',
+            'vlcapitalpedido'
         ];
         return $colunas;
     }

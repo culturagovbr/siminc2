@@ -8,17 +8,17 @@ switch ($_REQUEST['req']) {
     case 'excluir':
     $cUnidadeOrcamentaria->excluir($_REQUEST['unoid']);
     die;
-    case 'formulario-medida':
+    case 'formulario-sub-unidade':
         $cUnidadeOrcamentaria->montarFormulario($_REQUEST['unoid'], $_REQUEST['suoid']);
     die;
-    case 'listar-medida':
+    case 'listar-sub-unidade':
         $cUnidadeOrcamentaria->montarListagem($_REQUEST['unoid']);
     die;
-    case 'salvar-medida':
+    case 'salvar-sub-unidade':
         $cSubUnidade = new Public_Controller_SubUnidadeOrcamentaria();
         $cSubUnidade->salvar($_REQUEST);
     die;
-    case 'excluir-medida':
+    case 'excluir-sub-unidade':
         $cSubUnidade = new Public_Controller_SubUnidadeOrcamentaria();
         $cSubUnidade->excluir($_REQUEST);
     die;
@@ -47,12 +47,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <input name="unoid" id="unoid" type="hidden" value="<?php echo $mUnidadeOrcamentaria->unoid; ?>">
 
                         <?php
-                        echo $simec->input('unocod', 'Código', $mUnidadeOrcamentaria->unocod, ['required','class'=>"inteiro" ,'maxlength' => 5]);
-                        echo $simec->input('unonome', 'Nome', $mUnidadeOrcamentaria->unonome, ['required','maxlength' => 250]);
-                        echo $simec->input('unocodigopi', 'Código PI', $mUnidadeOrcamentaria->unocodigopi, ['required','maxlength' => 1]);
-                        echo $simec->radio('unofundo', 'Fundos', $mUnidadeOrcamentaria->unofundo, ['t'=>'Sim', 'f'=>'Não']);
-                        echo $simec->input('unosigla', 'Sigla da Unidade Orçamentária', $mUnidadeOrcamentaria->unosigla, ['required','maxlength' => 20]);
-//                        echo $simec->input('unocodorcamento', 'Código dor Orçmaneto', $mUnidadeOrcamentaria->unocodorcamento, ['required','maxlength' => 5]);
+                            echo $simec->input('unocod', 'Código UO', $mUnidadeOrcamentaria->unocod, ['required','class'=>"inteiro" ,'maxlength' => 5]);
+                            echo $simec->input('unonome', 'Nome UO', $mUnidadeOrcamentaria->unonome, ['required','maxlength' => 250]);
+                            echo $simec->input('unosigla', 'Sigla UO', $mUnidadeOrcamentaria->unosigla, ['required','maxlength' => 20]);
+                            echo $simec->radio('unofundo', 'FNC', $mUnidadeOrcamentaria->unofundo, ['t'=>'Sim', 'f'=>'Não']);
                         ?>
 
                         <div class="form-group">
@@ -75,14 +73,14 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <h5>Sub-Unidade Orçamentaria</h5>
                 </div>
                 <div class="ibox-content">
-                  <div id="div_formulario_medida">
+                  <div id="div_formulario_sub_unidade">
                       <?php
                           if($mUnidadeOrcamentaria->unoid){
                               $cUnidadeOrcamentaria->montarFormulario($mUnidadeOrcamentaria->unoid);
                           }
                       ?>
                   </div>
-                  <div id="div_listagem_medida">
+                  <div id="div_listagem_sub_unidade">
                       <?php $cUnidadeOrcamentaria->montarListagem($mUnidadeOrcamentaria->unoid); ?>
                   </div>
                 </div>

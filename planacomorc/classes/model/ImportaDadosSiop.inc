@@ -52,6 +52,11 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         $this->executar($sql);
     }
     
+    public function excluiDadosWsOrcamentarioOrgaoAnterior(){
+        $sql = "DELETE FROM wssof.ws_execucaoorcamentariadto WHERE anoexercicio::NUMERIC >= 2019 AND unidadeorcamentaria ILIKE '42%';";
+        $this->executar($sql);
+    }
+    
     public function excluiDadosSiopExecucao($exercicio){
         $sql = "DELETE FROM spo.siopexecucao WHERE exercicio = '". (int)$exercicio. "'";
         $this->executar($sql);
@@ -91,7 +96,7 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                 exo.localizador AS loccod,
                 exo.planoorcamentario AS plocod,
                 exo.numeroptres AS ptres,
-                exo.planointerno AS plicod,
+                SUBSTRING(exo.planointerno, 1, 11) AS plicod,
                 natureza AS natcod,
                 gruponaturezadespesa AS gndcod,
                 CASE WHEN exo.dotacaoinicial <> '' THEN
@@ -118,27 +123,29 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
     public function RetornaFuncionais($exercicio){
         $sql = "
             SELECT
+                exe.unidadeorcamentaria,
                 exe.programa,
                 exe.acao,
+                exe.localizador,
                 exe.planoorcamentario,
-                exe.unidadeorcamentaria,
                 exe.anoexercicio,
                 exe.anoreferencia,
                 exe.categoriaeconomica,
-                exe.programa || '.' || exe.acao || '.' || exe.planoorcamentario || '.' || exe.unidadeorcamentaria AS funcional,
+                exe.unidadeorcamentaria || '.' || exe.programa || '.' || exe.acao || '.' || exe.localizador || '.' || exe.planoorcamentario AS funcional,
+                sum(exe.dotacaoinicial::numeric) AS dotacaoinicial,
                 sum(exe.dotatual::numeric) AS dotatual,
                 sum(exe.dotinicialsiafi::numeric) AS dotinicialsiafi,
-                sum(exe.dotacaoantecipada::numeric) AS dotacaoantecipada,
-                sum(exe.dotacaoinicial::numeric) AS dotacaoinicial
+                sum(exe.dotacaoantecipada::numeric) AS dotacaoantecipada
             FROM wssof.ws_execucaoorcamentariadto AS exe
             WHERE
-                exe.anoexercicio = '".(int)$exercicio. "'
-                AND exe.anoreferencia = '".(int)$exercicio. "'
+                exe.anoexercicio = '". (int)$exercicio. "'
+                AND exe.anoreferencia = '". (int)$exercicio. "'
             GROUP BY
-                exe.acao,
-                exe.planoorcamentario,
                 exe.unidadeorcamentaria,
                 exe.programa,
+                exe.acao,
+                exe.localizador,
+                exe.planoorcamentario,
                 exe.anoexercicio,
                 exe.anoreferencia,
                 exe.categoriaeconomica
@@ -159,10 +166,12 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                 psu.suoid,
                 coalesce(psu.ptrdotacaocapital, 0) AS ptrdotacaocapital,
                 coalesce(psu.ptrdotacaocusteio, 0) AS ptrdotacaocusteio,
-                funcional AS funcionalptres,
-                ptr.prgcod || '.' || ptr.acacod || '.' || ptr.plocod || '.' || ptr.unicod AS funcional,
+                ptr.funcional AS funcionalptres,
+                ptr.unicod || '.' || ptr.prgcod || '.' || ptr.acacod || '.' || ptr.loccod || '.' || ptr.plocod  AS funcional,
+                suo.unocod,
                 suo.unosigla,
                 suo.unonome,
+                suo.suocod,
                 suo.suosigla,
                 suo.suonome
             FROM spo.ptressubunidade AS psu
@@ -185,8 +194,10 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
             SELECT
                 pli.plicod,
                 pli.pliid,
+                pli.suocod,
                 pli.suosigla,
-                plititulo,
+                pli.plititulo,
+                pli.unocod,
                 pli.unosigla,
                 pli.funcional,
                 pli.previsto::numeric,
@@ -213,249 +224,65 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
     public function RetornaDivergenciaPlanejado($exercicio){
         $sql = "
             SELECT
-                ptrid,
-                ptres,
-                funcional,
-                subunidade,
-                empenhado,
-                liquidado,
-                pago
-            FROM(
-                SELECT
-                    funcionais.ptrid,
-                    funcionais.ptres,
-                    funcionais.funcional,
-                    funcionais.subunidade,
-                    COALESCE(sec_geral.empenhado, 0.00) - COALESCE(funcionais.empenhado, 0.00) AS empenhado,
-                    COALESCE(sec_geral.liquidado, 0.00) - COALESCE(funcionais.liquidado, 0.00) AS liquidado,
-                    COALESCE(sec_geral.pago, 0.00) - COALESCE(funcionais.pago, 0.00) AS pago
-                FROM(
+                ptr.ptrid,
+                ptr.ptres,
+                ptr.funcional,
+                CASE WHEN (
                     SELECT
-                        agrupado.ptrid,
-                        agrupado.ptres,
-                        agrupado.funcional,
-                        CASE WHEN (
-                            SELECT
-                                COUNT(1)
-                            FROM spo.ptressubunidade
-                            WHERE
-                                ptressubunidade.ptrid = agrupado.ptrid
-                        ) > 1 THEN
-                            'Várias'
-                        ELSE
-                           (
-                            SELECT
-                                suo.unosigla || ' - ' || suo.suosigla AS subunidade
-                            FROM spo.ptressubunidade
-                                JOIN public.vw_subunidadeorcamentaria suo ON ptressubunidade.suoid = suo.suoid
-                            WHERE
-                                ptressubunidade.ptrid = agrupado.ptrid
-                                LIMIT 1
-                            )
-                        END AS subunidade,
-                        SUM(agrupado.empenhado) AS empenhado,
-                        SUM(agrupado.liquidado) AS liquidado,
-                        SUM(agrupado.pago) AS pago
-                    FROM (
-                        SELECT
-                            ptr.ptrid,
-                            ptr.ptres,
-                            ptr.funcional,
-                            COALESCE(sec.empenhado, 0.00) AS empenhado,
-                            COALESCE(sec.liquidado, 0.00) AS liquidado,
-                            COALESCE(sec.pago, 0.00) as pago
-                        FROM public.vw_subunidadeorcamentaria suo
-                            JOIN spo.ptressubunidade psu on psu.suoid = suo.suoid
-                            JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano
-                            LEFT JOIN monitora.pi_planointernoptres ppt on ppt.ptrid = ptr.ptrid
-                            LEFT JOIN monitora.pi_planointerno pli on(pli.pliid = ppt.pliid AND pli.ungcod = suo.suocod AND pli.unicod = suo.unocod AND plistatus = 'A')
-                            LEFT JOIN planacomorc.pi_complemento pic on pic.pliid = pli.pliid
-                            LEFT JOIN planacomorc.unidadegestora_limite lmu on lmu.ungcod = suo.suocod AND lmu.lmustatus = 'A' AND lmu.prsano = suo.prsano
-                            LEFT JOIN(
-                                SELECT
-                                    siopexecucao.unicod,
-                                    pi_planointerno.ungcod,
-                                    siopexecucao.ptres,
-                                    SUM(COALESCE(siopexecucao.vlrautorizado, 0.00))::NUMERIC AS provisionado,
-                                    SUM(COALESCE(siopexecucao.vlrempenhado, 0.00))::NUMERIC AS empenhado,
-                                    SUM(COALESCE(siopexecucao.vlrliquidado, 0.00))::NUMERIC AS liquidado,
-                                    SUM(COALESCE(siopexecucao.vlrpago, 0.00))::NUMERIC AS pago
-                                FROM spo.siopexecucao
-                                    LEFT JOIN monitora.pi_planointerno ON(
-                                        siopexecucao.plicod = pi_planointerno.plicod
-                                        AND siopexecucao.exercicio = pi_planointerno.pliano
-                                        AND pi_planointerno.plistatus = 'A')
-                                WHERE
-                                    pi_planointerno.ungcod IS NOT NULL
-                                    AND siopexecucao.exercicio = '$exercicio'
-                                GROUP BY
-                                    siopexecucao.ptres,
-                                    siopexecucao.unicod,
-                                    pi_planointerno.ungcod
-                            ) sec ON(ptr.ptres = sec.ptres AND suo.unocod = sec.unicod AND suo.suocod = sec.ungcod)
-                        WHERE
-                            suo.prsano = '$exercicio'
-                            AND suo.unofundo = FALSE
-                            AND suo.suostatus = 'A'
-                            AND ptr.irpcod <> '6'
-                        GROUP BY
-                            ptr.ptrid,
-                            ptr.ptres,
-                            ptr.funcional,
-                            sec.empenhado,
-                            sec.liquidado,
-                            sec.pago
-                    ) agrupado
+                        COUNT(ptressubunidade.ptrid)
+                    FROM spo.ptressubunidade
+                    WHERE
+                        ptressubunidade.ptrid = ptr.ptrid
+                ) = 1 THEN
+			suo.suocod || ' - ' || suo.suonome || '(' || suo.unosigla || ')'
+		ELSE
+                    'Várias'
+		END AS subunidade,
+		COALESCE(sec.empenhado, 0.00) AS empenhado,
+		COALESCE(sec.liquidado, 0.00) AS liquidado,
+		COALESCE(sec.pago, 0.00) as pago
+            FROM public.vw_subunidadeorcamentaria suo
+                JOIN spo.ptressubunidade psu on psu.suoid = suo.suoid
+                JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano
+                JOIN(
+                    SELECT
+                        siopexecucao.ptres,
+                        SUM(COALESCE(siopexecucao.vlrautorizado, 0.00))::NUMERIC AS provisionado,
+                        SUM(COALESCE(siopexecucao.vlrempenhado, 0.00))::NUMERIC AS empenhado,
+                        SUM(COALESCE(siopexecucao.vlrliquidado, 0.00))::NUMERIC AS liquidado,
+                        SUM(COALESCE(siopexecucao.vlrpago, 0.00))::NUMERIC AS pago
+                    FROM spo.siopexecucao
+                        LEFT JOIN monitora.pi_planointerno ON(
+                            siopexecucao.plicod = pi_planointerno.plicod
+                            AND pi_planointerno.pliano = '". (int)$exercicio. "'
+                            AND pi_planointerno.plistatus = 'A'
+			)
+                    WHERE
+                        pi_planointerno.ungcod IS NULL
+                        AND siopexecucao.exercicio = '". (int)$exercicio. "'
                     GROUP BY
-                        agrupado.ptrid,
-                        agrupado.ptres,
-                        agrupado.funcional
-                ) AS funcionais
-                    LEFT JOIN(
-                        SELECT
-                            siopexecucao.ptres,
-                            SUM(COALESCE(siopexecucao.vlrautorizado, 0.00))::NUMERIC AS provisionado,
-                            SUM(COALESCE(siopexecucao.vlrempenhado, 0.00))::NUMERIC AS empenhado,
-                            SUM(COALESCE(siopexecucao.vlrliquidado, 0.00))::NUMERIC AS liquidado,
-                            SUM(COALESCE(siopexecucao.vlrpago, 0.00))::NUMERIC AS pago
-                        FROM spo.siopexecucao
-                        WHERE
-                            siopexecucao.exercicio = '$exercicio'
-                        GROUP BY
-                            siopexecucao.ptres
-                    ) sec_geral ON(funcionais.ptres = sec_geral.ptres)
-                WHERE
-                    sec_geral.empenhado - funcionais.empenhado > 0
-                    OR sec_geral.liquidado - funcionais.liquidado > 0
-                    OR sec_geral.pago - funcionais.pago > 0
-
-                UNION
-
-                SELECT DISTINCT
-                    ptr_divergente.ptrid,
-                    ptr_divergente.ptres,
-                    ptr_divergente.funcional,
-                    CASE WHEN (
-                        SELECT
-                            COUNT(1)
-                        FROM spo.ptressubunidade
-                        WHERE
-                            ptressubunidade.ptrid = ptr_divergente.ptrid
-                    ) > 1 THEN
-                            'Várias'
-                    ELSE
-                       (
-                        SELECT
-                            suo.unosigla || ' - ' || suo.suosigla AS subunidade
-                        FROM spo.ptressubunidade
-                            JOIN public.vw_subunidadeorcamentaria suo ON ptressubunidade.suoid = suo.suoid
-                        WHERE
-                            ptressubunidade.ptrid = ptr_divergente.ptrid
-                            LIMIT 1
-                        )
-                    END AS subunidade,
-                    sec_total.empenhado - (
-                        SELECT
-                            SUM(COALESCE(siopexecucao.vlrempenhado, 0.00))::NUMERIC AS empenhado
-                        FROM spo.siopexecucao
-                            JOIN monitora.vw_planointerno pli ON(
-                                siopexecucao.plicod = pli.plicod
-                                AND siopexecucao.exercicio = pli.pliano)
-                        WHERE
-                            siopexecucao.exercicio = '$exercicio'
-                            AND siopexecucao.ptres = ptr_divergente.ptres
-                            AND siopexecucao.plicod = pi_correto.plicod -- varios
-                            AND pli.unocod = pi_correto.unocod
-                            AND pli.suocod = pi_correto.suocod
-                    ) AS empenhado,
-                    sec_total.liquidado - (
-                        SELECT
-                            SUM(COALESCE(siopexecucao.vlrliquidado, 0.00))::NUMERIC AS empenhado
-                        FROM spo.siopexecucao
-                            JOIN monitora.vw_planointerno pli ON(
-                                siopexecucao.plicod = pli.plicod
-                                AND siopexecucao.exercicio = pli.pliano)
-                        WHERE
-                            siopexecucao.exercicio = '$exercicio'
-                            AND siopexecucao.ptres = ptr_divergente.ptres
-                            AND siopexecucao.plicod = pi_correto.plicod -- varios
-                            AND pli.unocod = pi_correto.unocod
-                            AND pli.suocod = pi_correto.suocod
-                    ) AS liquidado,
-                    sec_total.pago - (
-                        SELECT
-                            SUM(COALESCE(siopexecucao.vlrpago, 0.00))::NUMERIC AS empenhado
-                        FROM spo.siopexecucao
-                            JOIN monitora.vw_planointerno pli ON(
-                                siopexecucao.plicod = pli.plicod
-                                AND siopexecucao.exercicio = pli.pliano)
-                        WHERE
-                            siopexecucao.exercicio = '$exercicio'
-                            AND siopexecucao.ptres = ptr_divergente.ptres
-                            AND siopexecucao.plicod = pi_correto.plicod -- varios
-                            AND pli.unocod = pi_correto.unocod
-                            AND pli.suocod = pi_correto.suocod
-                    ) AS pago
-                FROM spo.siopexecucao pi_siop -- SELECT * FROM spo.siopexecucao
-                    JOIN (
-                        SELECT
-                            pli.plicod,
-                            pli.ptres
-                        FROM monitora.vw_planointerno pli
-                            JOIN public.vw_subunidadeorcamentaria suo ON(pli.suoid = suo.suoid)
-                            JOIN monitora.vw_ptres ptr ON(pli.ptrid = ptr.ptrid)
-                        WHERE
-                            pli.pliano = '$exercicio'
-                            AND suo.unofundo IS FALSE
-                            AND ptr.irpcod != '6'
-                            AND(pli.plicod IS NOT NULL AND pli.plicod != '')
-                    ) pi_siminc2 ON(pi_siop.plicod = pi_siminc2.plicod)
-                    JOIN monitora.vw_ptres ptr_divergente ON(pi_siop.ptres = ptr_divergente.ptres AND ptr_divergente.ptrano = '$exercicio') -- SELECT * FROM monitora.vw_ptres
-                    LEFT JOIN(
-                        SELECT
-                            siopexecucao.unicod,
-                            siopexecucao.ptres,
-                            SUM(COALESCE(siopexecucao.vlrautorizado, 0.00))::NUMERIC AS provisionado,
-                            SUM(COALESCE(siopexecucao.vlrempenhado, 0.00))::NUMERIC AS empenhado,
-                            SUM(COALESCE(siopexecucao.vlrliquidado, 0.00))::NUMERIC AS liquidado,
-                            SUM(COALESCE(siopexecucao.vlrpago, 0.00))::NUMERIC AS pago
-                        FROM spo.siopexecucao
-                        WHERE
-                            siopexecucao.exercicio = '$exercicio' -- Inserindo o ano direto na subquery por motivo de performance da consulta.
-                        GROUP BY
-                            siopexecucao.ptres,
-                            siopexecucao.unicod
-                    ) sec_total ON(ptr_divergente.ptres = sec_total.ptres)
-                    LEFT JOIN (
-                        SELECT
-                            suo.unocod,
-                            suo.suocod,
-                            pli.plicod,
-                            pli.ptres
-                        FROM monitora.vw_planointerno pli
-                            JOIN public.vw_subunidadeorcamentaria suo ON(pli.suoid = suo.suoid)
-                            JOIN monitora.vw_ptres ptr ON(pli.ptrid = ptr.ptrid)
-                        WHERE
-                            pli.pliano = '$exercicio'
-                            AND suo.unofundo IS FALSE
-                            AND ptr.irpcod <> '6'
-                            AND(pli.plicod IS NOT NULL AND pli.plicod != '')
-                    ) pi_correto ON(pi_siop.plicod = pi_siminc2.plicod AND pi_siop.ptres = pi_correto.ptres)
-                WHERE
-                    pi_siop.exercicio = '$exercicio'
-                    AND (
-                        pi_siop.vlrempenhado > 0
-                        OR pi_siop.vlrliquidado > 0
-                        OR pi_siop.vlrpago > 0
-                    )
-                    -- Filtrar os PIs do SIOP que tem código de pi e ptres diferente do código do pi e ptres do SIMINC2
-                    AND pi_siop.ptres != pi_siminc2.ptres
-                    AND ptr_divergente.irpcod <> '6'
-            ) consulta
+                        siopexecucao.ptres
+		) sec ON(ptr.ptres = sec.ptres)
+            WHERE
+                suo.prsano = '". (int)$exercicio. "'
+                AND suo.unofundo = FALSE
+                AND suo.suostatus = 'A'
+		AND ptr.irpcod <> '6'
+		AND (empenhado > 0 OR liquidado > 0 OR pago > 0)
+            GROUP BY
+		ptr.ptrid,
+		ptr.ptres,
+		ptr.funcional,
+                subunidade,
+		sec.empenhado,
+		sec.liquidado,
+		sec.pago
             ORDER BY
-                funcional
+                ptr.funcional,
+		ptr.ptres,
+		subunidade
         ";
-        //ver($sql, d);
+
         $listaResultado = $this->carregar($sql);
         return $listaResultado? $listaResultado: [];        
     }
@@ -485,5 +312,24 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         return $this->carregar($sql);        
     }
 
+    public function AtualizarDotacaoInicial(){
+        $sql = " update monitora.ptres
+                    set ptrdotacaoinicialcapital = x.ptrdotacaoinicialcapital,
+                        ptrdotacaoinicialcusteio = x.ptrdotacaoinicialcusteio
+                 from 
+                 (select sum(case when exe.categoriaeconomica='4' then exe.dotacaoinicial::numeric else 0 end) as ptrdotacaoinicialcapital,
+                        sum(case when exe.categoriaeconomica='3' then exe.dotacaoinicial::numeric else 0 end) as ptrdotacaoinicialcusteio,
+                        ptres.ptrid
+                   from wssof.ws_execucaoorcamentariadto exe, monitora.ptres ptres
+                  where exe.acao = ptres.acacod
+                    and exe.planoorcamentario = ptres.plocod
+                    and exe.unidadeorcamentaria = ptres.unicod
+                    and exe.programa = ptres.prgcod
+                    and exe.anoexercicio::integer = ptres.ptrano::integer
+                    and exe.localizador = ptres.loccod
+                  group by ptres.ptrid) as x
+                  where monitora.ptres.ptrid = x.ptrid";
+        $this->executar($sql);
+    }
 }//end Class
 ?>

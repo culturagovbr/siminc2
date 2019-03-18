@@ -11,7 +11,7 @@ class Public_Controller_Metappa
             $mMetappa->popularDadosObjeto($dados);
             $mMetappa->prsano = $mMetappa->prsano ? $mMetappa->prsano : $_SESSION['exercicio'];
             $mMetappa->mppquantificavel = $dados['mppquantificavel'] == 't'? 't': 'f';
-            
+
             $mMetappa->salvar(null, null, ['mppdsc', 'mppcod', 'mppnome', 'mppstatus', 'prsano', 'mppquantificavel', 'mppquantidade', ]);
             $mMetappa->commit();
             simec_redirecionar($url, 'success');
@@ -19,8 +19,8 @@ class Public_Controller_Metappa
             $mMetappa->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
-    
+    }
+
     public function excluir($mppid)
     {
         $url = '?modulo=apoio/metappa&acao=A';
@@ -42,5 +42,5 @@ class Public_Controller_Metappa
             $mMetappa->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
-}            
+    }
+}

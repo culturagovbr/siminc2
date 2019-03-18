@@ -30,7 +30,7 @@ $listaHistoricoUsuario = (new Planacomorc_Model_HistoricoPiUsuario())->recuperar
                         </tbody>
                     </table>
                 <?php } else { ?>
-                    <div class="alert alert-danger">Não há Histórico de alterações nesse PI</div>
+                    <div class="alert alert-danger">Não há Histórico de alterações nesse PA</div>
                 <?php } ?>
             </div>
         </div>

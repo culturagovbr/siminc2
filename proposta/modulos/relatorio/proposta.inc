@@ -1,10 +1,5 @@
 <?php
 
-    header( 'Content-Type: application/vnd.ms-excel' );
-    header( 'Expires: 0' );
-    header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
-    header( 'Content-Disposition: attachment; filename="relatorio_geral_pi' . '.xls"' );
-
     $cabecalho = [
         'ID Proposta',
         'Subunidade',
@@ -33,17 +28,15 @@
     );
     $listaPerfil = pegaPerfilGeral();
     $listaSubUnidadeUsuario = buscarSubUnidadeUsuario((object) array('usucpf' => $_SESSION['usucpf']));
-    $listaSubUnidadeUsuario = implode("', '", $listaSubUnidadeUsuario);
     if((in_array(PFL_CONSULTA_UNIDADE, $listaPerfil)) || in_array(PFL_SUBUNIDADE, $listaPerfil) && ($listaSubUnidadeUsuario)){
         $filtro = array('prsano' => $_SESSION['exercicio']);
         if($listaSubUnidadeUsuario){
-            $filtro['suocod']=$listaSubUnidadeUsuario;
+            $filtro['suocod'] = $listaSubUnidadeUsuario;
         }
-        $sql = montarSqlRelatorioGeralProposta((object) $filtro);
-    }else if (in_array(PFL_ADMINISTRADOR, $listaPerfil) || in_array(PFL_SUPERUSUARIO, $listaPerfil)){
+    } else if (in_array(PFL_ADMINISTRADOR, $listaPerfil) || in_array(PFL_SUPERUSUARIO, $listaPerfil)){
         $filtro = array('prsano' => $_SESSION['exercicio']);
-        $sql = montarSqlRelatorioGeralProposta((object) $filtro);
     }
+    $sql = montarSqlRelatorioGeralProposta((object) $filtro);
     $lista = $db->carregar($sql);
 ?>
 
@@ -69,4 +62,9 @@
 </table>
 
 <?php
-die;
+
+    header('Content-Type: application/vnd.ms-excel');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Content-Disposition: attachment; filename="relatorio-proposta'. '.xls"');
+    die;

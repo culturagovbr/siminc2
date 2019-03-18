@@ -41,6 +41,7 @@ class Public_Model_IniciativaPpa extends Modelo
     protected $arChavePrimaria = array(
         'ippid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
@@ -63,7 +64,7 @@ class Public_Model_IniciativaPpa extends Modelo
         'ippstatus' => null,
         'prsano' => null,
     );
-    
+
     public function recuperarSqlCombo($descricao = null, $where = [], $order = '')
     {
         $where['exercicio'] = !empty($where['exercicio']) ? $where['exercicio'] : $_SESSION['exercicio'];
@@ -82,5 +83,4 @@ class Public_Model_IniciativaPpa extends Modelo
         ";
         return $sql;
     }
-}//end Class
-?>
+}

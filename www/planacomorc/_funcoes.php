@@ -1497,7 +1497,7 @@ function buscarPTRES(stdClass $filtros) {
 	    JOIN monitora.pi_planointerno pi ON(pip.pliid = pi.pliid)
             JOIN monitora.acao aca ON(ptr.acaid = aca.acaid)
             JOIN public.vw_subunidadeorcamentaria uni ON(aca.unicod = uni.unocod AND uni.suocod = pi.ungcod AND uni.prsano = aca.prgano) -- SELECT * FROM public.vw_subunidadeorcamentaria
-            JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
+            LEFT JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
             LEFT JOIN (
                 SELECT
                     pip.ptrid,
@@ -1910,7 +1910,7 @@ function enviarEmailAprovacao($pliid){
     $usuario = wf_pegarUltimoUsuarioModificacao($pi['docid']);
 
     # $textoEmail
-    include_once APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
+    include APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
 
     $listaUsuariosPlanejamento = buscarUsuarioPerfilPlanejamento((object) array(
         'sisid' => SISID_PLANEJAMENTO,
@@ -1973,7 +1973,7 @@ function enviarEmailCorrecao($pliid){
     $textoDevolucao = wf_pegarComentarioEstadoAtual($pi['docid']);
 
     # $textoEmail
-    include_once APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
+    include APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
 
     $listaUsuariosUnidadeDoPi = buscarUsuarioPerfilPlanejamento((object) array(
         'sisid' => SISID_PLANEJAMENTO,
@@ -2035,7 +2035,7 @@ function enviarEmailAprovado($pliid){
     $usuario = wf_pegarUltimoUsuarioModificacao($pi['docid']);
 
     # $textoEmail
-    include_once APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
+    include APPRAIZ. "planacomorc/modulos/principal/unidade/email.inc";
 
     $listaUsuariosPlanejamento = buscarUsuarioPerfilPlanejamento((object) array(
         'sisid' => SISID_PLANEJAMENTO,
@@ -2062,7 +2062,7 @@ function enviarEmailAprovado($pliid){
 //),
 //array(
 //# Destinatario
-//'email' => $listaResponsaveis
+//'email' => $listaDestinatario
 //),
 //'PI - '. ($pi['plicod']? $pi['plicod']: $pi['pliid']). ' - '. $acao, # Titulo do e-mail
 //$textoEmail,
@@ -3346,18 +3346,18 @@ function exibirLinkEspelho($pliid){
 }
 
 /**
- * Exibe o grafico de unidades.
+ * Exibe o grafico de UOs vinculadas.
  * 
  * @param string $colors
+ * @param boolean $percentualPlanejamento
  */
-function carregarGraficoUnidade($colors, $percentualPlanejamento=false){
+function montarGraficoVinculadas($colors, $percentualPlanejamento = FALSE){
     $oPlanoInterno = new Pi_PlanoInterno();
     echo '<div class="panel-body">';
-    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamento((object) array(
-        'exercicio' => $_SESSION['exercicio'],
-        'unofundo' => 'FALSE'
+    $estatistica = $oPlanoInterno->consultarExecucaoOrcamentariaUo((object) array(
+        'exercicio' => (int)$_SESSION['exercicio']
     ));
-    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
+    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, FALSE);
     $grafico
         ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
         ->setColors($colors)
@@ -3367,42 +3367,22 @@ function carregarGraficoUnidade($colors, $percentualPlanejamento=false){
 }
 
 /**
- * Exibe o grafico de unidades.
+ * Exibe o grafico de Subunidades.
  * 
  * @param string $colors
+ * @param boolean $percentualPlanejamento
+ * @param array $listaSubunidade
  */
-function carregarGraficoDireta($colors, $percentualPlanejamento=false){
+function montarGraficoDireta($colors, $percentualPlanejamento = FALSE, $listaSubunidade = array()){
     $oPlanoInterno = new Pi_PlanoInterno();
     echo '<div class="panel-body">';
-    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
+    $estatistica = $oPlanoInterno->consultarExecucaoOrcamentariaSubunidade((object) array(
         'exercicio' => $_SESSION['exercicio'],
-        'unosigla' => 'MINC',
-        'unofundo' => 'FALSE',
-        'unidades'=>"suocod not in ('420009', '420008')"));
-    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
-    $grafico
-        ->setWidth('85%')
-        ->setColors($colors)
-        ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
-        ->setEvent(array('click' => "exibirModalDetalheGrafico(1, event.point.series.name, event.point.category);"))
-        ->gerarGrafico($estatistica, $percentualPlanejamento);
-    echo '</div>';
-}
-
-/**
- * Exibe o grafico de unidades.
- * 
- * @param string $colors
- */
-function carregarGraficoCgconCogep($colors, $percentualPlanejamento=false){
-    $oPlanoInterno = new Pi_PlanoInterno();
-    echo '<div class="panel-body">';
-    $estatistica = $oPlanoInterno->recuperarEstatisticaPagamentoDetalhe((object) array(
-        'exercicio' => $_SESSION['exercicio'],
-        'unosigla' => 'MINC',
-        'unofundo' => 'FALSE',
-        'unidades'=>"suocod in ('420009', '420008')"));
-    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
+        # Caso o exercicio seja superior a 2018(ano da unificação de Òrgãos), o sistema busca todas as vinculadas do MC
+        'unocod' => (int)$_SESSION['exercicio'] > 2018? UNICOD_MC: UNICOD_MINC,
+        'listaSubunidade' => $listaSubunidade
+    ));
+    $grafico = new Grafico(Grafico::K_TIPO_COLUNA, FALSE);
     $grafico
         ->setWidth('85%')
         ->setColors($colors)

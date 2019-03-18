@@ -9,25 +9,26 @@ class Monitora_Controller_Ptres
         try {
             $mPtres = new Monitora_Model_Ptres($dados['ptrid']);
             $mPtres->popularDadosObjeto($dados);
-            
+
             $acao = new Monitora_Model_Acao($mPtres->acaid);
             $mPtres->acacod = $acao->acacod;
             $mPtres->prgcod = $acao->prgcod;
             $mPtres->loccod = $acao->loccod;
+            $mPtres->funcod = $dados['funcod'];
+            $mPtres->sfucod = $dados['sfucod'];
 
             # Dados monetários
 //            $mPtres->ptrdotacaocusteio = (int)str_replace(array('.', ','), array('', '.'), $dados['ptrdotacaocusteio']);
 //            $mPtres->ptrdotacaocapital = (int)str_replace(array('.', ','), array('', '.'), $dados['ptrdotacaocapital']);
             $mPtres->ptrano = $_SESSION['exercicio'];
-            $mPtres->salvar(null, null, ['acaid', 'ptrnomeprodutopo', 'ptrnomeunidadepo', 'ptrano', 'funcod', 'sfucod', 'prgcod', 'acacod', 'loccod', 'unicod', 'irpcod', 'ptrdotacao', 'ptrstatus', 'ptrdata', 'plocod', 'esfcod', 'ptrdotacaocapital', 'ptrdotacaocusteio', 'plodsc']);
+            $mPtres->salvar(null, null, ['ptrnomeprodutopo', 'ptrnomeunidadepo', 'ptrano', 'prgcod', 'acacod', 'loccod', 'unicod', 'irpcod', 'ptrdotacao', 'ptrstatus', 'ptrdata', 'plocod', 'esfcod', 'ptrdotacaocapital', 'ptrdotacaocusteio', 'plodsc']);
             $mPtres->commit();
-            
             simec_redirecionar($url, 'success');
         } catch (Exception $e){
             $mPtres->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
     
     public function excluir($ptrid)
     {
@@ -50,5 +51,5 @@ class Monitora_Controller_Ptres
             $mPtres->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
-}            
+    }
+}

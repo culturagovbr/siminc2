@@ -31,11 +31,14 @@ require_once(APPRAIZ. 'spo/ws/sof/Quantitativo.php');
 try{
     $db = new cls_banco();
     $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
+    $cImportaDadosSiop->exercicio = date('Y');
     echo '1)Atualizando, dados! | ';
     $cImportaDadosSiop->AtualizarDados();
     echo '2)Montando email para ser enviado! | ';
     $cImportaDadosSiop->AtualizarDotacao();
-    echo '3)Rotina Finalizada!';
+    echo '3)Atualizando Dotações Iniciais! | ';
+    $cImportaDadosSiop->AtualizarDotacaoInicial();
+    echo '4)Rotina Finalizada!';
 } catch (Exception $e){
     # Buscando Destinatários
     $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();

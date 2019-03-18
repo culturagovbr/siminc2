@@ -319,7 +319,7 @@
             'orc_custeio_12',
             'vlrautorizado',
             'vlrempenhado',
-            'vlrliquido',
+            'vlrliquidado',
             'vlrpago',
         ];
 

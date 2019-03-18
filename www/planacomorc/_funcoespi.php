@@ -1214,14 +1214,15 @@ DML;
                     ungcod,
                     pliano,
                     plisituacao,
-                    plicadsiafi
-                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')
+                    plicadsiafi,
+                    plirecursosnecessarios
+                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s')
                 RETURNING
                     pliid;
 DML;
             
             $stmt = sprintf(
-                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF);
+                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF, str_replace(array("'"), ' ', $dados['plidsc']));
             $pliid = $db->pegaUm($stmt);
             
             //Grava usuário que salvou por último
@@ -1247,7 +1248,6 @@ DML;
         }
     } else {
 
-
         $mPiPlanoInterno = new Pi_PlanoInterno($dados['pliid']);
         $perfis = pegaPerfilGeral();
         $estadoAtual = wf_pegarEstadoAtual($mPiPlanoInterno->docid);
@@ -1261,6 +1261,7 @@ DML;
             UPDATE monitora.pi_planointerno SET
                 plititulo = '%s',
                 plidsc = '%s',
+                plirecursosnecessarios = '%s',
                 mdeid = %s,
                 eqdid = %s,
                 neeid = %s,
@@ -1272,6 +1273,7 @@ DML;
         $stmt = sprintf($sql,
             trim($dados['plititulo']),
             trim($dados['plidsc']),
+            trim($dados['plirecursosnecessarios']),
             $dados['mdeid'],
             $dados['eqdid'],
             $dados['neeid'],
@@ -1344,8 +1346,29 @@ DML;
     if ($comCommit) {
         $db->commit();
     }
-
+    
+    gravarEtapas($pliid);
+    
     return $pliid;
+}
+
+function gravarEtapas($pliid){
+    $mEtapas = new Planacomorc_Model_Etapas();
+    $mEtapas->excluirPorPliid($pliid);
+    $mEtapas->commit();
+    $arrEtadsc = $_REQUEST['etadsc'];
+    $arrEtadata = $_REQUEST['etadata'];
+    if (count($arrEtadsc)>0){
+        foreach($arrEtadsc as $key => $value){
+            $mEtapas = new Planacomorc_Model_Etapas();
+            $mEtapas->etadsc=$value;
+            $mEtapas->etadata=$arrEtadata[$key];
+            $mEtapas->pliid = $pliid;
+            $mEtapas->salvar();
+            $mEtapas->commit();
+        }
+    }
+    
 }
 
 function gravarUsuarioAlteracao($pliid){
@@ -1377,9 +1400,9 @@ function salvarPiComplemento($pliid, $dados)
     $modelPiComplemento->picexecucao = $dados['picexecucao']? desformata_valor($dados['picexecucao']): null;
     $modelPiComplemento->picted = $dados['picted'] == 't' ? 't' : 'f';
     $modelPiComplemento->picedital = $dados['picedital'] == 't' ? 't' : 'f';
-
-    $modelPiComplemento->salvar(NULL, NULL, array('ptaid', 'pijid', 'oppid', 'mppid', 'ippid', 'pprid', 'pumid', 'picpriorizacao', 'picquantidade', 'picpublico', 'picexecucao', 'picvalorcusteio', 'picvalorcapital'));
-
+//ver($modelPiComplemento,d);
+    $modelPiComplemento->salvar(NULL, NULL, array('prgid', 'ptaid', 'pijid', 'oppid', 'mppid', 'ippid', 'pprid', 'pumid', 'picpriorizacao', 'picquantidade', 'picpublico', 'picexecucao', 'picvalorcusteio', 'picvalorcapital'));
+    
     associarConvenio($pliid, $dados);
     associarSniic($pliid, $dados);
     associarSei($pliid, $dados);
@@ -2126,7 +2149,8 @@ function carregarPI($pliid) {
             sba.sbasigla || ' - ' AS sbasigla,
             sba.sbacod,
             ben.benid,
-            em.emenumero
+            em.emenumero,
+            pli.plirecursosnecessarios
         FROM monitora.pi_planointerno pli
             LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
             LEFT JOIN emendas.emenda em ON(ben.emeid = em.emeid)
@@ -2152,8 +2176,11 @@ function carregarPiComDetalhes(stdclass $filtros) {
         SELECT
             pli.pliid,
             pli.mdeid,
-            suo.suonome || '(' || suo.suosigla || ')' AS unidade,
-            suodel.suonome || '(' || suodel.suosigla || ')' AS sub_unidade,
+            CASE WHEN suo.unocod='55101' then '55101 - MINISTERIO DA CIDADANIA - ADMINISTRAÇÃO DIRETA'
+		        ELSE suo.unocod || ' - ' || suo.unonome
+	        END AS uo,
+            suo.suocod || ' - ' || suo.suonome || '(' || suo.suosigla || ')' AS unidade,
+            suodel.suocod || ' - ' || suodel.suonome || '(' || suodel.suosigla || ')' AS sub_unidade,
             mde.mdecod,
             pli.eqdid,
             eqd.eqddsc,
@@ -2765,16 +2792,17 @@ function pegarDocidPi($pliid, $tipoFluxo)
 function posAcaoAprovarPi($pliid)
 {
     global $db;
-
-    $dadosPI = $db->pegaLinha("select * from monitora.pi_planointerno where pliid = $pliid");
+    $dadosPI = $db->pegaLinha("SELECT * FROM monitora.pi_planointerno WHERE pliid = ". (int)$pliid);
 
     if(!$dadosPI['plicod']){
         $codigos = gerarCodigosPi($pliid);
-        $sql = "update monitora.pi_planointerno set 
-                    plicod = '{$codigos['plicod']}', 
-                    plilivre = '{$codigos['plilivre']}', 
-                    plicodsubacao = '{$codigos['plicodsubacao']}'
-                where pliid = $pliid";
+        $sql = "
+            UPDATE monitora.pi_planointerno SET
+                plicod = '{$codigos['plicod']}',
+                plilivre = '{$codigos['plilivre']}',
+                plicodsubacao = '{$codigos['plicodsubacao']}'
+            WHERE
+                pliid = ". (int)$pliid;
 
         $db->executar($sql);
         $db->commit();
@@ -2848,28 +2876,65 @@ function gerarCodigosPi($pliid)
 
     $sql = "
         SELECT
-            SUBSTR(pliano, 3, 2) ||
-            CASE WHEN pi.pliemenda = TRUE THEN
-                'E'
-            ELSE
-                eqd.eqdcod
-            END ||
-            LPAD(pi.pliid::TEXT, 5, '0') ||
-            suo.suocodigopi ||
-            CASE WHEN pic.picted = TRUE THEN
-                'T'
-            ELSE
-                cap.capcod
-            END AS plicod,
-            LPAD(pi.pliid::TEXT, 4, '0') plicodsubacao,
-            SUBSTR(pliano, 3, 2) plilivre
-        FROM
-            monitora.pi_planointerno pi
+	    (
+		'C' ||
+		ptr.acacod ||
+		(
+                    CASE WHEN ptr.plocod = 'EIND' THEN
+                        'I'
+                    WHEN ptr.plocod = 'ECOM' THEN
+                        'C'
+                    WHEN ptr.plocod = 'EREL' THEN
+                        'R'
+                    WHEN ptr.plocod = 'EBAN' THEN
+                        'B'
+                    WHEN eqd.eqdcod IN('F', 'P', 'O', 'I') THEN
+                        '1'
+                    WHEN eqd.eqdcod IN('P', 'M', 'B', 'C') THEN
+                        '4'
+                    WHEN eqd.eqdcod IN('N') THEN
+                        'N'
+                    ELSE
+                        'X'
+                    END
+		) ||
+		suo.suocodigopi ||
+		LPAD((
+                    SELECT
+                        (COUNT(DISTINCT seq_pi.pliid)+1) AS numero
+                    FROM monitora.pi_planointerno seq_pi
+                        JOIN public.vw_subunidadeorcamentaria seq_suo ON(
+                            seq_pi.ungcod = seq_suo.suocod
+                        )
+                    WHERE
+                        seq_pi.plistatus = 'A'
+                        AND seq_pi.plicod ILIKE 'C%' -- TODOS QUE COMEÇAM COM 'C'
+                        AND seq_suo.suocodigopi = suo.suocodigopi
+		)::TEXT, 3, '0')
+            ) AS plicod,
+            LPAD((
+                SELECT
+                    (COUNT(DISTINCT seq_pi.pliid)+1) AS numero
+                FROM monitora.pi_planointerno seq_pi
+                    JOIN public.vw_subunidadeorcamentaria seq_suo ON(
+                        seq_pi.ungcod = seq_suo.suocod
+                    )
+                WHERE
+                    seq_pi.plistatus = 'A'
+                    AND seq_pi.plicod ILIKE 'C%' -- TODOS QUE COMEÇAM COM 'C'
+                    AND seq_suo.suocodigopi = suo.suocodigopi
+            )::TEXT, 4, '0') AS plicodsubacao,
+            SUBSTR(pliano, 3, 2) AS plilivre
+        FROM monitora.pi_planointerno pi
             JOIN planacomorc.pi_complemento pic ON pic.pliid = pi.pliid
             JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pi.eqdid
-            JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pi.ungcod
+            JOIN public.vw_subunidadeorcamentaria suo ON(
+                suo.suocod = pi.ungcod
                 AND suo.unocod = pi.unicod
                 AND suo.prsano = pi.pliano
+            )
+            JOIN monitora.pi_planointernoptres ppt ON(pi.pliid = ppt.pliid)
+            JOIN monitora.vw_ptres ptr ON(ppt.ptrid = ptr.ptrid)
             LEFT JOIN monitora.pi_categoriaapropriacao cap ON cap.capid = pi.capid
         WHERE
              pi.pliid = ". (int)$pliid;
@@ -2949,4 +3014,53 @@ function alterarCodigoPi($request){
     }
 
     return $resposta;
+}
+
+/**
+ * Controla a exibição de Aviso de que o PI passou por alteração Orçamentária e precisa ajustar os Cronogramas.
+ * 
+ * @param int $pliid
+ * @return VOID
+ */
+function controlarAvisoPedidoAlteracao($pliid){
+    $modelPi = new Pi_PlanoInterno();
+    $pedidoAlteracaoOrcamentaria = $pliid? $modelPi->consultarPedidoAlteracaoEfetivado((object)array('pliid' => (int)$pliid)): new stdClass();
+    if(
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_fisico != $pedidoAlteracaoOrcamentaria->total_fisico) ||
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_custeio != (int)$pedidoAlteracaoOrcamentaria->total_orcamentario_custeio) ||
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_custeio != (int)$pedidoAlteracaoOrcamentaria->total_financeiro_custeio) ||
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_capital != (int)$pedidoAlteracaoOrcamentaria->total_orcamentario_capital) ||
+        ($pedidoAlteracaoOrcamentaria->resultado_provavel_capital != (int)$pedidoAlteracaoOrcamentaria->total_financeiro_capital)
+    ){
+        exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria);
+    }
+}
+
+/**
+ * Renderiza o aviso na tela de que o PI passou por Alteração Orçamentária e necessita ajustar os valores dos Cronogramas.
+ * 
+ * @param stdClass $pedidoAlteracaoOrcamentaria
+ * @return VOID Mostra na tela o aviso com funcionalidade de ocultar após 10 segundos.
+ */
+function exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria){
+    $htmlAviso = '
+        <div class="row div_row_aviso_pedido">
+            <div class="alert alert-danger alert-dismissable">
+                Atenção! Esse PI teve alteração de valores de Custeio e Capital, por favor adeque-os preenchimentos dos Cronogramas Físico, Orçamentário e Financeiro.
+                <a href="#" class="a_espelho_pedido" title="Visualizar Pedido de Alteração" data-pedid="'. (int)$pedidoAlteracaoOrcamentaria->pedid. '">
+                    <b>N° do Pedido: '. (int)$pedidoAlteracaoOrcamentaria->pedid. '</b>
+                </a>
+                <b>Tipo: '. $pedidoAlteracaoOrcamentaria->tpddsc. '</b>
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button" style="align-self: " title="Fechar aviso">X</button>
+            </div>
+        </div>
+
+        <script>
+            setTimeout(function(){
+                $(".div_row_aviso_pedido").hide("slow");
+            }, 17000);
+        </script>
+    ';
+    
+    echo $htmlAviso;
 }

@@ -91,7 +91,7 @@ class Monitora_Model_Ptres extends Modelo
         ];
 
         $mImportador = new Wssof_Importador();
-        $mImportador->obterProgramacaoCompleta($exercicio, $momento, $map);
+//        $mImportador->obterProgramacaoCompleta($exercicio, $momento, $map);
         $this->atualizarFuncionaisSiop($exercicio, $momento);
         $this->commit();
     }
@@ -102,75 +102,81 @@ class Monitora_Model_Ptres extends Modelo
                 aca.identificadorunico,
                 aca.exercicio,
                 aca.codigomomento,
-                aca.baselegal,
-                aca.detalhamentoimplementacao,
-                aca.codigoacao,
                 aca.codigoorgao,
+                aca.codigofuncao,
+                aca.codigosubfuncao,
                 aca.codigoprograma,
+                aca.codigoacao,
                 aca.codigoobjetivo,
-                aca.descricao acadescricao,
-                aca.titulo acatitulo,
                 loc.codigolocalizador,
                 plo.planoorcamentario,
-                loc.descricao locdescricao,
-                plo.titulo plotitulo
+                aca.titulo AS acatitulo,
+                aca.descricao AS acadescricao,
+                loc.descricao AS locdescricao,
+                plo.titulo AS plotitulo,
+                aca.baselegal,
+                aca.detalhamentoimplementacao
             FROM wssof.ws_acoesdto aca
                 JOIN wssof.ws_localizadoresdto loc ON(
                     loc.identificadorunicoacao = aca.identificadorunico
-                    AND loc.exercicio = '$exercicio'
+                    AND loc.exercicio = '". (int)$exercicio. "'
                     AND loc.codigomomento = '". (int)$momento. "'
                 )
                 JOIN wssof.ws_planosorcamentariosdto plo ON(
                     plo.identificadorunicoacao = aca.identificadorunico
-                    AND plo.exercicio = '$exercicio'
+                    AND plo.exercicio = '". (int)$exercicio. "'
                     AND plo.codigomomento = '". (int)$momento. "'
                 )
             WHERE
-                aca.exercicio = '$exercicio'
+                aca.exercicio = '". (int)$exercicio. "'
                 AND aca.codigomomento = '". (int)$momento. "'
+                AND aca.codigoorgao NOT ILIKE '42%'
+                AND aca.codigoorgao NOT ILIKE '51%'
         ";
-        
-        $aAcoesDto = $this->carregar($sql);
-        $aAcoesDto = $aAcoesDto ? $aAcoesDto : [];
+//ver($sql, d);
+        $listaFuncional = $this->carregar($sql);
+        $listaFuncional = $listaFuncional? $listaFuncional: [];
 
-        foreach($aAcoesDto as $acaoDto){
-            $acaid = $this->atualizarAcaoSiop($acaoDto);
-            $ptrid = $this->atualizarPtresSiop($acaoDto, $acaid);
+        foreach($listaFuncional as $funcional){
+            $acaid = $this->atualizarAcaoSiop($funcional);
+            $ptrid = $this->atualizarPtresSiop($funcional, $acaid);
         }
     }
 
-    public function atualizarAcaoSiop($acaoDto)
+    public function atualizarAcaoSiop($funcional)
     {
         $sql = "
             SELECT
                 acaid
             FROM monitora.acao aca
             WHERE
-                aca.prgano = '{$acaoDto['exercicio']}'
-                AND aca.unicod = '{$acaoDto['codigoorgao']}'
-                AND aca.prgcod = '{$acaoDto['codigoprograma']}'
-                AND aca.acacod = '{$acaoDto['codigoacao']}'
-                AND aca.loccod = '{$acaoDto['codigolocalizador']}'
+                aca.prgano = '{$funcional['exercicio']}'
+                AND aca.unicod = '{$funcional['codigoorgao']}'
+                AND aca.funcod = '{$funcional['codigofuncao']}'
+                AND aca.sfucod = '{$funcional['codigosubfuncao']}'
+                AND aca.prgcod = '{$funcional['codigoprograma']}'
+                AND aca.acacod = '{$funcional['codigoacao']}'
+                AND aca.loccod = '{$funcional['codigolocalizador']}'
 	    ORDER BY
 		aca.acastatus
         ";
-
         $acaid = $this->pegaUm($sql);
 
         $mAcao = new Monitora_Model_Acao($acaid);
-
-        $mAcao->ididentificadorunicosiop = $acaoDto['identificadorunico'];
-        $mAcao->acatitulo = $mAcao->acadsc = $acaoDto['acatitulo'];
-        $mAcao->acadescricao = $acaoDto['acadescricao'];
-        $mAcao->acabaselegal = $acaoDto['baselegal'];
-        $mAcao->acadetalhamento = $acaoDto['detalhamentoimplementacao'];
-        $mAcao->prgano = $acaoDto['exercicio'];
-        $mAcao->acacod = $acaoDto['codigoacao'];
-        $mAcao->prgcod = $acaoDto['codigoprograma'];
-        $mAcao->loccod = $acaoDto['codigolocalizador'];
-        $mAcao->saccod = $acaoDto['codigolocalizador'];
-        $mAcao->unicod = $acaoDto['codigoorgao'];
-        $mAcao->acaobjetivocod = $acaoDto['codigoobjetivo'];
+        $mAcao->ididentificadorunicosiop = $funcional['identificadorunico'];
+        $mAcao->unicod = $funcional['codigoorgao'];
+        $mAcao->funcod = $funcional['codigofuncao'];
+        $mAcao->sfucod = $funcional['codigosubfuncao'];
+        $mAcao->prgano = $funcional['exercicio'];
+        $mAcao->acacod = $funcional['codigoacao'];
+        $mAcao->prgcod = $funcional['codigoprograma'];
+        $mAcao->loccod = $funcional['codigolocalizador'];
+        $mAcao->saccod = $funcional['codigolocalizador'];
+        $mAcao->acaobjetivocod = $funcional['codigoobjetivo'];
+        $mAcao->acatitulo = $mAcao->acadsc = $funcional['acatitulo'];
+        $mAcao->acadescricao = $funcional['acadescricao'];
+        $mAcao->acabaselegal = $funcional['baselegal'];
+        $mAcao->acadetalhamento = $funcional['detalhamentoimplementacao'];
 
         $mAcao->salvar();
         $acaid = $mAcao->acaid;
@@ -179,19 +185,21 @@ class Monitora_Model_Ptres extends Modelo
         return $acaid;
     }
 
-    public function atualizarPtresSiop($acaoDto, $acaid)
+    public function atualizarPtresSiop($funcional, $acaid)
     {
         $sql = "
             SELECT
                 ptrid
             FROM monitora.ptres ptr
             WHERE
-                ptr.ptrano = '{$acaoDto['exercicio']}'
-                AND ptr.acacod = '{$acaoDto['codigoacao']}'
-                AND ptr.prgcod = '{$acaoDto['codigoprograma']}'
-                AND ptr.loccod = '{$acaoDto['codigolocalizador']}'
-                AND ptr.unicod = '{$acaoDto['codigoorgao']}'
-                AND ptr.plocod = '{$acaoDto['planoorcamentario']}'
+                ptr.ptrano = '{$funcional['exercicio']}'
+                AND ptr.unicod = '{$funcional['codigoorgao']}'
+                AND ptr.funcod = '{$funcional['codigofuncao']}'
+                AND ptr.sfucod = '{$funcional['codigosubfuncao']}'
+                AND ptr.prgcod = '{$funcional['codigoprograma']}'
+                AND ptr.acacod = '{$funcional['codigoacao']}'
+                AND ptr.loccod = '{$funcional['codigolocalizador']}'
+                AND ptr.plocod = '{$funcional['planoorcamentario']}'
 	    ORDER BY
 		ptr.ptrstatus
         ";
@@ -203,17 +211,18 @@ class Monitora_Model_Ptres extends Modelo
             $mPtres->ptres = 0;
         }
         $mPtres->acaid = $acaid;
-        $mPtres->ptrano = $acaoDto['exercicio'];
-        $mPtres->prgcod = $acaoDto['codigoprograma'];
-        $mPtres->acacod = $acaoDto['codigoacao'];
-        $mPtres->loccod = $acaoDto['codigolocalizador'];
-        $mPtres->unicod = $acaoDto['codigoorgao'];
-        $mPtres->plocod = $acaoDto['planoorcamentario'];
-        $mPtres->plodsc = $acaoDto['plotitulo'];
-
+        $mPtres->ptrano = $funcional['exercicio'];
+        $mPtres->unicod = $funcional['codigoorgao'];
+        $mPtres->unicod = $funcional['codigoorgao'];
+        $mPtres->funcod = $funcional['codigofuncao'];
+        $mPtres->sfucod = $funcional['codigosubfuncao'];
+        $mPtres->acacod = $funcional['codigoacao'];
+        $mPtres->loccod = $funcional['codigolocalizador'];
+        $mPtres->plocod = $funcional['planoorcamentario'];
+        $mPtres->plodsc = $funcional['plotitulo'];
         $mPtres->salvar();
+        
         $ptrid = $mPtres->ptrid;
-
         unset($mPtres);
 
         return $ptrid;
@@ -317,28 +326,35 @@ class Monitora_Model_Ptres extends Modelo
         $sql = "
             SELECT DISTINCT
                 ptr.ptrid,
-                suo.unocod || '(' || suo.unonome || ')' AS unidade_orcamentaria,
-                vptr.acacod,
-                vptr.acatitulo,
                 ptr.ptres,
-                vptr.funcional,
-                vptr.plocod,
-                vptr.plodsc,
-                vptr.irpcod,
-                ptr.ptrdotacaocusteio,
-                ptr.ptrdotacaocapital
-            FROM monitora.ptres ptr
-                JOIN public.vw_subunidadeorcamentaria suo ON(
-                    ptr.unicod = suo.unocod
-                    AND ptr.ptrano = suo.prsano
-                    AND suo.suostatus = 'A'
-                )
-                JOIN monitora.vw_ptres vptr ON ptr.ptrid = vptr.ptrid-- SELECT * FROM monitora.vw_ptres 
+                ptr.unicod AS unocod,
+		ptr.unicod || '-' || COALESCE((
+                    SELECT
+                        uni.unonome
+                    FROM public.unidadeorcamentaria uni
+                    WHERE
+                        uni.prsano = '". (int)$param->exercicio. "'
+                        AND ptr.unicod = uni.unocod
+                    LIMIT 1
+                ), '') AS unonome,
+                ptr.funcod,
+                ptr.sfucod,
+                ptr.funcional,
+                ptr.acatitulo,
+                ptr.acacod,
+                ptr.irpcod
+            FROM monitora.vw_ptres ptr
             WHERE
                 ptr.ptrstatus = 'A'
                 AND ptr.ptrano = '". (int)$param->exercicio. "'
+            ORDER BY
+                ptr.ptres DESC,
+                unocod,
+                ptr.acacod,
+                ptr.funcional,
+                ptr.irpcod
         ";
-        
+//ver($sql, d);
         $listaResultado = $this->carregar($sql);
         return $listaResultado? $listaResultado: [];
     }

@@ -1016,9 +1016,16 @@ font {
                                         <div class="control-input">
                                             <span id="unidade">
                                             <?php
-                                            $sql = "select unocod as codigo, unonome descricao
+                                            /**
+                                             * Select feito para retirar duplicados "Ministério da Cidadania - *"
+                                             */
+                                            $sql = "select distinct unocod as codigo, unonome descricao
                                                         from public.unidadeorcamentaria uno
-                                                        where prsano = '" . date('Y') . "'
+                                                        where prsano = '" . date('Y') . "' and unocod not in ('55101')
+                                                    union 
+                                                    select distinct unocod as codigo, unonome descricao
+                                                        from public.unidadeorcamentaria uno
+                                                        where prsano = '" . date('Y') . "' and unoid = 93
                                                         order by descricao";
 
                                             $db->monta_combo("unicod", $sql, $editavel, "&nbsp;", 'ajax_unidade_gestora', '', '', '', 'S', 'unicod', '', '', '', '', 'chosen-select');

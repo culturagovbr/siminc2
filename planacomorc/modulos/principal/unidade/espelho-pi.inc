@@ -190,7 +190,7 @@
                         </div>
                     </div>
                     <div class="ibox-title">
-                        <h5>Plano Interno
+                        <h5>Plano de Ação
                         <?php if($dadosPI['plicod']): ?>
                             <span style="color: red; padding: 5px;" id="span-plicod">(<?php echo $dadosPI['plicod']; ?>)</span>
                         <?php else: ?>
@@ -220,7 +220,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <b>Código do PI:</b>
+                                            <b>Código</b>
                                         </td>
                                         <td align="left">
                                             <span><?php echo $dadosPI['plicod']; ?></span>
@@ -281,6 +281,14 @@
                                     </tr>
                                     <tr>
                                         <td>
+                                            <b>UO:</b>
+                                        </td>
+                                        <td align="left">
+                                            <span><?php echo $dadosPI['uo']; ?></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             <b>Programa:</b>
                                         </td>
                                         <td align="left">
@@ -337,7 +345,7 @@
                                     </tr>
                                     <tr class="titulo_espelho">
                                         <td colspan="2">
-                                            <b>Dados do Plano Interno</b>
+                                            <b>Dados do Plano de Ação</b>
                                         </td>
                                     </tr>
                                     <tr>
@@ -358,7 +366,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <b>Produto PI:</b>
+                                            <b>Produto PA:</b>
                                         </td>
                                         <td align="left">
                                             <span><?php echo $dadosPI['produto']; ?></span>

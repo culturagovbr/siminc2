@@ -5,7 +5,6 @@
      * @returns VOID
      */
     function initCadastroPi(){
-
         $('#modal-historico-pi').click(function(){
             $('#historico-pi .modal-body').load(urlPagina+'&req=historico-pi&pliid='+ $('#pliid').val());
             $('#historico-pi').modal();
@@ -502,5 +501,82 @@
                 window.location.href = '/planacomorc/planacomorc.php?modulo=principal/unidade/painel&acao=A';
             });
         }
+        
+        $('.a_espelho_pedido').click(function(){
+            var pedid = $(this).attr('data-pedid');
+            exibirEspelhoPedido(pedid);
+            return false;
+        }); 
+        
+        $('#btn-salvar-etapa').click(function () {
+            if (verificaFormEtapas()) {
+
+                var dados;
+                if ($("#lista_etapas").length == 0) {
+                    dados = '<div id="lista_etapas" class="table-responsive">';
+                    dados += '<table class="table table-striped table-bordered table-hover" id="tabela_etapas">';
+                    dados += '<thead>';
+                    dados += '<tr class="text-center">';
+                    dados += '<th width="10%">Ações</th>';
+                    dados += '<th>Descrição</th>';
+                    dados += '<th>Data</th>';
+                    dados += '</tr>';
+                    dados += '</thead>';
+                    dados += '<tbody id="teste">';
+                    dados += '</tbody>';
+                    dados += '</table></div>';
+                    $("#div_listagem_etapas").html(dados);
+
+                }
+                var indice = $("#tabela_etapas tbody tr").length+1;
+                dados = "<tr id='"+indice+"'>";
+                dados += '<td class="text-center">';
+                dados += '<a title="Excluir" href="javascript:return false;" style="margin-left: 5px;"><i title="Excluir" data-id="'+indice+'"  class="excluir-etapa fa fa-close"></i></a>';
+                dados += '</td>';
+                dados += '<td><input type="hidden" name="etadsc[]" value="'+$("#etadsci").val()+'">'+$("#etadsci").val()+'</td>';
+                dados += '<td><input type="hidden" name="etadata[]" value="'+$("#etadatai").val()+'">'+$("#etadatai").val()+'</td>';
+                dados += '</tr>';
+                $("#teste").append(dados);
+                $('.excluir-etapa').click(function(){
+                    var id = $(this).data("id");
+                    $("#"+id).remove();
+                    if ($("#tabela_etapas tbody tr").length==0){
+                        $("#div_listagem_etapas").html('<div class="alert alert-danger">Nenhum registro cadastrado</div>');
+                    }
+                });
+            }else{
+                alert("Favor, Preencher os campos!");
+            }
+        });
+
     }
 
+/**
+ * Exibe popup com Detalhes do Pedido. Tela de Espelho de Pedido.
+ *
+ * @returns VOID
+ */
+function exibirEspelhoPedido(pedid){
+    window.open(
+        window.location.href + '&req=espelho-pedido&pedid='+ pedid,
+        'popup_espelho_pedido',
+        'width=980,height=1000,status=1,menubar=1,toolbar=0,scrollbars=1,resizable=1');
+}
+
+/**
+ * Retorna falso caso não seja preenchido os campos de Descrição e Data do box de Etapas.
+ *
+ * @returns {boolean}
+ */
+function verificaFormEtapas() {
+    var dsc = $("#etadatai").val();
+    var data = $("#etadatai").val();
+
+    if( dsc !== '' && dsc !== null ){
+        return true;
+    }else if( data !== '' && data !== null ){
+        return true;
+    }
+
+    return false;
+}

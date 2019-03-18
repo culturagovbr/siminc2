@@ -214,10 +214,18 @@ class Monitora_Model_Acao extends Modelo
         ";
         return $sql;
     }
-    
-    public function recuperarDados(){
+
+    /**
+     * Recupera lista com registros de Ação.
+     * @return array|string
+     */
+    public function recuperarDados()
+    {
         $sql = "
             SELECT DISTINCT
+                acao.unicod,
+                funcod,
+                sfucod,
                 prgcod,
                 prgcod || '-' || prgdsc AS programa,
                 acastatus,
@@ -227,13 +235,33 @@ class Monitora_Model_Acao extends Modelo
                 acacod,
                 acaid,
                 acatitulo,
-                acao.unicod || '-' || uni.unidsc AS unidade
+                acao.unicod || '-' || COALESCE((
+                    SELECT
+                        uni.unonome
+                    FROM public.unidadeorcamentaria uni
+                    WHERE
+                        uni.prsano = '". (int)$_SESSION['exercicio']. "'
+                        AND acao.unicod = uni.unocod
+                    LIMIT 1
+                ), '') AS unidade
             FROM monitora.acao acao
-                JOIN public.unidade uni ON uni.unicod = acao.unicod
+                JOIN public.unidadeorcamentaria uni ON(
+                    uni.unocod = acao.unicod
+                    AND uni.prsano = acao.prgano
+                )
             WHERE
-                acastatus = 'A'
-                AND prgano = '". $_SESSION['exercicio']. "'";
-//ver($sql, d);
+                acao.acastatus = 'A'
+                AND acao.prgano = '". (int)$_SESSION['exercicio']. "'
+            ORDER BY
+                acao.unicod,
+                prgcod,
+                acacod,
+                loccod,
+                acaobjetivocod,
+                unidade,
+                acatitulo
+            ";
+
         $resultado = $this->carregar($sql);
 
         $dados = $resultado? $resultado : [];

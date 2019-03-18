@@ -1123,7 +1123,35 @@
             $('#div_edital').hide('slow');
         }
     }
-    
+
+    /**
+     * Muda o nome do box de Metas e os campos que contém na box.
+     *
+     */
+    function mudarNomesFormularioNaoOrcamentario(bool) {
+
+        if(bool === true){
+            // Muda o nome do box de "Metas" para "Planejamento Estratégico" quando for enquadramento Não Orçamentário
+            $(".div_metas_ppa_pnc h5").html("Planejamento Estratégico");
+            // Muda o nome do campo de "Objetivo PPA" para "Objetivo Estratégico" quando for enquadramento Não Orçamentário
+            $(".div-objetivo .control-label").html("Objetivo Estratégico");
+            // Muda o nome do campo de "Meta PPA" para "Diretriz Estratégica" quando for enquadramento Não Orçamentário
+            $(".div-metas .control-label").html("Diretriz Estratégica");
+            // Muda o nome do campo de "Iniciativa PPA" para "Meta" quando for enquadramento Não Orçamentário
+            $(".div-iniciativa .control-label").html("Meta");
+        }else {
+            // Troca o nome da label de Planejamento Estratégico para Metas quando não for enquadramento Não Orçamentário.
+            $(".div_metas_ppa_pnc h5").html("Metas");
+            // Muda o nome do campo de "Objetivo Estratégico" para "Objetivo PPA" quando não for enquadramento Não Orçamentário.
+            $(".div-objetivo .control-label").html("Objetivo PPA");
+            // Muda o nome do campo de "Diretriz Estratégica" para "Meta PPA" quando não for enquadramento Não Orçamentário.
+            $(".div-metas .control-label").html("Meta PPA");
+            // Muda o nome do campo de "Meta" para "Iniciativa PPA" quando não for enquadramento Não Orçamentário.
+            $(".div-iniciativa .control-label").html("Iniciativa PPA");
+        }
+
+    }
+
     /**
      * Controla a exibição do formulario se o enquadramento for não orçamentário.
      *
@@ -1133,15 +1161,36 @@
     function mudarFormularioNaoOrcamentario(codigo){
         // Se o código for Não Orçamentário, o sistema não exibe as opções PTRES(Funcional), Valor do Projeto, Cronograma Orçamentário e Financeiro.
         if(verificarFormularioNaoOrcamentario()){
+
+            mudarNomesFormularioNaoOrcamentario(true);
             // Oculta a opções PTRES(Funcional).
             $('.div_ptres').hide('slow');
+            // Exibe as Etapas
+            $('.div_etapas_pi').show('slow');
             // Oculta o quadro de Custeio e Capital com a opção de Valor do Projeto.
             $('.div_custeio_capital').hide('slow');
             // Oculta as colunas e campos do Cronograma Orçamentário.
             $('.td_cronograma_orcamentario').hide('slow');
             // Oculta as colunas e campos do Cronograma Financeiro.
             $('.td_cronograma_financeiro').hide('slow');
+            // Oculta os campos de Meta PNC e Indicador PNC.
+            $('.grupo_pnc').hide('slow');
+            // Oculta o campo de Area Cultural.
+            $('#div_area_cultural').hide('slow');
+            // Oculta o campo de Segmento Cultural.
+            $('#div_segmento_cultural').hide('slow');
+            // Oculta o campo de TED.
+            $('#div_ted').hide('slow');
+            // Oculta o campo de Números SNIIC.
+            $('#div_sniic').hide('slow');
+            // Oculta o campo de Número Pronac.
+            $('#div_pronac').hide('slow');
+            // Oculta a combo de Modalidade de Pactuação.
+            $('#div_pactuacao').hide('slow');
+            // Exibe o campo Recursos Necessários
+            $(".recursos_necessarios").show('slow'); 
         } else {
+            mudarNomesFormularioNaoOrcamentario(false);
             // Exibe a opções PTRES(Funcional).
             $('.div_ptres').show('slow');
             // Exibe o quadro de Custeio e Capital com a opção de Valor do Projeto.
@@ -1150,6 +1199,18 @@
             $('.td_cronograma_orcamentario').show('slow');
             // Exibe as colunas e campos do Cronograma Financeiro.
             $('.td_cronograma_financeiro').show('slow');
+            // Oculta as Etapas
+            $('.div_etapas_pi').hide('slow');
+            // Exibe o campo de Area Cultural.
+            $('#div_area_cultural').show('slow');
+            // Exibe o campo de Segmento Cultural.
+            $('#div_segmento_cultural').show('slow');
+            // Exibe o campo de TED.
+            $('#div_ted').show('slow');            
+            // Exibe a combo de Modalidade de Pactuação.
+            $('#div_pactuacao').show('slow');
+            // Oculta o campo Recursos Necessários
+            $(".recursos_necessarios").hide('slow');
         }
     }
     
@@ -1345,9 +1406,13 @@
                 
                 // Exibe os campos de metas PPA e PNC
                 $('.div_metas_ppa_pnc').show('slow');
-                $('#div_area_cultural').show('slow');
-                $('#div_segmento_cultural').show('slow');
                 $('#div_botao_edital').show('slow');
+
+                // Esconde as opções de Area Cultural e de Segmento quando o item é Não Orçamentária
+                if(!verificarFormularioNaoOrcamentario()) {
+                    $('#div_area_cultural').show('slow');
+                    $('#div_segmento_cultural').show('slow');
+                }
             }
         }
     }

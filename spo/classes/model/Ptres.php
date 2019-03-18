@@ -94,70 +94,50 @@ class Spo_Model_Ptres extends Modelo
 
     public function recuperarPtresSubunidade($prsano, $tipo = null)
     {
-        switch ($tipo){
-            // Somente Vinculadas
-            case 'V':
-                $where = "and uo.unocod not in ('42101', '42902')";
-                break;
-            // Somente Administração Direta
-            case 'D':
-                $where = "and uo.unocod in ('42101')";
-                break;
-            // Somente Fundo
-            case 'F':
-                $where = "and uo.unocod in ('42902') 
-                          and uo.unofundo = false
-                          union all
-                          select distinct p.ptrid, p.ptres, p.acaid, p.ptrano, p.funcod, p.sfucod, p.prgcod, p.acacod, p.loccod, p.plocod, p.esfcod,  
-                                  uo.unocod, uo.unonome, uo.unocod, uo.unonome,  uo.unofundo, uo.unosigla, uo.unosigla, uo.unoid, uo.unoid
-                          from monitora.ptres p
-                                  inner join public.vw_subunidadeorcamentaria uo on uo.unocod = p.unicod and uo.prsano = '2018' and uo.suostatus = 'A'
-                          where ptrano = '$prsano'
-                          and p.ptrstatus = 'A'
-                          and p.plocod not like 'E%'
-                          and uo.unocod in ('42902')
-                          and uo.unofundo = true";
-                break;
-            // Todas
-            default:
-                $where = '';
-        }
-
         $sql = "
-            SELECT
-                p.ptrid,
-                p.ptres,
-                p.acaid,
-                p.ptrano,
-                p.funcod,
-                p.sfucod,
-                p.prgcod,
-                p.acacod,
-                p.loccod,
-                p.plocod,
-                p.esfcod,
+            SELECT DISTINCT
+                ptr.ptrid,
+                ptr.ptres,
+                ptr.unicod,
+                ptr.prgcod,
+                ptr.acacod,
+                ptr.loccod,
+                ptr.plocod,
+                case when uo.unocod = '". (int)UNICOD_MC. "' then '". (int)UNICOD_MC. "-MINISTÉRIO DA CIDADANIA' else uo.unocod || '-' || uo.unonome end AS unidade_orcamentaria,
+                case when uo.unocod IN ('". (int)UNICOD_MC. "', '". (int)UNICOD_MINC. "', '". (int)UNICOD_ES. "') then 'D'
+                     when uo.unocod IN('". (int)UNICOD_FNC. "', '". (int)UNICOD_FRGPS. "') then 'F'
+                     else 'V'
+                end as tipo,
+                vptr.plodsc,
                 uo.unocod,
-                uo.unonome,
-                uo.suocod,
-                uo.suonome,
                 uo.unofundo,
-                uo.suosigla,
-                uo.unosigla,
-                uo.unoid,
-                uo.suoid
-            FROM monitora.ptres p
+                vptr.acatitulo,
+                vptr.funcional,
+                vptr.irpcod,
+                ptr.ptrdotacaocusteio,
+                ptr.ptrdotacaocapital
+                
+            FROM monitora.ptres ptr
                 JOIN public.vw_subunidadeorcamentaria uo ON(
-                    uo.unocod = p.unicod
-                    AND uo.prsano = '$prsano'
-                    AND uo.suostatus = 'A'
+                    uo.suostatus = 'A'
+                    AND ptr.unicod = uo.unocod
+                    AND ptr.ptrano = uo.prsano
                 )
+                JOIN monitora.vw_ptres vptr ON ptr.ptrid = vptr.ptrid
             WHERE
-                ptrano = '$prsano'
-                AND p.ptrstatus = 'A'
-                AND p.plocod NOT LIKE 'E%'
-                $where
+                ptr.ptrstatus = 'A'
+                AND ptr.ptrano = '". (int)$prsano. "' 
+                and ptr.ptres <> '0'
+                and ptr.plocod not in (select plocod from monitora.ptres where plocod like 'E%')
             ORDER BY
-                unofundo, unonome, suonome, acacod, prgcod, loccod, plocod
+                ptr.ptres DESC,
+                uo.unocod,
+                ptr.acacod,
+                vptr.acatitulo,
+                vptr.funcional,
+                ptr.plocod,
+                vptr.plodsc,
+                vptr.irpcod
         ";
 //ver($sql,d);
         $dados = $this->carregar($sql);
@@ -183,5 +163,15 @@ class Spo_Model_Ptres extends Modelo
             ORDER BY
                 eqddsc
         ";
+    }
+    
+    public function recuperarPtridSubUnidade(){
+        $sql = "select ptrid, suoid from spo.ptressubunidade";
+        $arrptrid = $this->carregar($sql);
+        $arrRetorno;
+        for ($i=0;$i<count($arrptrid);$i++){
+            $arrRetorno[$arrptrid[$i]['ptrid']][] = $arrptrid[$i]['suoid'];
+        }
+        return $arrRetorno;
     }
 }

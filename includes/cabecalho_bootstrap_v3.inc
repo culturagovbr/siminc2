@@ -317,7 +317,7 @@ $paginic = $db->pegaUm($sql);
     <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/ion.rangeSlider.skinHTML5.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/ionRangeSlider/normalize.css" rel="stylesheet">
     <!-- Steps -->
-    <link href="/zimec/public/temas/simec/css/plugins/steps/jquery.steps.css?v=1.2.1" rel="stylesheet">
+    <link href="/zimec/public/temas/simec/css/plugins/steps/jquery.steps.css?v=1.2.2" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/switchery/switchery.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/bootstrap-tour/bootstrap-tour.min.css" rel="stylesheet">
     <link href="/zimec/public/temas/simec/css/plugins/summernote/summernote.css" rel="stylesheet">
@@ -344,7 +344,7 @@ $paginic = $db->pegaUm($sql);
     <link href="/zimec/public/temas/simec/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
     <link href="/zimec/public/temas/simec/css/style.min.css?v=1.1.1" rel="stylesheet" media="all">
-    <link href="/zimec/public/temas/simec/css/simec.css?v=2.3.0" rel="stylesheet" media="all">
+    <link href="/zimec/public/temas/simec/css/simec.css?v=2.4.1" rel="stylesheet" media="all">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -397,7 +397,7 @@ $paginic = $db->pegaUm($sql);
                     $(function(){
                         $('#chosen-exercicio').change(function(){
                             $('#exercicio').val($(this).val());
-                            document.getElementById('setperfil').submit();
+                            $('#setperfil').submit();
                         });
                     })
                 </script>

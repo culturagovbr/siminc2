@@ -45,10 +45,10 @@
     preg_match('/\/([a-zA-Z]*)\.php/', $_SERVER['REQUEST_URI'], $sisarquivo);
     $sisarquivo = $sisarquivo[1];
 
-    # Código do órgão que está usando o sistema. Ex: 42000 => Ministério da Cultura
+    # Código do órgão que está usando o sistema. Ex: 42000 => Ministério da Cidadania
     define('CODIGO_ORGAO_SISTEMA', 42000);
-    define('NOME_ORGAO_SISTEMA', 'Ministério da Cultura');
-    define('SIGLA_ORGAO_SISTEMA', 'MinC');
+    define('NOME_ORGAO_SISTEMA', 'Ministério da Cidadania');
+    define('SIGLA_ORGAO_SISTEMA', 'MC');
 
     # Configuração padrão dos dados de acesso
     $configPadrao = new stdClass();

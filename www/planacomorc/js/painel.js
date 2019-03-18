@@ -22,6 +22,48 @@ function atualizarSIOP(){
                         closeOnConfirm: true
                     },
                     function(){
+                        window.location.href = window.location.href.replace('&req=atualizar-siop-ajax', '');
+                    });
+            } else {
+                swal({
+                        title: 'Erro!',
+                        text: resp.message,
+                        type: 'error',
+                        showCancelButton: false,
+                        confirmButtonText: 'OK',
+                        closeOnConfirm: true
+                    },
+                    function(){
+                        window.location.href = window.location.href.replace('&req=atualizar-siop-ajax', '');
+                    });
+            }
+        }
+    });
+}
+
+/**
+ * Atualiza os dados de execução orçamentária da própria base do Siminc
+ * 
+ * @returns VOID Retorna janela modal com aviso pra o usuário
+ */
+function atualizarSiminc(){
+    divCarregando();
+    $.ajax({
+        type: 'POST',
+        url: window.location.href,
+        data: 'req=atualizarSIMINC',
+        dataType: 'json',
+        success: function(resp){
+            if(resp.success){
+                swal({
+                        title: '',
+                        text: resp.message,
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'OK',
+                        closeOnConfirm: true
+                    },
+                    function(){
                         window.location.href = window.location.href;
                     });
             } else {

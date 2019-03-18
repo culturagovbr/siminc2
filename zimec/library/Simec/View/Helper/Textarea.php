@@ -21,7 +21,7 @@ class Simec_View_Helper_Textarea extends Simec_View_Helper_Element
         $id = isset($attribs['id']) ? $attribs['id'] : $name;
         $type = isset($attribs['type']) ? $attribs['type'] : 'text';
         $class = isset($attribs['class']) ? 'form-control ' .  $attribs['class'] : 'form-control';
-        $attribs['label-for'] = isset($attribs['label-for']) ? $attribs['label-for'] : $id;
+        $config['label-for'] = isset($config['label-for']) ? $config['label-for'] : $id;
 
         unset($attribs['id'], $attribs['type'], $attribs['class']);
 

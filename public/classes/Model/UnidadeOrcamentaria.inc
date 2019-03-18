@@ -26,6 +26,10 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  */
 class Public_Model_UnidadeOrcamentaria extends Modelo
 {
+    const SUOID_ES = 96;
+    const SUOID_DS = 94;
+    const SUOID_CULTURA = 88;
+
     /**
      * Nome da tabela especificada
      * @var string
@@ -88,10 +92,15 @@ class Public_Model_UnidadeOrcamentaria extends Modelo
         $order = $order ? $order : $descricao;
         $where = count($where) ? " where  " . implode(' and ', $where) : '';
 
-        $sql = "select unocod AS codigo, {$descricao} AS descricao
-                from {$this->stNomeTabela}
+        $sql = "
+            SELECT
+                unocod AS codigo,
+                {$descricao} AS descricao
+            FROM {$this->stNomeTabela}
                 $where
-                order by $order   
+                AND unoid NOT IN(". self::SUOID_ES. ", ". self::SUOID_DS. " , ". self::SUOID_CULTURA. ")
+            ORDER BY
+                $order   
         ";
 
         return $sql;
