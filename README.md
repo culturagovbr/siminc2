@@ -30,7 +30,7 @@ Para visualizar os container
   docker-compose ps
 ```
 
-Após finalizado os procedimentos de configuração do ambiente acesse o sistema pela porta 8082 por exemplo:
+Após finalizado os procedimentos de configuração do ambiente acesse o sistema pela porta 8083 por exemplo:
 ```
 http://localhost:8083
 ```
