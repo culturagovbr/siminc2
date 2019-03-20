@@ -214,7 +214,6 @@
      */
     function definirCamposObrigatorios(){
         var listaObrigatorios = ['plititulo', 'plidsc', 'unicod', 'ungcod','eqdid', 'pprid'];
-        console.log('listaObrigatorios'+ listaObrigatorios);
 
         // Se o TED não estiver marcado o sistema obriga a preencher a modalidade de Pactuação.
         if(!$('#picted').is(':checked')){
