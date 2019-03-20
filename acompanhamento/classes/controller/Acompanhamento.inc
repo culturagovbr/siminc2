@@ -14,12 +14,9 @@ class Acompanhamento_Controller_Acompanhamento
         try {
             $mAcompanhamento = new Acompanhamento_Model_Acompanhamento($dados['acoid']);
             $mAcompanhamento->popularDadosObjeto($dados);
-
-            $mAcompanhamento->acoquantidade = $mAcompanhamento->acoquantidade ? desformata_valor($mAcompanhamento->acoquantidade) : null;
+            $mAcompanhamento->acoquantidade = $mAcompanhamento->acoquantidade ? desformata_float($mAcompanhamento->acoquantidade) : NULL;
             $mAcompanhamento->acodata = $mAcompanhamento->acodata ? formata_data_sql($mAcompanhamento->acodata) : null;
-
             $mAcompanhamento->prsano = $mAcompanhamento->prsano ? $mAcompanhamento->prsano : $_SESSION['exercicio'];
-
             $mAcompanhamento->salvar(null, null, [
                 'acoanalise',
                 'acoprovidencias',
@@ -36,8 +33,8 @@ class Acompanhamento_Controller_Acompanhamento
             $mAcompanhamento->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
-    
+    }
+
     public function excluir($acoid)
     {
         $url = '?modulo=principal/monitorar-ppa&acao=A';
@@ -59,7 +56,7 @@ class Acompanhamento_Controller_Acompanhamento
             $mAcompanhamento->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 
     private function _vincularMedidas($acoid, $dados)
     {

@@ -1135,10 +1135,10 @@
             $(".div_metas_ppa_pnc h5").html("Planejamento Estratégico");
             // Muda o nome do campo de "Objetivo PPA" para "Objetivo Estratégico" quando for enquadramento Não Orçamentário
             $(".div-objetivo .control-label").html("Objetivo Estratégico");
-            // Muda o nome do campo de "Meta PPA" para "Diretriz Estratégica" quando for enquadramento Não Orçamentário
-            $(".div-metas .control-label").html("Diretriz Estratégica");
-            // Muda o nome do campo de "Iniciativa PPA" para "Meta" quando for enquadramento Não Orçamentário
-            $(".div-iniciativa .control-label").html("Meta");
+            // Muda o nome do campo de "Meta PPA" para "Meta" quando for enquadramento Não Orçamentário
+            $(".div-metas .control-label").html("Meta");
+            // Muda o nome do campo de "Iniciativa PPA" para "Diretriz Estratégica" quando for enquadramento Não Orçamentário
+            $(".div-iniciativa .control-label").html("Diretriz Estratégica");
         }else {
             // Troca o nome da label de Planejamento Estratégico para Metas quando não for enquadramento Não Orçamentário.
             $(".div_metas_ppa_pnc h5").html("Metas");
