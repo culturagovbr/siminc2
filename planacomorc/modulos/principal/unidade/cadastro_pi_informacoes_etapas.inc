@@ -4,13 +4,13 @@
             <h5>Informações Complementares:</h5>
         </div>
         <div class="ibox-content">
-            <div class="form-group" id="div_area_cultural">
+           <!-- <div class="form-group" id="div_area_cultural">
                 <div class="col-md-3 text-right">
                     <label for="mdeid" class="control-label">Área Cultural: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                 </div>
                 <div class="col-lg-9">
                     <?php
-                        $sql = "
+/*                        $sql = "
                             SELECT
                                 MAX(mdeid) AS codigo,
                                 upper(public.removeacento(mdedsc)) AS descricao
@@ -26,7 +26,7 @@
 
                         $mdeid = $dadosPI['mdeid'];
                         $db->monta_combo('mdeid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'mdeid', null, '', null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($mdeid) ? $mdeid : null));
-                    ?>
+                    */?>
                 </div>
             </div>
             <div class="form-group" id="div_segmento_cultural">
@@ -34,9 +34,9 @@
                     <label class="control-label" for="neeid">Segmento Cultural: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                 </div>
                 <div class="col-lg-9 div_neeid">
-                    <?php carregarSegmentoCultural($dadosPI['mdeid'], $dadosPI['neeid']); ?>
+                    <?php /*carregarSegmentoCultural($dadosPI['mdeid'], $dadosPI['neeid']); */?>
                 </div>
-            </div>
+            </div>-->
             <div class="form-group" id="div_pactuacao">
                 <div class="col-md-3 text-right">
                     <label class="control-label" for="capid">Modalidade de Pactuação: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
