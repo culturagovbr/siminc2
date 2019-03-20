@@ -72,22 +72,38 @@
                                 $simec->setPodeEditar(1);
                                 ?>
                             </div>
-                            <div class="col-md-6">
-                                <h3 class="text-center">Acompanhamento do PA</h3>
-                                <?php
-                                $colors = "'#55BF3B', '#eeaaee', '#00BFFF', '#aaeeee', '#7798BF', '#DDDF0D', '#7CCD7C', '#DF5353', '#008000', '#CD0000', '#FF4500', '#ff0066', '#4B0082', '#808000', '#800000', '#2F4F4F', '#006400', '#FFA500'";
-                                $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
-                                $grafico->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
-                                    ->setColors($colors)
-                                    ->setHeight('200px')
-                                    ->gerarGrafico($dadosGrafico);
-                                ?>
-                            </div>
-                            <div class="col-sm-2">
-                                <?php $percentual = $aPlanoInterno['previsto'] ? $aPlanoInterno['empenhado'] * 100 / $aPlanoInterno['previsto'] : 0; ?>
-                                <h3 class="text-center">Percentual de Empenho</h3>
-                                <meter style="display: none;" max="1000" value="<?php echo $percentual; ?>" id="percentual-empenhado"></meter>
-                            </div>
+                            <?php
+                                # Exibe o Gráfico de Acompanhamento caso não seja Enquadramento Não Orçamentário.
+                                if($dadosPI['eqdcod'] !== 'N'): ?>
+                                    <div class="col-md-6">
+                                        <h3 class="text-center">Acompanhamento do PA</h3>
+                                        <?php
+                                            $colors = "'#55BF3B', '#eeaaee', '#00BFFF', '#aaeeee', '#7798BF', '#DDDF0D', '#7CCD7C', '#DF5353', '#008000', '#CD0000', '#FF4500', '#ff0066', '#4B0082', '#808000', '#800000', '#2F4F4F', '#006400', '#FFA500'";
+                                            $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);
+                                            $grafico->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
+                                                ->setColors($colors)
+                                                ->setHeight('200px')
+                                                ->gerarGrafico($dadosGrafico);
+                                        ?>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <?php
+                                            $percentual = $aPlanoInterno['previsto'] ? $aPlanoInterno['empenhado'] * 100 / $aPlanoInterno['previsto'] : 0;
+                                            $titulo_grafico = 'Percentual de Empenho';
+                                        ?>
+                                        <h3 class="text-center"><?= $titulo_grafico; ?></h3>
+                                        <meter style="display: none;" max="1000" value="<?php echo $percentual; ?>" id="percentual-empenhado"></meter>
+                                    </div>
+                            <?php else: ?>
+                                <div class="col-sm-2">
+                                    <?php
+                                        $percentual = $aPlanoInterno['picquantidade'] ? $mAcompanhamento->acoquantidade * 100 / $aPlanoInterno['picquantidade'] : 0;
+                                        $titulo_grafico = 'Percentual de Execução';
+                                    ?>
+                                    <h3 class="text-center"><?= $titulo_grafico; ?></h3>
+                                    <meter style="display: none;" max="1000" value="<?php echo $percentual; ?>" id="percentual-empenhado"></meter>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
