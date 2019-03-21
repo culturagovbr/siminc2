@@ -47,10 +47,12 @@ switch ($_REQUEST['req']) {
         die;
     case 'importar-siop':
         $mPtres->importarSiop($_SESSION['exercicio'], $momento);
+    case 'atualizar-sistema':
+        $mPtres->importarSiop($_SESSION['exercicio'], $momento);
 }
 
 $quantidadeSiop = $mPtres->recuperarQuantidadesSiop((int)$momento, (int)$_SESSION['exercicio']);
-$funcionaisSiop = $mPtres->recuperarFuncionaisSiop((int)$momento, (int)$_SESSION['exercicio']);
+$funcionaisSiop = $mPtres->listarFuncionaisSiop((int)$momento, (int)$_SESSION['exercicio']);
 $comparacaoSiop = $mPtres->recuperarComparacaoSiop((int)$momento, (int)$_SESSION['exercicio']);
 
 /**

@@ -91,8 +91,8 @@ class Monitora_Model_Ptres extends Modelo
         ];
 
         $mImportador = new Wssof_Importador();
-//        $mImportador->obterProgramacaoCompleta($exercicio, $momento, $map);
-        $this->atualizarFuncionaisSiop($exercicio, $momento);
+        $mImportador->obterProgramacaoCompleta($exercicio, $momento, $map);
+//        $this->atualizarFuncionaisSiop($exercicio, $momento);
         $this->commit();
     }
 
@@ -118,14 +118,14 @@ class Monitora_Model_Ptres extends Modelo
                 aca.detalhamentoimplementacao
             FROM wssof.ws_acoesdto aca
                 JOIN wssof.ws_localizadoresdto loc ON(
-                    loc.identificadorunicoacao = aca.identificadorunico
-                    AND loc.exercicio = '". (int)$exercicio. "'
-                    AND loc.codigomomento = '". (int)$momento. "'
+                    aca.identificadorunico = loc.identificadorunicoacao
+                    AND aca.exercicio = loc.exercicio
+                    AND aca.codigomomento = loc.codigomomento
                 )
                 JOIN wssof.ws_planosorcamentariosdto plo ON(
-                    plo.identificadorunicoacao = aca.identificadorunico
-                    AND plo.exercicio = '". (int)$exercicio. "'
-                    AND plo.codigomomento = '". (int)$momento. "'
+                    aca.identificadorunico = plo.identificadorunicoacao
+                    AND aca.exercicio = plo.exercicio
+                    AND aca.codigomomento = plo.codigomomento
                 )
             WHERE
                 aca.exercicio = '". (int)$exercicio. "'
@@ -471,44 +471,45 @@ class Monitora_Model_Ptres extends Modelo
         return $momento = $resultado? $resultado: 0;
     }
     
-    public function recuperarFuncionaisSiop($momento, $exercicio)
+    public function listarFuncionaisSiop($momento, $exercicio)
     {
         $sql = "
             SELECT DISTINCT
                 aca.identificadorunico,
-                aca.exercicio,
-                aca.codigomomento,
-                aca.baselegal,
-                aca.detalhamentoimplementacao,
-                aca.codigoacao,
                 aca.codigoorgao,
+        	aca.codigofuncao,
+        	aca.codigosubfuncao,
                 aca.codigoprograma,
+                aca.codigoacao,
                 aca.codigoobjetivo,
-                aca.descricao acadescricao,
-                aca.titulo acatitulo,
                 loc.codigolocalizador,
                 plo.planoorcamentario,
                 loc.descricao locdescricao,
+                aca.descricao acadescricao,
+                aca.titulo acatitulo,
                 plo.titulo plotitulo
             FROM wssof.ws_acoesdto aca
                 JOIN wssof.ws_localizadoresdto loc ON(
-                    loc.identificadorunicoacao = aca.identificadorunico
-                    AND loc.exercicio = '". (int)$exercicio. "'
-                    AND loc.codigomomento = '".(int)$momento. "'
+                    aca.identificadorunico = loc.identificadorunicoacao
+                    AND aca.exercicio = loc.exercicio
+                    AND aca.codigomomento = loc.codigomomento
                 )
                 JOIN wssof.ws_planosorcamentariosdto plo ON(
-                    plo.identificadorunicoacao = aca.identificadorunico
-                    AND plo.exercicio = '". (int)$exercicio. "'
-                    AND plo.codigomomento = '".(int)$momento. "'
+                    aca.identificadorunico = plo.identificadorunicoacao
+                    AND aca.exercicio = plo.exercicio
+                    AND aca.codigomomento = plo.codigomomento
                 )
             WHERE
                 aca.exercicio = '". (int)$exercicio. "'
                 AND aca.codigomomento = '".(int)$momento. "'
             ORDER BY
-                aca.codigoacao,
-                aca.codigoprograma,
-                loc.codigolocalizador,
+                aca.identificadorunico,
                 aca.codigoorgao,
+        	aca.codigofuncao,
+                aca.codigosubfuncao,
+                aca.codigoprograma,
+                aca.codigoacao,
+                loc.codigolocalizador,
                 plo.planoorcamentario
         ";
 
