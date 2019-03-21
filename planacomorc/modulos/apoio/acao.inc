@@ -1,6 +1,6 @@
 <?php
 
-$aAcao = (new Monitora_Model_Acao)->recuperarDados();
+$listaAcoes = (new Monitora_Model_Acao)->recuperarDados();
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
@@ -41,21 +41,21 @@ include APPRAIZ . "includes/cabecalho.inc";
                             </thead>
                             <tbody>
                             <?php
-                                if($aAcao):
-                                    foreach($aAcao as $dados): ?>
+                                if($listaAcoes):
+                                    foreach($listaAcoes as $acao): ?>
                                         <tr>
                                             <td class="text-center">
-                                                <a title="Alterar" href="?modulo=apoio/acao_form&acao=A&acaid=<?php echo $dados['acaid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                                <a title="Alterar" href="?modulo=apoio/acao_form&acao=A&acaid=<?php echo $acao['acaid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                             </td>
-                                            <td><?php echo $dados['unicod']; ?></td>
-                                            <td><?php echo $dados['funcod']; ?></td>
-                                            <td><?php echo $dados['sfucod']; ?></td>
-                                            <td><?php echo $dados['prgcod']; ?></td>
-                                            <td><?php echo $dados['acacod']; ?></td>
-                                            <td><?php echo $dados['loccod']; ?></td>
-                                            <td><?php echo $dados['acaobjetivocod']? $dados['acaobjetivocod']: '-'; ?></td>
-                                            <td><?php echo $dados['unidade']; ?></td>
-                                            <td><?php echo $dados['acatitulo']; ?></td>
+                                            <td><?php echo $acao['unicod']; ?></td>
+                                            <td><?php echo $acao['funcod']; ?></td>
+                                            <td><?php echo $acao['sfucod']; ?></td>
+                                            <td><?php echo $acao['prgcod']; ?></td>
+                                            <td><?php echo $acao['acacod']; ?></td>
+                                            <td><?php echo $acao['loccod']; ?></td>
+                                            <td><?php echo $acao['acaobjetivocod']? $acao['acaobjetivocod']: '-'; ?></td>
+                                            <td><?php echo $acao['unidade']; ?></td>
+                                            <td><?php echo $acao['acatitulo']; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
