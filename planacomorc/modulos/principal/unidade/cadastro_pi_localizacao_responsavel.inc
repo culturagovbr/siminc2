@@ -2,7 +2,7 @@
 
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>Localização do Projeto <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></h5>
+            <h5>Localização do Projeto</h5>
         </div>
         <div class="ibox-content">
             <div class="form-group">

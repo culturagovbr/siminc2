@@ -13,10 +13,10 @@
             }
         }
 
-        // Se não for selecionado nenhum tipo de localização, o sistema acrescenta uma mensagem de erro.
-        if($('#esfid').val() == ""){
-            $('.legend_localizacao').addClass('validateRedText');
-            addMsgCustom.push('Localização do Projeto');
+        // Se não for selecionado nenhum Tipo de Localização (esfid), o sistema acrescenta uma mensagem de erro.
+        /*if($('#esfid').val() == ""){
+            /!*$('.legend_localizacao').addClass('validateRedText');
+            addMsgCustom.push('Localização do Projeto');*!/
         } else {
             switch($('#esfid').val()) {
                 // Verifica se a esfera é Estadual/DF.
@@ -53,9 +53,9 @@
                     $('.legend_localizacao').removeClass('validateRedText');
                 break;
             }
-        }
+        }*/
 
-        if(!verificarFormularioEmenda()){
+/*        if(!verificarFormularioEmenda()){
             // Se for Não Orçamentário, não é obrigado informar responsáveis.
             if(!verificarFormularioNaoOrcamentario()){
                 // Se não for inserido nenhum Responsável, o sistema acrescenta uma mensagem de erro.
@@ -66,7 +66,7 @@
                     $('.legend_responsaveis').removeClass('validateRedText');
                 }
             }
-        }
+        }*/
 
 //        if(!verificarFormularioNaoOrcamentario()){
 //            // Valida se o usuário preencheu ou o valor de capital ou de custeio(Valor do Projeto).
@@ -230,8 +230,9 @@
             // Se o formulario não possui as opções de manutenção item o sistema lista como obrigatório as opções Objetivo PPA, Metas PPA, Iniciativa PPA
             }
         } else {
+            // Requer preenchimento obrigatório dos abaixo quando não for "Não Orçamentário"
             if(!verificarFormularioNaoOrcamentario()){
-                listaObrigatorios.push('mdeid', 'neeid', 'mpnid', 'ipnid', 'oppid', 'mppid');
+                // listaObrigatorios.push('mdeid', 'neeid', 'mpnid', 'ipnid', 'oppid', 'mppid');
             }
         }
         
