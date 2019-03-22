@@ -59,6 +59,6 @@ $exercicio = date('Y');
 $momento = 9000;
 
 $mPtres = new Monitora_Model_Ptres();
-$mPtres->importarSiop($exercicio, $momento);
+//$mPtres->importarSiop($exercicio, $momento); @todo refatorar pq as responsabilidades foram dividas em dois métodos
 
 ver('FIM', d);

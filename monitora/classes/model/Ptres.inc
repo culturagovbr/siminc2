@@ -80,10 +80,10 @@ class Monitora_Model_Ptres extends Modelo
         'ptrnomeunidadepo' => null,
     );
 
+    /*
+     * 
+     */
     public function importarSiop($exercicio, $momento) {
-        $exercicio = $exercicio ? $exercicio : date('Y');
-        $momento = $momento ? $momento : 3000;
-
         $map = [
             'retornarAcoes' => 'acoesDTO',
             'retornarLocalizadores' => 'localizadoresDTO',
@@ -91,9 +91,8 @@ class Monitora_Model_Ptres extends Modelo
         ];
 
         $mImportador = new Wssof_Importador();
-        $mImportador->obterProgramacaoCompleta($exercicio, $momento, $map);
-//        $this->atualizarFuncionaisSiop($exercicio, $momento);
-        $this->commit();
+        $listaAcaoLocalizadorPo = $mImportador->obterProgramacaoCompleta($exercicio, $momento, $map);
+        return $listaAcaoLocalizadorPo;
     }
 
     public function atualizarFuncionaisSiop($exercicio, $momento) {
@@ -547,5 +546,57 @@ class Monitora_Model_Ptres extends Modelo
         ";
 
         return $this->carregar($sql);
+    }
+    
+    /**
+     * Retorna total de funcionais cadastradas dentro do sistema
+     * 
+     * @param stdClass $param
+     * @return integer
+     */
+    public function buscarTotalFuncionaisSistema(stdClass $param){
+        $total = 0;
+        $sql = "
+            SELECT DISTINCT
+                COUNT(ptr.ptrid) AS total
+            FROM monitora.vw_ptres ptr
+            WHERE
+                ptr.ptrstatus = 'A'
+                AND ptr.ptrano = '". (int)$param->exercicio. "'
+        ";
+        
+        $total = $this->pegaUm($sql);
+        return $total;
+    }
+    
+    /**
+     * Retorna total de funcionais importadas do SIOP
+     * 
+     * @param stdClass $param
+     * @return integer
+     */
+    public function buscarTotalFuncionaisSIOP(stdClass $param){
+        $total = 0;
+        $sql = "
+            SELECT
+                COUNT(aca.identificadorunico) AS total
+            FROM wssof.ws_acoesdto aca
+                JOIN wssof.ws_localizadoresdto loc ON(
+                    aca.identificadorunico = loc.identificadorunicoacao
+                    AND aca.exercicio = loc.exercicio
+                    AND aca.codigomomento = loc.codigomomento
+                )
+                JOIN wssof.ws_planosorcamentariosdto plo ON(
+                    aca.identificadorunico = plo.identificadorunicoacao
+                    AND aca.exercicio = plo.exercicio
+                    AND aca.codigomomento = plo.codigomomento
+                )
+            WHERE
+                aca.exercicio = '". (int)$param->exercicio. "'
+                AND aca.codigomomento = '". (int)$param->momento. "'
+        ";
+        
+        $total = $this->pegaUm($sql);
+        return $total;
     }
 }
