@@ -80,10 +80,10 @@ class Monitora_Model_Ptres extends Modelo
         'ptrnomeunidadepo' => null,
     );
 
+    /*
+     * 
+     */
     public function importarSiop($exercicio, $momento) {
-        $exercicio = $exercicio ? $exercicio : date('Y');
-        $momento = $momento ? $momento : 3000;
-
         $map = [
             'retornarAcoes' => 'acoesDTO',
             'retornarLocalizadores' => 'localizadoresDTO',
@@ -91,9 +91,8 @@ class Monitora_Model_Ptres extends Modelo
         ];
 
         $mImportador = new Wssof_Importador();
-//        $mImportador->obterProgramacaoCompleta($exercicio, $momento, $map);
-        $this->atualizarFuncionaisSiop($exercicio, $momento);
-        $this->commit();
+        $listaAcaoLocalizadorPo = $mImportador->obterProgramacaoCompleta($exercicio, $momento, $map);
+        return $listaAcaoLocalizadorPo;
     }
 
     public function atualizarFuncionaisSiop($exercicio, $momento) {
@@ -118,14 +117,14 @@ class Monitora_Model_Ptres extends Modelo
                 aca.detalhamentoimplementacao
             FROM wssof.ws_acoesdto aca
                 JOIN wssof.ws_localizadoresdto loc ON(
-                    loc.identificadorunicoacao = aca.identificadorunico
-                    AND loc.exercicio = '". (int)$exercicio. "'
-                    AND loc.codigomomento = '". (int)$momento. "'
+                    aca.identificadorunico = loc.identificadorunicoacao
+                    AND aca.exercicio = loc.exercicio
+                    AND aca.codigomomento = loc.codigomomento
                 )
                 JOIN wssof.ws_planosorcamentariosdto plo ON(
-                    plo.identificadorunicoacao = aca.identificadorunico
-                    AND plo.exercicio = '". (int)$exercicio. "'
-                    AND plo.codigomomento = '". (int)$momento. "'
+                    aca.identificadorunico = plo.identificadorunicoacao
+                    AND aca.exercicio = plo.exercicio
+                    AND aca.codigomomento = plo.codigomomento
                 )
             WHERE
                 aca.exercicio = '". (int)$exercicio. "'
@@ -191,14 +190,15 @@ class Monitora_Model_Ptres extends Modelo
             SELECT
                 ptrid
             FROM monitora.ptres ptr
+                JOIN monitora.acao aca ON ptr.acaid = aca.acaid
             WHERE
-                ptr.ptrano = '{$funcional['exercicio']}'
-                AND ptr.unicod = '{$funcional['codigoorgao']}'
-                AND ptr.funcod = '{$funcional['codigofuncao']}'
-                AND ptr.sfucod = '{$funcional['codigosubfuncao']}'
-                AND ptr.prgcod = '{$funcional['codigoprograma']}'
-                AND ptr.acacod = '{$funcional['codigoacao']}'
-                AND ptr.loccod = '{$funcional['codigolocalizador']}'
+                aca.prgano = '{$funcional['exercicio']}'
+                AND aca.unicod = '{$funcional['codigoorgao']}'
+                AND aca.funcod = '{$funcional['codigofuncao']}'
+                AND aca.sfucod = '{$funcional['codigosubfuncao']}'
+                AND aca.prgcod = '{$funcional['codigoprograma']}'
+                AND aca.acacod = '{$funcional['codigoacao']}'
+                AND aca.loccod = '{$funcional['codigolocalizador']}'
                 AND ptr.plocod = '{$funcional['planoorcamentario']}'
 	    ORDER BY
 		ptr.ptrstatus
@@ -213,9 +213,9 @@ class Monitora_Model_Ptres extends Modelo
         $mPtres->acaid = $acaid;
         $mPtres->ptrano = $funcional['exercicio'];
         $mPtres->unicod = $funcional['codigoorgao'];
-        $mPtres->unicod = $funcional['codigoorgao'];
         $mPtres->funcod = $funcional['codigofuncao'];
         $mPtres->sfucod = $funcional['codigosubfuncao'];
+        $mPtres->prgcod = $funcional['codigoprograma'];
         $mPtres->acacod = $funcional['codigoacao'];
         $mPtres->loccod = $funcional['codigolocalizador'];
         $mPtres->plocod = $funcional['planoorcamentario'];
@@ -471,44 +471,45 @@ class Monitora_Model_Ptres extends Modelo
         return $momento = $resultado? $resultado: 0;
     }
     
-    public function recuperarFuncionaisSiop($momento, $exercicio)
+    public function listarFuncionaisSiop($momento, $exercicio)
     {
         $sql = "
             SELECT DISTINCT
                 aca.identificadorunico,
-                aca.exercicio,
-                aca.codigomomento,
-                aca.baselegal,
-                aca.detalhamentoimplementacao,
-                aca.codigoacao,
                 aca.codigoorgao,
+        	aca.codigofuncao,
+        	aca.codigosubfuncao,
                 aca.codigoprograma,
+                aca.codigoacao,
                 aca.codigoobjetivo,
-                aca.descricao acadescricao,
-                aca.titulo acatitulo,
                 loc.codigolocalizador,
                 plo.planoorcamentario,
                 loc.descricao locdescricao,
+                aca.descricao acadescricao,
+                aca.titulo acatitulo,
                 plo.titulo plotitulo
             FROM wssof.ws_acoesdto aca
                 JOIN wssof.ws_localizadoresdto loc ON(
-                    loc.identificadorunicoacao = aca.identificadorunico
-                    AND loc.exercicio = '". (int)$exercicio. "'
-                    AND loc.codigomomento = '".(int)$momento. "'
+                    aca.identificadorunico = loc.identificadorunicoacao
+                    AND aca.exercicio = loc.exercicio
+                    AND aca.codigomomento = loc.codigomomento
                 )
                 JOIN wssof.ws_planosorcamentariosdto plo ON(
-                    plo.identificadorunicoacao = aca.identificadorunico
-                    AND plo.exercicio = '". (int)$exercicio. "'
-                    AND plo.codigomomento = '".(int)$momento. "'
+                    aca.identificadorunico = plo.identificadorunicoacao
+                    AND aca.exercicio = plo.exercicio
+                    AND aca.codigomomento = plo.codigomomento
                 )
             WHERE
                 aca.exercicio = '". (int)$exercicio. "'
                 AND aca.codigomomento = '".(int)$momento. "'
             ORDER BY
-                aca.codigoacao,
-                aca.codigoprograma,
-                loc.codigolocalizador,
+                aca.identificadorunico,
                 aca.codigoorgao,
+        	aca.codigofuncao,
+                aca.codigosubfuncao,
+                aca.codigoprograma,
+                aca.codigoacao,
+                loc.codigolocalizador,
                 plo.planoorcamentario
         ";
 
@@ -546,5 +547,57 @@ class Monitora_Model_Ptres extends Modelo
         ";
 
         return $this->carregar($sql);
+    }
+    
+    /**
+     * Retorna total de funcionais cadastradas dentro do sistema
+     * 
+     * @param stdClass $param
+     * @return integer
+     */
+    public function buscarTotalFuncionaisSistema(stdClass $param){
+        $total = 0;
+        $sql = "
+            SELECT DISTINCT
+                COUNT(ptr.ptrid) AS total
+            FROM monitora.vw_ptres ptr
+            WHERE
+                ptr.ptrstatus = 'A'
+                AND ptr.ptrano = '". (int)$param->exercicio. "'
+        ";
+        
+        $total = $this->pegaUm($sql);
+        return $total;
+    }
+    
+    /**
+     * Retorna total de funcionais importadas do SIOP
+     * 
+     * @param stdClass $param
+     * @return integer
+     */
+    public function buscarTotalFuncionaisSIOP(stdClass $param){
+        $total = 0;
+        $sql = "
+            SELECT
+                COUNT(aca.identificadorunico) AS total
+            FROM wssof.ws_acoesdto aca
+                JOIN wssof.ws_localizadoresdto loc ON(
+                    aca.identificadorunico = loc.identificadorunicoacao
+                    AND aca.exercicio = loc.exercicio
+                    AND aca.codigomomento = loc.codigomomento
+                )
+                JOIN wssof.ws_planosorcamentariosdto plo ON(
+                    aca.identificadorunico = plo.identificadorunicoacao
+                    AND aca.exercicio = plo.exercicio
+                    AND aca.codigomomento = plo.codigomomento
+                )
+            WHERE
+                aca.exercicio = '". (int)$param->exercicio. "'
+                AND aca.codigomomento = '". (int)$param->momento. "'
+        ";
+        
+        $total = $this->pegaUm($sql);
+        return $total;
     }
 }
