@@ -190,14 +190,15 @@ class Monitora_Model_Ptres extends Modelo
             SELECT
                 ptrid
             FROM monitora.ptres ptr
+                JOIN monitora.acao aca ON ptr.acaid = aca.acaid
             WHERE
-                ptr.ptrano = '{$funcional['exercicio']}'
-                AND ptr.unicod = '{$funcional['codigoorgao']}'
-                AND ptr.funcod = '{$funcional['codigofuncao']}'
-                AND ptr.sfucod = '{$funcional['codigosubfuncao']}'
-                AND ptr.prgcod = '{$funcional['codigoprograma']}'
-                AND ptr.acacod = '{$funcional['codigoacao']}'
-                AND ptr.loccod = '{$funcional['codigolocalizador']}'
+                aca.prgano = '{$funcional['exercicio']}'
+                AND aca.unicod = '{$funcional['codigoorgao']}'
+                AND aca.funcod = '{$funcional['codigofuncao']}'
+                AND aca.sfucod = '{$funcional['codigosubfuncao']}'
+                AND aca.prgcod = '{$funcional['codigoprograma']}'
+                AND aca.acacod = '{$funcional['codigoacao']}'
+                AND aca.loccod = '{$funcional['codigolocalizador']}'
                 AND ptr.plocod = '{$funcional['planoorcamentario']}'
 	    ORDER BY
 		ptr.ptrstatus
@@ -212,9 +213,9 @@ class Monitora_Model_Ptres extends Modelo
         $mPtres->acaid = $acaid;
         $mPtres->ptrano = $funcional['exercicio'];
         $mPtres->unicod = $funcional['codigoorgao'];
-        $mPtres->unicod = $funcional['codigoorgao'];
         $mPtres->funcod = $funcional['codigofuncao'];
         $mPtres->sfucod = $funcional['codigosubfuncao'];
+        $mPtres->prgcod = $funcional['codigoprograma'];
         $mPtres->acacod = $funcional['codigoacao'];
         $mPtres->loccod = $funcional['codigolocalizador'];
         $mPtres->plocod = $funcional['planoorcamentario'];
