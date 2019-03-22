@@ -345,7 +345,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <td style="border-right: 1px black solid;">
                                         <i class="fa fa-plus detalhar-linha link" data-suoid="<?php echo $dado['suoid']; ?>"></i>&nbsp;&nbsp;
                                         <span class="detalhe-subunidade" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar PAs dessa Unidade">
-                                            <?php echo $dado['unosigla'] . ' - ' . $dado['suonome'] . ' (' . $dado['suocod'] . ')'; ?>
+                                            <?php echo $dado['unosigla'] . ' - ' . $dado['suonome']; ?>
                                         </span>
                                     </td>
 
