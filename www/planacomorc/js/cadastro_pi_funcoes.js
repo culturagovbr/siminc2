@@ -1163,6 +1163,10 @@
         if(verificarFormularioNaoOrcamentario()){
 
             mudarNomesFormularioNaoOrcamentario(true);
+            // Oculta o botão de Criar Plano de Ação por Proposta.
+            $('.div-proposta-pa').hide('slow');
+            // Oculta a aba de Alterações Orçamentárias.
+            $('.aba-alteracoes').hide('slow');
             // Oculta a opções PTRES(Funcional).
             $('.div_ptres').hide('slow');
             // Exibe as Etapas
@@ -1211,6 +1215,10 @@
             $('#div_pactuacao').show('slow');
             // Oculta o campo Recursos Necessários
             $(".recursos_necessarios").hide('slow');
+            // Oculta o botão de Criar Plano de Ação por Proposta.
+            $('.div-proposta-pa').show('slow');
+            // Oculta a aba de Alterações Orçamentárias.
+            $('.aba-alteracoes').show('slow');
         }
     }
     
