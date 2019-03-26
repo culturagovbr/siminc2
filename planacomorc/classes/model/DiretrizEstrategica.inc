@@ -57,12 +57,12 @@ class Planacomorc_Model_DiretrizEstrategica extends Modelo
      */
     protected $arAtributos = array(
         'dieid' => null,
+        'obeid' => null,
         'diecod' => null,
         'dienome' => null,
         'diecadastro' => null,
         'prsano' => null,
         'diestatus' => null,
-        'obeid' => null,
     );
 
 }

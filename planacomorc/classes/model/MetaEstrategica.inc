@@ -57,12 +57,12 @@ class Planacomorc_Model_MetaEstrategica extends Modelo
      */
     protected $arAtributos = array(
         'meeid' => null,
+        'obeid' => null,
         'meecod' => null,
         'meenome' => null,
         'meecadastro' => null,
         'prsano' => null,
         'meestatus' => null,
-        'obeid' => null,
     );
 
 }

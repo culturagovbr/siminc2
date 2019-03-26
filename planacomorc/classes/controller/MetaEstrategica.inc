@@ -4,16 +4,18 @@ class Planacomorc_Controller_MetaEstrategica
 {
     public function salvar($dados)
     {
-
         try {
             $mMetaEstrategica = new Planacomorc_Model_MetaEstrategica($dados['meeid']);
+            $mMetaEstrategica->prsano = $_SESSION['exercicio'];
+            $mMetaEstrategica->obeid = $dados['obeid'];
+            $mMetaEstrategica->meecadastro = 'NOW()';
             $mMetaEstrategica->popularDadosObjeto($dados);
-            $mMetaEstrategica->salvar(null, null, []);
+            $mMetaEstrategica->salvar(null, null);
             $mMetaEstrategica->commit();
-            echo json_encode(true);
+            echo json_encode(array("return" => true));
         } catch (Exception $e) {
             $mMetaEstrategica->rollback();
-            echo json_encode(false);
+            echo json_encode(array("return" => false));
         }
     }
 
@@ -24,10 +26,10 @@ class Planacomorc_Controller_MetaEstrategica
             $mMetaEstrategica->meestatus = 'I';
             $mMetaEstrategica->salvar(null, null, []);
             $mMetaEstrategica->commit();
-            echo json_encode(true);
+            echo json_encode(array("return" => true));
         } catch (Exception $e) {
             $mMetaEstrategica->rollback();
-            echo json_encode(false);
+            echo json_encode(array("return" => false));
         }
     }
 
