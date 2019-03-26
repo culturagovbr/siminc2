@@ -223,43 +223,43 @@ class Monitora_Model_Acao extends Modelo
     {
         $sql = "
             SELECT DISTINCT
-                acao.unicod,
-                funcod,
-                sfucod,
-                prgcod,
-                prgcod || '-' || prgdsc AS programa,
-                acastatus,
-                prgano,
-                loccod,
-                acaobjetivocod,
-                acacod,
-                acaid,
-                acatitulo,
-                acao.unicod || '-' || COALESCE((
+                aca.unicod,
+                aca.funcod,
+                aca.sfucod,
+                aca.prgcod,
+                aca.prgcod || '-' || aca.prgdsc AS programa,
+                aca.acastatus,
+                aca.prgano,
+                aca.loccod,
+                aca.acaobjetivocod,
+                aca.acacod,
+                aca.acaid,
+                aca.acatitulo,
+                aca.unicod || '-' || COALESCE((
                     SELECT
                         uni.unonome
                     FROM public.unidadeorcamentaria uni
                     WHERE
                         uni.prsano = '". (int)$_SESSION['exercicio']. "'
-                        AND acao.unicod = uni.unocod
+                        AND aca.unicod = uni.unocod
                     LIMIT 1
                 ), '') AS unidade
-            FROM monitora.acao acao
+            FROM monitora.acao aca
                 JOIN public.unidadeorcamentaria uni ON(
-                    uni.unocod = acao.unicod
-                    AND uni.prsano = acao.prgano
+                    uni.unocod = aca.unicod
+                    AND uni.prsano = aca.prgano
                 )
             WHERE
-                acao.acastatus = 'A'
-                AND acao.prgano = '". (int)$_SESSION['exercicio']. "'
+                aca.acastatus = 'A'
+                AND aca.prgano = '". (int)$_SESSION['exercicio']. "'
             ORDER BY
-                acao.unicod,
-                prgcod,
-                acacod,
-                loccod,
-                acaobjetivocod,
+                aca.unicod,
+                aca.prgcod,
+                aca.acacod,
+                aca.loccod,
+                aca.acaobjetivocod,
                 unidade,
-                acatitulo
+                aca.acatitulo
             ";
 
         $resultado = $this->carregar($sql);

@@ -60,5 +60,7 @@ $momento = 9000;
 
 $mPtres = new Monitora_Model_Ptres();
 $mPtres->importarSiop($exercicio, $momento);
+$mPtres->atualizarFuncionaisSiop($exercicio, $momento);
+$mPtres->commit();
 
 ver('FIM', d);

@@ -26,6 +26,8 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 require_once APPRAIZ. 'proposta/classes/model/PrePlanoInterno.inc';
 
 if($_REQUEST['uploadAnexo']){
+    $_FILES['file']['name'] = utf8_decode($_FILES['file']['name']);
+    $_REQUEST['arqdescricao'] = utf8_decode($_REQUEST['arqdescricao']);
     $file = new FilesSimec();
     if($file->setUpload($_REQUEST['arqdescricao'], '', false)){
         echo simec_json_encode(array(
@@ -226,13 +228,13 @@ $classTab2 = $aba? 'active': NULL;
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script language="JavaScript" src="../includes/funcoes.js?v=6"></script>
-<script language="JavaScript" src="../includes/funcoesspo.js?v=6"></script>
-<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=6">
-<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=6"></script>
-<script src="js/cadastro_pi_funcoes.js?v=16"></script>
-<script src="js/cadastro_pi_validacoes.js?v=16"></script>
-<script src="js/cadastro_pi_init.js?v=16"></script>
+<script language="JavaScript" src="../includes/funcoes.js?v=8"></script>
+<script language="JavaScript" src="../includes/funcoesspo.js?v=8"></script>
+<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=8">
+<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=8"></script>
+<script src="js/cadastro_pi_funcoes.js?v=18"></script>
+<script src="js/cadastro_pi_validacoes.js?v=18"></script>
+<script src="js/cadastro_pi_init.js?v=18"></script>
 <style>
     autorizadocapital {
         display: none;
@@ -259,7 +261,7 @@ include APPRAIZ . "includes/cabecalho.inc";
         <?php echo $dadosPI['emenumero'] ? "<br /><span>Emenda: {$dadosPI['emenumero']}</span>": ''; ?>
         <?php echo $dadosPI['benid'] ? "<br /><span>Beneficiário: {$dadosPI['benid']}</span>": ''; ?>
     </div>
-    <div class="col-lg-7">
+    <div class="col-lg-7 div-proposta-pa">
         <div style="padding-top: 10px;" class="text-right">
             <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listar_propostas_pi&acao=A" title="Criar um Plano de Ação a partir de uma proposta">
                 <i class="fa fa-plus-circle"></i> Criar PA por Proposta
@@ -283,7 +285,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <li class="<?php echo $classTab1; ?>">
                         <a data-toggle="tab" href="#tab-1">Monitoramento</a>
                     </li>
-                    <li class="<?= $classTab2; ?>">
+                    <li class="<?= $classTab2; ?> aba-alteracoes">
                         <a data-toggle="tab" href="#tab-2">Alterações Orçamentárias</a>
                     </li>
                 <?php endif; ?>
