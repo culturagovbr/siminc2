@@ -4,20 +4,19 @@ class Planacomorc_Controller_SubunidadeMetaEstrategica
 {
     public function salvar($dados)
     {
-        ver($dados, d);
-        $url = 'planacomorc.php?modulo=apoio/vincular-meta-ppa&acao=A';
+        $url = 'planacomorc.php?modulo=configuracao/vincular-meta-estrategica&acao=A';
 
         try {
             $mSubunidadeMetas = new Planacomorc_Model_SubunidadeMetaEstrategica();
             $mSubunidadeMetas->excluirPorExercicio($_SESSION['exercicio']);
 
             if (isset($dados['vinculos']) && is_array($dados['vinculos'])) {
-                foreach ($dados['vinculos'] as $mppid => $vinculos) {
+                foreach ($dados['vinculos'] as $meeid => $vinculos) {
                     foreach ($vinculos as $suoid) {
-                        $mSubunidadeMetas->mppid = $mppid;
+                        $mSubunidadeMetas->meeid = $meeid;
                         $mSubunidadeMetas->suoid = $suoid;
                         $mSubunidadeMetas->salvar();
-                        $mSubunidadeMetas->smpid = null;
+                        $mSubunidadeMetas->smeid = null;
                     }
                 }
             }

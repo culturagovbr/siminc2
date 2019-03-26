@@ -1,6 +1,6 @@
 <?php
 
-$aObjetivos = (new Planacomorc_Model_ObjetivoEstrategico())->RecuperarTodos('*', ["obestatus = 'A'"], 'obecod');
+$aObjetivos = (new Planacomorc_Model_ObjetivoEstrategico())->RecuperarTodos('*', ["prsano = '".$_SESSION['exercicio']."'","obestatus = 'A'"], 'obecod');
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
 

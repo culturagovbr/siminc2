@@ -90,7 +90,7 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
                 *
             FROM {$this->stNomeTabela}
             WHERE
-                smeid IN(
+                meeid IN(
                         SELECT
                             meeid
                         FROM planacomorc.meta_estrategica
@@ -103,7 +103,7 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
 
         $dadosAgrupados = [];
         foreach($dados as $dado){
-            $dadosAgrupados[$dado['mppid']][] = $dado['suoid'];
+            $dadosAgrupados[$dado['meeid']][] = $dado['suoid'];
         }
         return $dadosAgrupados;
     }

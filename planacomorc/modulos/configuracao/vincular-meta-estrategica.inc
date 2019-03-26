@@ -37,7 +37,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <table class="table table-striped table-bordered table-hover" >
                                     <thead>
                                     <tr>
-                                        <th width="50%">Meta PPA</th>
+                                        <th width="50%">Meta Estratégica</th>
                                         <th>Unidade</th>
                                     </tr>
                                     </thead>
@@ -47,8 +47,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                                                 <td><?php echo $meta['meecod'] . ' - ' . $meta['meenome']; ?></td>
                                                 <td>
                                                     <?php
-                                                        $vinculados = !empty($aVinculos[$meta['mppid']]) ?  $aVinculos[$meta['mppid']]: [];
-                                                        echo $simec->select("vinculos[{$meta['mppid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
+                                                        $vinculados = !empty($aVinculos[$meta['meeid']]) ?  $aVinculos[$meta['meeid']]: [];
+                                                        echo $simec->select("vinculos[{$meta['meeid']}][]", null, $vinculados, $aSubUnidadeOrcamentaria, null, ['input-size'=>12]);
                                                     ?>
                                                 </td>
                                             </tr>
