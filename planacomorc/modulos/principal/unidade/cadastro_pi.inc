@@ -234,7 +234,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 <script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=8"></script>
 <script src="js/cadastro_pi_funcoes.js?v=18"></script>
 <script src="js/cadastro_pi_validacoes.js?v=18"></script>
-<script src="js/cadastro_pi_init.js?v=18"></script>
+<script src="js/cadastro_pi_init.js?v=19"></script>
 <style>
     autorizadocapital {
         display: none;
@@ -336,7 +336,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="button" name="btg" onclick="submeter('<?php echo $plicod; ?>//');" <?php echo $disabled; ?>><i class="fa fa-check"></i>&nbsp;Salvar</button>
-                                <a href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" class="btn btn-warning" id="btnVoltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                                <a class="btn btn-warning" id="btnVoltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
                             </div>
                         </div>
                     <?php }?>

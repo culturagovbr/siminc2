@@ -5,6 +5,11 @@
      * @returns VOID
      */
     function initCadastroPi(){
+
+        $('#btnVoltar').click(function () {
+            window.history.back(-1);
+        });
+
         $('#modal-historico-pi').click(function(){
             $('#historico-pi .modal-body').load(urlPagina+'&req=historico-pi&pliid='+ $('#pliid').val());
             $('#historico-pi').modal();
