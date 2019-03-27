@@ -62,6 +62,7 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
     );
 
     /**
+     * Exclui todos os vínculos do exercício.
      * @param $exercicio
      * @return string
      * @throws Exception
@@ -83,6 +84,11 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
         return $this->executar($sql);
     }
 
+    /**
+     * Busca todos os dados de acordo com as Metas Estratégicas existentes no exercício.
+     * @param $exercicio
+     * @return array
+     */
     public function recuperarPorExercicio($exercicio)
     {
         $sql = "
