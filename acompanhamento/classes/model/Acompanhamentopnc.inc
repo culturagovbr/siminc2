@@ -318,6 +318,8 @@ class Acompanhamento_Model_Acompanhamentopnc extends Modelo
                     AND sic.suoid IS NULL
                     AND mpn.mpnid = ". (int)$this->mpnid. "
                     AND ipn.prsano = '". (int)$uo->prsano. "'
+                ORDER BY
+                    4 ASC
         ";
 //ver($sql, d);
         $listaIndicadoresPnc = $this->carregar($sql);
