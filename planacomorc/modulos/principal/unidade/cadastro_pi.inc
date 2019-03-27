@@ -50,6 +50,14 @@ $urlModulo = '?modulo=principal/unidade/cadastro_pi&acao=A&aba=1';
 # Requisições
 include_once APPRAIZ. "acompanhamento/modulos/principal/monitorar-pi-request.inc";
 
+if ($_REQUEST['carregarMetasEstrategicas']) {
+    echo $simec->select('meeid', 'Meta Estratégica', $dadosPI['meeid'], (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo(['meecod', 'meenome'], ["obeid = '".$_REQUEST['obeid']."'"], 'meecod'));
+    die();
+}
+if ($_REQUEST['carregarDiretrizEstrategicas']) {
+    echo $simec->select('dieid', 'Diretriz Estratégica', $dadosPI['dieid'], (new Planacomorc_Model_DiretrizEstrategica())->recuperarSqlCombo(['diecod', 'dienome'], ["obeid = '".$_REQUEST['obeid']."'"], 'diecod'));
+    die();
+}
 if ($_REQUEST['carregarComboUG']) {
     echo carregarComboUG($_REQUEST['unicod']);
     die();
@@ -228,13 +236,13 @@ $classTab2 = $aba? 'active': NULL;
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script language="JavaScript" src="../includes/funcoes.js?v=8"></script>
-<script language="JavaScript" src="../includes/funcoesspo.js?v=8"></script>
-<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=8">
-<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=8"></script>
-<script src="js/cadastro_pi_funcoes.js?v=18"></script>
-<script src="js/cadastro_pi_validacoes.js?v=18"></script>
-<script src="js/cadastro_pi_init.js?v=18"></script>
+<script language="JavaScript" src="../includes/funcoes.js?v=9"></script>
+<script language="JavaScript" src="../includes/funcoesspo.js?v=9"></script>
+<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=9">
+<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=9"></script>
+<script src="js/cadastro_pi_funcoes.js?v=19"></script>
+<script src="js/cadastro_pi_validacoes.js?v=19"></script>
+<script src="js/cadastro_pi_init.js?v=19"></script>
 <style>
     autorizadocapital {
         display: none;

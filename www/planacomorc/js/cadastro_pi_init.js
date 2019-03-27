@@ -91,7 +91,13 @@
             carregarMetasPPA($(this).val(), null, $('#ungcod').val(), delegacao, null);
             carregarIniciativaPPA($(this).val(), $('#ungcod').val());
         });
-        
+
+        // Evento ao mudar opção de Objetivos Estratégicos.
+        $('#obeid').change(function(){
+            carregarMetasEstrategicas($(this).val(), null);
+            carregarDiretrizEstrategica($(this).val(), null);
+        });
+
         $('#delegacao').change(function(){    
             var mppid = $('#mppid').val();
             carregarMetasPPA($('#oppid').val(), null, $('#ungcod').val(), $(this).val(), mppid);
