@@ -94,8 +94,10 @@
 
         // Evento ao mudar opção de Objetivos Estratégicos.
         $('#obeid').change(function(){
-            carregarMetasEstrategicas($(this).val(), null);
-            carregarDiretrizEstrategica($(this).val(), null);
+            if($(this).val() >= 1 ){
+                carregarMetasEstrategicas($(this).val(), null);
+                carregarDiretrizEstrategica($(this).val(), null);
+            }
         });
 
         $('#delegacao').change(function(){    
