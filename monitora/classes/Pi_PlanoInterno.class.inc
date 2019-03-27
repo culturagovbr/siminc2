@@ -1436,9 +1436,18 @@ class Pi_PlanoInterno extends Modelo
 			WHERE
 				amd.acoid = ac.acoid
 		)::TEXT, '{', ''), '}', ''), '\"', '')) AS medidas,
-		ac.acoprovidencias AS providencias
+		ac.acoprovidencias AS providencias,
+				obe.obecod,
+                obe.obenome,
+                mee.meecod,
+                mee.meenome,
+                die.diecod,
+                die.dienome
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+                LEFT JOIN planacomorc.objetivo_estrategico AS obe ON pic.obeid = obe.obeid
+                LEFT JOIN planacomorc.meta_estrategica AS mee ON pic.meeid = mee.meeid
+                LEFT JOIN planacomorc.diretriz_estrategica AS die ON pic.dieid = die.dieid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
                     suo.suocod = pli.ungcod 
                     AND suo.unocod = pli.unicod 
