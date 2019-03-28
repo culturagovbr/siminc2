@@ -18,6 +18,8 @@ switch ($_REQUEST['req']) {
         $cObjetivoEstrategico->montarListagemMetaEstrategica($_REQUEST['obeid']);
         die;
     case 'salvar-meta-estrategica':
+        $_REQUEST['meecod'] = utf8_decode($_REQUEST['meecod']);
+        $_REQUEST['meenome'] = utf8_decode($_REQUEST['meenome']);
         $cMetaEstrategica->salvar($_REQUEST);
         die;
     case 'excluir-meta-estrategica':
@@ -30,6 +32,8 @@ switch ($_REQUEST['req']) {
         $cObjetivoEstrategico->montarListagemDiretrizEstrategica($_REQUEST['obeid']);
         die;
     case 'salvar-diretriz-estrategica':
+        $_REQUEST['diecod'] = utf8_decode($_REQUEST['diecod']);
+        $_REQUEST['dienome'] = utf8_decode($_REQUEST['dienome']);
         $cDiretrizEstrategica->salvar($_REQUEST);
         die;
     case 'excluir-diretriz-estrategica':

@@ -1403,6 +1403,9 @@ function salvarPiComplemento($pliid, $dados)
 //ver($modelPiComplemento,d);
     $modelPiComplemento->salvar(NULL, NULL,
         array(
+                'obeid',
+                'meeid',
+                'dieid',
                 'esfid',
                 'prgid',
                 'ptaid',
