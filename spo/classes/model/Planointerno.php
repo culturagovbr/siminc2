@@ -170,7 +170,10 @@ class Spo_Model_Planointerno extends Modelo
                 ed.esddsc AS situacao,
                 ppr.pprnome AS produto,
                 pum.pumdescricao AS unidademedida,
-                pc.picquantidade AS quantidade
+                pc.picquantidade AS quantidade,
+                CASE
+                    WHEN pd.pliid IS NOT NULL THEN TRUE ELSE FALSE
+                END AS delegado
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pc USING(pliid)
                 JOIN monitora.pi_unidade_medida AS pum ON(
@@ -193,6 +196,8 @@ class Spo_Model_Planointerno extends Modelo
                 )
                 LEFT JOIN workflow.documento wd ON(pli.docid = wd.docid)
                 LEFT JOIN workflow.estadodocumento ed ON(wd.esdid = ed.esdid)
+                LEFT JOIN planacomorc.pi_delegacao pd ON(pli.pliid = pd.pliid)
+		        LEFT JOIN public.vw_subunidadeorcamentaria pdsuo ON(pd.suoid = pdsuo.suoid)
             WHERE
                 pli.pliano = '". (int)$filtros->exercicio. "'
                 AND (pli.plistatus = 'A' OR (pli.plistatus = 'I' AND ed.esdid = ". (int)ESD_PI_CANCELADO. "))

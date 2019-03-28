@@ -407,7 +407,7 @@
                 switch(currentIndex) {
                     case numeroPassoIndicadores:
                         if(newIndex === numeroPassoAtividades){
-                            permitirAvancarPasso = verificarPreenchimentoIndicadoresAtual();
+                            permitirAvancarPasso = true;
                             if(permitirAvancarPasso === false){
                                 swal('', 'Por favor, preencha pelo menos os indicadores do ano de '+ $('#chosen-exercicio').val()+ '.', 'warning');
                             }
