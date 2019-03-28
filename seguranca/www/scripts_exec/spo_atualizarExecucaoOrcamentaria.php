@@ -33,16 +33,16 @@ try{
     $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
     $cImportaDadosSiop->exercicio = date('Y');
     echo '1)Atualizando, dados! | ';
-    $cImportaDadosSiop->AtualizarDados();
+    $cImportaDadosSiop->atualizarExecucaoFuncionais();
     echo '2)Montando email para ser enviado! | ';
-    $cImportaDadosSiop->AtualizarDotacao();
+    $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
     echo '3)Atualizando Dotações Iniciais! | ';
-    $cImportaDadosSiop->AtualizarDotacaoInicial();
+    $cImportaDadosSiop->atualizarDotacaoInicialFuncionais();
     echo '4)Rotina Finalizada!';
 } catch (Exception $e){
     # Buscando Destinatários
     $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-    $listaDestinatarios = $mImportaDadosSiop->RetornaEmailsSuperUsuarios();
+    $listaDestinatarios = $mImportaDadosSiop->buscarListaEmailsSuperUsuarios();
     echo '1)Buscando Destinatários! | ';
     # Atribuindo mensagem de assunto do e-mail
     $assunto = '[SIMINC2] Erro nas Alterações de Dotação';

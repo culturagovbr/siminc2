@@ -17,7 +17,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
     public $sqls = [];
     public $destinatarios = '';
     
-    public function AtualizarDados(){
+    public function atualizarExecucaoFuncionais($consultarWebservice = TRUE){
         ini_set('display_errors', 1);
         ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
         set_time_limit(0);
@@ -28,32 +28,17 @@ class Planacomorc_Controller_ImportaDadosSiop{
         $this->pagina = 0;
         $this->filtro = array('anoExercicio' => $this->exercicio);
 
-        $mImportaDadosSiop->excluiDadosWsOrcamentario($this->exercicio);
-        $this->ConsultaDadosWs();
-        $mImportaDadosSiop->excluiDadosWsOrcamentarioOrgaoAnterior();
-        $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
-        $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
+        if($consultarWebservice === TRUE){
+            $mImportaDadosSiop->excluirWsExecucaoOrcamentaria($this->exercicio);
+            $this->consultarExecucaoOrcamentariaSIOP();
+        }
+        $mImportaDadosSiop->excluirWsExecucaoOrcamentariaPorOrgao(42);
+        $mImportaDadosSiop->excluirSiopExecucao($this->exercicio);
+        $mImportaDadosSiop->inserirSiopExecucao($this->exercicio);
         $mImportaDadosSiop->commit();
     }
     
-    public function AtualizarDadosSiminc(){
-        ini_set('display_errors', 1);
-        ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-        set_time_limit(0);
-        ini_set("memory_limit", "2048M");
-        session_start();
-        
-        $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-        $this->pagina = 0;
-        $this->filtro = array('anoExercicio' => $this->exercicio);
-
-        $mImportaDadosSiop->excluiDadosWsOrcamentarioOrgaoAnterior();
-        $mImportaDadosSiop->excluiDadosSiopExecucao($this->exercicio);
-        $mImportaDadosSiop->insereDadosSiopExecucao($this->exercicio);
-        $mImportaDadosSiop->commit();
-    }
-    
-    private function ConsultaDadosWs(){
+    private function consultarExecucaoOrcamentariaSIOP(){
         $continuar = TRUE;
         do{
             # Busca dados de Quantitativo operação consultarExecucaoOrcamentaria do webservice do SIOP
@@ -82,40 +67,40 @@ class Planacomorc_Controller_ImportaDadosSiop{
         } while ($continuar);
     }
 
-    public function AtualizarDotacao(){
+    public function atualizarLimitesFuncionaisSubunidades(){
         $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-        $listaResultadoFuncionaisSIOP = $mImportaDadosSiop->RetornaFuncionais($this->exercicio);
+        $listaResultadoFuncionaisSIOP = $mImportaDadosSiop->buscarDotacoesFuncionaisSIOP($this->exercicio);
         $listaFuncionaisSiop = [];
         foreach($listaResultadoFuncionaisSIOP as $funcionalSIOP){
             $listaFuncionaisSiop[$funcionalSIOP['funcional']][$funcionalSIOP['categoriaeconomica']] = $funcionalSIOP['dotatual'];
         }
 
-        $listaResultadoFuncionaisSubunidadeSiminc = $mImportaDadosSiop->RetornaDadosSiminc($this->exercicio);
+        $listaResultadoFuncionaisSubunidadeSiminc = $mImportaDadosSiop->buscarLimitesFuncionaisSubunidades($this->exercicio);
         $listaFuncionaisSubunidadeSiminc = [];
         foreach($listaResultadoFuncionaisSubunidadeSiminc as $funcionalSubunidadeSiminc){
             $listaFuncionaisSubunidadeSiminc[$funcionalSubunidadeSiminc['funcional']][] = $funcionalSubunidadeSiminc;
         }
-        $this->GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop);
+        $this->montarListaFuncionaisComAlteracoesECompartilhadas($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop);
 
-        $dadosProvisionado = $mImportaDadosSiop->RetornaDadosProvisionados($this->exercicio);
-        $this->GeraTabelaProvisionado($dadosProvisionado);
+        $dadosProvisionado = $mImportaDadosSiop->buscarPaComProvisionadoMaiorPrevisto($this->exercicio);
+        $this->montarListaPAProvisionadoMaiorPrevisto($dadosProvisionado);
 
-        $listaDivergenciaPlanejada = $mImportaDadosSiop->RetornaDivergenciaPlanejado($this->exercicio);
-        $this->GeraTabelaDivergenciaPlanejado($listaDivergenciaPlanejada);
+        $listaDivergenciaPlanejada = $mImportaDadosSiop->buscarFuncionaisSemValorPlanejado($this->exercicio);
+        $this->montarListaFuncionalSemPA($listaDivergenciaPlanejada);
         if($this->boAlteracao){$this->corpoEmailV3 .= $this->htmlTabela1;}
         if($this->boAlteracaoCompartilhada){$this->corpoEmailV3 .= $this->htmlTabela2;}
         if($this->boAlteracaoProvisionado){$this->corpoEmailV3 .= $this->htmlTabela3;}
         if($this->boDivergenciaPlanejada){$this->corpoEmailV3 .= $this->htmlTabela4;}
-        $this->destinatarios = $mImportaDadosSiop->RetornaEmailsSuperUsuarios();
-        $this->EnviaEmail();
+        $this->destinatarios = $mImportaDadosSiop->buscarListaEmailsSuperUsuarios();
+        $this->montarRelatórioEmail();
     }
     
-    public function AtualizarDotacaoInicial(){
+    public function atualizarDotacaoInicialFuncionais(){
         $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
-        $mImportaDadosSiop->AtualizarDotacaoInicial();
+        $mImportaDadosSiop->atualizarDotacoesIniciaisFuncionais($this->exercicio);
         $mImportaDadosSiop->commit();
     }
-    private function GeraTabelasDivergentes($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop){
+    private function montarListaFuncionaisComAlteracoesECompartilhadas($listaFuncionaisSubunidadeSiminc, $listaFuncionaisSiop){
         $this->sqls = [];
         $this->htmlTabela1 = "
         <h3>Foram realizadas alterações na Dotação das seguintes unidades:</h3>
@@ -280,9 +265,9 @@ class Planacomorc_Controller_ImportaDadosSiop{
         $this->htmlTabela2 .= "</tbody></table>";        
     }
     
-    private function GeraTabelaProvisionado($dadosProvisionado){
+    private function montarListaPAProvisionadoMaiorPrevisto($dadosProvisionado){
         $this->htmlTabela3 = "
-        <h3>Lista de PIs com valor Provisionado maior do que o valor Previsto:</h3>
+        <h3>Lista de PAs com valor Provisionado maior do que o valor Previsto:</h3>
         <style>
                /* classe mid para alterar a formatação das colunas para o meio/centro */
             .mid{
@@ -294,7 +279,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
             <tr>
                 <th>Funcional</th>
                 <th style='width: 75px'>Unidade</th>
-                <th>PI</th>
+                <th>PA</th>
                 <th>Título</th>
                 <th style='text-align: right; color: green;'>Previsto</th>
                 <th style='text-align: right; color: red;'>Provisionado</th>
@@ -324,9 +309,9 @@ class Planacomorc_Controller_ImportaDadosSiop{
         $this->htmlTabela3 .= "</tbody></table>";
     }
     
-    private function GeraTabelaDivergenciaPlanejado($listaDivergenciaPlanejada){
+    private function montarListaFuncionalSemPA($listaDivergenciaPlanejada){
         $this->htmlTabela4 = "
-            <h3>Valor sem PI por Funcional:</h3>
+            <h3>Valor sem PA por Funcional:</h3>
             <style>
                 /* classe mid para alterar a formatação das colunas para o meio/centro */
                 .mid {
@@ -362,7 +347,7 @@ class Planacomorc_Controller_ImportaDadosSiop{
         $this->htmlTabela4 .= "</tbody></table>";
     }
     
-    private function EnviaEmail(){
+    private function montarRelatórioEmail(){
         $mImportaDadosSiop = new Planacomorc_Model_ImportaDadosSiop();
         if($this->corpoEmailV3){
             $this->corpoEmailV3 = "<h2 style='color: red; text-align: center'>Relatório de Alterações e Divergências</h2>" . $this->corpoEmailV3;

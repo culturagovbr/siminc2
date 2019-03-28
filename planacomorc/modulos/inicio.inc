@@ -120,9 +120,9 @@ switch ($_REQUEST['req']) {
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
-            $cImportaDadosSiop->AtualizarDadosSiminc();
-            $cImportaDadosSiop->AtualizarDotacao();
-            $cImportaDadosSiop->AtualizarDotacaoInicial();
+            $cImportaDadosSiop->atualizarExecucaoFuncionais(FALSE);
+            $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
+            $cImportaDadosSiop->atualizarDotacaoInicialFuncionais();
             
             echo simec_json_encode(array(
                 'success' => 1,
@@ -139,9 +139,9 @@ switch ($_REQUEST['req']) {
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
-            $cImportaDadosSiop->AtualizarDados();
-            $cImportaDadosSiop->AtualizarDotacao();
-            $cImportaDadosSiop->AtualizarDotacaoInicial();
+            $cImportaDadosSiop->atualizarExecucaoFuncionais(FALSE);
+            $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
+            $cImportaDadosSiop->atualizarDotacaoInicialFuncionais();
             
             echo simec_json_encode(array(
                 'success' => 1,
