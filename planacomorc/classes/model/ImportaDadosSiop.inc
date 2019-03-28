@@ -47,22 +47,22 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
      */
     protected $arAtributos = array();
     
-    public function excluiDadosWsOrcamentario($exercicio){
+    public function excluirWsExecucaoOrcamentaria($exercicio){
         $sql = "DELETE FROM wssof.ws_execucaoorcamentariadto WHERE anoexercicio = ". (int)$exercicio;
         $this->executar($sql);
     }
     
-    public function excluiDadosWsOrcamentarioOrgaoAnterior(){
-        $sql = "DELETE FROM wssof.ws_execucaoorcamentariadto WHERE anoexercicio::NUMERIC >= 2019 AND unidadeorcamentaria ILIKE '42%';";
+    public function excluirWsExecucaoOrcamentariaPorOrgao($preFixoCodigoOrgao){
+        $sql = "DELETE FROM wssof.ws_execucaoorcamentariadto WHERE anoexercicio::NUMERIC >= 2019 AND unidadeorcamentaria ILIKE '". (int)$preFixoCodigoOrgao. "%'";
         $this->executar($sql);
     }
     
-    public function excluiDadosSiopExecucao($exercicio){
+    public function excluirSiopExecucao($exercicio){
         $sql = "DELETE FROM spo.siopexecucao WHERE exercicio = '". (int)$exercicio. "'";
         $this->executar($sql);
     }
     
-    public function insereDadosSiopExecucao($exercicio){
+    public function inserirSiopExecucao($exercicio){
         $sql = "
             INSERT INTO spo.siopexecucao(
                 exercicio,
@@ -120,60 +120,65 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         $this->executar($sql);
     }
     
-    public function RetornaFuncionais($exercicio){
+    public function buscarDotacoesFuncionaisSIOP($exercicio){
         $sql = "
             SELECT
                 exe.unidadeorcamentaria,
+                exe.funcao,
+                exe.subfuncao,
                 exe.programa,
                 exe.acao,
                 exe.localizador,
                 exe.planoorcamentario,
-                exe.anoexercicio,
-                exe.anoreferencia,
                 exe.categoriaeconomica,
-                exe.unidadeorcamentaria || '.' || exe.programa || '.' || exe.acao || '.' || exe.localizador || '.' || exe.planoorcamentario AS funcional,
-                sum(exe.dotacaoinicial::numeric) AS dotacaoinicial,
-                sum(exe.dotatual::numeric) AS dotatual,
-                sum(exe.dotinicialsiafi::numeric) AS dotinicialsiafi,
-                sum(exe.dotacaoantecipada::numeric) AS dotacaoantecipada
+                exe.unidadeorcamentaria || '.' || exe.funcao || '.' || exe.subfuncao || '.' || exe.programa || '.' || exe.acao || '.' || exe.localizador || '.' || exe.planoorcamentario AS funcional,
+                SUM(exe.dotacaoinicial::numeric) AS dotacaoinicial,
+                SUM(exe.dotatual::numeric) AS dotatual,
+                SUM(exe.dotinicialsiafi::numeric) AS dotinicialsiafi,
+                SUM(exe.dotacaoantecipada::numeric) AS dotacaoantecipada
             FROM wssof.ws_execucaoorcamentariadto AS exe
             WHERE
                 exe.anoexercicio = '". (int)$exercicio. "'
                 AND exe.anoreferencia = '". (int)$exercicio. "'
             GROUP BY
                 exe.unidadeorcamentaria,
+                exe.funcao,
+                exe.subfuncao,
                 exe.programa,
                 exe.acao,
                 exe.localizador,
                 exe.planoorcamentario,
-                exe.anoexercicio,
-                exe.anoreferencia,
                 exe.categoriaeconomica
             ORDER BY
-                funcional
+                exe.unidadeorcamentaria,
+                exe.programa,
+                exe.acao,
+                exe.localizador,
+                exe.planoorcamentario,
+                exe.categoriaeconomica
         ";
 
         $dados = $this->carregar($sql);
         return $dados ? $dados : [];        
     }
     
-    public function RetornaDadosSiminc($exercicio){
+    public function buscarLimitesFuncionaisSubunidades($exercicio){
         $sql = "
             SELECT
-                psu.psuid,
-                ptr.ptrid,
                 ptr.unicod,
-                psu.suoid,
-                coalesce(psu.ptrdotacaocapital, 0) AS ptrdotacaocapital,
-                coalesce(psu.ptrdotacaocusteio, 0) AS ptrdotacaocusteio,
-                ptr.funcional AS funcionalptres,
-                ptr.unicod || '.' || ptr.prgcod || '.' || ptr.acacod || '.' || ptr.loccod || '.' || ptr.plocod  AS funcional,
                 suo.unocod,
                 suo.unosigla,
                 suo.unonome,
                 suo.suocod,
                 suo.suosigla,
-                suo.suonome
+                suo.suonome,
+                psu.suoid,
+                psu.psuid,
+                ptr.ptrid,
+                ptr.funcional AS funcionalptres,
+                ptr.unicod || '.' || ptr.funcod || '.' || ptr.sfucod || '.' || ptr.prgcod || '.' || ptr.acacod || '.' || ptr.loccod || '.' || ptr.plocod  AS funcional,
+                COALESCE(psu.ptrdotacaocapital, 0) AS ptrdotacaocapital,
+                COALESCE(psu.ptrdotacaocusteio, 0) AS ptrdotacaocusteio
             FROM spo.ptressubunidade AS psu
                 JOIN monitora.vw_ptres AS ptr ON ptr.ptrid = psu.ptrid
                 JOIN public.vw_subunidadeorcamentaria AS suo ON suo.suoid = psu.suoid
@@ -189,7 +194,7 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         return $dados ? $dados : [];        
     }
     
-    public function RetornaDadosProvisionados($exercicio){
+    public function buscarPaComProvisionadoMaiorPrevisto($exercicio){
         $sql = "
             SELECT
                 pli.plicod,
@@ -221,7 +226,7 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         return $dados ? $dados : [];        
     }
     
-    public function RetornaDivergenciaPlanejado($exercicio){
+    public function buscarFuncionaisSemValorPlanejado($exercicio){
         $sql = "
             SELECT
                 ptr.ptrid,
@@ -287,7 +292,7 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         return $listaResultado? $listaResultado: [];        
     }
     
-    public function RetornaEmailsSuperUsuarios(){
+    public function buscarListaEmailsSuperUsuarios(){
         $sql = "
             SELECT DISTINCT
                 usu.usucpf,
@@ -312,24 +317,47 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
         return $this->carregar($sql);        
     }
 
-    public function AtualizarDotacaoInicial(){
-        $sql = " update monitora.ptres
-                    set ptrdotacaoinicialcapital = x.ptrdotacaoinicialcapital,
-                        ptrdotacaoinicialcusteio = x.ptrdotacaoinicialcusteio
-                 from 
-                 (select sum(case when exe.categoriaeconomica='4' then exe.dotacaoinicial::numeric else 0 end) as ptrdotacaoinicialcapital,
-                        sum(case when exe.categoriaeconomica='3' then exe.dotacaoinicial::numeric else 0 end) as ptrdotacaoinicialcusteio,
-                        ptres.ptrid
-                   from wssof.ws_execucaoorcamentariadto exe, monitora.ptres ptres
-                  where exe.acao = ptres.acacod
-                    and exe.planoorcamentario = ptres.plocod
-                    and exe.unidadeorcamentaria = ptres.unicod
-                    and exe.programa = ptres.prgcod
-                    and exe.anoexercicio::integer = ptres.ptrano::integer
-                    and exe.localizador = ptres.loccod
-                  group by ptres.ptrid) as x
-                  where monitora.ptres.ptrid = x.ptrid";
+    public function atualizarDotacoesIniciaisFuncionais($exercicio){
+        $sql = "
+            UPDATE monitora.ptres SET
+                ptrdotacaoinicialcapital = x.ptrdotacaoinicialcapital,
+                ptrdotacaoinicialcusteio = x.ptrdotacaoinicialcusteio
+            FROM (
+                SELECT
+                    SUM(
+                        CASE WHEN exe.categoriaeconomica = '4' THEN
+                            exe.dotacaoinicial::NUMERIC
+                        ELSE
+                            0
+                        END
+                    ) AS ptrdotacaoinicialcapital,
+                    SUM(
+                        CASE WHEN exe.categoriaeconomica = '3' THEN
+                            exe.dotacaoinicial::NUMERIC
+                        ELSE
+                            0
+                        END
+                    ) AS ptrdotacaoinicialcusteio,
+                    ptres.ptrid
+                FROM wssof.ws_execucaoorcamentariadto exe,
+                    monitora.vw_ptres ptres
+                WHERE
+                    exe.anoexercicio::INTEGER = ptres.ptrano::INTEGER
+                    AND exe.unidadeorcamentaria = ptres.unicod
+                    AND exe.funcao = ptres.funcod
+                    AND exe.subfuncao = ptres.sfucod
+                    AND exe.programa = ptres.prgcod
+                    AND exe.acao = ptres.acacod
+                    AND exe.localizador = ptres.loccod
+                    AND exe.planoorcamentario = ptres.plocod
+                GROUP BY
+                    ptres.ptrid
+            ) AS x
+            WHERE
+                monitora.ptres.ptrano = '". (int)$exercicio. "'
+                AND monitora.ptres.ptrid = x.ptrid
+        ";
         $this->executar($sql);
     }
-}//end Class
-?>
+}
+
