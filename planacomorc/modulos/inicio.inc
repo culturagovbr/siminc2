@@ -139,7 +139,7 @@ switch ($_REQUEST['req']) {
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
-            $cImportaDadosSiop->atualizarExecucaoFuncionais(FALSE);
+            $cImportaDadosSiop->atualizarExecucaoFuncionais();
             $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
             $cImportaDadosSiop->atualizarDotacaoInicialFuncionais();
             
