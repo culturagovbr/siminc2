@@ -31,7 +31,8 @@ $cabecalho = [
 
     'Valor Provisionado', 'Valor Empenhado', 'Valor Liquidado', 'Valor Pago',
     
-    'Executado', 'Análise Situacional', 'Classificação', 'Medidas a serem adotadas', 'Detalhamento das providências a serem adotadas'
+    'Executado', 'Análise Situacional', 'Classificação', 'Medidas a serem adotadas', 'Detalhamento das providências a serem adotadas', 'Código do Objetivo Estratégico', 'Objetivo Estratégico',
+    'Código da Meta Estratégica', 'Meta Estratégica', 'Código da Diretriz Estratégica', 'Diretriz Estratégica'
 ];
 
 # Lista de colunas que terão formatação de moeda.
