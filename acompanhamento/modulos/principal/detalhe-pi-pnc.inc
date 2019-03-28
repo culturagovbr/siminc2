@@ -35,22 +35,22 @@
                     </td>
                     <td><?php echo $pi['plicod']; ?></td>
                     <td><?php echo $pi['plititulo']; ?></td>
-                    <td class="text-right"><?php echo number_format($pi['previsto'], 2, ',', '.'); ?></td>
-                    <td class="text-right"><?php echo number_format($pi['autorizado'], 2, ',', '.'); ?></td>
-                    <td class="text-right"><?php echo number_format($pi['empenhado'], 2, ',', '.'); ?></td>
-                    <td class="text-right"><?php echo number_format($pi['liquidado'], 2, ',', '.'); ?></td>
-                    <td class="text-right"><?php echo number_format($pi['pago'], 2, ',', '.'); ?></td>
+                    <td class="text-right"><?= number_format($pi['previsto'], 0, ',', '.'); ?></td>
+                    <td class="text-right"><?= number_format($pi['autorizado'], 0, ',', '.'); ?></td>
+                    <td class="text-right"><?= number_format($pi['empenhado'], 0, ',', '.'); ?></td>
+                    <td class="text-right"><?= number_format($pi['liquidado'], 0, ',', '.'); ?></td>
+                    <td class="text-right"><?= number_format($pi['pago'], 0, ',', '.'); ?></td>
                 </tr>
             <?php } ?>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="3">TOTAL</th>
-                    <th class="text-right"><?php echo number_format($totais['previsto'], 2, ',', '.'); ?></th>
-                    <th class="text-right"><?php echo number_format($totais['autorizado'], 2, ',', '.'); ?></th>
-                    <th class="text-right"><?php echo number_format($totais['empenhado'], 2, ',', '.'); ?></th>
-                    <th class="text-right"><?php echo number_format($totais['liquidado'], 2, ',', '.'); ?></th>
-                    <th class="text-right"><?php echo number_format($totais['pago'], 2, ',', '.'); ?></th>
+                    <th class="text-right"><?= number_format($totais['previsto'], 0, ',', '.'); ?></th>
+                    <th class="text-right"><?= number_format($totais['autorizado'], 0, ',', '.'); ?></th>
+                    <th class="text-right"><?= number_format($totais['empenhado'], 0, ',', '.'); ?></th>
+                    <th class="text-right"><?= number_format($totais['liquidado'], 0, ',', '.'); ?></th>
+                    <th class="text-right"><?= number_format($totais['pago'], 0, ',', '.'); ?></th>
                 </tr>
             </tfoot>
         </table>

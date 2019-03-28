@@ -255,10 +255,10 @@
                                                         <?php echo number_format($valoresOrcamentarios['qtd'], 0, ',', '.'); ?>
                                                     </a>
                                                 </td>
-                                                <td><a class="a_grafico" href="#" title="Exibir Grafico de Planos Internos">R$ <?php echo number_format($valoresOrcamentarios['previsto'], 2, ',', '.'); ?></a></td>
-                                                <td><a class="a_grafico" href="#" title="Exibir Grafico de Planos Internos">R$ <?php echo number_format($valoresOrcamentarios['empenhado'], 2, ',', '.'); ?></a></td>
-                                                <td><a class="a_grafico" href="#" title="Exibir Grafico de Planos Internos">R$ <?php echo number_format($valoresOrcamentarios['liquidado'], 2, ',', '.'); ?></a></td>
-                                                <td><a class="a_grafico" href="#" title="Exibir Grafico de Planos Internos">R$ <?php echo number_format($valoresOrcamentarios['pago'], 2, ',', '.'); ?></a></td>
+                                                <td><a class="a_grafico" href="#" title="Exibir Grafico de Planos Internos">R$ <?= number_format($valoresOrcamentarios['previsto'], 0, ',', '.'); ?></a></td>
+                                                <td><a class="a_grafico" href="#" title="Exibir Grafico de Planos Internos">R$ <?= number_format($valoresOrcamentarios['empenhado'], 0, ',', '.'); ?></a></td>
+                                                <td><a class="a_grafico" href="#" title="Exibir Grafico de Planos Internos">R$ <?= number_format($valoresOrcamentarios['liquidado'], 0, ',', '.'); ?></a></td>
+                                                <td><a class="a_grafico" href="#" title="Exibir Grafico de Planos Internos">R$ <?= number_format($valoresOrcamentarios['pago'], 0, ',', '.'); ?></a></td>
                                             </tr>
                                         </tbody>
                                     <?php else: ?>
