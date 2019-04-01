@@ -5,7 +5,7 @@
 
     <?php
         echo $simec->input('meecod', 'Código', $mMetaEstrategica->meecod, ['required', 'class' => 'upper-text', 'maxlength' => 4]);
-        echo $simec->input('meenome', 'Nome', $mMetaEstrategica->meenome, ['required', 'maxlength' => 125]);
+        echo $simec->input('meenome', 'Nome', $mMetaEstrategica->meenome, ['required', 'maxlength' => 200]);
     ?>
 
     <div class="form-group">

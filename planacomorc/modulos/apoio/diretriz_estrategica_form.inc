@@ -5,7 +5,7 @@
 
     <?php
         echo $simec->input('diecod', 'Código', $mDiretrizEstrategica->diecod, ['required', 'class' => 'upper-text', 'maxlength' => 4]);
-        echo $simec->input('dienome', 'Nome', $mDiretrizEstrategica->dienome, ['required', 'maxlength' => 125]);
+        echo $simec->input('dienome', 'Nome', $mDiretrizEstrategica->dienome, ['required', 'maxlength' => 200]);
     ?>
 
     <div class="form-group">
