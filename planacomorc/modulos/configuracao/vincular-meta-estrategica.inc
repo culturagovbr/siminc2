@@ -9,7 +9,7 @@ switch ($_REQUEST['req']){
 
 $aMetasEstrategicas = (new Planacomorc_Model_MetaEstrategica())->recuperarTodos('*', ["prsano = '{$_SESSION['exercicio']}'", "meestatus = 'A'"], 'meecod');
 
-$aSubUnidadeOrcamentaria = simec_preparar_array((new Public_Model_SubUnidadeOrcamentaria())->recuperarTodos("suoid AS codigo, unosigla || ' - ' || suonome || '(' || suocod || ')' AS descricao", ["prsano = '{$_SESSION['exercicio']}'", "suostatus = 'A'"], 'descricao'));
+$aSubUnidadeOrcamentaria = simec_preparar_array((new Public_Model_SubUnidadeOrcamentaria())->recuperarTodos("suoid AS codigo, unosigla || ' - ' || suonome || '( ' || suocod || ' )' AS descricao", ["prsano = '{$_SESSION['exercicio']}'", "suostatus = 'A'"], 'descricao'));
 $aVinculos = (new Planacomorc_Model_SubunidadeMetaEstrategica())->recuperarPorExercicio($_SESSION['exercicio']);
 
 include APPRAIZ . "includes/cabecalho.inc";
