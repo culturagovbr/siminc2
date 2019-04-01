@@ -1,10 +1,11 @@
 <?php
 
-//include APPRAIZ.'acompanhamento/classes/controller/ConsultaRelatorio.inc';
-
 $tipoRelatorio = $_REQUEST['tipo_relatorio'] ? $_REQUEST['tipo_relatorio'] : array();
 $norelatorio = '';
-$listaSubUnidades = buscarSuoidUsuario((object) array('usucpf' => $_SESSION['usucpf']));
+$listaSubUnidades = buscarSuoidUsuario((object) array(
+    'exercicio' => $_SESSION['exercicio'],
+    'usucpf' => $_SESSION['usucpf']
+));
 
 if(isset($_REQUEST['req'])){
     switch ($_REQUEST['req']) {
@@ -113,6 +114,7 @@ if(isset($_REQUEST['req'])){
             $norelatorio = $retConsultaRelatorio['consulta'];          
     }
 }
+
 if ($_REQUEST['crid']){
     $cConsultaRelatorio = new Acompanhamento_Controller_ConsultaRelatorio();
     $retConsultaRelatorio = $cConsultaRelatorio->consultarRelatorio($_REQUEST['crid']);
@@ -123,6 +125,7 @@ if ($_REQUEST['crid']){
         $$key = $value;
     }
 }
+
 include APPRAIZ . 'includes/AgrupadorBootstrap.php';
 
 /**
@@ -426,4 +429,5 @@ include APPRAIZ . "includes/cabecalho.inc";
         });
 
     }
+
 </script>

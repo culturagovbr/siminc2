@@ -7,14 +7,15 @@
     include_once APPRAIZ . 'includes/relatorio-agrupador/tabela.php';
 
     # Busca SQL com filtros pra realizar a consulta
-
     $filtro = array(
-                    'prsano'  => $_REQUEST['filtro']['prsano'],
-                    'suoid'   => $_REQUEST['filtro']['suoid'],
-                    'eqdid'   => $_REQUEST['filtro']['eqdid'],
-                    'irpcod'  => $_REQUEST['filtro']['irpcod'],
-                    'tpdid'   => $_REQUEST['filtro']['tpdid']);
-
+        'prsano'            => $_REQUEST['filtro']['prsano'],
+        'suoid'             => $_REQUEST['filtro']['suoid'],
+        'listaSuoidUsuario' => $listaSubUnidades,
+        'eqdid'             => $_REQUEST['filtro']['eqdid'],
+        'irpcod'            => $_REQUEST['filtro']['irpcod'],
+        'tpdid'             => $_REQUEST['filtro']['tpdid']
+    );
+    
     $sql = montarSqlRelatorioGeralProposta((object) $filtro);
 
     # Busca lista pra montar a tabela do relatório
@@ -146,4 +147,3 @@
         </div>
     </div>
 </div>
-

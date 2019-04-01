@@ -11,6 +11,8 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
 
     $where .= $Objwhere->prsano? "\n AND pro.prsano = '". (int)$Objwhere->prsano. "'": NULL;
     $where .= $Objwhere->suoid? "\n AND suo.suoid IN(".join($Objwhere->suoid, ','). ")": NULL;
+    # Filtro pra Subunidade vinculada ao Usuário do tipo Unidade
+    $where .= $Objwhere->listaSuoidUsuario? "\n AND suo.suoid IN(".join($Objwhere->listaSuoidUsuario, ','). ")": NULL;
     $where .= $Objwhere->eqdid? "\n AND pro.eqdid IN(".join($Objwhere->eqdid, ','). ")": NULL;
     $where .= $Objwhere->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($Objwhere->irpcod, ','). ")": NULL;
     $where .= $Objwhere->tpdid? "\n AND eqd.tpdid IN(".join($Objwhere->tpdid, ','). ")": NULL;
@@ -21,7 +23,7 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
             pro.proid,
             suo.unosigla || ' - ' || suo.suonome subunidade,
             eqd.eqddsc,
-	        ptr.irpcod,
+            ptr.irpcod,
             ptr.funcional,
             ptr.acatitulo,
             ptr.plodsc,
@@ -56,7 +58,7 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
             pro.proid,
             subunidade,
             eqd.eqddsc,
-	        ptr.irpcod,
+            ptr.irpcod,
             ptr.funcional,
             ptr.acatitulo,
             ptr.plodsc
