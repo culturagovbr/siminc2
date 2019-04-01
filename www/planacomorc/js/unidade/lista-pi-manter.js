@@ -19,11 +19,13 @@
         $('.btn-limpar').click(function(){
             $('#requisicao').val('limpar');
             $('#filtropi').submit();
+            $('#filtropa').submit();
         });
         
         $('#btn-exportar-xls').click(function(){
             $('#requisicao').val('listapimanter-xls');
             $('#filtropi').submit();
+            $('#filtropa').submit();
             $('#requisicao').val('');
         });
         

@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Tela de cadastro de PIs
+ * Tela de cadastro de Plano de Ação
  * @see cadastro.inc
  * $Id: cadastro_pi.inc 101265 2015-08-14 13:05:26Z maykelbraz $
  */
 
 /**
- * Funções de apoio ao cadastro de PIs.
+ * Funções de apoio ao cadastro de Plano de Ação.
  * @see _funcoespi.php
  */
 include_once '_funcoespi.php';
@@ -26,6 +26,8 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 require_once APPRAIZ. 'proposta/classes/model/PrePlanoInterno.inc';
 
 if($_REQUEST['uploadAnexo']){
+    $_FILES['file']['name'] = utf8_decode($_FILES['file']['name']);
+    $_REQUEST['arqdescricao'] = utf8_decode($_REQUEST['arqdescricao']);
     $file = new FilesSimec();
     if($file->setUpload($_REQUEST['arqdescricao'], '', false)){
         echo simec_json_encode(array(
@@ -48,6 +50,14 @@ $urlModulo = '?modulo=principal/unidade/cadastro_pi&acao=A&aba=1';
 # Requisições
 include_once APPRAIZ. "acompanhamento/modulos/principal/monitorar-pi-request.inc";
 
+if ($_REQUEST['carregarMetasEstrategicas']) {
+    echo $simec->select('meeid', 'Meta Estratégica', $dadosPI['meeid'], (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo(['meecod', 'meenome'], ["obeid = '".$_REQUEST['obeid']."'"], 'meecod'));
+    die();
+}
+if ($_REQUEST['carregarDiretrizEstrategicas']) {
+    echo $simec->select('dieid', 'Diretriz Estratégica', $dadosPI['dieid'], (new Planacomorc_Model_DiretrizEstrategica())->recuperarSqlCombo(['diecod', 'dienome'], ["obeid = '".$_REQUEST['obeid']."'"], 'diecod'));
+    die();
+}
 if ($_REQUEST['carregarComboUG']) {
     echo carregarComboUG($_REQUEST['unicod']);
     die();
@@ -226,13 +236,13 @@ $classTab2 = $aba? 'active': NULL;
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script language="JavaScript" src="../includes/funcoes.js?v=5"></script>
-<script language="JavaScript" src="../includes/funcoesspo.js?v=5"></script>
-<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=5">
-<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=5"></script>
-<script src="js/cadastro_pi_funcoes.js?v=15"></script>
-<script src="js/cadastro_pi_validacoes.js?v=15"></script>
-<script src="js/cadastro_pi_init.js?v=15"></script>
+<script language="JavaScript" src="../includes/funcoes.js?v=9"></script>
+<script language="JavaScript" src="../includes/funcoesspo.js?v=9"></script>
+<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=9">
+<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=9"></script>
+<script src="js/cadastro_pi_funcoes.js?v=19"></script>
+<script src="js/cadastro_pi_validacoes.js?v=19"></script>
+<script src="js/cadastro_pi_init.js?v=19"></script>
 <style>
     autorizadocapital {
         display: none;
@@ -247,9 +257,9 @@ include APPRAIZ . "includes/cabecalho.inc";
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-5">
-        <h2>
-            Cadastro de PI
-            <?php if(!empty($dadosPI['plicod'])){ ?>
+        <h2><?php
+            echo $titulo_modulo;
+            if(!empty($dadosPI['plicod'])){ ?>
                 <span style="color: red; padding: 5px;" id="span-plicod"><?= strtoupper($dadosPI['plicod']) ?></span>
                 <input class="upper-text" maxlength="11" type="text" id="plicod" value="<?= $dadosPI['plicod'] ?>" style="display:none;">
                 <a style="margin-left: 10px;" class="fa fa-history" id="modal-historico-pi" title="Histórico de alterações"></a>
@@ -259,15 +269,17 @@ include APPRAIZ . "includes/cabecalho.inc";
         <?php echo $dadosPI['emenumero'] ? "<br /><span>Emenda: {$dadosPI['emenumero']}</span>": ''; ?>
         <?php echo $dadosPI['benid'] ? "<br /><span>Beneficiário: {$dadosPI['benid']}</span>": ''; ?>
     </div>
-    <div class="col-lg-7">
+    <div class="col-lg-7 div-proposta-pa">
         <div style="padding-top: 10px;" class="text-right">
-            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listar_propostas_pi&acao=A"><i class="fa fa-plus-circle"></i> Criar PI por Proposta</a>
+            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listar_propostas_pi&acao=A" title="Criar um Plano de Ação a partir de uma proposta">
+                <i class="fa fa-plus-circle"></i> Criar PA por Proposta
+            </a>
         </div>
     </div>
 </div>
 
 <?php bootstrapPopup("Histórico de Alterações", 'historico-pi', APPRAIZ. "planacomorc/modulos/principal/unidade/historico_pi_modal.inc", array('fechar'), array('tamanho' => 'lg')); ?>
-<?php bootstrapPopup("Registro do último usuário que alterou este pi", 'historico-pi-usuario', APPRAIZ. "planacomorc/modulos/principal/unidade/historico_pi_usuario_modal.inc", array('fechar'), array('tamanho' => 'lg')); ?>
+<?php bootstrapPopup("Registro do último usuário que alterou este PA", 'historico-pi-usuario', APPRAIZ. "planacomorc/modulos/principal/unidade/historico_pi_usuario_modal.inc", array('fechar'), array('tamanho' => 'lg')); ?>
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -275,13 +287,13 @@ include APPRAIZ . "includes/cabecalho.inc";
         <div class="tabs-container col-lg-12">
             <ul class="nav nav-tabs">
                 <li class="<?php echo $classTab0; ?>">
-                    <a data-toggle="tab" href="#tab-0">Plano Interno( Projeto )</a>
+                    <a data-toggle="tab" href="#tab-0">Plano de Ação( Projeto )</a>
                 </li>
                 <?php if( (int)$estadoAtual['esdid'] === (int)ESD_PI_APROVADO): ?>
                     <li class="<?php echo $classTab1; ?>">
                         <a data-toggle="tab" href="#tab-1">Monitoramento</a>
                     </li>
-                    <li class="<?= $classTab2; ?>">
+                    <li class="<?= $classTab2; ?> aba-alteracoes">
                         <a data-toggle="tab" href="#tab-2">Alterações Orçamentárias</a>
                     </li>
                 <?php endif; ?>
@@ -332,7 +344,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="button" name="btg" onclick="submeter('<?php echo $plicod; ?>//');" <?php echo $disabled; ?>><i class="fa fa-check"></i>&nbsp;Salvar</button>
-                                <a href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" class="btn btn-warning" id="btnVoltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                                <a class="btn btn-warning" id="btnVoltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
                             </div>
                         </div>
                     <?php }?>

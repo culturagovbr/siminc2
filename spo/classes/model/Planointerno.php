@@ -86,13 +86,14 @@ class Spo_Model_Planointerno extends Modelo
      */
     public static function montarFiltro(stdClass $filtros){
         $where = "";
-//ver($filtros);
+
         # Sub-Unidades e Sub-Unidades Delegadas do Usuário.
         $where .= self::montarFiltroSubUnidadeUsuario($filtros);
+        # ID Plano de Ação.
+        $where .= $filtros->idpa ? "\n AND pli.pliid = '". (int)pg_escape_string($filtros->idpa). "' ": NULL;
         # Código do PI.
         $where .= $filtros->plicod? "\n AND (pli.plicod = '". pg_escape_string($filtros->plicod). "' OR pli.pliid = '". (int)pg_escape_string($filtros->plicod). "') ": NULL;
         # Unidade Orçamentária.
-//ver($filtros->unicod);
         $where .= $filtros->unicod && !empty(join_simec(',', $filtros->unicod))? "\n AND pli.unicod::INTEGER IN(". join_simec(',', $filtros->unicod). ") ": NULL;
         # Sub-Unidade Orçamentária.
         $where .= $filtros->ungcod && !empty(join_simec(',', $filtros->ungcod))? "\n AND pli.ungcod::INTEGER IN(". join_simec(',', $filtros->ungcod). ") ": NULL;
@@ -116,6 +117,8 @@ class Spo_Model_Planointerno extends Modelo
         $where .= $filtros->unofundo? "\n AND suo.unofundo = ". $filtros->unofundo: NULL;
         # Busca pelo ID do Beneficiário
         $where .= $filtros->benid ? "\n AND ben.benid = " . $filtros->benid : NULL;
+        # Traz apenas o enquadramento Não Orçamentário (OBS: eqdid já estava em uso).
+        $where .= $filtros->enquadramento ? "\n AND enq.eqdcod = '" . $filtros->enquadramento ."'" : NULL;
 
 //ver($where);
         return $where;
@@ -143,8 +146,71 @@ class Spo_Model_Planointerno extends Modelo
         return $where;
     }
 
+
     /**
-     * Cria sql da lista principal de PIs.
+     * Cria sql da lista principal de PAs Não Orçamentários.
+     *
+     * @param stdClass $filtros
+     * @return string
+     */
+    public static function listarNaoOrcamentario(stdClass $filtros)
+    {
+
+        $where = self::montarFiltro($filtros);
+//        ver($where, d);
+        $sql = "
+            SELECT DISTINCT
+                pli.pliid::VARCHAR AS pliid,
+                pli.pliid::VARCHAR AS id,
+                suo.suonome AS sub_unidade,
+                ed.esdid,
+                ed.esddsc,
+                pli.pliano,
+                '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || COALESCE(pli.plititulo, 'N/A') || '</a>' AS plititulo,
+                ed.esddsc AS situacao,
+                ppr.pprnome AS produto,
+                pum.pumdescricao AS unidademedida,
+                pc.picquantidade AS quantidade,
+                CASE
+                    WHEN pd.pliid IS NOT NULL THEN TRUE ELSE FALSE
+                END AS delegado
+            FROM monitora.pi_planointerno pli
+                JOIN planacomorc.pi_complemento pc USING(pliid)
+                JOIN monitora.pi_unidade_medida AS pum ON(
+                    pum.pumid = pc.pumid
+                    AND pum.pumstatus = 'A'
+                )
+                JOIN monitora.pi_produto AS ppr ON(
+                    ppr.pprid = pc.pprid
+                    AND ppr.pprstatus = 'A'
+                )
+                JOIN monitora.pi_enquadramentodespesa AS enq ON(
+                    enq.eqdid = pli.eqdid
+                    AND enq.eqdstatus = 'A'
+                )
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suo.suostatus = 'A'
+                    AND pli.unicod = suo.unocod
+                    AND pli.ungcod = suo.suocod
+                    AND suo.prsano = pli.pliano
+                )
+                LEFT JOIN workflow.documento wd ON(pli.docid = wd.docid)
+                LEFT JOIN workflow.estadodocumento ed ON(wd.esdid = ed.esdid)
+                LEFT JOIN planacomorc.pi_delegacao pd ON(pli.pliid = pd.pliid)
+		        LEFT JOIN public.vw_subunidadeorcamentaria pdsuo ON(pd.suoid = pdsuo.suoid)
+            WHERE
+                pli.pliano = '". (int)$filtros->exercicio. "'
+                AND (pli.plistatus = 'A' OR (pli.plistatus = 'I' AND ed.esdid = ". (int)ESD_PI_CANCELADO. "))
+                $where
+            ORDER BY
+                plititulo
+        ";
+//ver($sql);
+        return $sql;
+    }
+
+    /**
+     * Cria sql da lista principal de PAs.
      * 
      * @param stdClass $filtros
      * @return string
@@ -163,9 +229,9 @@ class Spo_Model_Planointerno extends Modelo
                 pli.plicod,
                 ed.esdid,
                 ed.esddsc,
-                '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || pli.plicod || '</a>' AS codigo_pi,
+                '<a href=\"#\" title=\"Exibir detalhes do Plano de Ação(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || pli.plicod || '</a>' AS codigo_pi,
                 pli.ungcod || '-' || suo.suonome AS sub_unidade,
-                '<a href=\"#\" title=\"Exibir detalhes do Plano Interno(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || COALESCE(pli.plititulo, 'N/A') || '</a>' AS plititulo,
+                '<a href=\"#\" title=\"Exibir detalhes do Plano de Ação(Espelho)\" class=\"a_espelho\" data-pi=\"' || pli.pliid || '\">' || COALESCE(pli.plititulo, 'N/A') || '</a>' AS plititulo,
                 TRIM(aca.prgcod) || '.' || TRIM(aca.acacod) || '.' || TRIM(aca.loccod) || '.' || (CASE WHEN LENGTH(COALESCE(aca.acaobjetivocod, '-')) <= 0 THEN '-' ELSE COALESCE(aca.acaobjetivocod, '-') END) || '.' || (CASE WHEN LENGTH(COALESCE(ptr.plocod, '-')) <= 0 THEN '-' ELSE COALESCE(ptr.plocod, '-') END) AS funcional,
 		ed.esddsc AS situacao,
 		pc.picvalorcusteio AS custeio,

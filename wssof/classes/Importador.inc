@@ -95,9 +95,17 @@ class Wssof_Importador extends Modelo
                 }
             }
         }
-        $this->commit();
     }
 
+    /**
+     * Realiza consulta ao Webservice do SIOP obterProgramacaoCompleta com a 
+     * finalidade de retornar todas as ações, localizadores e Planos Orçamentários(POs) e grava nas tabelas temporarias do schema wssof.
+     * 
+     * @param integer $exercicio
+     * @param integer $momento O valor padrão é 9000
+     * @param array $map
+     * @return array
+     */
     public function obterProgramacaoCompleta($exercicio, $momento, $map = null){
         $servico = new SiopSoapCurl_Quantitativo_Service_ProgramacaoCompleta();
         $servico->getXml()
@@ -111,6 +119,8 @@ class Wssof_Importador extends Modelo
         ;
         $dadosImportar = $servico->configure()->request();
         $this->importarTabelasSof($exercicio, $dadosImportar, $momento);
+        
+        return $dadosImportar;
     }
-}//end Class
-?>
+
+}

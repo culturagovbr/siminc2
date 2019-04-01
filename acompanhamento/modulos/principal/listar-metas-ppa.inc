@@ -25,7 +25,7 @@
                         <th>Meta</th>
                         <th>Qtd. Prevista</th>
                         <th>Qtd. Alcançada</th>
-                        <th>PIs</th>
+                        <th>PAs</th>
                     </tr>
                     </thead>
                     <tbody>

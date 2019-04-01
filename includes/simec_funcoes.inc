@@ -1,4 +1,29 @@
 <?php
+
+/** * UTF-8 decode recursive * * @param array $array * @return $array */
+function utf8_decode_recursive($array)
+{
+    $utf8_array = array();
+    if($array){
+	foreach ($array as $key => $val) {
+            if (is_array($val)) $utf8_array[$key] = utf8_decode_recursive($val); else $utf8_array[$key] = utf8_decode($val);
+	}
+    }
+    return $utf8_array;
+}
+
+/** * UTF-8 encode recursive * * @param array $array * @return $array */
+function utf8_encode_recursive($array)
+{
+    $utf8_array = array();
+    if($array){
+        foreach ($array as $key => $val) {
+            if (is_array($val)) $utf8_array[$key] = utf8_encode_recursive($val); else $utf8_array[$key] = utf8_encode($val);
+        }
+    }
+    return $utf8_array;
+}
+
 /*
  * simec_htmlentities - Função utilizada para corrigir problema de padrão de acentuação
  */

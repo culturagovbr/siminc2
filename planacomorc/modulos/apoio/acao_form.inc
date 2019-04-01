@@ -1,5 +1,6 @@
 <?php
 
+    $mAcao = new Monitora_Model_Acao($_REQUEST['acaid']);
     $cAcao = new Monitora_Controller_Acao();
     switch ($_REQUEST['req']) {
         case 'salvar':
@@ -8,9 +9,13 @@
         case 'excluir':
             $cAcao->excluir($_REQUEST['acaid']);
             die;
+        case 'carregarSubfuncao':
+            $funcod = $_REQUEST['funcod'];
+            echo $simec->select('sfucod', 'Subfunção', $mAcao->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], ["funcod = '". $funcod. "'"]), ['required']);
+            die;
     }
 
-    $mAcao = new Monitora_Model_Acao($_REQUEST['acaid']);
+    
     $mUnidadeOrcamentaria = new Public_Model_UnidadeOrcamentaria();
     $mPrograma = new Monitora_Model_Programa();
     $mLocalizador = new Public_Model_Localizador();
@@ -39,9 +44,13 @@
 
                         <?php
                             echo $simec->select('unicod', 'Unidade Orçamentária', $mAcao->unicod, $mUnidadeOrcamentaria->recuperarSqlComboUnocod(['unocod', 'unonome'], null, 'unocod'), ['required']);
-                            echo $simec->input('acacod', 'Código', $mAcao->acacod, ['required', 'maxlength' => 4]);
-                            echo $simec->input('acatitulo', 'Nome', $mAcao->acatitulo, ['required', 'maxlength' => 255]);
+                            echo $simec->select('funcod', 'Função', $mAcao->funcod, (new Public_Model_Funcao())->recuperarSqlCombo(['funcod', 'fundsc'], null), ['required']);
+                            echo '<span id="span-subfuncao">';
+                            echo $simec->select('sfucod', 'Subfunção', $mAcao->sfucod, (new Public_Model_SubFuncao())->recuperarSqlCombo(['sfucod', 'sfudsc'], null), ['required']);
+                            echo '</span>';
                             echo $simec->select('prgcod', 'Programa', $mAcao->prgcod, $mPrograma->recuperaSqlComboPrgcod((object)['exercicio' => $_SESSION['exercicio']]));
+                            echo $simec->input('acacod', 'Código da ação', $mAcao->acacod, ['required', 'maxlength' => 4]);
+                            echo $simec->input('acatitulo', 'Nome da ação', $mAcao->acatitulo, ['required', 'maxlength' => 255]);
                             echo $simec->select('loccod', 'Localizador', $mAcao->loccod, $mLocalizador->recuperarSqlCombo(['codigolocalizador', 'descricao'], ["exercicio = '". (int)$_SESSION['exercicio']. "'"], 'codigolocalizador'), ['required']);
                             echo $simec->select('acaobjetivocod', 'Objetivo', $mAcao->acaobjetivocod, $mObjetivo->recuperarSqlComboPorOppcod());
                             echo $simec->textarea('acanomeproduto', 'Nome do Produto', $mAcao->acanomeproduto, ['maxlength' => 200, 'cols'=>30, 'rows'=>3]);
@@ -63,3 +72,15 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    $(document).ready(function() {
+        
+        $('#funcod').change(function () {
+            $('#span-subfuncao').load('?modulo=apoio/acao_form&acao=A&req=carregarSubfuncao&funcod=' + $(this).val());
+        });
+        
+    });
+
+</script>

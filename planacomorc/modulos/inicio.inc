@@ -120,9 +120,9 @@ switch ($_REQUEST['req']) {
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
-            $cImportaDadosSiop->AtualizarDadosSiminc();
-            $cImportaDadosSiop->AtualizarDotacao();
-            $cImportaDadosSiop->AtualizarDotacaoInicial();
+            $cImportaDadosSiop->atualizarExecucaoFuncionais(FALSE);
+            $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
+            $cImportaDadosSiop->atualizarDotacaoInicialFuncionais();
             
             echo simec_json_encode(array(
                 'success' => 1,
@@ -139,9 +139,9 @@ switch ($_REQUEST['req']) {
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
-            $cImportaDadosSiop->AtualizarDados();
-            $cImportaDadosSiop->AtualizarDotacao();
-            $cImportaDadosSiop->AtualizarDotacaoInicial();
+            $cImportaDadosSiop->atualizarExecucaoFuncionais();
+            $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
+            $cImportaDadosSiop->atualizarDotacaoInicialFuncionais();
             
             echo simec_json_encode(array(
                 'success' => 1,
@@ -202,20 +202,23 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <i class="fa fa-cloud-download"></i> Atualizar <?= SIGLA_SISTEMA; ?>
                 </a>-->
             <?php } ?>
-            <?php if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { ?>
+<!--            <?php /*if((in_array(PFL_ADMINISTRADOR, $perfis)) || (in_array(PFL_SUPERUSUARIO, $perfis))) { */?>
                 <a id="btn-atualizar-siop" class="btn btn-success" title="Busca os dados do sistema SIOP e atualiza os dados de Dotações das Funcionais e execução orçamentária">
                     <i class="fa fa-cloud-download"></i> Atualizar SIOP
                 </a>
-            <?php } ?>
-            <a class="btn btn-success" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A" title="Painel de Acompanhamento do Fundo Nacional de Cultura">
+            --><?php /*} */?>
+            <!--<a class="btn btn-success" href="planacomorc.php?modulo=principal/unidade/painel_fnc&acao=A" title="Painel de Acompanhamento do Fundo Nacional de Cultura">
                 <i class="fa fa-area-chart"></i> Painel FNC
+            </a>-->
+            <a class="btn btn-success" href="planacomorc.php?modulo=principal/unidade/listapa-nao-orcamentaria&acao=A" title="Listagem de PA">
+                <i class="fa fa-list"></i> Ações não Orçamentárias
             </a>
-            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" title="Listagem de PI">
-                <i class="fa fa-list"></i> Lista de PI
+            <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" title="Listagem de PA">
+                <i class="fa fa-list"></i> Lista de PA
             </a>
-            <?php if(!array_intersect($perfis, [PFL_CONSULTA, PFL_CONSULTA_UNIDADE])){ ?>
-            <a class="btn btn-warning" href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A" title="Novo cadastro de PI">
-                    <i class="fa fa-plus-circle"></i> Criar PI
+            <?php if(!(in_array(PFL_CONSULTA, $perfis) || in_array(PFL_CONSULTA_UNIDADE, $perfis))){ ?>
+                <a class="btn btn-warning" href="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A" title="Novo cadastro de PA">
+                    <i class="fa fa-plus-circle"></i> Criar PA
                 </a>
             <?php }?>
             <a class="btn btn-primary" href="planacomorc.php?modulo=relatorio/geral&acao=A&fundo=f" title="Relatório Geral em Planilha">
@@ -341,8 +344,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <tr class="linha_subunidade">
                                     <td style="border-right: 1px black solid;">
                                         <i class="fa fa-plus detalhar-linha link" data-suoid="<?php echo $dado['suoid']; ?>"></i>&nbsp;&nbsp;
-                                        <span class="detalhe-subunidade" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar PIs dessa Unidade">
-                                            <?php echo $dado['unosigla'] . ' - ' . $dado['suonome'] . ' (' . $dado['suocod'] . ')'; ?>
+                                        <span class="detalhe-subunidade" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar PAs dessa Unidade">
+                                            <?php echo $dado['unosigla'] . ' - ' . $dado['suonome']; ?>
                                         </span>
                                     </td>
 
@@ -373,7 +376,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <tr class="tr_<?php echo $dado['suoid']; ?> tr_detalhe" style="display: none;">
                                         <td style="padding-left: 30px; border-right: 1px black solid;" >
                                             <span class="detalhe-funcional" data-ptrid="<?php echo $dado['ptrid']; ?>" data-suoid="<?php echo $dado['suoid']; ?>" 
-                                                  title="<?php echo"Visualizar lista de PIs com essa funcional"?>">
+                                                  title="<?php echo"Visualizar lista de PAs com essa funcional"?>">
                                                 <?php echo $dado['funcional'] . ' - ' . $dado['acatitulo'] . ': ' . $dado['plodsc'] . ' (RP ' . $dado['irpcod'] . ') (PTRES:'.$dado['ptres'].')'; ?>
                                             </span>
                                             <?php if($dado['compartilhada'] > 1): ?>
@@ -419,9 +422,9 @@ include APPRAIZ . "includes/cabecalho.inc";
 </div>
 
 <?php
-    // -- popup de detalhamento do PI
-    bootstrapPopup("PI's da Unidade", 'detalhe-subunidade', '', array('fechar'), array('tamanho' => 'lg'));
-    bootstrapPopup("PI's da Funcional na Unidade", 'detalhe-funcional', '', array('fechar'), array('tamanho' => 'lg'));
+    // -- popup de detalhamento do PA
+    bootstrapPopup("PA's da Unidade", 'detalhe-subunidade', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup("PA's da Funcional na Unidade", 'detalhe-funcional', '', array('fechar'), array('tamanho' => 'lg'));
     bootstrapPopup("Detalhe da Unidade", 'detalhe-grafico', '', array('fechar'), array('tamanho' => 'lg'));
 ?>
 
@@ -429,6 +432,11 @@ include APPRAIZ . "includes/cabecalho.inc";
     $(document).ready(function(){
 
         initLinkEspelhoPi();
+
+        <?php if($_REQUEST['req'] == 'atualizar-siop-ajax' ): ?>
+            atualizarSIOP();
+        <?php endif; ?>
+
 
         $('#btn-atualizar-siop').click(function(){
             atualizarSIOP();
