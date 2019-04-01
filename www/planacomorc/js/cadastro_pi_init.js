@@ -99,8 +99,9 @@
 
         // Evento ao mudar opção de Objetivos Estratégicos.
         $('#obeid').change(function(){
+            suocod = $('#ungcod').val();
             if($(this).val() >= 1 ){
-                carregarMetasEstrategicas($(this).val(), null);
+                carregarMetasEstrategicas($(this).val(), null, suocod);
                 carregarDiretrizEstrategica($(this).val(), null);
             }
         });
