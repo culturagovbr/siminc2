@@ -1243,9 +1243,9 @@
     /**
      * Carrega novo conteúdo para o select de Metas Estratégicas via requisição ajax.
      */
-    function carregarMetasEstrategicas(obeid, meeid) {
+    function carregarMetasEstrategicas(obeid, meeid, suocod) {
 
-        $.post(urlPagina + '&carregarMetasEstrategicas=ok&obeid=' + obeid,
+        $.post(urlPagina + '&carregarMetasEstrategicas=ok&obeid=' + obeid + '&suocod=' +suocod,
             function (response) {
                 $('#meeid').remove();
                 $('.div_meeid').html(response);
