@@ -61,5 +61,4 @@ class Monitora_Model_PiProduto extends Modelo
         'pprdescricao' => null,
     );
 
-}//end Class
-?>
+}
