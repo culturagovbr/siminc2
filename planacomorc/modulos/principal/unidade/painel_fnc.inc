@@ -15,8 +15,8 @@
         case 'atualizarSIOP':
             try{
                 $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
-                $cImportaDadosSiop->AtualizarDados();
-                $cImportaDadosSiop->AtualizarDotacao();
+                $cImportaDadosSiop->atualizarExecucaoFuncionais();
+                $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
 
                 echo simec_json_encode(array(
                     'success' => 1,

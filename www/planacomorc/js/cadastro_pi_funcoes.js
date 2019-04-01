@@ -1010,7 +1010,7 @@
         if($('#eqdid').val() == intEnqNaoOrcamentario){
             resultado = true;
         }
-        
+
         return resultado;
     }
     
@@ -1124,33 +1124,6 @@
         }
     }
 
-    /**
-     * Muda o nome do box de Metas e os campos que contém na box.
-     *
-     */
-    function mudarNomesFormularioNaoOrcamentario(bool) {
-
-        if(bool === true){
-            // Muda o nome do box de "Metas" para "Planejamento Estratégico" quando for enquadramento Não Orçamentário
-            $(".div_metas_ppa_pnc h5").html("Planejamento Estratégico");
-            // Muda o nome do campo de "Objetivo PPA" para "Objetivo Estratégico" quando for enquadramento Não Orçamentário
-            $(".div-objetivo .control-label").html("Objetivo Estratégico");
-            // Muda o nome do campo de "Meta PPA" para "Diretriz Estratégica" quando for enquadramento Não Orçamentário
-            $(".div-metas .control-label").html("Diretriz Estratégica");
-            // Muda o nome do campo de "Iniciativa PPA" para "Meta" quando for enquadramento Não Orçamentário
-            $(".div-iniciativa .control-label").html("Meta");
-        }else {
-            // Troca o nome da label de Planejamento Estratégico para Metas quando não for enquadramento Não Orçamentário.
-            $(".div_metas_ppa_pnc h5").html("Metas");
-            // Muda o nome do campo de "Objetivo Estratégico" para "Objetivo PPA" quando não for enquadramento Não Orçamentário.
-            $(".div-objetivo .control-label").html("Objetivo PPA");
-            // Muda o nome do campo de "Diretriz Estratégica" para "Meta PPA" quando não for enquadramento Não Orçamentário.
-            $(".div-metas .control-label").html("Meta PPA");
-            // Muda o nome do campo de "Meta" para "Iniciativa PPA" quando não for enquadramento Não Orçamentário.
-            $(".div-iniciativa .control-label").html("Iniciativa PPA");
-        }
-
-    }
 
     /**
      * Controla a exibição do formulario se o enquadramento for não orçamentário.
@@ -1162,7 +1135,10 @@
         // Se o código for Não Orçamentário, o sistema não exibe as opções PTRES(Funcional), Valor do Projeto, Cronograma Orçamentário e Financeiro.
         if(verificarFormularioNaoOrcamentario()){
 
-            mudarNomesFormularioNaoOrcamentario(true);
+            // Oculta o botão de Criar Plano de Ação por Proposta.
+            $('.div-proposta-pa').hide('slow');
+            // Oculta a aba de Alterações Orçamentárias.
+            $('.aba-alteracoes').hide('slow');
             // Oculta a opções PTRES(Funcional).
             $('.div_ptres').hide('slow');
             // Exibe as Etapas
@@ -1190,7 +1166,6 @@
             // Exibe o campo Recursos Necessários
             $(".recursos_necessarios").show('slow'); 
         } else {
-            mudarNomesFormularioNaoOrcamentario(false);
             // Exibe a opções PTRES(Funcional).
             $('.div_ptres').show('slow');
             // Exibe o quadro de Custeio e Capital com a opção de Valor do Projeto.
@@ -1211,6 +1186,10 @@
             $('#div_pactuacao').show('slow');
             // Oculta o campo Recursos Necessários
             $(".recursos_necessarios").hide('slow');
+            // Oculta o botão de Criar Plano de Ação por Proposta.
+            $('.div-proposta-pa').show('slow');
+            // Oculta a aba de Alterações Orçamentárias.
+            $('.aba-alteracoes').show('slow');
         }
     }
     
@@ -1259,6 +1238,34 @@
             $('.div_ungcod').html(response);
             $(".chosen-select").chosen();
         });
+    }
+
+    /**
+     * Carrega novo conteúdo para o select de Metas Estratégicas via requisição ajax.
+     */
+    function carregarMetasEstrategicas(obeid, meeid) {
+
+        $.post(urlPagina + '&carregarMetasEstrategicas=ok&obeid=' + obeid,
+            function (response) {
+                $('#meeid').remove();
+                $('.div_meeid').html(response);
+                $('#meeid').val(meeid);
+                $(".chosen-select").chosen();
+            });
+    }
+
+    /**
+     * Carrega novo conteúdo para o select de Diretriz Estratégica via requisição ajax.
+     */
+    function carregarDiretrizEstrategica(obeid, dieid) {
+
+        $.post(urlPagina + '&carregarDiretrizEstrategicas=ok&obeid=' + obeid,
+            function (response) {
+                $('#dieid').remove();
+                $('.div_dieid').html(response);
+                $('#dieid').val(dieid);
+                $(".chosen-select").chosen();
+            });
     }
 
     /**
@@ -1412,6 +1419,8 @@
                 if(!verificarFormularioNaoOrcamentario()) {
                     $('#div_area_cultural').show('slow');
                     $('#div_segmento_cultural').show('slow');
+                } else if (verificarFormularioNaoOrcamentario()) {
+                    $('.div_metas_ppa_pnc').hide('fast');
                 }
             }
         }

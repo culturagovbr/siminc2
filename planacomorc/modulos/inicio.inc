@@ -120,9 +120,9 @@ switch ($_REQUEST['req']) {
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
-            $cImportaDadosSiop->AtualizarDadosSiminc();
-            $cImportaDadosSiop->AtualizarDotacao();
-            $cImportaDadosSiop->AtualizarDotacaoInicial();
+            $cImportaDadosSiop->atualizarExecucaoFuncionais(FALSE);
+            $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
+            $cImportaDadosSiop->atualizarDotacaoInicialFuncionais();
             
             echo simec_json_encode(array(
                 'success' => 1,
@@ -139,9 +139,9 @@ switch ($_REQUEST['req']) {
         try{
             $cImportaDadosSiop = new Planacomorc_Controller_ImportaDadosSiop();
             $cImportaDadosSiop->exercicio = $_SESSION['exercicio'];
-            $cImportaDadosSiop->AtualizarDados();
-            $cImportaDadosSiop->AtualizarDotacao();
-            $cImportaDadosSiop->AtualizarDotacaoInicial();
+            $cImportaDadosSiop->atualizarExecucaoFuncionais();
+            $cImportaDadosSiop->atualizarLimitesFuncionaisSubunidades();
+            $cImportaDadosSiop->atualizarDotacaoInicialFuncionais();
             
             echo simec_json_encode(array(
                 'success' => 1,
@@ -345,7 +345,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <td style="border-right: 1px black solid;">
                                         <i class="fa fa-plus detalhar-linha link" data-suoid="<?php echo $dado['suoid']; ?>"></i>&nbsp;&nbsp;
                                         <span class="detalhe-subunidade" data-suoid="<?php echo $dado['suoid']; ?>" title="Visualizar PAs dessa Unidade">
-                                            <?php echo $dado['unosigla'] . ' - ' . $dado['suonome'] . ' (' . $dado['suocod'] . ')'; ?>
+                                            <?php echo $dado['unosigla'] . ' - ' . $dado['suonome']; ?>
                                         </span>
                                     </td>
 

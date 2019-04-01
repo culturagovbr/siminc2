@@ -14,8 +14,8 @@ class Monitora_Controller_Ptres
             $mPtres->acacod = $acao->acacod;
             $mPtres->prgcod = $acao->prgcod;
             $mPtres->loccod = $acao->loccod;
-            $mPtres->funcod = $dados['funcod'];
-            $mPtres->sfucod = $dados['sfucod'];
+            $mPtres->funcod = $acao->funcod;
+            $mPtres->sfucod = $acao->sfucod;
 
             # Dados monetários
 //            $mPtres->ptrdotacaocusteio = (int)str_replace(array('.', ','), array('', '.'), $dados['ptrdotacaocusteio']);

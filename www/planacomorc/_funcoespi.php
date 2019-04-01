@@ -1222,7 +1222,8 @@ DML;
 DML;
             
             $stmt = sprintf(
-                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF, str_replace(array("'"), ' ', $dados['plidsc']));
+                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF, str_replace(array("'"), ' ', $dados['plirecursosnecessarios']));
+
             $pliid = $db->pegaUm($stmt);
             
             //Grava usuário que salvou por último
@@ -1401,7 +1402,28 @@ function salvarPiComplemento($pliid, $dados)
     $modelPiComplemento->picted = $dados['picted'] == 't' ? 't' : 'f';
     $modelPiComplemento->picedital = $dados['picedital'] == 't' ? 't' : 'f';
 //ver($modelPiComplemento,d);
-    $modelPiComplemento->salvar(NULL, NULL, array('prgid', 'ptaid', 'pijid', 'oppid', 'mppid', 'ippid', 'pprid', 'pumid', 'picpriorizacao', 'picquantidade', 'picpublico', 'picexecucao', 'picvalorcusteio', 'picvalorcapital'));
+    $modelPiComplemento->salvar(NULL, NULL,
+        array(
+                'obeid',
+                'meeid',
+                'dieid',
+                'esfid',
+                'prgid',
+                'ptaid',
+                'pijid',
+                'oppid',
+                'mppid',
+                'ippid',
+                'pprid',
+                'pumid',
+                'picpriorizacao',
+                'picquantidade',
+                'picpublico',
+                'picexecucao',
+                'picvalorcusteio',
+                'picvalorcapital'
+        )
+    );
     
     associarConvenio($pliid, $dados);
     associarSniic($pliid, $dados);

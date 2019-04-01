@@ -50,6 +50,14 @@ $urlModulo = '?modulo=principal/unidade/cadastro_pi&acao=A&aba=1';
 # Requisições
 include_once APPRAIZ. "acompanhamento/modulos/principal/monitorar-pi-request.inc";
 
+if ($_REQUEST['carregarMetasEstrategicas']) {
+    echo $simec->select('meeid', 'Meta Estratégica', $dadosPI['meeid'], (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo(['meecod', 'meenome'], ["obeid = '".$_REQUEST['obeid']."'"], 'meecod'));
+    die();
+}
+if ($_REQUEST['carregarDiretrizEstrategicas']) {
+    echo $simec->select('dieid', 'Diretriz Estratégica', $dadosPI['dieid'], (new Planacomorc_Model_DiretrizEstrategica())->recuperarSqlCombo(['diecod', 'dienome'], ["obeid = '".$_REQUEST['obeid']."'"], 'diecod'));
+    die();
+}
 if ($_REQUEST['carregarComboUG']) {
     echo carregarComboUG($_REQUEST['unicod']);
     die();
@@ -228,13 +236,13 @@ $classTab2 = $aba? 'active': NULL;
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script language="JavaScript" src="../includes/funcoes.js?v=6"></script>
-<script language="JavaScript" src="../includes/funcoesspo.js?v=6"></script>
-<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=6">
-<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=6"></script>
-<script src="js/cadastro_pi_funcoes.js?v=16"></script>
-<script src="js/cadastro_pi_validacoes.js?v=16"></script>
-<script src="js/cadastro_pi_init.js?v=16"></script>
+<script language="JavaScript" src="../includes/funcoes.js?v=9"></script>
+<script language="JavaScript" src="../includes/funcoesspo.js?v=9"></script>
+<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=9">
+<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=9"></script>
+<script src="js/cadastro_pi_funcoes.js?v=19"></script>
+<script src="js/cadastro_pi_validacoes.js?v=19"></script>
+<script src="js/cadastro_pi_init.js?v=19"></script>
 <style>
     autorizadocapital {
         display: none;
@@ -261,7 +269,7 @@ include APPRAIZ . "includes/cabecalho.inc";
         <?php echo $dadosPI['emenumero'] ? "<br /><span>Emenda: {$dadosPI['emenumero']}</span>": ''; ?>
         <?php echo $dadosPI['benid'] ? "<br /><span>Beneficiário: {$dadosPI['benid']}</span>": ''; ?>
     </div>
-    <div class="col-lg-7">
+    <div class="col-lg-7 div-proposta-pa">
         <div style="padding-top: 10px;" class="text-right">
             <a class="btn btn-danger" href="planacomorc.php?modulo=principal/unidade/listar_propostas_pi&acao=A" title="Criar um Plano de Ação a partir de uma proposta">
                 <i class="fa fa-plus-circle"></i> Criar PA por Proposta
@@ -285,7 +293,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <li class="<?php echo $classTab1; ?>">
                         <a data-toggle="tab" href="#tab-1">Monitoramento</a>
                     </li>
-                    <li class="<?= $classTab2; ?>">
+                    <li class="<?= $classTab2; ?> aba-alteracoes">
                         <a data-toggle="tab" href="#tab-2">Alterações Orçamentárias</a>
                     </li>
                 <?php endif; ?>
@@ -336,7 +344,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="button" name="btg" onclick="submeter('<?php echo $plicod; ?>//');" <?php echo $disabled; ?>><i class="fa fa-check"></i>&nbsp;Salvar</button>
-                                <a href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" class="btn btn-warning" id="btnVoltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                                <a class="btn btn-warning" id="btnVoltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
                             </div>
                         </div>
                     <?php }?>
