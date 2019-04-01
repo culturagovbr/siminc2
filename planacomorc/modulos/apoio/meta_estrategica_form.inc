@@ -10,9 +10,12 @@
 
     <div class="form-group">
         <div class="text-center">
-            <a class="btn btn-primary" id="btn-salvar-meta-estrategica">
+            <button class="btn btn-success" id="btn-novo-meta" type="button">
+                <i class="fa fa-plus"></i>&nbsp;Novo
+            </button>
+            <button class="btn btn-primary" id="btn-salvar-meta-estrategica" type="button">
                 <i class="fa fa-check"></i>&nbsp;Salvar
-            </a>
+            </button>
         </div>
     </div>
 </form>
@@ -37,9 +40,17 @@
                     }
                 });
             }else{
+                swal('Erro!', 'Preencha todos os campos, por favor!', 'warning');
                 return false;
             }
 
+        });
+
+        // Limpa os campos para ser inserido novo registro
+        $('#btn-novo-meta').click(function () {
+            $('#meeid').val('');
+            $('#meecod').val('');
+            $('#meenome').val('');
         });
 
     });
