@@ -64,7 +64,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <input name="obeid" id="obeid" type="hidden" value="<?= $mObjetivoEstrategico->obeid; ?>">
                         <?php
                             echo $simec->input('obecod', 'Código', $mObjetivoEstrategico->obecod, ['required', 'class' => 'upper-text', 'maxlength' => 4]);
-                            echo $simec->input('obenome', 'Nome', $mObjetivoEstrategico->obenome, ['required', 'maxlength' => 125]);
+                            echo $simec->input('obenome', 'Nome', $mObjetivoEstrategico->obenome, ['required', 'maxlength' => 200]);
                         ?>
                         <div class="form-group">
                             <div class="text-center">
