@@ -1,41 +1,14 @@
 <div class="col-md-6">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>Dados do Plano Interno</h5>
+            <h5>Dados do Plano de Ação</h5>
         </div>
         <div class="ibox-content">
-            <div class="form-group">
-                <div class="col-md-3 text-right">
-                    <label class="control-label" for="plititulo">Título: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
-                </div>
-                <div class="col-lg-9">
-                    <input type="text" value="<?php
-                    if ($dadosPI['plititulo']) {
-                        echo $dadosPI['plititulo'];
-                    }
-                    ?>" class="CampoEstilo normal form-control obrigatorio" title="" id="plititulo" value="" maxlength="250" size="2" name="plititulo">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-3 text-right">
-                    <label class="control-label" for="plidsc">Descrição / Finalidade: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
-                </div>
-                <div class="col-lg-9">
-                    <textarea class="obrigatorio txareanormal form-control" rows="6" cols="60" name="plidsc" id="plidsc" maxlength="1000"><?php
-                        if ($dadosPI['plidsc']) {
-                            echo $dadosPI['plidsc'];
-                        }
-                        ?></textarea>
-                </div>
-            </div>
-            <div class="form-group recursos_necessarios">
-                <div class="col-md-3 text-right">
-                    <label class="control-label" for="plirecursosnecessarios">Recursos Necessários:</label>
-                </div>
-                <div class="col-lg-9">
-                    <textarea class="obrigatorio txareanormal form-control" rows="6" cols="60" name="plirecursosnecessarios" id="plirecursosnecessarios" maxlength="1000"><?php if ($dadosPI['plirecursosnecessarios']) {echo $dadosPI['plirecursosnecessarios'];}?></textarea>
-                </div>
-            </div>
+            <?php
+                echo $simec->input('plititulo', 'Título', $dadosPI['plititulo'], ['maxlength' => 250, 'required']);
+                echo $simec->textarea('plidsc', 'Descrição / Finalidade', $dadosPI['plidsc'], ['rows' => 6, 'cols' => 60, 'required']);
+                echo $simec->textarea('plirecursosnecessarios', 'Recursos Necessários', $dadosPI['plirecursosnecessarios'], ['rows' => 6, 'cols' => 60]);
+            ?>
         </div>
     </div>
 </div>
@@ -144,28 +117,10 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-3 text-right">
-                    <label class="control-label" for="eqdid">Enquadramento da Despesa: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
-                </div>
-                <div class="col-lg-9 carregaEnq">
-                    <?php
-                        $sql = "
-                            SELECT
-                                eqdid AS codigo,
-                                eqddsc AS descricao
-                            FROM monitora.pi_enquadramentodespesa
-                            WHERE
-                                eqdstatus = 'A'
-                                AND eqdano = '{$_SESSION['exercicio']}'
-                            ORDER BY
-                                eqddsc
-                        ";
-                        $eqdid = $dadosPI['eqdid'];
-                        $db->monta_combo('eqdid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'eqdid', null, '', null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($eqdid) ? $eqdid : null));
-                    ?>
-                </div>
-            </div>
+            <?php
+                $checked = $dadosPI['eqdid']? $dadosPI['eqdid']: $codigoEnquadramentoNaoOrcamentario;
+                echo $simec->select("eqdid", 'Enquadramento da Despesa', $checked, (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo('eqdid, eqddsc', null, 'eqddsc'), ['required']);
+            ?>
 
             <div class="form-group grupo_manutencao" style="display: none;">
                 <div class="col-md-3 text-right">

@@ -14,8 +14,14 @@
         case 'carregarMedida':
             $mClassificacao = new Acompanhamento_Model_Classificacao($_REQUEST['claid']);
             $retorno['medida'] = $mClassificacao->clamedida;
-            $retorno['select'] = $simec->select('medidas[]', 'Medidas a serem adotadas', null, (new Acompanhamento_Model_Medida())->recuperarSqlCombo(null, ['claid = ' . (int)$_REQUEST['claid']]));
-
+            $listaMedidas = $db->carregar((new Acompanhamento_Model_Medida())->recuperarSqlCombo(null, ['claid = ' . (int)$_REQUEST['claid']]));
+            $listaMedidasUtf8 = array();
+            if($listaMedidas){
+                foreach ($listaMedidas as $medida){
+                    $listaMedidasUtf8[$medida['codigo']] = utf8_encode($medida['descricao']);
+                }
+            }
+            $retorno['select'] = $simec->select('medidas[]', 'Medidas a serem adotadas', null, $listaMedidasUtf8);
             echo json_encode($retorno);
         die;
         case 'uploadAnexoAcompanhamento':

@@ -20,8 +20,14 @@
         case 'carregarMedida':
             $mClassificacao = new Acompanhamento_Model_Classificacao($_REQUEST['claid']);
             $retorno['medida'] = $mClassificacao->clamedida;
-            $retorno['select'] = $simec->select('medidas[]', 'Medidas a serem adotadas', null, (new Acompanhamento_Model_Medida())->recuperarSqlCombo(null, ['claid = ' . (int)$_REQUEST['claid']]));
-
+            $listaMedidas = $db->carregar((new Acompanhamento_Model_Medida())->recuperarSqlCombo(null, ['claid = ' . (int)$_REQUEST['claid']]));
+            $listaMedidasUtf8 = array();
+            if($listaMedidas){
+                foreach ($listaMedidas as $medida){
+                    $listaMedidasUtf8[$medida['codigo']] = utf8_encode($medida['descricao']);
+                }
+            }
+            $retorno['select'] = $simec->select('medidas[]', 'Medidas a serem adotadas', null, $listaMedidasUtf8);
             echo json_encode($retorno);
         die;
         case 'uploadAnexo':
@@ -180,14 +186,14 @@
                                 if($infoMeta['mppanualizavel'] == 't'){
                                     echo $simec->input('Previstoa', 'Previsto Anualizado', number_format($infoMeta['mppquantidadeanualizada'], 2, ',', '.'));
                                 }
-                                echo $simec->input('qtd_pis', 'Planos Internos (PI´s)', '<a class="detalhe-pi" title="PI\'s Vinculados" href="?modulo=principal/monitorar-ppa&acao=A&req=detalhe-pi&mppid=' . $mppid . '&suoid=' . $suoid . '">' . number_format($infoPI['qtd'], 0, ',', '.') . '</a>');
+                                echo $simec->input('qtd_pis', "Planos de Ação (PA's)", '<a class="detalhe-pi" title="PA\'s Vinculados" href="?modulo=principal/monitorar-ppa&acao=A&req=detalhe-pi&mppid=' . $mppid . '&suoid=' . $suoid . '">' . number_format($infoPI['qtd'], 0, ',', '.') . '</a>');
                                 $simec->setLabelSize(3);
                                 $simec->setPodeEditar(1);
                                 ?>
 
                             </div>
                             <div class="col-md-5">
-                                <h3 class="text-center">PI's Associados à Meta</h3>
+                                <h3 class="text-center">PAs associados à Meta</h3>
                                 <?php
                                 $colors = "'#55BF3B', '#eeaaee', '#00BFFF', '#aaeeee', '#7798BF', '#DDDF0D', '#7CCD7C', '#DF5353', '#008000', '#CD0000', '#FF4500', '#ff0066', '#4B0082', '#808000', '#800000', '#2F4F4F', '#006400', '#FFA500'";
                                 $grafico = new Grafico(Grafico::K_TIPO_COLUNA, false);

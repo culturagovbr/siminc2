@@ -38,7 +38,7 @@
                     <tr class="text-center">
                         <th width="5%">Status</th>
                         <th>Meta</th>
-                        <th width="5%">PIs</th>
+                        <th width="5%">PAs</th>
                     </tr>
                     </thead>
                     <tbody>
