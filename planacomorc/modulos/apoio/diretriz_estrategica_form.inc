@@ -5,14 +5,17 @@
 
     <?php
         echo $simec->input('diecod', 'Código', $mDiretrizEstrategica->diecod, ['required', 'class' => 'upper-text', 'maxlength' => 4]);
-        echo $simec->input('dienome', 'Nome', $mDiretrizEstrategica->dienome, ['required', 'maxlength' => 125]);
+        echo $simec->input('dienome', 'Nome', $mDiretrizEstrategica->dienome, ['required', 'maxlength' => 200]);
     ?>
 
     <div class="form-group">
         <div class="text-center">
-            <a class="btn btn-primary" id="btn-salvar-diretriz-estrategica">
+            <button class="btn btn-success" id="btn-novo-diretriz" type="button">
+                <i class="fa fa-plus"></i>&nbsp;Novo
+            </button>
+            <button class="btn btn-primary" id="btn-salvar-diretriz-estrategica" type="button">
                 <i class="fa fa-check"></i>&nbsp;Salvar
-            </a>
+            </button>
         </div>
     </div>
 </form>
@@ -37,9 +40,17 @@
                     }
                 });
             }else{
+                swal('Erro!', 'Preencha todos os campos, por favor!', 'warning');
                 return false;
             }
 
+        });
+
+        // Limpa os campos para ser inserido novo registro
+        $('#btn-novo-diretriz').click(function () {
+            $('#dieid').val('');
+            $('#diecod').val('');
+            $('#dienome').val('');
         });
 
     });
