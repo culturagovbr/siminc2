@@ -1651,6 +1651,8 @@ class Pi_PlanoInterno extends Modelo
                 pli.plititulo,
                 pli.plicod,
                 pli.pliemenda,
+                pip.pprnome,
+                pic.picquantidade,
                 pic.picted,
                 pic.picedital,
                 pic.picvalorcapital,
@@ -1684,6 +1686,7 @@ class Pi_PlanoInterno extends Modelo
                     ex.exercicio = ptr.ptrano
                     AND ex.plicod = pli.plicod
                 )
+                LEFT JOIN monitora.pi_produto AS pip ON pic.pprid = pip.pprid
             WHERE
                 pli.plistatus = 'A'
                 AND (ptr.irpcod <> '6' OR ptr.ptrid IS NULL)
@@ -1693,6 +1696,8 @@ class Pi_PlanoInterno extends Modelo
                 pli.plititulo,
                 pli.plicod,
                 pli.pliemenda,
+                pip.pprnome,
+                pic.picquantidade,
                 pic.picted,
                 pic.picedital,
                 pic.picvalorcapital,

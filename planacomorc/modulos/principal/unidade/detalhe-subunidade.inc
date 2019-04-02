@@ -156,15 +156,9 @@
                                                             <tr class="text-center">
                                                                 <th>Ações</th>
                                                                 <th>Id</th>
-                                                                <th>Código</th>
                                                                 <th>Título</th>
-                                                                <th>RP</th>
-                                                                <th>Custeio</th>
-                                                                <th>Capital</th>
-                                                                <th>Provisionado</th>
-                                                                <th>Empenhado</th>
-                                                                <th>Liquidado</th>
-                                                                <th>Pago</th>
+                                                                <th>Quantidade</th>
+                                                                <th>Produto</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -189,35 +183,14 @@
                                                                 </td>
                                                                 <td>
                                                                     <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?php echo $dado['pliid']; ?>" >
-                                                                        <?php echo $dado['plicod']; ?>
-                                                                    </a>
-                                                                </td>
-                                                                <td>
-                                                                    <a href="#" title="Exibir detalhes do Plano Interno(Espelho)" class="a_espelho" data-pi="<?php echo $dado['pliid']; ?>" >
                                                                         <?php echo $dado['plititulo']; ?>
                                                                     </a>
                                                                 </td>
-                                                                <td class="text-center"><?php echo $dado['irpcod']; ?></td>
-                                                                <td class="text-right"><?php echo number_format($dado['picvalorcusteio'], 0, ',', '.'); ?></td>
-                                                                <td class="text-right"><?php echo number_format($dado['picvalorcapital'], 0, ',', '.'); ?></td>
-                                                                <td class="text-right"><?php echo marcarVermelhoValorSuperior($dado['autorizado'], $dado['picvalorcusteio']+ $dado['picvalorcapital']); ?></td>
-                                                                <td class="text-right"><?php echo marcarVermelhoValorSuperior($dado['empenhado'], $dado['picvalorcusteio']+ $dado['picvalorcapital']); ?></td>
-                                                                <td class="text-right"><?php echo marcarVermelhoValorSuperior($dado['liquidado'], $dado['picvalorcusteio']+ $dado['picvalorcapital']); ?></td>
-                                                                <td class="text-right"><?php echo marcarVermelhoValorSuperior($dado['pago'], $dado['picvalorcusteio']+ $dado['picvalorcapital']); ?></td>
+                                                                <td><?php echo $dado['picquantidade']; ?></td>
+                                                                <td class="text-center"><?php echo $dado['pprnome']; ?></td>
                                                             </tr>
                                                         <?php endforeach; ?>
                                                         </tbody>
-                                                        <tfoot>
-                                                        <tr>
-                                                            <th colspan="5">TOTAL</th>
-                                                            <th class="text-right"><?php echo number_format($total['custeio'], 0, ',', '.'); ?></th>
-                                                            <th class="text-right"><?php echo number_format($total['capital'], 0, ',', '.'); ?></th>
-                                                            <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['autorizado'], $total['custeio']+ $total['capital']); ?></th>
-                                                            <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['empenhado'], $total['custeio']+ $total['capital']); ?></th>
-                                                            <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['liquidado'], $total['custeio']+ $total['capital']); ?></th>
-                                                            <th class="text-right"><?php echo marcarVermelhoValorSuperior($total['pago'], $total['custeio']+ $total['capital']); ?></th>
-                                                        </tr>
-                                                        </tfoot>
                                                     </table>
                                                 </div>
                                             <?php else:
@@ -234,28 +207,18 @@
                                                         <thead>
                                                         <tr class="text-center">
                                                             <th>Id</th>
-                                                            <th>Código</th>
                                                             <th>Título</th>
-                                                            <th>Custeio</th>
-                                                            <th>Capital</th>
-                                                            <th>Provisionado</th>
-                                                            <th>Empenhado</th>
-                                                            <th>Liquidado</th>
-                                                            <th>Pago</th>
+                                                            <th>Quantidade</th>
+                                                            <th>Produto</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
                                                         <?php foreach($dadosDelegadoNaoOrcamentario as $delegado): ?>
                                                             <tr>
-                                                                <td><?php echo $delegado['pliid']; ?></td>
-                                                                <td><?php echo $delegado['plicod']; ?></td>
-                                                                <td><?php echo $delegado['plititulo']; ?></td>
-                                                                <td class="text-right"><?php echo number_format2($delegado['picvalorcusteio'], 0, ',', '.'); ?></td>
-                                                                <td class="text-right"><?php echo number_format2($delegado['picvalorcapital'], 0, ',', '.'); ?></td>
-                                                                <td class="text-right"><?php echo marcarVermelhoValorSuperior($delegado['autorizado'], $delegado['picvalorcusteio']+ $delegado['picvalorcapital']); ?></td>
-                                                                <td class="text-right"><?php echo marcarVermelhoValorSuperior($delegado['empenhado'], $delegado['picvalorcusteio']+ $delegado['picvalorcapital']); ?></td>
-                                                                <td class="text-right"><?php echo marcarVermelhoValorSuperior($delegado['liquidado'], $delegado['picvalorcusteio']+ $delegado['picvalorcapital']); ?></td>
-                                                                <td class="text-right"><?php echo marcarVermelhoValorSuperior($delegado['pago'], $delegado['picvalorcusteio']+ $delegado['picvalorcapital']); ?></td>
+                                                                <td><?= $delegado['pliid']; ?></td>
+                                                                <td><?= $delegado['plititulo']; ?></td>
+                                                                <td><?= $delegado['picquantidade']; ?></td>
+                                                                <td><?= $delegado['pprnome']; ?></td>
                                                             </tr>
                                                         <?php endforeach; ?>
                                                         </tbody>
