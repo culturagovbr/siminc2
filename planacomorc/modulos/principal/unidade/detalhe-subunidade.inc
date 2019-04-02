@@ -151,7 +151,7 @@
                                         <div class="ibox-content">
                                             <?php if(count($dadosPiNaoOrcamentario)): ?>
                                                 <div class="table-responsive">
-                                                    <table class="table table-bordered table-striped table-hover">
+                                                    <table class="table table-bordered table-striped table-hover dataTables">
                                                         <thead>
                                                             <tr class="text-center">
                                                                 <th>Ações</th>
