@@ -191,7 +191,7 @@
                             </td>
                             <td><?php echo $dados['id']; ?></td>
                             <td><?php echo $dados['codigo_pi']; ?></td>
-                            <td><?php echo $dados['sub_unidade']; ?></td>
+                            <td><?php echo $dados['sub_unidade'] .($dados['compartilhada'] == 't'? ' <i style="font-size: 15px; color: #6892ff;" class="fa fa-handshake-o link" title="PA compartilhado com outras Subunidades."></i>': NULL); ?></td>
                             <td><?php echo $dados['plititulo']; ?></td>
                             <td><?php echo $dados['funcional']; ?></td>
                             <td><?php echo $dados['situacao']; ?></td>
