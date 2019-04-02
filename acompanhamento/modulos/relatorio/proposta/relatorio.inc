@@ -9,8 +9,7 @@
     # Busca SQL com filtros pra realizar a consulta
     $filtro = array(
         'prsano'            => $_REQUEST['filtro']['prsano'],
-        'suoid'             => $_REQUEST['filtro']['suoid'],
-        'listaSuoidUsuario' => $listaSubUnidades,
+        'suoid'             => $_REQUEST['filtro']['suoid']? $_REQUEST['filtro']['suoid']: $listaSubUnidades,
         'eqdid'             => $_REQUEST['filtro']['eqdid'],
         'irpcod'            => $_REQUEST['filtro']['irpcod'],
         'tpdid'             => $_REQUEST['filtro']['tpdid']
