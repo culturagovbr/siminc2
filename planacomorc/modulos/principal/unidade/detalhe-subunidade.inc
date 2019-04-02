@@ -173,7 +173,7 @@
                                                             $total['liquidado'] += $dado['liquidado'];
                                                             ?>
                                                             <tr>
-                                                                <td class="text-center">
+                                                                <td class="text-center" width="5%">
                                                                     <a href="<?php echo $urlBaseCadastro; ?>&pliid=<?php echo $dado['pliid']; ?>" class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></a>
                                                                 </td>
                                                                 <td>
@@ -186,7 +186,7 @@
                                                                         <?php echo $dado['plititulo']; ?>
                                                                     </a>
                                                                 </td>
-                                                                <td><?php echo $dado['picquantidade']; ?></td>
+                                                                <td class="text-center"><?php echo $dado['picquantidade']; ?></td>
                                                                 <td class="text-center"><?php echo $dado['pprnome']; ?></td>
                                                             </tr>
                                                         <?php endforeach; ?>
@@ -208,7 +208,7 @@
                                                         <tr class="text-center">
                                                             <th>Id</th>
                                                             <th>Título</th>
-                                                            <th>Quantidade</th>
+                                                            <th class="text-center">Quantidade</th>
                                                             <th>Produto</th>
                                                         </tr>
                                                         </thead>
@@ -217,7 +217,7 @@
                                                             <tr>
                                                                 <td><?= $delegado['pliid']; ?></td>
                                                                 <td><?= $delegado['plititulo']; ?></td>
-                                                                <td><?= $delegado['picquantidade']; ?></td>
+                                                                <td class="text-center"><?= $delegado['picquantidade']; ?></td>
                                                                 <td><?= $delegado['pprnome']; ?></td>
                                                             </tr>
                                                         <?php endforeach; ?>
