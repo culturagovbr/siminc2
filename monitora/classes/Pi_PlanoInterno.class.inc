@@ -1640,10 +1640,10 @@ class Pi_PlanoInterno extends Modelo
                 pic.picedital,
                 pic.picvalorcapital,
                 pic.picvalorcusteio,
-		SUM(COALESCE(ex.vlrautorizado,0)) AS autorizado,
-		SUM(COALESCE(ex.vlrempenhado,0)) AS empenhado,
-		SUM(COALESCE(ex.vlrliquidado,0)) AS liquidado,
-		SUM(COALESCE(ex.vlrpago,0)) AS pago,
+                SUM(COALESCE(ex.vlrautorizado,0)) AS autorizado,
+                SUM(COALESCE(ex.vlrempenhado,0)) AS empenhado,
+                SUM(COALESCE(ex.vlrliquidado,0)) AS liquidado,
+                SUM(COALESCE(ex.vlrpago,0)) AS pago,
                 suo.suocod,
                 suo.suonome,
                 suo.unocod,
@@ -1660,8 +1660,8 @@ class Pi_PlanoInterno extends Modelo
                 JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod
                     AND suo.unocod = pli.unicod
                     AND suo.prsano = pli.pliano
-                JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
-                JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
+                LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
+                LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
                 LEFT JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
@@ -1671,7 +1671,7 @@ class Pi_PlanoInterno extends Modelo
                 )
             WHERE
                 pli.plistatus = 'A'
-                AND ptr.irpcod <> '6'
+                AND (ptr.irpcod <> '6' OR ptr.ptrid IS NULL)
                 $where
             GROUP BY
                 pli.pliid,
