@@ -17,6 +17,10 @@
     }
     if($_POST['filtro']['suoid']){
         $filtros[] = "suo.suoid IN(". join($_POST['filtro']['suoid'], ','). ")";
+    } else {
+        if($listaSubUnidades){
+            $filtros[] = "suo.suoid IN(". join($listaSubUnidades, ','). ")";
+        }
     }
     if($_POST['filtro']['acaid']){
         $filtros[] = "ptr.acaid IN(". join($_POST['filtro']['acaid'], ','). ")";
