@@ -172,8 +172,11 @@ class Spo_Model_Planointerno extends Modelo
                 pum.pumdescricao AS unidademedida,
                 pc.picquantidade AS quantidade,
                 CASE
-                    WHEN pd.pliid IS NOT NULL THEN TRUE ELSE FALSE
-                END AS delegado
+                    WHEN pd.pliid IS NOT NULL THEN
+                        TRUE
+                    ELSE
+                        FALSE
+                END AS compartilhada
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pc USING(pliid)
                 JOIN monitora.pi_unidade_medida AS pum ON(
@@ -236,31 +239,31 @@ class Spo_Model_Planointerno extends Modelo
                 ed.esddsc AS situacao,
                 pc.picvalorcusteio AS custeio,
                 pc.picvalorcapital AS capital,
-                (select coalesce(pliselid,0) from alteracao.plano_interno_selecionado pis where pis.pliid=pli.pliid and pis.pedid = ".(int)$pedid.") as pliselid,
+                (SELECT COALESCE (pliselid,0) FROM alteracao.plano_interno_selecionado pis WHERE pis.pliid=pli.pliid AND pis.pedid = ".(int)$pedid.") AS pliselid,
                 COALESCE((SELECT
-                    SUM(coalesce(se.vlrautorizado,0::numeric)) AS vlrautorizado
-                   FROM spo.siopexecucao se
-                  where se.plicod = pli.plicod
-                    and se.exercicio = pli.pliano
-                    ),0.00) as autorizado,
+                    SUM(COALESCE(se.vlrautorizado,0::NUMERIC)) AS vlrautorizado
+                    FROM spo.siopexecucao se
+                    WHERE se.plicod = pli.plicod
+                        AND se.exercicio = pli.pliano
+                    ),0.00) AS autorizado,
                 COALESCE((SELECT
-                    SUM(coalesce(se.vlrempenhado,0::numeric)) AS vlrempenhado
-                   FROM spo.siopexecucao se
-                  where se.plicod = pli.plicod
-                    and se.exercicio = pli.pliano
+                    SUM(COALESCE(se.vlrempenhado,0::NUMERIC)) AS vlrempenhado
+                    FROM spo.siopexecucao se
+                    WHERE se.plicod = pli.plicod
+                        AND se.exercicio = pli.pliano
                     ),0.00) as empenhado,
                 COALESCE((SELECT
-                    SUM(coalesce(se.vlrliquidado,0::numeric)) AS vlrliquidado
-                   FROM spo.siopexecucao se
-                  where se.plicod = pli.plicod
-                    and se.exercicio = pli.pliano
-                    ),0.00) as liquidado,
+                    SUM(coalesce(se.vlrliquidado,0::NUMERIC)) AS vlrliquidado
+                    FROM spo.siopexecucao se
+                    WHERE se.plicod = pli.plicod
+                        AND se.exercicio = pli.pliano
+                    ),0.00) AS liquidado,
                 COALESCE((SELECT
-                    SUM(coalesce(se.vlrpago,0::numeric)) AS vlrpago
-                   FROM spo.siopexecucao se
-                  where se.plicod = pli.plicod
-                    and se.exercicio = pli.pliano
-                    ),0.00) as pago,
+                    SUM(coalesce(se.vlrpago,0::NUMERIC)) AS vlrpago
+                    FROM spo.siopexecucao se
+                    WHERE se.plicod = pli.plicod
+                        AND se.exercicio = pli.pliano
+                    ),0.00) AS pago,
                 pli.plistatus,
                 CASE WHEN pd.pliid IS NOT NULL THEN
                     TRUE

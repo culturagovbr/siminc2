@@ -189,7 +189,7 @@
                                                 <?php } ?>
                                             </td>
                                             <td><?= $planoAcao['id']; ?></td>
-                                            <td><?= $planoAcao['sub_unidade']; ?></td>
+                                            <td><?= $planoAcao['sub_unidade'] . ($planoAcao['compartilhada'] == 't'? ' <i style="font-size: 15px; color: #6892ff;" class="fa fa-handshake-o link" title="PA compartilhado com outras Subunidades."></i>\'': NULL); ?></td>
                                             <td><?= $planoAcao['plititulo']; ?></td>
                                             <td><?= $planoAcao['situacao']; ?></td>
                                             <td><?= $planoAcao['quantidade']; ?></td>
