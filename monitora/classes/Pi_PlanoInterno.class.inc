@@ -5,7 +5,9 @@ class Pi_PlanoInterno extends Modelo
 
     const K_TIPO_DETALHE_PTRES = 'PT';
     const K_TIPO_DETALHE_PI = 'PI';
+    const K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO = 'PIN';
     const K_TIPO_DETALHE_DELEGADO = 'DL';
+    const K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO = 'DLN';
 
     /**
      * Nome da tabela especificada
@@ -1533,6 +1535,9 @@ class Pi_PlanoInterno extends Modelo
         $dadosPi = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI));
         $dadosDelegado = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_DELEGADO));
 
+        $dadosPiNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO));
+        $dadosDelegadoNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO));
+
         include_once APPRAIZ . 'planacomorc/modulos/principal/unidade/detalhe-subunidade.inc';
     }
 
@@ -1623,9 +1628,19 @@ class Pi_PlanoInterno extends Modelo
                 $where .= $parametros->suoid? " AND suo.suoid = '$parametros->suoid'": NULL;
                 break;
             case self::K_TIPO_DETALHE_PI:
+                $where .= " AND eqd.eqdcod != 'N'";
+                $where .= " AND suo.suoid = '$parametros->suoid'";
+                break;
+            case self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO:
+                $where .= " AND eqd.eqdcod = 'N'";
                 $where .= " AND suo.suoid = '$parametros->suoid'";
                 break;
             case self::K_TIPO_DETALHE_DELEGADO:
+                $where .= " AND eqd.eqdcod != 'N'";
+                $where .= " AND pde.suoid = '$parametros->suoid'";
+                break;
+            case self::K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO:
+                $where .= " AND eqd.eqdcod = 'N'";
                 $where .= " AND pde.suoid = '$parametros->suoid'";
                 break;
         }
