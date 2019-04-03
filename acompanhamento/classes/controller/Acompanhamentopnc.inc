@@ -14,14 +14,14 @@ class Acompanhamento_Controller_Acompanhamentopnc
                 $acompanhamentoHistoricoIdicadorPnc->usucpf = $_SESSION['usucpf'];
                 $acompanhamentoHistoricoIdicadorPnc->hipdata = 'NOW()';
                 $acompanhamentoHistoricoIdicadorPnc->hipquantidadeantigo = $acompanhamentoIndicadorPnc->idpquantidade;
-                $acompanhamentoHistoricoIdicadorPnc->hipquantidadenovo = desformata_valor($dados['idpquantidade']);
+                $acompanhamentoHistoricoIdicadorPnc->hipquantidadenovo = $dados['idpquantidade'];
                 $acompanhamentoHistoricoIdicadorPnc->salvar();
             } else {
                 $acompanhamentoIndicadorPnc = new Acompanhamento_Model_Indicadorpnc();
             }
             $acompanhamentoIndicadorPnc->popularDadosObjeto($dados);
 
-            $acompanhamentoIndicadorPnc->idpquantidade = $acompanhamentoIndicadorPnc->idpquantidade? desformata_valor($acompanhamentoIndicadorPnc->idpquantidade): NULL;
+            $acompanhamentoIndicadorPnc->idpquantidade = $acompanhamentoIndicadorPnc->idpquantidade? $acompanhamentoIndicadorPnc->idpquantidade: NULL;
             $acompanhamentoIndicadorPnc->idpdata = $acompanhamentoIndicadorPnc->idpdata? formata_data_sql($acompanhamentoIndicadorPnc->idpdata): NULL;
             $acompanhamentoIndicadorPnc->salvar(NULL, NULL, ['idpjustificativa']);
             $acompanhamentoIndicadorPnc->commit();
