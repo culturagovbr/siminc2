@@ -9,7 +9,7 @@
     # Busca SQL com filtros pra realizar a consulta
     $sql = montarSqlRelatorioGeralPrePi((object) array(
         'exercicio' => $_POST['filtro']['prsano'],
-        'suoid' => $_POST['filtro']['suoid'],
+        'suoid' => $_POST['filtro']['suoid']? $_POST['filtro']['suoid']: $listaSubUnidades,
         'irpcod' => $_POST['filtro']['irpcod'],
         'esdid' => $_POST['filtro']['esdid']
     ));

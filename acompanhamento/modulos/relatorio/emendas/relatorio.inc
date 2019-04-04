@@ -12,6 +12,7 @@
     );
 
     $dto = (object)$_POST['filtro'];
+    $dto->suoid = $dto->suoid? $dto->suoid: $listaSubUnidades;
     $dto->exercicio = $_POST['filtro']['prsano'];
     $modelEmenda = new Emendas_Model_Emenda();
     $sql = $modelEmenda->montarSqlRelatorioGeral($dto);

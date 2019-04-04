@@ -48,8 +48,6 @@
     }else{
         $destino = isset($agrupador2) ? $agrupador2 : array();
         $origem = $arrColunas;
-        // Dados padrão de origem
-//        $origem = 
     }
 
     // exibe agrupador

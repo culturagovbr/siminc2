@@ -21,7 +21,7 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
             pro.proid,
             suo.unosigla || ' - ' || suo.suonome subunidade,
             eqd.eqddsc,
-	        ptr.irpcod,
+            ptr.irpcod,
             ptr.funcional,
             ptr.acatitulo,
             ptr.plodsc,
@@ -56,7 +56,7 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
             pro.proid,
             subunidade,
             eqd.eqddsc,
-	        ptr.irpcod,
+            ptr.irpcod,
             ptr.funcional,
             ptr.acatitulo,
             ptr.plodsc
