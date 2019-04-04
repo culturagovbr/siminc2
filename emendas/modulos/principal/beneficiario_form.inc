@@ -329,7 +329,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     <div class="form-group">
                                         <div class="text-center">
                                             <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
-                                            <a href="?modulo=principal/emenda&acao=A" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                                            <a href="?modulo=inicio&acao=C" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
                                             <a href="?modulo=principal/emenda_form&acao=A&emeid=<?php echo $mBeneficiario->emeid; ?>" class="btn btn-success" id="btn-emenda" type="button"><i class="fa fa-file"></i>&nbsp;Ver Emenda</a>
                                             <?php if($mBeneficiario->benid && $podeEditar){ ?>
                                                 <a href="?modulo=principal/beneficiario_form&acao=A&req=excluir&benid=<?php echo $mBeneficiario->benid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
@@ -619,7 +619,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <button class="btn btn-primary" type="submit">
                                             <i class="fa fa-check"></i>&nbsp;Salvar
                                         </button>
-                                        <a href="?modulo=principal/emenda&acao=A" class="btn btn-warning" id="btn-voltar" type="button">
+                                        <a href="?modulo=inicio&acao=C" class="btn btn-warning" id="btn-voltar" type="button">
                                             <i class="fa fa-arrow-left"></i>&nbsp;Voltar
                                         </a>
                                         <a href="?modulo=principal/emenda_form&acao=A&emeid=<?php echo $mBeneficiario->emeid; ?>" class="btn btn-success" id="btn-voltar" type="button">

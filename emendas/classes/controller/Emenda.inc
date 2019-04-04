@@ -22,7 +22,7 @@ class Emendas_Controller_Emenda
     
     public function excluir($emeid)
     {
-        $url = '?modulo=principal/emenda&acao=A';
+        $url = '?modulo=inicio&acao=C';
 
         try {
             $mEmenda = new Emendas_Model_Emenda($emeid);

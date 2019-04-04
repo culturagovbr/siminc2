@@ -1,6 +1,5 @@
 <?php
 
-//simec_redirecionar('emendas.php?modulo=principal/emenda&acao=A');
 $cAcompanhamento = new Acompanhamento_Controller_Acompanhamento();
 $cAcompanhamentopnc = new Acompanhamento_Controller_Acompanhamentopnc();
 switch ($_REQUEST['req']) {
