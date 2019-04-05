@@ -768,9 +768,13 @@ class Emendas_Model_Emenda extends Modelo
 
     private function _inserirDetalhesImportacao($line)
     {
+        $mFonteRecurso = new Public_Model_FonteRecurso();
+        $mFonteRecurso->foncod = (int)$line[9];
+        $fonteRecurso = $mFonteRecurso->carregarPorFoncod();
+
         $mEmendaDetalhe = new Emendas_Model_EmendaDetalhe();
         $mEmendaDetalhe->emeid = $this->emeid;
-        $mEmendaDetalhe->foncod = $line[9];
+        $mEmendaDetalhe->fonid = $fonteRecurso['fonid'];
         $mEmendaDetalhe->gndcod = $line[12];
         $mEmendaDetalhe->mapcod = $line[13];
         $mEmendaDetalhe->emdvalor = str_replace(['.', ','], ['', '.'], $line[18]) + str_replace(['.', ','], ['', '.'], $line[20]);
