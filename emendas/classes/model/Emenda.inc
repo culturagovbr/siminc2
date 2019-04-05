@@ -651,7 +651,7 @@ class Emendas_Model_Emenda extends Modelo
         $extensao = substr($files['name'], strrpos($files['name'], '.'));
 
         $origem = $files['tmp_name'];
-        $destino = APPRAIZ . 'emendas/modulos/apoio/importacao/planilha_' . date('YmdHis') . $extensao;
+        $destino = APPRAIZ . 'arquivos/emendas/planilha_'. date('YmdHis'). $extensao;
         if(move_uploaded_file($origem , $destino)){
 
             $file = fopen($destino, 'r');
@@ -659,7 +659,6 @@ class Emendas_Model_Emenda extends Modelo
             $count = 0;
             while (($line = fgetcsv($file, 0, ';')) !== false)
             {
-
                 $line = array_map('trim', $line);
 //                    $line = array_map('utf8_decode', $line);
 
@@ -668,20 +667,20 @@ class Emendas_Model_Emenda extends Modelo
                 $emenumero = trim($line[2]);
                 if(!$emenumero) { continue; }
 
-                $sql = "select emeid from emendas.emenda where emenumero = " . $emenumero;
+                $sql = "SELECT emeid FROM emendas.emenda WHERE emenumero = ". $emenumero;
                 $emeid = $this->pegaUm($sql);
 
                 if($emeid){
                     $this->carregarPorId($emeid);
                 } else {
-                    // Unidade Orçamentária
+                    # Unidade Orçamentária
                     $unocod = substr(trim($line[5]), 0, 5);
                     $unoid = $this->_recuperarUnidadeImportacao($unocod, $_SESSION['exercicio']);
 
-                    // Autor
+                    # Autor
                     $autid = $this->_recuperarAutorImportacao($line, $_SESSION['exercicio']);
 
-                    // Ação
+                    # Funcional
                     $funcional = $this->_recuperarFuncionalImportacao($line[7], $line[6], $line[8], $unocod, $_SESSION['exercicio']);
 
                     if(!$funcional || !$autid){ continue; }
@@ -700,11 +699,9 @@ class Emendas_Model_Emenda extends Modelo
                 } else {
                     $this->_inserirDetalhesImportacao($line);
                 }
-                $this->commit();
                 $this->emeid = null;
             }
             fclose($file);
-            ver('FIM', d);
         }
     }
 

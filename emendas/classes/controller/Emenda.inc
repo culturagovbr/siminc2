@@ -45,13 +45,20 @@ class Emendas_Controller_Emenda
 
     public function importar($files)
     {
-        if($files['error'] == UPLOAD_ERR_OK){
+        $url = '?modulo=apoio/importar_emendas&acao=A';
 
-            $mEmendas = new Emendas_Model_Emenda();
-            $mEmendas->importar($files);
-
+        try {
+            if($files['error'] == UPLOAD_ERR_OK){
+                $mEmendas = new Emendas_Model_Emenda();
+                $mEmendas->importar($files);
+                $mEmendas->commit();
+            }
+            
+            simec_redirecionar($url, 'success');
+        } catch (Exception $e){
+            $mEmenda->rollback();
+            simec_redirecionar($url, 'error');
         }
-        echo 'Fim';
     }
 
     public function montarFormularioDetalhes($emeid = null, $emdid = null)
@@ -84,4 +91,4 @@ class Emendas_Controller_Emenda
         include_once APPRAIZ . 'emendas/modulos/principal/emendadetalhe.inc';
     }
 
-}            
+}

@@ -62,10 +62,9 @@ switch ($requisicao) {
         break;
 }
 
-$aEmenda = (new Emendas_Model_Emenda)->recuperarListagem((object)$filtroEmenda);
-
 include APPRAIZ . "includes/cabecalho.inc";
-
+$filtroEmenda['exercicio'] = $_SESSION['exercicio'];
+$aEmenda = (new Emendas_Model_Emenda)->recuperarListagem((object)$filtroEmenda);
 ?>
 
 <script src="js/principal/emenda.js?v=5"></script>
