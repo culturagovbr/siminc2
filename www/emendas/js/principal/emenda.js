@@ -16,7 +16,7 @@
         });
 
         $('.editar_situacao').click(function(){
-            $('#proposta_modal .modal-body').load('emendas.php?modulo=principal/emenda&acao=A&req=proposta_modal&benid='+ $(this).data('benid'));
+            $('#proposta_modal .modal-body').load('emendas.php?modulo=inicio&acao=C&req=proposta_modal&benid='+ $(this).data('benid'));
             $('#proposta_modal').modal();
         });
         
@@ -48,7 +48,7 @@
         // Evento ao mudar opção de UO
         $('#unicod').change(function(){
             carregarUG($(this).val());
-            $('#span-funcional').load('?modulo=principal/emenda&acao=A&req=carregarAcaoPorUo&unicod=' + $(this).val());
+            $('#span-funcional').load('?modulo=inicio&acao=C&req=carregarAcaoPorUo&unicod=' + $(this).val());
         });
 
     }
@@ -71,7 +71,7 @@
      */
     function carregarUG(unicod) {
         $.post(
-            '?modulo=principal/emenda&acao=A&req=carregarComboUG', { unicod: unicod}, function(response) {
+            '?modulo=inicio&acao=C&req=carregarComboUG', { unicod: unicod}, function(response) {
                 $('#div_ungcod').remove('slow');
                 $('#div_ungcod').html(response);
                 $(".chosen-select").chosen();

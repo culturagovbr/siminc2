@@ -5,7 +5,7 @@ class Emendas_Controller_SiconvBeneficiario
     public function salvar($dados)
     {
         try {
-            $url = '?modulo=principal/emenda&acao=A';
+            $url = '?modulo=inicio&acao=C';
 
             # Desmarca todos os beneficiarios(Exclusao logica).
             (new Emendas_Model_SiconvBeneficiario())->excluirDeBeneficiario($dados['benid']);

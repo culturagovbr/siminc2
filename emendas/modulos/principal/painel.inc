@@ -6,7 +6,7 @@ $perfis = pegaPerfilGeral();
 # Caso seja o perfil de SubUnidade o sistema redireciona para a tela de lista de emendas.
 if(count(array_intersect($perfis, [PFL_SUBUNIDADE]))){
     # Todos os perfis são redirecionados para a nova tela de Painel
-    $urlPainel = 'emendas.php?modulo=principal/emenda&acao=A';
+    $urlPainel = 'emendas.php?modulo=inicio&acao=C';
     if($_REQUEST['exercicio']){
         $urlPainel .= '&exercicio='. $_REQUEST['exercicio'];
     }
@@ -31,7 +31,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     </div>
     <div class="col-lg-8">
         <div style="padding-top: 10px;" class="text-right">
-            <a class="btn btn-danger" href="emendas.php?modulo=principal/emenda&acao=A">
+            <a class="btn btn-danger" href="?modulo=inicio&acao=C">
                 <i class="fa fa-list"></i> Lista de Emendas
             </a>
         </div>
