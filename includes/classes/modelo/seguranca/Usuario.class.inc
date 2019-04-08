@@ -21,39 +21,39 @@ class Usuario extends Modelo{
      * @var array
      * @access protected
      */
-    protected $arAtributos     = array(
-									  	'usucpf' => null,
-									  	'regcod' => null,
-									  	'usunome' => null,
-									  	'usuemail' => null,
-									  	'usustatus' => null,
-									  	'usufoneddd' => null,
-									  	'usufonenum' => null,
-									  	'ususenha' => null,
-									  	'usudataultacesso' => null,
-									  	'usunivel' => null,
-									  	'ususexo' => null,
-									  	'orgcod' => null,
-									  	'unicod' => null,
-									  	'usuchaveativacao' => null,
-									  	'usutentativas' => null,
-									  	'usuprgproposto' => null,
-									  	'usuacaproposto' => null,
-									  	'usuobs' => null,
-									  	'ungcod' => null,
-									  	'usudatainc' => null,
-									  	'usuconectado' => null,
-									  	'pflcod' => null,
-									  	'suscod' => null,
-									  	'usunomeguerra' => null,
-									  	'orgao' => null,
-									  	'muncod' => null,
-									  	'usudatanascimento' => null,
-									  	'usudataatualizacao' => null,
-									  	'entid' => null,
-									  	'tpocod' => null,
-									  	'carid' => null
-									  );
+    protected $arAtributos = array(
+        'usucpf' => null,
+        'regcod' => null,
+        'usunome' => null,
+        'usuemail' => null,
+        'usustatus' => null,
+        'usufoneddd' => null,
+        'usufonenum' => null,
+        'ususenha' => null,
+        'usudataultacesso' => null,
+        'usunivel' => null,
+        'ususexo' => null,
+        'orgcod' => null,
+        'unicod' => null,
+        'usuchaveativacao' => null,
+        'usutentativas' => null,
+        'usuprgproposto' => null,
+        'usuacaproposto' => null,
+        'usuobs' => null,
+        'ungcod' => null,
+        'usudatainc' => null,
+        'usuconectado' => null,
+        'pflcod' => null,
+        'suscod' => null,
+        'usunomeguerra' => null,
+        'orgao' => null,
+        'muncod' => null,
+        'usudatanascimento' => null,
+        'usudataatualizacao' => null,
+        'entid' => null,
+        'tpocod' => null,
+        'carid' => null
+    );
 
     public function loginWebService($usuario, $senha){
 
@@ -249,5 +249,59 @@ class Usuario extends Modelo{
         );
 
         $this->executar( $sql );
+    }
+
+    /**
+     * Recupera as ações realizadas no sistema.
+     *
+     * @param $where
+     * @return array|string
+     */
+    public function recuperarAuditoria($where)
+    {
+        $sql = "
+            SELECT
+                usu.usucpf AS cpf,
+                usu.usunome AS nome,
+                usu.usuemail AS email,
+                usu.regcod AS uf,
+                usu.usufoneddd AS ddd,
+                '( '||usu.usufoneddd||' ) '||usu.usufonenum AS telefone,
+                usu.usufuncao AS funcao,
+                CASE aud.audtipo
+                    WHEN 'I' THEN 'Inclução'
+                    WHEN 'U' THEN 'Alteração'
+                    WHEN 'D' THEN 'Exclusão'
+                    WHEN 'X' THEN 'Erro do Sistema'
+                END AS tipo_acao,
+                to_char(aud.auddata, 'dd/MM/yyyy HH:MM:SS') as data_evento,
+                aba.abadsc AS menuutilizado
+            FROM seguranca.usuario usu
+                JOIN auditoria aud ON usu.usucpf = aud.usucpf
+                JOIN seguranca.aba aba ON aud.sisid = aba.sisid
+                ".$where."
+        ";
+
+        return (object)$this->carregar($sql);
+    }
+
+    /**
+     * Monta o where da consulta de auditoria.
+     *
+     * @param $wh
+     * @return string
+     */
+    public static function montaWhere(stdClass $wh)
+    {
+        $where = $wh->usucpf ? "\nAND usu.usucpf LIKE '%".$wh->usucpf."%'" : NULL;
+        $where .= $wh->usunome ? "\nAND usu.usunome LIKE '%".str_to_upper($wh->usunome)."%' " : NULL;
+        $where .= trim($wh->audtipo) ? "\nAND aud.audtipo = '".$wh->audtipo."' " : NULL;
+        $where .= $wh->audtabela ? "\nAND aud.audtabela LIKE '%".$wh->audtabela."%' " : NULL;
+        $where .= $wh->audsql ? "\nAND aud.audsql LIKE '%".$wh->audsql."%' " : NULL;
+        $where .= ($wh->auddata_ini && $wh->auddata_fim) ? "\nAND aud.auddata <= '".formata_data_sql($wh->auddata_fim)." 23:59:59' AND aud.auddata >= '".formata_data_sql($wh->auddata_ini)." 00:00:00' " : NULL;
+        # Remove o "AND" para a primeira Claúsula existente.
+        if ($where) $where = " WHERE ".substr($where,4, strlen($where)); else $where = "";
+
+        return $where;
     }
 }
