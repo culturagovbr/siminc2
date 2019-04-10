@@ -1,8 +1,8 @@
 <?php
 
 if(!empty($_FILES['arquivo'])){
-    $cEmendas = new Emendas_Controller_Emenda();
-    $cEmendas->importar($_FILES['arquivo']);
+    $controleImportar = new Emendas_Controller_Importacao();
+    $controleImportar->importar($_FILES['arquivo']);
 }
 
 include APPRAIZ . "includes/cabecalho.inc";
