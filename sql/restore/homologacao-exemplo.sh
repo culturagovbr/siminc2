@@ -79,10 +79,5 @@ WHERE
 ;
 "
 
-# Apagando tabelas de logs que não são necessárias
-PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_homologacao" -c "
-TRUNCATE TABLE acomporc.mensagensretorno;
-DELETE FROM spo.logws;
-VACUUM FULL VERBOSE acomporc.mensagensretorno;
-VACUUM FULL VERBOSE spo.logws;"
-
+# Criando arquivo de dump pra o ambiente de desenvolvimento atualizado com permissões e tabela de auditoria vazia
+# pg_dump -v --dbname=postgres://postgres:[SENHA_BD]@[IP_SERVIDOR_BANCO]:5432/siminc2_homologacao -Fc > siminc2_homologacao.bkp
