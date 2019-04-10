@@ -646,149 +646,188 @@ class Emendas_Model_Emenda extends Modelo
         return $colunas;
     }
 
-    public function importar($files)
+    /**
+     * Atualiza/importa os dados de emendas e beneficiários da Planilha para o Sistema
+     * 
+     * @param array $listaEmendas
+     * @return array
+     */
+    public function importar(array $listaEmendas, $exercicio)
     {
-        $extensao = substr($files['name'], strrpos($files['name'], '.'));
+        foreach($listaEmendas as $emenda){
+            $emenumero = trim($emenda['emenda']);
+            /**
+             * Caso o registro da emenda não tenha número de emenda, o sistema 
+             * pula a importação desse registro e continua a partir do próximo.
+             */
+            if(!$emenumero) continue;
 
-        $origem = $files['tmp_name'];
-        $destino = APPRAIZ . 'arquivos/emendas/planilha_'. date('YmdHis'). $extensao;
-        if(move_uploaded_file($origem , $destino)){
+            $sql = "SELECT emeid FROM emendas.emenda WHERE emenumero = ". (int)$emenumero;
+            $emeid = $this->pegaUm($sql);
 
-            $file = fopen($destino, 'r');
+            if($emeid) {
+                $this->carregarPorId($emeid);
+            } else {
+                # Unidade Orçamentária
+                $unocod = substr(trim($emenda['unidadeOrcamentaria']), 0, 5);
+                $unoid = $this->_buscarUOporUnocodExercicio($unocod, $exercicio);
 
-            $count = 0;
-            while (($line = fgetcsv($file, 0, ';')) !== false)
-            {
-                $line = array_map('trim', $line);
-//                    $line = array_map('utf8_decode', $line);
+                # Autor
+                $autid = $this->_importarAutor($emenda['autor'], $emenda['partido']);
 
-                if(!$count++){ continue; }
+                # Funcional
+                $ptrid = $this->_buscarFuncionalImportacao(
+                    $exercicio,
+                    $unocod,
+                    $emenda['funcao'],
+                    $emenda['subFuncao'],
+                    $emenda['programa'],
+                    $emenda['acao'],
+                    $emenda['localizador']
+                );
 
-                $emenumero = trim($line[2]);
-                if(!$emenumero) { continue; }
+                /**
+                 * Caso o registro da emenda não tenha funcional ou autor, o sistema 
+                 * pula a importação desse registro e continua a partir do próximo.
+                 */
+                if(!$ptrid || !$autid) continue;
 
-                $sql = "SELECT emeid FROM emendas.emenda WHERE emenumero = ". $emenumero;
-                $emeid = $this->pegaUm($sql);
-
-                if($emeid){
-                    $this->carregarPorId($emeid);
-                } else {
-                    # Unidade Orçamentária
-                    $unocod = substr(trim($line[5]), 0, 5);
-                    $unoid = $this->_recuperarUnidadeImportacao($unocod, $_SESSION['exercicio']);
-
-                    # Autor
-                    $autid = $this->_recuperarAutorImportacao($line, $_SESSION['exercicio']);
-
-                    # Funcional
-                    $funcional = $this->_recuperarFuncionalImportacao($line[7], $line[6], $line[8], $unocod, $_SESSION['exercicio']);
-
-                    if(!$funcional || !$autid){ continue; }
-
-                    $this->emenumero = $emenumero;
-                    $this->unoid = $unoid;
-                    $this->ptrid = $funcional[0]['ptrid'];
-                    $this->autid = $autid;
-                    $this->emeimpositiva = 't';
-                    $this->prsano = $_SESSION['exercicio'];
-                    $this->salvar();
-                }
-
-                if(is_numeric($line[14])){
-                    $this->_inserirBeneficiarioImportacao($line);
-                } else {
-                    $this->_inserirDetalhesImportacao($line);
-                }
-                $this->emeid = null;
+                $this->emenumero = $emenumero;
+                $this->unoid = $unoid;
+                $this->ptrid = $ptrid;
+                $this->autid = $autid;
+                $this->emeimpositiva = 't';
+                $this->prsano = $exercicio;
+                $this->salvar();
             }
-            fclose($file);
+
+            if(is_numeric($emenda['beneficiario'])){
+                $this->_importarProponenteBeneficiario($emenda);
+            } else {
+                $this->_importarFonteEmendaDetalhes($emenda);
+            }
+            $this->emeid = null;
         }
+        
+        return $listaEmendas;
     }
 
-    private function _recuperarUnidadeImportacao($unocod, $exercicio)
+    private function _buscarUOporUnocodExercicio($unocod, $exercicio)
     {
-        $sql = "select unoid from public.unidadeorcamentaria where unocod = '{$unocod}' and prsano = '$exercicio'";
+        $sql = "
+            SELECT DISTINCT
+                unoid,
+                unonome
+            FROM public.vw_subunidadeorcamentaria
+            WHERE
+		unostatus = 'A'
+                AND prsano = '". (int)$exercicio. "'
+                AND unocod = '". (int)$unocod. "'
+            ORDER BY
+		unonome
+        ";
+
         return $this->pegaUm($sql);
     }
 
-    private function _recuperarAutorImportacao($line, $exercicio)
+    private function _importarAutor($autor, $partido)
     {
-        $dado = $line[0];
-
-        if('(-1)' == substr($dado, 0, 4)){
-            return false;
+        $listaAutor = explode('-', $autor);
+        $autcod = (int)trim($listaAutor[0]);
+        $autnome = trim($listaAutor[1]);
+        
+        /**
+         * Caso não tenha número de autor válido o sistema não realiza 
+         * modificação ou inserção de dados.
+         */
+        if(!$autcod > 0){
+            return NULL;
         }
-
-        $autor = explode('-', $dado);
-        $autcod = trim($autor[0]);
-        $sql = "select autid from emendas.autor where autcod = '{$autcod}' order by autstatus";
+        
+        # Buscando código interno de Autor
+        $sql = "SELECT autid FROM emendas.autor WHERE autstatus = 'A' AND autcod = '". (int)$autcod. "'";
         $autid = $this->pegaUm($sql);
 
-        $parsigla = $line[1];
-        $sql = "select parid from emendas.partido where parsigla = '{$parsigla}' order by parstatus";
+        # Buscando código interno de Partido
+        $sql = "SELECT parid FROM emendas.partido WHERE parstatus = 'A' AND parsigla = '". $partido. "'";
         $parid = $this->pegaUm($sql);
 
         if(!$parid){
+            # Inserindo Partido novo
             $mPartido = new Emendas_Model_Partido();
-            $mPartido->pardsc = $parsigla;
-            $mPartido->parsigla = $parsigla;
+            $mPartido->pardsc = $partido;
+            $mPartido->parsigla = $partido;
             $mPartido->salvar();
-
             $parid = $mPartido->parid;
         }
 
-        // Atualizando nome e partido do autor
+        # Atualizando/inserindo nome e partido do autor
         $mAutor = new Emendas_Model_Autor($autid);
         $mAutor->autcod = $autcod;
-        $mAutor->autnome = trim($autor[1]);
+        $mAutor->autnome = $autnome;
         $mAutor->parid = $parid;
         $mAutor->salvar();
-        $autid = $mAutor->autid;
+        $mAutor->autid;
 
-        return $autid;
+        return $mAutor->autid;
     }
 
-    private function _recuperarFuncionalImportacao($acao, $programa, $localizador, $unocod, $exercicio)
+    private function _buscarFuncionalImportacao($exercicio, $unocod, $funcao, $subfuncao, $programa, $acao, $localizador)
     {
         $acacod = substr(trim($acao), 0, 4);
         $prgcod = substr(trim($programa), 0, 4);
         $loccod = substr(trim($localizador), 0, 4);
-        $sql = "select * from monitora.ptres where acacod = '$acacod' and prgcod = '$prgcod' and loccod = '$loccod' and unicod = '$unocod' and ptrano = '{$exercicio}' and plocod = 'EIND' and ptrstatus = 'A'";
+        $sql = "
+            SELECT DISTINCT
+                ptrid,
+                funcional
+            FROM monitora.vw_ptres
+            WHERE
+                ptrstatus = 'A'
+                AND ptrano = '$exercicio'
+                AND unicod = '". (int)$unocod. "'
+                AND funcod = '". (int)$funcao. "'
+                AND sfucod = '". (int)$subfuncao. "'
+                AND prgcod = '". (int)$prgcod. "'
+                AND acacod = '$acacod'
+                AND loccod = '$loccod'
+                AND plocod = 'EIND'
+        ";
 
-        $funcional = $this->carregar($sql);
-        if(count($funcional)> 1){
-            ver('Mais de uma ação', d);
+        $listaFuncional = $this->carregar($sql);
+        $funcional = current($listaFuncional);
+        if(count($listaFuncional) > 1){
+            throw new Exception('Houve um erro porque o sistema achou mais de uma funcional('. $funcional['funcional']. ') pra uma emenda existente na planilha.');
         }
 
-        return $funcional;
+        return $funcional? $funcional['ptrid']: NULL;
     }
 
-    private function _inserirDetalhesImportacao($line)
+    private function _importarFonteEmendaDetalhes($emenda)
     {
         $mFonteRecurso = new Public_Model_FonteRecurso();
-        $mFonteRecurso->foncod = (int)$line[9];
+        $mFonteRecurso->foncod = (int)$emenda['fonte'];
         $fonteRecurso = $mFonteRecurso->carregarPorFoncod();
 
         $mEmendaDetalhe = new Emendas_Model_EmendaDetalhe();
         $mEmendaDetalhe->emeid = $this->emeid;
         $mEmendaDetalhe->fonid = $fonteRecurso['fonid'];
-        $mEmendaDetalhe->gndcod = $line[12];
-        $mEmendaDetalhe->mapcod = $line[13];
-        $mEmendaDetalhe->emdvalor = str_replace(['.', ','], ['', '.'], $line[18]) + str_replace(['.', ','], ['', '.'], $line[20]);
+        $mEmendaDetalhe->gndcod = $emenda['gnd'];
+        $mEmendaDetalhe->mapcod = $emenda['modalidade'];
+        $mEmendaDetalhe->emdvalor = str_replace(['.', ','], ['', '.'], $emenda['autorizado']) + str_replace(['.', ','], ['', '.'], $emenda['valorPriorizado']);
 
         return $mEmendaDetalhe->salvar();
     }
 
-    private function _inserirBeneficiarioImportacao($line)
+    private function _importarProponenteBeneficiario($emenda)
     {
-        $proponente = explode('-', $line[15]);
+        $proponente = explode('-', $emenda['beneficiarioNome']);
 
         if(count($proponente) >= 2){
             $procnpj = trim(array_shift($proponente));
-            $sql = "select proid from emendas.proponente where procnpj = '{$procnpj}' order by prostatus";
-
+            $sql = "SELECT proid FROM emendas.proponente WHERE prostatus = 'A' AND procnpj = '{$procnpj}'";
         } else {
-            $sql = "select proid from emendas.proponente where procnpj = '00000000000000' order by prostatus";
+            $sql = "SELECT proid FROM emendas.proponente WHERE prostatus = 'A' AND procnpj = '00000000000000'";
         }
 
         $proid = $this->pegaUm($sql);
@@ -801,33 +840,29 @@ class Emendas_Model_Emenda extends Modelo
             $proid = $mProponente->proid;
         }
 
-        $sql = "select benid from emendas.beneficiario where emeid = {$this->emeid} and proid = {$proid}";
+        $sql = "SELECT benid FROM emendas.beneficiario WHERE benstatus = 'A' AND emeid = ". (int)$this->emeid. " AND proid = ". (int)$proid;
         $benid = $this->pegaUm($sql);
 
         $mBeneficiario = new Emendas_Model_Beneficiario($benid);
-
         if(!$benid){
             $mBeneficiario->emeid = $this->emeid;
             $mBeneficiario->proid = $proid;
-
             $mBeneficiario->salvar();
         }
 
-        $this->_inserirBeneficiarioDetalhe($mBeneficiario->benid, $mBeneficiario->emeid, $line);
+        $this->_importarBeneficiarioDetalhe($mBeneficiario->benid, $mBeneficiario->emeid, $emenda);
     }
 
-    private function _inserirBeneficiarioDetalhe($benid, $emeid, $line)
+    private function _importarBeneficiarioDetalhe($benid, $emeid, $emenda)
     {
-        $gndcod = $line[12];
-
-        $sql = "select emdid from emendas.emendadetalhe where gndcod = {$gndcod} and emeid = {$emeid}";
+        $sql = "SELECT emdid FROM emendas.emendadetalhe WHERE gndcod = '". (int)$emenda['gnd']. "' AND emeid = ". (int)$emeid;
         $emdid = $this->pegaUm($sql);
 
         $mBeneficiarioDetalhe = new Emendas_Model_BeneficiarioDetalhe();
         $mBeneficiarioDetalhe->benid = $benid;
         $mBeneficiarioDetalhe->emdid = $emdid;
-        $mBeneficiarioDetalhe->bedvalor = str_replace(['.', ','], ['', '.'], $line[19]);
-        $mBeneficiarioDetalhe->bedvalorpriorizado = str_replace(['.', ','], ['', '.'], $line[20]);
+        $mBeneficiarioDetalhe->bedvalor = str_replace(['.', ','], ['', '.'], $emenda['valorIndicado']);
+        $mBeneficiarioDetalhe->bedvalorpriorizado = str_replace(['.', ','], ['', '.'], $emenda['valorPriorizado']);
 
         return $mBeneficiarioDetalhe->salvar();
     }
