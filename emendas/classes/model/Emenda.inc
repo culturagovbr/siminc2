@@ -1276,5 +1276,4 @@ class Emendas_Model_Emenda extends Modelo
         }
     }
 
-}//end Class
-?>
+}
