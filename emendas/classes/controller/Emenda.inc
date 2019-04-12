@@ -18,7 +18,7 @@ class Emendas_Controller_Emenda
             $mEmenda->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
     
     public function excluir($emeid)
     {
@@ -41,17 +41,6 @@ class Emendas_Controller_Emenda
             $mEmenda->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
-
-    public function importar($files)
-    {
-        if($files['error'] == UPLOAD_ERR_OK){
-
-            $mEmendas = new Emendas_Model_Emenda();
-            $mEmendas->importar($files);
-
-        }
-        echo 'Fim';
     }
 
     public function montarFormularioDetalhes($emeid = null, $emdid = null)
@@ -84,4 +73,4 @@ class Emendas_Controller_Emenda
         include_once APPRAIZ . 'emendas/modulos/principal/emendadetalhe.inc';
     }
 
-}            
+}
