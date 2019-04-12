@@ -7,7 +7,7 @@ class Emendas_Controller_Importacao
     public function importar($arquivo)
     {
         $url = '?modulo=apoio/importar_emendas&acao=A';
-        $modelEmenda = new Emendas_Model_Emenda();
+        $modelImportacaoEmenda = new Emendas_Model_ImportacaoEmenda();
         try {
             if(!self::validarCarregamentoArquivo($arquivo['error'])){
                 throw new Exception('Não foi possivel fazer o upload do arquivo, verifique sua conexão e tente novamente.');
@@ -23,17 +23,39 @@ class Emendas_Controller_Importacao
             }
             
             # Lista de emendas contida no arquivo da Planilha de importação
-            $listaEmendas = self::listarEmendasArquivo($arquivoDestino);
+            $listaEmendasArquivo = self::listarEmendasArquivo($arquivoDestino);
             
-            $modelEmenda->importar($listaEmendas, (int)$_SESSION['exercicio']);
-            $modelEmenda->commit();
-            simec_redirecionar($url, 'success');
+            $modelImportacaoEmenda->setExercicio((int)$_SESSION['exercicio']);
+            $modelImportacaoEmenda->setListaEmendasArquivo($listaEmendasArquivo);
+            $modelImportacaoEmenda->importar();
+            $modelImportacaoEmenda->commit();
+            $_SESSION['mensagem_carregar'] = array('type' => 'success', 'text' => 'Operação realizada com sucesso');
         } catch (Exception $e){
-            $modelEmenda->rollback();
-            simec_redirecionar($url, 'error', $e->getMessage());
+            $modelImportacaoEmenda->rollback();
+//            simec_redirecionar($url, 'error', $e->getMessage());
+            $_SESSION['mensagem_carregar'] = array('type' => 'error', 'text' => $e->getMessage());
         }
+        
+        return $modelImportacaoEmenda->getListaEmendasArquivo();
     }
     
+    /**
+     * Lista os nomes das colunas do arquivo de planilha pra importação.
+     * 
+     * @return array
+     */
+    public static function listarColunasArquivoPlanilha() {
+        $listaColunas = array(
+            'Autor', 'Partido', 'Emenda', 'Esfera', 'Órgão', 'Unidade Orçamentária',
+            'Programa', 'Ação', 'Localizador', 'Fonte', 'IDOC', 'IDUSO', 'GND',
+            'Modalidade', 'Beneficiário', 'Beneficiário (nome)', 'Função', 'Subfunção',
+            'LOA', 'Dotação Atual', 'Autorizado', 'Valor Indicado (por Beneficiário)',
+            'Valor Priorizado (por Beneficiário)'
+        );
+        
+        return $listaColunas;
+    }
+
     /**
      * Retorna uma lista de emendas contida no arquivo da Planilha de importação
      * 
