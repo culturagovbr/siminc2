@@ -1,27 +1,43 @@
 <?php
 
-$cAcompanhamento = new Acompanhamento_Controller_Acompanhamento();
-$cAcompanhamentopnc = new Acompanhamento_Controller_Acompanhamentopnc();
-switch ($_REQUEST['req']) {
-    case 'espelho-pi':
-        include APPRAIZ. 'planacomorc/modulos/principal/unidade/espelho-pi.inc';
-        die;
-    case 'listar-metas-ppa':
-        $cAcompanhamento->listarMetasPpa($_REQUEST['suoid'], $_REQUEST['janid']);
-        die;
-    case 'listar-metas-pnc':
-        include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc';
-        die;
-}
+    include_once APPRAIZ. "includes/library/simec/Grafico.php";
+    include_once APPRAIZ. "monitora/classes/Pi_PlanoInterno.class.inc";
 
-$mEmendas = new Emendas_Model_Emenda();
-$mAcompanhamento = new Acompanhamento_Model_Acompanhamento($_REQUEST['acoid']);
+    $cAcompanhamento = new Acompanhamento_Controller_Acompanhamento();
+    $cAcompanhamentopnc = new Acompanhamento_Controller_Acompanhamentopnc();
+    switch ($_REQUEST['req']) {
+        case 'espelho-pi':
+            include APPRAIZ. 'planacomorc/modulos/principal/unidade/espelho-pi.inc';
+            die;
+        case 'listar-metas-ppa':
+            $cAcompanhamento->listarMetasPpa($_REQUEST['suoid'], $_REQUEST['janid']);
+            die;
+        case 'listar-metas-pnc':
+            include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc';
+            die;
+    }
 
-$listaPerfis = pegaPerfilGeral();
+    $mEmendas = new Emendas_Model_Emenda();
+    $mAcompanhamento = new Acompanhamento_Model_Acompanhamento($_REQUEST['acoid']);
 
-include_once APPRAIZ . "includes/library/simec/Grafico.php";
-include APPRAIZ . "includes/cabecalho.inc";
-include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
+    $listaPerfis = pegaPerfilGeral();
+
+    $listaSubunidadeUsuario = (new Public_Model_SubUnidadeOrcamentaria())->recuperarPorUsuario();
+    $suoid = $_REQUEST['suoid'] ? $_REQUEST['suoid'] : key($listaSubunidadeUsuario);
+    
+    $listaPas = (new Pi_PlanoInterno())->recuperarPorUnidade((object)[
+        'exercicio' => $_SESSION['exercicio'],
+        'suoid' => $suoid,
+        'naoOrcamentaria' => FALSE
+    ]);
+    
+    $listaPasNaoOrcamentaria = (new Pi_PlanoInterno())->recuperarPorUnidade((object)[
+        'exercicio' => $_SESSION['exercicio'],
+        'suoid' => $suoid,
+        'naoOrcamentaria' => TRUE
+    ]);
+    
+    include APPRAIZ. "includes/cabecalho.inc";
 ?>
 
 <script src="js/principal/acompanhamento.js?v=1"></script>
@@ -32,11 +48,7 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
     </div>
     <div class="col-lg-4">
         <div class="form-horizontal" style="padding-top: 10px;">
-            <?php
-            $aUnidades = (new Public_Model_SubUnidadeOrcamentaria())->recuperarPorUsuario();
-            $suoid = $_REQUEST['suoid'] ? $_REQUEST['suoid'] : key($aUnidades);
-            echo $simec->select('suoid', 'Unidade', $suoid, $aUnidades, null, ['label-size'=>2]);
-            ?>
+            <?php echo $simec->select('suoid', 'Unidade', $suoid, $listaSubunidadeUsuario, null, ['label-size'=>2]); ?>
         </div>
     </div>
     <div class="col-lg-4">
@@ -59,13 +71,12 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <?php $aPis = (new Pi_PlanoInterno())->recuperarPorUnidade($suoid); ?>
-                    <h5>Meus Projetos <span style="color: red;">(<?php echo count($aPis); ?>)</span></h5>
+                    <h5>Meus Planos de Ação <span style="color: red;">(<?php echo count($listaPas); ?>)</span></h5>
                 </div>
                 <div class="ibox-content">
                     <?php
                     $aObjetivos = [];
-                    if(count($aPis)){ ?>
+                    if(count($listaPas)){ ?>
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover table-condensed" >
                                 <thead>
@@ -83,7 +94,7 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
                                 <?php
                                 $total = 0;
 
-                                foreach($aPis as $dados){
+                                foreach($listaPas as $dados){
                                         # Cria icones e url de acesso conforme o preenchimento.
                                         if($dados['acoid']){
                                             $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid'];
@@ -141,6 +152,121 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
+                    <h5>Meus Planos de Ação(Não Orçamentários) <span style="color: red;">(<?php echo count($listaPasNaoOrcamentaria); ?>)</span></h5>
+                </div>
+                <div class="ibox-content">
+                    <?php
+                    $aObjetivos = [];
+                    if(count($listaPasNaoOrcamentaria)){ ?>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover table-condensed" >
+                                <thead>
+                                <tr class="text-center">
+                                    <th>Status</th>
+                                    <th>PI</th>
+                                    <th>Título</th>
+                                    <th>Vl. Total (R$)</th>
+                                    <th>Físico</th>
+                                    <th>Unidade</th>
+                                    <th>Produto</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $total = 0;
+
+                                foreach($listaPasNaoOrcamentaria as $dados){
+                                        # Cria icones e url de acesso conforme o preenchimento.
+                                        if($dados['acoid']){
+                                            $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid'];
+                                            $icone = '<span class="label label-primary">Preenchida</span>';
+                                        } else {
+                                            $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid']. '&suoid='. $suoid;
+                                            $icone = '<span class="label label-danger">Pendente</span>';
+                                        }
+                                        
+                                        # Caso seja perfil PNC não exibe o link de acesso a pagina de edição
+                                        if(in_array(PFL_PNC, $listaPerfis)){
+                                            $botao = $icone;
+                                        } else {
+                                            $botao = '<a href="'. $url. '">'. $icone. '</a>';
+                                        }
+                                        
+                                        if($dados['oppcod']){
+                                            $aObjetivos[$dados['oppcod']] = $dados;
+                                        }
+                                        $total += $dados['valor'];
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $botao; ?></td>
+                                        <td>
+                                            <a href="javascript: exibirEspelhoPi('<?php echo $dados['pliid']; ?>')"><?php echo $dados['plicod'] ?></a>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            echo $dados['unofundo'] == 't' ? "<span class='label label-dark'>FNC</span>  " : '';
+                                            echo $dados['plititulo'];
+                                            ?>
+                                        </td>
+                                        <td class="text-right"><?php echo number_format($dados['valor'], 0, ',', '.'); ?></td>
+                                        <td class="text-right"><?php echo number_format($dados['picquantidade'], 0, ',', '.'); ?></td>
+                                        <td><?php echo $dados['pumnome'] ?></td>
+                                        <td><?php echo $dados['pprnome'] ?></td>
+                                    </tr>
+                                <?php } ?>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th colspan="3">TOTAL</th>
+                                    <th class="text-right"><?php echo number_format($total, 2, ',', '.'); ?></th>
+                                    <th colspan="3"></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    <?php } else {
+                        echo '<div class="alert alert-danger">Nenhum registro cadastrado</div>';
+                    } ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" id="box-metas-pnc">
+            <?php include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc'; ?>
+        </div>
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <?php $aPos = (new Spo_Model_PtresSubunidade())->recuperarPorUnidade($suoid); ?>
+                    <h5>Meus Planos Orçamentários <span style="color: red;">(<?php echo count($aPos); ?>)</span></h5>
+                </div>
+                <div class="ibox-content">
+                    <?php
+                    if(count($listaPas)){ ?>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover table-condensed" >
+                                <thead>
+                                <tr class="text-center">
+                                    <th>Funcional</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach($aPos as $dados){ ?>
+                                    <tr>
+                                        <td><?php echo $dados['funcional'] . ' - ' . $dados['plodsc'] ?></td>
+                                    </tr>
+                                <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php } else {
+                        echo '<div class="alert alert-danger">Nenhum registro cadastrado</div>';
+                    } ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
                     <h5>Objetivos PPA que Contribuo <span style="color: red;">(<?php echo count($aObjetivos); ?>)</span></h5>
                 </div>
                 <div class="ibox-content">
@@ -169,38 +295,6 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
                     } ?>
                 </div>
             </div>
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <?php $aPos = (new Spo_Model_PtresSubunidade())->recuperarPorUnidade($suoid); ?>
-                    <h5>Meus Planos Orçamentários <span style="color: red;">(<?php echo count($aPos); ?>)</span></h5>
-                </div>
-                <div class="ibox-content">
-                    <?php
-                    if(count($aPis)){ ?>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover table-condensed" >
-                                <thead>
-                                <tr class="text-center">
-                                    <th>Funcional</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php foreach($aPos as $dados){ ?>
-                                    <tr>
-                                        <td><?php echo $dados['funcional'] . ' - ' . $dados['plodsc'] ?></td>
-                                    </tr>
-                                <?php } ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php } else {
-                        echo '<div class="alert alert-danger">Nenhum registro cadastrado</div>';
-                    } ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12" id="box-metas-pnc">
-            <?php include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc'; ?>
         </div>
     </div>
 </div>
@@ -240,6 +334,7 @@ include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
     /**
      * Exibe popup com Detalhes do pi. Tela de Espelho de PI.
      *
+     * @param pliid int
      * @returns VOID
      */
     function exibirEspelhoPi(pliid){

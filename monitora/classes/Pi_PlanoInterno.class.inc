@@ -2029,28 +2029,68 @@ class Pi_PlanoInterno extends Modelo
         return $this->carregar($sql);
     }
 
-    public function recuperarPorUnidade($suoid, $exercicio = null)
+    public function recuperarPorUnidade(stdClass $filtros = NULL)
     {
-        $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
+        $where = $filtros->naoOrcamentaria === TRUE? "\n AND eqd.eqdcod = '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'": "AND eqd.eqdcod != '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'";
 
-        $sql = "select pli.pliid, pli.plititulo, pli.plicod, coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0) valor, pic.picquantidade, aco.acoid, suo.unofundo,
-                       pic.pprid, pic.pumid, ppr.pprnome, pum.pumnome, ptr.funcional, ptr.plocod, ptr.plodsc, ptr.acatitulo, opp.oppid, opp.oppcod, opp.oppdsc, opp.oppnome
-                from monitora.pi_planointerno pli
-                        inner join public.vw_subunidadeorcamentaria suo on suo.unocod = pli.unicod and suo.suocod = pli.ungcod and suo.prsano = pli.pliano
-                        inner join planacomorc.pi_complemento pic on pic.pliid = pli.pliid
-                        left  join monitora.pi_planointernoptres ppt on ppt.pliid = pli.pliid
-                        inner join monitora.vw_ptres ptr on ptr.ptrid = ppt.ptrid AND ptr.ptrano = pli.pliano
-                        left join monitora.pi_produto ppr on ppr.pprid = pic.pprid
-                        left join monitora.pi_unidade_medida pum on pum.pumid = pic.pumid
-                        left join public.objetivoppa opp on opp.oppid = pic.oppid
-                        left join acompanhamento.acompanhamento aco on aco.pliid = pli.pliid
-                where pli.plistatus = 'A'
-                and pli.pliano = '$exercicio'
-                and coalesce(pli.plicod, '') != ''
-                and pli.ungcod = (select suocod from public.vw_subunidadeorcamentaria where suoid = " . (int)$suoid . ")
-                order by suo.unofundo, pum.pumnome, pli.plititulo;
-                ";
-
+        $sql = "
+            SELECT
+                pli.pliid,
+                pli.plititulo,
+                pli.plicod,
+                coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0) valor,
+                pic.picquantidade,
+                aco.acoid,
+                suo.unofundo,
+                pic.pprid,
+                pic.pumid,
+                ppr.pprnome,
+                pum.pumnome,
+                ptr.funcional,
+                ptr.plocod,
+                ptr.plodsc,
+                ptr.acatitulo,
+                opp.oppid,
+                opp.oppcod,
+                opp.oppdsc,
+                opp.oppnome
+            FROM monitora.pi_planointerno pli
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suo.unocod = pli.unicod
+                    AND suo.suocod = pli.ungcod
+                    AND suo.prsano = pli.pliano
+                )
+                LEFT JOIN monitora.pi_enquadramentodespesa eqd ON(
+                    pli.eqdid = eqd.eqdid
+                    AND pli.pliano = eqd.eqdano
+                )
+                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+                LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
+                LEFT JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = ppt.ptrid
+                    AND ptr.ptrano = pli.pliano
+                )
+                LEFT JOIN monitora.pi_produto ppr ON ppr.pprid = pic.pprid
+                LEFT JOIN monitora.pi_unidade_medida pum ON pum.pumid = pic.pumid
+                LEFT JOIN public.objetivoppa opp ON opp.oppid = pic.oppid
+                LEFT JOIN acompanhamento.acompanhamento aco ON aco.pliid = pli.pliid
+            WHERE
+                pli.plistatus = 'A'
+                AND pli.pliano = '". (int)$filtros->exercicio. "'
+                AND pli.ungcod = (
+                    SELECT
+                        suocod
+                    FROM public.vw_subunidadeorcamentaria
+                    WHERE
+                        suoid = ". (int)$filtros->suoid. "
+                )
+                $where
+            ORDER BY
+                suo.unofundo,
+                pum.pumnome,
+                pli.plititulo
+        ";
+//ver($sql);
         return $this->carregar($sql);
     }
 
