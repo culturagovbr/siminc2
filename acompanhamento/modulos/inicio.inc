@@ -3,6 +3,8 @@
     include_once APPRAIZ. "includes/library/simec/Grafico.php";
     include_once APPRAIZ. "monitora/classes/Pi_PlanoInterno.class.inc";
 
+    include APPRAIZ. "includes/cabecalho.inc";
+    
     $cAcompanhamento = new Acompanhamento_Controller_Acompanhamento();
     $cAcompanhamentopnc = new Acompanhamento_Controller_Acompanhamentopnc();
     switch ($_REQUEST['req']) {
@@ -36,8 +38,6 @@
         'suoid' => $suoid,
         'naoOrcamentaria' => TRUE
     ]);
-    
-    include APPRAIZ. "includes/cabecalho.inc";
 ?>
 
 <script src="js/principal/acompanhamento.js?v=1"></script>
@@ -95,27 +95,27 @@
                                 $total = 0;
 
                                 foreach($listaPas as $dados){
-                                        # Cria icones e url de acesso conforme o preenchimento.
-                                        if($dados['acoid']){
-                                            $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid'];
-                                            $icone = '<span class="label label-primary">Preenchida</span>';
-                                        } else {
-                                            $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid']. '&suoid='. $suoid;
-                                            $icone = '<span class="label label-danger">Pendente</span>';
-                                        }
-                                        
-                                        # Caso seja perfil PNC não exibe o link de acesso a pagina de edição
-                                        if(in_array(PFL_PNC, $listaPerfis)){
-                                            $botao = $icone;
-                                        } else {
-                                            $botao = '<a href="'. $url. '">'. $icone. '</a>';
-                                        }
-                                        
-                                        if($dados['oppcod']){
-                                            $aObjetivos[$dados['oppcod']] = $dados;
-                                        }
-                                        $total += $dados['valor'];
-                                    ?>
+                                    # Cria icones e url de acesso conforme o preenchimento.
+                                    if($dados['acoid']){
+                                        $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid'];
+                                        $icone = '<span class="label label-primary">Preenchida</span>';
+                                    } else {
+                                        $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid']. '&suoid='. $suoid;
+                                        $icone = '<span class="label label-danger">Pendente</span>';
+                                    }
+
+                                    # Caso seja perfil PNC não exibe o link de acesso a pagina de edição
+                                    if(in_array(PFL_PNC, $listaPerfis)){
+                                        $botao = $icone;
+                                    } else {
+                                        $botao = '<a href="'. $url. '">'. $icone. '</a>';
+                                    }
+
+                                    if($dados['oppcod']){
+                                        $aObjetivos[$dados['oppcod']] = $dados;
+                                    }
+                                    $total += $dados['valor'];
+                                ?>
                                     <tr>
                                         <td><?php echo $botao; ?></td>
                                         <td>
@@ -161,42 +161,42 @@
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover table-condensed" >
                                 <thead>
-                                <tr class="text-center">
-                                    <th>Status</th>
-                                    <th>PI</th>
-                                    <th>Título</th>
-                                    <th>Vl. Total (R$)</th>
-                                    <th>Físico</th>
-                                    <th>Unidade</th>
-                                    <th>Produto</th>
-                                </tr>
+                                    <tr class="text-center">
+                                        <th>Status</th>
+                                        <th>PI</th>
+                                        <th>Título</th>
+                                        <th>Vl. Total (R$)</th>
+                                        <th>Físico</th>
+                                        <th>Unidade</th>
+                                        <th>Produto</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 <?php
                                 $total = 0;
 
                                 foreach($listaPasNaoOrcamentaria as $dados){
-                                        # Cria icones e url de acesso conforme o preenchimento.
-                                        if($dados['acoid']){
-                                            $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid'];
-                                            $icone = '<span class="label label-primary">Preenchida</span>';
-                                        } else {
-                                            $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid']. '&suoid='. $suoid;
-                                            $icone = '<span class="label label-danger">Pendente</span>';
-                                        }
-                                        
-                                        # Caso seja perfil PNC não exibe o link de acesso a pagina de edição
-                                        if(in_array(PFL_PNC, $listaPerfis)){
-                                            $botao = $icone;
-                                        } else {
-                                            $botao = '<a href="'. $url. '">'. $icone. '</a>';
-                                        }
-                                        
-                                        if($dados['oppcod']){
-                                            $aObjetivos[$dados['oppcod']] = $dados;
-                                        }
-                                        $total += $dados['valor'];
-                                    ?>
+                                    # Cria icones e url de acesso conforme o preenchimento.
+                                    if($dados['acoid']){
+                                        $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid'];
+                                        $icone = '<span class="label label-primary">Preenchida</span>';
+                                    } else {
+                                        $url = '?modulo=principal/monitorar-pi&acao=A&pliid='. $dados['pliid']. '&suoid='. $suoid;
+                                        $icone = '<span class="label label-danger">Pendente</span>';
+                                    }
+
+                                    # Caso seja perfil PNC não exibe o link de acesso a pagina de edição
+                                    if(in_array(PFL_PNC, $listaPerfis)){
+                                        $botao = $icone;
+                                    } else {
+                                        $botao = '<a href="'. $url. '">'. $icone. '</a>';
+                                    }
+
+                                    if($dados['oppcod']){
+                                        $aObjetivos[$dados['oppcod']] = $dados;
+                                    }
+                                    $total += $dados['valor'];
+                                ?>
                                     <tr>
                                         <td><?php echo $botao; ?></td>
                                         <td>

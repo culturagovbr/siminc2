@@ -2139,12 +2139,21 @@ class Pi_PlanoInterno extends Modelo
         $where = ' where ' . implode(' and ', $where);
         $order = ' order by ' . implode(', ', $order);
 
-        $sql = "select *
-                from monitora.vw_planointerno pli
-                $where
-                $order
-                "
-        ;
+        $sql = "
+            SELECT
+                pliid, plicod, plititulo, plidsc, pliano, picquantidade, picvalorcapital,
+                picvalorcusteio, previsto, autorizado, empenhado, liquidado,
+                pago, acoid, acoquantidade, acodata, esddsc, unoid, unocod, unonome,
+                unosigla, suoid, suocod, suonome, suosigla, eqddsc, eqdcod, resultadoprimario,
+                mainome, masnome, prgcod, prgdsc, oppcod, oppnome, ippcod, ippnome,
+                acacod, acatitulo, loccod, locdsc, plocod, po, ptres, mdedsc,
+                mpnnome, mppnome, needsc, capdsc, ptrid, funcional, acaid, pliemenda,
+                picedital, pumnome, pprid, pprnome, emenda, edital, esfdsc, mppid,
+                mpnid, oppid, pumid, ipnid, ippid
+            FROM monitora.vw_planointerno pli
+            $where
+            $order
+        ";
 
         return $this->carregar($sql);
     }
