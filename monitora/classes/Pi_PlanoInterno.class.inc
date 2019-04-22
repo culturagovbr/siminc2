@@ -2041,6 +2041,8 @@ class Pi_PlanoInterno extends Modelo
                 coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0) valor,
                 pic.picquantidade,
                 aco.acoid,
+                aco.acoquantidade,
+                cla.cladsc,
                 suo.unofundo,
                 pic.pprid,
                 pic.pumid,
@@ -2073,7 +2075,11 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_produto ppr ON ppr.pprid = pic.pprid
                 LEFT JOIN monitora.pi_unidade_medida pum ON pum.pumid = pic.pumid
                 LEFT JOIN public.objetivoppa opp ON opp.oppid = pic.oppid
-                LEFT JOIN acompanhamento.acompanhamento aco ON aco.pliid = pli.pliid
+                LEFT JOIN acompanhamento.acompanhamento aco ON(
+                    aco.acostatus = 'A'
+                    AND aco.pliid = pli.pliid
+                )
+                LEFT JOIN acompanhamento.classificacao cla ON aco.claid = cla.claid
             WHERE
                 pli.plistatus = 'A'
                 AND pli.pliano = '". (int)$filtros->exercicio. "'

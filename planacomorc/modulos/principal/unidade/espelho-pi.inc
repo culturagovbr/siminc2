@@ -55,8 +55,6 @@
             'ungcod' => $dadosPI['ungcod']
     ));
     $disponivelSubUnidade = ($autorizadoSubUnidade - $detalhadoSubUnidade);
-//ver($autorizadoSubUnidade, $detalhadoSubUnidade);
-//ver($dadosPI['ungcod'],d);
 
 ?>
 <style>
