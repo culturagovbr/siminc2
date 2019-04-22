@@ -3,8 +3,6 @@
     include_once APPRAIZ. "includes/library/simec/Grafico.php";
     include_once APPRAIZ. "monitora/classes/Pi_PlanoInterno.class.inc";
 
-    include APPRAIZ. "includes/cabecalho.inc";
-    
     $cAcompanhamento = new Acompanhamento_Controller_Acompanhamento();
     $cAcompanhamentopnc = new Acompanhamento_Controller_Acompanhamentopnc();
     switch ($_REQUEST['req']) {
@@ -19,6 +17,8 @@
             die;
     }
 
+    include APPRAIZ. "includes/cabecalho.inc";
+    
     $mEmendas = new Emendas_Model_Emenda();
     $mAcompanhamento = new Acompanhamento_Model_Acompanhamento($_REQUEST['acoid']);
 
@@ -119,13 +119,14 @@
                                     <tr>
                                         <td><?php echo $botao; ?></td>
                                         <td>
-                                            <a href="javascript: exibirEspelhoPi('<?php echo $dados['pliid']; ?>')"><?php echo $dados['plicod'] ?></a>
+                                            <a href="javascript: exibirEspelhoPi('<?php echo $dados['pliid']; ?>')">
+                                                <?php echo $dados['plicod'] ?>
+                                            </a>
                                         </td>
                                         <td>
-                                            <?php
-                                            echo $dados['unofundo'] == 't' ? "<span class='label label-dark'>FNC</span>  " : '';
-                                            echo $dados['plititulo'];
-                                            ?>
+                                            <a href="javascript: exibirEspelhoPi('<?php echo $dados['pliid']; ?>')">
+                                                <?php echo ($dados['unofundo'] == 't' ? "<span class='label label-dark'>FNC</span>  " : ''). $dados['plititulo']; ?>
+                                            </a>
                                         </td>
                                         <td class="text-right"><?php echo number_format($dados['valor'], 0, ',', '.'); ?></td>
                                         <td class="text-right"><?php echo number_format($dados['picquantidade'], 0, ',', '.'); ?></td>
@@ -163,12 +164,12 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th>Status</th>
-                                        <th>PI</th>
+                                        <th>ID</th>
                                         <th>Título</th>
-                                        <th>Vl. Total (R$)</th>
-                                        <th>Físico</th>
-                                        <th>Unidade</th>
+                                        <th>Quantidade Prevista</th>
+                                        <th>Executado</th>
                                         <th>Produto</th>
+                                        <th>Classificação</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -200,18 +201,17 @@
                                     <tr>
                                         <td><?php echo $botao; ?></td>
                                         <td>
-                                            <a href="javascript: exibirEspelhoPi('<?php echo $dados['pliid']; ?>')"><?php echo $dados['plicod'] ?></a>
+                                            <a href="javascript: exibirEspelhoPi('<?php echo $dados['pliid']; ?>')"><?php echo $dados['pliid'] ?></a>
                                         </td>
                                         <td>
-                                            <?php
-                                            echo $dados['unofundo'] == 't' ? "<span class='label label-dark'>FNC</span>  " : '';
-                                            echo $dados['plititulo'];
-                                            ?>
+                                            <a href="javascript: exibirEspelhoPi('<?php echo $dados['pliid']; ?>')">
+                                            <?php echo ($dados['unofundo'] == 't' ? "<span class='label label-dark'>FNC</span>  " : ''). $dados['plititulo']; ?>
+                                            </a>
                                         </td>
-                                        <td class="text-right"><?php echo number_format($dados['valor'], 0, ',', '.'); ?></td>
                                         <td class="text-right"><?php echo number_format($dados['picquantidade'], 0, ',', '.'); ?></td>
-                                        <td><?php echo $dados['pumnome'] ?></td>
+                                        <td class="text-right"><?php echo number_format($dados['acoquantidade'], 0, ',', '.'); ?></td>
                                         <td><?php echo $dados['pprnome'] ?></td>
+                                        <td><?php echo $dados['cladsc'] ?></td>
                                     </tr>
                                 <?php } ?>
                                 </tbody>
