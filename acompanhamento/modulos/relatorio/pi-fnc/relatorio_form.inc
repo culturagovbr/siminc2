@@ -1,6 +1,6 @@
 <input type="hidden" name="req" id="req" value=""/>
 <div class="ibox-title">
-    <h5>Relatório Geral de PI-FNC</h5><br>
+    <h5>Relatório Geral de PA-FNC</h5><br>
 </div>
 <div class="ibox-content">
     <?php

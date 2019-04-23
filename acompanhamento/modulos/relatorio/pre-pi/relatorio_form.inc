@@ -1,6 +1,6 @@
 <input type="hidden" name="req" id="req" value=""/>
 <div class="ibox-title">
-    <h5>Relatório Geral de Pré-PI</h5><br>
+    <h5>Relatório Geral de Pré-PA</h5><br>
 </div>
 <div class="ibox-content">
     <?php
