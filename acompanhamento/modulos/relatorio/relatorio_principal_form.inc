@@ -2,8 +2,9 @@
 
 $tipoRelatorio = $_REQUEST['tipo_relatorio'] ? $_REQUEST['tipo_relatorio'] : array();
 $norelatorio = '';
+
 $listaSubUnidades = buscarSuoidUsuario((object) array(
-    'exercicio' => $_SESSION['exercicio'],
+    'exercicio' => ($_REQUEST['prsano']? $_REQUEST['prsano']: $_SESSION['exercicio']),
     'usucpf' => $_SESSION['usucpf']
 ));
 
@@ -154,9 +155,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 $base = array(
                                     'proposta' => 'Relatório de Propostas',
                                     'emendas'=> 'Relatório de Beneficiários/Emenda',
-                                    'pre-pi' => 'Relatório de Pré-PI',
-                                    'pi' => 'Relatório de PI',
-                                    'pi-fnc' => 'Relatório de PI do FNC',
+                                    'pre-pi' => 'Relatório de Pré-PA',
+                                    'pi' => 'Relatório de PA',
+                                    'pi-fnc' => 'Relatório de PA do FNC',
                                     'funcional' => 'Relatório de Funcionais',
                                 );
                                 echo $simec->select('tipo_relatorio', '', $preenchidos, $base);
