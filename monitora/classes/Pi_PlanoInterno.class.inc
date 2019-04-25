@@ -1757,28 +1757,38 @@ class Pi_PlanoInterno extends Modelo
         return $resultado;
     }
 
-    public function recuperarPis($filtro, $unoFundo='false')
+    public function recuperarPis($filtro, $unoFundo = 'false')
     {
-      if(is_array($filtro['eqdid']) && count($filtro['eqdid'])){
-      	$where = ' and pli.eqdid in (' . implode(',', $filtro['eqdid']) . ')';
-      }
-      if(is_array($filtro['suoid']) && count($filtro['suoid'])){
-          $where .= " and suo.suocod in('" . implode("','", $filtro['suoid']) . "')";
-      }
-        $sql = "select  pli.docid, doc.esdid, pli.pliid, pli.plicod, pli.plidsc, pli.plititulo, ptr.acatitulo, ptr.funcional,
-                        doc.esdid, ptr.ptres, ptr.ptrid, ptr.prgcod, ptr.acacod, ptr.loccod, ptr.plocod, ptr.plodsc, ptr.irpcod,
-                        suo.unocod, suo.unosigla, suo.unonome, suo.suocod, suo.suosigla, suo.suonome, suo.unofundo
-                from monitora.pi_planointerno pli
-                        inner join workflow.documento doc on doc.docid = pli.docid
-                        inner join monitora.pi_planointernoptres pip on pip.pliid = pli.pliid
-                        inner join monitora.vw_ptres ptr on ptr.ptrid = pip.ptrid
-                        inner join public.vw_subunidadeorcamentaria suo on suo.suocod = pli.ungcod and suo.unocod = pli.unicod and suo.prsano = pli.pliano
-                where pli.pliano = '{$filtro['exercicio']}'
-                and pli.plistatus = 'A'
-                and suo.unofundo = ".$unoFundo."
-                and doc.esdid = '{$filtro['esdid']}'
-                $where
-                ";
+        if (is_array($filtro['eqdid']) && count($filtro['eqdid'])) {
+            $where = ' and pli.eqdid in (' . implode(',', $filtro['eqdid']) . ')';
+        }
+        if (is_array($filtro['suoid']) && count($filtro['suoid'])) {
+            $where .= " and suo.suocod in('" . implode("','", $filtro['suoid']) . "')";
+        }
+
+        $sql = "
+            SELECT
+                pli.docid, doc.esdid, pli.pliid, pli.plicod, pli.plidsc, pli.plititulo, ptr.acatitulo, ptr.funcional,
+                doc.esdid, ptr.ptres, ptr.ptrid, ptr.prgcod, ptr.acacod, ptr.loccod, ptr.plocod, ptr.plodsc, ptr.irpcod,
+                suo.unocod, suo.unosigla, suo.unonome, suo.suocod, suo.suosigla, suo.suonome, suo.unofundo
+            FROM monitora.pi_planointerno AS pli
+                JOIN workflow.documento AS doc ON doc.docid = pli.docid
+                LEFT JOIN monitora.pi_planointernoptres AS pip ON pli.pliid = pip.pliid
+                LEFT JOIN monitora.vw_ptres AS ptr ON pip.ptrid = ptr.ptrid
+                JOIN public.vw_subunidadeorcamentaria AS suo ON(
+                    suo.suocod = pli.ungcod
+                    AND suo.unocod = pli.unicod
+                    AND suo.prsano = pli.pliano
+                )
+                JOIN monitora.pi_enquadramentodespesa AS eqd ON pli.eqdid = eqd.eqdid
+            WHERE
+                pli.pliano = '{$filtro['exercicio']}'
+                AND pli.plistatus = 'A'
+                AND suo.unofundo = " . $unoFundo . "
+                AND doc.esdid = '{$filtro['esdid']}'
+            $where
+        ";
+
         return $this->carregar($sql);
     }
 
