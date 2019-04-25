@@ -2802,7 +2802,7 @@ function pegarDocidPi($pliid, $tipoFluxo)
     $sql = "select docid from monitora.pi_planointerno where pliid = {$pliid}";
     $docid = $db->pegaUm($sql);
     if (!$docid) {
-        $docid = wf_cadastrarDocumento($tipoFluxo, "PI {$pliid}");
+        $docid = wf_cadastrarDocumento($tipoFluxo, "PA {$pliid}");
 
         $db->executar("UPDATE monitora.pi_planointerno SET docid = $docid where pliid = {$pliid}");
         $db->commit();
