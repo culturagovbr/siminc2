@@ -4,7 +4,7 @@ $tipoRelatorio = $_REQUEST['tipo_relatorio'] ? $_REQUEST['tipo_relatorio'] : arr
 $norelatorio = '';
 
 $listaSubUnidades = buscarSuoidUsuario((object) array(
-    'exercicio' => ($_REQUEST['prsano']? $_REQUEST['prsano']: $_SESSION['exercicio']),
+    'exercicio' => ($_REQUEST['filtro']['prsano']? $_REQUEST['filtro']['prsano']: $_SESSION['exercicio']),
     'usucpf' => $_SESSION['usucpf']
 ));
 
