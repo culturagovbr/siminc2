@@ -556,7 +556,7 @@ function buscarSuoidUsuario(stdClass $filtros){
             AND suo.prsano = '". (int)$filtros->exercicio. "'
             AND rpu.usucpf = '". pg_escape_string($filtros->usucpf). "'
     ";
-
+//ver($sql, d);
     $resultado = $db->carregar($sql);
     if($resultado){
         foreach($resultado as $contador => $subUnidade){
