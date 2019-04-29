@@ -423,7 +423,6 @@ include APPRAIZ . "includes/cabecalho.inc";
 </div> <!-- div principal -->
 
 <?php
-    # Modal Seleção de PTRES
     bootstrapPopup('Seleção de PTRES', 'modal_ptres', '', array('fechar'), array('tamanho' => 'lg'));
     bootstrapPopup('Detalhamento PTRES', 'modal_detalhes_ptres', '', array('fechar'), array('tamanho' => 'lg'));
     bootstrapPopup('Seleção de Responsáveis', 'modal_responsaveis', '', array('fechar'), array('tamanho' => 'lg'));
