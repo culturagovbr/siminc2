@@ -40,14 +40,14 @@ Para visualizar uma lista completa do padrão de versionamento de código [clique 
 
     $ git branch
     $ git fetch
-    $ git checkout teste
-    $ git pull origin teste
+    $ git checkout homologa
+    $ git pull origin homologa
     $ git merge hotfix-007-planejamento-documentos
-    $ git push origin teste
+    $ git push origin homologa
 
     master  o-------o-------------o---------------------------------------------
                      \
-            o----o------------o---o-o---o--------- teste -----------------------
+            o----o------------o---o-o---o--------- homologa --------------------
                        \               /
                         o------o-o-o--o--- hotfix-007-planejamento-documentos --
 
