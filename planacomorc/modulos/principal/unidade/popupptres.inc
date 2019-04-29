@@ -5,7 +5,7 @@
  *
  */
 if ($_REQUEST['detalhe']) {
-    include APPRAIZ . "planacomorc/modulos/principal/unidade/modal-ptres-grafico.inc";
+    include APPRAIZ. 'planacomorc/modulos/principal/unidade/modal-ptres-grafico.inc';
     die();
 }
 
@@ -179,7 +179,7 @@ if($_REQUEST['fnc'] == 1){
             $(document).ready(function(){
                 apresentaLinhasSelecionadas($('#orcamento'), 2);
 
-                $('#modal-ptres .btn-info').click(function(e) {
+                $('#modal_ptres .btn-info').click(function(e) {
                     e.stopPropagation();
                     var params = parametrosFiltro();
                     atualizaListagemPTRES(params);
@@ -386,7 +386,7 @@ if($_REQUEST['fnc'] == 1){
                 }
                 
                 // fecha modal após a seleção
-                $('#modal-ptres').modal('hide');
+                $('#modal_ptres').modal('hide');
             }
 
             function ptresApagar(ptres) {
@@ -419,12 +419,12 @@ if($_REQUEST['fnc'] == 1){
             function parametrosFiltro()
             {
                 var params = {};
-                $('#modal-ptres #formularioPopup select').each(function() {
+                $('#modal_ptres #formularioPopup select').each(function() {
                     var inputName = $(this).attr('name'),
                     inputValue = $(this).val();
                     params[inputName] = inputValue;
                 });
-                $('#modal-ptres #formularioPopup input:hidden').each(function() {
+                $('#modal_ptres #formularioPopup input:hidden').each(function() {
                     var inputName = $(this).attr('name'),
                     inputValue = $(this).val();
                     params[inputName] = inputValue;
@@ -433,13 +433,13 @@ if($_REQUEST['fnc'] == 1){
             }
 
             function atualizaListagemPTRES(params){
-                $('#modal-ptres .modal-body').html('');
+                $('#modal_ptres .modal-body').html('');
                 $.post('planacomorc.php?modulo=principal/unidade/popupptres&acao=A&fnc='+ fnc+ '&obrigatorio=n', params, function(response) {
-                    $('#modal-ptres .modal-body').html(response);
+                    $('#modal_ptres .modal-body').html(response);
                     //console.log(response);
                     delegatePaginacao();
-                    $('#modal-ptres .chosen-select').chosen();
-                    $('#modal-ptres .chosen-container').css('width', '100%');
+                    $('#modal_ptres .chosen-select').chosen();
+                    $('#modal_ptres .chosen-container').css('width', '100%');
                 });
             }
 
