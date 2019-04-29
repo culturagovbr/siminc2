@@ -1029,12 +1029,10 @@
     }
 
     function abrirModalResponsaveis() {
-        // Verifica se o modal terá que carregar a tela.
-        if($('#modal_responsaveis .modal-body p').size() <= 1){
+        if($('#modal_responsaveis .modal-body div').size() <= 1){
             $.post('planacomorc.php?modulo=principal/unidade/pi-responsaveis&acao=A&ungcod='+ $("#ungcod").val(),
                 function(response) {
-                    $('#modal_responsaveis .modal-body p').html(response);
-                    $('.modal_dialog_responsaveis').show();
+                    $('#modal_responsaveis .modal-body').html(response);
                     $('#modal_responsaveis').modal();
                     $('#modal_responsaveis .chosen-select').chosen();
                     $('#modal_responsaveis .chosen-container').css('width', '100%');
@@ -1048,13 +1046,12 @@
 
     function abrirModalLocalizacao() {
         // Verifica se o modal terá que carregar a tela.
-        if($('#modal_localizacao .modal-body p').size() <= 1){
+        if($('#modal_localizacao .modal-body div').size() <= 1){
             $.post('planacomorc.php?modulo=principal/unidade/pi-localizacao&acao=A', function(response) {
-                    $('#modal_localizacao .modal-body p').html(response);
-                    $('.modal_dialog_localizacao').show();
-                    $('#modal_localizacao').modal();
-                    $('#modal_localizacao .chosen-select').chosen();
-                    $('#modal_localizacao .chosen-container').css('width', '100%');
+                $('#modal_localizacao .modal-body').html(response);
+                $('#modal_localizacao').modal();
+                $('#modal_localizacao .chosen-select').chosen();
+                $('#modal_localizacao .chosen-container').css('width', '100%');
             });
         } else {
             $('#modal_localizacao').modal();
@@ -1064,13 +1061,12 @@
 
     function abrirModalLocalizacaoEstadual() {
         // Verifica se o modal terá que carregar a tela.
-        if($('#modal_localizacao_estadual .modal-body p').size() <= 1){
+        if($('#modal_localizacao_estadual .modal-body div').size() <= 1){
             $.post('planacomorc.php?modulo=principal/unidade/pi-localizacao-estadual&acao=A', function(response) {
-                    $('#modal_localizacao_estadual .modal-body p').html(response);
-                    $('.modal_dialog_localizacao_estadual').show();
-                    $('#modal_localizacao_estadual').modal();
-                    $('#modal_localizacao_estadual .chosen-select').chosen();
-                    $('#modal_localizacao_estadual .chosen-container').css('width', '100%');
+                $('#modal_localizacao_estadual .modal-body').html(response);
+                $('#modal_localizacao_estadual').modal();
+                $('#modal_localizacao_estadual .chosen-select').chosen();
+                $('#modal_localizacao_estadual .chosen-container').css('width', '100%');
             });
         } else {
             $('#modal_localizacao_estadual').modal();
@@ -1080,13 +1076,12 @@
 
     function abrirModalLocalizacaoExterior() {
         // Verifica se o modal terá que carregar a tela.
-        if($('#modal_localizacao_exterior .modal-body p').size() <= 1){
+        if($('#modal_localizacao_exterior .modal-body div').size() <= 1){
             $.post('planacomorc.php?modulo=principal/unidade/pi-localizacao-exterior&acao=A', function(response) {
-                    $('#modal_localizacao_exterior .modal-body p').html(response);
-                    $('.modal_dialog_localizacao_exterior').show();
-                    $('#modal_localizacao_exterior').modal();
-                    $('#modal_localizacao_exterior .chosen-select').chosen();
-                    $('#modal_localizacao_exterior .chosen-container').css('width', '100%');
+                $('#modal_localizacao_exterior .modal-body').html(response);
+                $('#modal_localizacao_exterior').modal();
+                $('#modal_localizacao_exterior .chosen-select').chosen();
+                $('#modal_localizacao_exterior .chosen-container').css('width', '100%');
             });
         } else {
             $('#modal_localizacao_exterior').modal();
@@ -1095,7 +1090,6 @@
     }
 
     function abrirModalUpload() {
-        $('.modal_dialog_upload').show();
         $('#modal_upload').modal();
         $('#modal_upload .chosen-container').css('width', '100%');
     }
@@ -1578,35 +1572,29 @@
             alert('<p style="text-align: justify;">&nbsp; &nbsp; Não será possível selecionar uma funcional sem informar o Enquadramento da Despesa.<br />&nbsp; &nbsp; <span style="color: #ff0000;">Por favor, selecione um Enquadramento da Despesa e tente novamente.</span></p>');
         } else {
             // Verifica se o modal terá que recarregar a tela.
-            if($('#modal-ptres .modal-body div').size() <= 1){
+            if($('#modal_ptres .modal-body div').size() <= 1){
                 $.post(urlPopup+ '&obrigatorio=n&unicod='+ $("#unicod").val()+ '&ungcod='+ $("#ungcod").val()+ '&no_ptrid='+ $('input[name=ptrid]').val()+ '&eqdid='+ $('#eqdid').val(), function(response) {
-                    $('#modal-ptres .modal-body p').html(response);
-                    $('.modal-dialog-ptres').show();
-                    $('#modal-ptres').modal();
-                    $('#modal-ptres .chosen-select').chosen();
-                    $('#modal-ptres .chosen-container').css('width', '100%');
+                    $('#modal_ptres .modal-body').html(response);
+                    $('#modal_ptres').modal();
+                    $('#modal_ptres .chosen-select').chosen();
+                    $('#modal_ptres .chosen-container').css('width', '100%');
                 });
             } else {
                 $('#formularioPopup input[name=unicod]').val($("#unicod").val());
                 $('#formularioPopup input[name=ungcod]').val($("#ungcod").val());
                 $('#formularioPopup input[name=eqdid]').val($('#eqdid').val());
                 $('#formularioPopup input[name=no_ptrid]').val($('input[name=ptrid]').val());
-                $('#modal-ptres').modal();
+                $('#modal_ptres').modal();
                 $('#btnPopupPtresPesquisar').click();
             }
         }
     }
 
     function visualizarRegistro(ptrid) {
-        $('#modal-confirm .modal-body p').empty();
         url = 'planacomorc.php?modulo=principal/unidade/popupptres&acao=A&detalhe=ok&ptrid=' + ptrid;
         $.post(url, function(html) {
-            $('#modal-confirm .modal-body p').html(html);
-            $('#modal-confirm .modal-title').html('Detalhamento PTRES');
-            $('#modal-confirm .btn-primary').remove();
-            $('#modal-confirm .btn-default').html('Fechar');
-            $('.modal-dialog').show();
-            $('#modal-confirm').modal();
+            $('#modal_detalhes_ptres .modal-body').html(html);
+            $('#modal_detalhes_ptres').modal();
         });
     }
 
