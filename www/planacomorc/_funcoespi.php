@@ -1214,15 +1214,14 @@ DML;
                     ungcod,
                     pliano,
                     plisituacao,
-                    plicadsiafi,
-                    plirecursosnecessarios
-                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s')
+                    plicadsiafi
+                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')
                 RETURNING
                     pliid;
 DML;
             
             $stmt = sprintf(
-                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF, str_replace(array("'"), ' ', $dados['plirecursosnecessarios']));
+                $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF);
 
             $pliid = $db->pegaUm($stmt);
             
@@ -1262,7 +1261,6 @@ DML;
             UPDATE monitora.pi_planointerno SET
                 plititulo = '%s',
                 plidsc = '%s',
-                plirecursosnecessarios = '%s',
                 mdeid = %s,
                 eqdid = %s,
                 neeid = %s,
@@ -1274,7 +1272,6 @@ DML;
         $stmt = sprintf($sql,
             trim($dados['plititulo']),
             trim($dados['plidsc']),
-            trim($dados['plirecursosnecessarios']),
             $dados['mdeid'],
             $dados['eqdid'],
             $dados['neeid'],
@@ -2171,8 +2168,7 @@ function carregarPI($pliid) {
             sba.sbasigla || ' - ' AS sbasigla,
             sba.sbacod,
             ben.benid,
-            em.emenumero,
-            pli.plirecursosnecessarios
+            em.emenumero
         FROM monitora.pi_planointerno pli
             LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
             LEFT JOIN emendas.emenda em ON(ben.emeid = em.emeid)
