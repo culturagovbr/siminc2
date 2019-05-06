@@ -223,7 +223,7 @@ if(in_array($_SESSION['monitora_var']['unicod'],$arUnidadeSemModalidae)){
     <td>
 	<?
 	$sql = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao
-		    FROM monitora.pi_modalidadeensino 
+		    FROM planejamento.area_cultural 
 		    WHERE mdeano='".$_SESSION['exercicio']."' and mdestatus='A' 
 		    ORDER BY mdecod";
 	

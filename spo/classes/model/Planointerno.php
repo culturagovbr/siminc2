@@ -41,7 +41,7 @@ class Spo_Model_Planointerno extends Modelo
     protected $arChaveEstrangeira = array(
         'capid' => array('tabela' => 'planejamento.categoria_apropriacao', 'pk' => 'capid'),
         'eqdid' => array('tabela' => 'planejamento.programa', 'pk' => 'eqdid'),
-        'mdeid' => array('tabela' => 'monitora.pi_modalidadeensino', 'pk' => 'mdeid'),
+        'mdeid' => array('tabela' => 'planejamento.area_cultural', 'pk' => 'mdeid'),
         'neeid' => array('tabela' => 'monitora.pi_niveletapaensino', 'pk' => 'neeid'),
         'obrid' => array('tabela' => 'obras.obrainfraestrutura', 'pk' => 'obrid'),
         'usucpf' => array('tabela' => 'usuario', 'pk' => 'usucpf'),

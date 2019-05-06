@@ -3,11 +3,11 @@
 ALTER TABLE monitora.pi_niveletapaensino
    ADD COLUMN mdeid integer NOT NULL DEFAULT NULL;
 COMMENT ON COLUMN monitora.pi_niveletapaensino.mdeid
-  IS 'Relação com a tabela de Área Cultural. monitora.pi_modalidadeensino';
+  IS 'Relação com a tabela de Área Cultural. planejamento.area_cultural';
 
 ALTER TABLE monitora.pi_niveletapaensino
    ADD CONSTRAINT fk_pi_niveletapaensino_reference_pi_modalidadeensino FOREIGN KEY(mdeid)
-  REFERENCES monitora.pi_modalidadeensino(mdeid) MATCH SIMPLE
+  REFERENCES planejamento.area_cultural(mdeid) MATCH SIMPLE
   ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- DROP TABLE IF EXISTS monitora.pi_objetivoppa_metappa;
@@ -561,7 +561,7 @@ GRANT ALL ON TABLE public.areacultural TO postgres;
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.areacultural TO usr_simec;
 
 insert into public.areacultural
-select * from monitora.pi_modalidadeensino
+select * from planejamento.area_cultural
 
 
 -- Table: public.segmentocultural

@@ -1467,7 +1467,7 @@ class Pi_PlanoInterno extends Modelo
                 )
                 LEFT JOIN public.objetivoppa opp ON opp.oppid = pic.oppid
                 LEFT JOIN public.iniciativappa ipp ON ipp.ippid = pic.ippid
-                LEFT JOIN monitora.pi_modalidadeensino mde ON mde.mdeid = pli.mdeid
+                LEFT JOIN planejamento.area_cultural mde ON mde.mdeid = pli.mdeid
                 LEFT JOIN monitora.pi_niveletapaensino nee ON nee.neeid = pli.neeid
                 LEFT JOIN public.metappa mpp ON mpp.mppid = pic.mppid
                 LEFT JOIN public.metapnc mpn ON mpn.mpnid = pic.mpnid

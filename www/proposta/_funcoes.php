@@ -139,7 +139,7 @@ function montarSqlRelatorioGeralPrePi(stdClass $filtros){
             LEFT JOIN public.iniciativappa ipp ON pli.ippid = ipp.ippid
             LEFT JOIN public.metapnc mpn ON pli.mpnid = mpn.mpnid
             LEFT JOIN public.indicadorpnc ipn ON pli.ipnid = ipn.ipnid
-            LEFT JOIN monitora.pi_modalidadeensino mde ON pli.mdeid = mde.mdeid
+            LEFT JOIN planejamento.area_cultural mde ON pli.mdeid = mde.mdeid
             LEFT JOIN monitora.pi_niveletapaensino nee ON pli.neeid = nee.neeid
             LEFT JOIN territorios.esfera esf ON pli.esfid = esf.esfid
             LEFT JOIN proposta.preplanointernolocalizacao plo ON pli.pliid = plo.pliid

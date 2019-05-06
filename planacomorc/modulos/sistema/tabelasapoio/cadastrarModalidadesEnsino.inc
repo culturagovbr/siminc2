@@ -14,7 +14,7 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
     $ano = $_POST['ano'];
     
     $sql = "
-        INSERT INTO monitora.pi_modalidadeensino (mdecod,mdedsc,mdeano,mdestatus) VALUES
+        INSERT INTO planejamento.area_cultural (mdecod,mdedsc,mdeano,mdestatus) VALUES
             ('$codigo', '$descricao', '$ano', '$status') ";
       if ($db->executar( $sql )) {
         $db->commit ();
@@ -27,7 +27,7 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
 
 }
 if($_REQUEST['execucao'] == 'editar'){
-    $strSql = "SELECT * FROM monitora.pi_modalidadeensino WHERE mdeid='" . $_REQUEST['registro']."'";
+    $strSql = "SELECT * FROM planejamento.area_cultural WHERE mdeid='" . $_REQUEST['registro']."'";
     //ver($strSql,d);
     $rs = $db->pegaLinha($strSql);
     $id = $rs['mdeid'];
@@ -46,7 +46,7 @@ if($_POST['id']){
     $ano = $_POST['ano'];
     
     $sql = "
-        UPDATE monitora.pi_modalidadeensino SET
+        UPDATE planejamento.area_cultural SET
             mdecod='$codigo', mdedsc='$descricao', mdeano='$ano', mdestatus='$status'
         WHERE mdeid='$id'
     ";

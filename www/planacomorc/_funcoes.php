@@ -284,7 +284,7 @@ function updateModalidadeEnsino($rowID) {
 
     global $db;
 
-    $strSql = 'SELECT * FROM monitora.pi_modalidadeensino WHERE mdeid=' . $rowID;
+    $strSql = 'SELECT * FROM planejamento.area_cultural WHERE mdeid=' . $rowID;
     $rs = $db->carregar($strSql);
     if (!$rs)
         return false;
@@ -371,7 +371,7 @@ function deleteRowModalidadeEnsino($rowID) {
 
     global $db;
 
-    $strSql = sprintf('UPDATE monitora.pi_modalidadeensino SET mdestatus=\'I\' WHERE mdeid=%d', (int) $rowID);
+    $strSql = sprintf('UPDATE planejamento.area_cultural SET mdestatus=\'I\' WHERE mdeid=%d', (int) $rowID);
      if ($db->executar( $strSql )) {
         $db->commit ();
       }
@@ -460,13 +460,13 @@ function salvaModalidadeEnsino(array $post) {
     if (empty($post['mdeid'])) {
 
         $strSqlBase = "INSERT INTO
-            monitora.pi_modalidadeensino(mdecod, mdedsc, mdeano, mdestatus)
+            planejamento.area_cultural(mdecod, mdedsc, mdeano, mdestatus)
             VALUES('%s', '%s', '%s', '%s')";
         $strSql = sprintf($strSqlBase, $mdecod, $mdedsc, $mdeano, 'A');
         $mensagem = 'inserido';
     } else {
 //atualiza
-        $strSql = "UPDATE monitora.pi_modalidadeensino SET ";
+        $strSql = "UPDATE planejamento.area_cultural SET ";
         $mdeid = $post['mdeid'];
         unset($post['mdeid']);
 

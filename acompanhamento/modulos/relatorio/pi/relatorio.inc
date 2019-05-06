@@ -174,7 +174,7 @@
                         $stSql = "SELECT
                                       mdeid AS codigo,
                                       mdedsc AS descricao
-                                  FROM monitora.pi_modalidadeensino
+                                  FROM planejamento.area_cultural
                                   WHERE
                                       mdestatus = 'A'
                                       AND mdeano = '" . $_REQUEST['filtro']['prsano'] . "'

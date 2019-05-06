@@ -174,7 +174,7 @@ if($obPi_PlanoInterno->pliid){
 	</tr>
 	<tr>
 		<td class = "subtitulodireita">Modalidade de Ensino/Tema/Público:</td>
-		<td><?php echo (($obPi_PlanoInterno->mdeid)?$db->pegaUm("SELECT mdecod || ' - ' || mdedsc FROM monitora.pi_modalidadeensino WHERE mdeid='".$obPi_PlanoInterno->mdeid."'"):"Não informado"); ?></td>
+		<td><?php echo (($obPi_PlanoInterno->mdeid)?$db->pegaUm("SELECT mdecod || ' - ' || mdedsc FROM planejamento.area_cultural WHERE mdeid='".$obPi_PlanoInterno->mdeid."'"):"Não informado"); ?></td>
 	</tr>
 	<tr>
 		<td class = "subtitulodireita">Título:</td>

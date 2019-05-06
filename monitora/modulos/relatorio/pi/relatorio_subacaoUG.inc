@@ -567,7 +567,7 @@ monta_titulo( $titulo_modulo, '' );
 				    <td>
 						<?
 						$mdeid = $_REQUEST['mdeid'];
-						$sql = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao FROM monitora.pi_modalidadeensino WHERE mdeano = '{$_SESSION['exercicio']}'";
+						$sql = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao FROM planejamento.area_cultural WHERE mdeano = '{$_SESSION['exercicio']}'";
 						$db->monta_combo('mdeid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '000000005_3');
 			    	 	?>
 				    </td>

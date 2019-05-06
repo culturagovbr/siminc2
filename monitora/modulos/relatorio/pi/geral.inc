@@ -123,7 +123,7 @@ function monta_sql(){
                         LEFT JOIN planejamento.categoria_apropriacao cap on pl.capid = cap.capid
                         LEFT JOIN planejamento.enquadramento_despesa eqd on pl.eqdid = eqd.eqdid
                         LEFT JOIN monitora.pi_niveletapaensino nee on pl.neeid = nee.neeid
-                        LEFT JOIN monitora.pi_modalidadeensino mde on pl.mdeid = mde.mdeid
+                        LEFT JOIN planejamento.area_cultural mde on pl.mdeid = mde.mdeid
                         LEFT JOIN ( select sbaid, ptrid,
                                                 sum( sadvalor ) as valor
                                                 from  monitora.pi_subacaodotacao
@@ -736,7 +736,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 				><img src="../imagens/combo-todos.gif" border="0" align="middle"></div>
 				<div id="mod_ensino_campo_on" style="display:<?php echo $possuiSelecionado ? "block" : "none" ?>;">
 					<?php
-					$sql_combo = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao FROM monitora.pi_modalidadeensino WHERE mdeano = '{$_SESSION['exercicio']}' order by mdecod";
+					$sql_combo = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao FROM planejamento.area_cultural WHERE mdeano = '{$_SESSION['exercicio']}' order by mdecod";
 					
 					combo_popup(
 						'f_mod_ensino',			// nome do campo

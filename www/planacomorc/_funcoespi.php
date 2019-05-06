@@ -2115,7 +2115,7 @@ SELECT scp.scpid,
       ON (scp.neeid = nee.neeid AND scp.scpano = nee.neeano)
     LEFT JOIN planejamento.categoria_apropriacao cap
       ON (scp.capid = cap.capid AND scp.scpano = cap.capano)
-    LEFT JOIN monitora.pi_modalidadeensino mde
+    LEFT JOIN planejamento.area_cultural mde
       ON (scp.mdeid = mde.mdeid AND scp.scpano = mde.mdeano)
   WHERE scpid = %d
 DML;
@@ -2181,7 +2181,7 @@ function carregarPI($pliid) {
             LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
             LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
             LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
-            LEFT JOIN monitora.pi_modalidadeensino mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
+            LEFT JOIN planejamento.area_cultural mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
         WHERE
             pli.pliid = %d
 DML;
@@ -2272,7 +2272,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
                 pli.capid = cap.capid
                 AND pli.pliano = cap.capano
             )
-            LEFT JOIN monitora.pi_modalidadeensino mde ON(pli.mdeid = mde.mdeid)
+            LEFT JOIN planejamento.area_cultural mde ON(pli.mdeid = mde.mdeid)
             LEFT JOIN public.vw_subunidadeorcamentaria suo ON(
                 pli.unicod = suo.unocod
                 AND suo.suocod = pli.ungcod

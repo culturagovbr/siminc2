@@ -366,7 +366,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
                 LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
                 LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
                 LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
-                LEFT JOIN monitora.pi_modalidadeensino mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
+                LEFT JOIN planejamento.area_cultural mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
             WHERE
                 pli.pliid = $pliid
         ";
@@ -723,14 +723,14 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             SELECT
                 MAX(mdeid),
                 upper(public.removeacento(mdedsc)) as descricao
-            FROM monitora.pi_modalidadeensino
+            FROM planejamento.area_cultural
             WHERE
                 mdestatus = 'A'
                 AND mdeano = '{$_SESSION['exercicio']}'
                 AND upper(public.removeacento(mdedsc)) = (
                     SELECT
                         upper(public.removeacento(mdedsc))
-                    FROM monitora.pi_modalidadeensino
+                    FROM planejamento.area_cultural
                     WHERE
                         mdestatus = 'A'
                         AND mdeano = '{$anoAnterior}'

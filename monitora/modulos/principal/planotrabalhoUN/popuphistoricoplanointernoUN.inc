@@ -141,7 +141,7 @@ button{cursor:pointer}
 			<td class="subtitulodireita">Modalidade de Ensino/Tema/Público:</td>
 			<td><?php
 			if ($obPi_PlanoInterno->mdeid) {
-				echo $db->pegaUm ( "SELECT mdecod || ' - ' || mdedsc FROM monitora.pi_modalidadeensino WHERE mdeid='" . $obPi_PlanoInterno->mdeid . "'" );
+				echo $db->pegaUm ( "SELECT mdecod || ' - ' || mdedsc FROM planejamento.area_cultural WHERE mdeid='" . $obPi_PlanoInterno->mdeid . "'" );
 			}
 			?>
 		</td>

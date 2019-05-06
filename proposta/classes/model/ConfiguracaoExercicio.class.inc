@@ -744,17 +744,17 @@ class ConfiguracaoExercicio extends Modelo {
                 from monitora.pi_unidade_medida t
                 where t.prsano = '2018';
                 
-                insert into monitora.pi_modalidadeensino (mdecod, mdedsc, mdeano, mdestatus)
+                insert into planejamento.area_cultural (mdecod, mdedsc, mdeano, mdestatus)
                 select t.mdecod, t.mdedsc, '2019', t.mdestatus
-                from monitora.pi_modalidadeensino t
+                from planejamento.area_cultural t
                 where t.mdeano = '2018';
                 
                 insert into monitora.pi_niveletapaensino (needsc
                 , neeano, neestatus, mdeid, neecod)
                 select t.needsc, '2019', t.neestatus, novo.mdeid, t.neecod
                 from monitora.pi_niveletapaensino t
-                        inner join monitora.pi_modalidadeensino old on old.mdeid = t.mdeid and old.mdestatus = 'A'
-                        inner join monitora.pi_modalidadeensino novo on novo.mdecod = old.mdecod and novo.mdeano = '2019' and novo.mdestatus = 'A'
+                        inner join planejamento.area_cultural old on old.mdeid = t.mdeid and old.mdestatus = 'A'
+                        inner join planejamento.area_cultural novo on novo.mdecod = old.mdecod and novo.mdeano = '2019' and novo.mdestatus = 'A'
                 where t.neeano = '2018'
                 and t.neestatus = 'A';
                 
