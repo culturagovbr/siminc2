@@ -1,8 +1,8 @@
 <?php
 
-$cAreaCultural = new Public_Controller_AreaCultural();
+$cAreaCultural = new Planacomorc_Controller_AreaCultural();
 $cSegmentoCultural = new Public_Controller_SegmentoCultural();
-$mAreaCultural = new Monitora_Model_PiModalidadeEnsino($_REQUEST['mdeid']);
+$mAreaCultural = new Planacomorc_Model_AreaCultural($_REQUEST['mdeid']);
 
 $mSegmentoCultural = new Monitora_Model_PiNivelEtapaEnsino($_REQUEST['neeid']);
 

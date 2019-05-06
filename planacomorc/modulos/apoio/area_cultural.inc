@@ -1,6 +1,6 @@
 <?php
 
-$listaAreaCultural = (new Monitora_Model_PiModalidadeEnsino())->recuperarTodos('*', ["mdestatus = 'A'", "mdeano = '". $_SESSION['exercicio']. "'"], 'mdedsc');
+$listaAreaCultural = (new Planacomorc_Model_AreaCultural())->recuperarTodos('*', ["mdestatus = 'A'", "mdeano = '". $_SESSION['exercicio']. "'"], 'mdedsc');
 
     include APPRAIZ . "includes/cabecalho.inc";
 

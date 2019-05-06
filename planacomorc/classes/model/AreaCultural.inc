@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.pi_modalidadeensino
+ * Classe de mapeamento da entidade planejamento.area_cultural
  *
  * @category Class
  * @package  A1
@@ -10,12 +10,10 @@
  * @link     no link
  */
 
-
 require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
-
 /**
- * Monitora_Model_Pi_modalidadeensino
+ * Planacomorc_Model_AreaCultural
  *
  * @category Class
  * @package  A1
@@ -24,14 +22,14 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release: 
  * @link     no link
  */
-class Monitora_Model_PiModalidadeEnsino extends Modelo
+class Planacomorc_Model_AreaCultural extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.pi_modalidadeensino';
+    protected $stNomeTabela = 'planejamento.area_cultural';
 
     /**
      * Chave primaria.
@@ -41,6 +39,7 @@ class Monitora_Model_PiModalidadeEnsino extends Modelo
     protected $arChavePrimaria = array(
         'mdeid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
@@ -61,5 +60,4 @@ class Monitora_Model_PiModalidadeEnsino extends Modelo
         'mdestatus' => null,
     );
 
-}//end Class
-?>
+}

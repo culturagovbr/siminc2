@@ -265,7 +265,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     </div>
                     <div class="ibox-content">
                         <?php
-                            echo '<span id="span-area">'. $simec->select('mdeid', 'Área Cultural', $mPrePlanoInterno->mdeid, (new Monitora_Model_PiModalidadeEnsino())->recuperarSqlCombo(), ['required']). '</span>';
+                            echo '<span id="span-area">'. $simec->select('mdeid', 'Área Cultural', $mPrePlanoInterno->mdeid, (new Planacomorc_Model_AreaCultural())->recuperarSqlCombo(), ['required']). '</span>';
                             echo '<span id="span-segmento">' . $simec->select('neeid', 'Segmento Cultural', $mPrePlanoInterno->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(), ['required']). '</span>';
                             echo $simec->select('esfid', 'Localização', $mPrePlanoInterno->esfid, (new Territorios_Model_Esfera())->recuperarSqlCombo());
                         ?>
