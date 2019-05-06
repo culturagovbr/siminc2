@@ -161,7 +161,7 @@ class Monitora_Model_Ptres extends Modelo
         ";
         $acaid = $this->pegaUm($sql);
 
-        $mAcao = new Monitora_Model_Acao($acaid);
+        $mAcao = new Planacomorc_Model_Acao($acaid);
         $mAcao->ididentificadorunicosiop = $funcional['identificadorunico'];
         $mAcao->unicod = $funcional['codigoorgao'];
         $mAcao->funcod = $funcional['codigofuncao'];

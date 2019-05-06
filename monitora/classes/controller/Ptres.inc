@@ -10,7 +10,7 @@ class Monitora_Controller_Ptres
             $mPtres = new Monitora_Model_Ptres($dados['ptrid']);
             $mPtres->popularDadosObjeto($dados);
 
-            $acao = new Monitora_Model_Acao($mPtres->acaid);
+            $acao = new Planacomorc_Model_Acao($mPtres->acaid);
             $mPtres->acacod = $acao->acacod;
             $mPtres->prgcod = $acao->prgcod;
             $mPtres->loccod = $acao->loccod;
