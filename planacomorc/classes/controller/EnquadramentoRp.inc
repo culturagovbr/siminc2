@@ -1,11 +1,10 @@
 <?php
 
-class Monitora_Controller_EnquadramentoRp
+class Planacomorc_Controller_EnquadramentoRp
 {
     public function salvar($dados)
     {
         $url = '?modulo=apoio/acao-enquadramento&acao=A';
-
         try {
             $mEnquadramentoRp = new Planacomorc_Model_Enquadramentorp();
             $mEnquadramentoRp->excluirPorExercicio($_SESSION['exercicio']);
@@ -27,12 +26,11 @@ class Monitora_Controller_EnquadramentoRp
             $mEnquadramentoRp->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 
     public function salvar2($dados)
     {
         $url = 'planacomorc.php?modulo=apoio/vincular-meta-ppa&acao=A';
-
         try {
             $oModel = new Spo_Model_SubUnidadeMetaPpa();
             $oModel->excluirPorExercicio($_SESSION['exercicio']);
@@ -50,8 +48,8 @@ class Monitora_Controller_EnquadramentoRp
             $oModel->commit();
             simec_redirecionar($url, 'success');
         } catch (Exception $e){
-            $prefeitura->rollback();
+            $oModel->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 }

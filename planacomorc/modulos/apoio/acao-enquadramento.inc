@@ -2,7 +2,7 @@
 
 switch ($_REQUEST['req']){
     case 'salvar':
-        (new Monitora_Controller_EnquadramentoRp())->salvar($_REQUEST);
+        (new Planacomorc_Controller_EnquadramentoRp())->salvar($_REQUEST);
         die;
 }
 
