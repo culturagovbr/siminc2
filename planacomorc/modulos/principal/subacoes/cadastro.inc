@@ -185,7 +185,7 @@ DML;
                     $sql = "
                         SELECT ed.eqdid AS codigo,
                             ed.eqdcod ||' - '|| ed.eqddsc AS descricao
-                        FROM monitora.pi_enquadramentodespesa ed
+                        FROM planejamento.enquadramento_despesa ed
                         INNER JOIN monitora.pi_subacaoenquadramento sae ON ed.eqdid = sae.eqdid
                         WHERE sae.sbaid = {$subacao['sbaid']}
                             AND eqdano = '{$_SESSION['exercicio']}'                        
@@ -203,7 +203,7 @@ DML;
                 $sql = "
                     SELECT eqdid AS codigo,
                         eqdcod ||' - '|| eqddsc AS descricao
-                    FROM monitora.pi_enquadramentodespesa
+                    FROM planejamento.enquadramento_despesa
                     WHERE eqdano = '{$_SESSION['exercicio']}'
                     ORDER BY eqdcod
                 ";

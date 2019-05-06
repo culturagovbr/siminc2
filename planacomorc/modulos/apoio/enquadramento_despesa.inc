@@ -1,6 +1,6 @@
 <?php
 
-$Enquadramento = (new Monitora_Model_PiEnquadramentoDespesa())->recuperarTodosRp( (object) array('exercicio' => $_SESSION['exercicio']));
+$Enquadramento = (new Planacomorc_Model_EnquadramentoDespesa())->recuperarTodosRp( (object) array('exercicio' => $_SESSION['exercicio']));
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>

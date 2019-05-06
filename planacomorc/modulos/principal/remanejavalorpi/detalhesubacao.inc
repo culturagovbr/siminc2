@@ -83,7 +83,7 @@ DML;
                 $sql = <<<DML
 SELECT ed.eqdid as codigo,
        ed.eqdcod ||' - '|| ed.eqddsc AS descricao
-  FROM monitora.pi_enquadramentodespesa ed
+  FROM planejamento.enquadramento_despesa ed
     INNER JOIN monitora.pi_subacaoenquadramento sae ON ed.eqdid = sae.eqdid
   WHERE sae.sbaid = {$sbaid}
     AND ed.eqdano = '{$_SESSION['exercicio']}'

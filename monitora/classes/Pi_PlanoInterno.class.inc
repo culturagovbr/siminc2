@@ -1455,7 +1455,7 @@ class Pi_PlanoInterno extends Modelo
                     AND suo.unocod = pli.unicod 
                     AND suo.prsano = pli.pliano
                 )
-                JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
+                JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN monitora.enquadramentorp AS erp ON(eqd.eqdid = erp.eqdid)
                 LEFT JOIN planacomorc.resultadoprimario AS rp ON(erp.irpcod::INTEGER = rp.rpcod)
                 LEFT JOIN planacomorc.manutencaoitem mai ON mai.maiid = pic.maiid
@@ -1609,7 +1609,7 @@ class Pi_PlanoInterno extends Modelo
                 JOIN monitora.pi_planointernoptres ppt ON ppt.ptrid = ptr.ptrid
                 JOIN monitora.pi_planointerno pli ON(pli.pliid = ppt.pliid AND pli.ungcod = suo.suocod AND pli.unicod = suo.unocod AND pli.plistatus = 'A')
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
-                JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
+                JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pli.eqdid
             WHERE
                 ptr.ptrano = '{$_SESSION['exercicio']}' $where
             GROUP BY
@@ -1680,7 +1680,7 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
-                LEFT JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
+                LEFT JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
                 LEFT JOIN spo.siopexecucao ex ON(
                     ex.exercicio = ptr.ptrano
@@ -1780,7 +1780,7 @@ class Pi_PlanoInterno extends Modelo
                     AND suo.unocod = pli.unicod
                     AND suo.prsano = pli.pliano
                 )
-                JOIN monitora.pi_enquadramentodespesa AS eqd ON pli.eqdid = eqd.eqdid
+                JOIN planejamento.enquadramento_despesa AS eqd ON pli.eqdid = eqd.eqdid
             WHERE
                 pli.pliano = '{$filtro['exercicio']}'
                 AND pli.plistatus = 'A'
@@ -2072,7 +2072,7 @@ class Pi_PlanoInterno extends Modelo
                     AND suo.suocod = pli.ungcod
                     AND suo.prsano = pli.pliano
                 )
-                LEFT JOIN monitora.pi_enquadramentodespesa eqd ON(
+                LEFT JOIN planejamento.enquadramento_despesa eqd ON(
                     pli.eqdid = eqd.eqdid
                     AND pli.pliano = eqd.eqdano
                 )

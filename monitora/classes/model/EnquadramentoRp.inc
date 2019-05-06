@@ -69,7 +69,7 @@ class Monitora_Model_EnquadramentoRp extends Modelo
           eqdid IN(
             SELECT
               eqdid
-            FROM monitora.pi_enquadramentodespesa
+            FROM planejamento.enquadramento_despesa
             WHERE
               eqdano = '{$exercicio}'
           )
@@ -96,7 +96,7 @@ class Monitora_Model_EnquadramentoRp extends Modelo
                     SELECT
                         eqdid
                     FROM
-                        monitora.pi_enquadramentodespesa
+                        planejamento.enquadramento_despesa
                     WHERE
                         eqdano = '". (int)$exercicio. "')
         ";

@@ -181,7 +181,7 @@ $pages = 50;
 					<td>
 						<?
 						$eqdid = $_REQUEST['eqdid'];
-						$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM monitora.pi_enquadramentodespesa WHERE eqdano = '{$_SESSION['exercicio']}' ORDER BY eqdcod";
+						$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM planejamento.enquadramento_despesa WHERE eqdano = '{$_SESSION['exercicio']}' ORDER BY eqdcod";
 						$db->monta_combo('eqdid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '000000005_0');						 
 						?>
 					</td>

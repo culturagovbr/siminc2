@@ -119,7 +119,7 @@ class Alteracao_Model_Alteracao extends Modelo
             FROM proposta.proposta pro
                 JOIN monitora.vw_ptres ptr ON pro.ptrid = ptr.ptrid
                 JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pro.suoid
-                JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pro.eqdid
+                JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pro.eqdid
                 LEFT JOIN proposta.propostadetalhe prd ON prd.proid = pro.proid AND prd.prdstatus = 'A'
             WHERE
                 prostatus = 'A'
@@ -187,7 +187,7 @@ class Alteracao_Model_Alteracao extends Modelo
                     AND a.codigoacao = aca.acacod
                     AND a.codigoprograma = aca.prgcod
                 )
-                JOIN monitora.pi_enquadramentodespesa eqd ON(pro.eqdid = eqd.eqdid)
+                JOIN planejamento.enquadramento_despesa eqd ON(pro.eqdid = eqd.eqdid)
                 JOIN proposta.tipodetalhamento tpd ON(eqd.tpdid = tpd.tpdid)
                 LEFT JOIN wssof.ws_planosorcamentariosdto po ON(
                     po.identificadorunicoacao = a.identificadorunico

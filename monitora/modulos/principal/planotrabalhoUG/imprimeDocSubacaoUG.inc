@@ -35,7 +35,7 @@ if($_POST['imprimeWord']){
 				$sql = "SELECT 
 							ed.eqdcod as enquadramento
 		 				FROM monitora.pi_subacaoenquadramento sae
-		 					inner join monitora.pi_enquadramentodespesa ed on ed.eqdid = sae.eqdid
+		 					inner join planejamento.enquadramento_despesa ed on ed.eqdid = sae.eqdid
 						WHERE sae.sbaid = ". $sbaid;
 				$aEnquadramento = $db->carregar( $sql );
 				$aEnquadramento = ($aEnquadramento) ? $aEnquadramento : array();
@@ -211,7 +211,7 @@ monta_titulo( "Gerenciar Subação", "");
 	    	
 			<?
 			$eqdid = $_REQUEST['eqdid'];
-			$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM monitora.pi_enquadramentodespesa WHERE eqdano = '{$_SESSION['exercicio']}' order by eqdcod";  
+			$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM planejamento.enquadramento_despesa WHERE eqdano = '{$_SESSION['exercicio']}' order by eqdcod";
 			$db->monta_combo('eqdid', $sql, 'S',  'Selecione', '', '', '', '', 'N'); 
 			?>    	
 	    </td>

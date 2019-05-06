@@ -15,7 +15,7 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
     $meta = $_POST['mpneid'];
     
     $sql = "
-        INSERT INTO monitora.pi_enquadramentodespesa (eqdcod,eqddsc,eqdano,eqdstatus,mpneid) VALUES
+        INSERT INTO planejamento.enquadramento_despesa (eqdcod,eqddsc,eqdano,eqdstatus,mpneid) VALUES
             ('$codigo', '$descricao', '$ano', '$status','$meta') ";
       if ($db->executar( $sql )) {
         $db->commit ();
@@ -31,7 +31,7 @@ if($_REQUEST['execucao'] == 'editar'){
     $strSql = '
         SELECT 
             *
-        FROM monitora.pi_enquadramentodespesa  
+        FROM planejamento.enquadramento_despesa  
         WHERE eqdid = ' . $_REQUEST['registro'];
     
     $rs = $db->pegaLinha($strSql);
@@ -53,7 +53,7 @@ if($_POST['id']){
     $meta = $_POST['mpneid'];
     
     $sql = "
-        UPDATE monitora.pi_enquadramentodespesa SET
+        UPDATE planejamento.enquadramento_despesa SET
             eqdcod='$codigo', eqddsc='$descricao', eqdano='$ano', eqdstatus='$status', mpneid='$meta'
         WHERE eqdid='$id'
     ";

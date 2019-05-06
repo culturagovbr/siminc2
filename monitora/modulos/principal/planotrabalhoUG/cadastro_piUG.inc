@@ -431,7 +431,7 @@ if(in_array($_SESSION['monitora_var']['ungcod'],$arUnidadeSemModalidae)){
                 <?php
                     $sql = "
                         SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao
-                        FROM monitora.pi_enquadramentodespesa 
+                        FROM planejamento.enquadramento_despesa 
                         WHERE eqdano='" . $_SESSION['exercicio'] . "' and eqdstatus='A' 
                         ORDER BY eqdcod
                     ";

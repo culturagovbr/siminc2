@@ -61,11 +61,11 @@ include APPRAIZ . 'includes/cabecalho.inc';
                     <div class="col-md-10">
                         <? $sqlEqdid = "
                                 SELECT ed.eqdid AS codigo, ed.eqdcod ||' - '||ed.eqddsc AS descricao
-                                FROM monitora.pi_enquadramentodespesa ed
+                                FROM planejamento.enquadramento_despesa ed
                                 WHERE ed.eqdano = '{$_SESSION['exercicio']}'";
                             $strItens = "SELECT se.eqdid AS codigo
                                 FROM monitora.pi_subacaoenquadramento se
-                                INNER JOIN monitora.pi_enquadramentodespesa ed ON (ed.eqdid = se.eqdid)
+                                INNER JOIN planejamento.enquadramento_despesa ed ON (ed.eqdid = se.eqdid)
                                 WHERE se.sbaid = {$_GET['sbaid']}
                                     AND ed.eqdano = '{$_SESSION['exercicio']}'";
                             $rs = $db->carregar($strItens);

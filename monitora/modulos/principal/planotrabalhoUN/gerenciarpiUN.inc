@@ -186,7 +186,7 @@ if(!$db->testa_superuser()){
 		    <td>
 				<?php
 					$enquadramento = $_REQUEST['enquadramento'];
-					$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM monitora.pi_enquadramentodespesa WHERE eqdano = '{$_SESSION['exercicio']}' ORDER BY eqdcod";  
+					$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM planejamento.enquadramento_despesa WHERE eqdano = '{$_SESSION['exercicio']}' ORDER BY eqdcod";
 					$db->monta_combo('enquadramento', $sql, 'S',  'Selecione', '', '', '', '', 'N'); 
 				?>    	
 		    </td>

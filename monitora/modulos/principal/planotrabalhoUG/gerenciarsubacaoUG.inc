@@ -105,7 +105,7 @@ if($_GET['del_sbaid']){
     	
 		<?
 		$eqdid = $_REQUEST['eqdid'];
-		$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM monitora.pi_enquadramentodespesa WHERE eqdano = '{$_SESSION['exercicio']}' order by eqddsc";  
+		$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM planejamento.enquadramento_despesa WHERE eqdano = '{$_SESSION['exercicio']}' order by eqddsc";
 		$db->monta_combo('eqdid', $sql, 'S',  'Selecione', '', '', '', '', 'N'); 
 		?>    	
     </td>

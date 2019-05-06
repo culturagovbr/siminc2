@@ -17,7 +17,7 @@ if( $_POST ){
 $sql = "SELECT sbacod, to_char(sbadata, 'ddmmYYYY') as sbadata, sbadsc, sbatitulo, eqdcod, sbaobra, prgcod||'.'||acacod||'.'||unicod||'.'||loccod as codigo FROM monitora.pi_subacao AS sba 
 		INNER JOIN monitora.pi_subacaodotacao AS sbd ON sbd.sbaid = sba.sbaid 
 		INNER JOIN monitora.ptres AS ptr ON ptr.ptrid = sbd.ptrid 
-		INNER JOIN monitora.pi_enquadramentodespesa AS eqd ON eqd.eqdid = sba.eqdid 
+		INNER JOIN planejamento.enquadramento_despesa AS eqd ON eqd.eqdid = sba.eqdid
 		INNER JOIN monitora.subacaounidade sbu ON sbu.sbaid = sba.sbaid  
 		WHERE sba.sbastatus = 'A' AND ptr.unicod ='".COD_FNDE."' ";
  */
@@ -31,7 +31,7 @@ $sql = "SELECT
 		INNER JOIN monitora.pi_planointerno AS pli ON pli.sbaid = sba.sbaid
 		INNER JOIN monitora.ptres AS ptr ON ptr.ptrid = sbd.ptrid 
 		INNER JOIN monitora.pi_subacaoenquadramento sae ON sae.sbaid = sba.sbaid
-		INNER JOIN monitora.pi_enquadramentodespesa as eqd ON eqd.eqdid = sae.eqdid 
+		INNER JOIN planejamento.enquadramento_despesa as eqd ON eqd.eqdid = sae.eqdid 
 		INNER JOIN monitora.pi_subacaounidade sbu ON sbu.sbaid = sba.sbaid  
 		WHERE sba.sbastatus = 'A' AND ptr.unicod ='".COD_FNDE."' and ptr.ptrano = '".$_SESSION['exercicio']."'";
 if( $plicod != "" ){
@@ -84,7 +84,7 @@ $sql = "SELECT
 		INNER JOIN monitora.pi_planointerno AS pli ON pli.sbaid = sba.sbaid
 		INNER JOIN monitora.ptres AS ptr ON ptr.ptrid = sbd.ptrid 
 		INNER JOIN monitora.pi_subacaoenquadramento sae ON sae.sbaid = sba.sbaid
-		INNER JOIN monitora.pi_enquadramentodespesa as eqd ON eqd.eqdid = sae.eqdid 
+		INNER JOIN planejamento.enquadramento_despesa as eqd ON eqd.eqdid = sae.eqdid 
 		INNER JOIN monitora.pi_subacaounidade sbu ON sbu.sbaid = sba.sbaid 
 		WHERE sba.sbastatus = 'A'  and ptr.ptrano = '".$_SESSION['exercicio']."' ";
 if( $plicod != "" ){
@@ -137,7 +137,7 @@ $sql = "SELECT
 		FROM monitora.pi_planointerno AS pli
 		INNER JOIN monitora.pi_subacao AS sba ON sba.sbaid = pli.sbaid 
 		INNER JOIN monitora.pi_subacaoenquadramento sae ON sae.sbaid = sba.sbaid
-		INNER JOIN monitora.pi_enquadramentodespesa as eqd ON eqd.eqdid = sae.eqdid 
+		INNER JOIN planejamento.enquadramento_despesa as eqd ON eqd.eqdid = sae.eqdid 
 		INNER JOIN monitora.pi_subacaounidade sbu ON sbu.sbaid = sba.sbaid
 		INNER JOIN monitora.pi_planointernoptres pip ON pip.pliid = pli.pliid
 		INNER JOIN monitora.ptres AS ptr ON ptr.ptrid = pip.ptrid
@@ -197,7 +197,7 @@ $sql = "SELECT
 		INNER JOIN monitora.acao aca ON aca.acaid = ptres.acaid 
 		INNER JOIN monitora.pi_subacao AS sba ON sba.sbaid = pli.sbaid 
 		INNER JOIN monitora.pi_subacaoenquadramento sae ON sae.sbaid = sba.sbaid
-		INNER JOIN monitora.pi_enquadramentodespesa as eqd ON eqd.eqdid = sae.eqdid 
+		INNER JOIN planejamento.enquadramento_despesa as eqd ON eqd.eqdid = sae.eqdid 
 		INNER JOIN monitora.pi_subacaounidade sbu ON sbu.sbaid = sba.sbaid 
 		WHERE pli.pliano = '".$_SESSION['exercicio']."' and ( aca.unicod = '".COD_FNDE."' or aca.unicod = '".COD_DIRETA."' ) AND pli.plistatus = 'A' and ( 
 				(plisituacao = 'A' OR plisituacao = 'C' OR plisituacao = 'S' OR plisituacao = 'E' OR plisituacao = 'P') or 

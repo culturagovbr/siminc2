@@ -41,7 +41,7 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
             JOIN monitora.vw_ptres ptr ON pro.ptrid = ptr.ptrid
 	        JOIN monitora.acao aca ON ptr.acaid = aca.acaid
             JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pro.suoid
-            JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pro.eqdid
+            JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pro.eqdid
             LEFT JOIN proposta.propostadetalhe prd ON(
 		prd.proid = pro.proid
 		AND prd.prdstatus = 'A'
@@ -127,7 +127,7 @@ function montarSqlRelatorioGeralPrePi(stdClass $filtros){
         FROM proposta.preplanointerno pli
             JOIN monitora.vw_ptres ptr ON pli.ptrid = ptr.ptrid
             JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pli.suoid
-            JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
+            JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pli.eqdid
             LEFT JOIN workflow.documento doc ON doc.docid = pli.docid
             LEFT JOIN workflow.estadodocumento esd ON esd.esdid = doc.esdid
             LEFT JOIN planacomorc.manutencaoitem mai ON pli.maiid = mai.maiid

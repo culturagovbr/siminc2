@@ -79,7 +79,7 @@ class Planacomorc_Model_ManutencaoItem extends Modelo
                 maidescricao AS descricao,
                 eqddsc AS enquadramento
             FROM planacomorc.manutencaoitem mai
-                LEFT JOIN monitora.pi_enquadramentodespesa eqd ON(mai.eqdid = eqd.eqdid)
+                LEFT JOIN planejamento.enquadramento_despesa eqd ON(mai.eqdid = eqd.eqdid)
             WHERE
                 prsano = '{$_SESSION['exercicio']}'
                 AND maistatus = 'A'

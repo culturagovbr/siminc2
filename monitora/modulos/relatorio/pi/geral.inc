@@ -121,7 +121,7 @@ function monta_sql(){
                         LEFT JOIN monitora.pi_planointernoatividade pia on pia.pliid = pl.pliid
                         LEFT JOIN pde.atividade atv on pia.atiid = atv.atiid
                         LEFT JOIN monitora.pi_categoriaapropriacao cap on pl.capid = cap.capid
-                        LEFT JOIN monitora.pi_enquadramentodespesa eqd on pl.eqdid = eqd.eqdid
+                        LEFT JOIN planejamento.enquadramento_despesa eqd on pl.eqdid = eqd.eqdid
                         LEFT JOIN monitora.pi_niveletapaensino nee on pl.neeid = nee.neeid
                         LEFT JOIN monitora.pi_modalidadeensino mde on pl.mdeid = mde.mdeid
                         LEFT JOIN ( select sbaid, ptrid,
@@ -623,7 +623,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 				><img src="../imagens/combo-todos.gif" border="0" align="middle"></div>
 				<div id="enq_Despesa_campo_on" style="display:<?php echo $possuiSelecionado ? "block" : "none" ?>;">
 					<?php
-						$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM monitora.pi_enquadramentodespesa WHERE eqdano = '{$_SESSION['exercicio']}' ORDER BY eqdcod";
+						$sql = "SELECT eqdid as codigo, eqdcod ||' - '|| eqddsc as descricao FROM planejamento.enquadramento_despesa WHERE eqdano = '{$_SESSION['exercicio']}' ORDER BY eqdcod";
 
 						combo_popup(
 							'f_enq_Despesa',			// nome do campo

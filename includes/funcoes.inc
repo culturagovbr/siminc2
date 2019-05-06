@@ -5411,7 +5411,7 @@ function buscarListaCodigoEnquadramentoReduzido($exercicio) {
     $sql = "
         SELECT
             eqdid
-        FROM monitora.pi_enquadramentodespesa
+        FROM planejamento.programa
         WHERE
             eqdstatus = 'A'
             AND eqdstreduzido = 'S'

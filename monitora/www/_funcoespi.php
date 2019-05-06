@@ -294,7 +294,7 @@ function carregarComboEnquadramentoPorSubacao($sbaid) {
 	
 	if($sbaid){
 		$sql = "SELECT ed.eqdid as codigo, ed.eqdcod ||' - '|| ed.eqddsc as descricao
-		    FROM monitora.pi_enquadramentodespesa ed
+		    FROM planejamento.enquadramento_despesa ed
 		    	INNER JOIN monitora.pi_subacaoenquadramento se on ed.eqdid = se.eqdid 
 		    WHERE ed.eqdano='".$_SESSION['exercicio']."' and ed.eqdstatus='A' and se.sbaid=$sbaid
 		    ORDER BY ed.eqdcod";

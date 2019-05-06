@@ -154,7 +154,7 @@ if($obPi_PlanoInterno->pliid){
 	<tr>
 	<tr>
 		<td class = "subtitulodireita">Enquadramento da Despesa:</td>
-		<td><?php echo (($obPi_PlanoInterno->eqdid)?$db->pegaUm("SELECT eqdcod || ' - ' || eqddsc FROM monitora.pi_enquadramentodespesa WHERE eqdid='".$obPi_PlanoInterno->eqdid."'"):"Não informado"); ?></td>
+		<td><?php echo (($obPi_PlanoInterno->eqdid)?$db->pegaUm("SELECT eqdcod || ' - ' || eqddsc FROM planejamento.enquadramento_despesa WHERE eqdid='".$obPi_PlanoInterno->eqdid."'"):"Não informado"); ?></td>
 	</tr>
 	<tr>
 		<td class = "subtitulodireita">Subação:</td>

@@ -729,9 +729,9 @@ class ConfiguracaoExercicio extends Modelo {
                 from public.metapnc t
                 where prsano = '2018';
                 
-                insert into monitora.pi_enquadramentodespesa (eqdcod, eqddsc, eqdano, eqdstatus, mpneid, eqdstreduzido, eqdrp)
+                insert into planejamento.enquadramento_despesa (eqdcod, eqddsc, eqdano, eqdstatus, mpneid, eqdstreduzido, eqdrp)
                 select t.eqdcod, t.eqddsc, 2019, t.eqdstatus, t.mpneid, t.eqdstreduzido, t.eqdrp
-                from monitora.pi_enquadramentodespesa t
+                from planejamento.enquadramento_despesa t
                 where eqdano = '2018';
                 
                 insert into monitora.pi_produto (prsano, pprnome, pprdescricao, pprstatus, tipo)
@@ -761,8 +761,8 @@ class ConfiguracaoExercicio extends Modelo {
                 insert into planacomorc.manutencaoitem (prsano,mainome,maidescricao,maistatus,eqdid)
                 select '2019', t.mainome, t.maidescricao, t.maistatus, novo.eqdid
                 from planacomorc.manutencaoitem t
-                        inner join monitora.pi_enquadramentodespesa old on old.eqdid = t.eqdid and old.eqdstatus = 'A'
-                        inner join monitora.pi_enquadramentodespesa novo on novo.eqdcod = old.eqdcod and novo.eqdano = '2019' and novo.eqdstatus = 'A'
+                        inner join planejamento.enquadramento_despesa old on old.eqdid = t.eqdid and old.eqdstatus = 'A'
+                        inner join planejamento.enquadramento_despesa novo on novo.eqdcod = old.eqdcod and novo.eqdano = '2019' and novo.eqdstatus = 'A'
                 where t.prsano = '2018'
                 and t.maistatus = 'A'
                 ;

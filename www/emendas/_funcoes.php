@@ -446,7 +446,7 @@ function buscarEnquadramentoEmenda($ano){
     $sql = "
         SELECT
             eqdid
-        FROM monitora.pi_enquadramentodespesa
+        FROM planejamento.enquadramento_despesa
         WHERE
             eqdcod = 'E'
             AND eqdano = '". (int)$ano. "'";

@@ -105,7 +105,7 @@
                         $stSql = "SELECT DISTINCT
                                       eqd.eqdid AS codigo,
                                       eqd.eqddsc AS descricao
-                                  FROM monitora.pi_enquadramentodespesa eqd
+                                  FROM planejamento.enquadramento_despesa eqd
                                   WHERE eqd.eqdano='" . $_REQUEST['filtro']['prsano'] . "'
                                       AND eqdstatus = 'A'
                                   ORDER BY

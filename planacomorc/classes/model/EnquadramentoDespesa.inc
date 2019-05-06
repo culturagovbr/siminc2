@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.pi_enquadramentodespesa
+ * Classe de mapeamento da entidade planejamento.enquadramento_despesa
  *
  * @category Class
  * @package  A1
@@ -15,7 +15,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 
 /**
- * Monitora_Model_Pi_enquadramentodespesa
+ * Planacomorc_Model_EnquadramentoDespesa
  *
  * @category Class
  * @package  A1
@@ -24,7 +24,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release:
  * @link     no link
  */
-class Monitora_Model_PiEnquadramentoDespesa extends Modelo
+class Planacomorc_Model_EnquadramentoDespesa extends Modelo
 {
     const EQDCOD_PAC = 'A';
     
@@ -51,7 +51,7 @@ class Monitora_Model_PiEnquadramentoDespesa extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.pi_enquadramentodespesa';
+    protected $stNomeTabela = 'planejamento.enquadramento_despesa';
 
     /**
      * Chave primaria.
@@ -61,6 +61,7 @@ class Monitora_Model_PiEnquadramentoDespesa extends Modelo
     protected $arChavePrimaria = array(
         'eqdid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
@@ -80,11 +81,10 @@ class Monitora_Model_PiEnquadramentoDespesa extends Modelo
         'eqddsc' => null,
         'eqdano' => null,
         'eqdstatus' => null,
-//        'mpneid' => null,
         'eqdstreduzido' => null,
         'tpdid' => null,
     );
-    
+
     public function recuperarTodos($stCampos = '*', $arClausulas = null, $stOrdem = null, array $opcoes = array()) {
         // -- Retornar a query ao invés dos dados
         $opcoes['query'] = isset($opcoes['query']) ? $opcoes['query'] : false;
@@ -154,7 +154,7 @@ class Monitora_Model_PiEnquadramentoDespesa extends Modelo
                         JOIN public.identresultprimario AS rp ON (erp.irpcod = rp.irpcod)
                     WHERE
                         erp.eqdid = pi_enquadramentodespesa.eqdid)::TEXT, '{', ''), '}', ''), '\"', '') AS lista_rp
-            FROM monitora.pi_enquadramentodespesa
+            FROM planejamento.enquadramento_despesa
             WHERE
                 eqdstatus = 'A'
                 $where

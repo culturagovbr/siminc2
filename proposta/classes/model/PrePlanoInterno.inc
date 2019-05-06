@@ -122,7 +122,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             FROM proposta.preplanointerno pli
                 JOIN monitora.vw_ptres ptr ON pli.ptrid = ptr.ptrid
                 JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pli.suoid
-                JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
+                JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN workflow.documento doc ON doc.docid = pli.docid
                 LEFT JOIN workflow.estadodocumento esd ON esd.esdid = doc.esdid
             WHERE
@@ -363,7 +363,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
                 LEFT JOIN emendas.emenda em ON(ben.emeid = em.emeid)
                 LEFT JOIN planacomorc.pi_complemento pc on pc.pliid = pli.pliid
                 LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
-                LEFT JOIN monitora.pi_enquadramentodespesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
+                LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
                 LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
                 LEFT JOIN monitora.pi_categoriaapropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
                 LEFT JOIN monitora.pi_modalidadeensino mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
@@ -499,14 +499,14 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             SELECT
                 eqdid,
                 eqddsc
-            FROM monitora.pi_enquadramentodespesa
+            FROM planejamento.enquadramento_despesa
             WHERE
                 eqdstatus = 'A'
                 AND eqdano = '{$_SESSION['exercicio']}'
                 AND eqddsc = (
                     SELECT
                         eqddsc
-                    FROM monitora.pi_enquadramentodespesa
+                    FROM planejamento.enquadramento_despesa
                     WHERE
                         eqdstatus = 'A'
                         AND eqdano = '{$anoAnterior}'

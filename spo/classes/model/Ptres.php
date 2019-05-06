@@ -156,7 +156,7 @@ class Spo_Model_Ptres extends Modelo
             SELECT
                 eqdid AS codigo,
                 eqddsc AS descricao
-            FROM monitora.pi_enquadramentodespesa
+            FROM planejamento.programa
             WHERE
                 eqdstatus = 'A'
                 AND eqdano::INTEGER = ". (int)$filtro->exercicio. "

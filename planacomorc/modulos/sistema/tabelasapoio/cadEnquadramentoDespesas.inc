@@ -24,7 +24,7 @@ include APPRAIZ . 'includes/cabecalho.inc';
     <?php
  $strSqlGrid = "SELECT
     eqdid, eqdcod, eqddsc, eqdano
-FROM monitora.pi_enquadramentodespesa
+FROM planejamento.enquadramento_despesa
     WHERE
         eqdstatus='A' AND
         eqdano = '{$_SESSION['exercicio']}'

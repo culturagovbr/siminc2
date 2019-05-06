@@ -259,7 +259,7 @@ function updateEnquadramentoDespesas($rowID) {
 
     global $db;
 
-    $strSql = 'SELECT * FROM monitora.pi_enquadramentodespesa WHERE eqdid=' . $rowID;
+    $strSql = 'SELECT * FROM planejamento.enquadramento_despesa WHERE eqdid=' . $rowID;
     $rs = $db->carregar($strSql);
     if (!$rs)
         return false;
@@ -334,7 +334,7 @@ function deleteRowEnquadramentoDespesas($rowID) {
 
     global $db;
 
-    $strSql = sprintf('UPDATE monitora.pi_enquadramentodespesa SET eqdstatus=\'I\' WHERE eqdid=%d', (int) $rowID);
+    $strSql = sprintf('UPDATE planejamento.enquadramento_despesa SET eqdstatus=\'I\' WHERE eqdid=%d', (int) $rowID);
     //$db->executar($strSql);
       if ($db->executar( $strSql )) {
         $db->commit ();
@@ -419,13 +419,13 @@ function salvaEnquadramentoDespesas(array $post) {
     if (empty($post['eqdid'])) {
 
         $strSqlBase = "INSERT INTO
-            monitora.pi_enquadramentodespesa(eqdcod, eqddsc, eqdano, eqdstatus)
+            planejamento.enquadramento_despesa(eqdcod, eqddsc, eqdano, eqdstatus)
             VALUES('%s', '%s', '%s', '%s')";
         $strSql = sprintf($strSqlBase, $eqdcod, $eqddsc, $eqdano, 'A');
         $mensagem = 'inserido';
     } else {
 //atualiza
-        $strSql = "UPDATE monitora.pi_enquadramentodespesa SET ";
+        $strSql = "UPDATE planejamento.enquadramento_despesa SET ";
         $eqdid = $post['eqdid'];
         unset($post['eqdid']);
 

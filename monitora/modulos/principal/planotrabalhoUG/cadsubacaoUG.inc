@@ -182,13 +182,13 @@ monta_titulo( "Cadastro de Subação", '<img src="../imagens/obrig.gif" border="0"
 			$sql = "SELECT 
 						ed.eqdid as codigo, 
 						ed.eqdcod ||' - '|| ed.eqddsc as descricao 
-					FROM monitora.pi_enquadramentodespesa ed
+					FROM planejamento.enquadramento_despesa ed
 						INNER JOIN monitora.pi_subacaoenquadramento sae on ed.eqdid = sae.eqdid
 					WHERE sae.sbaid = {$obPi_Subacao->sbaid} ";
 			$eqdid = $db->carregar($sql);
 	 	}
 		
-		$sql = "SELECT eqdid as codigo, eqdid ||' - '|| eqdcod ||' - '|| eqddsc as descricao FROM monitora.pi_enquadramentodespesa WHERE eqdano = '{$_SESSION['exercicio']}' order by eqddsc";
+		$sql = "SELECT eqdid as codigo, eqdid ||' - '|| eqdcod ||' - '|| eqddsc as descricao FROM planejamento.enquadramento_despesa WHERE eqdano = '{$_SESSION['exercicio']}' order by eqddsc";
 		combo_popup( "eqdid", $sql, "Enquadramento da Despesa", "600x600", 0, array(), "", "S", false, false, 5, 480 );
 		?>
 		<img src="../imagens/obrig.gif">    	

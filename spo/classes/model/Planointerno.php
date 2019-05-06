@@ -40,7 +40,7 @@ class Spo_Model_Planointerno extends Modelo
      */
     protected $arChaveEstrangeira = array(
         'capid' => array('tabela' => 'monitora.pi_categoriaapropriacao', 'pk' => 'capid'),
-        'eqdid' => array('tabela' => 'monitora.pi_enquadramentodespesa', 'pk' => 'eqdid'),
+        'eqdid' => array('tabela' => 'planejamento.programa', 'pk' => 'eqdid'),
         'mdeid' => array('tabela' => 'monitora.pi_modalidadeensino', 'pk' => 'mdeid'),
         'neeid' => array('tabela' => 'monitora.pi_niveletapaensino', 'pk' => 'neeid'),
         'obrid' => array('tabela' => 'obras.obrainfraestrutura', 'pk' => 'obrid'),
@@ -187,7 +187,7 @@ class Spo_Model_Planointerno extends Modelo
                     ppr.pprid = pc.pprid
                     AND ppr.pprstatus = 'A'
                 )
-                JOIN monitora.pi_enquadramentodespesa AS enq ON(
+                JOIN planejamento.programa AS enq ON(
                     enq.eqdid = pli.eqdid
                     AND enq.eqdstatus = 'A'
                 )

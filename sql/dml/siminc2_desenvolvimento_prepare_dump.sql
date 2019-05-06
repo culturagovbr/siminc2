@@ -11,7 +11,7 @@ DELETE FROM auditoria.auditoria;
 VACUUM FULL VERBOSE auditoria.auditoria;
 
 /*
- * Arquivo de Remoção de dados das tabelas domínios do Sistema SIMINC2 - Módulo Acompanhamento (Monitoramento).
+ * Arquivo de Remoï¿½ï¿½o de dados das tabelas domï¿½nios do Sistema SIMINC2 - Mï¿½dulo Acompanhamento (Monitoramento).
  *
  * @since 2018/12/05
  * @author Douglas Santana <douglas.fontes@cultura.gov.br>
@@ -25,7 +25,7 @@ UPDATE acompanhamento.acompanhamento SET acostatus = 'I';
 UPDATE acompanhamento.janela SET janstatus = 'I';
 
 /*
- * Arquivo de Remoção de dados das tabelas domínios do Sistema SIMINC2 - Módulo Emendas Parlamentares.
+ * Arquivo de Remoï¿½ï¿½o de dados das tabelas domï¿½nios do Sistema SIMINC2 - Mï¿½dulo Emendas Parlamentares.
  *
  * @since 2018/12/05
  * @author Douglas Santana <douglas.fontes@cultura.gov.br>
@@ -52,7 +52,7 @@ VACUUM FULL VERBOSE emendas.usuario_siconv;
 */
 
 /*
- * Arquivo de Remoção de dados das tabelas domínios do Sistema SIMINC2 - Módulo Painel (Gestão Estratégica).
+ * Arquivo de Remoï¿½ï¿½o de dados das tabelas domï¿½nios do Sistema SIMINC2 - Mï¿½dulo Painel (Gestï¿½o Estratï¿½gica).
  *
  * @since 2018/12/05
  * @author Douglas Santana <douglas.fontes@cultura.gov.br>
@@ -68,7 +68,7 @@ UPDATE seguranca.menu SET mnushow = 'f' WHERE mnucod = 1961;
 UPDATE seguranca.menu SET mnushow = 'f' WHERE mnucod = 1940;
 
 /*
- * Arquivo de Remoção de dados das tabelas domínios do Sistema SIMINC2 - Módulo Planacomorc (Planejamento Orçamentário).
+ * Arquivo de Remoï¿½ï¿½o de dados das tabelas domï¿½nios do Sistema SIMINC2 - Mï¿½dulo Planacomorc (Planejamento Orï¿½amentï¿½rio).
  *
  * @since 2018/12/05
  * @author Douglas Santana <douglas.fontes@cultura.gov.br>
@@ -78,7 +78,7 @@ UPDATE seguranca.menu SET mnushow = 'f' WHERE mnucod = 1940;
 UPDATE proposta.preplanointerno SET plistatus = 'I';
 UPDATE public.metappa SET mppstatus = 'I';
 UPDATE public.indicadorpnc SET ipnstatus = 'I';
-UPDATE monitora.pi_enquadramentodespesa SET eqdstatus = 'I';
+UPDATE planejamento.enquadramento_despesa SET eqdstatus = 'I';
 UPDATE public.iniciativappa SET ippstatus = 'I';
 UPDATE monitora.acao SET acastatus = 'I';
 UPDATE monitora.ptres SET ptrstatus = 'I';
@@ -92,7 +92,7 @@ UPDATE planacomorc.manutencaoitem SET maistatus = 'I';
 UPDATE monitora.programa SET prgstatus = 'I';
 
 /*
- * Arquivo de Remoção de dados das tabelas domínios do Sistema SIMINC2 - Módulo Proposta Orçamentária.
+ * Arquivo de Remoï¿½ï¿½o de dados das tabelas domï¿½nios do Sistema SIMINC2 - Mï¿½dulo Proposta Orï¿½amentï¿½ria.
  *
  * @since 2018/12/05
  * @author Leonardo dos Santos <leonardo.barreiros@cultura.gov.br>

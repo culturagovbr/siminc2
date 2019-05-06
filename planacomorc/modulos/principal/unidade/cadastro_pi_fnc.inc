@@ -460,7 +460,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         SELECT
                                             eqdid AS codigo,
                                             eqddsc AS descricao
-                                        FROM monitora.pi_enquadramentodespesa
+                                        FROM planejamento.enquadramento_despesa
                                         WHERE
                                             eqdstatus = 'A'
                                             AND eqdano = '{$_SESSION['exercicio']}'

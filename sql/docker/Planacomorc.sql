@@ -9,7 +9,7 @@
 UPDATE proposta.preplanointerno SET plistatus = 'I';
 UPDATE public.metappa SET mppstatus = 'I';
 UPDATE public.indicadorpnc SET ipnstatus = 'I';
-UPDATE monitora.pi_enquadramentodespesa SET eqdstatus = 'I';
+UPDATE planejamento.enquadramento_despesa SET eqdstatus = 'I';
 UPDATE public.iniciativappa SET ippstatus = 'I';
 UPDATE monitora.acao SET acastatus = 'I';
 UPDATE monitora.ptres SET ptrstatus = 'I';

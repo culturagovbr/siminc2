@@ -110,7 +110,7 @@ if($obPi_PlanoInterno->pliid){
 		<td class = "subtitulodireita">Enquadramento da Despesa:</td>
 		<td><?php 
 				if($obPi_PlanoInterno->eqdid){
-					echo $db->pegaUm("SELECT eqdcod || ' - ' || eqddsc FROM monitora.pi_enquadramentodespesa WHERE eqdid='".$obPi_PlanoInterno->eqdid."'");					
+					echo $db->pegaUm("SELECT eqdcod || ' - ' || eqddsc FROM planejamento.enquadramento_despesa WHERE eqdid='".$obPi_PlanoInterno->eqdid."'");
 				}
 
 			?>

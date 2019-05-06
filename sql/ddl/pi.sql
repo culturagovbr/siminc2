@@ -661,7 +661,7 @@ CREATE TABLE planacomorc.manutencaoitem
   eqdid integer,
   CONSTRAINT pk_manutencaoitem PRIMARY KEY (maiid),
   CONSTRAINT fk_manutencaoitem_reference_enquadramentodespesa FOREIGN KEY (eqdid)
-      REFERENCES monitora.pi_enquadramentodespesa (eqdid) MATCH SIMPLE
+      REFERENCES planejamento.enquadramento_despesa (eqdid) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT ckc_maistatus_manutencaoitem CHECK (maistatus = ANY (ARRAY['I'::bpchar, 'A'::bpchar]))
 );

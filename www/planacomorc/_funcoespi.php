@@ -1107,7 +1107,7 @@ function carregarComboEnquadramentoPorSubacao($sbaid) {
 
     if ($sbaid) {
         $sql = "SELECT ed.eqdid as codigo, ed.eqdcod ||' - '|| ed.eqddsc as descricao
-              FROM monitora.pi_enquadramentodespesa ed
+              FROM planejamento.enquadramento_despesa ed
                    INNER JOIN monitora.pi_subacaoenquadramento se on ed.eqdid = se.eqdid
               WHERE ed.eqdano='" . $_SESSION['exercicio'] . "' and ed.eqdstatus='A' and se.sbaid=$sbaid
               ORDER BY ed.eqdcod";
@@ -2109,7 +2109,7 @@ SELECT scp.scpid,
   FROM planacomorc.solicitacaocriacaopi scp
     LEFT JOIN monitora.pi_subacao sba
       ON (scp.sbaid = sba.sbaid AND scp.scpano = sba.sbaano)
-    LEFT JOIN monitora.pi_enquadramentodespesa eqd
+    LEFT JOIN planejamento.enquadramento_despesa eqd
       ON (scp.eqdid = eqd.eqdid AND scp.scpano = eqd.eqdano)
     LEFT JOIN monitora.pi_niveletapaensino nee
       ON (scp.neeid = nee.neeid AND scp.scpano = nee.neeano)
@@ -2178,7 +2178,7 @@ function carregarPI($pliid) {
             LEFT JOIN emendas.emenda em ON(ben.emeid = em.emeid)
             LEFT JOIN planacomorc.pi_complemento pc on pc.pliid = pli.pliid
             LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
-            LEFT JOIN monitora.pi_enquadramentodespesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
+            LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
             LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
             LEFT JOIN monitora.pi_categoriaapropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
             LEFT JOIN monitora.pi_modalidadeensino mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
@@ -2260,7 +2260,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
             LEFT JOIN monitora.pi_planointernoptres pip ON(pli.pliid = pip.pliid)
             LEFT JOIN monitora.vw_ptres ptr ON(pip.ptrid = ptr.ptrid)
             LEFT JOIN planacomorc.pi_complemento pc ON(pc.pliid = pli.pliid)
-            LEFT JOIN monitora.pi_enquadramentodespesa eqd ON(
+            LEFT JOIN planejamento.enquadramento_despesa eqd ON(
                 pli.eqdid = eqd.eqdid
                 AND pli.pliano = eqd.eqdano
             )
@@ -2372,7 +2372,7 @@ function buscarCodigoEnquadramento($exercicio, $codigo) {
     $sql = "
         SELECT
             eqdid AS codigoFinalistico
-        FROM monitora.pi_enquadramentodespesa
+        FROM planejamento.enquadramento_despesa
         WHERE
             eqdstatus = 'A'
             AND eqdano = '". (int)$exercicio. "'
@@ -2949,7 +2949,7 @@ function gerarCodigosPi($pliid)
             SUBSTR(pliano, 3, 2) AS plilivre
         FROM monitora.pi_planointerno pi
             JOIN planacomorc.pi_complemento pic ON pic.pliid = pi.pliid
-            JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pi.eqdid
+            JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pi.eqdid
             JOIN public.vw_subunidadeorcamentaria suo ON(
                 suo.suocod = pi.ungcod
                 AND suo.unocod = pi.unicod

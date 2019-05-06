@@ -1,6 +1,6 @@
 <?php
 
-$cEnquadramento = new Monitora_Controller_PiEnquadramentoDespesa();
+$cEnquadramento = new Planacomorc_Controller_EnquadramentoDespesa();
 switch ($_REQUEST['req']) {
     case 'salvar':
         $cEnquadramento->salvar($_REQUEST);
@@ -10,7 +10,7 @@ switch ($_REQUEST['req']) {
         die;
 }
 
-$mEnquadramento = new Monitora_Model_PiEnquadramentoDespesa($_REQUEST['eqdid']);
+$mEnquadramento = new Planacomorc_Model_EnquadramentoDespesa($_REQUEST['eqdid']);
 $lista_rp = $mEnquadramento->recuperarRP($_REQUEST['eqdid']);
 
 include APPRAIZ . "includes/cabecalho.inc";
