@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.enquadramentorp
+ * Classe de mapeamento da entidade planejamento.enquadramentorp
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Monitora_Model_EnquadramentoRp extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.enquadramentorp';
+    protected $stNomeTabela = 'planejamento.enquadramentorp';
 
     /**
      * Chave primaria.
@@ -77,7 +77,7 @@ class Monitora_Model_EnquadramentoRp extends Modelo
       }
 
       $sql = "
-          DELETE from monitora.enquadramentorp
+          DELETE from planejamento.enquadramentorp
           WHERE
             $condicao
       ";
@@ -90,7 +90,7 @@ class Monitora_Model_EnquadramentoRp extends Modelo
             SELECT
                 *
             FROM
-                monitora.enquadramentorp
+                planejamento.enquadramentorp
             WHERE
                 eqdid IN (
                     SELECT

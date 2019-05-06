@@ -95,7 +95,7 @@ class Planacomorc_Model_EnquadramentoDespesa extends Modelo
             SELECT DISTINCT
                 $stCampos
             FROM $this->stNomeTabela t1
-                LEFT JOIN monitora.enquadramentorp AS erp ON(t1.eqdid = erp.eqdid)
+                LEFT JOIN planejamento.enquadramentorp AS erp ON(t1.eqdid = erp.eqdid)
                 LEFT JOIN planacomorc.resultadoprimario as rp ON(erp.irpcod::INTEGER = rp.rpcod)
         ";
 
@@ -125,7 +125,7 @@ class Planacomorc_Model_EnquadramentoDespesa extends Modelo
     }
 
     public function recuperarRP($eqdid){
-      $sql = 'SELECT irpcod FROM monitora.enquadramentorp WHERE eqdid = '. (int)$eqdid;
+      $sql = 'SELECT irpcod FROM planejamento.enquadramentorp WHERE eqdid = '. (int)$eqdid;
       $dados = $this->carregar($sql);
       $dados = $dados ? $dados : [];
       $listaResultado = array();
@@ -150,7 +150,7 @@ class Planacomorc_Model_EnquadramentoDespesa extends Modelo
                 REPLACE(REPLACE(REPLACE(ARRAY (
                     SELECT DISTINCT
                         ' ' || erp.irpcod || ' - ' || rp.irpdsc || ' '
-                    FROM monitora.enquadramentorp erp
+                    FROM planejamento.enquadramentorp erp
                         JOIN public.identresultprimario AS rp ON (erp.irpcod = rp.irpcod)
                     WHERE
                         erp.eqdid = pi_enquadramentodespesa.eqdid)::TEXT, '{', ''), '}', ''), '\"', '') AS lista_rp
@@ -171,7 +171,7 @@ class Planacomorc_Model_EnquadramentoDespesa extends Modelo
         $sql = "
             SELECT
                 irp.irpcod || ' - ' || irp.irpdsc rp
-            FROM monitora.enquadramentorp erp
+            FROM planejamento.enquadramentorp erp
                 JOIN public.identresultprimario irp ON irp.irpcod = erp.irpcod
             WHERE
                 irp.irpstatus = 'A'
@@ -191,7 +191,7 @@ class Planacomorc_Model_EnquadramentoDespesa extends Modelo
         $sql = "
             SELECT
                 irp.irpcod
-            FROM monitora.enquadramentorp erp
+            FROM planejamento.enquadramentorp erp
                 JOIN public.identresultprimario irp ON irp.irpcod = erp.irpcod
             WHERE
                 irp.irpstatus = 'A'

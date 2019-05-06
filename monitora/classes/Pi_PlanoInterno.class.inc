@@ -1456,7 +1456,7 @@ class Pi_PlanoInterno extends Modelo
                     AND suo.prsano = pli.pliano
                 )
                 JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pli.eqdid
-                LEFT JOIN monitora.enquadramentorp AS erp ON(eqd.eqdid = erp.eqdid)
+                LEFT JOIN planejamento.enquadramentorp AS erp ON(eqd.eqdid = erp.eqdid)
                 LEFT JOIN planacomorc.resultadoprimario AS rp ON(erp.irpcod::INTEGER = rp.rpcod)
                 LEFT JOIN planacomorc.manutencaoitem mai ON mai.maiid = pic.maiid
                 LEFT JOIN planacomorc.manutencaosubitem mas ON mas.masid = pic.masid
@@ -1681,7 +1681,7 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
                 LEFT JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pli.eqdid
-                LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
+                LEFT JOIN planejamento.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
                 LEFT JOIN spo.siopexecucao ex ON(
                     ex.exercicio = ptr.ptrano
                     AND ex.plicod = pli.plicod

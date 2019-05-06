@@ -536,7 +536,7 @@ function montarSqlBuscarFuncional(stdClass $filtros) {
         $where .= " \n AND ptr.irpcod IN(
                 SELECT
                     eqrp.irpcod
-                FROM monitora.enquadramentorp eqrp
+                FROM planejamento.enquadramentorp eqrp
                 WHERE
                     eqrp.eqdid = ". (int)$filtros->eqdid. "
             )
@@ -641,7 +641,7 @@ function montarSqlBuscarFuncionalImportacao(stdClass $filtros) {
         $where .= " \n AND ptr.irpcod IN(
                 SELECT
                     eqrp.irpcod
-                FROM monitora.enquadramentorp eqrp
+                FROM planejamento.enquadramentorp eqrp
                 WHERE
                     eqrp.eqdid = ". (int)$filtros->eqdid. "
             )
@@ -754,7 +754,7 @@ function montarSqlBuscarFuncionalFnc(stdClass $filtros) {
         $where .= " \n AND ptr.irpcod IN(
                 SELECT
                     eqrp.irpcod
-                FROM monitora.enquadramentorp eqrp
+                FROM planejamento.enquadramentorp eqrp
                 WHERE
                     eqrp.eqdid = ". (int)$filtros->eqdid. "
             )

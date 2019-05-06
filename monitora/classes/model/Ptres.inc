@@ -275,7 +275,7 @@ class Monitora_Model_Ptres extends Modelo
                 coalesce(ptr.prgcod, '') || ' - ' || coalesce(ptr.acacod, '') || ' - ' || coalesce(ptr.loccod, '') || ' - ' || coalesce(ptr.acaobjetivocod, '') || ' - ' || coalesce(ptr.plocod, '') || ' - ' || ptr.acatitulo || ' - ' || ptr.plodsc descricao
             FROM monitora.vw_ptres ptr
                 JOIN spo.ptressubunidade psu ON psu.ptrid = ptr.ptrid
-                JOIN monitora.enquadramentorp erp ON(
+                JOIN planejamento.enquadramentorp erp ON(
                     erp.irpcod = ptr.irpcod
                     AND erp.eqdid = ". (int)$eqdid. "
                 )

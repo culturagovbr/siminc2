@@ -82,7 +82,7 @@ class Proposta_Model_Subunidaderplimite extends Modelo
                 SELECT DISTINCT
                     irpcod
                 FROM
-                    monitora.enquadramentorp
+                    planejamento.enquadramentorp
                 WHERE
                     eqdid = ". (int)$dto->eqdid;
             # Filtro por RP no disponivel
