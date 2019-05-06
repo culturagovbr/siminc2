@@ -17,7 +17,7 @@ class Proposta_Controller_PrePlanoInterno
 
             $mPrePlanoInterno->prsano = $mPrePlanoInterno->prsano ? $mPrePlanoInterno->prsano : $_SESSION['exercicio'];
 //ver($dados, d);
-            $mPrePlanoInterno->salvar(null, null, ['esfid', 'plidsc', 'maiid', 'masid', 'oppid', 'mppid', 'ippid', 'mpnid', 'ipnid', 'pprid', 'mdeid', 'neeid', 'pumid', 'pliquantidade', 'plivalorcusteio', 'plivalorcapital', 'docid', 'plivalorcusteioadicional', 'plivalorcapitaladicional', 'pliquantidadeadicional', 'plijustificativaadicional']);
+            $mPrePlanoInterno->salvar(null, null, ['esfid', 'plidsc', 'maiid', 'masid', 'oppid', 'mppid', 'ippid', 'mpnid', 'ipnid', 'pprid', 'arceid', 'secid', 'pumid', 'pliquantidade', 'plivalorcusteio', 'plivalorcapital', 'docid', 'plivalorcusteioadicional', 'plivalorcapitaladicional', 'pliquantidadeadicional', 'plijustificativaadicional']);
 
 
             // Salvando dados da Localização

@@ -284,7 +284,7 @@ function controlarExibicaoFormularioReduzido(){
         // Area
         $('#mdeid').attr('required', false); $('#mdeid').val('').trigger("chosen:updated");
         // Segmento
-        $('#neeid').attr('required', false); $('#neeid').val('').trigger("chosen:updated");
+        $('#secid').attr('required', false); $('#secid').val('').trigger("chosen:updated");
     } else {
         // Exibe campos
         $('.div_metas').show();
@@ -299,7 +299,7 @@ function controlarExibicaoFormularioReduzido(){
         //'required'
         $('#mdeid').attr('required', 'required');
         // Seg'required'
-        $('#neeid').attr('required', 'required');
+        $('#secid').attr('required', 'required');
     }
 }
 

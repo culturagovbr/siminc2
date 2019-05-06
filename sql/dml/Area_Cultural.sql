@@ -4,8 +4,8 @@ SELECT
 	*
 FROM planejamento.area_cultural
 WHERE
-    mdestatus = 'A'
-    AND mdeano = '2016'
+    arcstatus = 'A'
+    AND arcano = '2016'
 ;
 
 

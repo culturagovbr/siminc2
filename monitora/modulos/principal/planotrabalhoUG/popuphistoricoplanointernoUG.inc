@@ -162,7 +162,7 @@ if($obPi_PlanoInterno->pliid){
 	</tr>
 	<tr>
 		<td class = "subtitulodireita">Nível/Etapa de Ensino:</td>
-		<td><?php echo $db->pegaUm("SELECT neecod || ' - ' || needsc FROM monitora.pi_niveletapaensino WHERE neeid='".$obPi_PlanoInterno->neeid."'"); ?></td>
+		<td><?php echo $db->pegaUm("SELECT neecod || ' - ' || needsc FROM monitora.pi_niveletapaensino WHERE secid='".$obPi_PlanoInterno->secid."'"); ?></td>
 	</tr>
 	<tr>
 		<td class = "subtitulodireita">Categoria de Apropriação:</td>
@@ -174,7 +174,7 @@ if($obPi_PlanoInterno->pliid){
 	</tr>
 	<tr>
 		<td class = "subtitulodireita">Modalidade de Ensino/Tema/Público:</td>
-		<td><?php echo (($obPi_PlanoInterno->mdeid)?$db->pegaUm("SELECT mdecod || ' - ' || mdedsc FROM planejamento.area_cultural WHERE mdeid='".$obPi_PlanoInterno->mdeid."'"):"Não informado"); ?></td>
+		<td><?php echo (($obPi_PlanoInterno->mdeid)?$db->pegaUm("SELECT arccod || ' - ' || arcdsc FROM planejamento.area_cultural WHERE mdeid='".$obPi_PlanoInterno->mdeid."'"):"Não informado"); ?></td>
 	</tr>
 	<tr>
 		<td class = "subtitulodireita">Título:</td>

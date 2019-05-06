@@ -2,19 +2,19 @@
 
 $cAreaCultural = new Planacomorc_Controller_AreaCultural();
 $cSegmentoCultural = new Public_Controller_SegmentoCultural();
-$mAreaCultural = new Planacomorc_Model_AreaCultural($_REQUEST['mdeid']);
+$mAreaCultural = new Planacomorc_Model_AreaCultural($_REQUEST['arceid']);
 
-$mSegmentoCultural = new Monitora_Model_PiNivelEtapaEnsino($_REQUEST['neeid']);
+$mSegmentoCultural = new Monitora_Model_PiNivelEtapaEnsino($_REQUEST['secid']);
 
-if($_REQUEST['mdeid'])
-    $lista = $mSegmentoCultural->RecuperaSegmentoPorArea($_REQUEST['mdeid']);
+if($_REQUEST['arceid'])
+    $lista = $mSegmentoCultural->RecuperaSegmentoPorArea($_REQUEST['arceid']);
 
 switch ($_REQUEST['req']) {
     case 'salvar-area':
         $cAreaCultural->salvar($_REQUEST);
         break;
     case 'excluir-area':
-        $cAreaCultural->excluir($_REQUEST['mdeid']);
+        $cAreaCultural->excluir($_REQUEST['arceid']);
         break;
     case 'salvar-segmento':
         $cSegmentoCultural->salvar($_REQUEST);
@@ -23,7 +23,7 @@ switch ($_REQUEST['req']) {
         $cSegmentoCultural->excluir($_REQUEST);
         break;
     case 'listar-segmento':
-        $lista = $mSegmentoCultural->RecuperaSegmentoPorArea($_REQUEST['mdeid']);
+        $lista = $mSegmentoCultural->RecuperaSegmentoPorArea($_REQUEST['arceid']);
         include_once(APPRAIZ.'/planacomorc/modulos/apoio/segmento-cultural.inc');
         die;
 
@@ -48,19 +48,19 @@ include APPRAIZ . "includes/cabecalho.inc";
                 <div class="ibox-content">
                     <form id="formulario" name="formulario" method="post" class="form-horizontal">
                         <input type="hidden" name="req" id="req" value="salvar-area" />
-                        <input name="mdeid" id="mdeid" type="hidden" value="<?php echo $mAreaCultural->mdeid; ?>">
+                        <input name="arceid" id="arceid" type="hidden" value="<?php echo $mAreaCultural->arceid; ?>">
                         
                         <?php
-                            echo $simec->input('mdecod', 'Código PI', $mAreaCultural->mdecod, ['required','maxlength' => 1, 'class' => 'upper-text']);
-                            echo $simec->input('mdedsc', 'Descrição', $mAreaCultural->mdedsc, ['required', 'maxlength' => 250]);
+                            echo $simec->input('arccod', 'Código PI', $mAreaCultural->arccod, ['required','maxlength' => 1, 'class' => 'upper-text']);
+                            echo $simec->input('arcdsc', 'Descrição', $mAreaCultural->arcdsc, ['required', 'maxlength' => 250]);
                         ?>
                         
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
                                 <a href="?modulo=apoio/area_cultural&acao=A" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
-                                <?php if($mAreaCultural->mdeid){ ?>
-                                    <a href="?modulo=apoio/area_cultural_form&acao=A&req=excluir-area&mdeid=<?php echo $mAreaCultural->mdeid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
+                                <?php if($mAreaCultural->arceid){ ?>
+                                    <a href="?modulo=apoio/area_cultural_form&acao=A&req=excluir-area&arceid=<?php echo $mAreaCultural->arceid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
                                 <?php } ?>                                
                             </div>
                         </div>                        
@@ -73,12 +73,12 @@ include APPRAIZ . "includes/cabecalho.inc";
                 <div class="ibox-title">
                     <h5>Segmento Cultural</h5>
                 </div>
-                <?php if($mAreaCultural->mdeid){ ?>
+                <?php if($mAreaCultural->arceid){ ?>
                     <div class="ibox-content">
                         <form id="formulario-segmento" name="formulario-segmento" method="post" class="form-horizontal" action="?modulo=apoio/area_cultural_form&acao=A">
                             <input type="hidden" name="req" id="req" value="salvar-segmento" />
-                            <input name="mdeid" id="mdeid" type="hidden" value="<?php echo $mAreaCultural->mdeid; ?>">
-                            <input name="neeid" id="neeid" type="hidden" value="<?php echo $mSegmentoCultural->neeid; ?>">
+                            <input name="arceid" id="arceid" type="hidden" value="<?php echo $mAreaCultural->arceid; ?>">
+                            <input name="secid" id="secid" type="hidden" value="<?php echo $mSegmentoCultural->secid; ?>">
 
                             <?php
                                 echo $simec->input('neecod', 'Código', $mSegmentoCultural->neecod, ['maxlength' => 3, 'class' => 'upper-text', 'required']);
@@ -134,7 +134,7 @@ include APPRAIZ . "includes/cabecalho.inc";
             options = {
                 success: function() {
                     // Carregar a listagem
-                    jQuery("#lista-segmento").load('?modulo=apoio/area_cultural_form&acao=A&req=listar-segmento&mdeid='+$('#mdeid').val());
+                    jQuery("#lista-segmento").load('?modulo=apoio/area_cultural_form&acao=A&req=listar-segmento&arceid='+$('#arceid').val());
 
                     // Zerar o formulário
                     LimparCamposSegmento();

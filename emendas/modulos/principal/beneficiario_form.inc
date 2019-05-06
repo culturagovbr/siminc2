@@ -64,7 +64,7 @@ switch ($_REQUEST['req']) {
         die;
     case 'carregarSegmento':
         $mBeneficiario = new Emendas_Model_Beneficiario($_REQUEST['benid']);
-        echo $simec->select('neeid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$_REQUEST['mdeid']]));
+        echo $simec->select('secid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->secid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$_REQUEST['mdeid']]));
         die;
     case 'verificarPactuacaoConvenio':
         echo verificarPactuacaoConvenio($_REQUEST['capid']);
@@ -273,8 +273,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         </div>
                                         <div class="ibox-content">
                                             <?php
-                                                echo $simec->select('mdeid', 'Área Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->mdeid, (new Planacomorc_Model_AreaCultural())->recuperarSqlCombo(null, ["mdestatus = 'A'"]));
-                                                echo '<span id="span-segmento">' . $simec->select('neeid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->neeid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$mBeneficiario->mdeid])) . '</span>';
+                                                echo $simec->select('mdeid', 'Área Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->mdeid, (new Planacomorc_Model_AreaCultural())->recuperarSqlCombo(null, ["arcstatus = 'A'"]));
+                                                echo '<span id="span-segmento">' . $simec->select('secid', 'Segmento Cultural <span class="campo-obrigatorio" title="Campo obrigatório pra Gerar PI">*</span>', $mBeneficiario->secid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ["neestatus = 'A'", "mdeid = " . (int)$mBeneficiario->mdeid])) . '</span>';
                                                 echo $simec->select("alteracao[]", 'Alterações', $mBeneficiario->recuperarAlteracao(), (new Emendas_Model_AlteracaoOrcamentaria())->recuperarSqlCombo(), [], $configPodeEditar);
                                                 # Setar os campos para "não" por padrão.
                                                 $benparecertecnico = $mBeneficiario->benparecertecnico ? $mBeneficiario->benparecertecnico : 0;

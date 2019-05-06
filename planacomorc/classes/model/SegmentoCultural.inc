@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.pi_niveletapaensino
+ * Classe de mapeamento da entidade planejamento.segmento_cultural
  *
  * @category Class
  * @package  A1
@@ -10,9 +10,7 @@
  * @link     no link
  */
 
-
 require_once APPRAIZ .'includes/classes/Modelo.class.inc';
-
 
 /**
  * Monitora_Model_Pi_niveletapaensino
@@ -31,7 +29,7 @@ class Monitora_Model_PiNivelEtapaEnsino extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.pi_niveletapaensino';
+    protected $stNomeTabela = 'planejamento.segmento_cultural';
 
     /**
      * Chave primaria.
@@ -39,14 +37,14 @@ class Monitora_Model_PiNivelEtapaEnsino extends Modelo
      * @access protected
      */
     protected $arChavePrimaria = array(
-        'neeid',
+        'secid',
     );
     /**
      * Chaves estrangeiras.
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'mdeid' => array('tabela' => 'pi_modalidadeensino', 'pk' => 'mdeid'),
+        'arceid' => array('tabela' => 'pi_modalidadeensino', 'pk' => 'arceid'),
     );
 
     /**
@@ -55,39 +53,37 @@ class Monitora_Model_PiNivelEtapaEnsino extends Modelo
      * @access protected
      */
     protected $arAtributos = array(
-        'neeid' => null,
+        'secid' => null,
         'needsc' => null,
         'neeano' => null,
         'neestatus' => null,
-        'mdeid' => null,
+        'arceid' => null,
         'neecod' => null,
     );
 
     /**
      * Retorna os Segmentos por Àrea Cultural.
      *
-     * @param $mdeid
+     * @param $arceid
      * @return array
      * @access public
      */
-    public function RecuperaSegmentoPorArea($mdeid)
+    public function RecuperaSegmentoPorArea($arceid)
     {
-        global $db;
 
         $sql ="SELECT
-                    neeid,
+                    secid,
                     needsc,
-                    mdeid,
+                    arceid,
                     neecod
                 FROM
-                    monitora.pi_niveletapaensino
+                    planejamento.segmento_cultural
                 WHERE
-                    mdeid = $mdeid
+                    arceid = $arceid
                     AND neestatus = 'A'
         ";
 
-        return $db->carregar($sql);
+        return $this->carregar($sql);
     }
 
-}//end Class
-?>
+}

@@ -190,8 +190,8 @@ $pages = 50;
 					<td class='SubTituloDireita'>Nível/Etapa/Modalidade de ensino:</td>
 					<td>
 						<?
-						$sql = "SELECT neeid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";						
-						$db->monta_combo('neeid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '000000005_1');
+						$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
+						$db->monta_combo('secid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '000000005_1');
 						?>
 					</td>
 				</tr>
@@ -255,7 +255,7 @@ $pages = 50;
 							sbatitulo,
 							mdeid,
 							eqdid,
-							neeid,
+							secid,
 							capid,
 							sa.pieid,
 							sa.pigid,
@@ -293,7 +293,7 @@ $pages = 50;
 							sbatitulo,
 							mdeid,
 							eqdid,
-							neeid,
+							secid,
 							capid,
 							sa.pieid,
 							sa.pigid,

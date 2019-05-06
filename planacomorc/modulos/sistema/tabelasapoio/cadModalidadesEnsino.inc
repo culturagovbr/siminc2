@@ -24,12 +24,12 @@ include APPRAIZ . 'includes/cabecalho.inc';
 <?php
 $strSqlGrid = "
     SELECT
-        mdeid, mdecod, mdedsc, mdeano
+        arceid, arccod, arcdsc, arcano
     FROM planejamento.area_cultural
     WHERE
-        mdestatus='A'
-        AND mdeano = '{$_SESSION['exercicio']}'
-    ORDER BY mdecod
+        arcstatus='A'
+        AND arcano = '{$_SESSION['exercicio']}'
+    ORDER BY arccod
     ";
 
     echo $fm->getMensagens();
@@ -44,7 +44,7 @@ $strSqlGrid = "
         'edit' => 'editRegistro',
         'delete' => 'deleteRegistro'
     ));
-    $listagem->addCallbackDeCampo(array('mdedsc' ), 'alinhaParaEsquerda');
+    $listagem->addCallbackDeCampo(array('arcdsc' ), 'alinhaParaEsquerda');
     $listagem->setTotalizador(Simec_Listagem::TOTAL_QTD_REGISTROS);
     ?>
     <?php if (false === $listagem->render()): ?>
@@ -88,7 +88,7 @@ $(document).ready(function(){
     $("#fSubmit").on("click", function(e){
         e.preventDefault();
 
-        var inputs = ['#mdecod','#mdedsc','#mdeano']
+        var inputs = ['#arccod','#arcdsc','#arcano']
           , frmData = $("#frmModalidade").serialize()
           , urlAction;
 

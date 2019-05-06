@@ -14,7 +14,7 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
     $ano = $_POST['ano'];
     
     $sql = "
-        INSERT INTO planejamento.area_cultural (mdecod,mdedsc,mdeano,mdestatus) VALUES
+        INSERT INTO planejamento.area_cultural (arccod,arcdsc,arcano,arcstatus) VALUES
             ('$codigo', '$descricao', '$ano', '$status') ";
       if ($db->executar( $sql )) {
         $db->commit ();
@@ -27,14 +27,14 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
 
 }
 if($_REQUEST['execucao'] == 'editar'){
-    $strSql = "SELECT * FROM planejamento.area_cultural WHERE mdeid='" . $_REQUEST['registro']."'";
+    $strSql = "SELECT * FROM planejamento.area_cultural WHERE arceid='" . $_REQUEST['registro']."'";
     //ver($strSql,d);
     $rs = $db->pegaLinha($strSql);
-    $id = $rs['mdeid'];
-    $codigo = $rs['mdecod'];
-    $descricao = $rs['mdedsc'];
-    $ano = $rs['mdeano'];
-    $status = $rs['mdestatus'];
+    $id = $rs['arceid'];
+    $codigo = $rs['arccod'];
+    $descricao = $rs['arcdsc'];
+    $ano = $rs['arcano'];
+    $status = $rs['arcstatus'];
     //ver($rs,$codigo,d);
 }
 
@@ -47,8 +47,8 @@ if($_POST['id']){
     
     $sql = "
         UPDATE planejamento.area_cultural SET
-            mdecod='$codigo', mdedsc='$descricao', mdeano='$ano', mdestatus='$status'
-        WHERE mdeid='$id'
+            arccod='$codigo', arcdsc='$descricao', arcano='$ano', arcstatus='$status'
+        WHERE arceid='$id'
     ";
       if ($db->executar( $sql )) {
         $db->commit ();

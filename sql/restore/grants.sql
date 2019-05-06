@@ -7890,7 +7890,7 @@ GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_enquadramentodespesa_eqdid_seq" T
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_executor_pieid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_gestor_pigid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_modalidadeensino_mdeid_seq" TO "usr_simec";
-GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_niveletapaensino_neeid_seq" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_niveletapaensino_secid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_planointernohistorico_pihid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_planointerno_pliid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_produto_pprid_seq" TO "usr_simec";

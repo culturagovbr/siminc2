@@ -7,12 +7,12 @@
      */
     $pi = new Spo_Model_Planointerno();
     $select = 't1.*, t2.eqdcod, t2.eqddsc, t3.neecod, t3.needsc, t4.capcod, t4.capdsc,';
-    $select .= 't5.mdecod, t5.mdedsc, t6.unicod, t6.unidsc, t7.ungcod, t7.ungdsc,';
+    $select .= 't5.arccod, t5.arcdsc, t6.unicod, t6.unidsc, t7.ungcod, t7.ungdsc,';
     $select .= 't8.sbacod, t8.sbadsc';
 
     $options = array(
-        'join' => array('eqdid', 'neeid', 'capid'),
-        'leftjoin' => array('mdeid', 'unicod', 'ungcod', 'sbaid')
+        'join' => array('eqdid', 'secid', 'capid'),
+        'leftjoin' => array('arceid', 'unicod', 'ungcod', 'sbaid')
     );
     $dadosPi = $pi->recuperarTodos($select, array("t1.pliid = {$_REQUEST['pliid']}"), '', $options);
 
@@ -62,7 +62,7 @@
                 </tr>
                 <tr>
                     <th>Área Cultural:</th>
-                    <td>{$dadosPi['mdecod']} - {$dadosPi['mdedsc']}</td>
+                    <td>{$dadosPi['arccod']} - {$dadosPi['arcdsc']}</td>
                 </tr>
                 <tr>
                     <th>Título:</th>

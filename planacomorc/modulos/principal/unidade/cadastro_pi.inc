@@ -77,7 +77,7 @@ if ($_REQUEST['carregarIndicadorPNC']) {
     die();
 }
 if ($_REQUEST['carregarSegmentoCultural']) {
-    carregarSegmentoCultural((int)$_REQUEST['mdeid'], null);
+    carregarSegmentoCultural((int)$_REQUEST['arceid'], null);
     die();
 }
 if ($_REQUEST['carregarManutencaoItem']) {

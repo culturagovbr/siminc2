@@ -28,8 +28,8 @@ function condicaoGerarPi($benid){
             AND b.pumid IS NOT NULL
             AND b.picquantidade IS NOT NULL
             AND b.mdeid IS NOT NULL
-            AND b.neeid IS NOT NULL
-            AND b.neeid IS NOT NULL
+            AND b.secid IS NOT NULL
+            AND b.secid IS NOT NULL
             AND b.capid IS NOT NULL
             AND b.bented IS NOT NULL
     ";
@@ -155,7 +155,7 @@ function adaptarBeneficioPi(stdClass $beneficiario){
     $pi->pliid = $beneficiario->pliid;
     $pi->mdeid = $beneficiario->mdeid;
     $pi->eqdid = $eqdid;
-    $pi->neeid = $beneficiario->neeid;
+    $pi->secid = $beneficiario->secid;
     $pi->capid = $beneficiario->capid;
     $pi->plititulo = $beneficiario->plititulo. ($emenda->emenumero? ' - '. $emenda->emenumero: NULL);
     $pi->plidsc = $beneficiario->plidsc;
@@ -493,7 +493,7 @@ function montarSqlDadosBeneficiario($benid){
             b.sicid,
             b.impid,
             b.mdeid,
-            b.neeid,
+            b.secid,
             b.capid,
             b.bented,
             b.benparecertecnico,

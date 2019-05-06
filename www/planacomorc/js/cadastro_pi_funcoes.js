@@ -1328,8 +1328,8 @@
      */
     function carregarSegmentoCultural(codigo) {
         $.post(urlPagina+ '&carregarSegmentoCultural=ok&mdeid=' + codigo, function(response) {
-            $('#neeid').remove();
-            $('.div_neeid').html(response);
+            $('#secid').remove();
+            $('.div_secid').html(response);
             $(".chosen-select").chosen();
         });
     }
@@ -1395,7 +1395,7 @@
                 }
                 
                 $('#mdeid').val('').trigger("chosen:updated");
-                $('#neeid').val('').trigger("chosen:updated");
+                $('#secid').val('').trigger("chosen:updated");
                 $('#oppid').val('').trigger("chosen:updated");
                 $('#mppid').val('').trigger("chosen:updated");
                 $('#ippid').val('').trigger("chosen:updated");

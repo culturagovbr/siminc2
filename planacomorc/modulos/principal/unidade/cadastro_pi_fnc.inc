@@ -60,7 +60,7 @@ if ($_REQUEST['carregarIndicadorPNC']) {
     die();
 }
 if ($_REQUEST['carregarSegmentoCultural']) {
-    carregarSegmentoCultural((int)$_REQUEST['mdeid'], null);
+    carregarSegmentoCultural((int)$_REQUEST['arceid'], null);
     die();
 }
 if ($_REQUEST['carregarManutencaoItem']) {
@@ -741,35 +741,35 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="ibox-content">
                         <div class="form-group" id="div_area_cultural">
                             <div class="col-md-3 text-right">
-                                <label for="mdeid" class="control-label">Área Cultural: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+                                <label for="arceid" class="control-label">Área Cultural: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                             </div>
                             <div class="col-lg-9">
                                 <?php
                                 $sql = <<<DML
                                     SELECT
-                                        MAX(mdeid) AS codigo,
-                                        upper(public.removeacento(mdedsc)) AS descricao
+                                        MAX(arceid) AS codigo,
+                                        upper(public.removeacento(arcdsc)) AS descricao
                                     FROM planejamento.area_cultural
                                     WHERE
-                                        mdestatus = 'A'
-                                        AND mdeano = '{$_SESSION['exercicio']}' -- Resolver 2014
+                                        arcstatus = 'A'
+                                        AND arcano = '{$_SESSION['exercicio']}' -- Resolver 2014
                                     GROUP BY
                                         descricao
                                     ORDER BY
                                         descricao ASC
 DML;
 
-                                $mdeid = $dadosPI['mdeid'];
-                                $db->monta_combo('mdeid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'mdeid', null, '', null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($mdeid) ? $mdeid : null));
+                                $arceid = $dadosPI['arceid'];
+                                $db->monta_combo('arceid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'arceid', null, '', null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($arceid) ? $arceid : null));
                                 ?>
                             </div>
                         </div>
                         <div class="form-group" id="div_segmento_cultural">
                             <div class="col-md-3 text-right">
-                                <label class="control-label" for="neeid">Segmento Cultural: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+                                <label class="control-label" for="secid">Segmento Cultural: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
                             </div>
-                            <div class="col-lg-9 div_neeid">
-                                <?php carregarSegmentoCultural($dadosPI['mdeid'], $dadosPI['neeid']); ?>
+                            <div class="col-lg-9 div_secid">
+                                <?php carregarSegmentoCultural($dadosPI['arceid'], $dadosPI['secid']); ?>
                             </div>
                         </div>
                         <div class="form-group">

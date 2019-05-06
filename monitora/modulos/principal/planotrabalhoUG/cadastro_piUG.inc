@@ -134,7 +134,7 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
 			$sql = "UPDATE monitora.pi_planointerno SET plicod='".$_POST['plicod']."',
                                 $stModalidade
                                 eqdid='".$_POST['eqdid']."', 
-                                neeid='".$_POST['neeid']."', 
+                                secid='".$_POST['secid']."', 
                                 capid='".$_POST['capid']."', 
                                 plilivre='".$_POST['plilivre']."', 
                                 plidsc='".$_POST['plidsc']."', 
@@ -163,7 +163,7 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
 				
 				$mdeid = $planointerno['mdeid'];
 				$eqdid = $planointerno['eqdid'];
-				$neeid = $planointerno['neeid'];
+				$secid = $planointerno['secid'];
 				$capid = $planointerno['capid'];
 				$plilivre      = $planointerno['plilivre'];
 				
@@ -231,7 +231,7 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
 			$sql_I = "INSERT INTO monitora.pi_planointerno ( plicod, 
 														  $stModalidade 
 														  eqdid, 
-														  neeid, 
+														  secid, 
 														  capid, 
 														  plilivre, 
 														  plidsc, 
@@ -246,7 +246,7 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
      			  	  VALUES ('".$_POST['plicod']."', 
      			  	  		  $stModalidade2
      			  	  		  '".$_POST['eqdid']."', 
-     			  	  		  '".$_POST['neeid']."', 
+     			  	  		  '".$_POST['secid']."', 
      			  	  		  '".$_POST['capid']."', 
      			  	  		  upper('".$_POST['plilivre']."'), 
      			  	  		  '".$_POST['plidsc']."', 
@@ -444,12 +444,12 @@ if(in_array($_SESSION['monitora_var']['ungcod'],$arUnidadeSemModalidae)){
             <td>
                 <?php
                     $sql = "
-                        SELECT neeid as codigo, neecod ||' - '|| needsc as descricao
+                        SELECT secid as codigo, neecod ||' - '|| needsc as descricao
                         FROM monitora.pi_niveletapaensino 
                         WHERE neeano='" . $_SESSION['exercicio'] . "' and neestatus='A' 
                         ORDER BY neecod
                     ";
-                    $db->monta_combo('neeid', $sql, 'S', 'Selecione', 'atualizarPrevisaoPI', '', '', '240', 'S', 'neeid');
+                    $db->monta_combo('secid', $sql, 'S', 'Selecione', 'atualizarPrevisaoPI', '', '', '240', 'S', 'secid');
                 ?>
             </td>
         </tr>
@@ -477,10 +477,10 @@ if(in_array($_SESSION['monitora_var']['ungcod'],$arUnidadeSemModalidae)){
                 <td>
                     <?php
                         $sql = "
-                            SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao
+                            SELECT mdeid as codigo, arccod ||' - '|| arcdsc as descricao
                             FROM planejamento.area_cultural 
-                            WHERE mdeano='" . $_SESSION['exercicio'] . "' and mdestatus='A' 
-                            ORDER BY mdecod
+                            WHERE arcano='" . $_SESSION['exercicio'] . "' and arcstatus='A' 
+                            ORDER BY arccod
                         ";
                         $db->monta_combo('mdeid', $sql, 'S', 'Selecione', 'atualizarPrevisaoPI', '', '', '240', 'S', 'mdeid');
                     ?>
@@ -738,7 +738,7 @@ function validar(x){
 	if(document.getElementById("eqdid").value == ''){
 		msg+="O preenchimento do campo Enquadramento da Despesa é obrigatório.\n";
 	}
-	if(document.getElementById("neeid").value == ''){
+	if(document.getElementById("secid").value == ''){
 		msg+="O preenchimento do campo Nível/Etapa de Ensino é obrigatório.\n";
 	}
 	if(document.getElementById("capid").value == ''){
@@ -844,8 +844,8 @@ function atualizarPrevisaoPI(){
 		document.getElementById("enquadramento_i").innerHTML = '';
 	}
 	
-	if(document.getElementById('neeid').value) {
-		var nivel = document.getElementById('neeid').options[document.getElementById('neeid').selectedIndex].text.split(" - ");
+	if(document.getElementById('secid').value) {
+		var nivel = document.getElementById('secid').options[document.getElementById('secid').selectedIndex].text.split(" - ");
 		document.getElementById("nivel").innerHTML = nivel[0]; 
 		document.getElementById("nivel_i").innerHTML = nivel[0];
 	}

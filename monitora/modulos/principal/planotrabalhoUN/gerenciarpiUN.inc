@@ -87,7 +87,7 @@ if ( $_REQUEST['submetido'] == 1 ){
 	}
 
 	if( $_REQUEST["nivel"] ){
-		array_push($arFiltro, " pi.neeid = '" . $_REQUEST['nivel'] . "' ");
+		array_push($arFiltro, " pi.secid = '" . $_REQUEST['nivel'] . "' ");
 	}
 	
 	if( $_REQUEST["apropriacao"] ){
@@ -95,7 +95,7 @@ if ( $_REQUEST['submetido'] == 1 ){
 	}
 	
 	if( $_REQUEST["modalidade"] ){
-		array_push($arFiltro, " pi.mdeid = '" . $_REQUEST['modalidade'] . "' ");
+		array_push($arFiltro, " pi.arceid = '" . $_REQUEST['modalidade'] . "' ");
 	}
 	
 	if( $_REQUEST["plisituacao"] ){
@@ -196,7 +196,7 @@ if(!$db->testa_superuser()){
 			<td>
 				<?php
 					$nivel = $_REQUEST['nivel'];
-					$sql = "SELECT neeid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
+					$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
 					$db->monta_combo('nivel', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '');
 				?>
 			</td>
@@ -216,7 +216,7 @@ if(!$db->testa_superuser()){
 		    <td>
 				<?php
 					$modalidade = $_REQUEST['modalidade'];
-					$sql = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao FROM planejamento.area_cultural WHERE mdeano = '{$_SESSION['exercicio']}'";
+					$sql = "SELECT arceid as codigo, arccod ||' - '|| arcdsc as descricao FROM planejamento.area_cultural WHERE arcano = '{$_SESSION['exercicio']}'";
 					$db->monta_combo('modalidade', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '');
 		    	 ?>
 		    </td>

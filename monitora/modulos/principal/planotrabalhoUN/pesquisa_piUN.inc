@@ -23,8 +23,8 @@ if ($_POST['pesquisa']) {
 		array_push($where, " p.eqdid =  '".$eqdid."'");
 	}
 	// Nivel
-	if( $neeid ){
-		array_push($where, " p.neeid =  '".$neeid."'");
+	if( $secid ){
+		array_push($where, " p.secid =  '".$secid."'");
 	}
 	// Categoria
 	if( $capid ){
@@ -191,12 +191,12 @@ if(in_array($_SESSION['monitora_var']['unicod'],$arUnidadeSemModalidae)){
 	<td class='SubTituloDireita'>Nível/Etapa de Ensino:</td>
 	<td>
 		<?
-		$sql = "SELECT neeid as codigo, neecod ||' - '|| needsc as descricao
+		$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao
 			    FROM monitora.pi_niveletapaensino 
 			    WHERE neeano='".$_SESSION['exercicio']."' and neestatus='A' 
 			    ORDER BY neecod";
 		
-		$db->monta_combo('neeid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', 'neeid');
+		$db->monta_combo('secid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', 'secid');
 		?>
 	</td>
 </tr>
@@ -222,10 +222,10 @@ if(in_array($_SESSION['monitora_var']['unicod'],$arUnidadeSemModalidae)){
 	<td align='right' class="SubTituloDireita">Modalidade de Ensino / Tema / Público:</td>
     <td>
 	<?
-	$sql = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao
+	$sql = "SELECT mdeid as codigo, arccod ||' - '|| arcdsc as descricao
 		    FROM planejamento.area_cultural 
-		    WHERE mdeano='".$_SESSION['exercicio']."' and mdestatus='A' 
-		    ORDER BY mdecod";
+		    WHERE arcano='".$_SESSION['exercicio']."' and arcstatus='A' 
+		    ORDER BY arccod";
 	
 	$db->monta_combo('mdeid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', 'mdeid');
  	?>

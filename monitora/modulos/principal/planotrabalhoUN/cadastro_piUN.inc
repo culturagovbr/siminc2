@@ -130,9 +130,9 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
 			if($existe_plicod) die("<script>alert('O Código do PI ja existe.');window.location='?modulo=principal/planotrabalhoUN/cadastro_piUN&acao=A';</script>");
 			
 			$sql = "UPDATE monitora.pi_planointerno SET plicod='".$_POST['plicod']."', 
-													    mdeid='".$_POST['mdeid']."', 
+													    arceid='".$_POST['arceid']."', 
 													    eqdid='".$_POST['eqdid']."', 
-													    neeid='".$_POST['neeid']."', 
+													    secid='".$_POST['secid']."', 
 													    capid='".$_POST['capid']."', 
 													    plilivre='".$_POST['plilivre']."', 
 													    plidsc='".$_POST['plidsc']."',  
@@ -162,9 +162,9 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
 				$_REQUEST['sbaid'] = $planointerno['sbaid'];
 				$plititulo_sba = trim($planointerno['sbatitulo']).' - ';
 				
-				$mdeid = $planointerno['mdeid'];
+				$arceid = $planointerno['arceid'];
 				$eqdid = $planointerno['eqdid'];
-				$neeid = $planointerno['neeid'];
+				$secid = $planointerno['secid'];
 				$capid = $planointerno['capid'];
 				$plilivre      = $planointerno['plilivre'];
 				
@@ -214,9 +214,9 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
 			}
 			
 			$sql_I = "INSERT INTO monitora.pi_planointerno ( plicod, 
-														  mdeid, 
+														  arceid, 
 														  eqdid, 
-														  neeid, 
+														  secid, 
 														  capid, 
 														  plilivre, 
 														  plidsc, 
@@ -229,9 +229,9 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
 														  unicod,
 														  pliano ) 
      			  	  VALUES ('".$_POST['plicod']."', 
-     			  	  		  '".$_POST['mdeid']."', 
+     			  	  		  '".$_POST['arceid']."', 
      			  	  		  '".$_POST['eqdid']."', 
-     			  	  		  '".$_POST['neeid']."', 
+     			  	  		  '".$_POST['secid']."', 
      			  	  		  '".$_POST['capid']."', 
      			  	  		  upper('".$_POST['plilivre']."'), 
      			  	  		  '".$_POST['plidsc']."', 
@@ -442,12 +442,12 @@ function tabindexcampo(){
 	<td class='SubTituloDireita'>Nível/Etapa de Ensino:</td>
 	<td>
 		<?
-		$sql = "SELECT neeid as codigo, neecod ||' - '|| needsc as descricao
+		$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao
 			    FROM monitora.pi_niveletapaensino 
 			    WHERE neeano='".$_SESSION['exercicio']."' and neestatus='A' 
 			    ORDER BY neecod";
 		
-		$db->monta_combo('neeid', $sql, $permissao_formulario, 'Selecione', 'atualizarPrevisaoPI', '', '', '240', 'S', 'neeid');
+		$db->monta_combo('secid', $sql, $permissao_formulario, 'Selecione', 'atualizarPrevisaoPI', '', '', '240', 'S', 'secid');
 		?>
 	</td>
 </tr>
@@ -472,12 +472,12 @@ function tabindexcampo(){
 	<td align='right' class="SubTituloDireita">Modalidade de Ensino / Tema / Público:</td>
     <td>
 	<?
-	$sql = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao
+	$sql = "SELECT arceid as codigo, arccod ||' - '|| arcdsc as descricao
 		    FROM planejamento.area_cultural 
-		    WHERE mdeano='".$_SESSION['exercicio']."' and mdestatus='A' 
-		    ORDER BY mdecod";
+		    WHERE arcano='".$_SESSION['exercicio']."' and arcstatus='A' 
+		    ORDER BY arccod";
 	
-	$db->monta_combo('mdeid', $sql, $permissao_formulario, 'Selecione', 'atualizarPrevisaoPI', '', '', '240', 'S', 'mdeid');
+	$db->monta_combo('arceid', $sql, $permissao_formulario, 'Selecione', 'atualizarPrevisaoPI', '', '', '240', 'S', 'arceid');
  	?>
     </td>
 </tr>
@@ -757,7 +757,7 @@ function validar(x){
 	if(document.getElementById("eqdid").value == ''){
 		msg+="O preenchimento do campo Enquadramento da Despesa é obrigatório.\n";
 	}
-	if(document.getElementById("neeid").value == ''){
+	if(document.getElementById("secid").value == ''){
 		msg+="O preenchimento do campo Nível/Etapa de Ensino é obrigatório.\n";
 	}
 	if(document.getElementById("capid").value == ''){
@@ -841,8 +841,8 @@ function atualizarPrevisaoPI(){
 		document.getElementById("enquadramento").innerHTML = enquadramento[0]; 
 		document.getElementById("enquadramento_i").innerHTML = enquadramento[0];
 	}
-	if(document.getElementById('neeid').value) {
-		var nivel = document.getElementById('neeid').options[document.getElementById('neeid').selectedIndex].text.split(" - ");
+	if(document.getElementById('secid').value) {
+		var nivel = document.getElementById('secid').options[document.getElementById('secid').selectedIndex].text.split(" - ");
 		document.getElementById("nivel").innerHTML = nivel[0]; 
 		document.getElementById("nivel_i").innerHTML = nivel[0];
 	}

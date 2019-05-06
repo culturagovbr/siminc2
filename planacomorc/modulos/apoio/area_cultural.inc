@@ -1,6 +1,6 @@
 <?php
 
-$listaAreaCultural = (new Planacomorc_Model_AreaCultural())->recuperarTodos('*', ["mdestatus = 'A'", "mdeano = '". $_SESSION['exercicio']. "'"], 'mdedsc');
+$listaAreaCultural = (new Planacomorc_Model_AreaCultural())->recuperarTodos('*', ["arcstatus = 'A'", "arcano = '". $_SESSION['exercicio']. "'"], 'arcdsc');
 
     include APPRAIZ . "includes/cabecalho.inc";
 
@@ -40,10 +40,10 @@ $listaAreaCultural = (new Planacomorc_Model_AreaCultural())->recuperarTodos('*',
                                     foreach($listaAreaCultural as $dados):?>
                                         <tr>
                                             <td class="text-center">
-                                                <a title="Alterar" href="planacomorc.php?modulo=apoio/area_cultural_form&acao=A&mdeid=<?php echo $dados['mdeid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
+                                                <a title="Alterar" href="planacomorc.php?modulo=apoio/area_cultural_form&acao=A&arceid=<?php echo $dados['arceid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                             </td>
-                                            <td><?php echo $dados['mdecod']; ?></td>
-                                            <td><?php echo $dados['mdedsc']; ?></td>
+                                            <td><?php echo $dados['arccod']; ?></td>
+                                            <td><?php echo $dados['arcdsc']; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>

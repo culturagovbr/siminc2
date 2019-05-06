@@ -105,7 +105,7 @@ function montarSqlRelatorioGeralPrePi(stdClass $filtros){
             ipn.ipncod,
             ipn.ipndsc,
             -- Area cultural
-            mde.mdedsc,
+            mde.arcdsc,
             -- Segmento Cultural
             nee.needsc,
             -- Localização
@@ -140,7 +140,7 @@ function montarSqlRelatorioGeralPrePi(stdClass $filtros){
             LEFT JOIN public.metapnc mpn ON pli.mpnid = mpn.mpnid
             LEFT JOIN public.indicadorpnc ipn ON pli.ipnid = ipn.ipnid
             LEFT JOIN planejamento.area_cultural mde ON pli.mdeid = mde.mdeid
-            LEFT JOIN monitora.pi_niveletapaensino nee ON pli.neeid = nee.neeid
+            LEFT JOIN monitora.pi_niveletapaensino nee ON pli.secid = nee.secid
             LEFT JOIN territorios.esfera esf ON pli.esfid = esf.esfid
             LEFT JOIN proposta.preplanointernolocalizacao plo ON pli.pliid = plo.pliid
             LEFT JOIN territorios.pais pai ON plo.paiid = pai.paiid

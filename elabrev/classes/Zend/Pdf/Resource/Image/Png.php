@@ -321,11 +321,11 @@ class Zend_Pdf_Resource_Image_Png extends Zend_Pdf_Resource_Image
             $imageDictionary->SMask = $smaskStream;
 
             // Encode stream with FlateDecode filter
-            $smaskStreamDecodeParms = array();
-            $smaskStreamDecodeParms['Predictor']        = new Zend_Pdf_Element_Numeric(15);
-            $smaskStreamDecodeParms['Columns']          = new Zend_Pdf_Element_Numeric($width);
-            $smaskStreamDecodeParms['Colors']           = new Zend_Pdf_Element_Numeric(1);
-            $smaskStreamDecodeParms['BitsPerComponent'] = new Zend_Pdf_Element_Numeric(8);
+            $smaskStreaarccodeParms = array();
+            $smaskStreaarccodeParms['Predictor']        = new Zend_Pdf_Element_Numeric(15);
+            $smaskStreaarccodeParms['Columns']          = new Zend_Pdf_Element_Numeric($width);
+            $smaskStreaarccodeParms['Colors']           = new Zend_Pdf_Element_Numeric(1);
+            $smaskStreaarccodeParms['BitsPerComponent'] = new Zend_Pdf_Element_Numeric(8);
             $smaskStream->dictionary->DecodeParms  = new Zend_Pdf_Element_Dictionary($smaskStreamDecodeParms);
             $smaskStream->dictionary->Filter       = new Zend_Pdf_Element_Name('FlateDecode');
         }

@@ -30,9 +30,9 @@ class Pi_PlanoInterno extends Modelo
      */
     protected $arAtributos = array(
         'pliid' => null,
-        'mdeid' => null,
+        'arceid' => null,
         'eqdid' => null,
-        'neeid' => null,
+        'secid' => null,
         'capid' => null,
         'sbaid' => null,
         'obrid' => null,
@@ -1246,7 +1246,7 @@ class Pi_PlanoInterno extends Modelo
         $where .= $dto->picted == 'f'? "\n AND pic.picted IS FALSE": NULL;
         $where .= $dto->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($dto->irpcod, ','). ")": NULL;
         $where .= $dto->oppid? "\n AND pic.oppid IN(".join($dto->oppid, ','). ")": NULL;
-        $where .= $dto->mdeid? "\n AND pli.mdeid IN(".join($dto->mdeid, ','). ")": NULL;
+        $where .= $dto->arceid? "\n AND pli.arceid IN(".join($dto->arceid, ','). ")": NULL;
         $where .= $dto->capid? "\n AND pli.capid IN(".join($dto->capid, ','). ")": NULL;
         $where .= $dto->mescod? "\n AND pic.mescod IN('".join($dto->mescod, "','"). "')": NULL;
         $where .= $dto->claid? "\n AND cl.claid IN(".join($dto->claid, ','). ")": NULL;
@@ -1277,7 +1277,7 @@ class Pi_PlanoInterno extends Modelo
 
                 eqd.eqddsc, rp.rpcod || ' - ' || rp.redsc as resultadoprimario, mai.mainome, mas.masnome, ptr.prgcod, ptr.prgdsc, opp.oppcod, opp.oppnome, ipp.ippcod, ipp.ippnome,
                 ptr.acacod, ptr.acatitulo, ptr.loccod, ptr.locdsc, ptr.plocod, plodsc po, ptr.ptres,
-                mde.mdedsc, mpn.mpncod || ' - ' || mpn.mpnnome mpnnome, mpp.mppcod || ' - ' || mpp.mppnome mppnome,
+                mde.arcdsc, mpn.mpncod || ' - ' || mpn.mpnnome mpnnome, mpp.mppcod || ' - ' || mpp.mppnome mppnome,
                 pli.plititulo, pli.plidsc, nee.needsc, cap.capdsc,
                 case when rp.rpcod = 6 then 'Sim' else 'Não' end as pliemenda,
                 case when pic.picedital = true then 'Sim' else 'Não' end as picedital, esf.esfdsc,
@@ -1467,8 +1467,8 @@ class Pi_PlanoInterno extends Modelo
                 )
                 LEFT JOIN public.objetivoppa opp ON opp.oppid = pic.oppid
                 LEFT JOIN public.iniciativappa ipp ON ipp.ippid = pic.ippid
-                LEFT JOIN planejamento.area_cultural mde ON mde.mdeid = pli.mdeid
-                LEFT JOIN monitora.pi_niveletapaensino nee ON nee.neeid = pli.neeid
+                LEFT JOIN planejamento.area_cultural mde ON mde.arceid = pli.arceid
+                LEFT JOIN monitora.pi_niveletapaensino nee ON nee.secid = pli.secid
                 LEFT JOIN public.metappa mpp ON mpp.mppid = pic.mppid
                 LEFT JOIN public.metapnc mpn ON mpn.mpnid = pic.mpnid
                 LEFT JOIN planejamento.categoria_apropriacao cap ON cap.capid = pli.capid
@@ -2162,7 +2162,7 @@ class Pi_PlanoInterno extends Modelo
                 pago, acoid, acoquantidade, acodata, esddsc, unoid, unocod, unonome,
                 unosigla, suoid, suocod, suonome, suosigla, eqddsc, eqdcod, resultadoprimario,
                 mainome, masnome, prgcod, prgdsc, oppcod, oppnome, ippcod, ippnome,
-                acacod, acatitulo, loccod, locdsc, plocod, po, ptres, mdedsc,
+                acacod, acatitulo, loccod, locdsc, plocod, po, ptres, arcdsc,
                 mpnnome, mppnome, needsc, capdsc, ptrid, funcional, acaid, pliemenda,
                 picedital, pumnome, pprid, pprnome, emenda, edital, esfdsc, mppid,
                 mpnid, oppid, pumid, ipnid, ippid

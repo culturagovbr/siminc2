@@ -178,11 +178,11 @@
         $stSql = "
             SELECT
                 mdeid AS codigo,
-                mdedsc AS descricao
+                arcdsc AS descricao
             FROM planejamento.area_cultural
             WHERE
-                mdestatus = 'A'
-                AND mdeano = '".$_REQUEST['filtro']['prsano']."'
+                arcstatus = 'A'
+                AND arcano = '".$_REQUEST['filtro']['prsano']."'
             ORDER BY
                 descricao ASC
         ";

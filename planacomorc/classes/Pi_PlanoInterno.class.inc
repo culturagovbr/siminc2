@@ -37,9 +37,9 @@ class Pi_PlanoInterno extends Modelo{
      */
     protected $arAtributos     = array(
 									  	'pliid' => null,
-									  	'mdeid' => null,
+									  	'arceid' => null,
 									  	'eqdid' => null,
-									  	'neeid' => null,
+									  	'secid' => null,
 									  	'capid' => null,
 									  	'sbaid' => null,
 									  	'obrid' => null,

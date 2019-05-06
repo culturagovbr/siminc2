@@ -49,7 +49,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
      */
     protected $arChaveEstrangeira = array(
         'docid' => array('tabela' => 'workflow.documento', 'pk' => 'docid'),
-        'neeid' => array('tabela' => 'pi_niveletapaensino', 'pk' => 'neeid'),
+        'secid' => array('tabela' => 'pi_niveletapaensino', 'pk' => 'secid'),
         'mdeid' => array('tabela' => 'pi_modalidadeensino', 'pk' => 'mdeid'),
         'pumid' => array('tabela' => 'pi_unidade_medida', 'pk' => 'pumid'),
         'pprid' => array('tabela' => 'pi_produto', 'pk' => 'pprid'),
@@ -88,7 +88,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
         'pumid' => null,
         'pliquantidade' => null,
         'mdeid' => null,
-        'neeid' => null,
+        'secid' => null,
         'plivalorcusteio' => null,
         'plivalorcapital' => null,
         'docid' => null,
@@ -329,11 +329,11 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             SELECT DISTINCT
                 pli.pliid,
                 pli.mdeid,
-                mde.mdecod,
+                mde.arccod,
                 pli.eqdid,
                 ptr.ptrid,
                 eqd.eqdcod,
-                pli.neeid,
+                pli.secid,
                 nee.neecod,
                 pli.capid,
                 cap.capcod,
@@ -364,9 +364,9 @@ class Proposta_Model_PrePlanoInterno extends Modelo
                 LEFT JOIN planacomorc.pi_complemento pc on pc.pliid = pli.pliid
                 LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
                 LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
-                LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
+                LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.secid = nee.secid AND pli.pliano = nee.neeano)
                 LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
-                LEFT JOIN planejamento.area_cultural mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
+                LEFT JOIN planejamento.area_cultural mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.arcano)
             WHERE
                 pli.pliid = $pliid
         ";
@@ -397,7 +397,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
         $this->mpnid         = $this->getMetaPNCIDAnoAnterior($pi['mpnid']);
         $this->ipnid         = $this->getIndicadorPNCIDAnoAnterior($pi['ipnid']);
         $this->mdeid         = $this->getAreaCulturalIDAnoAnterior($pi['mdeid']);
-        $this->neeid         = $this->getSegmentoCulturalIDAnoAnterior($pi['neeid']);
+        $this->secid         = $this->getSegmentoCulturalIDAnoAnterior($pi['secid']);
         $this->esfid         = $pi['esfid'];
         $this->plivalorcusteio = $pi['picvalorcusteio'];
         $this->plivalorcapital = $pi['picvalorcapital'];
@@ -722,18 +722,18 @@ class Proposta_Model_PrePlanoInterno extends Modelo
         $sql = "
             SELECT
                 MAX(mdeid),
-                upper(public.removeacento(mdedsc)) as descricao
+                upper(public.removeacento(arcdsc)) as descricao
             FROM planejamento.area_cultural
             WHERE
-                mdestatus = 'A'
-                AND mdeano = '{$_SESSION['exercicio']}'
-                AND upper(public.removeacento(mdedsc)) = (
+                arcstatus = 'A'
+                AND arcano = '{$_SESSION['exercicio']}'
+                AND upper(public.removeacento(arcdsc)) = (
                     SELECT
-                        upper(public.removeacento(mdedsc))
+                        upper(public.removeacento(arcdsc))
                     FROM planejamento.area_cultural
                     WHERE
-                        mdestatus = 'A'
-                        AND mdeano = '{$anoAnterior}'
+                        arcstatus = 'A'
+                        AND arcano = '{$anoAnterior}'
                         AND mdeid = '". (int)$mdeid. "'
                 )
             GROUP BY
@@ -745,14 +745,14 @@ class Proposta_Model_PrePlanoInterno extends Modelo
     /**
      * Retorna a ID do campo Segmento Cultural do ano atual, baseado no ano anterior
      *
-     * @param $neeid
+     * @param $secid
      * @return bool|mixed|NULL|string
      */
-    private function getSegmentoCulturalIDAnoAnterior($neeid = NULL) {
+    private function getSegmentoCulturalIDAnoAnterior($secid = NULL) {
         $anoAnterior = $_SESSION['exercicio'] - 1;
         $sql = "
             SELECT
-                neeid AS codigo
+                secid AS codigo
             FROM monitora.pi_niveletapaensino
             WHERE
                 neeano = '{$_SESSION['exercicio']}'
@@ -764,7 +764,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
                     WHERE
                         neeano = '{$anoAnterior}'
                         AND neestatus = 'A'
-                        AND neeid = '". (int)$neeid. "'
+                        AND secid = '". (int)$secid. "'
                 )
         ";
 
@@ -955,7 +955,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             $planejamento['ippid'] = $this->ippid;
             $planejamento['mpnid'] = $this->mpnid;
             $planejamento['ipnid'] = $this->ipnid;
-            $planejamento['neeid'] = $this->neeid;
+            $planejamento['secid'] = $this->secid;
             $planejamento['esfid'] = $this->esfid;
             $planejamento['ptrid'] = $this->ptrid;
         }

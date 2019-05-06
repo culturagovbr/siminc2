@@ -37,7 +37,7 @@ class Planacomorc_Model_AreaCultural extends Modelo
      * @access protected
      */
     protected $arChavePrimaria = array(
-        'mdeid',
+        'arceid',
     );
 
     /**
@@ -53,11 +53,11 @@ class Planacomorc_Model_AreaCultural extends Modelo
      * @access protected
      */
     protected $arAtributos = array(
-        'mdeid' => null,
-        'mdecod' => null,
-        'mdedsc' => null,
-        'mdeano' => null,
-        'mdestatus' => null,
+        'arceid' => null,
+        'arccod' => null,
+        'arcdsc' => null,
+        'arcano' => null,
+        'arcstatus' => null,
     );
 
 }

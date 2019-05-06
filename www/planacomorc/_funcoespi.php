@@ -404,12 +404,12 @@ function carregarAderenciaPtFnc($ptaid) {
 /**
  * Monta a combo de Segmento Cultural.
  */
-function carregarSegmentoCultural($mdeid, $neeid) {
+function carregarSegmentoCultural($mdeid, $secid) {
     global $db;
 
     $sql = "
         SELECT
-            neeid AS codigo,
+            secid AS codigo,
             needsc AS descricao
         FROM monitora.pi_niveletapaensino
         WHERE
@@ -419,7 +419,7 @@ function carregarSegmentoCultural($mdeid, $neeid) {
         ORDER BY
             descricao
     ";
-    $db->monta_combo('neeid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'neeid', null, (isset($neeid) ? $neeid : null), null, 'class="form-control chosen-select" style="width=100%;"');
+    $db->monta_combo('secid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'secid', null, (isset($secid) ? $secid : null), null, 'class="form-control chosen-select" style="width=100%;"');
 }
 
 /**
@@ -1184,7 +1184,7 @@ DML;
 
 
     $dados['mdeid'] = $dados['mdeid'] ? $dados['mdeid'] : 'null';
-    $dados['neeid'] = $dados['neeid'] ? $dados['neeid'] : 'null';
+    $dados['secid'] = $dados['secid'] ? $dados['secid'] : 'null';
     $dados['capid'] = $dados['capid'] ? $dados['capid'] : 'null';
 
     $plicod = null; //$db->PegaUm($sql);
@@ -1201,7 +1201,7 @@ DML;
                 INSERT INTO monitora.pi_planointerno(
                     mdeid,
                     eqdid,
-                    neeid,
+                    secid,
                     capid,
                     sbaid,
                     plititulo,
@@ -1222,7 +1222,7 @@ DML;
 DML;
             
             $stmt = sprintf(
-                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF, str_replace(array("'"), ' ', $dados['plirecursosnecessarios']));
+                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['secid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF, str_replace(array("'"), ' ', $dados['plirecursosnecessarios']));
 
             $pliid = $db->pegaUm($stmt);
             
@@ -1265,7 +1265,7 @@ DML;
                 plirecursosnecessarios = '%s',
                 mdeid = %s,
                 eqdid = %s,
-                neeid = %s,
+                secid = %s,
                 capid = %s,
                 plicadsiafi = {$cadastroSIAF}
             WHERE
@@ -1277,7 +1277,7 @@ DML;
             trim($dados['plirecursosnecessarios']),
             $dados['mdeid'],
             $dados['eqdid'],
-            $dados['neeid'],
+            $dados['secid'],
             $dados['capid'],
             $dados['pliid']);
         $db->executar($stmt);
@@ -1839,7 +1839,7 @@ INSERT INTO planacomorc.solicitacaocriacaopi(
     scpdetalhadopisubacao,
     scpempenhadosubacao,
     eqdid,
-    neeid,
+    secid,
     capid,
     scplivre,
     mdeid,
@@ -1855,7 +1855,7 @@ DML;
     $dados['scpempenhadosubacao'] = formataFloat($dados['scpempenhadosubacao']);
 
     $stmt = sprintf(
-            $sql, $_SESSION['exercicio'], empty($dados['plititulo']) ? 'null' : "'{$dados['plititulo']}'", trim(str_replace("'", "''", $dados['plidsc'])), empty($dados['plicod']) ? 'null' : "'{$dados['plicod']}'", empty($dados['unicod']) ? 'null' : "'{$dados['unicod']}'", empty($dados['ungcod']) ? 'null' : "'{$dados['ungcod']}'", empty($dados['sbaid']) ? 'null' : $dados['sbaid'], empty($dados['scpdotacaosubacao']) ? 'null' : "'{$dados['scpdotacaosubacao']}'", empty($dados['scpdetalhadopisubacao']) ? 'null' : "'{$dados['scpdetalhadopisubacao']}'", empty($dados['scpempenhadosubacao']) ? 'null' : "'{$dados['scpempenhadosubacao']}'", empty($dados['eqdid']) ? 'null' : $dados['eqdid'], empty($dados['neeid']) ? 'null' : $dados['neeid'], empty($dados['capid']) ? 'null' : $dados['capid'], empty($dados['plilivre']) ? 'null' : "'{$dados['plilivre']}'", empty($dados['mdeid']) ? 'null' : $dados['mdeid'], $_SESSION['usucpf'], empty($dados['scpid']) ? 'null' : $dados['scpid'], empty($dados['tipotransacao']) ? 'S' : $dados['tipotransacao']
+            $sql, $_SESSION['exercicio'], empty($dados['plititulo']) ? 'null' : "'{$dados['plititulo']}'", trim(str_replace("'", "''", $dados['plidsc'])), empty($dados['plicod']) ? 'null' : "'{$dados['plicod']}'", empty($dados['unicod']) ? 'null' : "'{$dados['unicod']}'", empty($dados['ungcod']) ? 'null' : "'{$dados['ungcod']}'", empty($dados['sbaid']) ? 'null' : $dados['sbaid'], empty($dados['scpdotacaosubacao']) ? 'null' : "'{$dados['scpdotacaosubacao']}'", empty($dados['scpdetalhadopisubacao']) ? 'null' : "'{$dados['scpdetalhadopisubacao']}'", empty($dados['scpempenhadosubacao']) ? 'null' : "'{$dados['scpempenhadosubacao']}'", empty($dados['eqdid']) ? 'null' : $dados['eqdid'], empty($dados['secid']) ? 'null' : $dados['secid'], empty($dados['capid']) ? 'null' : $dados['capid'], empty($dados['plilivre']) ? 'null' : "'{$dados['plilivre']}'", empty($dados['mdeid']) ? 'null' : $dados['mdeid'], $_SESSION['usucpf'], empty($dados['scpid']) ? 'null' : $dados['scpid'], empty($dados['tipotransacao']) ? 'S' : $dados['tipotransacao']
     );
 
     if ($scpid = $db->pegaUm($stmt)) {
@@ -2087,10 +2087,10 @@ function carregarTransacao($scpid) {
     $sql = <<<DML
 SELECT scp.scpid,
        scp.mdeid,
-       mde.mdecod,
+       mde.arccod,
        scp.eqdid,
        eqd.eqdcod,
-       scp.neeid,
+       scp.secid,
        nee.neecod,
        scp.capid,
        cap.capcod,
@@ -2112,11 +2112,11 @@ SELECT scp.scpid,
     LEFT JOIN planejamento.enquadramento_despesa eqd
       ON (scp.eqdid = eqd.eqdid AND scp.scpano = eqd.eqdano)
     LEFT JOIN monitora.pi_niveletapaensino nee
-      ON (scp.neeid = nee.neeid AND scp.scpano = nee.neeano)
+      ON (scp.secid = nee.secid AND scp.scpano = nee.neeano)
     LEFT JOIN planejamento.categoria_apropriacao cap
       ON (scp.capid = cap.capid AND scp.scpano = cap.capano)
     LEFT JOIN planejamento.area_cultural mde
-      ON (scp.mdeid = mde.mdeid AND scp.scpano = mde.mdeano)
+      ON (scp.mdeid = mde.mdeid AND scp.scpano = mde.arcano)
   WHERE scpid = %d
 DML;
     $stmt = sprintf($sql, $scpid);
@@ -2137,10 +2137,10 @@ function carregarPI($pliid) {
         SELECT DISTINCT
             pli.pliid,
             pli.mdeid,
-            mde.mdecod,
+            mde.arccod,
             pli.eqdid,
             eqd.eqdcod,
-            pli.neeid,
+            pli.secid,
             nee.neecod,
             pli.capid,
             cap.capcod,
@@ -2179,9 +2179,9 @@ function carregarPI($pliid) {
             LEFT JOIN planacomorc.pi_complemento pc on pc.pliid = pli.pliid
             LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
             LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
-            LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
+            LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.secid = nee.secid AND pli.pliano = nee.neeano)
             LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
-            LEFT JOIN planejamento.area_cultural mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
+            LEFT JOIN planejamento.area_cultural mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.arcano)
         WHERE
             pli.pliid = %d
 DML;
@@ -2203,7 +2203,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
 	        END AS uo,
             suo.suocod || ' - ' || suo.suonome || '(' || suo.suosigla || ')' AS unidade,
             suodel.suocod || ' - ' || suodel.suonome || '(' || suodel.suosigla || ')' AS sub_unidade,
-            mde.mdecod,
+            mde.arccod,
             pli.eqdid,
             eqd.eqddsc,
             opp.oppcod || ' - ' || opp.oppnome AS objetivo,
@@ -2222,7 +2222,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
             esf.esfdsc AS tipo_localizacao,
             pli.pliemenda,
             eqd.eqdcod,
-            pli.neeid,
+            pli.secid,
             nee.neecod,
             pli.capid,
             cap.capcod,
@@ -2265,7 +2265,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
                 AND pli.pliano = eqd.eqdano
             )
             LEFT JOIN monitora.pi_niveletapaensino nee ON(
-                pli.neeid = nee.neeid
+                pli.secid = nee.secid
                 AND pli.pliano = nee.neeano
             )
             LEFT JOIN planejamento.categoria_apropriacao cap ON(

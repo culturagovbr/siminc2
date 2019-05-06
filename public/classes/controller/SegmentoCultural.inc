@@ -7,7 +7,7 @@ class Public_Controller_SegmentoCultural
         $url = '?modulo=apoio/area_cultural_form&acao=A';
 
         try {
-            $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($dados['neeid']);
+            $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($dados['secid']);
             $mdsegCultural->popularDadosObjeto($dados, true);
             $mdsegCultural->neecod = strtoupper($mdsegCultural->neecod);
             $mdsegCultural->neeano = $mdsegCultural->neeano ? $mdsegCultural->neeano : $_SESSION['exercicio'];
@@ -26,7 +26,7 @@ class Public_Controller_SegmentoCultural
         $url = '?modulo=apoio/area_cultural_form&acao=A';
 
         try {
-            $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($dados['neeid']);
+            $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($dados['secid']);
 
             $mdsegCultural->neestatus = 'I';
             $mdsegCultural->salvar();
@@ -38,16 +38,16 @@ class Public_Controller_SegmentoCultural
         }
     } //end salvar()
 
-    public function montarListagem($neeid)
+    public function montarListagem($secid)
     {
-        $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($neeid);
+        $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($secid);
         $perfis = pegaPerfilGeral();
         /**
          * @todo colcoar a constante correta do acompanhamento para atualizar a regra.
          */
         $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
 
-        $lista = (new Monitora_Model_PiNivelEtapaEnsino())->RecuperaSegmentoPorArea($mdsegCultural->neeid);
+        $lista = (new Monitora_Model_PiNivelEtapaEnsino())->RecuperaSegmentoPorArea($mdsegCultural->secid);
 
         include_once APPRAIZ . 'planacomorc/modulos/apoio/segmento-cultural.inc';
 

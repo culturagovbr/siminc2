@@ -360,7 +360,7 @@ class Emendas_Model_Emenda extends Modelo
 		TO_CHAR(ben.beninicio,'dd/mm/YYYY') AS vigencia,
 		pca.capdsc,
                 CASE WHEN bented IS TRUE THEN 'Sim' ELSE 'Não' END AS ted,
-                mde.mdedsc,
+                mde.arcdsc,
 		nee.needsc,
                 REPLACE(REPLACE(REPLACE(ARRAY(
                     SELECT DISTINCT
@@ -517,7 +517,7 @@ class Emendas_Model_Emenda extends Modelo
 		LEFT JOIN territorios.esfera esf ON ben.esfid = esf.esfid
 		LEFT JOIN planejamento.categoria_apropriacao pca ON ben.capid = pca.capid
 		LEFT JOIN planejamento.area_cultural mde ON ben.mdeid = mde.mdeid
-		LEFT JOIN monitora.pi_niveletapaensino nee ON ben.neeid = nee.neeid
+		LEFT JOIN monitora.pi_niveletapaensino nee ON ben.secid = nee.secid
 		LEFT JOIN emendas.impedimento imp ON ben.impid = imp.impid
 		-- DADOS SICONV
 		LEFT JOIN emendas.siconvbeneficiario sib ON(ben.benid = sib.benid)
@@ -582,7 +582,7 @@ class Emendas_Model_Emenda extends Modelo
             array('codigo' => 'vigencia',                   'descricao' => 'Data de Início da Vigência'),
             array('codigo' => 'capdsc',                     'descricao' => 'Modalidade de Pactuação'),
             array('codigo' => 'ted',                        'descricao' => 'TED'),
-            array('codigo' => 'mdedsc',                     'descricao' => 'Área Cultural'),
+            array('codigo' => 'arcdsc',                     'descricao' => 'Área Cultural'),
             array('codigo' => 'needsc',                     'descricao' => 'Segmento Cultural'),
             array('codigo' => 'lista_alteracoes',           'descricao' => 'Alterações'),
             array('codigo' => 'parecer_tecnico',            'descricao' => 'Parecer Técnico'),

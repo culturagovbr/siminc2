@@ -232,7 +232,7 @@
         } else {
             // Requer preenchimento obrigatório dos abaixo quando não for "Não Orçamentário"
             if(!verificarFormularioNaoOrcamentario()){
-                // listaObrigatorios.push('mdeid', 'neeid', 'mpnid', 'ipnid', 'oppid', 'mppid');
+                // listaObrigatorios.push('mdeid', 'secid', 'mpnid', 'ipnid', 'oppid', 'mppid');
             }
         }
         

@@ -309,7 +309,7 @@ function updateNivelEtapaEnsino($rowID) {
 
     global $db;
 
-    $strSql = 'SELECT * FROM monitora.pi_niveletapaensino WHERE neeid=' . $rowID;
+    $strSql = 'SELECT * FROM monitora.pi_niveletapaensino WHERE secid=' . $rowID;
     $rs = $db->carregar($strSql);
     if (!$rs)
         return false;
@@ -371,7 +371,7 @@ function deleteRowModalidadeEnsino($rowID) {
 
     global $db;
 
-    $strSql = sprintf('UPDATE planejamento.area_cultural SET mdestatus=\'I\' WHERE mdeid=%d', (int) $rowID);
+    $strSql = sprintf('UPDATE planejamento.area_cultural SET arcstatus=\'I\' WHERE mdeid=%d', (int) $rowID);
      if ($db->executar( $strSql )) {
         $db->commit ();
       }
@@ -393,7 +393,7 @@ function deleteRowNivelEtapaEnsino($rowID) {
 
     global $db;
 
-    $strSql = sprintf('UPDATE monitora.pi_niveletapaensino SET neestatus=\'I\' WHERE neeid=%d', (int) $rowID);
+    $strSql = sprintf('UPDATE monitora.pi_niveletapaensino SET neestatus=\'I\' WHERE secid=%d', (int) $rowID);
       if ($db->executar( $strSql )) {
         $db->commit ();
       }
@@ -460,9 +460,9 @@ function salvaModalidadeEnsino(array $post) {
     if (empty($post['mdeid'])) {
 
         $strSqlBase = "INSERT INTO
-            planejamento.area_cultural(mdecod, mdedsc, mdeano, mdestatus)
+            planejamento.area_cultural(arccod, arcdsc, arcano, arcstatus)
             VALUES('%s', '%s', '%s', '%s')";
-        $strSql = sprintf($strSqlBase, $mdecod, $mdedsc, $mdeano, 'A');
+        $strSql = sprintf($strSqlBase, $arccod, $arcdsc, $arcano, 'A');
         $mensagem = 'inserido';
     } else {
 //atualiza
@@ -498,7 +498,7 @@ function salvaNivelEtapaEnsino(array $post) {
     extract($post);
 
 //insere
-    if (empty($post['neeid'])) {
+    if (empty($post['secid'])) {
 
         $strSqlBase = "INSERT INTO
             monitora.pi_niveletapaensino(neecod, needsc, neeano, neestatus)
@@ -508,14 +508,14 @@ function salvaNivelEtapaEnsino(array $post) {
     } else {
 //atualiza
         $strSql = "UPDATE monitora.pi_niveletapaensino SET ";
-        $neeid = $post['neeid'];
-        unset($post['neeid']);
+        $secid = $post['secid'];
+        unset($post['secid']);
 
         foreach ($post as $k => $value)
             $strSql.= "{$k} = '{$value}',";
 
         $strSql = substr($strSql, 0, -1);
-        $strSql.= " WHERE neeid=" . $neeid;
+        $strSql.= " WHERE secid=" . $secid;
         $mensagem = 'atualizado';
     }
 

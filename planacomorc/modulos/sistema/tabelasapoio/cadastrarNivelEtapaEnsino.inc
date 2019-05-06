@@ -26,9 +26,9 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
 
 }
 if($_REQUEST['execucao'] == 'editar'){
-    $strSql = 'SELECT * FROM monitora.pi_niveletapaensino WHERE neeid=' . $_REQUEST['registro'];
+    $strSql = 'SELECT * FROM monitora.pi_niveletapaensino WHERE secid=' . $_REQUEST['registro'];
     $rs = $db->pegaLinha($strSql);
-    $id = $rs['neeid'];
+    $id = $rs['secid'];
     $codigo = $rs['neecod'];
     $descricao = $rs['needsc'];
     $ano = $rs['neeano'];
@@ -46,7 +46,7 @@ if($_POST['id']){
     $sql = "
         UPDATE monitora.pi_niveletapaensino SET
             neecod='$codigo', needsc='$descricao', neeano='$ano', neestatus='$status'
-        WHERE neeid='$id'
+        WHERE secid='$id'
     ";
       if ($db->executar( $sql )) {
         $db->commit ();

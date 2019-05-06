@@ -131,16 +131,16 @@
 
         $stSql = "
                 SELECT
-                    mdeid AS codigo,
-                    mdedsc AS descricao
+                    arceid AS codigo,
+                    arcdsc AS descricao
                 FROM planejamento.area_cultural
                 WHERE
-                    mdestatus = 'A'
-                    AND mdeano = '" . $_REQUEST['filtro']['prsano'] . "'
+                    arcstatus = 'A'
+                    AND arcano = '" . $_REQUEST['filtro']['prsano'] . "'
                 ORDER BY
                     descricao ASC
             ";
-        echo $simec->select("filtro[mdeid][]", 'Área Cultural', $mdeid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
+        echo $simec->select("filtro[arceid][]", 'Área Cultural', $mdeid, $stSql, null, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
                 SELECT DISTINCT

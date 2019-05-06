@@ -31,19 +31,19 @@ WHERE
 -- TRUNCATE TABLE planointerno.segmento;
 BEGIN; -- ROLLBACK;
 INSERT INTO monitora.pi_niveletapaensino(
-	mdeid, -- Área Cultural -- SELECT * FROM planejamento.area_cultural WHERE mdestatus = 'A' AND mdeano = '2016'
+	arceid, -- Área Cultural -- SELECT * FROM planejamento.area_cultural WHERE arcstatus = 'A' AND arcano = '2016'
 	neecod,
 	needsc,
 	neeano
 )
 SELECT
-	p_m.mdeid AS mdeid,
+	p_m.arceid AS arceid,
 	s.segid,
 	s.segdsc,
 	'2016'
 FROM planointerno.segmento s
 	JOIN planointerno.areacultural a ON(s.areid = a.areid AND a.prsano = '2017') -- SELECT * FROM planointerno.areacultural
-	JOIN planejamento.area_cultural p_m ON(a.arenome = p_m.mdedsc AND p_m.mdeano = '2016') -- SELECT * FROM planejamento.area_cultural WHERE mdestatus = 'A' AND mdeano = '2016'
+	JOIN planejamento.area_cultural p_m ON(a.arenome = p_m.arcdsc AND p_m.arcano = '2016') -- SELECT * FROM planejamento.area_cultural WHERE arcstatus = 'A' AND arcano = '2016'
 ;
 
 -- ALTER TABLE monitora.pi_niveletapaensino DROP COLUMN neecod;

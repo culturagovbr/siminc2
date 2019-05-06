@@ -1,13 +1,13 @@
 ﻿BEGIN; --ROLLBACK; COMMIT;
 
 ALTER TABLE monitora.pi_niveletapaensino
-   ADD COLUMN mdeid integer NOT NULL DEFAULT NULL;
-COMMENT ON COLUMN monitora.pi_niveletapaensino.mdeid
+   ADD COLUMN arceid integer NOT NULL DEFAULT NULL;
+COMMENT ON COLUMN monitora.pi_niveletapaensino.arceid
   IS 'Relação com a tabela de Área Cultural. planejamento.area_cultural';
 
 ALTER TABLE monitora.pi_niveletapaensino
-   ADD CONSTRAINT fk_pi_niveletapaensino_reference_pi_modalidadeensino FOREIGN KEY(mdeid)
-  REFERENCES planejamento.area_cultural(mdeid) MATCH SIMPLE
+   ADD CONSTRAINT fk_pi_niveletapaensino_reference_pi_modalidadeensino FOREIGN KEY(arceid)
+  REFERENCES planejamento.area_cultural(arceid) MATCH SIMPLE
   ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- DROP TABLE IF EXISTS monitora.pi_objetivoppa_metappa;

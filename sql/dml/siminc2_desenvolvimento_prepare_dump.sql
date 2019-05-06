@@ -86,7 +86,7 @@ UPDATE public.metapnc SET mpnstatus = 'I';
 
 UPDATE planacomorc.pi_janela SET pijstatus = 'I';
 UPDATE planejamento.categoria_apropriacao SET capstatus = 'I';
-UPDATE planejamento.area_cultural SET mdestatus = 'I';
+UPDATE planejamento.area_cultural SET arcstatus = 'I';
 UPDATE monitora.pi_produto SET pprstatus = 'I';
 UPDATE planacomorc.manutencaoitem SET maistatus = 'I';
 UPDATE monitora.programa SET prgstatus = 'I';

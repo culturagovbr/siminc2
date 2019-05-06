@@ -47,7 +47,7 @@ if( $enquadramento != "" ){
 	$sql .=" AND eqd.eqdid = '".$enquadramento."'";
 }
 if( $nivel ){
-	$sql .=" AND pli.neeid = '".$nivel."'";
+	$sql .=" AND pli.secid = '".$nivel."'";
 }
 if( $apropriacao ){
 	$sql .=" AND pli.capid = '".$apropriacao."'";
@@ -100,7 +100,7 @@ if( $enquadramento != "" ){
 	$sql .=" AND eqd.eqdid = '".$enquadramento."'";
 }
 if( $nivel ){
-	$sql .=" AND pli.neeid = '".$nivel."'";
+	$sql .=" AND pli.secid = '".$nivel."'";
 }
 if( $apropriacao ){
 	$sql .=" AND pli.capid = '".$apropriacao."'";
@@ -158,7 +158,7 @@ if( $enquadramento != "" ){
 	$sql .=" AND eqd.eqdid = '".$enquadramento."'";
 }
 if( $nivel ){
-	$sql .=" AND pli.neeid = '".$nivel."'";
+	$sql .=" AND pli.secid = '".$nivel."'";
 }
 if( $apropriacao ){
 	$sql .=" AND pli.capid = '".$apropriacao."'";
@@ -209,7 +209,7 @@ if( $enquadramento != "" ){
 	$sql .=" AND eqd.eqdid = '".$enquadramento."'";
 }
 if( $nivel ){
-	$sql .=" AND pli.neeid = '".$nivel."'";
+	$sql .=" AND pli.secid = '".$nivel."'";
 }
 if( $apropriacao ){
 	$sql .=" AND pli.capid = '".$apropriacao."'";

@@ -13,9 +13,9 @@ if($lista): ?>
             <?php foreach($lista as $dados){?>
                 <tr>
                     <td class="text-center">
-                        <a title="Alterar" class="editar-segmento" href="javascript:alterarSegmento(<?= $dados['neeid'];?>,'<?= $dados['neecod'];?>','<?= $dados['needsc'];?>')"><i class="fa fa-pencil"></i></a>
+                        <a title="Alterar" class="editar-segmento" href="javascript:alterarSegmento(<?= $dados['secid'];?>,'<?= $dados['neecod'];?>','<?= $dados['needsc'];?>')"><i class="fa fa-pencil"></i></a>
                         <?php if($podeEditar) { ?>
-                            <a title="excluir" name="req" value="excluir-segmento" id="excluir-segmento" href="?modulo=apoio/area_cultural_form&acao=A&req=excluir-segmento&mdeid=<?= $dados['mdeid'];?>&neeid=<?= $dados['neeid'];?>" style="margin-left: 5px;"><i class="fa fa-close"></i></a>
+                            <a title="excluir" name="req" value="excluir-segmento" id="excluir-segmento" href="?modulo=apoio/area_cultural_form&acao=A&req=excluir-segmento&arceid=<?= $dados['arceid'];?>&secid=<?= $dados['secid'];?>" style="margin-left: 5px;"><i class="fa fa-close"></i></a>
                         <?php } ?>
                     </td>
                     <td><?php echo $dados['needsc']; ?></td>
@@ -30,8 +30,8 @@ if($lista): ?>
 
 <script>
 
-    function alterarSegmento(neeid, neecod, needsc){
-        $("#neeid").val(neeid);
+    function alterarSegmento(secid, neecod, needsc){
+        $("#secid").val(secid);
         $("#neecod").val(neecod);
         $("#needsc").val(needsc);
     }

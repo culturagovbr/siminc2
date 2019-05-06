@@ -24,7 +24,7 @@ include APPRAIZ . 'includes/cabecalho.inc';
 <?php
 $strSqlGrid = "
     SELECT
-        neeid, neecod, needsc, neeano
+        secid, neecod, needsc, neeano
     FROM monitora.pi_niveletapaensino
     WHERE
         neestatus='A' AND

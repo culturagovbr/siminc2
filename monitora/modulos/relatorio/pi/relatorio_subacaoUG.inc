@@ -95,8 +95,8 @@ if ( $_REQUEST['requisicao'] == 1 ){
 		array_push($filtro, " pi.eqdid = " . $_REQUEST['eqdid'] . " ");
 	}
 	
-	if( $_REQUEST["neeid"] ){
-		array_push($filtro, " pi.neeid = " . $_REQUEST["neeid"] . " ");
+	if( $_REQUEST["secid"] ){
+		array_push($filtro, " pi.secid = " . $_REQUEST["secid"] . " ");
 	}
 	
 	if( $_REQUEST["capid"] ){
@@ -539,8 +539,8 @@ monta_titulo( $titulo_modulo, '' );
 					<td class='SubTituloDireita'>Nível/Etapa de Ensino:</td>
 					<td>
 						<?
-						$sql = "SELECT neeid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";						
-						$db->monta_combo('neeid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '000000005_1');
+						$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
+						$db->monta_combo('secid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '000000005_1');
 						?>
 					</td>
 				</tr>
@@ -567,7 +567,7 @@ monta_titulo( $titulo_modulo, '' );
 				    <td>
 						<?
 						$mdeid = $_REQUEST['mdeid'];
-						$sql = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao FROM planejamento.area_cultural WHERE mdeano = '{$_SESSION['exercicio']}'";
+						$sql = "SELECT mdeid as codigo, arccod ||' - '|| arcdsc as descricao FROM planejamento.area_cultural WHERE arcano = '{$_SESSION['exercicio']}'";
 						$db->monta_combo('mdeid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '000000005_3');
 			    	 	?>
 				    </td>

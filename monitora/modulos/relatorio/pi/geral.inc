@@ -66,7 +66,7 @@ function monta_sql(){
 	}
 	// Nível/Etapa de Ensino
 	if( $f_nivel_ensino[0] && $nivel_ensino_campo_flag ){
-		array_push($where, " nee.neeid in ('" . implode( "','", $f_nivel_ensino ) . "') ");
+		array_push($where, " nee.secid in ('" . implode( "','", $f_nivel_ensino ) . "') ");
 	}
 	// Modalidade de Ensino
 	if( $f_mod_ensino[0] && $mod_ensino_campo_flag ){
@@ -111,7 +111,7 @@ function monta_sql(){
                                 cap.capcod || ' - ' || cap.capdsc as categoria,
                                 eqd.eqdcod || ' - ' || eqd.eqddsc as enquadramento,
                                 nee.neecod || ' - ' || nee.needsc as niveletapa,
-                                mde.mdecod || ' - ' || mde.mdedsc as modalidade
+                                mde.arccod || ' - ' || mde.arcdsc as modalidade
                         FROM monitora.pi_planointerno pl
                         INNER JOIN monitora.pi_subacao sa ON sa.sbaid = pl.sbaid
                         INNER JOIN monitora.pi_planointernoptres pt ON pt.pliid = pl.pliid
@@ -122,7 +122,7 @@ function monta_sql(){
                         LEFT JOIN pde.atividade atv on pia.atiid = atv.atiid
                         LEFT JOIN planejamento.categoria_apropriacao cap on pl.capid = cap.capid
                         LEFT JOIN planejamento.enquadramento_despesa eqd on pl.eqdid = eqd.eqdid
-                        LEFT JOIN monitora.pi_niveletapaensino nee on pl.neeid = nee.neeid
+                        LEFT JOIN monitora.pi_niveletapaensino nee on pl.secid = nee.secid
                         LEFT JOIN planejamento.area_cultural mde on pl.mdeid = mde.mdeid
                         LEFT JOIN ( select sbaid, ptrid,
                                                 sum( sadvalor ) as valor
@@ -159,11 +159,11 @@ function monta_sql(){
                 	eqd.eqdid,
                 	eqd.eqdcod,
                 	enquadramento,
-                	nee.neeid,
+                	nee.secid,
                 	nee.neecod,
                 	niveletapa,
                 	mde.mdeid,
-                	mde.mdecod,
+                	mde.arccod,
                 	modalidade
                 ORDER BY 
                 " . ( is_array($agrupador) && count($agrupador) ? implode(', ', $agrupador) : '' )."
@@ -264,7 +264,7 @@ function monta_agp(){
 						  );				
 		    continue;
 		    break;		    		    
-		    case 'mde.mdecod':
+		    case 'mde.arccod':
 				array_push($agp['agrupador'], array(
 													"campo" => "modalidade",
 											  		"label" => "Modalidade de ensino"
@@ -451,7 +451,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 						  'descricao' => 'Categoria de Apropriação'),
 					array('codigo' => 'nee.neecod',
 						  'descricao' => 'Nível/Etapa de ensino'),
-					array('codigo' => 'mde.mdecod',
+					array('codigo' => 'mde.arccod',
 						  'descricao' => 'Modalidade de ensino'),
 					array('codigo' => 'sa.sbacod',
 						  'descricao' => 'Subação'),
@@ -700,7 +700,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 				><img src="../imagens/combo-todos.gif" border="0" align="middle"></div>
 				<div id="nivel_ensino_campo_on" style="display:<?php echo $possuiSelecionado ? "block" : "none" ?>;">
 					<?php
-					$sql_combo = "SELECT neeid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
+					$sql_combo = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
 
 					combo_popup(
 						'f_nivel_ensino',			// nome do campo
@@ -736,7 +736,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 				><img src="../imagens/combo-todos.gif" border="0" align="middle"></div>
 				<div id="mod_ensino_campo_on" style="display:<?php echo $possuiSelecionado ? "block" : "none" ?>;">
 					<?php
-					$sql_combo = "SELECT mdeid as codigo, mdecod ||' - '|| mdedsc as descricao FROM planejamento.area_cultural WHERE mdeano = '{$_SESSION['exercicio']}' order by mdecod";
+					$sql_combo = "SELECT mdeid as codigo, arccod ||' - '|| arcdsc as descricao FROM planejamento.area_cultural WHERE arcano = '{$_SESSION['exercicio']}' order by arccod";
 					
 					combo_popup(
 						'f_mod_ensino',			// nome do campo
