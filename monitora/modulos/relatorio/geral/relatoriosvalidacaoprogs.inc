@@ -99,13 +99,13 @@ monta_titulo( $titulo_modulo, $subtitulo_modulo );
 	//carrega dados para o combobox de programas 
 	$prgs = "
 			SELECT
-				monitora.programa.prgid AS codigo,
-				monitora.programa.prgcod || ' - ' || monitora.programa.prgdsc AS descricao 
+				planejamento.programa.prgid AS codigo,
+				planejamento.programa.prgcod || ' - ' || planejamento.programa.prgdsc AS descricao 
 			FROM
-				monitora.programa
+				planejamento.programa
 			WHERE
-				monitora.programa.prgstatus =  'A' AND
-				monitora.programa.prgano =  '" . $_SESSION['exercicio']. "'"
+				planejamento.programa.prgstatus =  'A' AND
+				planejamento.programa.prgano =  '" . $_SESSION['exercicio']. "'"
 	;	
 	$prgid = $_REQUEST["prgid"];
 	$db->monta_combo("prgid", $prgs, "S", "Todos os Programas", "AtualizaUnidade", null); 
@@ -201,7 +201,7 @@ monta_titulo( $titulo_modulo, $subtitulo_modulo );
 								 pa.usucpf = usu.usucpf
 							left join cor on
 								pa.avpsituacao = cor.corcod
-							inner join monitora.programa p on
+							inner join planejamento.programa p on
 								p.prgid = a.prgid
 						where
 							a.prgano = '%s' and

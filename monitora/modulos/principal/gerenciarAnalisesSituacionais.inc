@@ -88,7 +88,7 @@ monta_titulo( $titulo_modulo, $unidade);
 			<td class="SubTituloDireita" width="40%">Programa:</td>
 				<?php 
 					$sql = "SELECT prgid as codigo, prgdsc as descricao 
-							FROM monitora.programa 
+							FROM planejamento.programa 
 							WHERE prgstatus='A' AND prgano='".$_SESSION['exercicio']."'
 							ORDER BY prgdsc";
 				?>	

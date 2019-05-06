@@ -164,7 +164,7 @@ monta_titulo( 'Relatório de Planejamento', '' );
 				<?
 				$sql = "SELECT prgcod as codigo, 
 						   prgdsc as descricao 
-						FROM monitora.programa
+						FROM planejamento.programa
 						WHERE prgano = '".$_SESSION['exercicio']."'
 						order by descricao";
 
@@ -218,7 +218,7 @@ global $db;
 					  ON (um.unmcod = a.unmcod)
 					INNER JOIN public.produto prod 
 					  ON (prod.procod = a.procod)
-					INNER JOIN monitora.programa pr 
+					INNER JOIN planejamento.programa pr 
 					  ON (pr.prgcod = a.prgcod)
 					INNER JOIN ( SELECT TRIM(ptres)::character(6) as ptres, 
 					   				sum(rofdot_ini) as dotacao, 

@@ -8,7 +8,7 @@
 	//$_SESSION['exercicio'] = $db->pega_ano_atual();
 	//$_SESSION['anoexercicio'] = $db->pega_ano_atual();	
 	
-	$ano = $db->pegaUm("select distinct prsano from monitora.programacaoexercicio order by prsano desc limit 1");
+	$ano = $db->pegaUm("select distinct prsano from planejamento.programacaoexercicio order by prsano desc limit 1");
 	if ( $ano ) {
 		$_SESSION['exercicio'] = $ano;
 		$_SESSION['anoexercicio'] = $ano;

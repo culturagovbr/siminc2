@@ -178,7 +178,7 @@ monta_titulo( 'Pesquisa Plano Interno', '&nbsp'  );
     			 DISTINCT pr.prgcod as codigo, 
     			 prgdsc as descricao 
     			FROM
-    			 monitora.programa pr JOIN monitora.acao ac ON (pr.prgid = ac.prgid)
+    			 planejamento.programa pr JOIN monitora.acao ac ON (pr.prgid = ac.prgid)
     			 JOIN financeiro.planointerno pl on(pl.acaid = ac.acaid)
     			WHERE
     			 pr.prgano = '" . $_SESSION['exercicio'] . "' AND
@@ -309,7 +309,7 @@ $sql = sprintf("SELECT
 				 JOIN financeiro.planointerno pl USING(acaid)
 				 JOIN public.unidade un ON un.unicod = ac.unicod 
 				 LEFT JOIN pde.planointernoatividade pa ON pa.pliid = pl.pliid AND pa.atiid = %d
-				 JOIN monitora.programa pr ON pr.prgid = ac.prgid 
+				 JOIN planejamento.programa pr ON pr.prgid = ac.prgid 
 				WHERE
 				  pl.pliid NOT IN (SELECT
 				 					pliid

@@ -376,7 +376,7 @@ class Sigplan{
 			$this->registrar( $tabela, $registro, self::INSERCAO );
 			switch ( $tabela ) {
 				// atualiza a lista de prgid
-				case 'monitora.programa':
+				case 'planejamento.programa':
 					$sql = sprintf( "select prgid, prgcod from programa where oid = '%s'", $id );
 					$programa = $this->bancodedados->pegaLinha( $sql );
 					$prgid[$programa['prgcod']] = $programa['prgid'];

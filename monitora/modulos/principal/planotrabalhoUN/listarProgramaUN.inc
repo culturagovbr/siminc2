@@ -70,7 +70,7 @@ $sql_lista .= "GROUP BY dtl.ptrid, dtl.ptres,
 	<td>
 	<?
 	$sql = "SELECT p.prgcod as codigo, (p.prgcod || ' - ' || p.prgdsc) as descricao
-			FROM monitora.programa p
+			FROM planejamento.programa p
 			WHERE p.prgano = '".$_SESSION['exercicio']."' ORDER BY prgcod";
 	$db->monta_combo('prgcod', $sql, 'S','Selecione','','','',400); 
 	?>

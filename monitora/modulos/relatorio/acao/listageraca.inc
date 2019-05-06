@@ -20,7 +20,7 @@
 
   $where = "  where  a.acasnrap = '$rap' and a.acastatus='A' and a.prgano='".$_SESSION['exercicio']."'";
   
-  $sql .= " inner join monitora.programa p on a.prgid = p.prgid inner join unidade un on un.unicod = a.unicod inner join orgao o on  o.orgcod=un.orgcod ";
+  $sql .= " inner join planejamento.programa p on a.prgid = p.prgid inner join unidade un on un.unicod = a.unicod inner join orgao o on  o.orgcod=un.orgcod ";
  if ($_REQUEST['lista']=='L'){
     $sql1 = "select distinct '<img border=\"0\" src=\"../imagens/alterar.gif\" title=\" Ver Cadastro \" onclick=\"alterar_cad(' || '\'' || a.acaid || '\',\'' || a.prgid || '\'' || ')\">' as acao, a.prgcod || '.' || a.acacod ||'.'||a.unicod ||'.' ||a.loccod as codigo,a.acadsc as descricao ";
 } else

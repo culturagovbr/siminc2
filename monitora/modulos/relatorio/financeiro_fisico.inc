@@ -344,7 +344,7 @@ $ano = $_SESSION['exercicio'];
 							"select
 								p.prgcod as codigo,
 								p.prgcod || ' - ' || p.prgdsc as descricao
-							from monitora.programa p 
+							from planejamento.programa p 
 							where
 								prgano = '" . $ano . "'
 							group by p.prgcod, p.prgdsc
@@ -355,7 +355,7 @@ $ano = $_SESSION['exercicio'];
 								"select
 									p.prgcod as codigo,
 									p.prgcod || ' - ' || p.prgdsc as descricao
-								from monitora.programa p 
+								from planejamento.programa p 
 								where
 									prgano = '" . $ano . "' and
 									p.prgcod in ( '" . implode( "','", $_REQUEST['programa'] ) . "' )

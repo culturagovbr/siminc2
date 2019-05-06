@@ -155,7 +155,7 @@ if ($db->testa_superuser())   {
 }
 
 // verifica se o exercício está aberto para estruturar o simec
-$sql= "select prsano from monitora.programacaoexercicio where prsano='".$_SESSION['exercicio']."' and prsstatus='A'";
+$sql= "select prsano from planejamento.programacaoexercicio where prsano='".$_SESSION['exercicio']."' and prsstatus='A'";
 
 $registro=$db->recuperar($sql);
 

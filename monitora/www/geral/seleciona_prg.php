@@ -21,7 +21,7 @@
 	
 	$db = new cls_banco();
 
-	$ano = $db->pegaUm( "select distinct prsano from monitora.programacaoexercicio order by prsano desc limit 1" );
+	$ano = $db->pegaUm( "select distinct prsano from planejamento.programacaoexercicio order by prsano desc limit 1" );
 	if ( $ano ) {
 		$_SESSION['exercicio_atual'] = $ano;
 		$_SESSION['exercicio'] = $ano;

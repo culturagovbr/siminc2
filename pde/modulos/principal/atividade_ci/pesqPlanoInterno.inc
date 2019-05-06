@@ -178,7 +178,7 @@ monta_titulo( 'Pesquisa Plano Interno', '&nbsp'  );
     			 DISTINCT pr.prgcod as codigo, 
     			 prgdsc as descricao 
     			FROM
-    			 monitora.programa pr JOIN monitora.acao ac ON (pr.prgid = ac.prgid)
+    			 planejamento.programa pr JOIN monitora.acao ac ON (pr.prgid = ac.prgid)
     			 JOIN financeiro.planointerno pl on(pl.acaid = ac.acaid)
     			WHERE
     			 pr.prgano = '" . $_SESSION['exercicio'] . "' AND

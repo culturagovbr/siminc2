@@ -287,7 +287,7 @@ class ConsultaFinanceiroTraducao
 			'titulo'    => 'Programa',
 			'tabela'    => 'financeiro.execucaomec',
 			'join'		=> '',
-//			'join'		=> ' inner join ( select distinct prgcod, prgdsc from monitora.programa ) as p on p.prgcod = orc.prgcod    ',
+//			'join'		=> ' inner join ( select distinct prgcod, prgdsc from planejamento.programa ) as p on p.prgcod = orc.prgcod    ',
 			'join_dep'	=> array()
 		),
 		'anoExecucao'	=> array(
@@ -776,7 +776,7 @@ class ConsultaFinanceiro
 			
 				/*
 				' inner join orgao o on o.orgcod = orc.orgcod  ' .
-				' inner join monitora.programa p on p.prgcod = orc.prgcod and p.prgano = orc.rofano ' .
+				' inner join planejamento.programa p on p.prgcod = orc.prgcod and p.prgano = orc.rofano ' .
 				//' inner join monitora.acao a on a.acacod = orc.acacod and a.prgcod = orc.prgcod and a.unicod = unicod and a.loccod = loccod and a.prgano = rofano and a.acasnrap = \'f\' ' .
 				' inner join ( select distinct acacod, acadsc, prgano from monitora.acao where acasnrap = \'f\' group by acacod, acadsc, prgano ) a on a.acacod = orc.acacod and a.prgano = orc.rofano  ' .
 				' inner join ( select distinct prgcod, acadsc, acacod, unicod, loccod, sacdsc, prgano from monitora.acao where acasnrap = \'f\' group by prgcod, acadsc, acacod, unicod, loccod, sacdsc, prgano ) loc on loc.acacod = orc.acacod and loc.prgano = orc.rofano  ' .

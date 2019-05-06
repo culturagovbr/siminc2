@@ -15,7 +15,7 @@ if($_POST['requisicao'] == 'montaComboPopAcao'){
 	$arPrograma = explode(",", $_POST['arPrograma']);
 	$where = "";
 	if($arPrograma[0]){
-		$where = "and prgcod in ( select prgcod from monitora.programa where prgid in('". implode("', '", $arPrograma). "' )  )";
+		$where = "and prgcod in ( select prgcod from planejamento.programa where prgid in('". implode("', '", $arPrograma). "' )  )";
 	}	
 	$sqlCombo = "select distinct
 							acacod as codigo,

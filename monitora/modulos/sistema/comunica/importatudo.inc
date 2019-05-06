@@ -86,8 +86,8 @@
 		
 		from 	monitora.usuarioresponsabilidade ur 
 		
-		inner join monitora.programa p1 on p1.prgid = ur.prgid and p1.prgano = '".($ano - 1)."' and p1.prgstatus = 'A'
-		inner join monitora.programa p2 on p1.prgcod = p2.prgcod and p2.prgano = '$ano'
+		inner join planejamento.programa p1 on p1.prgid = ur.prgid and p1.prgano = '".($ano - 1)."' and p1.prgstatus = 'A'
+		inner join planejamento.programa p2 on p1.prgcod = p2.prgcod and p2.prgano = '$ano'
 		where ur.rpustatus='A'";	
 	$db->executar($sql);
 	

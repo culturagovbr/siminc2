@@ -67,7 +67,7 @@ $sql_lista .= " GROUP BY dtl.ptrid,dtl.ptres,checkbox,descricao,uni.unidsc
 	<td>
 	<?
 	$sql = "SELECT p.prgcod as codigo, (p.prgcod || ' - ' || p.prgdsc) as descricao
-			FROM monitora.programa p
+			FROM planejamento.programa p
 			WHERE p.prgano = '".$prgano."' ORDER BY prgcod";
 	$db->monta_combo('prgcod', $sql, 'S','Selecione','','','',400); 
 	?>

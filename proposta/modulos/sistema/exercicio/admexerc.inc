@@ -28,7 +28,7 @@ if (($_REQUEST['act'] == 'inserir') or ($_REQUEST['act']=='alterar'))
 if ($_REQUEST['act'] == 'inserir')
 {
    // fazer inserção de programação simec.
-   $sql = "insert into monitora.programacaoexercicio (prsano,prsdata_inicial,prsdata_termino,prsstatus,prsexerccorrente) values (".
+   $sql = "insert into planejamento.programacaoexercicio (prsano,prsdata_inicial,prsdata_termino,prsstatus,prsexerccorrente) values (".
    "'".$_REQUEST['prsano']."',".
    "'".$_REQUEST['prsdata_inicial']."',".
    "'".$_REQUEST['prsdata_termino']."',".
@@ -43,11 +43,11 @@ if ($_REQUEST['act']=='alterar')
 {
    if ($_REQUEST['prsexerccorrente']=='t')
    {
-   	$sql = "update monitora.programacaoexercicio set prsexerccorrente='f'";
+   	$sql = "update planejamento.programacaoexercicio set prsexerccorrente='f'";
     $saida = $db->executar($sql);
    }
 	
-   $sql = "update monitora.programacaoexercicio set prsdata_inicial='".
+   $sql = "update planejamento.programacaoexercicio set prsdata_inicial='".
    $_REQUEST['prsdata_inicial'].
    "',  prsdata_termino='".$_REQUEST['prsdata_termino'].
    "',prsstatus='".
@@ -72,7 +72,7 @@ include APPRAIZ."includes/cabecalho.inc";
 <div align="center">
 <?
 if($_REQUEST['prsano']) {
-        $sql= "select * from monitora.programacaoexercicio where prsano='".$_REQUEST['prsano']."'";
+        $sql= "select * from planejamento.programacaoexercicio where prsano='".$_REQUEST['prsano']."'";
         $saida = $db->recuperar($sql,$res);
         if(is_array($saida)) {foreach($saida as $k=>$v) ${$k}=$v;
     }
@@ -163,7 +163,7 @@ monta_titulo($titulo_modulo,'');
     <br><br></form>
 <?
 $cabecalho = array('Ação','Ano','Período');
-$sql= "select  '<img border=\"0\" src=\"../imagens/alterar.gif\" title=\" Alterar Registro \" onclick=\"altera_prs('||prsano||')\">' as acao,  prsano, to_char(prsdata_inicial,'DD/MM/YYYY') ||'  ---   '||to_char(prsdata_termino,'DD/MM/YYYY') as descricao from monitora.programacaoexercicio order by prsano";
+$sql= "select  '<img border=\"0\" src=\"../imagens/alterar.gif\" title=\" Alterar Registro \" onclick=\"altera_prs('||prsano||')\">' as acao,  prsano, to_char(prsdata_inicial,'DD/MM/YYYY') ||'  ---   '||to_char(prsdata_termino,'DD/MM/YYYY') as descricao from planejamento.programacaoexercicio order by prsano";
 $db->monta_lista($sql,$cabecalho,100,20,'','','');
 
 ?>

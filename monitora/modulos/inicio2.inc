@@ -455,7 +455,7 @@ switch($filtro_agrupador) {
 					   p.prgcod || ' - ' || p.prgdsc as descricao,
 					   count(acaid) as qtdloc ,
 					   count(distinct acacod) as qtdacao
-				from monitora.programa p 
+				from planejamento.programa p 
 				inner join monitora.acao a ON a.prgid = p.prgid 
 				WHERE p.prgano='".$_SESSION['exercicio']."' and acasnrap = false and trim(prodsc) != '' and p.prgcod not in ('1073','1449') 
 				group by p.prgcod, p.prgdsc 
@@ -473,7 +473,7 @@ switch($filtro_agrupador) {
 				   	count(acaid) as qtdloc ,
 				   	count(distinct acacod) as qtdacao
 				FROM 
-					monitora.programa p 
+					planejamento.programa p 
 				INNER JOIN monitora.acao a ON a.prgid = p.prgid 
 				WHERE p.prgano='".$_SESSION['exercicio']."' and acasnrap = false and trim(prodsc) != '' and p.prgcod not in ('1073','1449') 
 				GROUP BY a.acacod, a.acatitulo 
@@ -488,7 +488,7 @@ switch($filtro_agrupador) {
 					   u.unicod || ' - ' || u.unidsc as descricao,
 					   count(acaid) as qtdloc ,
 					   count(distinct acacod) as qtdacao
-				from monitora.programa p 
+				from planejamento.programa p 
 				inner join monitora.acao a ON a.prgid = p.prgid 
 				inner join public.unidade u ON u.unicod = a.unicod
 				WHERE p.prgano='".$_SESSION['exercicio']."' and acasnrap = false and trim(prodsc) != '' and p.prgcod not in ('1073','1449') 
@@ -504,7 +504,7 @@ switch($filtro_agrupador) {
 					   l.loccod || ' - ' || l.locdsc as descricao,
 					   count(acaid) as qtdloc ,
 					   count(distinct acacod) as qtdacao
-				from monitora.programa p 
+				from planejamento.programa p 
 				inner join monitora.acao a ON a.prgid = p.prgid 
 				inner join public.localizador l ON l.loccod = a.loccod
 				WHERE p.prgano='".$_SESSION['exercicio']."' and acasnrap = false and trim(prodsc) != '' and p.prgcod not in ('1073','1449') 

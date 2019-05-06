@@ -66,7 +66,7 @@ monta_titulo( $db->pegaUm("SELECT unicod || ' - ' || unidsc FROM public.unidade 
 		<td>
 			<?
 			$sql = "SELECT p.prgcod as codigo, (p.prgcod || ' - ' || p.prgdsc) as descricao
-					FROM monitora.programa p
+					FROM planejamento.programa p
 					WHERE p.prgano = '".$_SESSION['exercicio']."' ORDER BY prgcod";
 			$db->monta_combo('prgcod', $sql, 'S','Selecione','','','',400); 
 			?>
@@ -78,7 +78,7 @@ monta_titulo( $db->pegaUm("SELECT unicod || ' - ' || unidsc FROM public.unidade 
 		<td>
 			<?
 			$sql = "SELECT p.prgcod as codigo, (p.prgcod || ' - ' || p.prgdsc) as descricao
-					FROM monitora.programa p
+					FROM planejamento.programa p
 					WHERE p.prgano = '".$_SESSION['exercicio']."' ORDER BY prgcod";
 			$db->monta_combo('prgcod', $sql, 'S','Selecione','','','',400); 
 			?>

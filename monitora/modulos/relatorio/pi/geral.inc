@@ -867,7 +867,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 										prgcod as codigo,
 										prgcod || ' - ' || prgdsc as descricao
 									 FROM 
-										monitora.programa
+										planejamento.programa
 									 WHERE
 										prgano = '".$_SESSION['exercicio']."'
 									 GROUP BY 

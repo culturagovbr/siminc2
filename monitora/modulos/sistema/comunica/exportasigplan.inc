@@ -257,7 +257,7 @@ if ( $_REQUEST["formulario"] ) {
 					prgdscsituacaoatual as \"PRGDscSituacaoAtual\",
 					prgdscresultadosespobt as \"PRGDscResultadosEspObt\",
 					to_char( prgdataatusituacaoatual, 'YYYY-MM-DDT' ) || to_char( prgdataatusituacaoatual, 'HH24:MI:SS' )  as \"PRGDataAtuSituacaoAtual\"
-				from monitora.programa
+				from planejamento.programa
 				where prgano = '".$_SESSION["exercicio"]."' and orgcod = '". CODIGO_ORGAO_SISTEMA. "'";
 				
 			$documento = sigplan_gravarDocumento( $sql, "Programa", "RetornaPrograma" );
@@ -350,7 +350,7 @@ if ( $_REQUEST["formulario"] ) {
 					rp.RSPObsMonitor as \"RSPObsMonitor\",
 					rp.RSPObsControle as \"RSPObsControle\"
 				from monitora.restricaoprograma rp
-				inner join monitora.programa p on
+				inner join planejamento.programa p on
 					p.prgid = rp.prgid and p.prgano = rp.prgano
 				where rp.prgano = '".$_SESSION["exercicio"]."' and rp.rspsnliberado = true
 				order by p.prgano, p.prgcod";

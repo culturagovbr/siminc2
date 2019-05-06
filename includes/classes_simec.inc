@@ -3749,7 +3749,7 @@ inner join elabrev.ppaacao_proposta  ap on ap.acaid = ua.acaid and ua.acaid=".$_
 	function cabecalho_programa($prgid)
 	{
 
-		$sql = "select * from monitora.programa where prgid=".$prgid;
+		$sql = "select * from planejamento.programa where prgid=".$prgid;
 		$RS = $this->record_set($sql);
 		$nlinhas = $this->conta_linhas($RS);
 		$nl=$nlinhas;

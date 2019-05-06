@@ -56,7 +56,7 @@
 									pap.prgid,
 									p.prgcod||' - '||p.prgdsc as dscprg
 								from monitora.progacaoproposto as pap
-									left join monitora.programa as p on pap.prgid = p.prgid
+									left join planejamento.programa as p on pap.prgid = p.prgid
 								where
 									pap.acacod = '' and
 									pap.usucpf = '%s'",

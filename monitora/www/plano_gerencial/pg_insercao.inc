@@ -205,7 +205,7 @@ monta_titulo($titulo_modulo,'');
 
 		// verifica se o exercício está aberto para estruturar o simec
 		$sql= 	"select prsano 
-				from monitora.programacaoexercicio 
+				from planejamento.programacaoexercicio 
 				where prsano='".$_SESSION['exercicio']."' and prsstatus='A'";
 
 		$registro=$db->recuperar($sql);

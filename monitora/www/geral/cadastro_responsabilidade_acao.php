@@ -170,7 +170,7 @@ document.getElementById('tabela').style.display  = "none";
 	  			count(*) as totalaca 
 	  		FROM
 	  			monitora.acao a 
-	  		INNER JOIN monitora.programa p ON a.prgid = p.prgid 
+	  		INNER JOIN planejamento.programa p ON a.prgid = p.prgid 
 	  		INNER JOIN public.unidade u ON a.unicod=u.unicod 
 	  		WHERE
 	  			p.prgcod not in ('1073','1449') AND 

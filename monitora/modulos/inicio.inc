@@ -437,7 +437,7 @@ function get_sql( $entidade, $referencias, $programa, $localizador, $unidade, $a
 					v.total_cor3 as cor3, 
 					count(distinct(a.acacod)) as total_acoes
 				from %s v
-					inner join monitora.programa p on v.prgid = p.prgid
+					inner join planejamento.programa p on v.prgid = p.prgid
 					inner join monitora.referencia r on v.refcod = r.refcod
 					inner join monitora.acao a ON a.prgano = p.prgano and a.prgcod = p.prgcod and a.prgid = p.prgid
 				where

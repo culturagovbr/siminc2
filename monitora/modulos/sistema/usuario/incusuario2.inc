@@ -46,7 +46,7 @@
         <td>
         <?php
 		//busca os programas ja propostos caso já exista 
-			$sql = "select pap.prgid, p.prgcod||' - '||p.prgdsc as dscprg from monitora.progacaoproposto as pap left join monitora.programa as p on pap.prgid = p.prgid where pap.acacod = '' and pap.usucpf = '".corrige_cpf($_REQUEST['usucpf'])."'";
+			$sql = "select pap.prgid, p.prgcod||' - '||p.prgdsc as dscprg from monitora.progacaoproposto as pap left join planejamento.programa as p on pap.prgid = p.prgid where pap.acacod = '' and pap.usucpf = '".corrige_cpf($_REQUEST['usucpf'])."'";
 			$RS1 = $db->carregar($sql);
 			if (! is_array($RS1) or ($_SESSION['sisid']==4))
 			{

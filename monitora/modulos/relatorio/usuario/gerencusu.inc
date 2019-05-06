@@ -423,10 +423,10 @@ monta_titulo($titulo_modulo,'');
 		<td>
 			<div id="programa_campo_off" style="color:#a0a0a0;" onclick="javascript:onOffCampo( 'programa' );"><img src="../imagens/combo-todos.gif" border="0" align="middle"></div>
 			<div id="programa_campo_on" style="display:none;">
-				<? $sql_combo = "select p.prgcod as codigo, p.prgcod || ' - ' || p.prgdsc as descricao from financeiro.execucao r inner join monitora.programa p on r.prgcod = p.prgcod where r.rofano = '" . $ano . "' group by p.prgcod, p.prgdsc order by p.prgcod, p.prgdsc"; 
+				<? $sql_combo = "select p.prgcod as codigo, p.prgcod || ' - ' || p.prgdsc as descricao from financeiro.execucao r inner join planejamento.programa p on r.prgcod = p.prgcod where r.rofano = '" . $ano . "' group by p.prgcod, p.prgdsc order by p.prgcod, p.prgdsc";
 				if ( $_REQUEST['prgid'] && $_REQUEST['prgid'][0] != '' )	
 				{
-					$sql_carregados = "select p.prgcod as codigo, p.prgcod || ' - ' || p.prgdsc as descricao from financeiro.execucao r inner join monitora.programa p on r.prgcod = p.prgcod where r.rofano = '" . $ano . "' and p.prgcod in ('".implode("','",$_REQUEST['prgid'])."') group by p.prgcod, p.prgdsc ";
+					$sql_carregados = "select p.prgcod as codigo, p.prgcod || ' - ' || p.prgdsc as descricao from financeiro.execucao r inner join planejamento.programa p on r.prgcod = p.prgcod where r.rofano = '" . $ano . "' and p.prgcod in ('".implode("','",$_REQUEST['prgid'])."') group by p.prgcod, p.prgdsc ";
 					$programa=$db->carregar( $sql_carregados );
 				}
 				?>

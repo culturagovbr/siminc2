@@ -58,7 +58,7 @@ if ($_SESSION['LINHA'] >= 0)
     // print 'acao===='.$acaoid.'<br>';
      $acacod = $codigo;
      $acadsc = $descricao;
-     $sqlp = 'select p.prgcod as coprg, p.prgdsc from monitora.programa p left join monitora.acao a on a.prgid=p.prgid where a.acaid='.$acaid;     
+     $sqlp = 'select p.prgcod as coprg, p.prgdsc from planejamento.programa p left join monitora.acao a on a.prgid=p.prgid where a.acaid='.$acaid;
      $RSp = $db->record_set($sqlp);     
      $resp = $db->carrega_registro($RSp,0);     
      if(is_array($resp)) foreach($resp as $k=>$v) ${$k}=$v;

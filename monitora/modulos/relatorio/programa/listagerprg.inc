@@ -16,36 +16,36 @@
   $periodo=1;
   $periodo2=1;
 
-  $from = ' from monitora.programa p ';
+  $from = ' from planejamento.programa p ';
   if ($_REQUEST['cbrp']) {
     // restrição e providencia
     $rest=2;
-    $from = ' from monitora.programa p, monitora.restricaoprograma r ';
+    $from = ' from planejamento.programa p, monitora.restricaoprograma r ';
   }
   if ($_REQUEST['tpscodav'] or $_REQUEST['cbpalt']) {
     $tpsav=2;
-    if ($rest==1)   $from = ' from monitora.programa p, monitora.avaliacaoparecer ava ';
-    else  $from = ' from monitora.programa p, monitora.restricaoprograma r, monitora.avaliacaoparecer ava  ';
+    if ($rest==1)   $from = ' from planejamento.programa p, monitora.avaliacaoparecer ava ';
+    else  $from = ' from planejamento.programa p, monitora.restricaoprograma r, monitora.avaliacaoparecer ava  ';
   }
   if ($_REQUEST['corcodav'] or $_REQUEST['cbpalt']) {
     $corav=2;
     $tpsav=2;
     if ($rest==1)
-       $from = ' from monitora.programa p, monitora.avaliacaoparecer ava ';
+       $from = ' from planejamento.programa p, monitora.avaliacaoparecer ava ';
     else
-      $from = ' from monitora.programa p, monitora.restricaoprograma r,monitora.avaliacaoparecer ava  ';
+      $from = ' from planejamento.programa p, monitora.restricaoprograma r,monitora.avaliacaoparecer ava  ';
   }
 
   if ($_REQUEST['tpscodpar'] or $_REQUEST['cbpalt']) {
     $tpspar=2;
     if ($rest==1)
     {
-      if ($tpsav==1) $from = ' from monitora.programa p, monitora.avaliacaoparecer par ';
-      else $from = ' from monitora.programa p, monitora.avaliacaoparecer ava, monitora.avaliacaoparecer par ';
+      if ($tpsav==1) $from = ' from planejamento.programa p, monitora.avaliacaoparecer par ';
+      else $from = ' from planejamento.programa p, monitora.avaliacaoparecer ava, monitora.avaliacaoparecer par ';
     }
     else  {
-      if ($tpsav==1) $from = ' from monitora.programa p, monitora.restricaoprograma r,monitora.avaliacaoparecer par ';
-      else $from = ' from monitora.programa p, monitora.restricaoprograma r, monitora.avaliacaoparecer ava, monitora.avaliacaoparecer par ';
+      if ($tpsav==1) $from = ' from planejamento.programa p, monitora.restricaoprograma r,monitora.avaliacaoparecer par ';
+      else $from = ' from planejamento.programa p, monitora.restricaoprograma r, monitora.avaliacaoparecer ava, monitora.avaliacaoparecer par ';
     }
   }
   if ($_REQUEST['corcodpar'] or $_REQUEST['cbpalt']) {
@@ -53,12 +53,12 @@
     $tpspar=2;
     if ($rest==1)
     {
-      if ($tpsav==1) $from = ' from monitora.programa p, monitora.avaliacaoparecer par ';
-      else $from = ' from monitora.programa p, monitora.avaliacaoparecer ava, monitora.avaliacaoparecer par ';
+      if ($tpsav==1) $from = ' from planejamento.programa p, monitora.avaliacaoparecer par ';
+      else $from = ' from planejamento.programa p, monitora.avaliacaoparecer ava, monitora.avaliacaoparecer par ';
     }
     else  {
-      if ($tpsav==1) $from = ' from monitora.programa p, monitora.restricaoprograma r,monitora.avaliacaoparecer par ';
-      else $from = ' from monitora.programa p, monitora.restricaoprograma r, monitora.avaliacaoparecer ava, monitora.avaliacaoparecer par ';
+      if ($tpsav==1) $from = ' from planejamento.programa p, monitora.restricaoprograma r,monitora.avaliacaoparecer par ';
+      else $from = ' from planejamento.programa p, monitora.restricaoprograma r, monitora.avaliacaoparecer ava, monitora.avaliacaoparecer par ';
     }
   }
   // monta relatorio
@@ -94,7 +94,7 @@
     if ($_REQUEST['prgid'][0])
   {
     $sql = $sql." and p.prgid in (".implode(",",$_REQUEST['prgid']).")";
-    $sqldsc = "select prgdsc from monitora.programa where prgid in (".implode(",",$_REQUEST['prgid']).")";
+    $sqldsc = "select prgdsc from planejamento.programa where prgid in (".implode(",",$_REQUEST['prgid']).")";
     $titulo=$db->carregar($sqldsc);
     foreach($titulo as $titulo2){
     	$titul.= '| Programa:'.$titulo2['prgdsc'];

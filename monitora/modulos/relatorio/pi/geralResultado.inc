@@ -153,7 +153,7 @@ function monta_sql(){
 		switch ($val) {
 		    case 'programa':
 				array_push($select,   " v.prgcod || ' - ' || pr.prgdsc AS programa ");
-				array_push($from, 	  " INNER JOIN monitora.programa pr ON pr.prgcod = v.prgcod and pr.prgano = v.prgano ");
+				array_push($from, 	  " INNER JOIN planejamento.programa pr ON pr.prgcod = v.prgcod and pr.prgano = v.prgano ");
 				array_push($group, 	  " v.prgcod, prgdsc ");											
 				array_push($agpLabel, " Programa ");				
 		    	continue;

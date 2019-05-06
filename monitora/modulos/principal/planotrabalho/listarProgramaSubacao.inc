@@ -47,7 +47,7 @@ switch($_SESSION['monitora_var']['tipo']) {
 				(SUM(dtl.ptrdotacao)-coalesce(SUM(dtl.valorpi),0)) as diferenca 
 				FROM monitora.v_detalhepiptres dtl 
 				LEFT JOIN entidade.entidade ent ON ent.entunicod = dtl.unicod AND ent.entungcod IS NULL 
-				inner JOIN monitora.programapiacao ppa ON ppa.acaid = dtl.acaid
+				inner JOIN planejamento.programapiacao ppa ON ppa.acaid = dtl.acaid
 				WHERE
 					  dtl.unicod = '".$unicod."' AND
 					  dtl.prgano = '".$prgano."'  
@@ -69,7 +69,7 @@ switch($_SESSION['monitora_var']['tipo']) {
 					FROM monitora.acaounidadegestora aug 
 					LEFT JOIN monitora.v_detalhepiptres dtl ON aug.acaid = dtl.acaid 
 					LEFT JOIN entidade.entidade ent ON ent.entunicod = dtl.unicod AND ent.entungcod IS NULL 
-					inner JOIN monitora.programapiacao ppa ON ppa.acaid = dtl.acaid 
+					inner JOIN planejamento.programapiacao ppa ON ppa.acaid = dtl.acaid
 					WHERE
 						aug.ungcod = '".$entungcod."' AND
 						dtl.prgano = '".$prgano."'  
@@ -175,7 +175,7 @@ if(!$unicod) {
 	<td>
 	<?
 	$sql = "SELECT p.prgcod as codigo, (p.prgcod || ' - ' || p.prgdsc) as descricao
-			FROM monitora.programa p
+			FROM planejamento.programa p
 			WHERE p.prgano = '".$prgano."' ORDER BY prgcod";
 	$db->monta_combo('prgcod', $sql, 'S','Selecione','','','',400); 
 	?>

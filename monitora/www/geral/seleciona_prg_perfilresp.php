@@ -29,7 +29,7 @@ $pflcod = $_REQUEST['pflcod'];
 
 	  $db = new cls_banco();
 	  $cabecalho = 'Selecione o(s) Programa(s)';
-	  $sql = "select prgid, prgcod, prgdsc from monitora.programa where prgano='".$_SESSION['exercicio']."' order by prgcod";
+	  $sql = "select prgid, prgcod, prgdsc from planejamento.programa where prgano='".$_SESSION['exercicio']."' order by prgcod";
 	  $RS = $db->carregar($sql);
 	  $nlinhas = count($RS)-1;
 	  for ($i=0; $i<=$nlinhas;$i++)

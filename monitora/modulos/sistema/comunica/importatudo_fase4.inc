@@ -13,7 +13,7 @@ $adodbXML = new adodb_xml("1.0","utf-8");
 
 print 'acao<br>';
 $adodbXML->ImportaXML(&$clientedb, "CargaAcao.xml", "monitora.acao",'ACA','sigplan');
-$sql='update monitora.acao set prgid=p.prgid from monitora.programa p where p.prgcod=acao.prgcod and p.prgano=acao.prgano and acao.prgid is null';
+$sql='update monitora.acao set prgid=p.prgid from planejamento.programa p where p.prgcod=acao.prgcod and p.prgano=acao.prgano and acao.prgid is null';
 $saida = $db->executar($sql);
 $db -> commit();
 

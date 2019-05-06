@@ -174,7 +174,7 @@ document.getElementById('tabela').style.display  = "none";
 <?
 
 	  $cabecalho = 'Selecione o(s) Programa(s)';
-	  $sql = "select prgid, prgcod, prgcod, prgdsc from monitora.programa where prgstatus='A' and prgano='".$_SESSION['exercicio']."' order by prgcod";
+	  $sql = "select prgid, prgcod, prgcod, prgdsc from planejamento.programa where prgstatus='A' and prgano='".$_SESSION['exercicio']."' order by prgcod";
 
 	  $RS = @$db->carregar($sql);
 	  $nlinhas = count($RS)-1;
@@ -205,7 +205,7 @@ $sql = "select
 		 p.prgcod||' - '||p.prgdsc as descricao 
 		from 
 		 monitora.usuarioresponsabilidade ur 
-		 inner join monitora.programa p on ur.prgid=p.prgid 
+		 inner join planejamento.programa p on ur.prgid=p.prgid 
 		where 
 		 ur.rpustatus='A' and 
 		 ur.usucpf = '$usucpf' and 
@@ -230,7 +230,7 @@ if(is_array($RS)) {
 //	         distinct p.prgid as codigo, 
 //	         p.prgdsc as descricao 
 //	        from 
-//	         monitora.programa p 
+//	         planejamento.programa p
 //	         inner join monitora.progacaoproposto pp on p.prgid = pp.prgid and 
 //	         									        pp.usucpf = '".$usucpf."' 
 //			where 

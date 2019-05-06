@@ -363,7 +363,7 @@ EOF;
 		update financeiro.reporcfin
 		set prgdsc = (
 			select prgdsc
-			from monitora.programa p
+			from planejamento.programa p
 			where
 				reporcfin.prgcod = p.prgcod and
 				p.prgano = reporcfin.rofano and

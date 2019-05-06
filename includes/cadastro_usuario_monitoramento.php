@@ -71,7 +71,7 @@
 		<td><?= $usuariosistema->pfldsc ?></td>
 	</tr>
 	<?php
-		$sql = sprintf( "SELECT DISTINCT p.prgcod, p.prgdsc AS descricao FROM monitora.programa p INNER JOIN monitora.progacaoproposto pp USING ( prgid ) WHERE pp.usucpf='%s' AND acacod IS NULL", $usucpf );
+		$sql = sprintf( "SELECT DISTINCT p.prgcod, p.prgdsc AS descricao FROM planejamento.programa p INNER JOIN monitora.progacaoproposto pp USING ( prgid ) WHERE pp.usucpf='%s' AND acacod IS NULL", $usucpf );
 		$programas = $db->carregar( $sql );
 	?>
 	<?php if ( $programas ): ?>
