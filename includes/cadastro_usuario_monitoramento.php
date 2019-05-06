@@ -85,7 +85,7 @@
 		</tr>
 	<?php endif; ?>
 	<?php
-		$sql = sprintf( "SELECT DISTINCT a.prgcod, a.acacod, a.unicod, a.acadsc FROM monitora.acao a INNER JOIN monitora.progacaoproposto pp USING ( acacod, prgid, unicod ) WHERE pp.usucpf='%s' AND acacod IS NOT NULL", $usucpf );
+		$sql = sprintf( "SELECT DISTINCT a.prgcod, a.acacod, a.unicod, a.acadsc FROM planejamento.acao a INNER JOIN monitora.progacaoproposto pp USING ( acacod, prgid, unicod ) WHERE pp.usucpf='%s' AND acacod IS NOT NULL", $usucpf );
 		$acoes = $db->carregar( $sql );
 	?>
 	<?php if ( $acoes ): ?>

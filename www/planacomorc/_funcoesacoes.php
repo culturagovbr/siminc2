@@ -132,7 +132,7 @@ function consultarAcao($dados) {
             COALESCE(aca.funcod ||' - '|| COALESCE(aca.fundsc,''),'--') AS funcao,
             COALESCE(aca.sfucod ||' - '|| COALESCE(aca.sfundsc,''),'--') AS subfuncao,
             COALESCE(aca.acadescricao,'--') as acadescricao
-        FROM monitora.acao aca
+        FROM planejamento.acao aca
         JOIN public.unidade uni ON aca.unicod = uni.unicod
         WHERE aca.acacod = '{$dados['acacod']}'
             AND aca.unicod = '{$dados['unicod']}'

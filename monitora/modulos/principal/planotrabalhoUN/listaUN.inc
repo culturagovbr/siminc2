@@ -50,7 +50,7 @@ $sql_lista = "SELECT '<center><img src=\"/imagens/alterar.gif\" border=0 title=\
 				uni.unicod, 
 				uni.unidsc 
 		FROM public.unidade uni 
-			INNER JOIN ( select distinct unicod from monitora.acao where prgano = '".$_SESSION['exercicio']."'  and acasnrap = false ) a ON a.unicod = uni.unicod
+			INNER JOIN ( select distinct unicod from planejamento.acao where prgano = '".$_SESSION['exercicio']."'  and acasnrap = false ) a ON a.unicod = uni.unicod
 		".(($filtro)?" WHERE ".implode(" AND ", $filtro):"")." 
 		$stWhere
 		ORDER BY uni.unicod

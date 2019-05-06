@@ -31,10 +31,10 @@ $campos = fgetcsv($fp, 1000, ";", "\"");
 //var_dump($campos);
 $linha = 1;
 
-$sqlSelAcao = "SELECT acaid FROM monitora.acao WHERE unicod = '%s' AND prgcod = '%s' AND acacod = '%s' AND loccod = '%s' AND prgano = '$exercicio'";
-$sqlUpdAcao = "UPDATE monitora.acao SET acasnemenda = 't' WHERE acaid = '%s' AND prgano = '$exercicio'";
-$sqlUpdAcaoFuncao = "UPDATE monitora.acao SET funcod = '%s' WHERE acaid = '%s' AND funcod IS NULL OR funcod = ''";
-$sqlUpdAcaoSubFuncao = "UPDATE monitora.acao SET sfucod = '%s' WHERE acaid = '%s' AND sfucod IS NULL OR sfucod = ''";
+$sqlSelAcao = "SELECT acaid FROM planejamento.acao WHERE unicod = '%s' AND prgcod = '%s' AND acacod = '%s' AND loccod = '%s' AND prgano = '$exercicio'";
+$sqlUpdAcao = "UPDATE planejamento.acao SET acasnemenda = 't' WHERE acaid = '%s' AND prgano = '$exercicio'";
+$sqlUpdAcaoFuncao = "UPDATE planejamento.acao SET funcod = '%s' WHERE acaid = '%s' AND funcod IS NULL OR funcod = ''";
+$sqlUpdAcaoSubFuncao = "UPDATE planejamento.acao SET sfucod = '%s' WHERE acaid = '%s' AND sfucod IS NULL OR sfucod = ''";
 $sqlSelEmenda = "SELECT emdid FROM emenda.emenda WHERE emdcod = '%s'";
 $sqlSelEmendaOID = "SELECT emdid FROM emenda.emenda WHERE oid = '%s'";
 $sqlInsEmenda = "INSERT INTO emenda.emenda (
@@ -222,8 +222,8 @@ if(TESTE)
 else
 	pg_query($pgconn, 'commit;');
 	
-pg_query($pgconn, "UPDATE monitora.acao SET acasnemenda = 't' WHERE acaid IN (SELECT DISTINCT acaid FROM emenda.emenda)");
-var_dump("UPDATE monitora.acao SET acasnemenda = 't' WHERE acaid IN (SELECT DISTINCT acaid FROM dbemd.emenda WHERE prgcod = '$exercicio')");
+pg_query($pgconn, "UPDATE planejamento.acao SET acasnemenda = 't' WHERE acaid IN (SELECT DISTINCT acaid FROM emenda.emenda)");
+var_dump("UPDATE planejamento.acao SET acasnemenda = 't' WHERE acaid IN (SELECT DISTINCT acaid FROM dbemd.emenda WHERE prgcod = '$exercicio')");
 
 pg_close($pgconn);
 ?>

@@ -41,7 +41,7 @@ $sql_lista = "SELECT
                 
 				coalesce(cast(SUM(dt2.valorpi) as varchar),'0.00') as detalhamento2,
                 (SUM(dtl.ptrdotacao)-coalesce(SUM(dt.valor),0.00)) as diferenca
-              FROM monitora.acao aca
+              FROM planejamento.acao aca
               	INNER JOIN monitora.ptres dtl ON aca.acaid = dtl.acaid
                 INNER JOIN public.unidade uni ON uni.unicod = dtl.unicod
                 LEFT JOIN ( select ptrid, sum( sadvalor ) as valor from monitora.pi_subacaodotacao group by ptrid ) dt ON dtl.ptrid = dt.ptrid
@@ -89,7 +89,7 @@ monta_titulo( $db->pegaUm("SELECT unicod || ' - ' || unidsc FROM public.unidade 
 		<td>
 			<?
 			$sql = "SELECT ac.acacod as codigo, (ac.acacod || ' - ' || ac.acadsc) as descricao
-		 			FROM monitora.acao ac 
+		 			FROM planejamento.acao ac 
 		 			WHERE ac.prgano = '".$_SESSION['exercicio']."' AND ac.acastatus = 'A' AND ac.acasnrap = false  
 		 			GROUP BY ac.acacod, ac.acadsc 
 		 			ORDER BY ac.acacod";

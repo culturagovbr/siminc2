@@ -23,7 +23,7 @@ SELECT '<img src="../imagens/send.png" style="cursor:pointer" title="Remanejar v
        COALESCE(CAST(SUM(dt2.valorpi) AS varchar), '0.00') AS detalhado_pi,
        COALESCE(SUM(ppi.total), 0.00) AS empenhado,
        (SUM(ptr.ptrdotacao) - COALESCE(SUM(dt.valor), 0.00)) AS nao_orcado_subacao
-  FROM monitora.acao aca
+  FROM planejamento.acao aca
     INNER JOIN monitora.ptres ptr ON aca.acaid = ptr.acaid
     INNER JOIN monitora.pi_subacaodotacao sd ON ptr.ptrid = sd.ptrid
     INNER JOIN public.unidade uni ON uni.unicod = ptr.unicod

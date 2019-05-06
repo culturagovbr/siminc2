@@ -106,7 +106,7 @@ $sqlEmenda = <<<EOS
 	saldo, 
 	liberado 
 	FROM 
-	monitora.acaoautoremenda 
+	planejamento.acaoautoremenda 
 	WHERE 
 	$whjoin 
 	ORDER BY $sumariogrupo

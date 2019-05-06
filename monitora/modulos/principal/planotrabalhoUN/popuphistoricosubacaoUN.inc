@@ -46,7 +46,7 @@ if($obPi_Subacao->sbaid){
 					SUM(dtl.ptrdotacao) as dotacaoinicial,
 					coalesce(cast(SUM(dt.valor) as varchar),'0.00') as detalhamento,
 					sum(sad.sadvalor) as valorcadastrado
-				FROM monitora.acao aca
+				FROM planejamento.acao aca
 					INNER JOIN monitora.ptres dtl ON aca.acaid = dtl.acaid
 					INNER JOIN public.unidade uni ON uni.unicod = dtl.unicod
 					INNER JOIN monitora.pi_subacaodotacao sad ON dtl.ptrid = sad.ptrid

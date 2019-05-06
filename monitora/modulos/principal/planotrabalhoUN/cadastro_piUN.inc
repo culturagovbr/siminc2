@@ -181,7 +181,7 @@ if(isset($_POST['evento']) && ($_POST['evento'] != '') ) {
 						FROM monitora.pi_planointerno pl
 						INNER JOIN monitora.pi_planointernoptres pt ON pt.pliid = pl.pliid 
 						LEFT JOIN monitora.ptres ptr ON ptr.ptrid = pt.ptrid 
-						LEFT JOIN monitora.acao ac ON ac.acaid = ptr.acaid
+						LEFT JOIN planejamento.acao ac ON ac.acaid = ptr.acaid
 						LEFT JOIN monitora.pi_subacaodotacao sad ON ptr.ptrid = sad.ptrid and sad.sbaid = pl.sbaid
 						LEFT JOIN ( select sbaid, ptrid, 
 									sum( sadvalor ) as valor

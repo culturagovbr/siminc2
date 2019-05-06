@@ -116,7 +116,7 @@ class ConsultaFinanceiroTraducao
 								'dsc_alias' => 'funcionaldsc',
 								'titulo'    => 'Localizador',
 								'tabela'    => '',
-								'join'		=> ' inner join monitora.acao loc on loc.acacod = orc.acacod and loc.prgcod = orc.prgcod and loc.unicod = orc.unicod and loc.loccod = orc.loccod and loc.prgano = orc.rofano and loc.acasnrap = \'f\' ',
+								'join'		=> ' inner join planejamento.acao loc on loc.acacod = orc.acacod and loc.prgcod = orc.prgcod and loc.unicod = orc.unicod and loc.loccod = orc.loccod and loc.prgano = orc.rofano and loc.acasnrap = \'f\' ',
 								'join_dep'	=> array()
 							),
 							'mapcod'	=> array(

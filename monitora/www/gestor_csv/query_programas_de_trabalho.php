@@ -34,7 +34,7 @@ $resultado = array();
 foreach ($dados as $key => $value) {
 	$sql = "
 		select acaid from
-			monitora.acao ac
+			planejamento.acao ac
 		where 
 			ac.funcod = '".$value['funcao']."'
 			and ac.sfucod = '".$value['subfuncao']."'

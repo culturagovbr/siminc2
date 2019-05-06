@@ -349,10 +349,10 @@ monta_titulo( 'Relatório Módulo Financeiro', 'Relatório Geral' );
 				<td>
 					<div id="acacod_campo_off" style="color:#a0a0a0;" onclick="javascript:onOffCampo( 'acacod' );"><img src="../imagens/combo-todos.gif" border="0" align="middle"></div>
 					<div id="acacod_campo_on" style="display:none;">
-						<? $sql_combo = "select acao.acacod as codigo, acao.acacod || ' - ' || acao.acadsc as descricao from financeiro.execucao r inner join ( select distinct acacod, acadsc, prgano from monitora.acao where prgano = '".$ano."' and acasnrap = 'f' group by acacod, acadsc, prgano ) acao on acao.acacod = r.acacod and acao.prgano = r.rofano where r.rofano = '" . $ano . "' group by acao.acacod, acao.acadsc order by acao.acacod, acao.acadsc"; 
+						<? $sql_combo = "select acao.acacod as codigo, acao.acacod || ' - ' || acao.acadsc as descricao from financeiro.execucao r inner join ( select distinct acacod, acadsc, prgano from planejamento.acao where prgano = '".$ano."' and acasnrap = 'f' group by acacod, acadsc, prgano ) acao on acao.acacod = r.acacod and acao.prgano = r.rofano where r.rofano = '" . $ano . "' group by acao.acacod, acao.acadsc order by acao.acacod, acao.acadsc";
 						if ( $_REQUEST['acacod'] && $_REQUEST['acacod'][0] != '' )
 						{
-							$sql_carregados = "select acao.acacod as codigo, acao.acacod || ' - ' || acao.acadsc as descricao from financeiro.execucao r inner join ( select distinct acacod, acadsc, prgano from monitora.acao where prgano = '$ano' and acasnrap = 'f' group by acacod, acadsc, prgano ) acao on acao.acacod = r.acacod and acao.prgano = r.rofano where r.rofano = '" . $ano . "' and acao.acacod in ('".implode("','",$_REQUEST['acacod'])."') group by acao.acacod, acao.acadsc ";
+							$sql_carregados = "select acao.acacod as codigo, acao.acacod || ' - ' || acao.acadsc as descricao from financeiro.execucao r inner join ( select distinct acacod, acadsc, prgano from planejamento.acao where prgano = '$ano' and acasnrap = 'f' group by acacod, acadsc, prgano ) acao on acao.acacod = r.acacod and acao.prgano = r.rofano where r.rofano = '" . $ano . "' and acao.acacod in ('".implode("','",$_REQUEST['acacod'])."') group by acao.acacod, acao.acadsc ";
 							$acacod = $db->carregar( $sql_carregados );
 						}
 						?>

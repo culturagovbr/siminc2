@@ -11,7 +11,7 @@ $db = new cls_banco();
 // carrega as ações
 $sql = sprintf(
 	"select acaid, prgcod, acacod, unicod, loccod, acadsc
-	from monitora.acao
+	from planejamento.acao
 	where prgcod like '%s%%' and acacod like '%s%%' and unicod like '%s%%' and loccod like '%s%%' and acasnrap = false and prgano = '%s'
 	order by prgcod, acacod, unicod, loccod, acadsc",
 	$_REQUEST['programa'],

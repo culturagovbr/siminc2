@@ -349,7 +349,7 @@ class Sigplan{
 			switch ( $tabela ) {				
 				case 'monitora.indicador':
 				case 'monitora.restricaoprograma':
-				case 'monitora.acao':
+				case 'planejamento.acao':
 					// identifica o prgid
 					if ( !isset( $prgid[$registro['prgcod']] ) ) {
 						return false;
@@ -382,7 +382,7 @@ class Sigplan{
 					$prgid[$programa['prgcod']] = $programa['prgid'];
 					break;
 				// atualiza a lista de acaid
-				case 'monitora.acao':
+				case 'planejamento.acao':
 					$sql = sprintf( "select acaid, prgcod, acacod, saccod from acao where oid = '%s'", $id );
 					$acao = $this->bancodedados->pegaLinha( $sql );
 					$acaid[$acao['prgcod']][$acao['acacod']][$acao['saccod']] = $acao['acaid'];

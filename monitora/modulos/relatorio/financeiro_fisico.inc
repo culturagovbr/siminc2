@@ -278,7 +278,7 @@ $ano = $_SESSION['exercicio'];
 							"select
 								acao.acacod as codigo,
 								acao.acacod || ' - ' || acao.acadsc as descricao
-							from monitora.acao acao
+							from planejamento.acao acao
 								left join monitora.dadofinanceiro fin on fin.acaid = acao.acaid
 								left join monitora.dadofisico fis on fis.acaid = acao.acaid
 							where
@@ -295,7 +295,7 @@ $ano = $_SESSION['exercicio'];
 								"select
 									acao.acacod as codigo,
 									acao.acacod || ' - ' || acao.acadsc as descricao
-								from monitora.acao acao
+								from planejamento.acao acao
 								where
 									acao.acacod in ( '" . implode( "','", $_REQUEST['acacod'] ) . "' )
 								group by acao.acacod, acao.acadsc

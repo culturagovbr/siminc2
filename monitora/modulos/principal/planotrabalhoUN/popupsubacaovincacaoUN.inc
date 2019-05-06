@@ -13,7 +13,7 @@ $sql = "SELECT
        coalesce(cast(SUM(dt.sadvalor) as varchar),'0.00') as detalhamento,
       -- dt.sbaid,
        su.sbatitulo
-  FROM monitora.acao aca
+  FROM planejamento.acao aca
     INNER JOIN monitora.ptres dtl ON aca.acaid = dtl.acaid
     INNER JOIN monitora.pi_subacaodotacao dt ON dtl.ptrid = dt.ptrid
     INNER JOIN monitora.pi_subacao su ON dt.sbaid = su.sbaid

@@ -169,7 +169,7 @@ document.getElementById('tabela').style.display  = "none";
 	  			p.prgid, 
 	  			count(*) as totalaca 
 	  		FROM
-	  			monitora.acao a 
+	  			planejamento.acao a 
 	  		INNER JOIN planejamento.programa p ON a.prgid = p.prgid 
 	  		INNER JOIN public.unidade u ON a.unicod=u.unicod 
 	  		WHERE

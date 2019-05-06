@@ -113,7 +113,7 @@ monta_titulo( 'Relatório de Planejamento', '' );
 			$sqlComboAcoes = "SELECT
 								aca.acaid as codigo,
 								'(PTRES:'||pt.ptres||') - '|| aca.unicod ||'.'|| aca.prgcod ||'.'|| aca.acacod ||' - '|| aca.acadsc as descricao
-							  FROM monitora.acao aca 
+							  FROM planejamento.acao aca 
 							  	inner join monitora.ptres pt on pt.acaid=aca.acaid
 							  WHERE aca.prgano='".$_SESSION['exercicio']."' and aca.acasnrap = false
 							  	and aca.unicod IN('".AD."','".CAPES."','".INEP."','".FNDE."')
@@ -212,7 +212,7 @@ global $db;
 					  ON (sad.sbaid = s.sbaid)
 					INNER JOIN monitora.ptres p 
 					  ON (p.ptrid = sad.ptrid)
-					INNER JOIN monitora.acao a 
+					INNER JOIN planejamento.acao a 
 					  ON (a.acaid = p.acaid)
 					INNER JOIN public.unidademedida um 
 					  ON (um.unmcod = a.unmcod)

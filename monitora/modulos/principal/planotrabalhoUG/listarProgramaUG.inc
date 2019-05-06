@@ -5,7 +5,7 @@ require_once APPRAIZ . "www/planacomorc/_constantes.php";
 if (isAjax() && isset($_POST['prgcod']) && isset($_POST['comboacao'])) {
     
     $sql = "SELECT ac.acacod as codigo, (ac.acacod || ' - ' || ac.acadsc) as descricao
-            FROM monitora.acao ac 
+            FROM planejamento.acao ac 
             WHERE 
                 ac.unicod IS NOT NULL AND 
                 ac.prgano = '".$_SESSION['exercicio']."' AND 
@@ -71,7 +71,7 @@ $sql_lista = retornaConsultaPTRES($params);
 	<td class="comboAcao">
 	<?
 	$sql = "SELECT ac.acacod as codigo, (ac.acacod || ' - ' || ac.acadsc) as descricao
- 			FROM monitora.acao ac 
+ 			FROM planejamento.acao ac 
  			WHERE ac.unicod IS NOT NULL AND ac.prgano = '".$_SESSION['exercicio']."' AND ac.acastatus = 'A' AND ac.acasnrap = false  
  			GROUP BY ac.acacod, ac.acadsc 
  			ORDER BY ac.acacod";

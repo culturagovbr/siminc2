@@ -433,7 +433,7 @@ DML;
 $strSQL = <<<HTML
 SELECT DISTINCT aca.acacod AS codigo,
                 aca.unicod || '.' || aca.acacod ||' - '|| aca.acatitulo AS descricao
-  FROM monitora.acao aca
+  FROM planejamento.acao aca
   WHERE aca.prgano = '%s'
     AND aca.acastatus = 'A'
     %where-filtro-unicod%

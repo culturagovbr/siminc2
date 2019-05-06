@@ -82,7 +82,7 @@ function procuraTarefaUnidade( $entid , $intAnoExercicioAtual ) {
 			 from pde.atividade at
          INNER JOIN pde.planointernoatividade p ON p.atiid = at.atiid
 		 inner JOIN financeiro.planointerno pl on pl.pliid = p.pliid
-		 inner join monitora.acao a on a.acaid = pl.acaid
+		 inner join planejamento.acao a on a.acaid = pl.acaid
 		 inner JOIN public.unidade u on u.unicod = a.unicod and u.unitpocod='U'
 		 left join financeiro.execucao v on v.plicod=pl.plicod and v.ptres=pl.pliptres
 		 where a.acaid = %d

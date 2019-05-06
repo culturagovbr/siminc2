@@ -173,7 +173,7 @@ class ConsultaFinanceiroTraducao
 			'dsc_alias' => 'funcionaldsc',
 			'titulo'    => 'Localizador',
 			'tabela'    => '',
-			'join'		=> ' inner join monitora.acao loc on loc.acacod = orc.acacod and loc.prgcod = orc.prgcod and loc.unicod = orc.unicod and loc.loccod = orc.loccod and loc.prgano = orc.rofano and loc.acasnrap = \'f\' ',
+			'join'		=> ' inner join planejamento.acao loc on loc.acacod = orc.acacod and loc.prgcod = orc.prgcod and loc.unicod = orc.unicod and loc.loccod = orc.loccod and loc.prgano = orc.rofano and loc.acasnrap = \'f\' ',
 			'join_dep'	=> array()
 		),
 		'mapcod'	=> array(
@@ -329,7 +329,7 @@ class ConsultaFinanceiroTraducao
 			'titulo'    => 'Ação',
 			'tabela'    => 'financeiro.execucaomec',
 			'join'		=> '',
-//			'join'		=> ' inner join monitora.acao acao on acao.acacod = orc.acacod and acao.prgcod = orc.prgcod and acao.unicod = orc.unicod and acao.loccod = orc.loccod and acao.acasnrap = \'f\' ',
+//			'join'		=> ' inner join planejamento.acao acao on acao.acacod = orc.acacod and acao.prgcod = orc.prgcod and acao.unicod = orc.unicod and acao.loccod = orc.loccod and acao.acasnrap = \'f\' ',
 			'join_dep'	=> array()
 		),
 		'localizadorExecucao'	=> array(
@@ -339,7 +339,7 @@ class ConsultaFinanceiroTraducao
 			'dsc_alias' => 'funcionaldsc',
 			'titulo'    => 'Localizador',
 			'tabela'    => '',
-			'join'		=> ' inner join monitora.acao loc on loc.acacod = orc.acacod and loc.prgcod = orc.prgcod and loc.unicod = orc.unicod and loc.loccod = orc.loccod and loc.acasnrap = \'f\' ',
+			'join'		=> ' inner join planejamento.acao loc on loc.acacod = orc.acacod and loc.prgcod = orc.prgcod and loc.unicod = orc.unicod and loc.loccod = orc.loccod and loc.acasnrap = \'f\' ',
 			'join_dep'	=> array()
 		),
 		'uoExecucao'	=> array(
@@ -777,9 +777,9 @@ class ConsultaFinanceiro
 				/*
 				' inner join orgao o on o.orgcod = orc.orgcod  ' .
 				' inner join planejamento.programa p on p.prgcod = orc.prgcod and p.prgano = orc.rofano ' .
-				//' inner join monitora.acao a on a.acacod = orc.acacod and a.prgcod = orc.prgcod and a.unicod = unicod and a.loccod = loccod and a.prgano = rofano and a.acasnrap = \'f\' ' .
-				' inner join ( select distinct acacod, acadsc, prgano from monitora.acao where acasnrap = \'f\' group by acacod, acadsc, prgano ) a on a.acacod = orc.acacod and a.prgano = orc.rofano  ' .
-				' inner join ( select distinct prgcod, acadsc, acacod, unicod, loccod, sacdsc, prgano from monitora.acao where acasnrap = \'f\' group by prgcod, acadsc, acacod, unicod, loccod, sacdsc, prgano ) loc on loc.acacod = orc.acacod and loc.prgano = orc.rofano  ' .
+				//' inner join planejamento.acao a on a.acacod = orc.acacod and a.prgcod = orc.prgcod and a.unicod = unicod and a.loccod = loccod and a.prgano = rofano and a.acasnrap = \'f\' ' .
+				' inner join ( select distinct acacod, acadsc, prgano from planejamento.acao where acasnrap = \'f\' group by acacod, acadsc, prgano ) a on a.acacod = orc.acacod and a.prgano = orc.rofano  ' .
+				' inner join ( select distinct prgcod, acadsc, acacod, unicod, loccod, sacdsc, prgano from planejamento.acao where acasnrap = \'f\' group by prgcod, acadsc, acacod, unicod, loccod, sacdsc, prgano ) loc on loc.acacod = orc.acacod and loc.prgano = orc.rofano  ' .
 				' inner join funcao f on f.funcod = orc.funcod ' .
 				' inner join ppasubfuncao sf on sf.sfucod = orc.sfucod ' .
 				' inner join gnd on gnd.gndcod = orc.gndcod ' .

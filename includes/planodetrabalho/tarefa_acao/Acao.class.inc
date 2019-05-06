@@ -5,7 +5,7 @@ class Acao
 	 * Nome da tabela do banco onde ficam armazenadas os projetos
 	 *
 	 */
-	public $TABLE_NAME = 'monitora.acao';
+	public $TABLE_NAME = 'planejamento.acao';
 	
 	/**
 	 * Identificador do projeto

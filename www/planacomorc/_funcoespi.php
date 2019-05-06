@@ -555,7 +555,7 @@ function montarSqlBuscarFuncional(stdClass $filtros) {
             COALESCE((pemp.total), 0.00) AS empenhado,
             (COALESCE(psu.ptrdotacaocusteio, 0.00) + COALESCE(psu.ptrdotacaocapital, 0.00)) - COALESCE(pemp.total, 0.00) AS nao_empenhado
         FROM monitora.ptres ptr
-            JOIN monitora.acao aca ON(ptr.acaid = aca.acaid)
+            JOIN planejamento.acao aca ON(ptr.acaid = aca.acaid)
             JOIN public.vw_subunidadeorcamentaria uni ON(aca.unicod = uni.unocod AND ptr.ptrano = uni.prsano)
             JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
             LEFT JOIN (
@@ -665,7 +665,7 @@ function montarSqlBuscarFuncionalImportacao(stdClass $filtros) {
             COALESCE((pemp.total), 0.00) AS empenhado,
             (COALESCE(psu.ptrdotacaocusteio, 0.00) + COALESCE(psu.ptrdotacaocapital, 0.00)) - COALESCE(pemp.total, 0.00) AS nao_empenhado
         FROM monitora.ptres ptr
-            JOIN monitora.acao aca ON(ptr.acaid = aca.acaid)
+            JOIN planejamento.acao aca ON(ptr.acaid = aca.acaid)
             JOIN public.vw_subunidadeorcamentaria uni ON(aca.unicod = uni.unocod AND ptr.ptrano = uni.prsano)
             JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
         LEFT JOIN (
@@ -778,7 +778,7 @@ function montarSqlBuscarFuncionalFnc(stdClass $filtros) {
             COALESCE((pemp.total), 0.00) AS empenhado,
             (COALESCE(ptr.ptrdotacaocusteio, 0.00) + COALESCE(ptr.ptrdotacaocapital, 0.00)) - COALESCE(pemp.total, 0.00) AS nao_empenhado
         FROM monitora.ptres ptr
-            JOIN monitora.acao aca ON(ptr.acaid = aca.acaid)
+            JOIN planejamento.acao aca ON(ptr.acaid = aca.acaid)
             JOIN public.vw_subunidadeorcamentaria uni ON(aca.unicod = uni.unocod AND ptr.ptrano = uni.prsano)
             JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
             LEFT JOIN (
@@ -1093,7 +1093,7 @@ function recuperarObjetivoPorPtres($ptrid) {
 
     $sql = "SELECT o.oppid
                 FROM monitora.ptres ptr
-                INNER JOIN monitora.acao aca on ptr.acaid = aca.acaid and aca.prgano = ptr.ptrano
+                INNER JOIN planejamento.acao aca on ptr.acaid = aca.acaid and aca.prgano = ptr.ptrano
                 INNER JOIN public.objetivoppa o on o.oppcod = aca.acaobjetivocod and o.prsano = ptr.ptrano
             where ptrid = $ptrid";
 
@@ -2027,7 +2027,7 @@ SELECT dtl.ptrid,
   FROM planacomorc.solicitacaocriacaopi scp
     LEFT JOIN planacomorc.solicitacaopidotacao sdp USING(scpid)
     LEFT JOIN monitora.ptres dtl USING(ptrid)
-    left join monitora.acao aca USING(acaid)
+    left join planejamento.acao aca USING(acaid)
     LEFT JOIN monitora.pi_subacaodotacao sd USING(ptrid)
     LEFT JOIN monitora.pi_subacao a ON a.sbaid = sd.sbaid
     LEFT JOIN (SELECT sbaid,

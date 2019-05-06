@@ -1462,7 +1462,7 @@ if( ($permissao == true) && ($habilitar_edicao == 'S') ) {
 									{
 										if( $dado['urpcampoid'] != "" )
 										{
-											if($dados_tpresp['tprtabela'] == 'monitora.acao'){
+											if($dados_tpresp['tprtabela'] == 'planejamento.acao'){
 											 	$sql_proposta = "select distinct
 											 		".$dados_tpresp['tprcampodsc']." as descricao
 													from ".$dados_tpresp['tprtabela']."

@@ -116,7 +116,7 @@ function monta_sql(){
                         INNER JOIN monitora.pi_subacao sa ON sa.sbaid = pl.sbaid
                         INNER JOIN monitora.pi_planointernoptres pt ON pt.pliid = pl.pliid
                         LEFT JOIN monitora.ptres ptr ON ptr.ptrid = pt.ptrid
-                        LEFT JOIN monitora.acao ac ON ac.acaid = ptr.acaid
+                        LEFT JOIN planejamento.acao ac ON ac.acaid = ptr.acaid
                         LEFT JOIN monitora.pi_subacaodotacao sad ON ptr.ptrid = sad.ptrid and sad.sbaid = pl.sbaid
                         LEFT JOIN monitora.pi_planointernoatividade pia on pia.pliid = pl.pliid
                         LEFT JOIN pde.atividade atv on pia.atiid = atv.atiid
@@ -543,7 +543,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 										acacod as codigo,
 										acacod || ' - ' || acadsc as descricao									
 									 FROM 
-										monitora.acao a
+										planejamento.acao a
 									 WHERE
 										a.acasnrap = false AND 
 										a.prgano = '".$_SESSION['exercicio']."' AND
@@ -661,7 +661,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 					<?php
 						$sql_combo ="SELECT acaid as codigo, 
 										a.prgcod || ' - ' || acacod || ' - ' || unicod || ' - ' || loccod || ' - ' || acadsc || ' ( ' || sacdsc || ' ) ' as descricao
-									FROM monitora.acao a
+									FROM planejamento.acao a
 									WHERE
 										a.acasnrap = false and a.prgano = '".$_SESSION['exercicio']."'
 									order by descricao";

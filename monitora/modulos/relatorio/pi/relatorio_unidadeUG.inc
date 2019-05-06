@@ -141,7 +141,7 @@ $pages = 50;
 				$sqlComboAcoes = "SELECT
 										aca.acaid as codigo,
 										'(PTRES:'||pt.ptres||') - '|| aca.unicod ||'.'|| aca.prgcod ||'.'|| aca.acacod ||' - '|| aca.acadsc as descricao
-								  FROM monitora.acao aca 
+								  FROM planejamento.acao aca 
 								  		inner join monitora.ptres pt on pt.acaid=aca.acaid
 								  WHERE aca.prgano='".$_SESSION['exercicio']."' and aca.acasnrap = false
 								  	and aca.unicod IN('".AD."','".CAPES."','".INEP."','".FNDE."')
@@ -323,7 +323,7 @@ $pages = 50;
 							inner join public.unidadegestora ug ON ug.ungcod = pi.ungcod
 							inner join monitora.pi_planointernoptres pip ON pip.pliid = pi.pliid
 							inner join monitora.ptres ptres ON ptres.ptrid = pip.ptrid 
-							inner join monitora.acao a ON a.acaid = ptres.acaid
+							inner join planejamento.acao a ON a.acaid = ptres.acaid
 						where pi.plistatus = 'A' and pliano = '".$_SESSION['exercicio']."' 
 						order by plicod
 						) as pi 
@@ -362,7 +362,7 @@ $pages = 50;
 				left JOIN 
 					monitora.ptres ptr ON ptr.ptrid = pt.ptrid 
 				left JOIN 
-					monitora.acao ac ON ac.acaid = ptr.acaid
+					planejamento.acao ac ON ac.acaid = ptr.acaid
 				WHERE
 					pi.plistatus = 'A' " . ( !empty($filtro) ? "AND" . implode(" AND ", $filtro) : '' ) . "
 				ORDER BY

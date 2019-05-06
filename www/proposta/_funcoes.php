@@ -39,7 +39,7 @@ function montarSqlRelatorioGeralProposta(stdClass $Objwhere){
             pro.prsano
         FROM proposta.proposta pro
             JOIN monitora.vw_ptres ptr ON pro.ptrid = ptr.ptrid
-	        JOIN monitora.acao aca ON ptr.acaid = aca.acaid
+	        JOIN planejamento.acao aca ON ptr.acaid = aca.acaid
             JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = pro.suoid
             JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pro.eqdid
             LEFT JOIN proposta.propostadetalhe prd ON(

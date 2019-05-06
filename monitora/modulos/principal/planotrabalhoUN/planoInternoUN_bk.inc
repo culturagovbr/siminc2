@@ -160,7 +160,7 @@ $sql1  = "select
 	  		  					       pl.plistatus = 'A'
 	  		  	LEFT JOIN monitora.subacao sa ON sa.sbaid = pl.sbaid AND
 	  		 					 sa.sbastatus = 'A'			
-	  		  	LEFT JOIN monitora.acao a ON a.acacod = esp.acacod AND
+	  		  	LEFT JOIN planejamento.acao a ON a.acacod = esp.acacod AND
 	  		  				     a.acastatus = 'A'				
 			where
 				esp.rofano = '" . $_SESSION['exercicio'] . "'
@@ -182,7 +182,7 @@ $sql1  = "select
 				pde.planointerno p
 				inner join monitora.planointernoatividade pia ON pia.pliid = p.pliid
 				inner join monitora.subacao s ON s.sbaid = p.sbaid
-				inner join monitora.acao a ON a.acaid = p.acaid
+				inner join planejamento.acao a ON a.acaid = p.acaid
 				inner join financeiro.execucao e ON e.plicod = p.plicod and e.acacod = a.acacod
 			where 
 				a.prgano ='".$_SESSION['exercicio']."' and 

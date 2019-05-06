@@ -168,7 +168,7 @@ select
 		inner join monitora.dadofinanceiro fin on fin.acaid = fis.acaid
 		inner join public.unidade uni on uni.unicod = fis.unicod
 		--inner join public.localizador loc on loc.loccod = fis.loccod
-		inner join monitora.acao aca on aca.acaid = fis.acaid
+		inner join planejamento.acao aca on aca.acaid = fis.acaid
 		inner join public.produto pro on pro.procod = aca.procod
 		inner join public.unidademedida unm on unm.unmcod = aca.unmcod
 	
@@ -229,7 +229,7 @@ $sqlBusca = "
 	from monitora.execucaofisica fis
 		left join monitora.dadofinanceiro fin on fin.acaid = fis.acaid
 		left join public.unidade uni on uni.unicod = fis.unicod
-		left join monitora.acao aca on aca.acaid = fis.acaid
+		left join planejamento.acao aca on aca.acaid = fis.acaid
 		left join public.produto pro on pro.procod = aca.procod
 		left join public.unidademedida unm on unm.unmcod = aca.unmcod
 	where

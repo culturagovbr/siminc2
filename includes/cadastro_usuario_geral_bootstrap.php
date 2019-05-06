@@ -508,7 +508,7 @@ require_once APPRAIZ . "includes/funcoesspo_componentes.php";
                         $dados_propostas = $dados_propostas ? $dados_propostas  : array();
                         foreach ( $dados_propostas as $dado ) {
                             if ($dado ['urpcampoid'] != "") {
-                                if ($dados_tpresp ['tprtabela'] == 'monitora.acao') {
+                                if ($dados_tpresp ['tprtabela'] == 'planejamento.acao') {
                                     $sql_proposta = "
                                         SELECT
                                             DISTINCT {$dados_tpresp ['tprcampodsc']} as descricao

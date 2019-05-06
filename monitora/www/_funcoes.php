@@ -358,7 +358,7 @@ function enviarParaAnaliseCPMO2() {
 				unicod,
 				acadsc 
 			FROM 
-				monitora.acao  
+				planejamento.acao  
 			WHERE 
 				acaid = {$_SESSION['acaid']}";
 	
@@ -407,7 +407,7 @@ function voltarParaCorrecaoCPMO() {
 				unicod,
 				acadsc
 			FROM
-				monitora.acao
+				planejamento.acao
 			WHERE
 				acaid = {$_SESSION['acaid']}";
 	
@@ -467,7 +467,7 @@ function voltarParaValidacaoCPMO() {
 				unicod,
 				acadsc
 			FROM
-				monitora.acao
+				planejamento.acao
 			WHERE
 				acaid = {$_SESSION['acaid']}";
 	
@@ -528,7 +528,7 @@ function enviarParaAnaliseCPMO()
 				unicod,
 				acadsc
 			FROM
-				monitora.acao
+				planejamento.acao
 			WHERE
 				acaid = {$_SESSION['acaid']}";
 	

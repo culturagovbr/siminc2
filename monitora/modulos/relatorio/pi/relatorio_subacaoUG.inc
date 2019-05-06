@@ -138,7 +138,7 @@ if( $_REQUEST['excel'] )
 				coalesce(cast(SUM(dt2.valorpi) as varchar),'0.00') as detalhamento2,
 				(SUM(ptr.ptrdotacao)-coalesce(SUM(dt.valor),0.00)) as diferenca,
 				sum(sd.sadvalor) as valorcadastrado 	
-			  FROM monitora.acao aca 
+			  FROM planejamento.acao aca 
 				inner JOIN monitora.ptres ptr ON aca.acaid = ptr.acaid
 				inner JOIN ( select sbaid, ptrid, sadvalor from monitora.pi_subacaodotacao ) sd ON ptr.ptrid = sd.ptrid
 				inner join monitora.pi_subacao sa ON sa.sbaid = sd.sbaid
@@ -477,7 +477,7 @@ monta_titulo( $titulo_modulo, '' );
 						$acaid = $db->carregar("SELECT
 													aca.acaid as codigo,
 													'(PTRES:'||pt.ptres||') - '|| aca.unicod ||'.'|| aca.prgcod ||'.'|| aca.acacod ||' - '|| aca.acadsc as descricao
-												  FROM monitora.acao aca 
+												  FROM planejamento.acao aca 
 												  	inner join monitora.ptres pt on pt.acaid=aca.acaid  
 												WHERE aca.prgano='".$_SESSION['exercicio']."' and aca.acasnrap = false
 												and aca.unicod IN('".AD."','".CAPES."','".INEP."','".FNDE."')
@@ -489,7 +489,7 @@ monta_titulo( $titulo_modulo, '' );
 					$sqlComboAcoes = "SELECT
 										aca.acaid as codigo,
 										'(PTRES:'||pt.ptres||') - '|| aca.unicod ||'.'|| aca.prgcod ||'.'|| aca.acacod ||' - '|| aca.acadsc as descricao
-									  FROM monitora.acao aca 
+									  FROM planejamento.acao aca 
 									  	inner join monitora.ptres pt on pt.acaid=aca.acaid
 									  WHERE aca.prgano='".$_SESSION['exercicio']."' and aca.acasnrap = false
 									  	and aca.unicod IN('".AD."','".CAPES."','".INEP."','".FNDE."')
@@ -801,7 +801,7 @@ function mostraDadosDetalhamentoOrcamentario($subacao, $codigo, $filtropi) {
 						coalesce(cast(SUM(dt2.valorpi) as varchar),'0.00') as detalhamento2,
 						(SUM(ptr.ptrdotacao)-coalesce(SUM(dt.valor),0.00)) as diferenca,
 						sum(sd.sadvalor) as valorcadastrado 	
-					  FROM monitora.acao aca 
+					  FROM planejamento.acao aca 
 						inner JOIN monitora.ptres ptr ON aca.acaid = ptr.acaid
 						inner JOIN ( select sbaid, ptrid, sadvalor from monitora.pi_subacaodotacao ) sd ON ptr.ptrid = sd.ptrid
 						inner join monitora.pi_subacao sa ON sa.sbaid = sd.sbaid

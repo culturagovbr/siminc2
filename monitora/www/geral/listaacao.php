@@ -26,7 +26,7 @@ else $wh = "";
 $innerUnidadeGestora = "";
 $whereUnidadeGestora = "";
 if(isset($_GET['ungcod']) && $_GET['ungcod']){
-	$innerUnidadeGestora = " inner join monitora.acaounidadegestora aug on a.acaid = aug.acaid ";
+	$innerUnidadeGestora = " inner join planejamento.acaounidadegestora aug on a.acaid = aug.acaid ";
 	$whereUnidadeGestora = " and aug.ungcod = '". $_GET['ungcod'] ."' ";
 }
 

@@ -209,7 +209,7 @@ monta_titulo( $titulo_modulo, "");
 						$ptres = $db->carregar("SELECT
 													pt.ptrid as codigo,
 													'(PTRES:'||pt.ptres||') - '|| aca.unicod ||'.'|| aca.prgcod ||'.'|| aca.acacod ||' - '|| aca.acadsc as descricao
-												  FROM monitora.acao aca 
+												  FROM planejamento.acao aca 
 												  	inner join monitora.ptres pt on pt.acaid=aca.acaid  
 												WHERE aca.prgano='".$_SESSION['exercicio']."' and aca.acasnrap = false
 												and aca.unicod IN('".AD."','".CAPES."','".INEP."','".FNDE."')
@@ -221,7 +221,7 @@ monta_titulo( $titulo_modulo, "");
 					$sqlComboAcoes = "SELECT
 										pt.ptrid as codigo,
 										'(PTRES:'||pt.ptres||') - '|| aca.unicod ||'.'|| aca.prgcod ||'.'|| aca.acacod ||' - '|| aca.acadsc as descricao
-									  FROM monitora.acao aca 
+									  FROM planejamento.acao aca 
 									  	inner join monitora.ptres pt on pt.acaid=aca.acaid
 									  WHERE aca.prgano='".$_SESSION['exercicio']."' and aca.acasnrap = false
 									  	and aca.unicod IN('".AD."','".CAPES."','".INEP."','".FNDE."')

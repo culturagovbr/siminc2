@@ -26,7 +26,7 @@ $unicod    = $unidade['entunicod'];
 					coalesce(cast(SUM(dt2.valorpi) as varchar),'0.00') as detalhamento,
 					coalesce(SUM(dt.valor),0.00)-coalesce(SUM(dt2.valorpi),0.00) as valorcadastrado 
 					--sum(sad.sadvalor) as valorcadastrado 
-				FROM monitora.acao aca
+				FROM planejamento.acao aca
 					INNER JOIN monitora.ptres dtl ON aca.acaid = dtl.acaid
 					INNER JOIN public.unidade uni ON uni.unicod = dtl.unicod
 					INNER JOIN monitora.pi_subacaodotacao sad ON dtl.ptrid = sad.ptrid
@@ -81,7 +81,7 @@ $sql_lista .= "GROUP BY dtl.ptrid, dtl.ptres,
 	<td>
 	<?
 	$sql = "SELECT ac.acacod as codigo, (ac.acacod || ' - ' || ac.acadsc) as descricao
- 			FROM monitora.acao ac 
+ 			FROM planejamento.acao ac 
  			WHERE ac.unicod = '".$_SESSION['monitora_var']['unicod']."' AND ac.prgano = '".$_SESSION['exercicio']."' AND ac.acastatus = 'A' AND ac.acasnrap = false  
  			GROUP BY ac.acacod, ac.acadsc 
  			ORDER BY ac.acacod";

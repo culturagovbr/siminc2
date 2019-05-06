@@ -88,8 +88,8 @@ class adodb_xml
         if ($tablename=='indicador' and $base=='sigplan') $sql= "select * from indicador where prgano=".$arrvalues[0]." and prgcod=".$arrvalues[1]." and indnum=".$arrvalues[2];
         if ($tablename=='restricaoprograma' and $base=='sigplan') $sql= "select * from restricaoprograma where prgano=".$arrvalues[0]." and prgcod=".$arrvalues[1]." and rspnum=".$arrvalues[2];
 
-        if ($tablename=='monitora.acao' and $base=='sigplan') {
-          $sql= "select acacod from monitora.acao where prgano=".$arrvalues[0]." and prgcod=".$arrvalues[1]." and acacod=".$arrvalues[2]." and saccod=".$arrvalues[3]." and loccod=".$arrvalues[4];
+        if ($tablename=='planejamento.acao' and $base=='sigplan') {
+          $sql= "select acacod from planejamento.acao where prgano=".$arrvalues[0]." and prgcod=".$arrvalues[1]." and acacod=".$arrvalues[2]." and saccod=".$arrvalues[3]." and loccod=".$arrvalues[4];
         }
         if ($tablename=='elabrev.ppaindicador' and $base=='ppa') $sql = "select * from elabrev.ppaindicador where indnum=".$arrvalues[1];
         
@@ -156,7 +156,7 @@ class adodb_xml
           if (! is_array($res))
          {
             // não existe, logo tem que inserir
-            if ($tablename=='monitora.acao' and $base=='sigplan')
+            if ($tablename=='planejamento.acao' and $base=='sigplan')
             {
               if ($arrvalues[3]<>'0000' and $arrvalues[3]<>'' and $arrvalues[4]<>'' )
                  {

@@ -761,7 +761,7 @@ GROUPBY;
                 (SELECT COALESCE(SUM(sadvalor),0.00)
                 FROM monitora.pi_subacaodotacao sd
                 JOIN monitora.ptres pt on pt.ptrid=sd.ptrid
-                JOIN monitora.acao aca on aca.acaid = pt.acaid
+                JOIN planejamento.acao aca on aca.acaid = pt.acaid
                 WHERE aca.prgano = '{$_SESSION['exercicio']}' AND sd.sbaid = sba.sbaid
               $whereObrigatorio
                    COALESCE(dtpi.valorpi, 0.00) AS detalhado_pi,
@@ -924,7 +924,7 @@ function retornaConsultaSubacao_bootstrap(array $params, $apenasObrigatorias = "
 	            (SELECT COALESCE(SUM(sadvalor),0.00)
 			FROM monitora.pi_subacaodotacao sd
 			JOIN monitora.ptres pt on pt.ptrid=sd.ptrid
-	        JOIN monitora.acao aca on aca.acaid = pt.acaid
+	        JOIN planejamento.acao aca on aca.acaid = pt.acaid
 	        WHERE
 	        	aca.prgano = '{$_SESSION['exercicio']}'
 	        AND sd.sbaid = sba.sbaid
@@ -1193,7 +1193,7 @@ SQL;
         $sql = <<<SQL
     {$params['SELECT']}
          FROM monitora.ptres ptr
-   INNER JOIN monitora.acao aca on ptr.acaid = aca.acaid
+   INNER JOIN planejamento.acao aca on ptr.acaid = aca.acaid
    INNER JOIN public.unidade uni on aca.unicod = uni.unicod
    LEFT JOIN monitora.pi_planointernoptres pip on ptr.ptrid = pip.ptrid
    LEFT JOIN (SELECT ptrid, SUM(sadvalor) AS valor
@@ -1223,7 +1223,7 @@ SQL;
 //   }else{
 //        $sql = <<<SQL
 //    {$params['SELECT']}
-//   FROM monitora.acao aca
+//   FROM planejamento.acao aca
 //                      INNER JOIN monitora.ptres dtl ON aca.acaid = dtl.acaid
 //                      INNER JOIN public.unidade uni ON uni.unicod = dtl.unicod
 //                      LEFT JOIN (SELECT ptrid,
@@ -1353,7 +1353,7 @@ SQL;
     if ($params['obrigatorio'] == 'n') {
         $sql = <<<SQL
     {$params['SELECT']}
-   FROM monitora.acao aca
+   FROM planejamento.acao aca
                       INNER JOIN monitora.ptres dtl ON aca.acaid = dtl.acaid
                       INNER JOIN public.unidade uni ON uni.unicod = dtl.unicod
                       LEFT JOIN (SELECT ptrid,
@@ -1384,7 +1384,7 @@ SQL;
     }else{
         $sql = <<<SQL
     {$params['SELECT']}
-   FROM monitora.acao aca
+   FROM planejamento.acao aca
                       INNER JOIN monitora.ptres dtl ON aca.acaid = dtl.acaid
                       INNER JOIN public.unidade uni ON uni.unicod = dtl.unicod
                       LEFT JOIN (SELECT ptrid,
@@ -1495,7 +1495,7 @@ function buscarPTRES(stdClass $filtros) {
         FROM monitora.ptres ptr
 	    JOIN monitora.pi_planointernoptres pip ON(ptr.ptrid = pip.ptrid)
 	    JOIN monitora.pi_planointerno pi ON(pip.pliid = pi.pliid)
-            JOIN monitora.acao aca ON(ptr.acaid = aca.acaid)
+            JOIN planejamento.acao aca ON(ptr.acaid = aca.acaid)
             JOIN public.vw_subunidadeorcamentaria uni ON(aca.unicod = uni.unocod AND uni.suocod = pi.ungcod AND uni.prsano = aca.prgano) -- SELECT * FROM public.vw_subunidadeorcamentaria
             LEFT JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
             LEFT JOIN (
@@ -1614,7 +1614,7 @@ function buscarPtresFnc(stdClass $filtros) {
         FROM monitora.ptres ptr
 	    JOIN monitora.pi_planointernoptres pip ON(ptr.ptrid = pip.ptrid)
 	    JOIN monitora.pi_planointerno pi ON(pip.pliid = pi.pliid)
-            JOIN monitora.acao aca ON(ptr.acaid = aca.acaid)
+            JOIN planejamento.acao aca ON(ptr.acaid = aca.acaid)
             JOIN public.vw_subunidadeorcamentaria uni ON(aca.unicod = uni.unocod AND uni.suocod = pi.ungcod AND uni.prsano = aca.prgano) -- SELECT * FROM public.vw_subunidadeorcamentaria
             JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid AND uni.suoid = psu.suoid)
             LEFT JOIN (
@@ -1765,7 +1765,7 @@ function buscarPTRESdoPIInstituicoes($pliid, $sbaid, $ptrid) {
             COALESCE(SUM(ptr.ptrdotacao), 0.00) - COALESCE(pemp.total, 0.00) AS nao_empenhado,
             $valorSelect
         FROM monitora.ptres ptr
-            JOIN monitora.acao aca on ptr.acaid = aca.acaid
+            JOIN planejamento.acao aca on ptr.acaid = aca.acaid
             JOIN public.unidadeorcamentaria uni on aca.unicod = uni.unocod AND uni.prsano = aca.prgano
             LEFT JOIN monitora.pi_planointernoptres pip on ptr.ptrid = pip.ptrid
             LEFT JOIN (
@@ -1857,7 +1857,7 @@ function buscarUmPTRES(stdClass $objFiltros) {
             ptr.plocod,
 	    po.plotitulo
         FROM monitora.ptres ptr
-            JOIN monitora.acao aca on ptr.acaid = aca.acaid
+            JOIN planejamento.acao aca on ptr.acaid = aca.acaid
             JOIN public.unidade uni on aca.unicod = uni.unicod
             LEFT JOIN public.localizador loc ON aca.loccod = loc.loccod
             LEFT JOIN monitora.programa prog ON aca.prgcod = prog.prgcod

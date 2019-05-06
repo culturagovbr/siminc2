@@ -27,7 +27,7 @@ $sql = "SELECT DISTINCT
 		    case when avp.avptextoold is null then avp.avptexto else avp.avptextoold end as textoold,
 		    avp.avpid
 		FROM
-			monitora.acao a
+			planejamento.acao a
 			inner join monitora.avaliacaoparecer avp on avp.acaid = a.acaid
 			left join monitora.referencia ref on ref.refcod = avp.refcod
 			left join monitora.execucaopto exp on exp.acaid = a.acaid and ref.refcod = exp.refcod

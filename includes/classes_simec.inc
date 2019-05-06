@@ -886,7 +886,7 @@ inner join elabrev.ppaacao_proposta  ap on ap.acaid = ua.acaid and ua.acaid=".$_
 		// esta funação verifica vários itens
 		// verificando o plano de trabalho
 		// fase 1 - verifica se o usuário tem responsabilidades em ação
-		$sql="select ur.acaid from monitora.usuarioresponsabilidade ur inner join seguranca.usuario u on u.usucpf=ur.usucpf inner join monitora.acao a on a.acaid=ur.acaid and a.prgano='".$_SESSION['exercicio']."' where ur.acaid is not null and ur.usucpf='".$_SESSION['usucpf']."'";
+		$sql="select ur.acaid from monitora.usuarioresponsabilidade ur inner join seguranca.usuario u on u.usucpf=ur.usucpf inner join planejamento.acao a on a.acaid=ur.acaid and a.prgano='".$_SESSION['exercicio']."' where ur.acaid is not null and ur.usucpf='".$_SESSION['usucpf']."'";
 
 		$RS = $this->record_set($sql);
 		$nlinhas = $this->conta_linhas($RS);

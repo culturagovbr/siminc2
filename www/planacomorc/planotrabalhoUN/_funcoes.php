@@ -1368,7 +1368,7 @@ function acao_verificar_responsabilidade( $atividade, $usuario ){
 	$sql = <<<EOS
 		select count( u.usucpf )
 		from pde.atividade ati
-		inner join monitora.acao aca on aca.acaid = ati.acaid
+		inner join planejamento.acao aca on aca.acaid = ati.acaid
 		inner join monitora.usuarioresponsabilidade ur on ur.acaid = aca.acaid
 		inner join seguranca.perfil p on p.pflcod = ur.pflcod
 		inner join seguranca.usuario u on u.usucpf = ur.usucpf
@@ -1404,7 +1404,7 @@ function verificaPerfilPlanoTrabalho() {
 				case PERFIL_COORDACAO:
 				case PERFIL_EQCOOACAO:
 					$sql = "SELECT ac.unicod FROM monitora.usuarioresponsabilidade ur
-							LEFT JOIN monitora.acao ac ON ac.acaid = ur.acaid
+							LEFT JOIN planejamento.acao ac ON ac.acaid = ur.acaid
 							WHERE ur.usucpf = '".$_SESSION['usucpf']."' AND ur.pflcod = '".$perfilid."' AND ur.prsano='".$_SESSION['exercicio']."'";
 					$unicods = (array) $db->carregar($sql);
 					if($unicods[0]) {
@@ -1443,7 +1443,7 @@ function verificaPerfilPlanoTrabalho() {
 								distinct a.unicod 
 							FROM 
 								monitora.usuarioresponsabilidade ur
-								inner join monitora.acao a on a.acaid=ur.acaid 
+								inner join planejamento.acao a on a.acaid=ur.acaid 
 							WHERE 
 								ur.rpustatus='A' and 
 								ur.usucpf = '".$_SESSION['usucpf']."' AND 
