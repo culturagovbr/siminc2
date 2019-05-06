@@ -80,7 +80,7 @@ class Monitora_Model_PiEnquadramentoDespesa extends Modelo
         'eqddsc' => null,
         'eqdano' => null,
         'eqdstatus' => null,
-        'mpneid' => null,
+//        'mpneid' => null,
         'eqdstreduzido' => null,
         'tpdid' => null,
     );
