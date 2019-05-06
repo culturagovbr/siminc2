@@ -17,7 +17,7 @@
 
     
     $mUnidadeOrcamentaria = new Public_Model_UnidadeOrcamentaria();
-    $mPrograma = new Monitora_Model_Programa();
+    $mPrograma = new Planacomorc_Model_Programa();
     $mLocalizador = new Public_Model_Localizador();
     $mObjetivo = new Public_Model_ObjetivoPpa();
 

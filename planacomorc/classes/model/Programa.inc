@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.programa
+ * Classe de mapeamento da entidade planejamento.programa
  *
  * @category Class
  * @package  A1
@@ -15,7 +15,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 
 /**
- * Monitora_Model_Programa
+ * Planacomorc_Model_Programa
  *
  * @category Class
  * @package  A1
@@ -24,14 +24,14 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release: 
  * @link     no link
  */
-class Monitora_Model_Programa extends Modelo
+class Planacomorc_Model_Programa extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.programa';
+    protected $stNomeTabela = 'planejamento.programa';
 
     /**
      * Chave primaria.
@@ -94,29 +94,10 @@ class Monitora_Model_Programa extends Modelo
     }
 
     /**
-     * Monta listagem de todos os programas na tela de cadastro de Programa.
-     * @param stdClass $dto
-     * @return array
-     */
-    public function buscarTodos(stdClass $dto) {
-
-        $sql = "
-            SELECT
-                prgid,
-                prgcod,
-                prgdsc
-            FROM monitora.programa
-            WHERE
-                prgstatus = 'A'
-                AND prgano = '". (int)$dto->exercicio. "'";
-
-        return $this->carregar($sql);
-    }
-
-    /**
      * Recuperar programa vinculado à ação na tela de cadastro de ação
+     *
      * @param stdClass $dto
-     * @return array
+     * @return string
      */
     public static function recuperaSqlComboPrgcod(stdClass $dto)
     {
@@ -124,7 +105,7 @@ class Monitora_Model_Programa extends Modelo
             SELECT
                 prgcod AS codigo,
                 prgcod || ' - ' || prgdsc AS descricao
-            FROM monitora.programa
+            FROM planejamento.programa
             WHERE
                 prgstatus = 'A'
                 AND prgano = '". $dto->exercicio ."'
@@ -133,5 +114,4 @@ class Monitora_Model_Programa extends Modelo
         return $sql;
     }
 
-}//end Class
-?>
+}

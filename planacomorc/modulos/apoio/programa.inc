@@ -1,6 +1,6 @@
 <?php
 
-$listaPrograma = (new Monitora_Model_Programa)->buscarTodos((object)array('exercicio' => $_SESSION['exercicio']));;
+$listaPrograma = (new Planacomorc_Model_Programa)->recuperarTodos('*' , ["prgstatus = 'A'", "prgano = '{$_SESSION['exercicio']}'"], 'prgcod');
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
@@ -33,8 +33,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php if ($listaPrograma) {
-                                foreach ($listaPrograma as $dados) { ?>
+                            <?php if ($listaPrograma) :
+                                foreach ($listaPrograma as $dados) : ?>
                                     <tr>
                                         <td class="text-center">
                                             <a title="Alterar"
@@ -45,8 +45,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                                         <td><?= $dados['prgcod']; ?></td>
                                         <td><?= $dados['prgdsc']; ?></td>
                                     </tr>
-                                <?php }
-                            } ?>
+                                <?php endforeach;
+                            endif; ?>
                             </tbody>
                         </table>
                     </div>

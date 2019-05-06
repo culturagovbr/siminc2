@@ -1,6 +1,6 @@
 <?php
 
-$cPrograma = new Public_Controller_Programa();
+$cPrograma = new Planacomorc_Controller_Programa();
 switch ($_REQUEST['req']) {
     case 'salvar':
         $cPrograma->salvar($_REQUEST);
@@ -10,7 +10,7 @@ switch ($_REQUEST['req']) {
         die;
 }
 
-$mPrograma = new Monitora_Model_Programa($_REQUEST['prgid']);
+$mPrograma = new Planacomorc_Model_Programa($_REQUEST['prgid']);
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
