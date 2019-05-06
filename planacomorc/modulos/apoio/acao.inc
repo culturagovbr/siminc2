@@ -1,6 +1,6 @@
 <?php
 
-$listaAcoes = (new Monitora_Model_Acao)->recuperarDados();
+$listaAcoes = (new Planacomorc_Model_Acao)->recuperarDados();
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>

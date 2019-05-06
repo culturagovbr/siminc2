@@ -1,7 +1,7 @@
 <?php
 
-    $mAcao = new Monitora_Model_Acao($_REQUEST['acaid']);
-    $cAcao = new Monitora_Controller_Acao();
+    $mAcao = new Planacomorc_Model_Acao($_REQUEST['acaid']);
+    $cAcao = new Planacomorc_Controller_Acao();
     switch ($_REQUEST['req']) {
         case 'salvar':
             $cAcao->salvar($_REQUEST);

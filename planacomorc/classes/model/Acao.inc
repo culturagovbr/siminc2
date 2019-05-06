@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.acao
+ * Classe de mapeamento da entidade planejamento.acao
  *
  * @category Class
  * @package  A1
@@ -15,7 +15,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 
 /**
- * Monitora_Model_Acao
+ * Planacomorc_Model_Acao
  *
  * @category Class
  * @package  A1
@@ -24,14 +24,14 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release:
  * @link     no link
  */
-class Monitora_Model_Acao extends Modelo
+class Planacomorc_Model_Acao extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.acao';
+    protected $stNomeTabela = 'planejamento.acao';
 
     /**
      * Chave primaria.
@@ -50,11 +50,7 @@ class Monitora_Model_Acao extends Modelo
         'funcod' => array('tabela' => 'public.ppafuncao', 'pk' => 'funcod'),
         'irpcod' => array('tabela' => 'identresultprimario', 'pk' => 'irpcod'),
         'prgano, prgcod, prgid' => array('tabela' => 'programa', 'pk' => 'prgano, prgcod, prgid'),
-        'regcod' => array('tabela' => 'regiao', 'pk' => 'regcod'),
-        'tincod' => array('tabela' => 'tipoinclusaoacao', 'pk' => 'tincod'),
-        'taccod' => array('tabela' => 'tipoacao', 'pk' => 'taccod'),
         'unicod, unitpocod' => array('tabela' => 'unidade', 'pk' => 'unicod, unitpocod'),
-        'unmcod' => array('tabela' => 'unidademedida', 'pk' => 'unmcod'),
         'sfucod' => array('tabela' => 'public.ppasubfuncao', 'pk' => 'sfucod'),
     );
 
@@ -65,120 +61,46 @@ class Monitora_Model_Acao extends Modelo
      */
     protected $arAtributos = array(
         'acaid' => null,
-        'acaid' => null,
+        'prgid' => null,
         'acacod' => null,
+        'acadsc' => null,
         'saccod' => null,
         'loccod' => null,
         'esfcod' => null,
         'unicod' => null,
         'unitpocod' => null,
-        'tincod' => null,
         'funcod' => null,
-        'unmcod' => null,
-        'regcod' => null,
-        'taccod' => null,
-        'osicod' => null,
-        'procod' => null,
+        'fundsc' => null,
+        'sfucod' => null,
+        'sfundsc' => null,
         'prgano' => null,
         'prgcod' => null,
-        'prgid' => null,
-        'acacodppa' => null,
-        'sitcodestagio' => null,
-        'sitcodandamento' => null,
-        'sitcodcronograma' => null,
-        'acapercexecucao' => null,
-        'acadsc' => null,
         'sacdsc' => null,
-        'acadsccomentarios' => null,
-        'acanomecoordenador' => null,
-        'acadscunresp' => null,
-        'acadscunexecutora' => null,
-        'acasnmedireta' => null,
-        'acasnmedesc' => null,
-        'acasnmelincred' => null,
         'acasnmetanaocumulativa' => null,
-        'acamesinicio' => null,
-        'acaanoinicio' => null,
-        'acamestermino' => null,
-        'acaanotermino' => null,
-        'acavlrrealateanoanterior' => null,
-        'acadsccomentsituacao' => null,
         'acadscsituacaoatual' => null,
-        'acadscresultadosespobt' => null,
-        'acamesprevisaoconclusao' => null,
-        'acaanoprevisaoconclusao' => null,
-        'acadsccomentexecfisica' => null,
-        'acadsccomentexecfinanceira' => null,
-        'acadsccomentexecfisicabgu' => null,
-        'acadsccomentexecfinanceirabgu' => null,
         'acasnrap' => null,
-        'acadsccomentexecucao' => null,
-        'acadsccomentexecucaorap' => null,
-        'acasnfiscalseguridade' => null,
-        'acasninvestatais' => null,
-        'acasnoutrasfontes' => null,
-        'cod_referencia' => null,
-        'acadscproduto' => null,
-        'acafinalidade' => null,
         'acadescricao' => null,
         'acabaselegal' => null,
-        'acarepercfinanceira' => null,
-        'acasnpadronizada' => null,
-        'acasnsetpadronizada' => null,
-        'acasntransfobrigatoria' => null,
-        'acasntransfvoluntaria' => null,
         'acasntransfoutras' => null,
-        'acasndespesaobrigatoria' => null,
-        'acasnbloqueioprogramacao' => null,
         'acadetalhamento' => null,
-        'acavlrcustototal' => null,
-        'acavlrcustoateanoanterior' => null,
-        'acaqtdprevistoanocorrente' => null,
-        'acaordemprioridade' => null,
-        'acaobs' => null,
-        'acacodsof' => null,
-        'acaqtdcustototal' => null,
-        'acacodreferenciasof' => null,
-        'acavlrrepercfinanceira' => null,
-        'sfucod' => null,
         'acastatus' => null,
-        'acasnemenda' => null,
         'acasnestrategica' => null,
-        'acaqtdateanoanterior' => null,
-        'acavlrcustoprevistoanocorrente' => null,
         'acasnbgu' => null,
-        'acaptres' => null,
         'acadataatualizacao' => null,
         'irpcod' => null,
         'acatipoinclusao' => null,
         'acatipoinclusaolocalizador' => null,
-        'unmdsc' => null,
-        'prodsc' => null,
         'descricaomomento' => null,
-        'unidaderesponsavel' => null,
-        'tipoinclusao' => null,
-        'tipoacao' => null,
-        'inicioacao' => null,
-        'terminoacao' => null,
         'acatitulo' => null,
         'ididentificadorunicosiop' => null,
-        'unmcodsof' => null,
-        'procodsof' => null,
-        'acatipocod' => null,
-        'acatipodsc' => null,
         'acainiciativacod' => null,
         'acainiciativadsc' => null,
         'acaobjetivocod' => null,
         'acaobjetivodsc' => null,
-        'esfdsc' => null,
-        'fundsc' => null,
-        'sfundsc' => null,
         'prgdsc' => null,
-        'prgtipo' => null,
         'codtipoinclusaoacao' => null,
         'codtipoinclusaolocalizador' => null,
-        'metalocalizador' => null,
-        'financeirolocalizador' => null,
+        'locquantidadeproposta' => null,
         'acanomeproduto' => null,
         'acanomeunidade' => null,
     );
@@ -244,7 +166,7 @@ class Monitora_Model_Acao extends Modelo
                         AND aca.unicod = uni.unocod
                     LIMIT 1
                 ), '') AS unidade
-            FROM monitora.acao aca
+            FROM planejamento.acao aca
                 JOIN public.unidadeorcamentaria uni ON(
                     uni.unocod = aca.unicod
                     AND uni.prsano = aca.prgano
