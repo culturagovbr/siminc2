@@ -365,7 +365,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
                 LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
                 LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
-                LEFT JOIN monitora.pi_categoriaapropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
+                LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
                 LEFT JOIN monitora.pi_modalidadeensino mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
             WHERE
                 pli.pliid = $pliid

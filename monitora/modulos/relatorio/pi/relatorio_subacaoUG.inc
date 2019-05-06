@@ -549,7 +549,7 @@ monta_titulo( $titulo_modulo, '' );
 					<td>
 						<?
 						$capid = $_REQUEST['capid'];
-						$sql = "SELECT capid as codigo, capcod ||' - '|| capdsc as descricao FROM monitora.pi_categoriaapropriacao WHERE capano = '{$_SESSION['exercicio']}' ORDER BY capcod ";
+						$sql = "SELECT capid as codigo, capcod ||' - '|| capdsc as descricao FROM planejamento.categoria_apropriacao WHERE capano = '{$_SESSION['exercicio']}' ORDER BY capcod ";
 						$db->monta_combo('capid', $sql, 'S', 'Selecione', '', '', '', '340', 'N', '000000005_2');
 						?>
 					</td>

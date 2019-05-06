@@ -782,7 +782,7 @@ DML;
                             SELECT
                                 capid AS codigo,
                                 capdsc AS descricao
-                            FROM monitora.pi_categoriaapropriacao
+                            FROM planejamento.categoria_apropriacao
                             WHERE
                                 capano = '{$_SESSION['exercicio']}'
                                 AND capstatus = 'A'

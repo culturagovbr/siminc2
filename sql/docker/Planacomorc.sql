@@ -16,7 +16,7 @@ UPDATE monitora.ptres SET ptrstatus = 'I';
 UPDATE public.metapnc SET mpnstatus = 'I';
 
 UPDATE planacomorc.pi_janela SET pijstatus = 'I';
-UPDATE monitora.pi_categoriaapropriacao SET capstatus = 'I';
+UPDATE planejamento.categoria_apropriacao SET capstatus = 'I';
 UPDATE monitora.pi_modalidadeensino SET mdestatus = 'I';
 UPDATE monitora.pi_produto SET pprstatus = 'I';
 UPDATE planacomorc.manutencaoitem SET maistatus = 'I';

@@ -1071,7 +1071,7 @@ DML;
 
     $categoria = "";
     if ($capid) {
-        $sql = "SELECT capdsc FROM monitora.pi_categoriaapropriacao WHERE capid='" . $capid . "'";
+        $sql = "SELECT capdsc FROM planejamento.categoria_apropriacao WHERE capid='" . $capid . "'";
         $categoria = $db->pegaUm($sql);
     }
     $arrRetorno = array('sbacod' => $subacao['sbacod']);
@@ -2113,7 +2113,7 @@ SELECT scp.scpid,
       ON (scp.eqdid = eqd.eqdid AND scp.scpano = eqd.eqdano)
     LEFT JOIN monitora.pi_niveletapaensino nee
       ON (scp.neeid = nee.neeid AND scp.scpano = nee.neeano)
-    LEFT JOIN monitora.pi_categoriaapropriacao cap
+    LEFT JOIN planejamento.categoria_apropriacao cap
       ON (scp.capid = cap.capid AND scp.scpano = cap.capano)
     LEFT JOIN monitora.pi_modalidadeensino mde
       ON (scp.mdeid = mde.mdeid AND scp.scpano = mde.mdeano)
@@ -2180,7 +2180,7 @@ function carregarPI($pliid) {
             LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
             LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
             LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.neeid = nee.neeid AND pli.pliano = nee.neeano)
-            LEFT JOIN monitora.pi_categoriaapropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
+            LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
             LEFT JOIN monitora.pi_modalidadeensino mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.mdeano)
         WHERE
             pli.pliid = %d
@@ -2268,7 +2268,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
                 pli.neeid = nee.neeid
                 AND pli.pliano = nee.neeano
             )
-            LEFT JOIN monitora.pi_categoriaapropriacao cap ON(
+            LEFT JOIN planejamento.categoria_apropriacao cap ON(
                 pli.capid = cap.capid
                 AND pli.pliano = cap.capano
             )
@@ -2957,7 +2957,7 @@ function gerarCodigosPi($pliid)
             )
             JOIN monitora.pi_planointernoptres ppt ON(pi.pliid = ppt.pliid)
             JOIN monitora.vw_ptres ptr ON(ppt.ptrid = ptr.ptrid)
-            LEFT JOIN monitora.pi_categoriaapropriacao cap ON cap.capid = pi.capid
+            LEFT JOIN planejamento.categoria_apropriacao cap ON cap.capid = pi.capid
         WHERE
              pi.pliid = ". (int)$pliid;
 //ver($sql, d);
@@ -2972,7 +2972,7 @@ function verificarPactuacaoConvenio($capid)
 
     global $db;
 
-    $sql = "SELECT count(*) FROM monitora.pi_categoriaapropriacao
+    $sql = "SELECT count(*) FROM planejamento.categoria_apropriacao
             WHERE capano = '{$_SESSION['exercicio']}'
             AND capstatus = 'A'
             AND capid = $capid

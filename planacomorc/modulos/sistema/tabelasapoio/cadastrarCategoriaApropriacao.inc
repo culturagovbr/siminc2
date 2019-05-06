@@ -14,7 +14,7 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
     $ano = $_POST['ano'];
     
     $sql = "
-        INSERT INTO monitora.pi_categoriaapropriacao (capcod,capdsc,capano,capstatus) VALUES
+        INSERT INTO planejamento.categoria_apropriacao (capcod,capdsc,capano,capstatus) VALUES
             ('$codigo', '$descricao', '$ano', '$status') ";
       if ($db->executar( $sql )) {
         $db->commit ();
@@ -30,7 +30,7 @@ if($_REQUEST['execucao'] == 'editar'){
     $strSql = '
         SELECT 
             *
-        FROM monitora.pi_categoriaapropriacao  
+        FROM planejamento.categoria_apropriacao  
         WHERE capid = ' . $_REQUEST['registro'];
     
     $rs = $db->pegaLinha($strSql);
@@ -49,7 +49,7 @@ if($_POST['id']){
     $ano = $_POST['ano'];
     
     $sql = "
-        UPDATE monitora.pi_categoriaapropriacao SET
+        UPDATE planejamento.categoria_apropriacao SET
             capcod='$codigo', capdsc='$descricao', capano='$ano', capstatus='$status'
         WHERE capid='$id'
     ";

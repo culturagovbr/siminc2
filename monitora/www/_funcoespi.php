@@ -274,7 +274,7 @@ function buscaDadosSubacao($sbaid, $capid = "") {
 	
 	$categoria = "";
 	if($capid){
-		$sql = "SELECT capdsc FROM monitora.pi_categoriaapropriacao WHERE capid='".$capid."'";
+		$sql = "SELECT capdsc FROM planejamento.categoria_apropriacao WHERE capid='".$capid."'";
 		$categoria = $db->pegaUm($sql);	
 	}
 	

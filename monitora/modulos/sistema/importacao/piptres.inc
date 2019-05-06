@@ -345,7 +345,7 @@ function inserePI($pi, $pidsc, $unicod, $ptres, $dotAtualizada, $dotInicial)
         'eqdid' => "SELECT eqdid FROM planejamento.enquadramento_despesa WHERE eqdcod = '" . substr($pi, 0, 1) . "' AND eqdano = '{$ano}' AND eqdstatus = 'A'",
         'sbaid' => "SELECT MAX(sbaid) FROM monitora.pi_subacao WHERE sbacod = '" . substr($pi, 1, 4) . "'",
         'neeid' => "SELECT neeid FROM monitora.pi_niveletapaensino WHERE neecod = '" . substr($pi, 5, 1) . "' AND neeano = '{$ano}' AND neestatus = 'A'",
-        'capid' => "SELECT capid FROM monitora.pi_categoriaapropriacao WHERE capcod = '" . substr($pi, 6, 2) . "' AND capano = '{$ano}' AND capstatus = 'A'",
+        'capid' => "SELECT capid FROM planejamento.categoria_apropriacao WHERE capcod = '" . substr($pi, 6, 2) . "' AND capano = '{$ano}' AND capstatus = 'A'",
         'mdeid' => "SELECT mdeid FROM monitora.pi_modalidadeensino WHERE mdecod = '" . substr($pi, 10) . "' AND mdeano = '{$ano}' AND mdestatus = 'A'",
         'usucpf' => '00000000191',
         'plisituacao' => 'C',

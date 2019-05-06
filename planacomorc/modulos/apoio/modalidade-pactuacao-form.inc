@@ -10,7 +10,7 @@ switch ($_REQUEST['req']) {
         die;
 }
 
-$mCategoriaApropriacao = new Monitora_Model_CategoriaApropriacao($_REQUEST['capid']);
+$mCategoriaApropriacao = new Planacomorc_Model_CategoriaApropriacao($_REQUEST['capid']);
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>

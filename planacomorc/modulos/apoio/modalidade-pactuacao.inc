@@ -1,6 +1,6 @@
 <?php
 
-$aCategoriaApropriacao = (new Monitora_Model_CategoriaApropriacao())->recuperarTodos('*', ["capstatus = 'A'", "capano = '{$_SESSION['exercicio']}'"], 'capdsc');
+$aCategoriaApropriacao = (new Planacomorc_Model_CategoriaApropriacao())->recuperarTodos('*', ["capstatus = 'A'", "capano = '{$_SESSION['exercicio']}'"], 'capdsc');
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>

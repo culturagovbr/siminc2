@@ -23,7 +23,7 @@ include APPRAIZ . 'includes/cabecalho.inc';
     <?php
  $strSqlGrid = "
     SELECT capid,capcod,capdsc,capano
-    FROM monitora.pi_categoriaapropriacao
+    FROM planejamento.categoria_apropriacao
     WHERE capano = '{$_SESSION['exercicio']}'
         AND capstatus = 'A'
     ORDER BY capcod

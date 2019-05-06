@@ -168,7 +168,7 @@
                  capid AS codigo,
                  capano as ano,
                  capdsc AS descricao
-             FROM monitora.pi_categoriaapropriacao
+             FROM planejamento.categoria_apropriacao
              WHERE
                  capano = '".$_REQUEST['filtro']['prsano']."'
                  AND capstatus = 'A'

@@ -355,7 +355,7 @@ function deleteRowEnquadramentoDespesas($rowID) {
 function deleteRowCategoriaApropriacao($rowID) {
 
     global $db;
-    $strSql = sprintf('UPDATE monitora.pi_categoriaapropriacao SET capstatus=\'I\' WHERE capid=%d', (int) $rowID);
+    $strSql = sprintf('UPDATE planejamento.categoria_apropriacao SET capstatus=\'I\' WHERE capid=%d', (int) $rowID);
     if ($db->executar( $strSql )) {
         $db->commit ();
     }

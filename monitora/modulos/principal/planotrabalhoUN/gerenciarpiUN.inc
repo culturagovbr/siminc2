@@ -206,7 +206,7 @@ if(!$db->testa_superuser()){
 			<td>
 				<?php
 					$apropriacao = $_REQUEST['apropriacao'];
-					$sql = "SELECT capid as codigo, capcod ||' - '|| capdsc as descricao FROM monitora.pi_categoriaapropriacao WHERE capano = '{$_SESSION['exercicio']}' ORDER BY capcod ";
+					$sql = "SELECT capid as codigo, capcod ||' - '|| capdsc as descricao FROM planejamento.categoria_apropriacao WHERE capano = '{$_SESSION['exercicio']}' ORDER BY capcod ";
 					$db->monta_combo('apropriacao', $sql, 'S', 'Selecione', '', '', '', '340', 'N', '');
 				?>
 			</td>

@@ -120,7 +120,7 @@ function monta_sql(){
                         LEFT JOIN monitora.pi_subacaodotacao sad ON ptr.ptrid = sad.ptrid and sad.sbaid = pl.sbaid
                         LEFT JOIN monitora.pi_planointernoatividade pia on pia.pliid = pl.pliid
                         LEFT JOIN pde.atividade atv on pia.atiid = atv.atiid
-                        LEFT JOIN monitora.pi_categoriaapropriacao cap on pl.capid = cap.capid
+                        LEFT JOIN planejamento.categoria_apropriacao cap on pl.capid = cap.capid
                         LEFT JOIN planejamento.enquadramento_despesa eqd on pl.eqdid = eqd.eqdid
                         LEFT JOIN monitora.pi_niveletapaensino nee on pl.neeid = nee.neeid
                         LEFT JOIN monitora.pi_modalidadeensino mde on pl.mdeid = mde.mdeid
@@ -587,7 +587,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 				><img src="../imagens/combo-todos.gif" border="0" align="middle"></div>
 				<div id="cat_apropriacao_campo_on" style="display:<?php echo $possuiSelecionado ? "block" : "none" ?>;">
 					<?php
-						$sql_combo = "SELECT capid as codigo, capcod ||' - '|| capdsc as descricao FROM monitora.pi_categoriaapropriacao WHERE capano = '{$_SESSION['exercicio']}' ORDER BY capcod";
+						$sql_combo = "SELECT capid as codigo, capcod ||' - '|| capdsc as descricao FROM planejamento.categoria_apropriacao WHERE capano = '{$_SESSION['exercicio']}' ORDER BY capcod";
 
 						combo_popup(
 							'f_cat_apropriacao',			// nome do campo

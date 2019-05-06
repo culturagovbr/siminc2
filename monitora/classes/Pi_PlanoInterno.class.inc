@@ -1471,7 +1471,7 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_niveletapaensino nee ON nee.neeid = pli.neeid
                 LEFT JOIN public.metappa mpp ON mpp.mppid = pic.mppid
                 LEFT JOIN public.metapnc mpn ON mpn.mpnid = pic.mpnid
-                LEFT JOIN monitora.pi_categoriaapropriacao cap ON cap.capid = pli.capid
+                LEFT JOIN planejamento.categoria_apropriacao cap ON cap.capid = pli.capid
                 LEFT JOIN monitora.pi_produto ppr ON ppr.pprid = pic.pprid
                 LEFT JOIN monitora.pi_unidade_medida pum ON pum.pumid = pic.pumid
                 LEFT JOIN workflow.documento doc ON doc.docid = pli.docid

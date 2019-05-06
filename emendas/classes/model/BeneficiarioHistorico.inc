@@ -369,8 +369,8 @@ class Emendas_Model_BeneficiarioHistorico extends Modelo
      */
     public function gravarHistoricoModalidade(array $post, Emendas_Model_Beneficiario $beneficiario){
         if($post['capid'] != $beneficiario->capid){
-            $modalidadeAnterior = new Monitora_Model_CategoriaApropriacao($beneficiario->capid);
-            $modalidadeNova = new Monitora_Model_CategoriaApropriacao($post['capid']);
+            $modalidadeAnterior = new Planacomorc_Model_CategoriaApropriacao($beneficiario->capid);
+            $modalidadeNova = new Planacomorc_Model_CategoriaApropriacao($post['capid']);
             
             $this->gravarHistoricoCampo(
                 'Modalidade de Pactuação',

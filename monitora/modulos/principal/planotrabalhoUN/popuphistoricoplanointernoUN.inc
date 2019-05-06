@@ -131,7 +131,7 @@ button{cursor:pointer}
 		</tr>
 		<tr>
 			<td class="subtitulodireita">Categoria de Apropriação:</td>
-			<td><?php echo $db->pegaUm("SELECT capcod || ' - ' || capdsc FROM monitora.pi_categoriaapropriacao WHERE capid='".$obPi_PlanoInterno->capid."'"); ?></td>
+			<td><?php echo $db->pegaUm("SELECT capcod || ' - ' || capdsc FROM planejamento.categoria_apropriacao WHERE capid='".$obPi_PlanoInterno->capid."'"); ?></td>
 		</tr>
 		<tr>
 			<td class="subtitulodireita">Codifição da Unidade(livre):</td>

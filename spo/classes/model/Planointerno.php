@@ -39,7 +39,7 @@ class Spo_Model_Planointerno extends Modelo
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'capid' => array('tabela' => 'monitora.pi_categoriaapropriacao', 'pk' => 'capid'),
+        'capid' => array('tabela' => 'planejamento.categoria_apropriacao', 'pk' => 'capid'),
         'eqdid' => array('tabela' => 'planejamento.programa', 'pk' => 'eqdid'),
         'mdeid' => array('tabela' => 'monitora.pi_modalidadeensino', 'pk' => 'mdeid'),
         'neeid' => array('tabela' => 'monitora.pi_niveletapaensino', 'pk' => 'neeid'),

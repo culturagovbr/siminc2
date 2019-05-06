@@ -799,9 +799,9 @@ class ConfiguracaoExercicio extends Modelo {
                 and t.ipnstatus  = 'A';
                 ;
                 
-                insert into monitora.pi_categoriaapropriacao (capcod, capdsc, capano, capstatus, capsiconv)
+                insert into planejamento.categoria_apropriacao (capcod, capdsc, capano, capstatus, capsiconv)
                 select t.capcod, t.capdsc, '2019', t.capstatus, t.capsiconv
-                from monitora.pi_categoriaapropriacao t
+                from planejamento.categoria_apropriacao t
                 where t.capano = '2018'
                 and t.capstatus = 'A'
                 ;

@@ -142,7 +142,7 @@ switch ($_REQUEST['req']) {
 
 $mBeneficiario = new Emendas_Model_Beneficiario($_REQUEST['benid']);
 $beneficiario = (object)$mBeneficiario->buscarBeneficiario($mBeneficiario->benid);
-$convenio = (new Monitora_Model_CategoriaApropriacao())->recuperarTodos('*', ["capstatus = 'A'",  "capdsc = 'Convênio'", "capano = '{$_SESSION['exercicio']}'"]);
+$convenio = (new Planacomorc_Model_CategoriaApropriacao())->recuperarTodos('*', ["capstatus = 'A'",  "capdsc = 'Convênio'", "capano = '{$_SESSION['exercicio']}'"]);
 $listaSniic = (new Emendas_Model_Sniic())->recuperarTodos('*', array('benid = '. (int)$mBeneficiario->benid));
 $listaPronac = (new Emendas_Model_Pronac())->recuperarTodos('*', array('benid = '. (int)$mBeneficiario->benid));
 $listaDeAnexos = (new Emendas_Model_BeneficiarioAnexo())->buscarPorBeneficiario((int)$mBeneficiario->benid);
@@ -258,7 +258,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             <?php
                                                 echo $simec->input('bennumeroprocesso', 'Número do Processo', $mBeneficiario->bennumeroprocesso, ['maxlength' => 50]);
                                                 echo $simec->data('beninicio', 'Data de Início da Vigência', $mBeneficiario->beninicio);
-                                                echo $simec->select('capid', 'Modalidade de Pactuação', $mBeneficiario->capid, (new Monitora_Model_CategoriaApropriacao())->recuperarSqlCombo(null, ["capstatus = 'A'"]), ['required']);
+                                                echo $simec->select('capid', 'Modalidade de Pactuação', $mBeneficiario->capid, (new Planacomorc_Model_CategoriaApropriacao())->recuperarSqlCombo(null, ["capstatus = 'A'"]), ['required']);
                                                 echo $simec->radioBoolean('bented', 'TED', $mBeneficiario->bented);
                                             ?>
                                         </div>

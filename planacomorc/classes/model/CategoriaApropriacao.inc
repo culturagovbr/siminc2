@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.pi_categoriaapropriacao
+ * Classe de mapeamento da entidade planejamento.categoria_apropriacao
  *
  * @category Class
  * @package  A1
@@ -15,7 +15,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 
 /**
- * Monitora_Model_Pi_categoriaapropriacao
+ * Planacomorc_Model_CategoriaApropriacao
  *
  * @category Class
  * @package  A1
@@ -24,14 +24,14 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release: 
  * @link     no link
  */
-class Monitora_Model_CategoriaApropriacao extends Modelo
+class Planacomorc_Model_CategoriaApropriacao extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.pi_categoriaapropriacao';
+    protected $stNomeTabela = 'planejamento.categoria_apropriacao';
 
     /**
      * Chave primaria.
@@ -41,6 +41,7 @@ class Monitora_Model_CategoriaApropriacao extends Modelo
     protected $arChavePrimaria = array(
         'capid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
@@ -64,9 +65,13 @@ class Monitora_Model_CategoriaApropriacao extends Modelo
 
     public function existeVinculo($dados = null)
     {
-        $sql = "select count(*) qtd from monitora.pi_planointerno pli where capid = {$this->capid}";
+        $sql = "
+            SELECT
+                count(*) qtd
+            FROM monitora.pi_planointerno pli
+            WHERE capid = {$this->capid}
+        ";
         return $this->pegaUm($sql);
     }
 
-}//end Class
-?>
+}

@@ -459,7 +459,7 @@ if(in_array($_SESSION['monitora_var']['ungcod'],$arUnidadeSemModalidae)){
                 <?php
                     $sql = "
                         SELECT capid as codigo, capcod ||' - '|| capdsc as descricao
-                        FROM monitora.pi_categoriaapropriacao 
+                        FROM planejamento.categoria_apropriacao 
                         WHERE capano='" . $_SESSION['exercicio'] . "' and capstatus='A' 
                         ORDER BY capcod
                     ";

@@ -17,18 +17,18 @@ WITH (
 
 SELECT
 	*
-FROM monitora.pi_categoriaapropriacao
+FROM planejamento.categoria_apropriacao
 WHERE
 	capano = '2016'
 ;
 
 --de -- SELECT * FROM planointerno.tipoinstrumento WHERE prsano = '2017'
--- para -- SELECT * FROM monitora.pi_categoriaapropriacao
+-- para -- SELECT * FROM planejamento.categoria_apropriacao
 -- DELETE FROM obras.unidadeobrasubacao; -- SELECT * FROM obras.unidadeobrasubacao;
--- DELETE FROM monitora.pi_categoriaapropriacao;
+-- DELETE FROM planejamento.categoria_apropriacao;
 -- TRUNCATE TABLE planointerno.tipoinstrumento;
 BEGIN; -- ROLLBACK;
-INSERT INTO monitora.pi_categoriaapropriacao (
+INSERT INTO planejamento.categoria_apropriacao (
 	capcod,
 	capdsc,
 	capano
@@ -42,6 +42,6 @@ WHERE
 	prsano = '2017'
 ;
 
-DELETE FROM monitora.pi_categoriaapropriacao WHERE capid = 278;
+DELETE FROM planejamento.categoria_apropriacao WHERE capid = 278;
 
 -- COMMIT; ROLLBACK;
