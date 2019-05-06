@@ -1,6 +1,6 @@
 <?php
 
-$cCategoriaApropriacao = new Monitora_Controller_CategoriaApropriacao();
+$cCategoriaApropriacao = new Planacomorc_Controller_CategoriaApropriacao();
 switch ($_REQUEST['req']) {
     case 'salvar':
         $cCategoriaApropriacao->salvar($_REQUEST);

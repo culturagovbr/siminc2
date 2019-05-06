@@ -1,6 +1,6 @@
 <?php
 
-class Monitora_Controller_CategoriaApropriacao
+class Planacomorc_Controller_CategoriaApropriacao
 {
     public function salvar($dados)
     {
