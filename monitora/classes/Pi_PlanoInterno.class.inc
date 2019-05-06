@@ -2041,7 +2041,7 @@ class Pi_PlanoInterno extends Modelo
 
     public function recuperarPorUnidade(stdClass $filtros = NULL)
     {
-        $where = $filtros->naoOrcamentaria === TRUE? "\n AND eqd.eqdcod = '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'": "AND eqd.eqdcod != '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'";
+        $where = $filtros->naoOrcamentaria === TRUE? "\n AND eqd.eqdcod = '". Planacomorc_Model_EnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'": "AND eqd.eqdcod != '". Planacomorc_Model_EnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'";
 
         $sql = "
             SELECT

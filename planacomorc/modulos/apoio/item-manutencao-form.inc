@@ -49,7 +49,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 						<?php
                             echo $simec->input('mainome', 'Nome', $mManutencaoItem->mainome, ['required','maxlength' => 200]);
                             echo $simec->input('maidescricao', 'Descrição', $mManutencaoItem->maidescricao, ['maxlength' => 500]);
-                            echo $simec->select('eqdid', 'Enquadramento da Despesa', $mManutencaoItem->eqdid, $mEnquadramentoDespesa = (new Monitora_Model_PiEnquadramentoDespesa)->recuperarSqlCombo(null, ["eqdcod NOT IN('C', 'E', 'F', 'I', 'N', 'A')"]));
+                            echo $simec->select('eqdid', 'Enquadramento da Despesa', $mManutencaoItem->eqdid, $mEnquadramentoDespesa = (new Planacomorc_Model_EnquadramentoDespesa)->recuperarSqlCombo(null, ["eqdcod NOT IN('C', 'E', 'F', 'I', 'N', 'A')"]));
 						?>
                         <div class="form-group">
                             <div class="text-center">

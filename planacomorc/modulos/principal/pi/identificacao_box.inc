@@ -102,7 +102,7 @@
     
     <?php
         $checked = $dadosPI['eqdid']? $dadosPI['eqdid']: $codigoEnquadramentoNaoOrcamentario;
-        echo $simec->select("eqdid", 'Enquadramento da Despesa', $checked, (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo('eqdid, eqddsc', null, 'eqddsc'), ['required']);
+        echo $simec->select("eqdid", 'Enquadramento da Despesa', $checked, (new Planacomorc_Model_EnquadramentoDespesa())->recuperarSqlCombo('eqdid, eqddsc', null, 'eqddsc'), ['required']);
     ?>
     
     <div class="form-group grupo_manutencao" style="display: none;">

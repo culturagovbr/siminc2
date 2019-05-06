@@ -74,7 +74,7 @@
                             </div>
                             <?php
                                 # Exibe o Gráfico de Acompanhamento caso não seja Enquadramento Não Orçamentário.
-                                if($planoAcao['eqdcod'] !== Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA): ?>
+                                if($planoAcao['eqdcod'] !== Planacomorc_Model_EnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA): ?>
                                     <div class="col-md-6">
                                         <h3 class="text-center">Acompanhamento do PA</h3>
                                         <?php

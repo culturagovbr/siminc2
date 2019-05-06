@@ -31,7 +31,7 @@ switch ($_REQUEST['req']) {
         echo $cPropostaDetalhe->excluir($_REQUEST['prdid']);
         die;
     case 'carregar-rp':
-        $rp = (new Monitora_Model_PiEnquadramentoDespesa())->recuperarDescricaoRp($_REQUEST['eqdid']);
+        $rp = (new Planacomorc_Model_EnquadramentoDespesa())->recuperarDescricaoRp($_REQUEST['eqdid']);
         echo '  <div class="form-group">
                     <label class="col-sm-3 control-label">RP: </label>
                     <div class="col-sm-9">
@@ -95,7 +95,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 'unofundo' => 'FALSE',
                                 'exercicio' => $_SESSION['exercicio'],
                                 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), ['required']);
-                            echo $simec->select('eqdid', 'Enquadramento da Despesa', $mProposta->eqdid, (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo(), ['required']);
+                            echo $simec->select('eqdid', 'Enquadramento da Despesa', $mProposta->eqdid, (new Planacomorc_Model_EnquadramentoDespesa())->recuperarSqlCombo(), ['required']);
                             echo '<span id="span-rp"></span>';
                             echo '<span id="span-funcional">' . $simec->select('ptrid', 'Funcional', $mProposta->ptrid, (new Monitora_Model_Ptres())->recuperarSqlPorSubunidadeEEnquadramento($mProposta->suoid, $mProposta->eqdid), ['required']) . '</span>';
                             echo '<span id="span-subunidades-ptres"></span>';

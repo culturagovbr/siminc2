@@ -34,7 +34,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
                         <?php
                             echo $simec->select('suoid','SubUnidade',$filtroprop['suoid'],(new Public_Model_SubUnidadeOrcamentaria())->queryComboChaveSuoid((object)array('unofundo' => 'FALSE','exercicio' => $_SESSION['exercicio'],'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)));
-                            echo $simec->select('eqdid', 'Enquadramento da Despesa', $filtroprop['eqdid'], (new Monitora_Model_PiEnquadramentoDespesa())->recuperarSqlCombo());
+                            echo $simec->select('eqdid', 'Enquadramento da Despesa', $filtroprop['eqdid'], (new Planacomorc_Model_EnquadramentoDespesa())->recuperarSqlCombo());
                             echo '<span id="span-funcional">'.$simec->select('ptrid', 'Funcional', $filtroprop['ptrid'], (new Proposta_Model_Proposta())->recuperarSqlFuncional($filtroprop['suoid'], '')).'</span>';
                         ?>
 

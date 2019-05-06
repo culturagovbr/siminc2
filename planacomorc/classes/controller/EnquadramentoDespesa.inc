@@ -13,7 +13,7 @@ class Planacomorc_Controller_EnquadramentoDespesa
 
             $mEnquadramento->salvar(null, null, ['eqdcod', 'eqddsc', 'eqdano', 'eqdstatus', 'mpneid', 'eqdstreduzido', 'tpdid' ]);
 
-            $mEnquadramentoRp = new Monitora_Model_EnquadramentoRp();
+            $mEnquadramentoRp = new Planacomorc_Model_Enquadramentorp();
             $mEnquadramentoRp->excluirPorExercicio($_SESSION['exercicio'], $mEnquadramento->eqdid);
 
             if($dados['lista_rp']){

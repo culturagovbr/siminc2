@@ -7,7 +7,7 @@ class Monitora_Controller_EnquadramentoRp
         $url = '?modulo=apoio/acao-enquadramento&acao=A';
 
         try {
-            $mEnquadramentoRp = new Monitora_Model_EnquadramentoRp();
+            $mEnquadramentoRp = new Planacomorc_Model_Enquadramentorp();
             $mEnquadramentoRp->excluirPorExercicio($_SESSION['exercicio']);
 
             if(isset($dados['vinculos']) && is_array($dados['vinculos'])){
