@@ -122,7 +122,7 @@ function monta_sql(){
                         LEFT JOIN pde.atividade atv on pia.atiid = atv.atiid
                         LEFT JOIN planejamento.categoria_apropriacao cap on pl.capid = cap.capid
                         LEFT JOIN planejamento.enquadramento_despesa eqd on pl.eqdid = eqd.eqdid
-                        LEFT JOIN monitora.pi_niveletapaensino nee on pl.secid = nee.secid
+                        LEFT JOIN planejamento.segmento_cultural nee on pl.secid = nee.secid
                         LEFT JOIN planejamento.area_cultural mde on pl.mdeid = mde.mdeid
                         LEFT JOIN ( select sbaid, ptrid,
                                                 sum( sadvalor ) as valor
@@ -700,7 +700,7 @@ monta_titulo( $titulo_modulo, 'Selecione os filtros e agrupadores desejados' );
 				><img src="../imagens/combo-todos.gif" border="0" align="middle"></div>
 				<div id="nivel_ensino_campo_on" style="display:<?php echo $possuiSelecionado ? "block" : "none" ?>;">
 					<?php
-					$sql_combo = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
+					$sql_combo = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM planejamento.segmento_cultural WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
 
 					combo_popup(
 						'f_nivel_ensino',			// nome do campo

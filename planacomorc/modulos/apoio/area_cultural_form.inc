@@ -4,7 +4,7 @@ $cAreaCultural = new Planacomorc_Controller_AreaCultural();
 $cSegmentoCultural = new Public_Controller_SegmentoCultural();
 $mAreaCultural = new Planacomorc_Model_AreaCultural($_REQUEST['arceid']);
 
-$mSegmentoCultural = new Monitora_Model_PiNivelEtapaEnsino($_REQUEST['secid']);
+$mSegmentoCultural = new Planacomorc_Model_SegmentoCultural($_REQUEST['secid']);
 
 if($_REQUEST['arceid'])
     $lista = $mSegmentoCultural->RecuperaSegmentoPorArea($_REQUEST['arceid']);
@@ -23,6 +23,7 @@ switch ($_REQUEST['req']) {
         $cSegmentoCultural->excluir($_REQUEST);
         break;
     case 'listar-segmento':
+//        $lista = $mSegmentoCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "arceid = '{$_REQUEST['arceid']}'"], NULL);
         $lista = $mSegmentoCultural->RecuperaSegmentoPorArea($_REQUEST['arceid']);
         include_once(APPRAIZ.'/planacomorc/modulos/apoio/segmento-cultural.inc');
         die;
@@ -81,8 +82,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <input name="secid" id="secid" type="hidden" value="<?php echo $mSegmentoCultural->secid; ?>">
 
                             <?php
-                                echo $simec->input('neecod', 'Código', $mSegmentoCultural->neecod, ['maxlength' => 3, 'class' => 'upper-text', 'required']);
-                                echo $simec->input('needsc', 'Descrição', $mSegmentoCultural->needsc, ['maxlength' => 250, 'required']);
+                                echo $simec->input('seccod', 'Código', $mSegmentoCultural->seccod, ['maxlength' => 3, 'class' => 'upper-text', 'required']);
+                                echo $simec->input('secdsc', 'Descrição', $mSegmentoCultural->secdsc, ['maxlength' => 250, 'required']);
                             ?>
 
                             <div class="form-group">
@@ -113,9 +114,9 @@ include APPRAIZ . "includes/cabecalho.inc";
     $(function(){
 
         $("#btn-salvar-segmento").click(function(){
-            var neecod = $("#neecod").val();
-            var needsc = $("#needsc").val();
-            if (neecod.trim().length==0){
+            var seccod = $("#seccod").val();
+            var secdsc = $("#secdsc").val();
+            if (seccod.trim().length==0){
                 swal({
                     title: 'Atenção',
                     text: 'Favor informar o código!',
@@ -123,7 +124,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                 });                
                 return false;
             }
-            if (needsc.trim().length==0){
+            if (secdsc.trim().length==0){
                 swal({
                     title: 'Atenção',
                     text: 'Favor informar a descrição!',
@@ -147,7 +148,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     });
 
     function LimparCamposSegmento(){
-        $("#neecod").val('');
-        $("#needsc").val('');
+        $("#seccod").val('');
+        $("#secdsc").val('');
     }
 </script>

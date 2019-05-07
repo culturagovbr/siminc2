@@ -20,17 +20,17 @@ WITH (
 
 SELECT
 	*
-FROM monitora.pi_niveletapaensino
+FROM planejamento.segmento_cultural
 WHERE
 	neeano = '2016'
 ;
 
 --de -- SELECT * FROM planointerno.segmento;
--- para -- SELECT * FROM monitora.pi_niveletapaensino WHERE neeano = '2016';
--- DELETE FROM monitora.pi_niveletapaensino;
+-- para -- SELECT * FROM planejamento.segmento_cultural WHERE neeano = '2016';
+-- DELETE FROM planejamento.segmento_cultural;
 -- TRUNCATE TABLE planointerno.segmento;
 BEGIN; -- ROLLBACK;
-INSERT INTO monitora.pi_niveletapaensino(
+INSERT INTO planejamento.segmento_cultural(
 	arceid, -- Área Cultural -- SELECT * FROM planejamento.area_cultural WHERE arcstatus = 'A' AND arcano = '2016'
 	neecod,
 	needsc,
@@ -46,8 +46,8 @@ FROM planointerno.segmento s
 	JOIN planejamento.area_cultural p_m ON(a.arenome = p_m.arcdsc AND p_m.arcano = '2016') -- SELECT * FROM planejamento.area_cultural WHERE arcstatus = 'A' AND arcano = '2016'
 ;
 
--- ALTER TABLE monitora.pi_niveletapaensino DROP COLUMN neecod;
+-- ALTER TABLE planejamento.segmento_cultural DROP COLUMN neecod;
 
-ALTER TABLE monitora.pi_niveletapaensino ADD COLUMN neecod character varying(10);
+ALTER TABLE planejamento.segmento_cultural ADD COLUMN neecod character varying(10);
 
 -- COMMIT; ROLLBACK;

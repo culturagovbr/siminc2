@@ -539,7 +539,7 @@ monta_titulo( $titulo_modulo, '' );
 					<td class='SubTituloDireita'>Nível/Etapa de Ensino:</td>
 					<td>
 						<?
-						$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
+						$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM planejamento.segmento_cultural WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
 						$db->monta_combo('secid', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '000000005_1');
 						?>
 					</td>

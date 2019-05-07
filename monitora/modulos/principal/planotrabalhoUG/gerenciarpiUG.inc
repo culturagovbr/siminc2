@@ -160,7 +160,7 @@ monta_titulo( $titulo_modulo, "");
 			<td>
 				<?php
 					$nivel = $_REQUEST['nivel'];
-					$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM monitora.pi_niveletapaensino WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
+					$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao FROM planejamento.segmento_cultural WHERE neeano = '{$_SESSION['exercicio']}' ORDER BY neecod ";
 					$db->monta_combo('nivel', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '');
 				?>
 			</td>

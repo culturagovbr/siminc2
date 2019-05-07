@@ -25,7 +25,7 @@ include APPRAIZ . 'includes/cabecalho.inc';
 $strSqlGrid = "
     SELECT
         secid, neecod, needsc, neeano
-    FROM monitora.pi_niveletapaensino
+    FROM planejamento.segmento_cultural
     WHERE
         neestatus='A' AND
         neeano = '{$_SESSION['exercicio']}'

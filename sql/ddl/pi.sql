@@ -1,12 +1,12 @@
 ﻿BEGIN; --ROLLBACK; COMMIT;
 
-ALTER TABLE monitora.pi_niveletapaensino
+ALTER TABLE planejamento.segmento_cultural
    ADD COLUMN arceid integer NOT NULL DEFAULT NULL;
-COMMENT ON COLUMN monitora.pi_niveletapaensino.arceid
+COMMENT ON COLUMN planejamento.segmento_cultural.arceid
   IS 'Relação com a tabela de Área Cultural. planejamento.area_cultural';
 
-ALTER TABLE monitora.pi_niveletapaensino
-   ADD CONSTRAINT fk_pi_niveletapaensino_reference_pi_modalidadeensino FOREIGN KEY(arceid)
+ALTER TABLE planejamento.segmento_cultural
+   ADD CONSTRAINT fk_pi_niveletapaensino_reference_segmento_cultural FOREIGN KEY(arceid)
   REFERENCES planejamento.area_cultural(arceid) MATCH SIMPLE
   ON UPDATE CASCADE ON DELETE RESTRICT;
 
@@ -574,7 +574,7 @@ CREATE TABLE public.segmentocultural
   secdsc character varying(250),
   secano character(4),
   secstatus character(1) DEFAULT 'A'::bpchar,
-  acuid integer NOT NULL, -- Relação com a tabela de Área Cultural. public.pi_modalidadeensino
+  acuid integer NOT NULL, -- Relação com a tabela de Área Cultural. public.segmento_cultural
   seccod character varying(10),
   CONSTRAINT pk_segmentocultural PRIMARY KEY (secid),
   CONSTRAINT fk_segmentocultural_reference_areacultural FOREIGN KEY (acuid)
@@ -588,11 +588,11 @@ ALTER TABLE public.segmentocultural
   OWNER TO postgres;
 GRANT ALL ON TABLE public.segmentocultural TO postgres;
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.segmentocultural TO usr_simec;
-COMMENT ON COLUMN public.segmentocultural.acuid IS 'Relação com a tabela de Área Cultural. public.pi_modalidadeensino';
+COMMENT ON COLUMN public.segmentocultural.acuid IS 'Relação com a tabela de Área Cultural. public.segmento_cultural';
 
 
 insert into public.segmentocultural
-select * from monitora.pi_niveletapaensino;
+select * from planejamento.segmento_cultural;
 
 
 ALTER TABLE planacomorc.pi_complemento

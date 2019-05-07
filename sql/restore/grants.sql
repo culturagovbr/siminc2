@@ -2578,7 +2578,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."pi_categoriaapropriaca
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."pi_enquadramentodespesa" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."pi_executor" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."pi_gestor" TO "usr_simec";
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."pi_modalidadeensino" TO "usr_simec";
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."segmento_cultural" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."pi_niveletapaensino" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."pi_obra" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "monitora"."pi_planointernoatividade" TO "usr_simec";
@@ -7889,7 +7889,7 @@ GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_categoriaapropriacao_capid_seq" T
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_enquadramentodespesa_eqdid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_executor_pieid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_gestor_pigid_seq" TO "usr_simec";
-GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_modalidadeensino_mdeid_seq" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "monitora"."segmento_cultural_mdeid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_niveletapaensino_secid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_planointernohistorico_pihid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "monitora"."pi_planointerno_pliid_seq" TO "usr_simec";

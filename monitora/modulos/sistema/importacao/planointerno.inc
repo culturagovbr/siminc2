@@ -251,7 +251,7 @@ DML;
             'plilivre' => substr($picod, 8, 2),
             'eqdid' => "SELECT eqdid FROM planejamento.enquadramento_despesa WHERE eqdcod = '" . substr($picod, 0, 1) . "' AND eqdano = '{$ano}' AND eqdstatus = 'A'",
             'sbaid' => "SELECT MAX(sbaid) FROM monitora.pi_subacao WHERE sbacod = '" . substr($picod, 1, 4) . "'",
-            'secid' => "SELECT secid FROM monitora.pi_niveletapaensino WHERE neecod = '" . substr($picod, 5, 1) . "' AND neeano = '{$ano}' AND neestatus = 'A'",
+            'secid' => "SELECT secid FROM planejamento.segmento_cultural WHERE neecod = '" . substr($picod, 5, 1) . "' AND neeano = '{$ano}' AND neestatus = 'A'",
             'capid' => "SELECT capid FROM planejamento.categoria_apropriacao WHERE capcod = '" . substr($picod, 6, 2) . "' AND capano = '{$ano}' AND capstatus = 'A'",
             'arceid' => "SELECT arceid FROM planejamento.area_cultural WHERE arccod = '" . substr($picod, 10) . "' AND arcano = '{$ano}' AND arcstatus = 'A'",
             'usucpf' => '00000000191',

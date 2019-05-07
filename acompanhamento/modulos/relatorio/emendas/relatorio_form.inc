@@ -177,7 +177,7 @@
 
         $stSql = "
             SELECT
-                mdeid AS codigo,
+                arceid AS codigo,
                 arcdsc AS descricao
             FROM planejamento.area_cultural
             WHERE
@@ -186,8 +186,8 @@
             ORDER BY
                 descricao ASC
         ";
-        $mdeid;
-        echo $simec->select("filtro[mdeid][]", 'Área Cultural', $mdeid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+        $arceid;
+        echo $simec->select("filtro[arceid][]", 'Área Cultural', $arceid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT

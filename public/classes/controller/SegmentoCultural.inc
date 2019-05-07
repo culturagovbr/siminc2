@@ -5,49 +5,44 @@ class Public_Controller_SegmentoCultural
     public function salvar($dados)
     {
         $url = '?modulo=apoio/area_cultural_form&acao=A';
-
         try {
-            $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($dados['secid']);
+            $mdsegCultural = new Planacomorc_Model_SegmentoCultural($dados['secid']);
             $mdsegCultural->popularDadosObjeto($dados, true);
-            $mdsegCultural->neecod = strtoupper($mdsegCultural->neecod);
-            $mdsegCultural->neeano = $mdsegCultural->neeano ? $mdsegCultural->neeano : $_SESSION['exercicio'];
-//            ver($mdsegCultural,d);
-
+            $mdsegCultural->seccod = strtoupper($mdsegCultural->seccod);
+            $mdsegCultural->secano = $mdsegCultural->secano ? $mdsegCultural->secano : $_SESSION['exercicio'];
             $mdsegCultural->salvar(null,null);
             $mdsegCultural->commit();
         } catch (Exception $e){
             $mdsegCultural->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 
     public function excluir($dados)
     {
         $url = '?modulo=apoio/area_cultural_form&acao=A';
-
         try {
-            $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($dados['secid']);
-
-            $mdsegCultural->neestatus = 'I';
+            $mdsegCultural = new Planacomorc_Model_SegmentoCultural($dados['secid']);
+            $mdsegCultural->secstatus = 'I';
             $mdsegCultural->salvar();
             $mdsegCultural->commit();
-            simec_redirecionar($url . '&mdeid=' . $mdsegCultural->mdeid, 'success');
+            simec_redirecionar($url . '&arceid=' . $mdsegCultural->arceid, 'success');
         } catch (Exception $e){
             $mdsegCultural->rollback();
             simec_redirecionar($url, 'error');
         }
-    } //end salvar()
+    }
 
     public function montarListagem($secid)
     {
-        $mdsegCultural = new Monitora_Model_PiNivelEtapaEnsino($secid);
+        $mdsegCultural = new Planacomorc_Model_SegmentoCultural($secid);
         $perfis = pegaPerfilGeral();
         /**
          * @todo colcoar a constante correta do acompanhamento para atualizar a regra.
          */
         $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
 
-        $lista = (new Monitora_Model_PiNivelEtapaEnsino())->RecuperaSegmentoPorArea($mdsegCultural->secid);
+        $lista = (new Planacomorc_Model_SegmentoCultural())->RecuperaSegmentoPorArea($mdsegCultural->secid);
 
         include_once APPRAIZ . 'planacomorc/modulos/apoio/segmento-cultural.inc';
 

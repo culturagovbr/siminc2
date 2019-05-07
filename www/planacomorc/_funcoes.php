@@ -309,7 +309,7 @@ function updateNivelEtapaEnsino($rowID) {
 
     global $db;
 
-    $strSql = 'SELECT * FROM monitora.pi_niveletapaensino WHERE secid=' . $rowID;
+    $strSql = 'SELECT * FROM planejamento.segmento_cultural WHERE secid=' . $rowID;
     $rs = $db->carregar($strSql);
     if (!$rs)
         return false;

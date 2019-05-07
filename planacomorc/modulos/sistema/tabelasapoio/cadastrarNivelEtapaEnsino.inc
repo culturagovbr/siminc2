@@ -13,7 +13,7 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
     $ano = $_POST['ano'];
     
     $sql = "
-        INSERT INTO monitora.pi_niveletapaensino (neecod,needsc,neeano,neestatus) VALUES
+        INSERT INTO planejamento.segmento_cultural (neecod,needsc,neeano,neestatus) VALUES
             ('$codigo', '$descricao', '{$ano}', 'A') ";
       if ($db->executar( $sql )) {
         $db->commit ();
@@ -26,7 +26,7 @@ if($_POST['execucao'] == 'cadastrar' && !$_POST['id']){
 
 }
 if($_REQUEST['execucao'] == 'editar'){
-    $strSql = 'SELECT * FROM monitora.pi_niveletapaensino WHERE secid=' . $_REQUEST['registro'];
+    $strSql = 'SELECT * FROM planejamento.segmento_cultural WHERE secid=' . $_REQUEST['registro'];
     $rs = $db->pegaLinha($strSql);
     $id = $rs['secid'];
     $codigo = $rs['neecod'];
@@ -44,7 +44,7 @@ if($_POST['id']){
     $ano = $_POST['ano'];
     
     $sql = "
-        UPDATE monitora.pi_niveletapaensino SET
+        UPDATE planejamento.segmento_cultural SET
             neecod='$codigo', needsc='$descricao', neeano='$ano', neestatus='$status'
         WHERE secid='$id'
     ";

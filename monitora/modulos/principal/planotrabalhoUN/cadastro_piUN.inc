@@ -443,7 +443,7 @@ function tabindexcampo(){
 	<td>
 		<?
 		$sql = "SELECT secid as codigo, neecod ||' - '|| needsc as descricao
-			    FROM monitora.pi_niveletapaensino 
+			    FROM planejamento.segmento_cultural 
 			    WHERE neeano='".$_SESSION['exercicio']."' and neestatus='A' 
 			    ORDER BY neecod";
 		

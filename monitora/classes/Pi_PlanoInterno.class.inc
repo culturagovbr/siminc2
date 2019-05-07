@@ -1468,7 +1468,7 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN public.objetivoppa opp ON opp.oppid = pic.oppid
                 LEFT JOIN public.iniciativappa ipp ON ipp.ippid = pic.ippid
                 LEFT JOIN planejamento.area_cultural mde ON mde.arceid = pli.arceid
-                LEFT JOIN monitora.pi_niveletapaensino nee ON nee.secid = pli.secid
+                LEFT JOIN planejamento.segmento_cultural nee ON nee.secid = pli.secid
                 LEFT JOIN public.metappa mpp ON mpp.mppid = pic.mppid
                 LEFT JOIN public.metapnc mpn ON mpn.mpnid = pic.mpnid
                 LEFT JOIN planejamento.categoria_apropriacao cap ON cap.capid = pli.capid

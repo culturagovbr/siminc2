@@ -204,10 +204,10 @@
                         echo $simec->radio("filtro[bented]", 'TED', $_REQUEST['filtro']['bented'], ['t' => 'Sim', 'f' => 'Não', '' => 'Todos'], NULL, ['input-size' => 9, 'label-size' => 2]);
                     }
 
-                    if( count($_REQUEST['filtro']['mdeid']) > 0 ) {
+                    if( count($_REQUEST['filtro']['arceid']) > 0 ) {
 
                         $stSql = "SELECT
-                                      mdeid AS codigo,
+                                      arceid AS codigo,
                                       arcdsc AS descricao
                                   FROM planejamento.area_cultural
                                   WHERE
@@ -216,7 +216,7 @@
                                   ORDER BY
                                       descricao ASC
                         ";
-                        echo $simec->select("filtro[mdeid][]", 'Área Cultural', $_REQUEST['filtro']['mdeid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
+                        echo $simec->select("filtro[arceid][]", 'Área Cultural', $_REQUEST['filtro']['arceid'], $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
                     }
 
                     if( count($_REQUEST['filtro']['aloid']) > 0 ) {

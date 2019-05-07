@@ -180,10 +180,10 @@
                         echo $simec->select("filtro[oppnome][]", 'Objetivo', $_REQUEST['filtro']['oppnome'], $stSql, null, ['input-size' => 3, 'label-size' => 1]);
                     }
 
-                    if( count($_REQUEST['filtro']['mdeid']) > 0 ) {
+                    if( count($_REQUEST['filtro']['arceid']) > 0 ) {
 
                         $stSql = "SELECT
-                                  mdeid AS codigo,
+                                  arceid AS codigo,
                                   arcdsc AS descricao
                               FROM planejamento.area_cultural
                               WHERE
@@ -192,7 +192,7 @@
                               ORDER BY
                                   descricao ASC
                         ";
-                        echo $simec->select("filtro[mdeid][]", 'Área Cultural', $_REQUEST['filtro']['mdeid'], $stSql, null, ['input-size' => 3, 'label-size' => 1]);
+                        echo $simec->select("filtro[arceid][]", 'Área Cultural', $_REQUEST['filtro']['arceid'], $stSql, null, ['input-size' => 3, 'label-size' => 1]);
                     }
 
                     if( count($_REQUEST['filtro']['capid']) > 0 ) {

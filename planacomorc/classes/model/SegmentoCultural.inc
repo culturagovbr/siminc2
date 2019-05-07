@@ -22,7 +22,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release: 
  * @link     no link
  */
-class Monitora_Model_PiNivelEtapaEnsino extends Modelo
+class Planacomorc_Model_SegmentoCultural extends Modelo
 {
     /**
      * Nome da tabela especificada
@@ -44,7 +44,7 @@ class Monitora_Model_PiNivelEtapaEnsino extends Modelo
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'arceid' => array('tabela' => 'pi_modalidadeensino', 'pk' => 'arceid'),
+        'arceid' => array('tabela' => 'segmento_cultural', 'pk' => 'arceid'),
     );
 
     /**
@@ -54,11 +54,11 @@ class Monitora_Model_PiNivelEtapaEnsino extends Modelo
      */
     protected $arAtributos = array(
         'secid' => null,
-        'needsc' => null,
-        'neeano' => null,
-        'neestatus' => null,
         'arceid' => null,
-        'neecod' => null,
+        'secdsc' => null,
+        'secano' => null,
+        'seccod' => null,
+        'secstatus' => null,
     );
 
     /**
@@ -73,14 +73,14 @@ class Monitora_Model_PiNivelEtapaEnsino extends Modelo
 
         $sql ="SELECT
                     secid,
-                    needsc,
                     arceid,
-                    neecod
+                    secdsc,
+                    seccod
                 FROM
                     planejamento.segmento_cultural
                 WHERE
                     arceid = $arceid
-                    AND neestatus = 'A'
+                    AND secstatus = 'A'
         ";
 
         return $this->carregar($sql);

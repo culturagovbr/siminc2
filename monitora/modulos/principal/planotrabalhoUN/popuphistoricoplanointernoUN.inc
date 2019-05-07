@@ -126,7 +126,7 @@ button{cursor:pointer}
 			<td class="subtitulodireita">Nível/Etapa de Ensino:</td>
 			<td><?php
 			
-			echo $db->pegaUm ( "SELECT neecod || ' - ' || needsc FROM monitora.pi_niveletapaensino WHERE secid='" . $obPi_PlanoInterno->secid . "'" );
+			echo $db->pegaUm ( "SELECT neecod || ' - ' || needsc FROM planejamento.segmento_cultural WHERE secid='" . $obPi_PlanoInterno->secid . "'" );
 			?></td>
 		</tr>
 		<tr>

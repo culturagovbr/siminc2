@@ -411,7 +411,7 @@ function carregarSegmentoCultural($mdeid, $secid) {
         SELECT
             secid AS codigo,
             needsc AS descricao
-        FROM monitora.pi_niveletapaensino
+        FROM planejamento.segmento_cultural
         WHERE
             neeano = '{$_SESSION['exercicio']}'
             AND neestatus = 'A'
@@ -2111,7 +2111,7 @@ SELECT scp.scpid,
       ON (scp.sbaid = sba.sbaid AND scp.scpano = sba.sbaano)
     LEFT JOIN planejamento.enquadramento_despesa eqd
       ON (scp.eqdid = eqd.eqdid AND scp.scpano = eqd.eqdano)
-    LEFT JOIN monitora.pi_niveletapaensino nee
+    LEFT JOIN planejamento.segmento_cultural nee
       ON (scp.secid = nee.secid AND scp.scpano = nee.neeano)
     LEFT JOIN planejamento.categoria_apropriacao cap
       ON (scp.capid = cap.capid AND scp.scpano = cap.capano)
@@ -2179,7 +2179,7 @@ function carregarPI($pliid) {
             LEFT JOIN planacomorc.pi_complemento pc on pc.pliid = pli.pliid
             LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
             LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
-            LEFT JOIN monitora.pi_niveletapaensino nee ON (pli.secid = nee.secid AND pli.pliano = nee.neeano)
+            LEFT JOIN planejamento.segmento_cultural nee ON (pli.secid = nee.secid AND pli.pliano = nee.neeano)
             LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
             LEFT JOIN planejamento.area_cultural mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.arcano)
         WHERE
@@ -2264,7 +2264,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
                 pli.eqdid = eqd.eqdid
                 AND pli.pliano = eqd.eqdano
             )
-            LEFT JOIN monitora.pi_niveletapaensino nee ON(
+            LEFT JOIN planejamento.segmento_cultural nee ON(
                 pli.secid = nee.secid
                 AND pli.pliano = nee.neeano
             )

@@ -42,7 +42,7 @@ class Spo_Model_Planointerno extends Modelo
         'capid' => array('tabela' => 'planejamento.categoria_apropriacao', 'pk' => 'capid'),
         'eqdid' => array('tabela' => 'planejamento.programa', 'pk' => 'eqdid'),
         'arceid' => array('tabela' => 'planejamento.area_cultural', 'pk' => 'arceid'),
-        'secid' => array('tabela' => 'monitora.pi_niveletapaensino', 'pk' => 'secid'),
+        'secid' => array('tabela' => 'planejamento.segmento_cultural', 'pk' => 'secid'),
         'obrid' => array('tabela' => 'obras.obrainfraestrutura', 'pk' => 'obrid'),
         'usucpf' => array('tabela' => 'usuario', 'pk' => 'usucpf'),
         'sbaid' => array('tabela' => 'monitora.pi_subacao', 'pk' => 'sbaid'),

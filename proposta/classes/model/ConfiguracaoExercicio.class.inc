@@ -749,10 +749,10 @@ class ConfiguracaoExercicio extends Modelo {
                 from planejamento.area_cultural t
                 where t.arcano = '2018';
                 
-                insert into monitora.pi_niveletapaensino (needsc
+                insert into planejamento.segmento_cultural (needsc
                 , neeano, neestatus, arceid, neecod)
                 select t.needsc, '2019', t.neestatus, novo.arceid, t.neecod
-                from monitora.pi_niveletapaensino t
+                from planejamento.segmento_cultural t
                         inner join planejamento.area_cultural old on old.arceid = t.arceid and old.arcstatus = 'A'
                         inner join planejamento.area_cultural novo on novo.arccod = old.arccod and novo.arcano = '2019' and novo.arcstatus = 'A'
                 where t.neeano = '2018'
