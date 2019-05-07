@@ -7,7 +7,7 @@ $mAreaCultural = new Planacomorc_Model_AreaCultural($_REQUEST['arceid']);
 $mSegmentoCultural = new Planacomorc_Model_SegmentoCultural($_REQUEST['secid']);
 
 if($_REQUEST['arceid'])
-    $lista = $mSegmentoCultural->RecuperaSegmentoPorArea($_REQUEST['arceid']);
+    $lista = $mSegmentoCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "arceid = '{$_REQUEST['arceid']}'"], 'secdsc');
 
 switch ($_REQUEST['req']) {
     case 'salvar-area':
@@ -23,8 +23,7 @@ switch ($_REQUEST['req']) {
         $cSegmentoCultural->excluir($_REQUEST);
         break;
     case 'listar-segmento':
-//        $lista = $mSegmentoCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "arceid = '{$_REQUEST['arceid']}'"], NULL);
-        $lista = $mSegmentoCultural->RecuperaSegmentoPorArea($_REQUEST['arceid']);
+        $lista = $mSegmentoCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "arceid = '{$_REQUEST['arceid']}'"], 'secdsc');
         include_once(APPRAIZ.'/planacomorc/modulos/apoio/segmento-cultural.inc');
         die;
 

@@ -61,29 +61,4 @@ class Planacomorc_Model_SegmentoCultural extends Modelo
         'secstatus' => null,
     );
 
-    /**
-     * Retorna os Segmentos por Àrea Cultural.
-     *
-     * @param $arceid
-     * @return array
-     * @access public
-     */
-    public function RecuperaSegmentoPorArea($arceid)
-    {
-
-        $sql ="SELECT
-                    secid,
-                    arceid,
-                    secdsc,
-                    seccod
-                FROM
-                    planejamento.segmento_cultural
-                WHERE
-                    arceid = $arceid
-                    AND secstatus = 'A'
-        ";
-
-        return $this->carregar($sql);
-    }
-
 }

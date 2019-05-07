@@ -28,7 +28,7 @@ switch($_REQUEST['req']) {
         echo $simec->select('ptrid', 'Funcional', null, (new Monitora_Model_Ptres())->recuperarSqlPorSubunidadeEEnquadramento($_REQUEST['suoid'], $_REQUEST['eqdid']), ['required']);
         die;
     case 'carregar-segmento':
-        echo $simec->select('secid', 'Segmento Cultural', null, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(null, ['arceid = ' . (int)$_REQUEST['arceid']]), ['required']);
+        echo $simec->select('secid', 'Segmento Cultural', null, (new Planacomorc_Model_SegmentoCultural())->recuperarSqlCombo(null, ['arceid = ' . (int)$_REQUEST['arceid']]), ['required']);
         die;
     case 'carregar-metapnc':
         echo $simec->select('mpnid', 'Meta PNC', null, (new Public_Model_MetaPnc())->recuperarSqlCombo(null, ['suoid'=>$_REQUEST['suoid']]), ['required']);
@@ -266,7 +266,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="ibox-content">
                         <?php
                             echo '<span id="span-area">'. $simec->select('arceid', 'Área Cultural', $mPrePlanoInterno->arceid, (new Planacomorc_Model_AreaCultural())->recuperarSqlCombo(), ['required']). '</span>';
-                            echo '<span id="span-segmento">' . $simec->select('secid', 'Segmento Cultural', $mPrePlanoInterno->secid, (new Monitora_Model_PiNivelEtapaEnsino())->recuperarSqlCombo(), ['required']). '</span>';
+                            echo '<span id="span-segmento">' . $simec->select('secid', 'Segmento Cultural', $mPrePlanoInterno->secid, (new Planacomorc_Model_SegmentoCultural())->recuperarSqlCombo(), ['required']). '</span>';
                             echo $simec->select('esfid', 'Localização', $mPrePlanoInterno->esfid, (new Territorios_Model_Esfera())->recuperarSqlCombo());
                         ?>
                         <div class="select-localizacao"  id="div-localizacao_<?php echo Territorios_Model_Esfera::K_EXTERIOR ?>">

@@ -72,7 +72,7 @@ if ( $_REQUEST['submetido'] == 1 ){
 	}
 	
 	if( $_REQUEST["modalidade"] ){
-		array_push($arFiltro, " pi.mdeid = '" . $_REQUEST['modalidade'] . "' ");
+		array_push($arFiltro, " pi.arceid = '" . $_REQUEST['modalidade'] . "' ");
 	}
 	
 	if( $_REQUEST["plisituacao"] ){
@@ -180,7 +180,7 @@ monta_titulo( $titulo_modulo, "");
 		    <td>
 				<?php
 					$modalidade = $_REQUEST['modalidade'];
-					$sql = "SELECT mdeid as codigo, arccod ||' - '|| arcdsc as descricao FROM planejamento.area_cultural WHERE arcano = '{$_SESSION['exercicio']}'";
+					$sql = "SELECT arceid as codigo, arccod ||' - '|| arcdsc as descricao FROM planejamento.area_cultural WHERE arcano = '{$_SESSION['exercicio']}'";
 					//$modensino = $modid;
 					$db->monta_combo('modalidade', $sql, 'S', 'Selecione', '', '', '', '240', 'N', '');
 		    	 ?>

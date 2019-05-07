@@ -42,8 +42,7 @@ class Public_Controller_SegmentoCultural
          */
         $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
 
-        $lista = (new Planacomorc_Model_SegmentoCultural())->RecuperaSegmentoPorArea($mdsegCultural->secid);
-
+        $lista = $mdsegCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "secid = '{$mdsegCultural->secid}'"], 'secdsc');
         include_once APPRAIZ . 'planacomorc/modulos/apoio/segmento-cultural.inc';
 
     }
