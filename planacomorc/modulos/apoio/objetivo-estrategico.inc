@@ -1,6 +1,7 @@
 <?php
 
-$aObjetivos = (new Planacomorc_Model_ObjetivoEstrategico())->RecuperarTodos('*', ["prsano = '".$_SESSION['exercicio']."'","obestatus = 'A'"], 'obecod');
+$aObjetivos = (new Planacomorc_Model_ObjetivoEstrategico())->RecuperarTodos('*', ["obestatus = 'A'"], 'obenome');
+
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
 
@@ -18,7 +19,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-                    <a class="btn-small btn btn-success" href="?modulo=apoio/objetivo_meta_diretriz_form&acao=A">
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/objetivo-estrategico-form&acao=A">
                         <span class="glyphicon glyphicon-plus"></span>
                         Novo
                     </a>
@@ -27,7 +28,6 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <thead>
                             <tr class="text-center">
                                 <th width="5%">Ação</th>
-                                <th>Código</th>
                                 <th>Nome</th>
                             </tr>
                             </thead>
@@ -37,11 +37,10 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     foreach($aObjetivos AS $objetivo): ?>
                                         <tr>
                                             <td class="text-center">
-                                                <a title="Alterar" href="planacomorc.php?modulo=apoio/objetivo_meta_diretriz_form&acao=A&obeid=<?= $objetivo['obeid']; ?>">
+                                                <a title="Alterar" href="planacomorc.php?modulo=apoio/objetivo-estrategico-form&acao=A&obeid=<?= $objetivo['obeid']; ?>">
                                                     <i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i>
                                                 </a>
                                             </td>
-                                            <td class="text-center"><?= $objetivo['obecod']; ?></td>
                                             <td><?= $objetivo['obenome']; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
