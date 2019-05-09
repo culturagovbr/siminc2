@@ -6,31 +6,36 @@ class Planacomorc_Controller_MetaUnidade
     {
         $url = '?modulo=apoio/meta-unidade&acao=A';
         try {
-            $mDiretriz = new Planacomorc_Model_MetaUnidade($dados['dieid']);
-            $mDiretriz->prsano = $_SESSION['exercicio'];
-            $mDiretriz->diecadastro = 'NOW()';
-            $mDiretriz->popularDadosObjeto($dados);
-            $mDiretriz->salvar(null, null);
-            $mDiretriz->commit();
+            $mMetaUnidade = new Planacomorc_Model_MetaUnidade($dados['meuid']);
+
+            if ($dados['meuquantidade']) $dados['meuquantidade'] = str_replace(".", "", $dados['meuquantidade']);
+
+            $mMetaUnidade->meuquantidade = $dados['meuquantidade'];
+            $mMetaUnidade->meuquantificavel = $dados['meuquantificavel'] == 't' ? 't' : 'f';
+            $mMetaUnidade->meuprioritario = $dados['meuprioritario'] == 't' ? 't' : 'f';
+            $mMetaUnidade->meucadastro = 'NOW()';
+            $mMetaUnidade->popularDadosObjeto($dados);
+            $mMetaUnidade->salvar(null, null, ['meeid', 'dimeid', 'obeid', 'meuquantidade']);
+            $mMetaUnidade->commit();
             simec_redirecionar($url, 'success');
         } catch (Exception $e) {
-            $mDiretriz->rollback();
+            $mMetaUnidade->rollback();
             simec_redirecionar($url, "error");
         }
     }
 
-    public function excluir($dieid)
+    public function excluir($meuid)
     {
         $url = '?modulo=apoio/meta-unidade&acao=A';
         try {
-            $mDiretriz = new Planacomorc_Model_MetaUnidade($dieid);
-            $mDiretriz->diestatus = 'I';
-            $mDiretriz->salvar(null, null);
-            $mDiretriz->commit();
-            $mDiretriz->commit();
+            $mMetaUnidade = new Planacomorc_Model_MetaUnidade($meuid);
+            $mMetaUnidade->meustatus = 'I';
+            $mMetaUnidade->salvar(null, null);
+            $mMetaUnidade->commit();
+            $mMetaUnidade->commit();
             simec_redirecionar($url, 'success');
         } catch (Exception $e) {
-            $mDiretriz->rollback();
+            $mMetaUnidade->rollback();
             simec_redirecionar($url, "error");
         }
     }

@@ -30,71 +30,35 @@ include APPRAIZ . "includes/cabecalho.inc";
                 </div>
                 <div class="ibox-content">
                     <form id="formulario" name="formulario" method="post" class="form-horizontal">
-                        <input type="hidden" name="req" id="req" value="salvar-area" />
-                        <input name="meuid" id="meuid" type="hidden" value="<?php echo $mMetaUnidade->meuid; ?>">
-                        
+                        <input type="hidden" name="req" id="req" value="salvar" />
+                        <input name="meuid" id="meuid" type="hidden" value="<?= $mMetaUnidade->meuid; ?>">
+
                         <?php
-                            echo $simec->input('meunome', 'Nome', $mMetaUnidade->meunome, ['required','maxlength' => 1, 'class' => 'upper-text']);
+                            echo $simec->input('meunome', 'Nome', $mMetaUnidade->meunome, ['required','maxlength' => 1000, 'class' => 'upper-text']);
                             echo $simec->select('meeid', 'Meta Estratégica',  $mMetaUnidade->meeid, (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo());
-                            echo $simec->select('dimeid', 'Dimensão Estratégica',  $mMetaUnidade->dimeid, (new Planacomorc_Model_Dim())->recuperarSqlCombo());
+                            echo $simec->select('dimeid', 'Dimensão Estratégica',  $mMetaUnidade->dimeid, (new Planacomorc_Model_DimensaoEstrategica())->recuperarSqlCombo());
                             echo $simec->select('obeid', 'Objetivo Estratégico',  $mMetaUnidade->obeid, (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo());
+                            # Traz Sim por default
+                            $radio = $mTipo->meuquantificavel ? $mTipo->meuquantificavel : 't';
+                            echo $simec->radio('meuquantificavel', 'Quantificável', $radio, ['t' => 'Sim', 'f' => 'Não'], ['required']);
+                            echo $simec->moedaInteiro('meuquantidade', 'Quantidade', $mMetaUnidade->meuquantidade, ['maxlength' => 9, 'class' => 'inteiro']);
+                            # Traz Não por default
+                            $radio = $mTipo->meuprioritario ? $mTipo->meuprioritario : 't';
+                            echo $simec->radio('meuprioritario', 'Prioritário', $radio, ['t' => 'Sim', 'f' => 'Não'], ['required']);
                         ?>
-                        
+
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
                                 <a href="?modulo=apoio/meta-unidade&acao=A" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
                                 <?php if($mMetaUnidade->meuid){ ?>
-                                    <a href="?modulo=apoio/meta-unidade-form&acao=A&req=excluir-area&meuid=<?php echo $mMetaUnidade->meuid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
-                                <?php } ?>                                
+                                    <a href="?modulo=apoio/meta-unidade-form&acao=A&req=excluir&meuid=<?php echo $mMetaUnidade->meuid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
+                                <?php } ?>
                             </div>
-                        </div>                        
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!--<script type="text/javascript">
-    $(function(){
-
-        $("#btn-salvar-segmento").click(function(){
-            var neecod = $("#neecod").val();
-            var needsc = $("#needsc").val();
-            if (neecod.trim().length==0){
-                swal({
-                    title: 'Atenção',
-                    text: 'Favor informar o código!',
-                    type: "error"
-                });                
-                return false;
-            }
-            if (needsc.trim().length==0){
-                swal({
-                    title: 'Atenção',
-                    text: 'Favor informar a descrição!',
-                    type: "error"
-                });                
-                return false;
-            }
-            options = {
-                success: function() {
-                    // Carregar a listagem
-                    jQuery("#lista-segmento").load('?modulo=apoio/meta-unidade-form&acao=A&req=listar-segmento&meuid='+$('#meuid').val());
-
-                    // Zerar o formulário
-                    LimparCamposSegmento();
-                }
-            }
-
-            jQuery("#formulario-segmento").ajaxForm(options).submit();
-            return false;
-        });
-    });
-
-    function LimparCamposSegmento(){
-        $("#neecod").val('');
-        $("#needsc").val('');
-    }
-</script>-->
