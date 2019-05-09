@@ -57,7 +57,7 @@ if ($_REQUEST['carregarMetasEstrategicas']) {
     die();
 }
 if ($_REQUEST['carregarDiretrizEstrategicas']) {
-    echo $simec->select('dieid', 'Diretriz Estratégica', $dadosPI['dieid'], (new Planacomorc_Model_DiretrizEstrategica())->recuperarSqlCombo(['diecod', 'dienome'], ["obeid = '".$_REQUEST['obeid']."'"], 'diecod'));
+    echo $simec->select('dieid', 'Diretriz Estratégica', $dadosPI['dieid'], (new Planacomorc_Model_DimensaoEstrategica())->recuperarSqlCombo(['diecod', 'dienome'], ["obeid = '".$_REQUEST['obeid']."'"], 'diecod'));
     die();
 }
 if ($_REQUEST['carregarComboUG']) {

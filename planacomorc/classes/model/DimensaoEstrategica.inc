@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.diretriz_estrategica
+ * Classe de mapeamento da entidade planacomorc.dimensao_estrategica
  *
  * @category Class
  * @package  A1
@@ -15,7 +15,7 @@ require_once APPRAIZ . 'includes/classes/Modelo.class.inc';
 
 
 /**
- * Planacomorc_Model_DiretrizEstrategica
+ * Planacomorc_Model_DimensaoEstrategica
  *
  * @category Class
  * @package  A1
@@ -24,14 +24,14 @@ require_once APPRAIZ . 'includes/classes/Modelo.class.inc';
  * @version  Release:
  * @link     no link
  */
-class Planacomorc_Model_DiretrizEstrategica extends Modelo
+class Planacomorc_Model_DimensaoEstrategica extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.diretriz_estrategica';
+    protected $stNomeTabela = 'planacomorc.dimensao_estrategica';
 
     /**
      * Chave primaria.
@@ -39,15 +39,13 @@ class Planacomorc_Model_DiretrizEstrategica extends Modelo
      * @access protected
      */
     protected $arChavePrimaria = array(
-        'dieid',
+        'dimeid',
     );
     /**
      * Chaves estrangeiras.
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'prsano' => array('tabela' => 'planacomorc.programacaoexercicio', 'pk' => 'prsano'),
-        'obeid' => array('tabela' => 'planacomorc.objetivo_estrategico', 'pk' => 'obeid'),
     );
 
     /**
@@ -56,13 +54,10 @@ class Planacomorc_Model_DiretrizEstrategica extends Modelo
      * @access protected
      */
     protected $arAtributos = array(
-        'dieid' => null,
-        'obeid' => null,
-        'diecod' => null,
-        'dienome' => null,
-        'diecadastro' => null,
-        'prsano' => null,
-        'diestatus' => null,
+        'dimeid' => null,
+        'dimenome' => null,
+        'dimecadastro' => null,
+        'dimestatus' => null,
     );
 
 }
