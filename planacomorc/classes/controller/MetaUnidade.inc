@@ -12,7 +12,7 @@ class Planacomorc_Controller_MetaUnidade
             $mDiretriz->popularDadosObjeto($dados);
             $mDiretriz->salvar(null, null);
             $mDiretriz->commit();
-            simec_redirecionar($url."&obeid=" . $mDiretriz->obeid, 'success');
+            simec_redirecionar($url, 'success');
         } catch (Exception $e) {
             $mDiretriz->rollback();
             simec_redirecionar($url, "error");
@@ -28,7 +28,7 @@ class Planacomorc_Controller_MetaUnidade
             $mDiretriz->salvar(null, null);
             $mDiretriz->commit();
             $mDiretriz->commit();
-            simec_redirecionar($url."&obeid=" . $mDiretriz->obeid, 'success');
+            simec_redirecionar($url, 'success');
         } catch (Exception $e) {
             $mDiretriz->rollback();
             simec_redirecionar($url, "error");
