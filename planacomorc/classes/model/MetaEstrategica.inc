@@ -41,6 +41,7 @@ class Planacomorc_Model_MetaEstrategica extends Modelo
     protected $arChavePrimaria = array(
         'meeid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
