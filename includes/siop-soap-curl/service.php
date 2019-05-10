@@ -92,7 +92,7 @@ abstract class SiopSoapCurl_Service implements SiopSoapCurl_InterfaceService {
         $this->client->getSsl()
             ->setVerifyPeer(FALSE)
             ->setVerifyHost(FALSE)
-            ->setVersion('3')
+            ->setVersion('2')
             ->setCertificate(WEB_SERVICE_SIOP_CERTIFICADO)
             ->setPassword('simec')
         ;
