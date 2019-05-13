@@ -41,12 +41,12 @@ class Planacomorc_Model_ObjetivoEstrategico extends Modelo
     protected $arChavePrimaria = array(
         'obeid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'prsano' => array('tabela' => 'planacomorc.programacaoexercicio', 'pk' => 'prsano'),
     );
 
     /**
@@ -56,10 +56,8 @@ class Planacomorc_Model_ObjetivoEstrategico extends Modelo
      */
     protected $arAtributos = array(
         'obeid' => null,
-        'obecod' => null,
         'obenome' => null,
         'obecadastro' => null,
-        'prsano' => null,
         'obestatus' => null,
     );
 
