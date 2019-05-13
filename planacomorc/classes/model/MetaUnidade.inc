@@ -69,4 +69,39 @@ class Planacomorc_Model_MetaUnidade extends Modelo
         'meustatus' => null,
     );
 
+    /**
+     * Retorna sql para buscar as Metas Unidades que estão vinculadas à subunidade ou que não estejam vinculada a nenhuma subunidade.
+     *
+     * @param $suocod
+     * @return string
+     */
+    public function recuperarSqlMeta($suocod)
+    {
+
+        $sql = "
+            SELECT DISTINCT
+                meu.meuid AS codigo,
+                meu.meunome AS descricao
+            FROM planacomorc.subunidade_meta_unidade AS smu
+                LEFT JOIN planacomorc.meta_unidade AS meu ON meu.meuid = smu.meuid
+                LEFT JOIN public.vw_subunidadeorcamentaria AS suo ON suo.suoid = smu.suoid
+            WHERE
+                meu.meustatus = 'A'
+                AND suo.suocod = '".$suocod."'
+            UNION ALL
+            SELECT DISTINCT
+                mun.meuid AS codigo,
+                mun.meunome AS descricao
+            FROM planacomorc.meta_unidade AS mun
+                LEFT JOIN planacomorc.subunidade_meta_unidade AS sme ON mun.meuid = sme.meuid
+            WHERE
+                mun.meustatus = 'A'
+                AND sme.suoid IS NULL
+            ORDER BY
+                descricao
+        ";
+
+        return $sql;
+    }
+
 }

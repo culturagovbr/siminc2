@@ -65,6 +65,7 @@
         $('div.div_ungcod').on('change', '#ungcod', function(){
             carregarLimitesUnidade($(this).val());
             carregarMetaPNC($(this).val());
+            carregarMetaUnidade($(this).val());
         });
         
         $('#orcamento').on('click', '.btnVisualizarDetalhes', function(){

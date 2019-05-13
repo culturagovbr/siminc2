@@ -1302,6 +1302,21 @@
     }
 
     /**
+     * Carrega as opções de Meta Unidade de acordo com as metas vinculadas a unidade ou que não tenham vinculo algum.
+     * @param ungcod
+     */
+    function carregarMetaUnidade(ungcod) {
+
+        if (ungcod !== null && ungcod !== '') {
+            $.post(urlPagina+ '&carregarComboUnidade=ok&ungcod='+ ungcod, function(response) {
+                $('#meuid').remove();
+                $('.div_meeid').html(response);
+                $('.chosen-select').chosen();
+            });
+        }
+    }
+
+    /**
      * Carrega novo conteúdo para o select de metas PNC via requisição ajax.
      */
     function carregarMetaPNC(codigo) {
