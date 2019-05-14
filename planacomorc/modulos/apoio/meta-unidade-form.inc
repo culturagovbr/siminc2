@@ -37,13 +37,13 @@ include APPRAIZ . "includes/cabecalho.inc";
                             echo $simec->textarea('meunome', 'Nome', $mMetaUnidade->meunome, ['required','maxlength' => 1000, 'cols' => 50, 'rows' => 6]);
                             echo $simec->select('meeid', 'Meta Estratégica',  $mMetaUnidade->meeid, (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo());
                             echo $simec->select('dimeid', 'Dimensão Estratégica',  $mMetaUnidade->dimeid, (new Planacomorc_Model_DimensaoEstrategica())->recuperarSqlCombo());
-                            echo $simec->select('obeid', 'Objetivo Estratégico',  $mMetaUnidade->obeid, (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo());
+                            echo $simec->select('obeid', 'Objetivo Estratégico',  $mMetaUnidade->obeid, (new Planacomorc_Model_ObjetivoEstrategico())->recuperarSqlCombo());
                             # Traz Sim por default
-                            $radio = $mTipo->meuquantificavel ? $mTipo->meuquantificavel : 't';
+                            $radio = $mMetaUnidade->meuquantificavel ? $mMetaUnidade->meuquantificavel : 't';
                             echo $simec->radio('meuquantificavel', 'Quantificável', $radio, ['t' => 'Sim', 'f' => 'Não'], ['required']);
                             echo $simec->moedaInteiro('meuquantidade', 'Quantidade', $mMetaUnidade->meuquantidade, ['maxlength' => 9, 'class' => 'inteiro']);
                             # Traz Não por default
-                            $radio = $mTipo->meuprioritario ? $mTipo->meuprioritario : 'f';
+                            $radio = $mMetaUnidade->meuprioritario ? $mMetaUnidade->meuprioritario : 'f';
                             echo $simec->radio('meuprioritario', 'Prioritário', $radio, ['t' => 'Sim', 'f' => 'Não'], ['required']);
                         ?>
 
