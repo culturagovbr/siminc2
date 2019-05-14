@@ -98,16 +98,7 @@
             carregarIniciativaPPA($(this).val(), $('#ungcod').val());
         });
 
-        // Evento ao mudar opção de Objetivos Estratégicos.
-        $('#obeid').change(function(){
-            suocod = $('#ungcod').val();
-            if($(this).val() >= 1 ){
-                carregarMetasEstrategicas($(this).val(), null, suocod);
-                carregarDiretrizEstrategica($(this).val(), null);
-            }
-        });
-
-        $('#delegacao').change(function(){    
+        $('#delegacao').change(function(){
             var mppid = $('#mppid').val();
             carregarMetasPPA($('#oppid').val(), null, $('#ungcod').val(), $(this).val(), mppid);
         });
@@ -564,6 +555,9 @@
             }
         });
 
+        $('div.div_meeid').on('change', '#meuid', function(){
+            carregarPlanejamentoEstrategico($(this).val());
+        });
     }
 
 /**

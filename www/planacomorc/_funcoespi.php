@@ -1394,6 +1394,7 @@ function salvarPiComplemento($pliid, $dados)
     $modelPiComplemento->masid = $dados['masid'] ? $dados['masid'] : null;
     $modelPiComplemento->pijid = $dados['pijid'] ? $dados['pijid'] : null;
     $modelPiComplemento->ptaid = $dados['ptaid'] ? $dados['ptaid'] : null;
+    $modelPiComplemento->meuid = $dados['meuid'] ? $dados['meuid'] : null;
     $modelPiComplemento->picpublico = str_replace(array("'"), ' ', $dados['picpublico']);
     $modelPiComplemento->picexecucao = $dados['picexecucao']? desformata_valor($dados['picexecucao']): null;
     $modelPiComplemento->picted = $dados['picted'] == 't' ? 't' : 'f';
@@ -1401,9 +1402,7 @@ function salvarPiComplemento($pliid, $dados)
 //ver($modelPiComplemento,d);
     $modelPiComplemento->salvar(NULL, NULL,
         array(
-                'obeid',
-                'meeid',
-                'dieid',
+                'meuid',
                 'esfid',
                 'prgid',
                 'ptaid',
@@ -3081,4 +3080,21 @@ function exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria){
     ';
     
     echo $htmlAviso;
+}
+
+/**
+ * Função para recuperar Combos de Objetivo, Dimensão Estratégica e Meta Estratégica
+ *
+ * @param $meuid
+ */
+function carregarComboEstrategico($meuid)
+{
+    global $simec;
+    $dimensaoEstrategica = (new Planacomorc_Model_MetaUnidade())->recuperarPlanejamentoEstrategico($meuid);
+
+    $simec->setPodeEditar(0);
+    echo $simec->textarea('obeid', 'Objetivo', $dimensaoEstrategica['obenome'], ['cols' => 60, 'rows' => 6]);
+    echo $simec->textarea('dieid', 'Dimensão Estratégica', $dimensaoEstrategica['dimenome'], ['cols' => 60, 'rows' => 6]);
+    echo $simec->textarea('meeid', 'Meta Estratégica', $dimensaoEstrategica['meenome'], ['cols' => 60, 'rows' => 6]);
+    $simec->setPodeEditar(1);
 }

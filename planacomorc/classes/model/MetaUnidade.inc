@@ -104,4 +104,34 @@ class Planacomorc_Model_MetaUnidade extends Modelo
         return $sql;
     }
 
+    /**
+     * Retorna o registro de Meta Unidade com os dados de Objetivo Estratégico, Dimensão Estratégica e Meta Estratégica.
+     *
+     * @param $meuid
+     * @return array|bool
+     */
+    public function recuperarPlanejamentoEstrategico($meuid)
+    {
+        $sql = "
+            SELECT
+                meu.meuid,
+                meu.meunome,
+                obj.obeid,
+                obj.obenome,
+                dime.dimeid,
+                dime.dimenome,
+                mee.meeid,
+                mee.meenome
+            FROM planacomorc.meta_unidade AS meu
+                LEFT JOIN planacomorc.objetivo_estrategico AS obj ON obj.obeid = meu.obeid AND obj.obestatus = 'A'
+                LEFT JOIN planacomorc.dimensao_estrategica AS dime ON dime.dimeid = meu.dimeid AND dime.dimestatus = 'A'
+                LEFT JOIN planacomorc.meta_estrategica AS mee ON mee.meeid = meu.meeid AND mee.meestatus = 'A'
+            WHERE
+                meu.meuid = ". (int)$meuid."
+                AND meu.meustatus = 'A'
+        ";
+
+        return $this->pegaLinha($sql);
+    }
+
 }

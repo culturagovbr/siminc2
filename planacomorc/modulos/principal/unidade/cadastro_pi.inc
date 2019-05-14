@@ -50,18 +50,12 @@ $urlModulo = '?modulo=principal/unidade/cadastro_pi&acao=A&aba=1';
 # Requisições
 include_once APPRAIZ. "acompanhamento/modulos/principal/monitorar-pi-request.inc";
 
+if ($_REQUEST['carregarComboPlanejamento']) {
+    carregarComboEstrategico($_REQUEST['meuid']);
+    die();
+}
 if ($_REQUEST['carregarComboUnidade']) {
     echo $simec->select('meuid', 'Meta Unidade', null, (new Planacomorc_Model_MetaUnidade())->recuperarSqlMeta($_REQUEST['ungcod']));
-    die();
-}
-if ($_REQUEST['carregarMetasEstrategicas']) {
-    $obeid = $_REQUEST['obeid'];
-    $suocod = $_REQUEST['suocod'];
-    echo $simec->select('meeid', 'Meta Estratégica', $dadosPI['meeid'], (new Planacomorc_Model_MetaEstrategica())->recuperarSqlMeta($obeid, $suocod));
-    die();
-}
-if ($_REQUEST['carregarDiretrizEstrategicas']) {
-    echo $simec->select('dieid', 'Diretriz Estratégica', $dadosPI['dieid'], (new Planacomorc_Model_DimensaoEstrategica())->recuperarSqlCombo(['diecod', 'dienome'], ["obeid = '".$_REQUEST['obeid']."'"], 'diecod'));
     die();
 }
 if ($_REQUEST['carregarComboUG']) {
@@ -242,13 +236,13 @@ $classTab2 = $aba? 'active': NULL;
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script language="JavaScript" src="../includes/funcoes.js?v=11"></script>
-<script language="JavaScript" src="../includes/funcoesspo.js?v=11"></script>
-<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=11">
-<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=11"></script>
-<script src="js/cadastro_pi_funcoes.js?v=22"></script>
-<script src="js/cadastro_pi_validacoes.js?v=21"></script>
-<script src="js/cadastro_pi_init.js?v=21"></script>
+<script language="JavaScript" src="../includes/funcoes.js?v=12"></script>
+<script language="JavaScript" src="../includes/funcoesspo.js?v=12"></script>
+<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=12">
+<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=12"></script>
+<script src="js/cadastro_pi_funcoes.js?v=23"></script>
+<script src="js/cadastro_pi_validacoes.js?v=22"></script>
+<script src="js/cadastro_pi_init.js?v=22"></script>
 <style>
     autorizadocapital {
         display: none;
