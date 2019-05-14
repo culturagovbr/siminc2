@@ -32,9 +32,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <form id="formulario" name="formulario" method="post" class="form-horizontal">
                         <input type="hidden" name="req" id="req" value="salvar" />
                         <input name="meeid" id="meeid" type="hidden" value="<?= $mMetaEstrategica->meeid; ?>">
-
                         <?php
-                            echo $simec->input('meenome', 'Descrição', $mMetaEstrategica->meenome, ['required', 'maxlength' => 1000]);
+                            echo $simec->textarea('meenome', 'Nome', $mObjetivoEstrategico->meenome, ['required','maxlength' => 1000, 'cols' => 50, 'rows' => 6]);
                         ?>
                         <div class="form-group">
                             <div class="text-center">

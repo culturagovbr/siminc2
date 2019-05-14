@@ -33,7 +33,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                         <input type="hidden" name="req" id="req" value="salvar" />
                         <input name="obeid" id="obeid" type="hidden" value="<?= $mObjetivoEstrategico->obeid; ?>">
                         <?php
-                            echo $simec->input('obenome', 'Nome', $mObjetivoEstrategico->obenome, ['required', 'maxlength' => 1000]);
+                            echo $simec->textarea('obenome', 'Nome', $mObjetivoEstrategico->obenome, ['required','maxlength' => 1000, 'cols' => 50, 'rows' => 6]);
                         ?>
                         <div class="form-group">
                             <div class="text-center">
