@@ -68,6 +68,9 @@
         <div class="col-md-12" id="box-metas-ppa">
             <?php $cAcompanhamento->listarMetasPpa($suoid); ?>
         </div>
+        <div class="col-md-12" id="box-metas-ppa">
+            <?php $cAcompanhamento->listarMetasPlanejamentoEstrategico($suoid); ?>
+        </div>
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">

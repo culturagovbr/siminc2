@@ -5,10 +5,10 @@ class Acompanhamento_Controller_Acompanhamento
     public function salvar($dados, $urlModulo = NULL)
     {
         $url = '?modulo=principal/monitorar-ppa&acao=A';
-        if(!empty($dados['ipnid'])){
+        if (!empty($dados['ipnid'])) {
             $url = '?modulo=principal/monitorar-pnc&acao=A';
-        } elseif(!empty($dados['pliid'])){
-            $url = $urlModulo. '&pliid='. $dados['pliid'];
+        } elseif (!empty($dados['pliid'])) {
+            $url = $urlModulo . '&pliid=' . $dados['pliid'];
         }
 
         try {
@@ -28,8 +28,8 @@ class Acompanhamento_Controller_Acompanhamento
             $this->_gravarHistorico($mAcompanhamento->acoid);
 
             $mAcompanhamento->commit();
-            simec_redirecionar($url. '&acoid='. $mAcompanhamento->acoid, 'success');
-        } catch (Exception $e){
+            simec_redirecionar($url . '&acoid=' . $mAcompanhamento->acoid, 'success');
+        } catch (Exception $e) {
             $mAcompanhamento->rollback();
             simec_redirecionar($url, 'error');
         }
@@ -41,18 +41,18 @@ class Acompanhamento_Controller_Acompanhamento
 
         try {
             $mAcompanhamento = new Acompanhamento_Model_Acompanhamento($acoid);
-            
-            if($mAcompanhamento->existeVinculo()){
+
+            if ($mAcompanhamento->existeVinculo()) {
                 $mensagem = 'O registro não pode ser excluído pois possui vínculo com algum PI.';
                 $url = '?modulo=apoio/modalidade-pactuacao-form&acao=A&capid=' . $mAcompanhamento->acoid;
                 simec_redirecionar($url, 'error', $mensagem);
-            }            
-            
+            }
+
             $mAcompanhamento->acostatus = 'I';
             $mAcompanhamento->salvar();
             $mAcompanhamento->commit();
             simec_redirecionar($url, 'success');
-        } catch (Exception $e){
+        } catch (Exception $e) {
             $mAcompanhamento->rollback();
             simec_redirecionar($url, 'error');
         }
@@ -64,8 +64,8 @@ class Acompanhamento_Controller_Acompanhamento
         $mAcompanhamentoMedidas->excluirVarios('acoid = ' . (int)$acoid);
 
         $mAcompanhamentoMedidas->acoid = $acoid;
-        if(isset($dados['medidas']) && is_array($dados['medidas'])){
-            foreach($dados['medidas'] as $medid){
+        if (isset($dados['medidas']) && is_array($dados['medidas'])) {
+            foreach ($dados['medidas'] as $medid) {
                 $mAcompanhamentoMedidas->medid = $medid;
                 $mAcompanhamentoMedidas->salvar();
                 $mAcompanhamentoMedidas->acmid = null;
@@ -76,11 +76,11 @@ class Acompanhamento_Controller_Acompanhamento
     private function _gravarHistorico($acoid)
     {
         $mHistorico = new Acompanhamento_Model_Historico();
-        
+
         $mHistorico->acoid = $acoid;
         $mHistorico->usucpf = $_SESSION['usucpforigem'];
         $mHistorico->hisdata = date('Y-m-d H:i:s');
-        
+
         $mHistorico->salvar();
     }
 
@@ -99,7 +99,7 @@ class Acompanhamento_Controller_Acompanhamento
 
         include_once APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi.inc';
     }
-    
+
     public function recuperarPiPorMetaPncESubunidade($mpnid, $suoid)
     {
         $mPi = new Pi_PlanoInterno();
@@ -125,6 +125,14 @@ class Acompanhamento_Controller_Acompanhamento
         $aJanelas = $mJanela->recuperarTodos('*', ["prsano = '{$_SESSION['exercicio']}'", "janstatus = 'A'", "tipid = " . Acompanhamento_Model_Tipo::K_TIPO_META_PPA], 'janinicio desc');
 
         include_once APPRAIZ . 'acompanhamento/modulos/principal/listar-metas-ppa.inc';
+    }
+
+    public function listarMetasPlanejamentoEstrategico($suoid)
+    {
+        $listaPerfis = pegaPerfilGeral();
+        $mAcompanhamento = new Acompanhamento_Model_Acompanhamento();
+
+        include_once APPRAIZ . 'acompanhamento/modulos/principal/listar-metas-planejamento-estrategico.inc';
     }
 
 }
