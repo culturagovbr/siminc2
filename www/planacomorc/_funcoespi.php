@@ -3086,9 +3086,12 @@ function exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria){
  * Função para recuperar Combos de Objetivo, Dimensão Estratégica e Meta Estratégica
  *
  * @param $meuid
+ * @return bool
  */
 function carregarComboEstrategico($meuid)
 {
+    if(!$meuid) return false;
+
     global $simec;
     $dimensaoEstrategica = (new Planacomorc_Model_MetaUnidade())->recuperarPlanejamentoEstrategico($meuid);
 
