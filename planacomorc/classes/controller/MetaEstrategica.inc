@@ -4,32 +4,32 @@ class Planacomorc_Controller_MetaEstrategica
 {
     public function salvar($dados)
     {
+        $url = '?modulo=apoio/meta-estrategica&acao=A';
         try {
             $mMetaEstrategica = new Planacomorc_Model_MetaEstrategica($dados['meeid']);
-            $mMetaEstrategica->prsano = $_SESSION['exercicio'];
-            $mMetaEstrategica->obeid = $dados['obeid'];
             $mMetaEstrategica->meecadastro = 'NOW()';
             $mMetaEstrategica->popularDadosObjeto($dados);
-            $mMetaEstrategica->salvar(null, null);
+            $mMetaEstrategica->salvar();
             $mMetaEstrategica->commit();
-            echo json_encode(array("return" => true));
-        } catch (Exception $e) {
+            simec_redirecionar($url, 'success');
+        } catch (Exception $e){
             $mMetaEstrategica->rollback();
-            echo json_encode(array("return" => false));
+            simec_redirecionar($url, 'error');
         }
     }
 
     public function excluir($meeid)
     {
+        $url = '?modulo=apoio/meta-estrategica&acao=A';
         try {
             $mMetaEstrategica = new Planacomorc_Model_MetaEstrategica($meeid);
             $mMetaEstrategica->meestatus = 'I';
-            $mMetaEstrategica->salvar(null, null, []);
+            $mMetaEstrategica->salvar();
             $mMetaEstrategica->commit();
-            echo json_encode(array("return" => true));
-        } catch (Exception $e) {
+            simec_redirecionar($url, 'success');
+        } catch (Exception $e){
             $mMetaEstrategica->rollback();
-            echo json_encode(array("return" => false));
+            simec_redirecionar($url, 'error');
         }
     }
 

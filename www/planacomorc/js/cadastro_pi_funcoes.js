@@ -1235,34 +1235,6 @@
     }
 
     /**
-     * Carrega novo conteúdo para o select de Metas Estratégicas via requisição ajax.
-     */
-    function carregarMetasEstrategicas(obeid, meeid, suocod) {
-
-        $.post(urlPagina + '&carregarMetasEstrategicas=ok&obeid=' + obeid + '&suocod=' +suocod,
-            function (response) {
-                $('#meeid').remove();
-                $('.div_meeid').html(response);
-                $('#meeid').val(meeid);
-                $(".chosen-select").chosen();
-            });
-    }
-
-    /**
-     * Carrega novo conteúdo para o select de Diretriz Estratégica via requisição ajax.
-     */
-    function carregarDiretrizEstrategica(obeid, dieid) {
-
-        $.post(urlPagina + '&carregarDiretrizEstrategicas=ok&obeid=' + obeid,
-            function (response) {
-                $('#dieid').remove();
-                $('.div_dieid').html(response);
-                $('#dieid').val(dieid);
-                $(".chosen-select").chosen();
-            });
-    }
-
-    /**
      * Carrega novo conteúdo para o select de Metas PPA via requisição ajax.
      */
     function carregarMetasPPA(oppid, mppid, suocod, delegacao, mppid) {
@@ -1297,6 +1269,32 @@
                     atualizarValorLimiteDisponivelUnidade();
                     mudarCorValorProjeto();
                 }
+            });
+        }
+    }
+
+    /**
+     * Carrega combo de Objetivo, Dimensão e Meta de acordo com a Meta Unidade.
+     *
+     * @param meuid
+     */
+    function carregarPlanejamentoEstrategico(meuid) {
+        $.post(urlPagina + '&carregarComboPlanejamento=ok&meuid=' + meuid, function(response) {
+            $('#div_objetivo_dimensao_meta').html(response);
+        });
+    }
+
+    /**
+     * Carrega as opções de Meta Unidade de acordo com as metas vinculadas a unidade ou que não tenham vinculo algum.
+     * @param ungcod
+     */
+    function carregarMetaUnidade(ungcod) {
+
+        if (ungcod !== null && ungcod !== '') {
+            $.post(urlPagina+ '&carregarComboUnidade=ok&ungcod='+ ungcod, function(response) {
+                $('#meuid').remove();
+                $('.div_meeid').html(response);
+                $('.chosen-select').chosen();
             });
         }
     }

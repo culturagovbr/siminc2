@@ -1,12 +1,13 @@
 <?php
 
-$aObjetivos = (new Planacomorc_Model_ObjetivoEstrategico())->RecuperarTodos('*', ["prsano = '".$_SESSION['exercicio']."'","obestatus = 'A'"], 'obecod');
+$litaMetaEstrategica = (new Planacomorc_Model_MetaEstrategica())->recuperarTodos('*', ["meestatus = 'A'"], 'meenome');
+
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2><?= $titulo_modulo; ?></h2>
+        <h2><?php echo $titulo_modulo; ?></h2>
     </div>
 </div>
 
@@ -18,31 +19,28 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <h5>Dados Gerais</h5>
                 </div>
                 <div class="ibox-content">
-                    <a class="btn-small btn btn-success" href="?modulo=apoio/objetivo_meta_diretriz_form&acao=A">
+                    <a class="btn-small btn btn-success" href="?modulo=apoio/meta-estrategica-form&acao=A">
                         <span class="glyphicon glyphicon-plus"></span>
                         Novo
                     </a>
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover dataTables">
+                        <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
+                                
                             <tr class="text-center">
                                 <th width="5%">Ação</th>
-                                <th>Código</th>
                                 <th>Nome</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
-                                if($aObjetivos):
-                                    foreach($aObjetivos AS $objetivo): ?>
+                                if($litaMetaEstrategica):
+                                    foreach($litaMetaEstrategica as $dados):?>
                                         <tr>
                                             <td class="text-center">
-                                                <a title="Alterar" href="planacomorc.php?modulo=apoio/objetivo_meta_diretriz_form&acao=A&obeid=<?= $objetivo['obeid']; ?>">
-                                                    <i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i>
-                                                </a>
+                                                <a title="Alterar" href="planacomorc.php?modulo=apoio/meta-estrategica-form&acao=A&meeid=<?php echo $dados['meeid']; ?>"><i class="btn btn-primary btn-sm glyphicon glyphicon-pencil"></i></a>
                                             </td>
-                                            <td class="text-center"><?= $objetivo['obecod']; ?></td>
-                                            <td><?= $objetivo['obenome']; ?></td>
+                                            <td><?= $dados['meenome']; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
