@@ -65,6 +65,7 @@
         $('div.div_ungcod').on('change', '#ungcod', function(){
             carregarLimitesUnidade($(this).val());
             carregarMetaPNC($(this).val());
+            carregarMetaUnidade($(this).val());
         });
         
         $('#orcamento').on('click', '.btnVisualizarDetalhes', function(){
@@ -97,16 +98,7 @@
             carregarIniciativaPPA($(this).val(), $('#ungcod').val());
         });
 
-        // Evento ao mudar opção de Objetivos Estratégicos.
-        $('#obeid').change(function(){
-            suocod = $('#ungcod').val();
-            if($(this).val() >= 1 ){
-                carregarMetasEstrategicas($(this).val(), null, suocod);
-                carregarDiretrizEstrategica($(this).val(), null);
-            }
-        });
-
-        $('#delegacao').change(function(){    
+        $('#delegacao').change(function(){
             var mppid = $('#mppid').val();
             carregarMetasPPA($('#oppid').val(), null, $('#ungcod').val(), $(this).val(), mppid);
         });
@@ -563,6 +555,9 @@
             }
         });
 
+        $('div.div_meeid').on('change', '#meuid', function(){
+            carregarPlanejamentoEstrategico($(this).val());
+        });
     }
 
 /**

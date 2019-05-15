@@ -41,12 +41,12 @@ class Planacomorc_Model_ObjetivoEstrategico extends Modelo
     protected $arChavePrimaria = array(
         'obeid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'prsano' => array('tabela' => 'planacomorc.programacaoexercicio', 'pk' => 'prsano'),
     );
 
     /**
@@ -56,11 +56,47 @@ class Planacomorc_Model_ObjetivoEstrategico extends Modelo
      */
     protected $arAtributos = array(
         'obeid' => null,
-        'obecod' => null,
         'obenome' => null,
         'obecadastro' => null,
-        'prsano' => null,
         'obestatus' => null,
     );
+
+    public function recuperarSqlCombo($descricao = null, $where = [], $order = '')
+    {
+        $pk = $this->arChavePrimaria[0];
+
+        foreach (array_keys($this->arAtributos) as $atributo) {
+            if (substr($atributo, -6) == 'status') {
+                $where[] = "{$atributo} = 'A'";
+            } elseif (substr($atributo, -3) == 'ano') {
+                $where[] = "$atributo = '{$_SESSION['exercicio']}'";
+            }
+            if ($descricao) {
+                $descricao = implode(" || ' - ' || ", (array)$descricao);
+            } else {
+                $aPossibilidades = ['dsc', 'desc', 'nome', 'descricao'];
+                foreach ($aPossibilidades as $possibilidade) {
+                    if (substr($atributo, -(strlen($possibilidade))) == $possibilidade) {
+                        $descricao = $atributo;
+                        break;
+                    }
+                }
+            }
+        }
+        $order = $order ? $order : $descricao;
+        $where = count($where) ? " where  " . implode(' and ', $where) : '';
+
+        $sql = "
+            SELECT
+                {$pk} AS codigo,
+                {$descricao} AS descricao
+            FROM {$this->stNomeTabela}
+                $where
+            ORDER BY
+                $order
+        ";
+
+        return $sql;
+    }
 
 }

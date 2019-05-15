@@ -15,7 +15,7 @@ require_once APPRAIZ . 'includes/classes/Modelo.class.inc';
 
 
 /**
- * Planacomorc_Model_SubunidadeMetaEstrategica
+ * Planacomorc_Model_SubunidadeMetaUnidade
  *
  * @category Class
  * @package  A1
@@ -24,14 +24,14 @@ require_once APPRAIZ . 'includes/classes/Modelo.class.inc';
  * @version  Release:
  * @link     no link
  */
-class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
+class Planacomorc_Model_SubunidadeMetaUnidade extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.subunidademeta_estrategica';
+    protected $stNomeTabela = 'planacomorc.subunidade_meta_unidade';
 
     /**
      * Chave primaria.
@@ -39,15 +39,16 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
      * @access protected
      */
     protected $arChavePrimaria = array(
-        'smeid',
+        'smuid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'suoid' => array('tabela' => 'public.subunidadeorcamentaria', 'pk' => 'suoid'),
-        'meeid' => array('tabela' => 'planacomorc.meta_estrategica', 'pk' => 'meeid'),
+        'suoid' => array('tabela' => 'public.subunidadeorcamentaria',        'pk' => 'suoid'),
+        'meuid' => array('tabela' => 'planacomorc.meta_unidade',             'pk' => 'meuid'),
     );
 
     /**
@@ -56,13 +57,14 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
      * @access protected
      */
     protected $arAtributos = array(
-        'smeid' => null,
+        'smuid' => null,
         'suoid' => null,
-        'meeid' => null,
+        'meuid' => null,
     );
 
     /**
-     * Exclui todos os vínculos do exercício.
+     * Exclui todos os vínculos de Subunidade com Meta Unidade de acordo com o exercício.
+     *
      * @param $exercicio
      * @return string
      * @throws Exception
@@ -72,12 +74,13 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
         $sql = "
             DELETE FROM {$this->stNomeTabela}
             WHERE
-                meeid IN (
+                suoid IN (
                     SELECT
-                        meeid
-                    FROM planacomorc.meta_estrategica
+                        suoid
+                    FROM public.vw_subunidadeorcamentaria
                     WHERE
-                        prsano = '{$exercicio}'
+                        suostatus = 'A'
+                        AND prsano = '{$exercicio}'
                 )
         ";
 
@@ -85,7 +88,7 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
     }
 
     /**
-     * Busca todos os dados de acordo com as Metas Estratégicas existentes no exercício.
+     * Busca todos os vinculos de acordo com as Metas Unidades existentes no exercício.
      * @param $exercicio
      * @return array
      */
@@ -96,21 +99,25 @@ class Planacomorc_Model_SubunidadeMetaEstrategica extends Modelo
                 *
             FROM {$this->stNomeTabela}
             WHERE
-                meeid IN(
-                        SELECT
-                            meeid
-                        FROM planacomorc.meta_estrategica
-                        WHERE
-                            prsano = '{$exercicio}'
-               )
+                suoid IN(
+                    SELECT
+                        suoid
+                    FROM public.vw_subunidadeorcamentaria
+                    WHERE
+                        prsano = '{$exercicio}'
+                        AND suostatus = 'A'
+                )
        ";
         $dados = $this->carregar($sql);
+
         $dados = $dados ? $dados : [];
 
         $dadosAgrupados = [];
         foreach($dados as $dado){
-            $dadosAgrupados[$dado['meeid']][] = $dado['suoid'];
+            $dadosAgrupados[$dado['meuid']][] = $dado['suoid'];
         }
+
         return $dadosAgrupados;
     }
+
 }
