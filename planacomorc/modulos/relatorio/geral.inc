@@ -1,12 +1,14 @@
 <?php
 
-include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
+include_once APPRAIZ. 'monitora/classes/Pi_PlanoInterno.class.inc';
 
 $cabecalho = [
     'ID Planejamento', 'Situação', 'Código', 'Código da UO', 'UO', 'Código da Unidade', 'Unidade', 'Unidade Delegada', 'Unidade Delegada', 'Enquadramento', 'RP - Resultado Primário',
     'Item de Manutenção', 'Subitem de Manutenção', 'Código do Programa', 'Programa', 'Código do Objetivo', 'Objetivo', 'Código da Iniciativa', 'Iniciativa', 'Código da Ação', 'Ação', 'Código do Localizador',
     'Localizador', 'Código do PO', 'Plano Orçamentário', 'PTRES', 'Área', 'Meta PNC', 'Meta', 'Título', 'Descrição', 'Segmento Cultural', 'Tipo de Instrumento / Modalidade de Pactuação',
-    'Emenda parlamentar', 'Forma de execução - Edital', 'Localização da ação', 'País', 'Unidade Federativa', 'Município', 'Responsável', 'TED', 'Edital', 'Previsão Edital',
+    'Emenda parlamentar', 'Forma de execução - Edital', 'Localização da ação', 'País', 'Unidade Federativa', 'Município',
+    'Meta da Unidade', 'Objetivo Estratégico', 'Dimensão Estratégica', 'Meta Estratégica', 'Quantidade da Meta Unidade', 'Prioritário',
+    'Responsável', 'TED', 'Edital', 'Previsão Edital',
     'Convênio', 'SNIIC', 'Processo', 'PRONAC', 'Produto', 'Unidade de Medida', 'Quantidade', 'Valor Total', 'Valor Total Custeio', 'Valor Total Capital',
 
     'Cronograma Físico<br />Capital Janeiro', 'Cronograma Físico<br />Capital Fevereivo', 'Cronograma Físico<br />Capital Março', 'Cronograma Físico<br />Capital Abril',
@@ -31,8 +33,7 @@ $cabecalho = [
 
     'Valor Provisionado', 'Valor Empenhado', 'Valor Liquidado', 'Valor Pago',
     
-    'Executado', 'Análise Situacional', 'Classificação', 'Medidas a serem adotadas', 'Detalhamento das providências a serem adotadas', 'Código do Objetivo Estratégico', 'Objetivo Estratégico',
-    'Código da Meta Estratégica', 'Meta Estratégica', 'Código da Diretriz Estratégica', 'Diretriz Estratégica'
+    'Executado', 'Análise Situacional', 'Classificação', 'Medidas a serem adotadas', 'Detalhamento das providências a serem adotadas'
 ];
 
 # Lista de colunas que terão formatação de moeda.
