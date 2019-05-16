@@ -1261,49 +1261,53 @@ class Pi_PlanoInterno extends Modelo
                 suo.unonome,
                 suo.suocod,
                 suo.suonome,
-                (SELECT ARRAY_TO_STRING(array(
-                        SELECT DISTINCT s.unonome
-                        FROM planacomorc.pi_delegacao d
-                                JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
-                        WHERE d.pliid = pli.pliid
+                (SELECT ARRAY_TO_STRING(ARRAY(
+                    SELECT DISTINCT
+                        s.unonome
+                    FROM planacomorc.pi_delegacao d
+                        JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
+                    WHERE
+                        d.pliid = pli.pliid
                 ), '; ')) unodelegada,
 
-                (SELECT ARRAY_TO_STRING(array(
-                        SELECT DISTINCT s.suonome
-                        FROM planacomorc.pi_delegacao d
-                                JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
-                        WHERE d.pliid = pli.pliid
+                (SELECT ARRAY_TO_STRING(ARRAY(
+                    SELECT DISTINCT
+                        s.suonome
+                    FROM planacomorc.pi_delegacao d
+                        JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
+                    WHERE
+                        d.pliid = pli.pliid
                 ), '; ')) suodelegada,
 
                 eqd.eqddsc, rp.rpcod || ' - ' || rp.redsc as resultadoprimario, mai.mainome, mas.masnome, ptr.prgcod, ptr.prgdsc, opp.oppcod, opp.oppnome, ipp.ippcod, ipp.ippnome,
                 ptr.acacod, ptr.acatitulo, ptr.loccod, ptr.locdsc, ptr.plocod, plodsc po, ptr.ptres,
                 mde.mdedsc, mpn.mpncod || ' - ' || mpn.mpnnome mpnnome, mpp.mppcod || ' - ' || mpp.mppnome mppnome,
                 pli.plititulo, pli.plidsc, nee.needsc, cap.capdsc,
-                case when rp.rpcod = 6 then 'Sim' else 'Não' end as pliemenda,
-                case when pic.picedital = true then 'Sim' else 'Não' end as picedital, esf.esfdsc,
-                case
-                        when pic.esfid in (1, 2, 3) then 'Brasil'
-                        else pic.esfid::char
-                end as pais,
-
-                case
-                        when pic.esfid = 2 then
-                                (SELECT ARRAY_TO_STRING(array(
-                                        SELECT DISTINCT e.estdescricao
-                                        FROM planacomorc.pi_localizacao l
-                                                JOIN territorios.estado e ON e.estuf = l.estuf
-                                        WHERE l.pliid = pli.pliid
-                                ), '; '))
-                        when pic.esfid = 3 then
-                                (SELECT ARRAY_TO_STRING(array(
-                                        SELECT DISTINCT e.estdescricao
-                                        FROM planacomorc.pi_localizacao l
-                                                JOIN territorios.municipio m ON m.muncod = l.muncod
-                                                JOIN territorios.estado e ON e.estuf = m.estuf
-                                        WHERE l.pliid = pli.pliid
-                                ), '; '))
-                        else ''
-                end estado,
+                CASE WHEN rp.rpcod = 6 THEN 'Sim' ELSE 'Não' END AS pliemenda,
+                CASE WHEN pic.picedital = TRUE THEN 'Sim' ELSE 'Não' END AS picedital,
+                esf.esfdsc,
+                CASE WHEN pic.esfid IN(1, 2, 3) THEN
+                    'Brasil'
+                ELSE
+                    pic.esfid::char
+                END AS pais,
+                CASE WHEN pic.esfid = 2 THEN
+                    (SELECT ARRAY_TO_STRING(array(
+                            SELECT DISTINCT e.estdescricao
+                            FROM planacomorc.pi_localizacao l
+                                    JOIN territorios.estado e ON e.estuf = l.estuf
+                            WHERE l.pliid = pli.pliid
+                    ), '; '))
+                WHEN pic.esfid = 3 THEN
+                    (SELECT ARRAY_TO_STRING(array(
+                            SELECT DISTINCT e.estdescricao
+                            FROM planacomorc.pi_localizacao l
+                                    JOIN territorios.municipio m ON m.muncod = l.muncod
+                                    JOIN territorios.estado e ON e.estuf = m.estuf
+                            WHERE l.pliid = pli.pliid
+                    ), '; '))
+                ELSE ''
+                END estado,
 
                 (SELECT ARRAY_TO_STRING(array(
                         SELECT DISTINCT m.mundescricao
@@ -1319,8 +1323,8 @@ class Pi_PlanoInterno extends Modelo
                                 JOIN seguranca.usuario usu ON usu.usucpf = pir.usucpf
                         WHERE pir.pliid = pli.pliid
                 ), '; ')) usuario,
-                case when pic.picted then 'Sim' else 'Não' end ted,
-                case when pic.picedital then 'Sim' else 'Não' end edital,
+                CASE WHEN pic.picted THEN 'Sim' ELSE 'Não' END AS ted,
+                CASE WHEN pic.picedital THEN 'Sim' ELSE 'Não' END AS edital,
                 mes.mesdsc,
 
                 (SELECT ARRAY_TO_STRING(array(
@@ -1431,15 +1435,15 @@ class Pi_PlanoInterno extends Modelo
 		ac.acoanalise AS analise,
 		cl.cladsc AS classificacao,
 		LTRIM(REPLACE(REPLACE(REPLACE(ARRAY(
-			SELECT DISTINCT
-				' ' || meddsc
-			FROM acompanhamento.medida md
-				JOIN acompanhamento.acompanhamentomedida amd ON md.medid = amd.medid
-			WHERE
-				amd.acoid = ac.acoid
+                    SELECT DISTINCT
+                        ' ' || meddsc
+                    FROM acompanhamento.medida md
+                        JOIN acompanhamento.acompanhamentomedida amd ON md.medid = amd.medid
+                    WHERE
+                        amd.acoid = ac.acoid
 		)::TEXT, '{', ''), '}', ''), '\"', '')) AS medidas,
 		ac.acoprovidencias AS providencias,
-				obe.obecod,
+                obe.obecod,
                 obe.obenome,
                 mee.meecod,
                 mee.meenome,
