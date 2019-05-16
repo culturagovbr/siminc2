@@ -1317,6 +1317,13 @@ class Pi_PlanoInterno extends Modelo
                         WHERE l.pliid = pli.pliid
                 ), '; ')) municipio,
 
+                meu.meunome,
+                obe.obenome,
+                dim.dimenome,
+                mee.meenome,
+                meu.meuquantidade,
+                CASE WHEN meuprioritario = TRUE THEN 'Sim' ELSE 'Não' END AS meuprioritario,
+
                 (SELECT ARRAY_TO_STRING(array(
                         SELECT DISTINCT usu.usunome || ' - ' || replace(to_char(usu.usucpf::numeric, '000:000:000-00'), ':', '.') || ' (' || usu.usufoneddd || ' ' || usu.usufonenum || ' - ' || usu.usuemail || ')'
                         FROM planacomorc.pi_responsavel pir
@@ -1442,18 +1449,9 @@ class Pi_PlanoInterno extends Modelo
                     WHERE
                         amd.acoid = ac.acoid
 		)::TEXT, '{', ''), '}', ''), '\"', '')) AS medidas,
-		ac.acoprovidencias AS providencias,
-                obe.obecod,
-                obe.obenome,
-                mee.meecod,
-                mee.meenome,
-                die.diecod,
-                die.dienome
+		ac.acoprovidencias AS providencias
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
-                LEFT JOIN planacomorc.objetivo_estrategico AS obe ON pic.obeid = obe.obeid
-                LEFT JOIN planacomorc.meta_estrategica AS mee ON pic.meeid = mee.meeid
-                LEFT JOIN planacomorc.diretriz_estrategica AS die ON pic.dieid = die.dieid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
                     suo.suocod = pli.ungcod 
                     AND suo.unocod = pli.unicod 
@@ -1478,6 +1476,10 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_categoriaapropriacao cap ON cap.capid = pli.capid
                 LEFT JOIN monitora.pi_produto ppr ON ppr.pprid = pic.pprid
                 LEFT JOIN monitora.pi_unidade_medida pum ON pum.pumid = pic.pumid
+                LEFT JOIN planacomorc.meta_unidade meu ON(pic.meuid = meu.meuid)
+                LEFT JOIN planacomorc.objetivo_estrategico obe ON(meu.obeid = obe.obeid)
+                LEFT JOIN planacomorc.dimensao_estrategica dim ON(meu.dimeid = dim.dimeid)
+                LEFT JOIN planacomorc.meta_estrategica mee ON(meu.meeid = mee.meeid)
                 LEFT JOIN workflow.documento doc ON doc.docid = pli.docid
                 LEFT JOIN workflow.estadodocumento esd ON esd.esdid = doc.esdid
                 LEFT JOIN territorios.esfera esf ON esf.esfid = pic.esfid

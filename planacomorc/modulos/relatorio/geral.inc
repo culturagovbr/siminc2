@@ -6,8 +6,8 @@ $cabecalho = [
     'ID Planejamento', 'Situação', 'Código', 'Código da UO', 'UO', 'Código da Unidade', 'Unidade', 'Unidade Delegada', 'Unidade Delegada', 'Enquadramento', 'RP - Resultado Primário',
     'Item de Manutenção', 'Subitem de Manutenção', 'Código do Programa', 'Programa', 'Código do Objetivo', 'Objetivo', 'Código da Iniciativa', 'Iniciativa', 'Código da Ação', 'Ação', 'Código do Localizador',
     'Localizador', 'Código do PO', 'Plano Orçamentário', 'PTRES', 'Área', 'Meta PNC', 'Meta', 'Título', 'Descrição', 'Segmento Cultural', 'Tipo de Instrumento / Modalidade de Pactuação',
-    'Emenda parlamentar', 'Forma de execução - Edital', 'Localização da ação', 'País', 'Unidade Federativa', 'Município', 'Código do Objetivo Estratégico', 'Objetivo Estratégico',
-    'Código da Meta Estratégica', 'Meta Estratégica', 'Código da Diretriz Estratégica', 'Diretriz Estratégica',
+    'Emenda parlamentar', 'Forma de execução - Edital', 'Localização da ação', 'País', 'Unidade Federativa', 'Município',
+    'Meta da Unidade', 'Objetivo Estratégico', 'Dimensão Estratégica', 'Meta Estratégica', 'Quantidade da Meta Unidade', 'Prioritário',
     'Responsável', 'TED', 'Edital', 'Previsão Edital',
     'Convênio', 'SNIIC', 'Processo', 'PRONAC', 'Produto', 'Unidade de Medida', 'Quantidade', 'Valor Total', 'Valor Total Custeio', 'Valor Total Capital',
 
