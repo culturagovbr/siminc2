@@ -1901,9 +1901,18 @@ class Pi_PlanoInterno extends Modelo
         return $this->pegaLinha($sql);
     }
 
-    public function recuperarPiPorMetaESubunidade($mppid, $suoid, $exercicio = null)
+    public function recuperarPiPorMetaESubunidade(stdClass $params, $exercicio = null)
     {
-        $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
+        $exercicio = (int)$exercicio ? (int)$exercicio : (int)$_SESSION['exercicio'];
+        $suoid = (int)$params->suoid;
+
+        if ($params->tipo === 'meta-unidade') {
+            $params->meuid  = (int)$params->meuid;
+            $where = "\n  AND pic.meuid = '{$params->meuid}'";
+        } else if ($params->tipo === 'meta-ppa') {
+            $params->mppid  = (int)$params->mppid;
+            $where = "\n  AND pic.mppid = '{$params->mppid}'";
+        }
 
         $sql = "
             SELECT
@@ -1912,7 +1921,7 @@ class Pi_PlanoInterno extends Modelo
                 pli.plititulo,
                 COALESCE(pic.picvalorcapital, 0) picvalorcapital,
                 COALESCE(pic.picvalorcusteio, 0) picvalorcusteio,
-                COALESCE(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0) previsto,
+                COALESCE(pic.picvalorcapital, 0) + COALESCE(pic.picvalorcusteio, 0) previsto,
                 COALESCE(sex.vlrautorizado, 0) AS autorizado,
                 COALESCE(sex.vlrempenhado, 0) AS empenhado,
                 COALESCE(sex.vlrliquidado, 0) AS liquidado,
@@ -1926,14 +1935,14 @@ class Pi_PlanoInterno extends Modelo
                     SELECT
                         sex.exercicio,
                         sex.plicod,
-                        sum(sex.vlrautorizado) vlrautorizado,
-                        sum(sex.vlrempenhado) vlrempenhado,
-                        sum(sex.vlrliquidado) vlrliquidado,
-                        sum(sex.vlrpago) vlrpago
+                        SUM(sex.vlrautorizado) vlrautorizado,
+                        SUM(sex.vlrempenhado) vlrempenhado,
+                        SUM(sex.vlrliquidado) vlrliquidado,
+                        SUM(sex.vlrpago) vlrpago
                     FROM
                         spo.siopexecucao sex
                     WHERE
-                        coalesce(sex.plicod, '') != ''
+                        COALESCE(sex.plicod, '') != ''
                     GROUP BY
                         sex.exercicio,
                         sex.plicod
@@ -1943,9 +1952,9 @@ class Pi_PlanoInterno extends Modelo
                 )
             WHERE
                 pli.plistatus = 'A'
-                AND pli.pliano = '". (int)$exercicio. "'
-                AND mppid = ". (int)$mppid. "
-                AND suo.suoid = ". (int)$suoid. "
+                AND pli.pliano = '". $exercicio. "'
+                {$where}
+                AND suo.suoid = '". $suoid. "'
         ";
 
         return $this->carregar($sql);

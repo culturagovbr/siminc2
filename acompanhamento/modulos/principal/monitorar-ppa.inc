@@ -12,7 +12,11 @@
             $cAcompanhamento->excluir($_REQUEST['acoid']);
         die;
         case 'detalhe-pi':
-            $cAcompanhamento->recuperarPiPorMetaESubunidade($_REQUEST['mppid'], $_REQUEST['suoid']);
+            $params = new stdClass();
+            $params->tipo = 'meta-ppa';
+            $params->mppid = $_REQUEST['mppid'];
+            $params->suoid = $_REQUEST['suoid'];
+            $cAcompanhamento->recuperarPiPorMetaESubunidade($params);
         die;
         case 'ver-historico':
             $cAcompanhamento->recuperarHistorico($_REQUEST['acoid']);

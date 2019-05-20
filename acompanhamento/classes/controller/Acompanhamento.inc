@@ -84,10 +84,11 @@ class Acompanhamento_Controller_Acompanhamento
         $mHistorico->salvar();
     }
 
-    public function recuperarPiPorMetaESubunidade($mppid, $suoid)
+    public function recuperarPiPorMetaESubunidade(stdClass $params)
     {
+
         $mPi = new Pi_PlanoInterno();
-        $listaPi = $mPi->recuperarPiPorMetaESubunidade($mppid, $suoid);
+        $listaPi = $mPi->recuperarPiPorMetaESubunidade($params);
 
         include_once APPRAIZ . 'acompanhamento/modulos/principal/detalhe-pi.inc';
     }
@@ -132,7 +133,10 @@ class Acompanhamento_Controller_Acompanhamento
         $listaPerfis = pegaPerfilGeral();
         $mAcompanhamento = new Acompanhamento_Model_Acompanhamento();
 
+        $mJanela = new Acompanhamento_Model_Janela();
+        $janelaAtiva = $mJanela->recuperarJanelaAtiva(Acompanhamento_Model_Tipo::K_TIPO_META_UNIDADE);
+        $aJanelas = $mJanela->recuperarTodos('*', ["prsano = '{$_SESSION['exercicio']}'", "janstatus = 'A'", "tipid = " . Acompanhamento_Model_Tipo::K_TIPO_META_UNIDADE], 'janinicio desc');
+
         include_once APPRAIZ . 'acompanhamento/modulos/principal/listar-metas-planejamento-estrategico.inc';
     }
-
 }

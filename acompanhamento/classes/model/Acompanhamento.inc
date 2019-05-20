@@ -51,6 +51,7 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         'pliid' => array('tabela' => 'pi_planointerno', 'pk' => 'pliid'),
         'mppid' => array('tabela' => 'metappa', 'pk' => 'mppid'),
         'claid' => array('tabela' => 'acompanhamento.classificacao', 'pk' => 'claid'),
+        'meuid' => array('tabela' => 'planacomorc.meta_unidade', 'pk' => 'meuid'),
     );
 
     /**
@@ -60,6 +61,7 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
      */
     protected $arAtributos = array(
         'acoid' => null,
+        'meuid' => null,
         'acoquantidade' => null,
         'acodata' => null,
         'acoanalise' => null,
@@ -72,6 +74,49 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         'prsano' => null,
         'acostatus' => null,
     );
+
+    public function recuperarMetasPlanejamentoEstrategico($suoid, $exercicio = null)
+    {
+        if (!$suoid) return [];
+        $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
+
+        $sql = "
+            SELECT
+                meu.*,
+                aco.acoid,
+                smu.suoid,
+                aco.acoquantidade
+            FROM planacomorc.meta_unidade AS meu
+            JOIN planacomorc.subunidade_meta_unidade AS smu ON smu.meuid = meu.meuid
+                LEFT JOIN acompanhamento.acompanhamento AS aco ON(
+                    aco.meuid = meu.meuid
+                    AND aco.suoid = smu.suoid
+                    AND acostatus = 'A'
+                )
+            WHERE
+                meu.meustatus = 'A'
+                AND smu.suoid = '{$suoid}'
+            UNION
+            SELECT
+                meu.*,
+                aco.acoid,
+                smu.suoid,
+                aco.acoquantidade
+            FROM planacomorc.meta_unidade AS meu
+                LEFT JOIN planacomorc.subunidade_meta_unidade AS smu ON smu.meuid = meu.meuid
+                LEFT JOIN acompanhamento.acompanhamento aco ON(
+                    aco.meuid = meu.meuid
+                    AND aco.suoid = '{$suoid}'
+                    AND acostatus = 'A'
+                )
+            WHERE
+                meu.meustatus = 'A'
+                AND smu.suoid IS NULL
+            ORDER BY
+                meunome
+        ";
+        return $this->carregar($sql);
+    }
 
     public function getMetasPpa($suoid, $exercicio = null)
     {

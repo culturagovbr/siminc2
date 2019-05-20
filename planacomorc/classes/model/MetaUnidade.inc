@@ -134,4 +134,43 @@ class Planacomorc_Model_MetaUnidade extends Modelo
         return $this->pegaLinha($sql);
     }
 
+    /**
+     *
+     */
+    public function recuperarInformacoes($exercicio = null)
+    {
+        $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
+
+        $sql = "
+            SELECT
+                meu.meuid,
+                meu.meunome,
+                meu.meuquantificavel,
+                meu.meuquantidade,
+                obe.obeid,
+                obe.obenome,
+                dime.dimeid,
+                dime.dimenome,
+                mee.meeid,
+                mee.meenome,
+                CASE WHEN (SELECT count(1) FROM planacomorc.subunidade_meta_unidade smu WHERE smu.meuid = meu.meuid) = 0 THEN
+                    TRUE
+                WHEN (SELECT count(1) FROM planacomorc.subunidade_meta_unidade smu WHERE smu.meuid = meu.meuid) > 2 THEN
+                    TRUE
+                ELSE
+                    FALSE
+                END AS compartilhada,
+                -- Cálculo para verificar quantidade anualizada: (valor previsto dividido por 4 e vezes o ano do monitoramento)
+                meu.meuquantidade / 4 * ((to_char(now(), 'YYYY')::int % 4) + 1) meuquantidadeanualizada
+            FROM planacomorc.meta_unidade meu
+                LEFT JOIN planacomorc.objetivo_estrategico AS obe ON obe.obeid = meu.obeid
+                LEFT JOIN planacomorc.dimensao_estrategica AS dime ON dime.dimeid = meu.dimeid
+                LEFT JOIN planacomorc.meta_estrategica AS mee ON mee.meeid = meu.meeid
+            WHERE
+                meu.meustatus = 'A'
+                AND meu.meuid = ". (int)$this->meuid. "
+        ";
+
+        return $this->pegaLinha($sql);
+    }
 }

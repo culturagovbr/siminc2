@@ -1,11 +1,18 @@
 <div class="ibox float-e-margins">
     <div class="ibox-title">
         <?php
-//        $aMetasPpa = $mAcompanhamento->getMetasPpaComPi($suoid, $janid);
+        $janid = $janid ? $janid : $janelaAtiva['janid'];
+//        $aMetasEstrategica = $mAcompanhamento->getMetasPpaComPi($suoid, $janid);
         ?>
-        <h5 style="margin-right: 30px;">Minhas Metas do Planejamento Estratégico
-            <!-- <span style="color: red;">(<?= count($aMetasEstrategica); ?>)</span>  -->
-        </h5>
+        <h5 style="margin-right: 30px;">Minhas Metas do Planejamento Estratégico <span style="color: red;">(<?= count($aMetasEstrategica); ?>)</span></h5>
+        Janela:
+        <select id="janid_ppa">
+            <?php foreach($aJanelas as $janela){ ?>
+                <option value="<?= $janela['janid']; ?>" <?= $janela['janid'] == $janid ? 'selected' : ''; ?>>
+                    <?php echo "{$janela['jandsc']} - (" . Simec_Util::formatarData($janela['janinicio'], 'dd/MM/YYYYY') . " - " . Simec_Util::formatarData($janela['janfim'], 'dd/MM/YYYYY') . ")"; ?>
+                </option>
+            <?php } ?>
+        </select>
     </div>
     <div class="ibox-content">
         <?php
