@@ -35,10 +35,10 @@ include APPRAIZ . "includes/cabecalho.inc";
 
                         <?php
                             echo $simec->textarea('meunome', 'Nome', $mMetaUnidade->meunome, ['required','maxlength' => 1000, 'cols' => 50, 'rows' => 6]);
-                            echo $simec->select('meeid', 'Meta Estratégica',  $mMetaUnidade->meeid, (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo());
-                            echo $simec->select('dimeid', 'Dimensão Estratégica',  $mMetaUnidade->dimeid, (new Planacomorc_Model_DimensaoEstrategica())->recuperarSqlCombo());
                             echo $simec->select('obeid', 'Objetivo Estratégico',  $mMetaUnidade->obeid, (new Planacomorc_Model_ObjetivoEstrategico())->recuperarSqlCombo());
-                            # Traz Sim por default
+                            echo $simec->select('dimeid', 'Dimensão Estratégica',  $mMetaUnidade->dimeid, (new Planacomorc_Model_DimensaoEstrategica())->recuperarSqlCombo());
+                            echo $simec->select('meeid', 'Meta Estratégica',  $mMetaUnidade->meeid, (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo());
+                        # Traz Sim por default
                             $radio = $mMetaUnidade->meuquantificavel ? $mMetaUnidade->meuquantificavel : 't';
                             echo $simec->radio('meuquantificavel', 'Quantificável', $radio, ['t' => 'Sim', 'f' => 'Não'], ['required']);
                             echo $simec->moedaInteiro('meuquantidade', 'Quantidade', $mMetaUnidade->meuquantidade, ['maxlength' => 9, 'class' => 'inteiro']);
