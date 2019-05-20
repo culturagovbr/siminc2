@@ -104,8 +104,6 @@ define("SUOCOD_MC_COGEP", 550006);
 define("SUOCOD_MC_STI", 550016);
 define("SUOCOD_MC_SAGI", 550010);
 
-
-define("SUOCOD_ASCOM", 420017);
 define("SUOCOD_ANCINE", 203003);
 
 define("SUOCOD_FCRB", 344001);
