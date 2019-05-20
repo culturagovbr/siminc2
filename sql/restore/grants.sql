@@ -2633,7 +2633,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."cronograma" TO "usr
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."cronograma_valor" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."dados_acao_exercicio" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."dadosfinanceirossiafi" TO "usr_simec";
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."diretriz_estrategica" TO "usr_simec";
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."dimensao_estrategica" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."dotacao_subacao" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."esfera" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."etapas" TO "usr_simec";
@@ -2650,6 +2650,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."manutencaoitem" TO 
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."manutencaosubitem" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."meta_estrategica" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."meta_plano_orcamentario" TO "usr_simec";
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."meta_unidade" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."metodologia_conversao" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."monitorinterno" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."monqstacaperiodo" TO "usr_simec";
@@ -2698,7 +2699,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."solicitacaocriacaop
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."solicitacaopidotacao" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."subacao" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."subfuncao" TO "usr_simec";
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."subunidademeta_estrategica" TO "usr_simec";
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."subunidade_meta_unidade" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."tcuquestionario" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."tcuquestpergunta" TO "usr_simec";
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE "planacomorc"."tcuquestresposta" TO "usr_simec";
@@ -5752,7 +5753,7 @@ GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."carga_financeira_id_carga_finance
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."cronograma_croid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."cronograma_valor_crvid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."dadosfinanceirossiafi_dfsid_seq" TO "usr_simec";
-GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."diretriz_estrategica_dieid_seq" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."dimensao_estrategica_dimeid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."dotacao_subacao_id_dotacao_subacao_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."esfera_id_esfera_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."etapas_etaid_seq" TO "usr_simec";
@@ -5768,6 +5769,7 @@ GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."manutencaoitem_maiid_seq" TO "usr
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."manutencaosubitem_masid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."meta_estrategica_meeid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."meta_plano_orcamentario_id_meta_plano_orcamentario_seq" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."meta_unidade_meuid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."metodologia_conversao_id_metodologia_conversao_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."monitorinterno_monid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."monqstacaperiodo_mqaid_seq" TO "usr_simec";
@@ -5813,7 +5815,7 @@ GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."solicitacaocriacaopi_scpid_seq" T
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."solicitacaopidotacao_spdid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."subacao_id_subacao_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."subfuncao_id_subfuncao_seq" TO "usr_simec";
-GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."subunidademeta_estrategica_smeid_seq" TO "usr_simec";
+GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."subunidade_meta_unidade_smuid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."tcuquestionario_tqtid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."tcuquestpergunta_tqpid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "planacomorc"."tcuquestresposta_tqrid_seq" TO "usr_simec";
@@ -6617,4 +6619,3 @@ GRANT USAGE, SELECT ON SEQUENCE "workflow"."documento_docid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."estadodocumento_esdid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."historicodocumento_hstid_seq" TO "usr_simec";
 GRANT USAGE, SELECT ON SEQUENCE "workflow"."tipodocumento_tpdid_seq" TO "usr_simec";
-
