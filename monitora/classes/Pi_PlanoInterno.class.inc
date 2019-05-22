@@ -1809,9 +1809,14 @@ class Pi_PlanoInterno extends Modelo
 
     }
 
-    public function recuperarResumoPorMetaESubunidade($mppid, $suoid, $exercicio = null)
+    public function recuperarResumoPorMetaESubunidade(stdClass $dto)
     {
-        $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
+        $exercicio = (int)$_SESSION['exercicio'];
+
+        $where = '';
+        $dto->mppid ? $where .= "\n  AND pic.mppid = '" . (int)$dto->mppid . "'" : NULL;
+        $dto->meuid ? $where .= "\n  AND pic.meuid = '" . (int)$dto->meuid . "'" : NULL;
+        $dto->suoid ? $where .= "\n  AND suo.suoid = '" . (int)$dto->suoid . "'" : NULL;
 
         $sql = "
             SELECT
@@ -1824,7 +1829,7 @@ class Pi_PlanoInterno extends Modelo
                 SUM(COALESCE(sex.vlrliquidado, 0)) AS liquidado,
                 SUM(COALESCE(sex.vlrpago, 0)) AS pago
             FROM monitora.pi_planointerno pli
-                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+                LEFT JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
                     suo.unocod = pli.unicod
                     AND suo.suocod = pli.ungcod
@@ -1840,7 +1845,7 @@ class Pi_PlanoInterno extends Modelo
                     FROM spo.siopexecucao sex
                     WHERE
                         sex.plicod IS NOT NULL
-                        AND sex.exercicio = '". (int)$exercicio. "'
+                        AND sex.exercicio = '" . $exercicio . "'
                     GROUP BY
                         sex.plicod
                 ) sex ON(
@@ -1848,13 +1853,13 @@ class Pi_PlanoInterno extends Modelo
                 )
             WHERE
                 pli.plistatus = 'A'
-                AND pli.pliano = '". (int)$exercicio. "'
-                AND pic.mppid = " . (int)$mppid . "
-                AND suo.suoid = " . (int)$suoid;
+                AND pli.pliano = '" . $exercicio . "'
+                {$where}
+        ";
 
         return $this->pegaLinha($sql);
     }
-    
+
     public function recuperarValoresPiMetaPncESubunidade($mpnid, $suoid, $exercicio = null)
     {
         $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];

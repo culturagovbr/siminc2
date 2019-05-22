@@ -6,6 +6,7 @@ $listaPerfis = pegaPerfilGeral();
 $cAcompanhamento = new Acompanhamento_Controller_Acompanhamento();
 switch ($_REQUEST['req']) {
     case 'salvar':
+        $_REQUEST['url'] = '?modulo=principal/monitorar-planejamento-estrategico&acao=A';
         $cAcompanhamento->salvar($_REQUEST);
         die;
     case 'excluir':
@@ -130,8 +131,8 @@ include APPRAIZ . "includes/cabecalho.inc";
                         $aMetas = $mAcompanhamento->recuperarMetasPlanejamentoEstrategico($suoid);
                         $aUnidades = (new Public_Model_SubUnidadeOrcamentaria())->recuperarPorUsuario();
                         $infoMeta = (new Planacomorc_Model_MetaUnidade($meuid))->recuperarInformacoes();
-                        $infoPI = (new Pi_PlanoInterno())->recuperarResumoPorMetaESubunidade($meuid, $suoid);
-
+                        $dto = ['meuid' => $meuid, 'suoid' => $suoid];
+                        $infoPI = (new Pi_PlanoInterno())->recuperarResumoPorMetaESubunidade((object)$dto);
                         $dadosGrafico = [];
                         if(count($infoPI)){
                             foreach ($infoPI as $key => $valor) {
@@ -159,8 +160,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 <div class="col-sm-4 col-md-3" title="<?= $meta['meuid'] . ' - ' . $meta['meunome']; ?>">
                                     <div data-cor="<?= $cor ?>" class="widget div-meta <?= $cor ?>">
                                         <div class="row">
-                                            <div class="col-xs-1"></div>
-                                            <div class="col-md-11">
+                                            <div class="col-xs-12">
                                                 <span><?= substr($meta['meunome'], 0, 50); ?>...</span>
                                             </div>
                                         </div>

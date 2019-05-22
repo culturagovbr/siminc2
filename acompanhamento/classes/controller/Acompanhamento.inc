@@ -9,6 +9,8 @@ class Acompanhamento_Controller_Acompanhamento
             $url = '?modulo=principal/monitorar-pnc&acao=A';
         } elseif (!empty($dados['pliid'])) {
             $url = $urlModulo . '&pliid=' . $dados['pliid'];
+        } elseif (!empty($dados['url'])) {
+            $url = '?modulo=principal/monitorar-planejamento-estrategico&acao=A';
         }
 
         try {

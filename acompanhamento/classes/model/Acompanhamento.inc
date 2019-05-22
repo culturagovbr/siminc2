@@ -378,49 +378,134 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
         return $listaResultado? $listaResultado: array();
     }
 
+    /**
+     * Recupera a lista de Meta do Planejamento Estrategico de acordo com a SubUnidade e a Janela.
+     *
+     * @param stdClass $dto  $dto->janid Janela do acompanhamento   $dto->suoid  SubUnidade Orçamentária
+     * @return array|string
+     */
+    public function recuperarMetasPlanejamentoComPI(stdClass $dto)
+    {
+        $sql = "
+            SELECT
+                ac.meuid, ac.meunome, ac.meustatus,
+                ac.meuquantificavel, ac.meuquantidade, ac.acoid, ac.suoid, ac.acoquantidade,
+                CASE
+                    WHEN (SELECT COUNT(1) FROM planacomorc.subunidade_meta_unidade smu WHERE smu.meuid = ac.meuid) = 0 THEN TRUE
+                    WHEN (SELECT COUNT(1) FROM planacomorc.subunidade_meta_unidade smu WHERE smu.meuid = ac.meuid) > 2 THEN TRUE
+                    ELSE FALSE
+                END AS compartilhada,
+                COUNT(pic.pliid) pis, SUM(pic.picquantidade) picquantidade
+            FROM (
+                SELECT
+                    meu.meuid, meu.meunome, meu.meustatus,
+                    meu.meuquantificavel, meu.meuquantidade, aco.acoid, smu.suoid, aco.acoquantidade
+                FROM planacomorc.meta_unidade meu
+                    JOIN planacomorc.subunidade_meta_unidade smu ON smu.meuid = meu.meuid
+                    LEFT JOIN acompanhamento.acompanhamento aco ON(
+                        aco.meuid = meu.meuid
+                        AND aco.suoid = smu.suoid
+                        AND aco.acostatus = 'A'
+                        AND aco.janid = '" . $dto->janid . "'
+                    )
+                WHERE
+                    meu.meustatus = 'A'
+                    AND smu.suoid = '" . $dto->suoid . "'
+                UNION
+                SELECT
+                    meu.meuid, meu.meunome, meu.meustatus, meu.meuquantificavel,
+                    meu.meuquantidade, aco.acoid, smu.suoid, aco.acoquantidade
+                FROM planacomorc.meta_unidade meu
+                    LEFT JOIN planacomorc.subunidade_meta_unidade smu ON smu.meuid = meu.meuid
+                    LEFT JOIN acompanhamento.acompanhamento aco ON(
+                        aco.meuid = meu.meuid
+                        AND aco.suoid = '" . $dto->suoid . "'
+                        AND aco.acostatus = 'A'
+                        AND aco.janid = '" . $dto->janid . "'
+                    )
+                WHERE
+                    meu.meustatus = 'A'
+                    AND smu.suoid IS NULL
+            ) AS ac
+                LEFT JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = ac.suoid
+                LEFT JOIN monitora.pi_planointerno pli ON pli.ungcod = suo.suocod AND pli.unicod = suo.unocod
+                LEFT JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid AND pic.meuid = ac.meuid
+            GROUP BY
+                ac.meuid, ac.meunome, ac.meustatus,
+                ac.meuquantificavel, ac.meuquantidade,
+                ac.acoid, ac.suoid, ac.acoquantidade,
+                compartilhada
+            ORDER BY
+                meunome
+        ";
+
+        return $this->carregar($sql);
+    }
+
     public function getMetasPpaComPi($suoid, $janid = null, $exercicio = null)
     {
         $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
 
-        if($suoid){
-            $sql = "select  ac.mppid, ac.mppdsc, ac.mppcod, ac.mppnome, ac.mppstatus, ac.prsano, ac.mppquantificavel, ac.mppquantidade, ac.acoid, ac.suoid, ac.acoquantidade,
-                            case 
-                                when  (select count(1) from spo.subunidademetappa m where m.mppid = ac.mppid) = 0 then true
-                                when  (select count(1) from spo.subunidademetappa m where m.mppid = ac.mppid) > 2 then true
-                                else false      
-                            end as compartilhada,
-                            count(pic.pliid) pis, sum(pic.picquantidade) picquantidade
-                    from (
-                            select mpp.mppid, mpp.mppdsc, mpp.mppcod, mpp.mppnome, mpp.mppstatus, mpp.prsano, mpp.mppquantificavel, mpp.mppquantidade, aco.acoid, smp.suoid, aco.acoquantidade
-                            from public.metappa mpp
-                                inner join spo.subunidademetappa smp on smp.mppid = mpp.mppid
-                                left join acompanhamento.acompanhamento aco on aco.mppid = mpp.mppid and aco.suoid = smp.suoid and acostatus = 'A' and aco.janid = " . (int) $janid . "
-                            where mpp.prsano = '$exercicio'
-                            and mpp.mppstatus = 'A'
-                            and smp.suoid = $suoid
-                            union
-                            select mpp.mppid, mpp.mppdsc, mpp.mppcod, mpp.mppnome, mpp.mppstatus, mpp.prsano, mpp.mppquantificavel, mpp.mppquantidade, aco.acoid, $suoid, aco.acoquantidade
-                            from public.metappa mpp
-                                left join spo.subunidademetappa smp on smp.mppid = mpp.mppid
-                                left join acompanhamento.acompanhamento aco on aco.mppid = mpp.mppid and aco.suoid = $suoid and acostatus = 'A' and aco.janid = " . (int) $janid . "
-                            where mpp.prsano = '$exercicio'
-                            and mpp.mppstatus = 'A'
-                            and smp.suoid is null
-                            and mpp.mppcod != '0'
-                    ) ac
-                            left join public.vw_subunidadeorcamentaria suo on suo.suoid = ac.suoid
-                            left join monitora.pi_planointerno pli on pli.ungcod = suo.suocod and pli.unicod = suo.unocod        
-                            left join planacomorc.pi_complemento pic on pic.pliid = pli.pliid and pic.mppid = ac.mppid        
-                    group by ac.mppid, ac.mppdsc, ac.mppcod, ac.mppnome, ac.mppstatus, ac.prsano, ac.mppquantificavel, ac.mppquantidade, ac.acoid, ac.suoid, ac.acoquantidade, compartilhada
-                    order by mppcod, mppdsc        
-                    ;";
+        if (!$suoid) return [];
 
-//            ver($sql, d);
+            $sql = "
+            SELECT
+                ac.mppid, ac.mppdsc, ac.mppcod, ac.mppnome, ac.mppstatus, ac.prsano,
+                ac.mppquantificavel, ac.mppquantidade, ac.acoid, ac.suoid, ac.acoquantidade,
+                CASE
+                    WHEN (SELECT COUNT(1) FROM spo.subunidademetappa m WHERE m.mppid = ac.mppid) = 0 THEN TRUE
+                WHEN (SELECT COUNT(1) FROM spo.subunidademetappa m WHERE m.mppid = ac.mppid) > 2 THEN TRUE
+                ELSE FALSE
+                END AS compartilhada,
+                COUNT(pic.pliid) pis, SUM(pic.picquantidade) picquantidade
+            FROM (
+                SELECT
+                    mpp.mppid, mpp.mppdsc, mpp.mppcod, mpp.mppnome, mpp.mppstatus,mpp.prsano,
+                    mpp.mppquantificavel, mpp.mppquantidade, aco.acoid, smp.suoid, aco.acoquantidade
+                FROM public.metappa mpp
+                    JOIN spo.subunidademetappa smp ON smp.mppid = mpp.mppid
+                    LEFT JOIN acompanhamento.acompanhamento aco ON(
+                        aco.mppid = mpp.mppid
+                        AND aco.suoid = smp.suoid
+                        AND acostatus = 'A'
+                        AND aco.janid = '" . (int)$janid . "'
+                    )
+                WHERE
+                    mpp.prsano = '" . $exercicio . "'
+                    AND mpp.mppstatus = 'A'
+                    AND smp.suoid = '" . $suoid . "'
+                UNION
+                SELECT
+                    mpp.mppid, mpp.mppdsc, mpp.mppcod, mpp.mppnome, mpp.mppstatus, mpp.prsano,
+                    mpp.mppquantificavel, mpp.mppquantidade, aco.acoid, smp.suoid, aco.acoquantidade
+                FROM public.metappa mpp
+                    LEFT JOIN spo.subunidademetappa smp ON smp.mppid = mpp.mppid
+                    LEFT JOIN acompanhamento.acompanhamento aco ON(
+                        aco.mppid = mpp.mppid
+                        AND aco.suoid = '" . $suoid . "'
+                        AND acostatus = 'A'
+                        AND aco.janid = '" . (int)$janid . "'
+                    )
+                WHERE
+                    mpp.prsano = '" . $exercicio . "'
+                    AND mpp.mppstatus = 'A'
+                    AND smp.suoid IS NULL
+                    AND mpp.mppcod != '0'
+            ) AS ac
+                LEFT JOIN public.vw_subunidadeorcamentaria suo ON suo.suoid = ac.suoid
+                LEFT JOIN monitora.pi_planointerno pli ON pli.ungcod = suo.suocod AND pli.unicod = suo.unocod
+                LEFT JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid AND pic.mppid = ac.mppid
+            GROUP BY
+                ac.mppid, ac.mppdsc, ac.mppcod,
+                ac.mppnome, ac.mppstatus, ac.prsano,
+                ac.mppquantificavel, ac.mppquantidade,
+                ac.acoid, ac.suoid, ac.acoquantidade,
+                compartilhada
+            ORDER BY
+                mppcod, mppdsc
+            ";
 
             return $this->carregar($sql);
-        }
-
-        return [];
     }
 
     public function getIndicadoresPnc(stdClass $filtro)

@@ -129,7 +129,8 @@
                         $aMetas = $mAcompanhamento->getMetasPpa($suoid);
                         $aUnidades = (new Public_Model_SubUnidadeOrcamentaria())->recuperarPorUsuario();
                         $infoMeta = (new Public_Model_MetaPpa($mppid))->recuperarInformacoes();
-                        $infoPI = (new Pi_PlanoInterno())->recuperarResumoPorMetaESubunidade($mppid, $suoid);
+                        $dto = ['mppid' => $mppid, 'suoid' => $suoid];
+                        $infoPI = (new Pi_PlanoInterno())->recuperarResumoPorMetaESubunidade((object)$dto);
 
                         $dadosGrafico = [];
                         if(count($infoPI)){
