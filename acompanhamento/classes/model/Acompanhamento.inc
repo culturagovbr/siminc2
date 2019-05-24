@@ -406,7 +406,7 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
                         aco.meuid = meu.meuid
                         AND aco.suoid = smu.suoid
                         AND aco.acostatus = 'A'
-                        AND aco.janid = '" . $dto->janid . "'
+                        AND aco.janid = '" . (int)$dto->janid . "'
                     )
                 WHERE
                     meu.meustatus = 'A'
@@ -421,7 +421,7 @@ class Acompanhamento_Model_Acompanhamento extends Modelo
                         aco.meuid = meu.meuid
                         AND aco.suoid = '" . $dto->suoid . "'
                         AND aco.acostatus = 'A'
-                        AND aco.janid = '" . $dto->janid . "'
+                        AND aco.janid = '" . (int)$dto->janid . "'
                     )
                 WHERE
                     meu.meustatus = 'A'
