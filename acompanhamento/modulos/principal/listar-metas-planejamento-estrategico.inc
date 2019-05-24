@@ -10,7 +10,7 @@
         <select id="janid_planejamento_estrategico">
             <?php foreach($aJanelas as $janela){ ?>
                 <option value="<?= $janela['janid']; ?>" <?= $janela['janid'] == $janid ? 'selected' : ''; ?>>
-                    <?= "{$janela['jandsc']} - (" . Simec_Util::formatarData($janela['janinicio'], 'dd/MM/YYYYY') . " - " . Simec_Util::formatarData($janela['janfim'], 'dd/MM/YYYYY') . ")"; ?>
+                    <?= "{$janela['jandsc']} - (" . Simec_Util::formatarData($janela['janinicio'], 'dd/MM/YYYY') . " - " . Simec_Util::formatarData($janela['janfim'], 'dd/MM/YYYY') . ")"; ?>
                 </option>
             <?php } ?>
         </select>
@@ -36,12 +36,12 @@
                             $url = '?modulo=principal/monitorar-planejamento-estrategico&acao=A&acoid='. $metaEstrategica['acoid'];
                             $icone = '<span class="label label-primary">Preenchida</span>';
                         } else {
-                            $url = '?modulo=principal/monitorar-planejamento-estrategico&acao=A&meuid='. $metaEstrategica['meuid']. '&suoid='. $metaEstrategica['suoid'];
+                            $url = '?modulo=principal/monitorar-planejamento-estrategico&acao=A&meuid='. $metaEstrategica['meuid']. '&suoid='. $metaEstrategica['suoid'] . '&janid=' . $janid;
                             $icone = '<span class="label label-danger">Pendente</span>';
                         }
                         $status = $metaEstrategica['acoid'] ?
                             '<a href="?modulo=principal/monitorar-planejamento-estrategico&acao=A&acoid=' . $metaEstrategica['acoid'] . '"><span class="label label-primary">Preenchida</span></a>' :
-                            '<a href="?modulo=principal/monitorar-planejamento-estrategico&acao=A&meuid=' . $metaEstrategica['meuid'] . '&suoid=' . $metaEstrategica['suoid'].'"><span class="label label-danger">Pendente</span></a>';
+                            '<a href="?modulo=principal/monitorar-planejamento-estrategico&acao=A&meuid=' . $metaEstrategica['meuid'] . '&suoid=' . $metaEstrategica['suoid']. '&janid=' . $janid . '"><span class="label label-danger">Pendente</span></a>';
                         # Caso seja perfil PNC não exibe o link de acesso a pagina de edição
                         if (in_array(PFL_PNC, $listaPerfis)) {
                             $botao = $icone;

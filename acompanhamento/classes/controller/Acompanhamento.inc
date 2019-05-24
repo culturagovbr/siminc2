@@ -130,7 +130,7 @@ class Acompanhamento_Controller_Acompanhamento
         include_once APPRAIZ . 'acompanhamento/modulos/principal/listar-metas-ppa.inc';
     }
 
-    public function listarMetasPlanejamentoEstrategico($suoid)
+    public function listarMetasPlanejamentoEstrategico($suoid, $janid = null)
     {
         $listaPerfis = pegaPerfilGeral();
         $mAcompanhamento = new Acompanhamento_Model_Acompanhamento();

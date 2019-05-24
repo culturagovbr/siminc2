@@ -16,7 +16,7 @@
             include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc';
             die;
         case 'listar-metas-estrategicas':
-            include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-planejamento-estrategico.inc';
+            $cAcompanhamento->listarMetasPlanejamentoEstrategico($_REQUEST['suoid'], $_REQUEST['janid']);
             die;
     }
 
