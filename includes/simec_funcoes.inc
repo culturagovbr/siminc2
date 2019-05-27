@@ -553,9 +553,10 @@ function buscarSuoidUsuario(stdClass $filtros){
             JOIN public.vw_subunidadeorcamentaria suo ON rpu.ungcod = suo.suocod
         WHERE
             rpu.rpustatus = 'A'
+            AND suo.prsano = '". (int)$filtros->exercicio. "'
             AND rpu.usucpf = '". pg_escape_string($filtros->usucpf). "'
     ";
-//ver($sql,d);
+//ver($sql, d);
     $resultado = $db->carregar($sql);
     if($resultado){
         foreach($resultado as $contador => $subUnidade){

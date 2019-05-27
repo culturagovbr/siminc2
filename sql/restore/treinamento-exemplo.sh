@@ -79,12 +79,5 @@ WHERE
 ;
 "
 
-# Apagando tabelas de logs que não são necessárias
-PGPASSWORD=[SENHA_BD] psql --host [IP_SERVIDOR_BANCO] --port 5432 --username "postgres" --dbname "siminc2_treinamento" -c "
-TRUNCATE TABLE acomporc.mensagensretorno;
-DELETE FROM spo.logws;
-VACUUM FULL VERBOSE acomporc.mensagensretorno;
-VACUUM FULL VERBOSE spo.logws;"
-
-# Criando arquivo de dump pra o ambiente de desenvolvimento atualizado com permissões pra o usuário usr_simec e tabela de auditoria vazia @todo fazer o pg_dump funcionar conectando por string assim como o pg_restore
-#pg_dump -v -h [IP_SERVIDOR_BANCO] -p 5432 -W -Fc -U postgres siminc2_treinamento > siminc2_desenvolvimento.bkp
+# Criando arquivo de dump pra o ambiente de desenvolvimento atualizado com permissões e tabela de auditoria vazia
+# pg_dump -v --dbname=postgres://postgres:[SENHA_BD]@[IP_SERVIDOR_BANCO]:5432/siminc2_treinamento -Fc > siminc2_desenvolvimento.bkp

@@ -1214,15 +1214,15 @@ DML;
                     ungcod,
                     pliano,
                     plisituacao,
-                    plicadsiafi,
-                    plirecursosnecessarios
-                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s')
+                    plicadsiafi
+                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')
                 RETURNING
                     pliid;
 DML;
             
             $stmt = sprintf(
-                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF, str_replace(array("'"), ' ', $dados['plidsc']));
+                $sql, $dados['mdeid'], $dados['eqdid'], $dados['neeid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF);
+
             $pliid = $db->pegaUm($stmt);
             
             //Grava usuário que salvou por último
@@ -1261,7 +1261,6 @@ DML;
             UPDATE monitora.pi_planointerno SET
                 plititulo = '%s',
                 plidsc = '%s',
-                plirecursosnecessarios = '%s',
                 mdeid = %s,
                 eqdid = %s,
                 neeid = %s,
@@ -1273,7 +1272,6 @@ DML;
         $stmt = sprintf($sql,
             trim($dados['plititulo']),
             trim($dados['plidsc']),
-            trim($dados['plirecursosnecessarios']),
             $dados['mdeid'],
             $dados['eqdid'],
             $dados['neeid'],
@@ -1396,6 +1394,7 @@ function salvarPiComplemento($pliid, $dados)
     $modelPiComplemento->masid = $dados['masid'] ? $dados['masid'] : null;
     $modelPiComplemento->pijid = $dados['pijid'] ? $dados['pijid'] : null;
     $modelPiComplemento->ptaid = $dados['ptaid'] ? $dados['ptaid'] : null;
+    $modelPiComplemento->meuid = $dados['meuid'] ? $dados['meuid'] : null;
     $modelPiComplemento->picpublico = str_replace(array("'"), ' ', $dados['picpublico']);
     $modelPiComplemento->picexecucao = $dados['picexecucao']? desformata_valor($dados['picexecucao']): null;
     $modelPiComplemento->picted = $dados['picted'] == 't' ? 't' : 'f';
@@ -1403,6 +1402,7 @@ function salvarPiComplemento($pliid, $dados)
 //ver($modelPiComplemento,d);
     $modelPiComplemento->salvar(NULL, NULL,
         array(
+                'meuid',
                 'esfid',
                 'prgid',
                 'ptaid',
@@ -2167,8 +2167,7 @@ function carregarPI($pliid) {
             sba.sbasigla || ' - ' AS sbasigla,
             sba.sbacod,
             ben.benid,
-            em.emenumero,
-            pli.plirecursosnecessarios
+            em.emenumero
         FROM monitora.pi_planointerno pli
             LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
             LEFT JOIN emendas.emenda em ON(ben.emeid = em.emeid)
@@ -2798,7 +2797,7 @@ function pegarDocidPi($pliid, $tipoFluxo)
     $sql = "select docid from monitora.pi_planointerno where pliid = {$pliid}";
     $docid = $db->pegaUm($sql);
     if (!$docid) {
-        $docid = wf_cadastrarDocumento($tipoFluxo, "PI {$pliid}");
+        $docid = wf_cadastrarDocumento($tipoFluxo, "PA {$pliid}");
 
         $db->executar("UPDATE monitora.pi_planointerno SET docid = $docid where pliid = {$pliid}");
         $db->commit();
@@ -3081,4 +3080,24 @@ function exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria){
     ';
     
     echo $htmlAviso;
+}
+
+/**
+ * Função para recuperar Combos de Objetivo, Dimensão Estratégica e Meta Estratégica
+ *
+ * @param $meuid
+ * @return bool
+ */
+function carregarComboEstrategico($meuid)
+{
+    if(!$meuid) return false;
+
+    global $simec;
+    $dimensaoEstrategica = (new Planacomorc_Model_MetaUnidade())->recuperarPlanejamentoEstrategico($meuid);
+
+    $simec->setPodeEditar(0);
+    echo $simec->textarea('obeid', 'Objetivo', $dimensaoEstrategica['obenome'], ['cols' => 60, 'rows' => 6]);
+    echo $simec->textarea('dieid', 'Dimensão Estratégica', $dimensaoEstrategica['dimenome'], ['cols' => 60, 'rows' => 6]);
+    echo $simec->textarea('meeid', 'Meta Estratégica', $dimensaoEstrategica['meenome'], ['cols' => 60, 'rows' => 6]);
+    $simec->setPodeEditar(1);
 }

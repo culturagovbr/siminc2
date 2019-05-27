@@ -302,34 +302,47 @@ class Emendas_Model_Emenda extends Modelo
 
         $sql = "
            SELECT DISTINCT
-		-- DADOS DA EMENDA
-		eme.emeid,
-		SUBSTRING(eme.emenumero::TEXT FROM 1 FOR 4) || ' ' || SUBSTRING(eme.emenumero::TEXT FROM 5 FOR LENGTH(eme.emenumero::TEXT)) AS emenumero,
+		        -- DADOS DA EMENDA
+		        eme.emeid,
+		        SUBSTRING(eme.emenumero::TEXT FROM 1 FOR 4) || ' ' || SUBSTRING(eme.emenumero::TEXT FROM 5 FOR LENGTH(eme.emenumero::TEXT)) AS emenumero,
                 -- AUTOR
                 aut.autcod,
                 aut.autnome,
-                CASE WHEN aut.autsexo = 'M' THEN 'Homem' when aut.autsexo = 'F' THEN 'Mulher' ELSE 'A Identificar' end genero,
+                CASE WHEN aut.autsexo = 'M'
+                    THEN 'Homem' when aut.autsexo = 'F'
+                    THEN 'Mulher' ELSE 'A Identificar'
+                END genero,
+
                 autip.atpdsc AS tipo_parlamentar,
                 aut.estuf,
                 p.parsigla,
+
                 -- UNIDADE
-		uno.unocod,
-		uno.unosigla,
-		ptr.funcional || ' - ' || COALESCE(ptr.acatitulo, '') AS funcional,
-                CASE WHEN eme.emeimpositiva = 't' THEN 'Sim' ELSE 'Não' END AS impositiva,
+		        uno.unocod,
+		        uno.unosigla,
+		        ptr.funcional || ' - ' || COALESCE(ptr.acatitulo, '') AS funcional,
+                CASE WHEN eme.emeimpositiva = 't'
+                    THEN 'Sim'
+                    ELSE 'Não'
+                END AS impositiva,
                 eme.emejustificativa,
+
                 -- DADOS FINANCEIROS
                 COALESCE((SELECT SUM(COALESCE(emed.emdvalor,0)) FROM emendas.emendadetalhe emed WHERE emed.emeid = eme.emeid and gndcod<=3),0) AS custeio,
                 COALESCE((SELECT SUM(COALESCE(emed.emdvalor,0)) FROM emendas.emendadetalhe emed WHERE emed.emeid = eme.emeid and gndcod>3),0) AS capital,
+
                 -- BENEFICIARIOS
-		ben.benid,
+		        ben.benid,
+		        suo.unocod AS cod_uo_beneficiario,
+                suo.unonome AS uo_beneficiario,
                 suo.suocod AS cod_unidade,
                 suo.suonome AS unidade,
                 suoed.suocod AS cod_unidade_delegada,
                 suoed.suonome AS unidade_delegada,
                 REPLACE(TO_CHAR(pro.procnpj::NUMERIC, '00:000:000/0000-00'), ':', '.') procnpj,
                 pro.pronome,
-		esf.esfdsc AS localizacao,
+		        esf.esfdsc AS localizacao,
+
                 REPLACE(REPLACE(ARRAY(
                     SELECT DISTINCT
                         p.paidescricao
@@ -339,6 +352,7 @@ class Emendas_Model_Emenda extends Modelo
                         p.paidescricao IS NOT NULL
                         AND bl.benid = ben.benid
                 )::TEXT, '{', ''), '}', '') AS lista_pais,
+
                 REPLACE(REPLACE(ARRAY(
                     SELECT DISTINCT
                         bl.estuf
@@ -347,6 +361,7 @@ class Emendas_Model_Emenda extends Modelo
                         bl.estuf IS NOT NULL
                         AND bl.benid = ben.benid
                 )::TEXT, '{', ''), '}', '') AS lista_uf,
+
                 REPLACE(REPLACE(ARRAY(
                     SELECT DISTINCT
                         m.mundescricao || '-' || m.estuf
@@ -356,12 +371,18 @@ class Emendas_Model_Emenda extends Modelo
                         m.mundescricao IS NOT NULL
                         AND bl.benid = ben.benid
                 )::TEXT, '{', ''), '}', '') AS lista_municipio,
-		ben.bennumeroprocesso AS processo,
-		TO_CHAR(ben.beninicio,'dd/mm/YYYY') AS vigencia,
-		pca.capdsc,
-                CASE WHEN bented IS TRUE THEN 'Sim' ELSE 'Não' END AS ted,
+
+		        ben.bennumeroprocesso AS processo,
+		        TO_CHAR(ben.beninicio,'dd/mm/YYYY') AS vigencia,
+		        pca.capdsc,
+                CASE WHEN bented IS TRUE
+                    THEN 'Sim'
+                    ELSE 'Não'
+                END AS ted,
+
                 mde.mdedsc,
-		nee.needsc,
+		        nee.needsc,
+
                 REPLACE(REPLACE(REPLACE(ARRAY(
                     SELECT DISTINCT
                         alo.alodsc
@@ -371,20 +392,50 @@ class Emendas_Model_Emenda extends Modelo
                         alo.alodsc IS NOT NULL
                         AND ba.benid = ben.benid
                 )::TEXT, '{', ''), '}', ''), '\"', '') AS lista_alteracoes,
-		CASE WHEN ben.benparecertecnico = 0 THEN 'Não' WHEN ben.benparecertecnico = 1 THEN 'Sim' WHEN ben.benparecertecnico = 2 THEN 'Não se aplica' END AS parecer_tecnico,
-		CASE WHEN ben.benparecerjuridico = 0 THEN 'Não' WHEN ben.benparecerjuridico = 1 THEN 'Sim' WHEN ben.benparecerjuridico = 2 THEN 'Não se aplica' END AS parecer_juridico,
-		CASE WHEN ben.benimpedimento IS NULL THEN 'Não' WHEN ben.benimpedimento = 0 THEN 'Não' WHEN ben.benimpedimento = 1 THEN 'Sim' WHEN ben.benimpedimento = 2 THEN 'Não se aplica' END AS empedimento,
-                CASE WHEN ben.benimpedimento = 1 THEN imp.impdsc END AS motivo,
-                CASE WHEN ben.benimpedimento = 1 THEN benmotivoimpedimento END AS justificativa,
-                
+
+		        CASE WHEN ben.benparecertecnico = 0
+		            THEN 'Não'
+                WHEN ben.benparecertecnico = 1
+                    THEN 'Sim'
+                WHEN ben.benparecertecnico = 2
+                    THEN 'Não se aplica'
+                END AS parecer_tecnico,
+
+		        CASE WHEN ben.benparecerjuridico = 0
+		            THEN 'Não'
+                WHEN ben.benparecerjuridico = 1
+                    THEN 'Sim'
+                WHEN ben.benparecerjuridico = 2
+                    THEN 'Não se aplica'
+                END AS parecer_juridico,
+
+		        CASE WHEN ben.benimpedimento IS NULL
+		            THEN 'Não'
+                WHEN ben.benimpedimento = 0
+                    THEN 'Não'
+                WHEN ben.benimpedimento = 1
+                    THEN 'Sim'
+                WHEN ben.benimpedimento = 2
+                    THEN 'Não se aplica'
+                END AS empedimento,
+
+                CASE WHEN ben.benimpedimento = 1
+                    THEN imp.impdsc
+                END AS motivo,
+
+                CASE WHEN ben.benimpedimento = 1
+                    THEN benmotivoimpedimento
+                END AS justificativa,
+
                 -- DADOS FINANCEIROS DO BENFICIÁRIO
-		COALESCE((
+		        COALESCE((
                     SELECT
                         SUM(COALESCE(
-                            CASE WHEN eme.gndcod <= 3 THEN
-                                bed.bedvalor
-                            ELSE
-                                0
+                            CASE WHEN eme.gndcod <= 3
+                                THEN
+                                    bed.bedvalor
+                                ELSE
+                                    0
                             END, 0)) AS bedvalor
                     FROM emendas.beneficiariodetalhe bed
                         LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
@@ -392,40 +443,47 @@ class Emendas_Model_Emenda extends Modelo
                         bed.benid = ben.benid
                         AND bed.bedstatus = 'A'
                 ), 0) AS bedvalorcusteio,
-		COALESCE((
+
+		        COALESCE((
                     SELECT
                         SUM(COALESCE(
-                            CASE WHEN eme.gndcod > 3 THEN
+                            CASE WHEN eme.gndcod > 3
+                            THEN
                                 bed.bedvalor
                             ELSE
                                 0
-                            END, 0)) AS bedvalor
+                        END, 0)) AS bedvalor
                     FROM emendas.beneficiariodetalhe bed
                         LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
                     WHERE
                         bed.benid = ben.benid
                         AND bed.bedstatus = 'A'
                 ), 0) AS bedvalorcapital,
+
                 (
                     SELECT
                         SUM(COALESCE(
-                            CASE WHEN eme.gndcod <= 3 THEN
+                            CASE WHEN eme.gndcod <= 3
+                            THEN
                                 bed.bedvalorpriorizado
                             ELSE
                                 0
-                            END, 0))
+                        END, 0))
                     FROM emendas.beneficiariodetalhe bed
                         LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
                     WHERE
                         bed.benid = ben.benid
                         AND bed.bedstatus = 'A'
                 ) AS bedvalorpriorizadocusteio,
+
                 (
                     SELECT
-                        SUM(COALESCE(CASE WHEN eme.gndcod > 3 THEN
-                            bed.bedvalorpriorizado
-                        ELSE
-                            0
+                        SUM(COALESCE(
+                            CASE WHEN eme.gndcod > 3
+                                THEN
+                                    bed.bedvalorpriorizado
+                                ELSE
+                                    0
                         END, 0))
                     FROM emendas.beneficiariodetalhe bed
                         LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
@@ -433,12 +491,15 @@ class Emendas_Model_Emenda extends Modelo
                         bed.benid = ben.benid
                         AND bed.bedstatus = 'A'
                 ) AS bedvalorpriorizadocapital,
-		COALESCE((
+
+		        COALESCE((
                     SELECT
-                        SUM(CASE WHEN eme.gndcod <= 3 THEN
-                            COALESCE(bed.bedvalor, 0) - COALESCE(bed.bedvalorpriorizado, 0)
-                        ELSE
-                            0
+                        SUM(
+                            CASE WHEN eme.gndcod <= 3
+                            THEN
+                                COALESCE(bed.bedvalor, 0) - COALESCE(bed.bedvalorpriorizado, 0)
+                            ELSE
+                                0
                         END)
                     FROM emendas.beneficiariodetalhe bed
                         LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
@@ -446,12 +507,15 @@ class Emendas_Model_Emenda extends Modelo
                         bed.benid = ben.benid
                         AND bed.bedstatus = 'A'
                 ), 0) AS contigenciadocusteio,
-		COALESCE((
+
+		        COALESCE((
                     SELECT
-                        SUM(CASE WHEN eme.gndcod > 3 THEN
-                            COALESCE(bed.bedvalor, 0) - COALESCE(bed.bedvalorpriorizado, 0)
-                        ELSE
-                            0
+                        SUM(
+                            CASE WHEN eme.gndcod > 3
+                                THEN
+                                    COALESCE(bed.bedvalor, 0) - COALESCE(bed.bedvalorpriorizado, 0)
+                                ELSE
+                                    0
                         END)
                     FROM emendas.beneficiariodetalhe bed
                         LEFT JOIN emendas.emendadetalhe eme ON bed.emdid = eme.emdid
@@ -459,53 +523,74 @@ class Emendas_Model_Emenda extends Modelo
                         bed.benid = ben.benid
                         AND bed.bedstatus = 'A'
                 ), 0) AS contigenciadocapital,
+
                 COALESCE((
-                    SELECT pf.vlcusteiopedido
-                      from emendas.pedido_financeiro pf
-                     where pf.benid = ben.benid
-                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
-                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),0) as vlcusteiopedido,
+                    SELECT
+                        pf.vlcusteiopedido
+                    FROM emendas.pedido_financeiro pf
+                        WHERE pf.benid = ben.benid
+                            AND pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                            AND pf.nromesreferencia = date_part('month', CURRENT_DATE)),0) as vlcusteiopedido,
+
                 COALESCE((
-                    SELECT pf.vlcapitalpedido
-                      from emendas.pedido_financeiro pf
-                     where pf.benid = ben.benid
-                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
-                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),0) as vlcapitalpedido,
+                    SELECT
+                        pf.vlcapitalpedido
+                    FROM emendas.pedido_financeiro pf
+                        WHERE pf.benid = ben.benid
+                            AND pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                            AND pf.nromesreferencia = date_part('month', CURRENT_DATE)),0) as vlcapitalpedido,
+
                 COALESCE((
-                    SELECT v.vindsc
-                      from emendas.pedido_financeiro pf
-                     inner join emendas.vinculacao v
-                        on pf.vinid=v.vinid
-                     where pf.benid = ben.benid
-                       and pf.nroanoreferencia = date_part('year', CURRENT_DATE)
-                       and pf.nromesreferencia = date_part('month', CURRENT_DATE)),'') as vindsc,
-		-- DADOS SICONV
-		CASE WHEN prg.prgcodigo IS NOT NULL THEN
-                    substr(prg.prgcodigo::TEXT, 1, 6) || ' ' || substr(prg.prgcodigo::TEXT, 6, 4) || ' ' || substr(prg.prgcodigo::TEXT, 10, 4)
-                ELSE
-                    NULL
+                    SELECT
+                        v.vindsc
+                    FROM emendas.pedido_financeiro pf
+                        INNER JOIN emendas.vinculacao v ON pf.vinid=v.vinid
+                            WHERE pf.benid = ben.benid
+                                AND pf.nroanoreferencia = date_part('year', CURRENT_DATE)
+                                AND pf.nromesreferencia = date_part('month', CURRENT_DATE)),'') as vindsc,
+
+                -- DADOS SICONV
+                CASE WHEN prg.prgcodigo IS NOT NULL
+                    THEN
+                        substr(prg.prgcodigo::TEXT, 1, 6) || ' ' || substr(prg.prgcodigo::TEXT, 6, 4) || ' ' || substr(prg.prgcodigo::TEXT, 10, 4)
+                    ELSE
+                        NULL
                 END AS numero_programa,
-		prg.prgtitulo AS titulo_programa,
-		ben.benprogramatitulo AS objeto_programa,
-		CASE WHEN bensic.sicsequencial IS NOT NULL THEN bensic.sicsequencial || '/' || bensic.prsano END AS numero_proposta,
-		bensic.sicjustificativa AS titulo_proposta,
-		bensic.sicobjeto AS objeto_proposta,
-		bensit.sitdsc AS situacao_proposta,
+                prg.prgtitulo AS titulo_programa,
+
+                ben.benprogramatitulo AS objeto_programa,
+                CASE WHEN bensic.sicsequencial IS NOT NULL
+                THEN
+                    bensic.sicsequencial || '/' || bensic.prsano
+                END AS numero_proposta,
+
+                bensic.sicjustificativa AS titulo_proposta,
+                bensic.sicobjeto AS objeto_proposta,
+                bensit.sitdsc AS situacao_proposta,
+
                 -- SITUAÇÃO WORKFLOW
                 doce.esddsc,
-		-- PLANO INTERNO
+
+                -- PLANO INTERNO
                 pi.pliid,
                 pi.plicod,
                 pi.empenhado,
                 pi.pago,
-                (select string_agg(numnotaempenho,',') as numnotaempenho from emendas.nota_empenho ne where ne.benid = ben.benid and nestatus='A') as numnotaempenho
-            FROM emendas.emenda eme
+                (
+                    SELECT
+                        string_agg(numnotaempenho,',') AS numnotaempenho
+                    FROM emendas.nota_empenho ne
+                        WHERE ne.benid = ben.benid
+                            AND nestatus='A'
+                )AS numnotaempenho
+           FROM emendas.emenda eme
                 -- DADOS DA EMENDA
                 LEFT JOIN public.unidadeorcamentaria uno ON uno.unoid = eme.unoid
                 LEFT JOIN emendas.autor aut ON(aut.autid = eme.autid AND aut.autstatus = 'A')
                 LEFT JOIN emendas.autortipo autip ON aut.atpid = autip.atpid
                 LEFT JOIN emendas.partido p ON aut.parid = p.parid
                 LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = eme.ptrid
+
                 -- BENEFICIARIOS
                 LEFT JOIN emendas.beneficiario ben ON ben.emeid = eme.emeid
                 LEFT JOIN emendas.proponente pro ON pro.proid = ben.proid
@@ -514,29 +599,32 @@ class Emendas_Model_Emenda extends Modelo
                 LEFT JOIN public.vw_subunidadeorcamentaria suo ON ben.suoid = suo.suoid
                 LEFT JOIN emendas.delegacao ed ON ben.benid = ed.benid
                 LEFT JOIN public.vw_subunidadeorcamentaria suoed ON ed.suoid = suoed.suoid
-		LEFT JOIN territorios.esfera esf ON ben.esfid = esf.esfid
-		LEFT JOIN monitora.pi_categoriaapropriacao pca ON ben.capid = pca.capid
-		LEFT JOIN monitora.pi_modalidadeensino mde ON ben.mdeid = mde.mdeid
-		LEFT JOIN monitora.pi_niveletapaensino nee ON ben.neeid = nee.neeid
-		LEFT JOIN emendas.impedimento imp ON ben.impid = imp.impid
-		-- DADOS SICONV
-		LEFT JOIN emendas.siconvbeneficiario sib ON(ben.benid = sib.benid)
-		LEFT JOIN emendas.siconvprograma sip ON(sib.sicid = sip.sicid)
-		LEFT JOIN emendas.programa prg ON prg.prgid = sip.prgid
+                LEFT JOIN territorios.esfera esf ON ben.esfid = esf.esfid
+                LEFT JOIN monitora.pi_categoriaapropriacao pca ON ben.capid = pca.capid
+                LEFT JOIN monitora.pi_modalidadeensino mde ON ben.mdeid = mde.mdeid
+                LEFT JOIN monitora.pi_niveletapaensino nee ON ben.neeid = nee.neeid
+                LEFT JOIN emendas.impedimento imp ON ben.impid = imp.impid
+
+                -- DADOS SICONV
+                LEFT JOIN emendas.siconvbeneficiario sib ON(ben.benid = sib.benid)
+                LEFT JOIN emendas.siconvprograma sip ON(sib.sicid = sip.sicid)
+                LEFT JOIN emendas.programa prg ON prg.prgid = sip.prgid
                 LEFT JOIN emendas.siconv bensic ON bensic.sicid = sib.sicid
                 LEFT JOIN emendas.siconvsituacao bensit ON bensic.sitid = bensit.sitid
+
                 -- SITUAÇÃO
-		LEFT JOIN workflow.documento doc ON ben.docid = doc.docid
-		LEFT JOIN workflow.estadodocumento doce ON doc.esdid = doce.esdid
-		-- PLANO INTERNO
+                LEFT JOIN workflow.documento doc ON ben.docid = doc.docid
+                LEFT JOIN workflow.estadodocumento doce ON doc.esdid = doce.esdid
+                -- PLANO INTERNO
                 LEFT JOIN monitora.vw_planointerno pi ON ben.pliid = pi.pliid
-            WHERE
-                eme.emestatus = 'A'
-                AND ben.benstatus = 'A'
-                $where
-            ORDER BY
-                1,
-                2
+
+                WHERE
+                    eme.emestatus = 'A'
+                    AND ben.benstatus = 'A'
+                    $where
+                ORDER BY
+                    1,
+                    2
         ";
 //ver($sql, d);
         return $sql;
@@ -644,191 +732,6 @@ class Emendas_Model_Emenda extends Modelo
             'vlcapitalpedido'
         ];
         return $colunas;
-    }
-
-    public function importar($files)
-    {
-        $extensao = substr($files['name'], strrpos($files['name'], '.'));
-
-        $origem = $files['tmp_name'];
-        $destino = APPRAIZ . 'emendas/modulos/apoio/importacao/planilha_' . date('YmdHis') . $extensao;
-        if(move_uploaded_file($origem , $destino)){
-
-            $file = fopen($destino, 'r');
-
-            $count = 0;
-            while (($line = fgetcsv($file, 0, ';')) !== false)
-            {
-
-                $line = array_map('trim', $line);
-//                    $line = array_map('utf8_decode', $line);
-
-                if(!$count++){ continue; }
-
-                $emenumero = trim($line[2]);
-                if(!$emenumero) { continue; }
-
-                $sql = "select emeid from emendas.emenda where emenumero = " . $emenumero;
-                $emeid = $this->pegaUm($sql);
-
-                if($emeid){
-                    $this->carregarPorId($emeid);
-                } else {
-                    // Unidade Orçamentária
-                    $unocod = substr(trim($line[5]), 0, 5);
-                    $unoid = $this->_recuperarUnidadeImportacao($unocod, $_SESSION['exercicio']);
-
-                    // Autor
-                    $autid = $this->_recuperarAutorImportacao($line, $_SESSION['exercicio']);
-
-                    // Ação
-                    $funcional = $this->_recuperarFuncionalImportacao($line[7], $line[6], $line[8], $unocod, $_SESSION['exercicio']);
-
-                    if(!$funcional || !$autid){ continue; }
-
-                    $this->emenumero = $emenumero;
-                    $this->unoid = $unoid;
-                    $this->ptrid = $funcional[0]['ptrid'];
-                    $this->autid = $autid;
-                    $this->emeimpositiva = 't';
-                    $this->prsano = $_SESSION['exercicio'];
-                    $this->salvar();
-                }
-
-                if(is_numeric($line[14])){
-                    $this->_inserirBeneficiarioImportacao($line);
-                } else {
-                    $this->_inserirDetalhesImportacao($line);
-                }
-                $this->commit();
-                $this->emeid = null;
-            }
-            fclose($file);
-            ver('FIM', d);
-        }
-    }
-
-    private function _recuperarUnidadeImportacao($unocod, $exercicio)
-    {
-        $sql = "select unoid from public.unidadeorcamentaria where unocod = '{$unocod}' and prsano = '$exercicio'";
-        return $this->pegaUm($sql);
-    }
-
-    private function _recuperarAutorImportacao($line, $exercicio)
-    {
-        $dado = $line[0];
-
-        if('(-1)' == substr($dado, 0, 4)){
-            return false;
-        }
-
-        $autor = explode('-', $dado);
-        $autcod = trim($autor[0]);
-        $sql = "select autid from emendas.autor where autcod = '{$autcod}' order by autstatus";
-        $autid = $this->pegaUm($sql);
-
-        $parsigla = $line[1];
-        $sql = "select parid from emendas.partido where parsigla = '{$parsigla}' order by parstatus";
-        $parid = $this->pegaUm($sql);
-
-        if(!$parid){
-            $mPartido = new Emendas_Model_Partido();
-            $mPartido->pardsc = $parsigla;
-            $mPartido->parsigla = $parsigla;
-            $mPartido->salvar();
-
-            $parid = $mPartido->parid;
-        }
-
-        // Atualizando nome e partido do autor
-        $mAutor = new Emendas_Model_Autor($autid);
-        $mAutor->autcod = $autcod;
-        $mAutor->autnome = trim($autor[1]);
-        $mAutor->parid = $parid;
-        $mAutor->salvar();
-        $autid = $mAutor->autid;
-
-        return $autid;
-    }
-
-    private function _recuperarFuncionalImportacao($acao, $programa, $localizador, $unocod, $exercicio)
-    {
-        $acacod = substr(trim($acao), 0, 4);
-        $prgcod = substr(trim($programa), 0, 4);
-        $loccod = substr(trim($localizador), 0, 4);
-        $sql = "select * from monitora.ptres where acacod = '$acacod' and prgcod = '$prgcod' and loccod = '$loccod' and unicod = '$unocod' and ptrano = '{$exercicio}' and plocod = 'EIND' and ptrstatus = 'A'";
-
-        $funcional = $this->carregar($sql);
-        if(count($funcional)> 1){
-            ver('Mais de uma ação', d);
-        }
-
-        return $funcional;
-    }
-
-    private function _inserirDetalhesImportacao($line)
-    {
-        $mEmendaDetalhe = new Emendas_Model_EmendaDetalhe();
-        $mEmendaDetalhe->emeid = $this->emeid;
-        $mEmendaDetalhe->foncod = $line[9];
-        $mEmendaDetalhe->gndcod = $line[12];
-        $mEmendaDetalhe->mapcod = $line[13];
-        $mEmendaDetalhe->emdvalor = str_replace(['.', ','], ['', '.'], $line[18]) + str_replace(['.', ','], ['', '.'], $line[20]);
-
-        return $mEmendaDetalhe->salvar();
-    }
-
-    private function _inserirBeneficiarioImportacao($line)
-    {
-        $proponente = explode('-', $line[15]);
-
-        if(count($proponente) >= 2){
-            $procnpj = trim(array_shift($proponente));
-            $sql = "select proid from emendas.proponente where procnpj = '{$procnpj}' order by prostatus";
-
-        } else {
-            $sql = "select proid from emendas.proponente where procnpj = '00000000000000' order by prostatus";
-        }
-
-        $proid = $this->pegaUm($sql);
-
-        if(!$proid){
-            $mProponente = new Emendas_Model_Proponente();
-            $mProponente->procnpj = $procnpj;
-            $mProponente->pronome = trim(implode(' - ', $proponente));
-            $mProponente->salvar();
-            $proid = $mProponente->proid;
-        }
-
-        $sql = "select benid from emendas.beneficiario where emeid = {$this->emeid} and proid = {$proid}";
-        $benid = $this->pegaUm($sql);
-
-        $mBeneficiario = new Emendas_Model_Beneficiario($benid);
-
-        if(!$benid){
-            $mBeneficiario->emeid = $this->emeid;
-            $mBeneficiario->proid = $proid;
-
-            $mBeneficiario->salvar();
-        }
-
-        $this->_inserirBeneficiarioDetalhe($mBeneficiario->benid, $mBeneficiario->emeid, $line);
-    }
-
-    private function _inserirBeneficiarioDetalhe($benid, $emeid, $line)
-    {
-        $gndcod = $line[12];
-
-        $sql = "select emdid from emendas.emendadetalhe where gndcod = {$gndcod} and emeid = {$emeid}";
-        $emdid = $this->pegaUm($sql);
-
-        $mBeneficiarioDetalhe = new Emendas_Model_BeneficiarioDetalhe();
-        $mBeneficiarioDetalhe->benid = $benid;
-        $mBeneficiarioDetalhe->emdid = $emdid;
-        $mBeneficiarioDetalhe->bedvalor = str_replace(['.', ','], ['', '.'], $line[19]);
-        $mBeneficiarioDetalhe->bedvalorpriorizado = str_replace(['.', ','], ['', '.'], $line[20]);
-
-        return $mBeneficiarioDetalhe->salvar();
     }
 
     public function gerarGraficoUf($exercicio)
@@ -1240,5 +1143,4 @@ class Emendas_Model_Emenda extends Modelo
         }
     }
 
-}//end Class
-?>
+}

@@ -25,5 +25,3 @@ services:
         - .:/var/www/siminc2
     environment:
         - APPLICATION_ENV=development
-    depends_on:
-        - db

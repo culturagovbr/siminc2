@@ -25,14 +25,8 @@ class Public_Controller_ProdutoPI
 
         try {
             $mProdutosPI = new Monitora_Model_PiProduto($pprid);
-
-            if($mProdutosPI->existeVinculo()){
-                $mensagem = 'O registro não pode ser excluído pois possui vínculo com algum PI.';
-                $url = '?modulo=apoio/produtos_pi&acao=A&capid=' . $mProdutosPI->pprid;
-                simec_redirecionar($url, 'error', $mensagem);
-            }
-
-			$mProdutosPI->excluir($mProdutosPI->pprid);
+            $mProdutosPI->pprstatus = 'I';
+            $mProdutosPI->salvar();
             $mProdutosPI->commit();
             simec_redirecionar($url, 'success');
         } catch (Exception $e){

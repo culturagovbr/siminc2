@@ -92,7 +92,7 @@ abstract class SiopSoapCurl_Service implements SiopSoapCurl_InterfaceService {
         $this->client->getSsl()
             ->setVerifyPeer(FALSE)
             ->setVerifyHost(FALSE)
-            ->setVersion('3')
+            ->setVersion('6')
             ->setCertificate(WEB_SERVICE_SIOP_CERTIFICADO)
             ->setPassword('simec')
         ;
@@ -102,7 +102,7 @@ abstract class SiopSoapCurl_Service implements SiopSoapCurl_InterfaceService {
             ->setWsdl($this->url. '?wsdl')
             ->setReturn(TRUE)
             ->setAuth(CURLAUTH_ANY)
-            ->setTimeout(180)
+            ->setTimeout(360)
             ->setPost(TRUE)
             ->setListHeader($this->mountListHeader())
         ;

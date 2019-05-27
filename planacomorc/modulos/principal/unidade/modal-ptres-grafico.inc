@@ -11,17 +11,16 @@ include_once '_funcoespi.php';
         $sql = "
             SELECT
                 ptr.ptres,
-                trim(aca.prgcod || '.' || aca.acacod || '.' || aca.unicod || '.' || aca.loccod || ' - ' || aca.acadsc) AS descricao,
-                uni.unicod,
-                uni.unidsc,
+                ptr.funcional AS descricao,
+                suo.unocod,
+                suo.unonome,
                 ptr.plocod,
-                plo.plotitulo,
-                COALESCE(SUM(COALESCE(psu.ptrdotacaocusteio, 0.00) + COALESCE(psu.ptrdotacaocapital, 0.00))+0.00, 0.00)                            AS dotacaoatual,
+                ptr.plodsc,
+                COALESCE(SUM(COALESCE(psu.ptrdotacaocusteio, 0.00) + COALESCE(psu.ptrdotacaocapital, 0.00))+0.00, 0.00) AS dotacaoatual,
                 COALESCE((SUM(pemp.total)), 0.00) AS empenhado,
                 COALESCE(SUM(DISTINCT ptr.ptrdotacao) - COALESCE(pemp.total, 0.00), 0.00) AS naoempenhado
-            FROM monitora.acao aca
-                JOIN monitora.ptres ptr ON aca.acaid = ptr.acaid
-                JOIN public.unidade uni ON uni.unicod = ptr.unicod
+            FROM monitora.vw_ptres ptr
+                LEFT JOIN public.vw_subunidadeorcamentaria suo ON ptr.unicod = suo.unocod -- SELECT * FROM public.vw_subunidadeorcamentaria
                 JOIN spo.ptressubunidade psu ON(ptr.ptrid = psu.ptrid)
                 LEFT JOIN (
                     SELECT
@@ -31,7 +30,7 @@ include_once '_funcoespi.php';
                         sum(ex.vlrempenhado) AS total
                     FROM spo.siopexecucao ex
                     WHERE
-                        ex.exercicio = '{$filtros->exercicio}'
+                        ex.exercicio = '{$_SESSION['exercicio']}'
                     GROUP BY
                         ex.unicod,
                         ex.ptres,
@@ -41,24 +40,18 @@ include_once '_funcoespi.php';
                     AND pemp.exercicio = ptr.ptrano
                     AND pemp.unicod = ptr.unicod
                 )
-                LEFT JOIN monitora.planoorcamentario plo ON(
-                    plo.prgcod = aca.prgcod
-                    AND plo.acacod = aca.acacod
-                    AND plo.unicod = aca.unicod
-                    AND ptr.plocod = plo.plocodigo
-                )
             WHERE
-                ptr.ptrano='{$_SESSION['exercicio']}'
+                ptr.ptrano= '{$_SESSION['exercicio']}'
                 AND ptr.ptres = '{$ptres}'
             GROUP BY
                 ptr.ptrid,
                 ptr.ptres,
                 descricao,
-                uni.unicod,
-                uni.unidsc,
+                suo.unocod,
+                suo.unonome,
                 pemp.total,
                 ptr.plocod,
-                plo.plotitulo
+                ptr.plodsc
         ";
 //        $sql = montarSqlBuscarFuncionalImportacao((object)array(
 //            'exercicio' => $_SESSION['exercicio'],
@@ -139,11 +132,11 @@ include_once '_funcoespi.php';
     </tr>
     <tr>
         <td class="SubTituloDireita">PO:</td>
-        <td>' . $dadosPtres['plocod'] . ' - ' . $dadosPtres['plotitulo'] . '</td>
+        <td>' . $dadosPtres['plocod'] . ' - ' . $dadosPtres['plodsc'] . '</td>
     </tr>
     <tr>
         <td class="SubTituloDireita">Unidade:</td>
-        <td>' . $dadosPtres['unicod'] . ' - ' . $dadosPtres['unidsc'] . '</td>
+        <td>' . $dadosPtres['unocod'] . ' - ' . $dadosPtres['unonome'] . '</td>
     </tr>
     <tr>
         <td class="SubTituloDireita" width="200px">Dotação atual:</td>

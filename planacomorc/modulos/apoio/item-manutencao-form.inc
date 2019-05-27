@@ -1,6 +1,6 @@
 <?php
 
-$cManutencaoItem= new Public_Controller_ManutencaoItem();
+$cManutencaoItem = new Public_Controller_ManutencaoItem();
 switch ($_REQUEST['req']) {
 	case 'salvar':
 		$cManutencaoItem->salvar($_REQUEST);
@@ -49,32 +49,8 @@ include APPRAIZ . "includes/cabecalho.inc";
 						<?php
                             echo $simec->input('mainome', 'Nome', $mManutencaoItem->mainome, ['required','maxlength' => 200]);
                             echo $simec->input('maidescricao', 'Descrição', $mManutencaoItem->maidescricao, ['maxlength' => 500]);
+                            echo $simec->select('eqdid', 'Enquadramento da Despesa', $mManutencaoItem->eqdid, $mEnquadramentoDespesa = (new Monitora_Model_PiEnquadramentoDespesa)->recuperarSqlCombo(null, ["eqdcod NOT IN('C', 'E', 'F', 'I', 'N', 'A')"]));
 						?>
-                        <div class="form-group">
-                            <label for="eqdid" class="col-sm-3 col-md-3 col-lg-3 control-label  control-label">Enquadramento da Despesa:</label>
-                            <div class="col-sm-9 col-md-9 col-lg-9 carregaEnq">
-                                <?php
-                                /**
-                                 * @todo Colocar a consulta na model, usando a prática do MVC.
-                                 */
-                                $sql = "
-                                    SELECT
-                                        eqdid AS codigo,
-                                        eqddsc AS descricao
-                                    FROM monitora.pi_enquadramentodespesa
-                                    WHERE
-                                        eqdstatus = 'A'
-                                        AND eqdano = '{$_SESSION['exercicio']}'
-                                        AND eqdcod NOT IN('C', 'E', 'F', 'I', 'N', 'A')
-                                    ORDER BY
-                                        eqddsc
-                                ";
-                                $eqdid = $mManutencaoItem->eqdid;
-                                $db->monta_combo('eqdid', $sql, 'S', 'Selecione', '', null, null, null, 'N', 'eqdid', null, '', null, 'class="form-control chosen-select" style="width=100%;"', null, (isset($eqdid) ? $eqdid : null));
-                                ?>
-                            </div>
-                        </div>
-
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" id="btn-salvar" type="submit"><i class="fa fa-check"></i>&nbsp;Salvar</button>

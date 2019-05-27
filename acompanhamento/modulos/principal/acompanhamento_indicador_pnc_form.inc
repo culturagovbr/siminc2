@@ -42,11 +42,11 @@
         echo $simec->input('ipndsc', 'Indicador', $indicadorPnc->ipndsc);
         echo $simec->input('prsano', 'Ano', $acompanhamentoIndicadorPnc->prsano);
         $simec->setPodeEditar(1);
-        echo $simec->valor(
+        echo $simec->input(
             'idpquantidade',
             'Quantidade',
             $acompanhamentoIndicadorPnc->idpid && !$acompanhamentoIndicadorPnc->idpquantidade? 0: $acompanhamentoIndicadorPnc->idpquantidade,
-            ['required']
+            ['required', 'maxlength' => 9]
         );
         if($acompanhamentoIndicadorPnc->prsano != $_SESSION['exercicio']){
             echo $simec->data('idpdata', 'Data', $acompanhamentoIndicadorPnc->idpdata);

@@ -81,7 +81,29 @@ class Public_Model_FonteRecurso extends Modelo
                     AND fonid <> ". (int)$this->fonid;
 //ver($sql,d);
         return $this->pegaLinha($sql);
+    }
 
+    /**
+     * Retorna a linha do registro de Fonte Recurso.
+     *
+     * @return array|bool
+     */
+    public function carregarPorFoncod()
+    {
+        $sql = "
+            SELECT
+                fonid,
+                foncod,
+                fondsc,
+                fonabrev,
+                grfid,
+                clasproporc
+            FROM public.fonterecurso
+            WHERE
+                fonstatus = 'A'
+                AND foncod = '". (int)$this->foncod ."'
+        ";
+        return $this->pegaLinha($sql);
     }
 
 }

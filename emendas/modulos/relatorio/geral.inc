@@ -19,6 +19,8 @@
         'Valor Capital',
         # BENEFICIARIOS
         'Id Beneficiario',
+        'Código da Unidade Beneficiário',
+        'Unidade Beneficiário',
         'Código Subunidade',
         'Subunidade',
         'Código Subunidade delegada',

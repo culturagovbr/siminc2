@@ -63,5 +63,30 @@ class Planacomorc_Model_ManutencaoItem extends Modelo
         'eqdid' => null,
     );
 
-}//end Class
-?>
+    /**
+     * Busca a lista com todos os itens de manutenção.
+     *
+     * @return array|string
+     */
+    public function recuperarLista()
+    {
+        global $db;
+
+        $sql = "
+            SELECT DISTINCT
+                maiid AS codigo,
+                mainome AS nome,
+                maidescricao AS descricao,
+                eqddsc AS enquadramento
+            FROM planacomorc.manutencaoitem mai
+                LEFT JOIN monitora.pi_enquadramentodespesa eqd ON(mai.eqdid = eqd.eqdid)
+            WHERE
+                prsano = '{$_SESSION['exercicio']}'
+                AND maistatus = 'A'
+            ORDER BY
+                nome
+        ";
+
+        return $db->carregar($sql);
+    }
+}

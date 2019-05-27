@@ -11,6 +11,7 @@
     $dto = (object)$_POST['filtro'];
     $dto->fundo = TRUE;
     $dto->exercicio = $_POST['filtro']['prsano'];
+    $dto->suoid = $dto->suoid? $dto->suoid: $listaSubUnidades;
     $listaRelatorio = $modelPlanoInterno->listarRelatorioGeralPi($dto);
 
     # Colunas do relatorio

@@ -5,6 +5,11 @@
      * @returns VOID
      */
     function initCadastroPi(){
+
+        $('#btnVoltar').click(function () {
+            window.history.back(-1);
+        });
+
         $('#modal-historico-pi').click(function(){
             $('#historico-pi .modal-body').load(urlPagina+'&req=historico-pi&pliid='+ $('#pliid').val());
             $('#historico-pi').modal();
@@ -60,6 +65,7 @@
         $('div.div_ungcod').on('change', '#ungcod', function(){
             carregarLimitesUnidade($(this).val());
             carregarMetaPNC($(this).val());
+            carregarMetaUnidade($(this).val());
         });
         
         $('#orcamento').on('click', '.btnVisualizarDetalhes', function(){
@@ -91,8 +97,8 @@
             carregarMetasPPA($(this).val(), null, $('#ungcod').val(), delegacao, null);
             carregarIniciativaPPA($(this).val(), $('#ungcod').val());
         });
-        
-        $('#delegacao').change(function(){    
+
+        $('#delegacao').change(function(){
             var mppid = $('#mppid').val();
             carregarMetasPPA($('#oppid').val(), null, $('#ungcod').val(), $(this).val(), mppid);
         });
@@ -549,6 +555,9 @@
             }
         });
 
+        $('div.div_meeid').on('change', '#meuid', function(){
+            carregarPlanejamentoEstrategico($(this).val());
+        });
     }
 
 /**

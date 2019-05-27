@@ -224,13 +224,13 @@ $podeEditar = $mPiPlanoInterno->verificarPermissaoEditarFnc($estadoAtual, $perfi
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script language="JavaScript" src="../includes/funcoes.js"></script>
-<script language="JavaScript" src="../includes/funcoesspo.js?v=1"></script>
-<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css">
-<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<script src="js/cadastro_pi_funcoes.js?v=10"></script>
-<script src="js/cadastro_pi_validacoes.js?v=9"></script>
-<script src="js/cadastro_pi_init.js?v=11"></script>
+<script language="JavaScript" src="../includes/funcoes.js?v=10"></script>
+<script language="JavaScript" src="../includes/funcoesspo.js?v=10"></script>
+<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=10">
+<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=10"></script>
+<script src="js/cadastro_pi_funcoes.js?v=21"></script>
+<script src="js/cadastro_pi_validacoes.js?v=20"></script>
+<script src="js/cadastro_pi_init.js?v=20"></script>
 <style>
     autorizadocapital {
         display: none;
@@ -1354,136 +1354,27 @@ DML;
     </form>
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal-ptres" class="modal fade">
-            <div class="modal-dialog-ptres">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de PTRES</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
+<?php
+    bootstrapPopup('Seleção de PTRES', 'modal_ptres', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Detalhamento PTRES', 'modal_detalhes_ptres', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Seleção de Responsáveis', 'modal_responsaveis', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Seleção de Localizações Municipais', 'modal_localizacao', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Seleção de Localizações Estaduais', 'modal_localizacao_estadual', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Seleção de Localizações no Exterior', 'modal_localizacao_exterior', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Anexar arquivos(Documentos)', 'modal_upload', '
+        <form class="dropzone" method="POST" enctype="multipart/form-data" action="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&uploadAnexo=1" id="formularioAnexoPlanacomorc" name="formularioAnexoPlanacomorc">
+            <div class="form-group">
+                <label for="arqdescricao" class="col-lg-2 control-label">Descrição:</label>
+                <div class="col-lg-10">
+                    <input type="text" value="" class="CampoEstilo normal form-control" placeholder="Insira a descrição do arquivo." title="Descrição" id="arqdescricao" name="arqdescricao" maxlength="255" size="2">
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_responsaveis" class="modal fade">
-            <div class="modal_dialog_responsaveis">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de Responsáveis</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
+            <div class="fallback">
+                <input name="file" type="file" multiple />
             </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_localizacao" class="modal fade">
-            <div class="modal_dialog_localizacao">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de Localizações Municipais</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_localizacao_estadual" class="modal fade">
-            <div class="modal_dialog_localizacao_estadual">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de Localizações Estaduais</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_localizacao_exterior" class="modal fade">
-            <div class="modal_dialog_localizacao_exterior">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de Localizações no Exterior</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_upload" class="modal fade">
-            <div class="modal_dialog_upload">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Anexar arquivos(Documentos)</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="dropzone" method="POST" enctype="multipart/form-data" action="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&uploadAnexo=1" id="formularioAnexo" name="formularioAnexo">
-                            <div class="form-group">
-                                <label for="arqdescricao" class="col-lg-2 control-label">Descrição:</label>
-                                <div class="col-lg-10">
-                                    <input type="text" value="" class="CampoEstilo normal form-control" placeholder="Insira a descrição do arquivo." title="Descrição" id="arqdescricao" name="arqdescricao" maxlength="255" size="2">
-                                </div>
-                            </div>
-                            <div class="fallback">
-                                <input name="file" type="file" multiple />
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        </form>
+    ', array('fechar'), array('tamanho' => 'lg'));
+?>
 
 <script type="text/javascript">
     // Enquadramentos

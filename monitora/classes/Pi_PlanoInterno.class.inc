@@ -5,7 +5,9 @@ class Pi_PlanoInterno extends Modelo
 
     const K_TIPO_DETALHE_PTRES = 'PT';
     const K_TIPO_DETALHE_PI = 'PI';
+    const K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO = 'PIN';
     const K_TIPO_DETALHE_DELEGADO = 'DL';
+    const K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO = 'DLN';
 
     /**
      * Nome da tabela especificada
@@ -1259,49 +1261,53 @@ class Pi_PlanoInterno extends Modelo
                 suo.unonome,
                 suo.suocod,
                 suo.suonome,
-                (SELECT ARRAY_TO_STRING(array(
-                        SELECT DISTINCT s.unonome
-                        FROM planacomorc.pi_delegacao d
-                                JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
-                        WHERE d.pliid = pli.pliid
+                (SELECT ARRAY_TO_STRING(ARRAY(
+                    SELECT DISTINCT
+                        s.unonome
+                    FROM planacomorc.pi_delegacao d
+                        JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
+                    WHERE
+                        d.pliid = pli.pliid
                 ), '; ')) unodelegada,
 
-                (SELECT ARRAY_TO_STRING(array(
-                        SELECT DISTINCT s.suonome
-                        FROM planacomorc.pi_delegacao d
-                                JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
-                        WHERE d.pliid = pli.pliid
+                (SELECT ARRAY_TO_STRING(ARRAY(
+                    SELECT DISTINCT
+                        s.suonome
+                    FROM planacomorc.pi_delegacao d
+                        JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
+                    WHERE
+                        d.pliid = pli.pliid
                 ), '; ')) suodelegada,
 
                 eqd.eqddsc, rp.rpcod || ' - ' || rp.redsc as resultadoprimario, mai.mainome, mas.masnome, ptr.prgcod, ptr.prgdsc, opp.oppcod, opp.oppnome, ipp.ippcod, ipp.ippnome,
                 ptr.acacod, ptr.acatitulo, ptr.loccod, ptr.locdsc, ptr.plocod, plodsc po, ptr.ptres,
                 mde.mdedsc, mpn.mpncod || ' - ' || mpn.mpnnome mpnnome, mpp.mppcod || ' - ' || mpp.mppnome mppnome,
                 pli.plititulo, pli.plidsc, nee.needsc, cap.capdsc,
-                case when rp.rpcod = 6 then 'Sim' else 'Não' end as pliemenda,
-                case when pic.picedital = true then 'Sim' else 'Não' end as picedital, esf.esfdsc,
-                case
-                        when pic.esfid in (1, 2, 3) then 'Brasil'
-                        else pic.esfid::char
-                end as pais,
-
-                case
-                        when pic.esfid = 2 then
-                                (SELECT ARRAY_TO_STRING(array(
-                                        SELECT DISTINCT e.estdescricao
-                                        FROM planacomorc.pi_localizacao l
-                                                JOIN territorios.estado e ON e.estuf = l.estuf
-                                        WHERE l.pliid = pli.pliid
-                                ), '; '))
-                        when pic.esfid = 3 then
-                                (SELECT ARRAY_TO_STRING(array(
-                                        SELECT DISTINCT e.estdescricao
-                                        FROM planacomorc.pi_localizacao l
-                                                JOIN territorios.municipio m ON m.muncod = l.muncod
-                                                JOIN territorios.estado e ON e.estuf = m.estuf
-                                        WHERE l.pliid = pli.pliid
-                                ), '; '))
-                        else ''
-                end estado,
+                CASE WHEN rp.rpcod = 6 THEN 'Sim' ELSE 'Não' END AS pliemenda,
+                CASE WHEN pic.picedital = TRUE THEN 'Sim' ELSE 'Não' END AS picedital,
+                esf.esfdsc,
+                CASE WHEN pic.esfid IN(1, 2, 3) THEN
+                    'Brasil'
+                ELSE
+                    pic.esfid::char
+                END AS pais,
+                CASE WHEN pic.esfid = 2 THEN
+                    (SELECT ARRAY_TO_STRING(array(
+                            SELECT DISTINCT e.estdescricao
+                            FROM planacomorc.pi_localizacao l
+                                    JOIN territorios.estado e ON e.estuf = l.estuf
+                            WHERE l.pliid = pli.pliid
+                    ), '; '))
+                WHEN pic.esfid = 3 THEN
+                    (SELECT ARRAY_TO_STRING(array(
+                            SELECT DISTINCT e.estdescricao
+                            FROM planacomorc.pi_localizacao l
+                                    JOIN territorios.municipio m ON m.muncod = l.muncod
+                                    JOIN territorios.estado e ON e.estuf = m.estuf
+                            WHERE l.pliid = pli.pliid
+                    ), '; '))
+                ELSE ''
+                END estado,
 
                 (SELECT ARRAY_TO_STRING(array(
                         SELECT DISTINCT m.mundescricao
@@ -1311,14 +1317,21 @@ class Pi_PlanoInterno extends Modelo
                         WHERE l.pliid = pli.pliid
                 ), '; ')) municipio,
 
+                meu.meunome,
+                obe.obenome,
+                dim.dimenome,
+                mee.meenome,
+                meu.meuquantidade,
+                CASE WHEN meuprioritario = TRUE THEN 'Sim' ELSE 'Não' END AS meuprioritario,
+
                 (SELECT ARRAY_TO_STRING(array(
                         SELECT DISTINCT usu.usunome || ' - ' || replace(to_char(usu.usucpf::numeric, '000:000:000-00'), ':', '.') || ' (' || usu.usufoneddd || ' ' || usu.usufonenum || ' - ' || usu.usuemail || ')'
                         FROM planacomorc.pi_responsavel pir
                                 JOIN seguranca.usuario usu ON usu.usucpf = pir.usucpf
                         WHERE pir.pliid = pli.pliid
                 ), '; ')) usuario,
-                case when pic.picted then 'Sim' else 'Não' end ted,
-                case when pic.picedital then 'Sim' else 'Não' end edital,
+                CASE WHEN pic.picted THEN 'Sim' ELSE 'Não' END AS ted,
+                CASE WHEN pic.picedital THEN 'Sim' ELSE 'Não' END AS edital,
                 mes.mesdsc,
 
                 (SELECT ARRAY_TO_STRING(array(
@@ -1429,12 +1442,12 @@ class Pi_PlanoInterno extends Modelo
 		ac.acoanalise AS analise,
 		cl.cladsc AS classificacao,
 		LTRIM(REPLACE(REPLACE(REPLACE(ARRAY(
-			SELECT DISTINCT
-				' ' || meddsc
-			FROM acompanhamento.medida md
-				JOIN acompanhamento.acompanhamentomedida amd ON md.medid = amd.medid
-			WHERE
-				amd.acoid = ac.acoid
+                    SELECT DISTINCT
+                        ' ' || meddsc
+                    FROM acompanhamento.medida md
+                        JOIN acompanhamento.acompanhamentomedida amd ON md.medid = amd.medid
+                    WHERE
+                        amd.acoid = ac.acoid
 		)::TEXT, '{', ''), '}', ''), '\"', '')) AS medidas,
 		ac.acoprovidencias AS providencias
             FROM monitora.pi_planointerno pli
@@ -1463,6 +1476,10 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_categoriaapropriacao cap ON cap.capid = pli.capid
                 LEFT JOIN monitora.pi_produto ppr ON ppr.pprid = pic.pprid
                 LEFT JOIN monitora.pi_unidade_medida pum ON pum.pumid = pic.pumid
+                LEFT JOIN planacomorc.meta_unidade meu ON(pic.meuid = meu.meuid)
+                LEFT JOIN planacomorc.objetivo_estrategico obe ON(meu.obeid = obe.obeid)
+                LEFT JOIN planacomorc.dimensao_estrategica dim ON(meu.dimeid = dim.dimeid)
+                LEFT JOIN planacomorc.meta_estrategica mee ON(meu.meeid = mee.meeid)
                 LEFT JOIN workflow.documento doc ON doc.docid = pli.docid
                 LEFT JOIN workflow.estadodocumento esd ON esd.esdid = doc.esdid
                 LEFT JOIN territorios.esfera esf ON esf.esfid = pic.esfid
@@ -1523,6 +1540,9 @@ class Pi_PlanoInterno extends Modelo
     {
         $dadosPi = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI));
         $dadosDelegado = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_DELEGADO));
+
+        $dadosPiNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO));
+        $dadosDelegadoNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO));
 
         include_once APPRAIZ . 'planacomorc/modulos/principal/unidade/detalhe-subunidade.inc';
     }
@@ -1614,9 +1634,19 @@ class Pi_PlanoInterno extends Modelo
                 $where .= $parametros->suoid? " AND suo.suoid = '$parametros->suoid'": NULL;
                 break;
             case self::K_TIPO_DETALHE_PI:
+                $where .= " AND eqd.eqdcod != 'N'";
+                $where .= " AND suo.suoid = '$parametros->suoid'";
+                break;
+            case self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO:
+                $where .= " AND eqd.eqdcod = 'N'";
                 $where .= " AND suo.suoid = '$parametros->suoid'";
                 break;
             case self::K_TIPO_DETALHE_DELEGADO:
+                $where .= " AND eqd.eqdcod != 'N'";
+                $where .= " AND pde.suoid = '$parametros->suoid'";
+                break;
+            case self::K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO:
+                $where .= " AND eqd.eqdcod = 'N'";
                 $where .= " AND pde.suoid = '$parametros->suoid'";
                 break;
         }
@@ -1627,14 +1657,16 @@ class Pi_PlanoInterno extends Modelo
                 pli.plititulo,
                 pli.plicod,
                 pli.pliemenda,
+                pip.pprnome,
+                pic.picquantidade,
                 pic.picted,
                 pic.picedital,
                 pic.picvalorcapital,
                 pic.picvalorcusteio,
-		SUM(COALESCE(ex.vlrautorizado,0)) AS autorizado,
-		SUM(COALESCE(ex.vlrempenhado,0)) AS empenhado,
-		SUM(COALESCE(ex.vlrliquidado,0)) AS liquidado,
-		SUM(COALESCE(ex.vlrpago,0)) AS pago,
+                SUM(COALESCE(ex.vlrautorizado,0)) AS autorizado,
+                SUM(COALESCE(ex.vlrempenhado,0)) AS empenhado,
+                SUM(COALESCE(ex.vlrliquidado,0)) AS liquidado,
+                SUM(COALESCE(ex.vlrpago,0)) AS pago,
                 suo.suocod,
                 suo.suonome,
                 suo.unocod,
@@ -1651,8 +1683,8 @@ class Pi_PlanoInterno extends Modelo
                 JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod
                     AND suo.unocod = pli.unicod
                     AND suo.prsano = pli.pliano
-                JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
-                JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
+                LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
+                LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
                 LEFT JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
@@ -1660,15 +1692,18 @@ class Pi_PlanoInterno extends Modelo
                     ex.exercicio = ptr.ptrano
                     AND ex.plicod = pli.plicod
                 )
+                LEFT JOIN monitora.pi_produto AS pip ON pic.pprid = pip.pprid
             WHERE
                 pli.plistatus = 'A'
-                AND ptr.irpcod <> '6'
+                AND (ptr.irpcod <> '6' OR ptr.ptrid IS NULL)
                 $where
             GROUP BY
                 pli.pliid,
                 pli.plititulo,
                 pli.plicod,
                 pli.pliemenda,
+                pip.pprnome,
+                pic.picquantidade,
                 pic.picted,
                 pic.picedital,
                 pic.picvalorcapital,
@@ -1728,28 +1763,38 @@ class Pi_PlanoInterno extends Modelo
         return $resultado;
     }
 
-    public function recuperarPis($filtro, $unoFundo='false')
+    public function recuperarPis($filtro, $unoFundo = 'false')
     {
-      if(is_array($filtro['eqdid']) && count($filtro['eqdid'])){
-      	$where = ' and pli.eqdid in (' . implode(',', $filtro['eqdid']) . ')';
-      }
-      if(is_array($filtro['suoid']) && count($filtro['suoid'])){
-          $where .= " and suo.suocod in('" . implode("','", $filtro['suoid']) . "')";
-      }
-        $sql = "select  pli.docid, doc.esdid, pli.pliid, pli.plicod, pli.plidsc, pli.plititulo, ptr.acatitulo, ptr.funcional,
-                        doc.esdid, ptr.ptres, ptr.ptrid, ptr.prgcod, ptr.acacod, ptr.loccod, ptr.plocod, ptr.plodsc, ptr.irpcod,
-                        suo.unocod, suo.unosigla, suo.unonome, suo.suocod, suo.suosigla, suo.suonome, suo.unofundo
-                from monitora.pi_planointerno pli
-                        inner join workflow.documento doc on doc.docid = pli.docid
-                        inner join monitora.pi_planointernoptres pip on pip.pliid = pli.pliid
-                        inner join monitora.vw_ptres ptr on ptr.ptrid = pip.ptrid
-                        inner join public.vw_subunidadeorcamentaria suo on suo.suocod = pli.ungcod and suo.unocod = pli.unicod and suo.prsano = pli.pliano
-                where pli.pliano = '{$filtro['exercicio']}'
-                and pli.plistatus = 'A'
-                and suo.unofundo = ".$unoFundo."
-                and doc.esdid = '{$filtro['esdid']}'
-                $where
-                ";
+        if (is_array($filtro['eqdid']) && count($filtro['eqdid'])) {
+            $where = ' and pli.eqdid in (' . implode(',', $filtro['eqdid']) . ')';
+        }
+        if (is_array($filtro['suoid']) && count($filtro['suoid'])) {
+            $where .= " and suo.suocod in('" . implode("','", $filtro['suoid']) . "')";
+        }
+
+        $sql = "
+            SELECT
+                pli.docid, doc.esdid, pli.pliid, pli.plicod, pli.plidsc, pli.plititulo, ptr.acatitulo, ptr.funcional,
+                doc.esdid, ptr.ptres, ptr.ptrid, ptr.prgcod, ptr.acacod, ptr.loccod, ptr.plocod, ptr.plodsc, ptr.irpcod,
+                suo.unocod, suo.unosigla, suo.unonome, suo.suocod, suo.suosigla, suo.suonome, suo.unofundo
+            FROM monitora.pi_planointerno AS pli
+                JOIN workflow.documento AS doc ON doc.docid = pli.docid
+                LEFT JOIN monitora.pi_planointernoptres AS pip ON pli.pliid = pip.pliid
+                LEFT JOIN monitora.vw_ptres AS ptr ON pip.ptrid = ptr.ptrid
+                JOIN public.vw_subunidadeorcamentaria AS suo ON(
+                    suo.suocod = pli.ungcod
+                    AND suo.unocod = pli.unicod
+                    AND suo.prsano = pli.pliano
+                )
+                JOIN monitora.pi_enquadramentodespesa AS eqd ON pli.eqdid = eqd.eqdid
+            WHERE
+                pli.pliano = '{$filtro['exercicio']}'
+                AND pli.plistatus = 'A'
+                AND suo.unofundo = " . $unoFundo . "
+                AND doc.esdid = '{$filtro['esdid']}'
+            $where
+        ";
+
         return $this->carregar($sql);
     }
 
@@ -2000,28 +2045,74 @@ class Pi_PlanoInterno extends Modelo
         return $this->carregar($sql);
     }
 
-    public function recuperarPorUnidade($suoid, $exercicio = null)
+    public function recuperarPorUnidade(stdClass $filtros = NULL)
     {
-        $exercicio = $exercicio ? $exercicio : $_SESSION['exercicio'];
+        $where = $filtros->naoOrcamentaria === TRUE? "\n AND eqd.eqdcod = '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'": "AND eqd.eqdcod != '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'";
 
-        $sql = "select pli.pliid, pli.plititulo, pli.plicod, coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0) valor, pic.picquantidade, aco.acoid, suo.unofundo,
-                       pic.pprid, pic.pumid, ppr.pprnome, pum.pumnome, ptr.funcional, ptr.plocod, ptr.plodsc, ptr.acatitulo, opp.oppid, opp.oppcod, opp.oppdsc, opp.oppnome
-                from monitora.pi_planointerno pli
-                        inner join public.vw_subunidadeorcamentaria suo on suo.unocod = pli.unicod and suo.suocod = pli.ungcod and suo.prsano = pli.pliano
-                        inner join planacomorc.pi_complemento pic on pic.pliid = pli.pliid
-                        left  join monitora.pi_planointernoptres ppt on ppt.pliid = pli.pliid
-                        inner join monitora.vw_ptres ptr on ptr.ptrid = ppt.ptrid AND ptr.ptrano = pli.pliano
-                        left join monitora.pi_produto ppr on ppr.pprid = pic.pprid
-                        left join monitora.pi_unidade_medida pum on pum.pumid = pic.pumid
-                        left join public.objetivoppa opp on opp.oppid = pic.oppid
-                        left join acompanhamento.acompanhamento aco on aco.pliid = pli.pliid
-                where pli.plistatus = 'A'
-                and pli.pliano = '$exercicio'
-                and coalesce(pli.plicod, '') != ''
-                and pli.ungcod = (select suocod from public.vw_subunidadeorcamentaria where suoid = " . (int)$suoid . ")
-                order by suo.unofundo, pum.pumnome, pli.plititulo;
-                ";
-
+        $sql = "
+            SELECT
+                pli.pliid,
+                pli.plititulo,
+                pli.plicod,
+                coalesce(pic.picvalorcapital, 0) + coalesce(pic.picvalorcusteio, 0) valor,
+                pic.picquantidade,
+                aco.acoid,
+                aco.acoquantidade,
+                cla.cladsc,
+                suo.unofundo,
+                pic.pprid,
+                pic.pumid,
+                ppr.pprnome,
+                pum.pumnome,
+                ptr.funcional,
+                ptr.plocod,
+                ptr.plodsc,
+                ptr.acatitulo,
+                opp.oppid,
+                opp.oppcod,
+                opp.oppdsc,
+                opp.oppnome
+            FROM monitora.pi_planointerno pli
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suo.unocod = pli.unicod
+                    AND suo.suocod = pli.ungcod
+                    AND suo.prsano = pli.pliano
+                )
+                LEFT JOIN monitora.pi_enquadramentodespesa eqd ON(
+                    pli.eqdid = eqd.eqdid
+                    AND pli.pliano = eqd.eqdano
+                )
+                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+                LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
+                LEFT JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = ppt.ptrid
+                    AND ptr.ptrano = pli.pliano
+                )
+                LEFT JOIN monitora.pi_produto ppr ON ppr.pprid = pic.pprid
+                LEFT JOIN monitora.pi_unidade_medida pum ON pum.pumid = pic.pumid
+                LEFT JOIN public.objetivoppa opp ON opp.oppid = pic.oppid
+                LEFT JOIN acompanhamento.acompanhamento aco ON(
+                    aco.acostatus = 'A'
+                    AND aco.pliid = pli.pliid
+                )
+                LEFT JOIN acompanhamento.classificacao cla ON aco.claid = cla.claid
+            WHERE
+                pli.plistatus = 'A'
+                AND pli.pliano = '". (int)$filtros->exercicio. "'
+                AND pli.ungcod = (
+                    SELECT
+                        suocod
+                    FROM public.vw_subunidadeorcamentaria
+                    WHERE
+                        suoid = ". (int)$filtros->suoid. "
+                )
+                $where
+            ORDER BY
+                suo.unofundo,
+                pum.pumnome,
+                pli.plititulo
+        ";
+//ver($sql);
         return $this->carregar($sql);
     }
 
@@ -2070,12 +2161,21 @@ class Pi_PlanoInterno extends Modelo
         $where = ' where ' . implode(' and ', $where);
         $order = ' order by ' . implode(', ', $order);
 
-        $sql = "select *
-                from monitora.vw_planointerno pli
-                $where
-                $order
-                "
-        ;
+        $sql = "
+            SELECT
+                pliid, plicod, plititulo, plidsc, pliano, picquantidade, picvalorcapital,
+                picvalorcusteio, previsto, autorizado, empenhado, liquidado,
+                pago, acoid, acoquantidade, acodata, esddsc, unoid, unocod, unonome,
+                unosigla, suoid, suocod, suonome, suosigla, eqddsc, eqdcod, resultadoprimario,
+                mainome, masnome, prgcod, prgdsc, oppcod, oppnome, ippcod, ippnome,
+                acacod, acatitulo, loccod, locdsc, plocod, po, ptres, mdedsc,
+                mpnnome, mppnome, needsc, capdsc, ptrid, funcional, acaid, pliemenda,
+                picedital, pumnome, pprid, pprnome, emenda, edital, esfdsc, mppid,
+                mpnid, oppid, pumid, ipnid, ippid
+            FROM monitora.vw_planointerno pli
+            $where
+            $order
+        ";
 
         return $this->carregar($sql);
     }

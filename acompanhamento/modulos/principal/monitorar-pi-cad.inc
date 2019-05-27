@@ -3,9 +3,9 @@
     include_once APPRAIZ . "monitora/classes/Pi_PlanoInterno.class.inc";
 
     $mPlanoInterno = new Pi_PlanoInterno($_REQUEST['pliid']);
-    $aPlanoInterno = current($mPlanoInterno->recuperarDados());
-
-    $acoid = $_REQUEST['acoid'] ? $_REQUEST['acoid'] : $aPlanoInterno['acoid'];
+    $planoAcao = current($mPlanoInterno->recuperarDados());
+    
+    $acoid = $_REQUEST['acoid'] ? $_REQUEST['acoid'] : $planoAcao['acoid'];
     $mAcompanhamento = new Acompanhamento_Model_Acompanhamento($acoid);
 
     $listaDeAnexos = (new Acompanhamento_Model_AcompanhamentoArquivo())->buscarPorAcompanhamento($mAcompanhamento->acoid);
@@ -22,7 +22,7 @@
     }
 </style>
 
-        <?php if($aPlanoInterno['pliid']){ ?>
+        <?php if($planoAcao['pliid']){ ?>
 
             <div class="col-md-12">
 
@@ -33,8 +33,8 @@
                                 <h5>
                                     Informações do Projeto: 
                                     <?php
-                                        if(!empty($aPlanoInterno['plicod'])){
-                                            echo '<span class="link" title="Exibir Espelho do PA" style="color: red; padding: 5px;" onclick="javascript: exibirEspelhoPi(\''. (int)$aPlanoInterno['pliid']. '\')">(' . $aPlanoInterno['plicod'] . ')</span>';
+                                        if(!empty($planoAcao['plicod'])){
+                                            echo '<span class="link" title="Exibir Espelho do PA" style="color: red; padding: 5px;" onclick="javascript: exibirEspelhoPi(\''. (int)$planoAcao['pliid']. '\')">(' . $planoAcao['plicod'] . ')</span>';
                                         }
                                     ?>
                                 </h5>
@@ -49,8 +49,8 @@
                                 $ultimoHistorico = $mPlanoInterno->recuperarUltimoHistoricoAcompanhamento();
 
                                 $dadosGrafico = [];
-                                if(count($aPlanoInterno)){
-                                    foreach ($aPlanoInterno as $key => $valor) {
+                                if(count($planoAcao)){
+                                    foreach ($planoAcao as $key => $valor) {
                                         if(in_array($key, ['previsto', 'autorizado', 'empenhado', 'liquidado', 'pago'])){
                                             $dadosGrafico[$key]['descricao'] = $key == 'autorizado' ? 'Provisionado' : ucfirst($key);
                                             $dadosGrafico[$key]['valor'] = $valor;
@@ -64,9 +64,9 @@
                                 if($ultimoHistorico){
                                     echo $simec->input('Monitorado', 'Monitorado em: ', "{$ultimoHistorico['hisdata']} por {$ultimoHistorico['usunome']}");
                                 }
-                                echo $simec->input('Quantidade', 'Quantidade', $aPlanoInterno['picquantidade']);
-                                echo $simec->input('Unidade', 'Unidade', $aPlanoInterno['pumnome']);
-                                echo $simec->input('Produto', 'Produto', $aPlanoInterno['pprnome']);
+                                echo $simec->input('Quantidade', 'Quantidade', $planoAcao['picquantidade']);
+                                echo $simec->input('Unidade', 'Unidade', $planoAcao['pumnome']);
+                                echo $simec->input('Produto', 'Produto', $planoAcao['pprnome']);
                                 echo $simec->input('Quantidadep', 'Quantidade prevista até a data', $qtdPrevista);
                                 $simec->setLabelSize(3);
                                 $simec->setPodeEditar(1);
@@ -74,7 +74,7 @@
                             </div>
                             <?php
                                 # Exibe o Gráfico de Acompanhamento caso não seja Enquadramento Não Orçamentário.
-                                if($dadosPI['eqdcod'] !== 'N'): ?>
+                                if($planoAcao['eqdcod'] !== Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA): ?>
                                     <div class="col-md-6">
                                         <h3 class="text-center">Acompanhamento do PA</h3>
                                         <?php
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <?php
-                                            $percentual = $aPlanoInterno['previsto'] ? $aPlanoInterno['empenhado'] * 100 / $aPlanoInterno['previsto'] : 0;
+                                            $percentual = $planoAcao['previsto'] ? $planoAcao['empenhado'] * 100 / $planoAcao['previsto'] : 0;
                                             $titulo_grafico = 'Percentual de Empenho';
                                         ?>
                                         <h3 class="text-center"><?= $titulo_grafico; ?></h3>
@@ -97,7 +97,7 @@
                             <?php else: ?>
                                 <div class="col-sm-2">
                                     <?php
-                                        $percentual = $aPlanoInterno['picquantidade'] ? $mAcompanhamento->acoquantidade * 100 / $aPlanoInterno['picquantidade'] : 0;
+                                        $percentual = $planoAcao['picquantidade'] ? $mAcompanhamento->acoquantidade * 100 / $planoAcao['picquantidade'] : 0;
                                         $titulo_grafico = 'Percentual de Execução';
                                     ?>
                                     <h3 class="text-center"><?= $titulo_grafico; ?></h3>
@@ -114,8 +114,8 @@
 
             <form id="formMonitorar" name="formMonitorar" method="post" class="form-horizontal">
                 <input type="hidden" name="req" id="req" value="salvar" />
-                <input name="pliid" id="pliid" type="hidden" value="<?php echo $aPlanoInterno['pliid']; ?>">
-                <input name="suoid" id="suoid" type="hidden" value="<?php echo $aPlanoInterno['suoid']; ?>">
+                <input name="pliid" id="pliid" type="hidden" value="<?php echo $planoAcao['pliid']; ?>">
+                <input name="suoid" id="suoid" type="hidden" value="<?php echo $planoAcao['suoid']; ?>">
                 <input name="acoid" id="acoid" type="hidden" value="<?php echo $mAcompanhamento->acoid; ?>">
 
                 <div class="col-md-8">

@@ -50,6 +50,14 @@ $urlModulo = '?modulo=principal/unidade/cadastro_pi&acao=A&aba=1';
 # Requisições
 include_once APPRAIZ. "acompanhamento/modulos/principal/monitorar-pi-request.inc";
 
+if ($_REQUEST['carregarComboPlanejamento']) {
+    carregarComboEstrategico($_REQUEST['meuid']);
+    die();
+}
+if ($_REQUEST['carregarComboUnidade']) {
+    echo $simec->select('meuid', 'Meta Unidade', null, (new Planacomorc_Model_MetaUnidade())->recuperarSqlMeta($_REQUEST['ungcod']));
+    die();
+}
 if ($_REQUEST['carregarComboUG']) {
     echo carregarComboUG($_REQUEST['unicod']);
     die();
@@ -228,13 +236,13 @@ $classTab2 = $aba? 'active': NULL;
 include APPRAIZ . "includes/cabecalho.inc";
 
 ?>
-<script language="JavaScript" src="../includes/funcoes.js?v=8"></script>
-<script language="JavaScript" src="../includes/funcoesspo.js?v=8"></script>
-<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=8">
-<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=8"></script>
-<script src="js/cadastro_pi_funcoes.js?v=18"></script>
-<script src="js/cadastro_pi_validacoes.js?v=18"></script>
-<script src="js/cadastro_pi_init.js?v=18"></script>
+<script language="JavaScript" src="../includes/funcoes.js?v=12"></script>
+<script language="JavaScript" src="../includes/funcoesspo.js?v=12"></script>
+<link rel="stylesheet" href="/library/bootstrap-switch/stylesheets/bootstrap-switch.css?v=12">
+<script src="/library/bootstrap-switch/js/bootstrap-switch.min.js?v=12"></script>
+<script src="js/cadastro_pi_funcoes.js?v=23"></script>
+<script src="js/cadastro_pi_validacoes.js?v=22"></script>
+<script src="js/cadastro_pi_init.js?v=22"></script>
 <style>
     autorizadocapital {
         display: none;
@@ -299,47 +307,68 @@ include APPRAIZ . "includes/cabecalho.inc";
                             <input type="hidden" name="pliid" id="pliid" value="<?= $_REQUEST['pliid']; ?>" />
                             <input type="hidden" name="tipotransacao" id="tipotransacao" value="E" />
                             <input type="hidden" name="scpid" id="scpid" value="<?php echo $_REQUEST['scpid']; ?>" />
-
-                            <div class="col-md-12">
-                                <?php if($_GET['apagar']): ?>
-                                    <div class="form-group">
-                                        <div class="col-lg-12">
-                                            <input type="button" class="btn btn-danger" id="btnApagar" value="APAGAR" />
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php if($_GET['apagar']): ?>
+                                        <div class="form-group">
+                                            <div class="col-lg-12">
+                                                <input type="button" class="btn btn-danger" id="btnApagar" value="APAGAR" />
+                                            </div>
                                         </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="ibox float-e-margins">
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/definicao_box.inc'; ?>
                                     </div>
-                                <?php endif; ?>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="ibox float-e-margins">
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/identificacao_box.inc'; ?>
+                                    </div>
+                                </div>
                             </div>
+                            
                             <div class="row">
-                                <?php include_once APPRAIZ.'planacomorc/modulos/principal/unidade/cadastro_pi_identificacao.inc';?>
+                                <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/detalhamento_box.inc'; ?>
                             </div>
+                            
                             <div class="row">
-                                <?php include_once APPRAIZ.'planacomorc/modulos/principal/unidade/cadastro_pi_detalhamento.inc';?>
+                                <div class="col-md-6">
+                                    <div class="ibox float-e-margins">
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/planejamento_estrategico_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/informacoes_complementares_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/localizacao_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/vinculacoes_eventuais_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/custeio_capital_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/anexos_box.inc'; ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="ibox float-e-margins">
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/metas_ppa_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/produto_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/etapas_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/responsaveis_box.inc'; ?>
+                                        <?php include_once APPRAIZ. 'planacomorc/modulos/principal/pi/cronogramas_box.inc'; ?>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="row">
-                                <?php include_once APPRAIZ.'planacomorc/modulos/principal/unidade/cadastro_pi_metas_produto.inc';?>
-                            </div>
-                            <div class="row">
-                                <?php include_once APPRAIZ.'planacomorc/modulos/principal/unidade/cadastro_pi_informacoes_etapas.inc';?>
-                            </div>
-                            <div class="row">                            
-                                <?php include_once APPRAIZ.'planacomorc/modulos/principal/unidade/cadastro_pi_localizacao_responsavel.inc';?>
-                            </div>
-                            <div class="row">
-                                <?php include_once APPRAIZ.'planacomorc/modulos/principal/unidade/cadastro_pi_vinculacoes.inc';?>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="row">
-                                <?php include_once APPRAIZ.'planacomorc/modulos/principal/unidade/cadastro_pi_custeio_anexos_cronograma.inc';?>
-                            </div>
+                            
                         </form>
-                    <?php if (!(array_intersect([PFL_CONSULTA,PFL_CONSULTA_UNIDADE], $perfis))) {?>
-                        <div class="form-group">
-                            <div class="text-center">
-                                <button class="btn btn-primary" type="button" name="btg" onclick="submeter('<?php echo $plicod; ?>//');" <?php echo $disabled; ?>><i class="fa fa-check"></i>&nbsp;Salvar</button>
-                                <a href="planacomorc.php?modulo=principal/unidade/listapimanter&acao=A" class="btn btn-warning" id="btnVoltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                        <?php if(!(array_intersect([PFL_CONSULTA, PFL_CONSULTA_UNIDADE], $perfis))): ?>
+                            <div class="form-group">
+                                <div class="text-center">
+                                    <button class="btn btn-primary" type="button" name="btg" onclick="submeter('<?php echo $plicod; ?>//');" <?php echo $disabled; ?>><i class="fa fa-check"></i>&nbsp;Salvar</button>
+                                    <a class="btn btn-warning" id="btnVoltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
+                                </div>
                             </div>
-                        </div>
-                    <?php }?>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -380,139 +409,38 @@ include APPRAIZ . "includes/cabecalho.inc";
             </div>
         </div>
 
+        <div class="col-lg-1" style="position: absolute; right: 0; top: 10px;">
+            <div class="col-md-1">
+                <a style="margin-left:0.8em; height:0.8em; padding-bottom:1.2em; font-size:3em;" class="fa fa-history" id="modal-historico-pi-usuario" title="Último usuário que salvou"></a>
+                <?php wf_desenhaBarraNavegacao($dadosPI['docid'], array('pliid' => $dadosPI['pliid'])); ?>
+                <div id="div_comentario_estado_atual" style="display: none;"><?php echo wf_pegarComentarioEstadoAtual($dadosPI['docid']); ?></div>
+            </div>
+        </div>
+        
     </div> <!-- div row -->
 </div> <!-- div principal -->
 
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal-ptres" class="modal fade">
-            <div class="modal-dialog-ptres">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de PTRES</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
+<?php
+    bootstrapPopup('Seleção de PTRES', 'modal_ptres', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Detalhamento PTRES', 'modal_detalhes_ptres', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Seleção de Responsáveis', 'modal_responsaveis', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Seleção de Localizações Municipais', 'modal_localizacao', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Seleção de Localizações Estaduais', 'modal_localizacao_estadual', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Seleção de Localizações no Exterior', 'modal_localizacao_exterior', '', array('fechar'), array('tamanho' => 'lg'));
+    bootstrapPopup('Anexar arquivos(Documentos)', 'modal_upload', '
+        <form class="dropzone" method="POST" enctype="multipart/form-data" action="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&uploadAnexo=1" id="formularioAnexoPlanacomorc" name="formularioAnexoPlanacomorc">
+            <div class="form-group">
+                <label for="arqdescricao" class="col-lg-2 control-label">Descrição:</label>
+                <div class="col-lg-10">
+                    <input type="text" value="" class="CampoEstilo normal form-control" placeholder="Insira a descrição do arquivo." title="Descrição" id="arqdescricao" name="arqdescricao" maxlength="255" size="2">
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_responsaveis" class="modal fade">
-            <div class="modal_dialog_responsaveis">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de Responsáveis</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
+            <div class="fallback">
+                <input name="file" type="file" multiple />
             </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_localizacao" class="modal fade">
-            <div class="modal_dialog_localizacao">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de Localizações Municipais</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_localizacao_estadual" class="modal fade">
-            <div class="modal_dialog_localizacao_estadual">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de Localizações Estaduais</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_localizacao_exterior" class="modal fade">
-            <div class="modal_dialog_localizacao_exterior">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Seleção de Localizações no Exterior</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div id="modal_upload" class="modal fade">
-            <div class="modal_dialog_upload">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                        <h4 class="modal-title">Anexar arquivos(Documentos)</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="dropzone" method="POST" enctype="multipart/form-data" action="planacomorc.php?modulo=principal/unidade/cadastro_pi&acao=A&uploadAnexo=1" id="formularioAnexoPlanacomorc" name="formularioAnexoPlanacomorc">
-                            <div class="form-group">
-                                <label for="arqdescricao" class="col-lg-2 control-label">Descrição:</label>
-                                <div class="col-lg-10">
-                                    <input type="text" value="" class="CampoEstilo normal form-control" placeholder="Insira a descrição do arquivo." title="Descrição" id="arqdescricao" name="arqdescricao" maxlength="255" size="2">
-                                </div>
-                            </div>
-                            <div class="fallback">
-                                <input name="file" type="file" multiple />
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" type="button">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        </form>
+    ', array('fechar'), array('tamanho' => 'lg'));
+?>
 
 <script type="text/javascript">
     // Enquadramentos
