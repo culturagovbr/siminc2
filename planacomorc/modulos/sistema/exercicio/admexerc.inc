@@ -1,7 +1,5 @@
 <?php
-$schema = 'planacomorc';
-
-$aExercicio = (new Spo_Model_Programacaoexercicio($schema))->buscarTodos();
+$aExercicio = (new Spo_Model_Programacaoexercicio($_SESSION['sisdiretorio']))->buscarTodos();
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>
@@ -27,18 +25,16 @@ include APPRAIZ . "includes/cabecalho.inc";
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover dataTables" >
                             <thead>
-                            <tr class="text-center">
-                                <th width="5%">Ação</th>
-                                <th>Ano</th>
-                                <th>Início</th>
-                                <th>Fim</th>
-                                <th>Corrente</th>
-                            </tr>
+                                <tr class="text-center">
+                                    <th width="5%">Ação</th>
+                                    <th>Ano</th>
+                                    <th>Início</th>
+                                    <th>Fim</th>
+                                    <th>Corrente</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <?php
-                                foreach($aExercicio as $exercicio):
-                            ?>
+                            <?php foreach($aExercicio as $exercicio): ?>
                                 <tr>
                                     <td class="text-center">
                                         <a title="Alterar" href="?modulo=sistema/exercicio/admexerc_form&acao=A&prsano=<?= $exercicio['prsano']; ?>">
