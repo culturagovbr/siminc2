@@ -1,5 +1,5 @@
 <?php
-    $cExercicio = new Planacomorc_Controller_ProgramacaoExercicio();
+    $cExercicio = new Public_Controller_ProgramacaoExercicio();
 
     switch ($_REQUEST['req']) {
         case 'salvar':
@@ -9,7 +9,7 @@
             $cExercicio->excluir($_REQUEST['prsano']);
         die;
     }
-    $mExercicio = new Spo_Model_Programacaoexercicio($_SESSION['sisdiretorio'], $_REQUEST['prsano']);
+    $mExercicio = new Public_Model_ProgramacaoExercicio($_SESSION['sisdiretorio'], $_REQUEST['prsano']);
 
     include APPRAIZ. "includes/cabecalho.inc";
 ?>

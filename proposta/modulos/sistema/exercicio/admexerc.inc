@@ -1,5 +1,5 @@
 <?php
-$aExercicio = (new Spo_Model_Programacaoexercicio($_SESSION['sisdiretorio']))->buscarTodos();
+$aExercicio = (new Public_Model_ProgramacaoExercicio($_SESSION['sisdiretorio']))->buscarTodos();
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>

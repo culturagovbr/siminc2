@@ -1,12 +1,12 @@
 <?php
 
-class Planacomorc_Controller_ProgramacaoExercicio
+class Public_Controller_ProgramacaoExercicio
 {
     public function salvar($dados)
     {
         $url = '?modulo=sistema/exercicio/admexerc&acao=A';
         try {
-            $mExercicio = new Spo_Model_Programacaoexercicio($_SESSION['sisdiretorio'], $dados['prsano']);
+            $mExercicio = new Public_Model_ProgramacaoExercicio($_SESSION['sisdiretorio'], $dados['prsano']);
             $mExercicio->popularDadosObjeto($dados);
             $mExercicio->prsano = $dados['prsano'];
             $mExercicio->prsdata_inicial = formata_data_sql($dados['prsdata_inicial']);
@@ -26,7 +26,7 @@ class Planacomorc_Controller_ProgramacaoExercicio
     {
         $url = '?modulo=sistema/exercicio/admexerc&acao=A';
         try {
-            $mExercicio = new Spo_Model_Programacaoexercicio($_SESSION['sisdiretorio'], $prsano);
+            $mExercicio = new Public_Model_ProgramacaoExercicio($_SESSION['sisdiretorio'], $prsano);
             $mExercicio->prsstatus = 'I';
             $mExercicio->salvar();
             $mExercicio->commit();
@@ -36,5 +36,4 @@ class Planacomorc_Controller_ProgramacaoExercicio
             simec_redirecionar($url, 'error');
         }
     }
-
 }
