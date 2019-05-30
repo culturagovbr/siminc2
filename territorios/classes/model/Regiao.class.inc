@@ -97,7 +97,7 @@ class Territorios_Model_Regiao extends Modelo
     }//end gravar()
 
 
-   /**
+    /**
      * Função excluir
      * - grava os dados
      *
@@ -105,15 +105,15 @@ class Territorios_Model_Regiao extends Modelo
     public function excluir()
     {
         global $url;
-       // $url = 'aspar.php?modulo=principal/proposicao/index&acao=A';
-        try{
+        // $url = 'aspar.php?modulo=principal/proposicao/index&acao=A';
+        try {
             $this->excluir();
             $this->commit();
             simec_redirecionar($url, 'success');
         } catch (Simec_Db_Exception $e) {
             simec_redirecionar($url, 'error');
         }
-    }//end excluir()
+    }
 
 
     /**
@@ -129,9 +129,6 @@ class Territorios_Model_Regiao extends Modelo
 
         return $sql;
 
-    }//end pegarSQLSelect()
+    }
 
-
-
-}//end Class
-?>
+}

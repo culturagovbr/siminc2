@@ -92,10 +92,10 @@ $aEmenda = (new Emendas_Model_Emenda)->recuperarListagem((object)$filtroEmenda);
                         <input name="req" id="req" value="" type="hidden">
 
                         <?php
-                        if(!$listaSubUnidadeUsuario){
+                       /* if(!$listaSubUnidadeUsuario){
                             echo $simec->select('unicod', 'Unidade Emenda', $filtroEmenda['unicod'], Spo_Model_Unidade::queryCombo((object)array(
                                 'prsano::INTEGER = '. (int)$_SESSION['exercicio']) ));
-                        }
+                        }*/
                         echo '<div id=div_ungcod>';
                         echo $simec->select('suoid', 'SubUnidade Beneficiário', $filtroEmenda['suoid'], Public_Model_SubUnidadeOrcamentaria::queryComboChaveSuoid((object)array(
                             'exercicio' => $_SESSION['exercicio'],

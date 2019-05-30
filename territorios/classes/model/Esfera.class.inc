@@ -54,5 +54,4 @@ class Territorios_Model_Esfera extends Modelo
         'esfid' => null,
         'esfdsc' => null,
     );
-}//end Class
-?>
+}

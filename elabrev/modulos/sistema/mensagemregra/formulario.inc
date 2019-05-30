@@ -1,1 +1,0 @@
-<?php include APPRAIZ .'includes/mensagemregra/formulario.inc'; ?>
