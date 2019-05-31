@@ -148,7 +148,7 @@
             SELECT DISTINCT
                 parid AS codigo,
                 parnome || ' - ' || parsigla AS descricao
-            FROM emenda.partido
+            FROM emendas.partido
             WHERE
                 parstatus = 'A'
             ORDER BY
