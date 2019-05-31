@@ -147,7 +147,7 @@
         $stSql = "
             SELECT DISTINCT
                 parid AS codigo,
-                parnome || ' - ' || parsigla AS descricao
+                pardsc || ' - ' || parsigla AS descricao
             FROM emendas.partido
             WHERE
                 parstatus = 'A'
