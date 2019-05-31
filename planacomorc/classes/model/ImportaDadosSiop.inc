@@ -109,8 +109,8 @@ class Planacomorc_Model_ImportaDadosSiop extends Modelo
                 ELSE
                     0
                 END AS vlrdotacaoatual,
-                exo.empliquidado::NUMERIC - exo.executadoporinscricaoderap::NUMERIC AS vlrempenhado,
-                exo.empliquidado::NUMERIC AS vlrliquidado,
+                exo.empliquidado::NUMERIC + exo.empenhadoaliquidar::NUMERIC AS vlrempenhado,
+                exo.empliquidado::NUMERIC - exo.executadoporinscricaoderap::NUMERIC AS vlrliquidado,
                 exo.pago::NUMERIC AS vlrpago,
                 exo.autorizado::NUMERIC AS vlrautorizado
             FROM wssof.ws_execucaoorcamentariadto exo
