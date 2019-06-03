@@ -30,7 +30,8 @@
                     </thead>
                     <tbody>
                     <?php foreach($aMetasPpa as $dados){
-                        
+
+                        $dados['suoid'] = $dados['suoid'] ? $dados['suoid'] : $suoid;
                         if($dados['acoid']){
                             $url = '?modulo=principal/monitorar-ppa&acao=A&acoid='. $dados['acoid'];
                             $icone = '<span class="label label-primary">Preenchida</span>';

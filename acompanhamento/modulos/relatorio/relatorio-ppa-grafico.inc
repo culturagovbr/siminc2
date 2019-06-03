@@ -100,11 +100,11 @@
                 </div>
 
                 <div class="ibox-content">
-                    <?php foreach($listaMetaPpa as $contador => $meta): ?>
-                    <?php
+                    <?php foreach($listaMetaPpa as $contador => $meta):
                         $infoMeta = (new Public_Model_MetaPpa($meta['mppid']))->recuperarInformacoes();
                         $mJanela = new Acompanhamento_Model_Janela($meta['janid']);
-                        $infoPI = (new Pi_PlanoInterno())->recuperarResumoPorMetaESubunidade($meta['mppid'], $meta['suoid']);
+                        $dto = ['mppid' => $meta['mppid'], 'suoid' => $meta['suoid']];
+                        $infoPI = (new Pi_PlanoInterno())->recuperarResumoPorMetaESubunidade((object)$dto);
                         $mAcompanhamento = new Acompanhamento_Model_Acompanhamento($meta['acoid']);
                         $listaDeAnexos = (new Acompanhamento_Model_AcompanhamentoArquivo())->buscarPorAcompanhamento($mAcompanhamento->acoid);
                         $subUnidade = new Public_Model_SubUnidadeOrcamentaria($meta['suoid']);
