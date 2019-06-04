@@ -642,8 +642,8 @@ endif;
                             INITCAP(usuario.usunome) AS descricao
                         FROM seguranca.perfil perfil
                             JOIN seguranca.perfilusuario perfilusuario ON(
-                            perfil.pflcod = perfilusuario.pflcod
-                            AND perfil.pflcod = 25
+                                perfil.pflcod = perfilusuario.pflcod
+                                AND perfil.pflcod = 25
                             )
                             RIGHT JOIN seguranca.usuario usuario ON usuario.usucpf = perfilusuario.usucpf
                             JOIN seguranca.usuario_sistema usuariosistema ON usuario.usucpf = usuariosistema.usucpf
