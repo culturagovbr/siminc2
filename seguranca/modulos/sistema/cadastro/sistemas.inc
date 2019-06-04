@@ -603,158 +603,163 @@ endif;
 
 ?>
 <form method="POST"  name="formulario">
-<input type='hidden' name="modulo" value="<?=$modulo?>">
-<input type='hidden' name="sisidEdit" value="<?=$sisid?>">
-<input type='hidden' name="act" value=<?=$act?>>
+    <input type='hidden' name="modulo" value="<?=$modulo?>">
+    <input type='hidden' name="sisidEdit" value="<?=$sisid?>">
+    <input type='hidden' name="act" value=<?=$act?>>
     <center>
-    <table  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
-      <tr>
-        <td align='right' class="SubTituloDireita">Descrição:</td>
-	    <td><?=campo_texto('dsc','S','S','',50,100,'','');?></td>
-      </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">abreviação:</td>
-	    <td><?=campo_texto('abrev','S','S','',25,100,'','');?></td>
-      </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">Finalidade:</td>
-	    <td><?=campo_textarea('finalidade','S','S','',75,3,'');?></td>
-      </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">Relacionado:</td>
-	    <td><?=campo_textarea('relacionado','S','S','',75,3,'');?></td>
-      </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">Público:</td>
-	    <td><?=campo_textarea('publico','S','S','',75,3,'');?></td>
-      </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">Diretório:</td>
-	    <td><?=campo_texto('diret','S',$sisid ? 'N' : 'S','',50,100,'','');?></td>
-      </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">Analista Resposável:</td>
-	    <td>
-	    	<?php
+        <table  class="tabela" bgcolor="#f5f5f5" cellSpacing="1" cellPadding="3" align="center">
+            <tr>
+                <td align='right' class="SubTituloDireita">Descrição:</td>
+                <td><?=campo_texto('dsc','S','S','',50,100,'','');?></td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">abreviação:</td>
+                <td><?=campo_texto('abrev','S','S','',25,100,'','');?></td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Finalidade:</td>
+                <td><?=campo_textarea('finalidade','S','S','',75,3,'');?></td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Relacionado:</td>
+                <td><?=campo_textarea('relacionado','S','S','',75,3,'');?></td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Público:</td>
+                <td><?=campo_textarea('publico','S','S','',75,3,'');?></td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Diretório:</td>
+                <td><?=campo_texto('diret','S',$sisid ? 'N' : 'S','',50,100,'','');?></td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Analista Resposável:</td>
+                <td>
+                <?php
                     $sql = "
                         SELECT DISTINCT
-                            u.usucpf as codigo,
-                            u.usunome as descricao
-                        FROM seguranca.usuario AS u
-                            INNER JOIN demandas.usuarioresponsabilidade ur ON u.usucpf = ur.usucpf	
-                            INNER JOIN seguranca.usuario_sistema us ON u.usucpf = us.usucpf
+                            usuario.usucpf as codigo,
+                            INITCAP(usuario.usunome) AS descricao
+                        FROM seguranca.perfil perfil
+                            JOIN seguranca.perfilusuario perfilusuario ON(
+                            perfil.pflcod = perfilusuario.pflcod
+                            AND perfil.pflcod = 25
+                            )
+                            RIGHT JOIN seguranca.usuario usuario ON usuario.usucpf = perfilusuario.usucpf
+                            JOIN seguranca.usuario_sistema usuariosistema ON usuario.usucpf = usuariosistema.usucpf
                         WHERE
-                            ur.rpustatus = 'A' AND
-                            us.susstatus = 'A' AND
-                            us.suscod = 'A' AND	
-                            ur.celid in (2) and
-                            ur.pflcod = 237
+                            usunome IS NOT NULL
+                            AND usuariosistema.suscod = 'A'
+                            AND usuariosistema.sisid = '4'
+                            AND (perfil.pflcod = 25)
+                        GROUP BY
+                            usuario.usucpf,
+                            usuario.usunome
                         ORDER BY
-                            u.usunome";
+                            descricao
+                    ";
+                    $db->monta_combo("usucpfanalista", $sql, 'S',"-- Selecione o Analista --",'','','','','S');
+                ?>
+                </td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Gestor responsável:</td>
+                <td>
+                    <?=campo_texto('usucpfgestor','','','',16,14,'###.###.###-##','', '', '', '', 'id="usucpfgestor"', '', '', "this.value=mascaraglobal('###.###.###-##',this.value);");?>
+                    <span id="dados-gestor"></span>
+                </td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Exercício:</td>
+                <td>
+                    <input type="radio" name="exerc" value="true" <?=($exerc=='t'?"CHECKED":"")?>> Ativo
+                    <input type="radio" name="exerc" value="false" <?=($exerc=='f'?"CHECKED":"")?>> Inativo
+                </td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Status:</td>
+                <td>
+                    <input type="radio" name="status" value="A" <?=($status=='A'?"CHECKED":"")?>> Ativo
+                    <input type="radio" name="status" value="I" <?=($status=='I'?"CHECKED":"")?>> Inativo
+                </td>
+            </tr>
+            <tr>
+                <td align='right' class="SubTituloDireita">Tabelas de segurança:</td>
+                <td>
+                    <input type="radio" name="tblseg" <?=$sisid ? 'disabled="disabled"' : '';?> value="A" <?=($tblseg=='A'?"CHECKED":"")?>> Ativo
+                    <input type="radio" name="tblseg" <?=$sisid ? 'disabled="disabled"' : '';?> value="I" <?=($tblseg=='I'?"CHECKED":"")?>> Inativo
+                </td>
+            </tr>
 
-                    $db->monta_combo("usucpfanalista",$sql, 'S',"-- Selecione o Analista --",'','','','','S');
-	    	?>
-	    </td>
-      </tr>
-    <tr>
-        <td align='right' class="SubTituloDireita">Gestor responsável:</td>
-        <td>
-            <?=campo_texto('usucpfgestor','','','',16,14,'###.###.###-##','', '', '', '', 'id="usucpfgestor"', '', '', "this.value=mascaraglobal('###.###.###-##',this.value);");?>
-            <span id="dados-gestor"></span>
-        </td>
-    </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">Exercício:</td>
-	       <td>
-            <input type="radio" name="exerc" value="true" <?=($exerc=='t'?"CHECKED":"")?>> Ativo
-            <input type="radio" name="exerc" value="false" <?=($exerc=='f'?"CHECKED":"")?>> Inativo
-        </td>
-      </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">Status:</td>
-	       <td>
-            <input type="radio" name="status" value="A" <?=($status=='A'?"CHECKED":"")?>> Ativo
-            <input type="radio" name="status" value="I" <?=($status=='I'?"CHECKED":"")?>> Inativo
-        </td>
-      </tr>
-      <tr>
-        <td align='right' class="SubTituloDireita">Tabelas de segurança:</td>
-	       <td>
-            <input type="radio" name="tblseg" <?=$sisid ? 'disabled="disabled"' : '';?> value="A" <?=($tblseg=='A'?"CHECKED":"")?>> Ativo
-            <input type="radio" name="tblseg" <?=$sisid ? 'disabled="disabled"' : '';?> value="I" <?=($tblseg=='I'?"CHECKED":"")?>> Inativo
-        </td>
-      </tr>
+            <?php if ($sisid) { ?>
+                <tr bgcolor="#CCCCCC">
+                    <td></td>
+                    <td><input type="button" name="btalterar" value="Alterar" onclick="validar_cadastro('A')" class="botao">
+                    <input type="button" name="btcancela" value="Cancelar" onclick="inicio();" class="botao"></td>
+                </tr>
+            <?php } else { ?>
+                <tr bgcolor="#CCCCCC">
+                    <td></td>
+                    <td><input type="button" name="btinserir" value="Incluir" onclick="validar_cadastro('I')" class="botao">
+                    <input type="button" name="btcancela" value="Cancelar" onclick="inicio();" class="botao"></td>
+                </tr>
+            <?php } ?>
+        </table>
+        <br><br>
 
-<? if ($sisid) { ?>
-	<tr bgcolor="#CCCCCC">
-   		<td></td>
-   		<td><input type="button" name="btalterar" value="Alterar" onclick="validar_cadastro('A')" class="botao">
-   		<input type="button" name="btcancela" value="Cancelar" onclick="inicio();" class="botao"></td>
- 	</tr>
-<? } else { ?>
-	<tr bgcolor="#CCCCCC">
-   		<td></td>
-   		<td><input type="button" name="btinserir" value="Incluir" onclick="validar_cadastro('I')" class="botao">
-   		<input type="button" name="btcancela" value="Cancelar" onclick="inicio();" class="botao"></td>
-	</tr>
-<? } ?>
+        <table width='95%' align='center' border="0" cellspacing="0" cellpadding="2" class="listagem">
+            <thead>
+                <tr>
+                  <td valign="top" class="title"><strong>Ação</strong></td>
+                  <td valign="top" class="title"><strong>Sistema</strong></td>
+                  <td valign="top" class="title"><strong>Abreviação</strong></td>
+                  <td valign="top" class="title"><strong>Analista Resposável</strong></td>
+                  <td valign="top" class="title"><strong>Status</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
 
-    </table>
-    <br><br>
+            //exibe listagem dos sistemas cadastrados
+            $sql= "
+                SELECT
+                    sisid AS codigo2,
+                    sisdsc AS descricao2,
+                    sisabrev AS abreviacao2,
+                    sisstatus AS status2,
+                    u.usunome
+                FROM sistema s
+                LEFT JOIN seguranca.usuario u ON u.usucpf = s.usucpfanalista
+                WHERE
+                    s.sisstatus = 'A'
+                ORDER BY
+                    sisdsc";
+            $RS2 = $db->record_set($sql);
+            $nlinhas = $db->conta_linhas($RS2);
+            if ($nlinhas >= 0) {
+            for ($i=0; $i<=$nlinhas;$i++){
+              $res = $db->carrega_registro($RS2,$i);
+            // a linha abaixo transforma em variáveis todos os campos do array
+              if(is_array($res)) foreach($res as $k=>$v) ${$k}=$v;
+                if (fmod($i,2) == 0) $marcado = '' ; else $marcado='marcado';
+                    print '<tr class="'.$marcado.'">
+                                <td>
+                                    <img border="0" src="../imagens/alterar.gif" title="Alterar o perfil." onclick="altera_cadastro('."'".md5_encrypt($codigo2,'')."'".')">&nbsp;&nbsp;&nbsp;
+                                </td>
+                                <td>'.$descricao2.'</td>
+                                <td>'.$abreviacao2.'</td>
+                                <td>'.$usunome.'</td>
+                                <td>'.($status2 == 'A'?'Ativo':'Inativo').'</td>
+                            </tr>';
 
-<table width='95%' align='center' border="0" cellspacing="0" cellpadding="2" class="listagem">
-<thead>
-    <tr>
-      <td valign="top" class="title"><strong>Ação</strong></td>
-      <td valign="top" class="title"><strong>Sistema</strong></td>
-      <td valign="top" class="title"><strong>Abreviação</strong></td>
-      <td valign="top" class="title"><strong>Analista Resposável</strong></td>
-      <td valign="top" class="title"><strong>Status</strong></td>
-    </tr>
-</thead>
-<tbody>
-<?php
-
-//exibe listagem dos sistemas cadastrados
-$sql= "
-    SELECT
-        sisid AS codigo2,
-        sisdsc AS descricao2,
-        sisabrev AS abreviacao2,
-        sisstatus AS status2,
-        u.usunome 
-    FROM sistema s
-    LEFT JOIN seguranca.usuario u ON u.usucpf = s.usucpfanalista
-    WHERE
-        s.sisstatus = 'A'
-    ORDER BY
-        sisdsc";
-$RS2 = $db->record_set($sql);
-$nlinhas = $db->conta_linhas($RS2);
-if ($nlinhas >= 0) {
-for ($i=0; $i<=$nlinhas;$i++){
-  $res = $db->carrega_registro($RS2,$i);
-// a linha abaixo transforma em variáveis todos os campos do array
-  if(is_array($res)) foreach($res as $k=>$v) ${$k}=$v;
-	if (fmod($i,2) == 0) $marcado = '' ; else $marcado='marcado';
-  		print '<tr class="'.$marcado.'">
-  					<td>
-  						<img border="0" src="../imagens/alterar.gif" title="Alterar o perfil." onclick="altera_cadastro('."'".md5_encrypt($codigo2,'')."'".')">&nbsp;&nbsp;&nbsp;
-  					</td>
-  					<td>'.$descricao2.'</td>
-  					<td>'.$abreviacao2.'</td>
-  					<td>'.$usunome.'</td>
-  					<td>'.($status2 == 'A'?'Ativo':'Inativo').'</td>
-  				</tr>';
-
-} }
-else
-{
-  	print '<tr class="'.$marcado.'"><td></td><td>Não há registros de sistemas </td></tr>';
-}
-?>
-	</tbody>
-    </table>
+            } }
+            else
+            {
+                print '<tr class="'.$marcado.'"><td></td><td>Não há registros de sistemas </td></tr>';
+            }
+            ?>
+            </tbody>
+        </table>
     </center>
 
 </form>
