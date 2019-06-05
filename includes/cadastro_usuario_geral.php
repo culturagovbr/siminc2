@@ -741,21 +741,6 @@ function gerFuncResp ($sisid, $sisDir, $usucpf, $dados = array()) {
 		<td align='right' class="SubTituloDireita">CPF:</td>
 		<td>
 			<?=campo_texto( 'cpf', 'S', $habilitar_edicao, '', 19, 14, '###.###.###-##', '', '', '', '', 'id="cpf"', '', '', 'mostraNomeReceita(this.value)' ); ?>
-			<?
-				$sql = "SELECT
-							count(*)
-						FROM
-							siape.tb_siape_cadastro_servidor
-						WHERE
-							nu_cpf = '".str_replace(array(".","-"),"",$cpf)."'";
-
-				$qtd = $db->pegaUm($sql);
-
-				if((integer)$qtd > 0) {
-			 ?>
-				&nbsp;
-				<a style="cursor: pointer;" onclick="visualizaDadosSiape('<?=str_replace(array(".","-"),"",$cpf)?>');">Consultar dados do SIAPE</a>
-			<? } ?>
 		</td>
 	</tr>
 	<tr id="tr_usunome">

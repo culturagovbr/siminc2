@@ -387,14 +387,15 @@ array_unique($filtroprocesso);
     <td><?=$db->monta_combo('aggid',$sql,'S','Selecione...','','','','','N',"aggid","",$_SESSION['painel']['aggid']);?></td>
 </tr>
 <tr>
-	<?php 
-		$sql= "SELECT 
-			mtidsc AS descricao, 
-			mtiid AS codigo
-		FROM 
-			pde.monitoratipoindicador 
-		order by
-			 descricao";
+	<?php
+		$sql= "
+            SELECT
+			    mtidsc AS descricao,
+			    mtiid AS codigo
+		    FROM painel.monitoratipoindicador
+		    ORDER BY
+		        descricao
+        ";
 	?>
     <td align='right' class="SubTituloDireita">Tipo de Indicador:</td>
     <td><?=$db->monta_combo('mtiid',$sql,'S','Selecione...','','','','','N',"mtiid","",$_SESSION['painel']['mtiid']);?></td>
