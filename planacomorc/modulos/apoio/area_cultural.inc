@@ -1,6 +1,6 @@
 <?php
 
-$listaAreaCultural = (new Planacomorc_Model_AreaCultural())->recuperarTodos('*', ["arcstatus = 'A'", "arcano = '". $_SESSION['exercicio']. "'"], 'arcdsc');
+$listaAreaCultural = (new Public_Model_AreaCultural())->recuperarTodos('*', ["arcstatus = 'A'", "arcano = '". $_SESSION['exercicio']. "'"], 'arcdsc');
 
     include APPRAIZ . "includes/cabecalho.inc";
 

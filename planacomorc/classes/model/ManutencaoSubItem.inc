@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.manutencaosubitem
+ * Classe de mapeamento da entidade planejamento.manutencao_subitem
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Planacomorc_Model_ManutencaoSubItem extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.manutencaosubitem';
+    protected $stNomeTabela = 'planejamento.manutencao_subitem';
 
     /**
      * Chave primaria.

@@ -15,7 +15,7 @@ switch ($_REQUEST['req']) {
         $cEmenda->excluir($_REQUEST['emeid']);
         die;
     case 'carregarAcaoPorUo':
-        $sqlPtres = (new Monitora_Model_Ptres())->recuperarSqlCombo([
+        $sqlPtres = (new Planacomorc_Model_Ptres())->recuperarSqlCombo([
             "'(Ptres: ' || ptres.ptres || ')'",
             "coalesce(ptres.prgcod, '')",
             "coalesce(ptres.acacod, '')",
@@ -72,7 +72,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                             echo $simec->input('emenumero', 'Número', $mEmenda->emenumero, ['class'=>'inteiro']);
                             echo $simec->select('autid', 'Autor', $mEmenda->autid, (new Emendas_Model_Autor())->recuperarSqlCombo(['autcod', 'autnome'], null, 'autnome'));
                             echo $simec->select('unoid', 'Unidade <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', $mEmenda->unoid, (new Public_Model_UnidadeOrcamentaria())->recuperarSqlCombo(['unocod', 'unonome'], null, 'unonome'));
-                            $sqlPtres = (new Monitora_Model_Ptres())->recuperarSqlCombo([
+                            $sqlPtres = (new Planacomorc_Model_Ptres())->recuperarSqlCombo([
                                 "'(Ptres: ' || ptres.ptres || ')'",
                                 "coalesce(ptres.prgcod, '')",
                                 "coalesce(ptres.acacod, '')",

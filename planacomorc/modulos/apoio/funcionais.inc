@@ -1,6 +1,6 @@
 <?php
 
-    $aPtres = (new Monitora_Model_Ptres)->recuperarTodosApoio((object)array('exercicio' => $_SESSION['exercicio']));
+    $aPtres = (new Planacomorc_Model_Ptres)->recuperarTodosApoio((object)array('exercicio' => $_SESSION['exercicio']));
 
     include APPRAIZ . "includes/cabecalho.inc";
 

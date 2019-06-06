@@ -15,7 +15,6 @@
             die;
     }
 
-    
     $mUnidadeOrcamentaria = new Public_Model_UnidadeOrcamentaria();
     $mPrograma = new Planacomorc_Model_Programa();
     $mLocalizador = new Public_Model_Localizador();
@@ -26,7 +25,7 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2><?php echo $titulo_modulo; ?></h2>
+        <h2><?= $titulo_modulo; ?></h2>
     </div>
 </div>
 

@@ -6,7 +6,7 @@ class Planacomorc_Controller_EnquadramentoRp
     {
         $url = '?modulo=apoio/acao-enquadramento&acao=A';
         try {
-            $mEnquadramentoRp = new Planacomorc_Model_Enquadramentorp();
+            $mEnquadramentoRp = new Planacomorc_Model_EnquadramentoRp();
             $mEnquadramentoRp->excluirPorExercicio($_SESSION['exercicio']);
 
             if(isset($dados['vinculos']) && is_array($dados['vinculos'])){

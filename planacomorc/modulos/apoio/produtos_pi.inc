@@ -1,6 +1,6 @@
 <?php
 
-$produtos = (new Monitora_Model_PiProduto)->recuperarTodos('*', ["pprstatus = 'A'", "prsano = '".(int)$_SESSION['exercicio']."'"], 'pprnome');
+$produtos = (new Public_Model_ProdutoPi)->recuperarTodos('*', ["pprstatus = 'A'", "prsano = '".(int)$_SESSION['exercicio']."'"], 'pprnome');
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>

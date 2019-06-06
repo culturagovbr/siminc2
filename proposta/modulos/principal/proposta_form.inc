@@ -11,7 +11,7 @@ switch ($_REQUEST['req']) {
         $cProposta->excluir($_REQUEST['proid']);
         die;
     case 'carregar-funcional':
-        echo $simec->select('ptrid', 'Funcional', null, (new Monitora_Model_Ptres())->recuperarSqlPorSubunidadeEEnquadramento($_REQUEST['suoid'], $_REQUEST['eqdid']), ['required']);
+        echo $simec->select('ptrid', 'Funcional', null, (new Planacomorc_Model_Ptres())->recuperarSqlPorSubunidadeEEnquadramento($_REQUEST['suoid'], $_REQUEST['eqdid']), ['required']);
         die;
     case 'carregar-funcional-filtros':
         echo $simec->select('ptrid', 'Funcional', null, (new Proposta_Model_Proposta())->recuperarSqlFuncional($_REQUEST['suoid'], $_REQUEST['eqdid']));
@@ -41,7 +41,7 @@ switch ($_REQUEST['req']) {
         die;
     case 'recuperar-dados-ptres':
         # Busca dados de produto e unidade de medida da funcional
-        $modelPtres = new Monitora_Model_Ptres($_REQUEST['ptrid']);
+        $modelPtres = new Planacomorc_Model_Ptres($_REQUEST['ptrid']);
         $modelPtres->ptrano = (int)$_SESSION['exercicio'];
         $funcional = $modelPtres->recuperarProdutosPorPtres();
         
@@ -58,7 +58,7 @@ switch ($_REQUEST['req']) {
         echo json_encode((new Proposta_Model_PrePlanoInterno())->recuperarValoresPorSubnidadeEPtres($_REQUEST['suoid'], $_REQUEST['ptrid']));
         die;
     case 'recuperar-subunidades-ptres':
-        $subunidades = (new Monitora_Model_Ptres($_REQUEST['ptrid']))->recuperarSubunidades();
+        $subunidades = (new Planacomorc_Model_Ptres($_REQUEST['ptrid']))->recuperarSubunidades();
         echo '  <div class="form-group">
                     <label class="col-sm-3 control-label">Subunidades Vinculadas à Funcional: </label>
                     <div class="col-sm-9">
@@ -97,7 +97,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                 'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario)), ['required']);
                             echo $simec->select('eqdid', 'Enquadramento da Despesa', $mProposta->eqdid, (new Planacomorc_Model_EnquadramentoDespesa())->recuperarSqlCombo(), ['required']);
                             echo '<span id="span-rp"></span>';
-                            echo '<span id="span-funcional">' . $simec->select('ptrid', 'Funcional', $mProposta->ptrid, (new Monitora_Model_Ptres())->recuperarSqlPorSubunidadeEEnquadramento($mProposta->suoid, $mProposta->eqdid), ['required']) . '</span>';
+                            echo '<span id="span-funcional">' . $simec->select('ptrid', 'Funcional', $mProposta->ptrid, (new Planacomorc_Model_Ptres())->recuperarSqlPorSubunidadeEEnquadramento($mProposta->suoid, $mProposta->eqdid), ['required']) . '</span>';
                             echo '<span id="span-subunidades-ptres"></span>';
                         ?>
                         <div class="form-group ">

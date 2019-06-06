@@ -1,6 +1,6 @@
 <?php
 
-    $cPtres = new Monitora_Controller_Ptres();
+    $cPtres = new Planacomorc_Controller_Ptres();
     switch ($_REQUEST['req']) {
         case 'salvar':
             $cPtres->salvar($_REQUEST);
@@ -13,7 +13,7 @@
             die;
     }
 
-    $mPtres = new Monitora_Model_Ptres($_REQUEST['ptrid']);
+    $mPtres = new Planacomorc_Model_Ptres($_REQUEST['ptrid']);
 
     include APPRAIZ . "includes/cabecalho.inc";
 ?>

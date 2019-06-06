@@ -15,7 +15,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 
 /**
- * Planacomorc_Model_Enquadramentorp
+ * Planacomorc_Model_EnquadramentoRp
  *
  * @category Class
  * @package  A1
@@ -24,7 +24,7 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release:
  * @link     no link
  */
-class Planacomorc_Model_Enquadramentorp extends Modelo
+class Planacomorc_Model_EnquadramentoRp extends Modelo
 {
     /**
      * Nome da tabela especificada
@@ -61,27 +61,29 @@ class Planacomorc_Model_Enquadramentorp extends Modelo
         'irpcod' => null,
     );
 
-    public function excluirPorExercicio($exercicio, $eqdid = null){
-      if($eqdid){
-        $condicao = "eqdid = ". (int)$eqdid;
-      } else {
-        $condicao = "
-          eqdid IN(
-            SELECT
-              eqdid
-            FROM planejamento.enquadramento_despesa
-            WHERE
-              eqdano = '{$exercicio}'
-          )
-        ";
-      }
+    public function excluirPorExercicio($exercicio, $eqdid = null)
+    {
+        if ($eqdid) {
+            $condicao = "eqdid = " . (int)$eqdid;
+        } else {
+            $condicao = "
+                eqdid IN(
+                    SELECT
+                        eqdid
+                    FROM planejamento.enquadramento_despesa
+                    WHERE
+                        eqdano = '{$exercicio}'
+                )
+            ";
+        }
 
-      $sql = "
-          DELETE from planejamento.enquadramentorp
-          WHERE
-            $condicao
-      ";
-      return $this->executar($sql);
+        $sql = "
+            DELETE FROM planejamento.enquadramentorp
+            WHERE
+                $condicao
+        ";
+
+        return $this->executar($sql);
     }
 
     public function recuperarPorExercicio($exercicio)
@@ -109,5 +111,4 @@ class Planacomorc_Model_Enquadramentorp extends Modelo
         }
         return $dadosAgrupados;
     }
-}//end Class
-?>
+}

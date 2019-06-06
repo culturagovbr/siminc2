@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.meta_estrategica
+ * Classe de mapeamento da entidade planejamento.meta_estrategica
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Planacomorc_Model_MetaEstrategica extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.meta_estrategica';
+    protected $stNomeTabela = 'planejamento.meta_estrategica';
 
     /**
      * Chave primaria.

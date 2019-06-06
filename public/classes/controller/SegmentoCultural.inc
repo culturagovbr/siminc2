@@ -6,14 +6,14 @@ class Public_Controller_SegmentoCultural
     {
         $url = '?modulo=apoio/area_cultural_form&acao=A';
         try {
-            $mdsegCultural = new Planacomorc_Model_SegmentoCultural($dados['secid']);
-            $mdsegCultural->popularDadosObjeto($dados, true);
-            $mdsegCultural->seccod = strtoupper($mdsegCultural->seccod);
-            $mdsegCultural->secano = $mdsegCultural->secano ? $mdsegCultural->secano : $_SESSION['exercicio'];
-            $mdsegCultural->salvar(null,null);
-            $mdsegCultural->commit();
+            $mSegmentoCultural = new Public_Model_SegmentoCultural($dados['secid']);
+            $mSegmentoCultural->popularDadosObjeto($dados, true);
+            $mSegmentoCultural->seccod = strtoupper($mSegmentoCultural->seccod);
+            $mSegmentoCultural->secano = $mSegmentoCultural->secano ? $mSegmentoCultural->secano : $_SESSION['exercicio'];
+            $mSegmentoCultural->salvar(null,null);
+            $mSegmentoCultural->commit();
         } catch (Exception $e){
-            $mdsegCultural->rollback();
+            $mSegmentoCultural->rollback();
             simec_redirecionar($url, 'error');
         }
     }
@@ -22,28 +22,27 @@ class Public_Controller_SegmentoCultural
     {
         $url = '?modulo=apoio/area_cultural_form&acao=A';
         try {
-            $mdsegCultural = new Planacomorc_Model_SegmentoCultural($dados['secid']);
-            $mdsegCultural->secstatus = 'I';
-            $mdsegCultural->salvar();
-            $mdsegCultural->commit();
-            simec_redirecionar($url . '&arceid=' . $mdsegCultural->arceid, 'success');
+            $mSegmentoCultural = new Public_Model_SegmentoCultural($dados['secid']);
+            $mSegmentoCultural->secstatus = 'I';
+            $mSegmentoCultural->salvar();
+            $mSegmentoCultural->commit();
+            simec_redirecionar($url . '&arceid=' . $mSegmentoCultural->arceid, 'success');
         } catch (Exception $e){
-            $mdsegCultural->rollback();
+            $mSegmentoCultural->rollback();
             simec_redirecionar($url, 'error');
         }
     }
 
     public function montarListagem($secid)
     {
-        $mdsegCultural = new Planacomorc_Model_SegmentoCultural($secid);
+        $mSegmentoCultural = new Public_Model_SegmentoCultural($secid);
         $perfis = pegaPerfilGeral();
         /**
          * @todo colcoar a constante correta do acompanhamento para atualizar a regra.
          */
         $podeEditar = !in_array(PFL_SUBUNIDADE, $perfis)? TRUE: FALSE;
 
-        $lista = $mdsegCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "secid = '{$mdsegCultural->secid}'"], 'secdsc');
+        $lista = $mSegmentoCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "secid = '{$mSegmentoCultural->secid}'"], 'secdsc');
         include_once APPRAIZ . 'planacomorc/modulos/apoio/segmento-cultural.inc';
-
     }
 }

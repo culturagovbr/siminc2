@@ -7,7 +7,7 @@ class Public_Controller_ProdutoPI
         $url = '?modulo=apoio/produtos_pi&acao=A';
 
         try {
-            $mProdutosPI = new Monitora_Model_PiProduto($dados['pprid']);
+            $mProdutosPI = new Public_Model_ProdutoPi($dados['pprid']);
             $mProdutosPI->popularDadosObjeto($dados);
             $mProdutosPI->prsano = $mProdutosPI->prsano ? $mProdutosPI->prsano : $_SESSION['exercicio'];
             $mProdutosPI->salvar(null,null, ['pprdescricao', 'tipo']);
@@ -24,7 +24,7 @@ class Public_Controller_ProdutoPI
         $url = '?modulo=apoio/produtos_pi&acao=A';
 
         try {
-            $mProdutosPI = new Monitora_Model_PiProduto($pprid);
+            $mProdutosPI = new Public_Model_ProdutoPi($pprid);
             $mProdutosPI->pprstatus = 'I';
             $mProdutosPI->salvar();
             $mProdutosPI->commit();

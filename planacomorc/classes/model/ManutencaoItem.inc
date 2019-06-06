@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.manutencaoitem
+ * Classe de mapeamento da entidade planejamento.manutencaoitem
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Planacomorc_Model_ManutencaoItem extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.manutencaoitem';
+    protected $stNomeTabela = 'planejamento.manutencao_item';
 
     /**
      * Chave primaria.
@@ -41,6 +41,7 @@ class Planacomorc_Model_ManutencaoItem extends Modelo
     protected $arChavePrimaria = array(
         'maiid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
@@ -78,7 +79,7 @@ class Planacomorc_Model_ManutencaoItem extends Modelo
                 mainome AS nome,
                 maidescricao AS descricao,
                 eqddsc AS enquadramento
-            FROM planacomorc.manutencaoitem mai
+            FROM planejamento.manutencao_item mai
                 LEFT JOIN planejamento.enquadramento_despesa eqd ON(mai.eqdid = eqd.eqdid)
             WHERE
                 prsano = '{$_SESSION['exercicio']}'

@@ -1,12 +1,12 @@
 <?php
 
-class Planacomorc_Controller_AreaCultural
+class Public_Controller_AreaCultural
 {
     public function salvar($dados)
     {
         $url = '?modulo=apoio/area_cultural_form&acao=A';
         try {
-            $mdareaCultural = new Planacomorc_Model_AreaCultural($dados['arceid']);
+            $mdareaCultural = new Public_Model_AreaCultural($dados['arceid']);
             $mdareaCultural->popularDadosObjeto($dados);
             $mdareaCultural->arccod = strtoupper($mdareaCultural->arccod);
             $mdareaCultural->arcano = $mdareaCultural->arcano ? $mdareaCultural->arcano : $_SESSION['exercicio'];
@@ -23,7 +23,7 @@ class Planacomorc_Controller_AreaCultural
     {
         $url = '?modulo=apoio/area_cultural&acao=A';
         try {
-            $mdareaCultural = new Planacomorc_Model_AreaCultural($arceid);
+            $mdareaCultural = new Public_Model_AreaCultural($arceid);
             $mdareaCultural->arcstatus = 'I';
             $mdareaCultural->salvar();
             $mdareaCultural->commit();

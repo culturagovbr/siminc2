@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.objetivo_estrategico
+ * Classe de mapeamento da entidade planejamento.objetivo_estrategico
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Planacomorc_Model_ObjetivoEstrategico extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.objetivo_estrategico';
+    protected $stNomeTabela = 'planejamento.objetivo_estrategico';
 
     /**
      * Chave primaria.

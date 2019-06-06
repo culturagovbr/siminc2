@@ -8,7 +8,7 @@ switch ($_REQUEST['req']){
 
 $aEnquadramento = (new Planacomorc_Model_EnquadramentoDespesa())->recuperarTodos('*', ["eqdano = '{$_SESSION['exercicio']}'", "eqdstatus = 'A'"], 'eqddsc');
 $aRp = simec_preparar_array((new Public_Model_IdentResultPrimario())->recuperarTodos("irpcod as codigo, irpcod || ' - ' || irpdsc as descricao", ["irpstatus = 'A'"], 'descricao'));
-$aVinculos = (new Planacomorc_Model_Enquadramentorp())->recuperarPorExercicio($_SESSION['exercicio']);
+$aVinculos = (new Planacomorc_Model_EnquadramentoRp())->recuperarPorExercicio($_SESSION['exercicio']);
 
 
 /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.pi_janela
+ * Classe de mapeamento da entidade planejamento.janela_plano_interno
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Planacomorc_Model_PiJanela extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.pi_janela';
+    protected $stNomeTabela = 'planejamento.janela_plano_interno';
 
     /**
      * Chave primaria.
@@ -41,6 +41,7 @@ class Planacomorc_Model_PiJanela extends Modelo
     protected $arChavePrimaria = array(
         'pijid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
@@ -82,7 +83,7 @@ class Planacomorc_Model_PiJanela extends Modelo
                 TO_CHAR(pij.pijinicio, 'DD/MM/YYYY') AS pijinicio,
                 TO_CHAR(pij.pijfim, 'DD/MM/YYYY') AS pijfim,
                 INITCAP(ucad.usunome) AS usunome
-            FROM planacomorc.pi_janela pij
+            FROM planejamento.janela_plano_interno pij
                 JOIN seguranca.usuario ucad ON pij.usucpf = ucad.usucpf
             WHERE
                 pij.pijstatus = 'A' $where
@@ -108,7 +109,7 @@ class Planacomorc_Model_PiJanela extends Modelo
             SELECT
                 pij.pijid AS codigo,
                 pij.pijdsc AS descricao
-            FROM planacomorc.pi_janela pij
+            FROM planejamento.janela_plano_interno pij
                 JOIN seguranca.usuario ucad ON pij.usucpf = ucad.usucpf
             WHERE
                 pij.pijstatus = 'A' $where
@@ -133,5 +134,4 @@ class Planacomorc_Model_PiJanela extends Modelo
         return $lista;
     }
 
-}//end Class
-?>
+}

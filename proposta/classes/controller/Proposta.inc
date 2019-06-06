@@ -14,7 +14,7 @@ class Proposta_Controller_Proposta
 
             $mProposta->salvar(null, null, ['proquantidade', 'proquantidadeexpansao', 'projustificativa', 'projustificativaexpansao', ]);
 
-            $mPtres = (new Monitora_Model_Ptres($dados['ptrid']))->salvarQuantidadeLocalizador($dados['locquantidadeproposta']);
+            $mPtres = (new Planacomorc_Model_Ptres($dados['ptrid']))->salvarQuantidadeLocalizador($dados['locquantidadeproposta']);
 
             $mProposta->commit();
             simec_redirecionar($url . '&proid='. $mProposta->proid, 'success');

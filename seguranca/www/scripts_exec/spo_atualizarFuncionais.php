@@ -58,9 +58,12 @@ $db = new cls_banco();
 $exercicio = date('Y');
 $momento = 9000;
 
-$mPtres = new Monitora_Model_Ptres();
-$mPtres->importarSiop($exercicio, $momento);
-$mPtres->atualizarFuncionaisSiop($exercicio, $momento);
-$mPtres->commit();
-
-ver('FIM', d);
+try{
+    $mPtres = new Planacomorc_Model_Ptres();
+    $mPtres->importarSiop($exercicio, $momento);
+    $mPtres->atualizarFuncionaisSiop($exercicio, $momento);
+    $mPtres->commit();
+    echo "Funcionais atualizadas com sucesso !";die;
+} catch (Exception $e){
+    echo "Erro ao atualizar as funcionais"; die;
+}

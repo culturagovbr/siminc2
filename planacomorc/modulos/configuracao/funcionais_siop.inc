@@ -5,7 +5,7 @@
     # Inclusão de classes externas
     include_once APPRAIZ. 'wssof/classes/Ws_MomentosDto.inc';
     
-    $mPtres = new Monitora_Model_Ptres();
+    $mPtres = new Planacomorc_Model_Ptres();
 
     # Busca último momento atualizado
     $ultimoMomento = $mPtres->buscarUltimoMomentoAtualizado((int)$_SESSION['exercicio']);

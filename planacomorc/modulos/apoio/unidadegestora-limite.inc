@@ -32,7 +32,7 @@ switch ($_REQUEST['req']) {
         $mPtresSubunidade->commit();
         die;
     case 'salvar-dotacao-fnc':
-        $mPtres = new Monitora_Model_Ptres($_REQUEST['ptrid']);
+        $mPtres = new Planacomorc_Model_Ptres($_REQUEST['ptrid']);
         $mPtres->popularDadosObjeto($_REQUEST);
         $mPtres->salvar(null, null, ['ptrdotacaocusteio', 'ptrdotacaocapital']);
         $mPtres->commit();

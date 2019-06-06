@@ -24,7 +24,7 @@ if(count(array_intersect($perfis, [PFL_SUBUNIDADE]))){
 }
 
 $mProposta = new Proposta_Model_Proposta();
-$mPtres = new Monitora_Model_Ptres();
+$mPtres = new Planacomorc_Model_Ptres();
 $mPrePlanoInterno = new Proposta_Model_PrePlanoInterno();
 
 # Busca último momento atualizado

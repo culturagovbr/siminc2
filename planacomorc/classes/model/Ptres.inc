@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.ptres
+ * Classe de mapeamento da entidade planejamento.ptres
  *
  * @category Class
  * @package  A1
@@ -13,11 +13,11 @@
 require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 require_once(APPRAIZ . 'wssof/classes/Importador.inc');
 require_once(APPRAIZ . 'wssof/classes/Ws_AcoesDto.inc');
-require_once(APPRAIZ . 'monitora/classes/model/Acao.inc');
+require_once(APPRAIZ . 'planacomorc/classes/model/Acao.inc');
 
 
 /**
- * Monitora_Model_Ptres
+ * Planacomorc_Model_Ptres
  *
  * @category Class
  * @package  A1
@@ -26,14 +26,14 @@ require_once(APPRAIZ . 'monitora/classes/model/Acao.inc');
  * @version  Release:
  * @link     no link
  */
-class Monitora_Model_Ptres extends Modelo
+class Planacomorc_Model_Ptres extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.ptres';
+    protected $stNomeTabela = 'planejamento.ptres';
 
     /**
      * Chave primaria.
@@ -156,8 +156,8 @@ class Monitora_Model_Ptres extends Modelo
                 AND aca.prgcod = '{$funcional['codigoprograma']}'
                 AND aca.acacod = '{$funcional['codigoacao']}'
                 AND aca.loccod = '{$funcional['codigolocalizador']}'
-	    ORDER BY
-		aca.acastatus
+	        ORDER BY
+		        aca.acastatus
         ";
         $acaid = $this->pegaUm($sql);
 
@@ -189,7 +189,7 @@ class Monitora_Model_Ptres extends Modelo
         $sql = "
             SELECT
                 ptrid
-            FROM monitora.ptres ptr
+            FROM planejamento.ptres ptr
                 JOIN monitora.acao aca ON ptr.acaid = aca.acaid
             WHERE
                 aca.prgano = '{$funcional['exercicio']}'
@@ -200,12 +200,12 @@ class Monitora_Model_Ptres extends Modelo
                 AND aca.acacod = '{$funcional['codigoacao']}'
                 AND aca.loccod = '{$funcional['codigolocalizador']}'
                 AND ptr.plocod = '{$funcional['planoorcamentario']}'
-	    ORDER BY
-		ptr.ptrstatus
+            ORDER BY
+                ptr.ptrstatus
         ";
         $ptrid = $this->pegaUm($sql);
 
-        $mPtres = new Monitora_Model_Ptres($ptrid);
+        $mPtres = new Planacomorc_Model_Ptres($ptrid);
 
         if(!$mPtres->ptrid){
             $mPtres->ptres = 0;
@@ -304,7 +304,7 @@ class Monitora_Model_Ptres extends Modelo
         global $db;
 
         $sql = "SELECT o.oppid
-                FROM monitora.ptres ptr
+                FROM planejamento.ptres ptr
                 INNER JOIN monitora.acao aca on ptr.acaid = aca.acaid and aca.prgano = ptr.ptrano
                 INNER JOIN public.objetivoppa o on o.oppcod = aca.acaobjetivocod and o.prsano = ptr.ptrano
             where ptrid = " . (int) $this->ptrid;
@@ -328,7 +328,7 @@ class Monitora_Model_Ptres extends Modelo
                 ptr.ptrid,
                 ptr.ptres,
                 ptr.unicod AS unocod,
-		ptr.unicod || '-' || COALESCE((
+		        ptr.unicod || '-' || COALESCE((
                     SELECT
                         uni.unonome
                     FROM public.unidadeorcamentaria uni
@@ -343,7 +343,7 @@ class Monitora_Model_Ptres extends Modelo
                 ptr.acatitulo,
                 ptr.acacod,
                 ptr.irpcod
-            FROM monitora.vw_ptres ptr
+            FROM planejamento.vw_ptres ptr
             WHERE
                 ptr.ptrstatus = 'A'
                 AND ptr.ptrano = '". (int)$param->exercicio. "'
@@ -381,7 +381,7 @@ class Monitora_Model_Ptres extends Modelo
                 aca.acanomeunidade unidade_acao,
                 ptr.ptrnomeprodutopo produto_po,
                 ptr.ptrnomeunidadepo unidade_po
-            FROM monitora.ptres ptr
+            FROM planejamento.ptres ptr
                 JOIN monitora.acao aca ON aca.acaid = ptr.acaid
             WHERE
                 ptr.ptrid = ". (int)$this->ptrid. "
@@ -406,7 +406,7 @@ class Monitora_Model_Ptres extends Modelo
         $sql = "select array_to_string(array(
                     select suo.unosigla || ' - ' || suo.suonome suonome
                     from spo.ptressubunidade psu
-                            inner join monitora.ptres p on p.ptrid = psu.ptrid
+                            inner join planejamento.ptres p on p.ptrid = psu.ptrid
                             inner join public.vw_subunidadeorcamentaria suo on suo.suoid = psu.suoid
                     where p.ptrano = '{$_SESSION['exercicio']}'
                     and p.ptrstatus = 'A'

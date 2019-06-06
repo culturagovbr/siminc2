@@ -1,13 +1,13 @@
 <?php
 
-class Monitora_Controller_Ptres
+class Planacomorc_Controller_Ptres
 {
     public function salvar($dados)
     {
         $url = '?modulo=apoio/funcionais&acao=A';
 
         try {
-            $mPtres = new Monitora_Model_Ptres($dados['ptrid']);
+            $mPtres = new Planacomorc_Model_Ptres($dados['ptrid']);
             $mPtres->popularDadosObjeto($dados);
 
             $acao = new Planacomorc_Model_Acao($mPtres->acaid);
@@ -35,7 +35,7 @@ class Monitora_Controller_Ptres
         $url = '?modulo=apoio/funcionais&acao=A';
 
         try {
-            $mPtres = new Monitora_Model_Ptres($ptrid);
+            $mPtres = new Planacomorc_Model_Ptres($ptrid);
             
             if($mPtres->existeVinculo()){
                 $mensagem = 'O registro não pode ser excluído pois possui vínculo com algum PI.';

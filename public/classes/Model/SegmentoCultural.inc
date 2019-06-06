@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade public.segmentocultural
+ * Classe de mapeamento da entidade public.segmento_cultural
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Public_Model_SegmentoCultural extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'public.segmentocultural';
+    protected $stNomeTabela = 'public.segmento_cultural';
 
     /**
      * Chave primaria.
@@ -41,12 +41,13 @@ class Public_Model_SegmentoCultural extends Modelo
     protected $arChavePrimaria = array(
         'secid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'acuid' => array('tabela' => 'areacultural', 'pk' => 'acuid'),
+        'arceid' => array('tabela' => 'public.area_cultural', 'pk' => 'arceid'),
     );
 
     /**
@@ -56,11 +57,10 @@ class Public_Model_SegmentoCultural extends Modelo
      */
     protected $arAtributos = array(
         'secid' => null,
+        'arceid' => null,
         'secdsc' => null,
         'secano' => null,
-        'secstatus' => null,
-        'acuid' => null,
         'seccod' => null,
+        'secstatus' => null,
     );
-}//end Class
-?>
+}

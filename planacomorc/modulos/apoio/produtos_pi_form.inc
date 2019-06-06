@@ -10,7 +10,7 @@ switch ($_REQUEST['req']) {
 		die;
 }
 
-$mProdutoPI = new Monitora_Model_PiProduto($_REQUEST['pprid']);
+$mProdutoPI = new Public_Model_ProdutoPi($_REQUEST['pprid']);
 
 include APPRAIZ . "includes/cabecalho.inc";
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.dimensao_estrategica
+ * Classe de mapeamento da entidade planejamento.dimensao_estrategica
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Planacomorc_Model_DimensaoEstrategica extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.dimensao_estrategica';
+    protected $stNomeTabela = 'planejamento.dimensao_estrategica';
 
     /**
      * Chave primaria.

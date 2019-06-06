@@ -1,10 +1,10 @@
 <?php
 
-$cAreaCultural = new Planacomorc_Controller_AreaCultural();
+$cAreaCultural = new Public_Controller_AreaCultural();
 $cSegmentoCultural = new Public_Controller_SegmentoCultural();
-$mAreaCultural = new Planacomorc_Model_AreaCultural($_REQUEST['arceid']);
+$mAreaCultural = new Public_Model_AreaCultural($_REQUEST['arceid']);
+$mSegmentoCultural = new Public_Model_SegmentoCultural($_REQUEST['secid']);
 
-$mSegmentoCultural = new Planacomorc_Model_SegmentoCultural($_REQUEST['secid']);
 
 if($_REQUEST['arceid'])
     $lista = $mSegmentoCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "arceid = '{$_REQUEST['arceid']}'"], 'secdsc');
@@ -26,7 +26,6 @@ switch ($_REQUEST['req']) {
         $lista = $mSegmentoCultural->recuperarTodos('*' , ["secstatus = 'A'", "secano = '{$_SESSION['exercicio']}'", "arceid = '{$_REQUEST['arceid']}'"], 'secdsc');
         include_once(APPRAIZ.'/planacomorc/modulos/apoio/segmento-cultural.inc');
         die;
-
 }
 
 include APPRAIZ . "includes/cabecalho.inc";
@@ -34,7 +33,7 @@ include APPRAIZ . "includes/cabecalho.inc";
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2><?php echo $titulo_modulo; ?></h2>
+        <h2><?= $titulo_modulo; ?></h2>
     </div>
 </div>
 
@@ -48,19 +47,17 @@ include APPRAIZ . "includes/cabecalho.inc";
                 <div class="ibox-content">
                     <form id="formulario" name="formulario" method="post" class="form-horizontal">
                         <input type="hidden" name="req" id="req" value="salvar-area" />
-                        <input name="arceid" id="arceid" type="hidden" value="<?php echo $mAreaCultural->arceid; ?>">
-                        
+                        <input name="arceid" id="arceid" type="hidden" value="<?= $mAreaCultural->arceid; ?>">
                         <?php
                             echo $simec->input('arccod', 'Código PI', $mAreaCultural->arccod, ['required','maxlength' => 1, 'class' => 'upper-text']);
                             echo $simec->input('arcdsc', 'Descrição', $mAreaCultural->arcdsc, ['required', 'maxlength' => 250]);
                         ?>
-                        
                         <div class="form-group">
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit" id="btn-salvar"><i class="fa fa-check"></i>&nbsp;Salvar</button>
                                 <a href="?modulo=apoio/area_cultural&acao=A" class="btn btn-warning" id="btn-voltar" type="button"><i class="fa fa-arrow-left"></i>&nbsp;Voltar</a>
-                                <?php if($mAreaCultural->arceid){ ?>
-                                    <a href="?modulo=apoio/area_cultural_form&acao=A&req=excluir-area&arceid=<?php echo $mAreaCultural->arceid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
+                                <?php if($mAreaCultural->arceid) { ?>
+                                    <a href="?modulo=apoio/area_cultural_form&acao=A&req=excluir-area&arceid=<?= $mAreaCultural->arceid; ?>" class="btn btn-danger link-excluir" id="btn-excluir" type="button"><i class="fa fa-close"></i>&nbsp;Excluir</a>
                                 <?php } ?>                                
                             </div>
                         </div>                        
@@ -147,6 +144,7 @@ include APPRAIZ . "includes/cabecalho.inc";
     });
 
     function LimparCamposSegmento(){
+        $("#secid").val('');
         $("#seccod").val('');
         $("#secdsc").val('');
     }

@@ -153,13 +153,13 @@ class Planacomorc_Model_EnquadramentoDespesa extends Modelo
                     FROM planejamento.enquadramentorp erp
                         JOIN public.identresultprimario AS rp ON (erp.irpcod = rp.irpcod)
                     WHERE
-                        erp.eqdid = pi_enquadramentodespesa.eqdid)::TEXT, '{', ''), '}', ''), '\"', '') AS lista_rp
-            FROM planejamento.enquadramento_despesa
+                        erp.eqdid = eqd.eqdid)::TEXT, '{', ''), '}', ''), '\"', '') AS lista_rp
+            FROM planejamento.enquadramento_despesa AS eqd
             WHERE
-                eqdstatus = 'A'
+                eqd.eqdstatus = 'A'
                 $where
             ORDER BY
-                eqddsc
+                eqd.eqddsc
        ";
         $lista = $this->carregar($sql);
         // implement here cast de array

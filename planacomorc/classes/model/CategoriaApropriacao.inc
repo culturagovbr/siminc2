@@ -68,7 +68,7 @@ class Planacomorc_Model_CategoriaApropriacao extends Modelo
         $sql = "
             SELECT
                 count(*) qtd
-            FROM monitora.pi_planointerno pli
+            FROM planejamento.plano_interno pli
             WHERE capid = {$this->capid}
         ";
         return $this->pegaUm($sql);

@@ -16,7 +16,7 @@ $filtroEmenda['listaSubUnidadeUsuario'] = $listaSubUnidadeUsuario;
 
 switch ($requisicao) {
     case 'carregarAcaoPorUo':
-        $sqlPtres = (new Monitora_Model_Ptres())->recuperarSqlCombo([
+        $sqlPtres = (new Planacomorc_Model_Ptres())->recuperarSqlCombo([
             "'(Ptres: ' || ptres.ptres || ')'",
             "coalesce(ptres.prgcod, '')",
             "coalesce(ptres.acacod, '')",
@@ -110,7 +110,7 @@ $aEmenda = (new Emendas_Model_Emenda)->recuperarListagem((object)$filtroEmenda);
                             'listaSubUnidadeUsuario' => $listaSubUnidadeUsuario
                         )));
                         echo '</div>';
-                        $sqlPtres = (new Monitora_Model_Ptres())->recuperarSqlCombo([
+                        $sqlPtres = (new Planacomorc_Model_Ptres())->recuperarSqlCombo([
                             "'(Ptres: ' || ptres.ptres || ')'",
                             "coalesce(ptres.prgcod, '')",
                             "coalesce(ptres.acacod, '')",

@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planejamento.area_cultural
+ * Classe de mapeamento da entidade public.area_cultural
  *
  * @category Class
  * @package  A1
@@ -13,7 +13,7 @@
 require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
 /**
- * Planacomorc_Model_AreaCultural
+ * Public_Model_AreaCultural
  *
  * @category Class
  * @package  A1
@@ -22,14 +22,14 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release: 
  * @link     no link
  */
-class Planacomorc_Model_AreaCultural extends Modelo
+class Public_Model_AreaCultural extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planejamento.area_cultural';
+    protected $stNomeTabela = 'public.area_cultural';
 
     /**
      * Chave primaria.

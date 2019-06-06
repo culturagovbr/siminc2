@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planejamento.segmento_cultural
+ * Classe de mapeamento da entidade public.produto_pi
  *
  * @category Class
  * @package  A1
@@ -10,10 +10,12 @@
  * @link     no link
  */
 
+
 require_once APPRAIZ .'includes/classes/Modelo.class.inc';
 
+
 /**
- * Monitora_Model_Pi_niveletapaensino
+ * Public_Model_ProdutoPi
  *
  * @category Class
  * @package  A1
@@ -22,14 +24,14 @@ require_once APPRAIZ .'includes/classes/Modelo.class.inc';
  * @version  Release: 
  * @link     no link
  */
-class Planacomorc_Model_SegmentoCultural extends Modelo
+class Public_Model_ProdutoPi extends Modelo
 {
     /**
      * Nome da tabela especificada
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planejamento.segmento_cultural';
+    protected $stNomeTabela = 'public.produto_pi';
 
     /**
      * Chave primaria.
@@ -37,14 +39,13 @@ class Planacomorc_Model_SegmentoCultural extends Modelo
      * @access protected
      */
     protected $arChavePrimaria = array(
-        'secid',
+        'pprid',
     );
     /**
      * Chaves estrangeiras.
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'arceid' => array('tabela' => 'segmento_cultural', 'pk' => 'arceid'),
     );
 
     /**
@@ -53,12 +54,12 @@ class Planacomorc_Model_SegmentoCultural extends Modelo
      * @access protected
      */
     protected $arAtributos = array(
-        'secid' => null,
-        'arceid' => null,
-        'secdsc' => null,
-        'secano' => null,
-        'seccod' => null,
-        'secstatus' => null,
+        'pprid' => null,
+        'pprnome' => null,
+        'prsano' => null,
+        'pprstatus' => null,
+        'pprdescricao' => null,
+        'tipo' => null,
     );
 
 }
