@@ -46,9 +46,9 @@
         });
 
         // Evento ao mudar opção de UO
-        $('#unicod').change(function(){
-            carregarUG($(this).val());
-            $('#span-funcional').load('?modulo=inicio&acao=C&req=carregarAcaoPorUo&unicod=' + $(this).val());
+        $('#suoid').change(function() {
+            carregarFuncional($(this).val());
+
         });
 
     }
@@ -69,14 +69,11 @@
      * Carrega novo conteúdo para a opções de Sub-Unidade via requisição ajax.
      *
      */
-    function carregarUG(unicod) {
+    function carregarFuncional(suoid) {
         $.post(
-            '?modulo=inicio&acao=C&req=carregarComboUG', { unicod: unicod}, function(response) {
-                $('#div_ungcod').remove('slow');
-                $('#div_ungcod').html(response);
+            '?modulo=inicio&acao=C&req=carregarFuncional', { suoid: suoid}, function(response) {
+                $('#span-funcional').remove('slow');
+                $('#span-funcional').html(response);
                 $(".chosen-select").chosen();
         });
     }
-
-
-
