@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.meta_unidade
+ * Classe de mapeamento da entidade planejamento.meta_unidade
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Planacomorc_Model_MetaUnidade extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.meta_unidade';
+    protected $stNomeTabela = 'planejamento.meta_unidade';
 
     /**
      * Chave primaria.
@@ -46,9 +46,9 @@ class Planacomorc_Model_MetaUnidade extends Modelo
      * @var array
      */
     protected $arChaveEstrangeira = array(
-        'dimeid' => array('tabela' => 'planacomorc.dimensao_estrategica', 'pk' => 'dimeid'),
-        'obeid'  => array('tabela' => 'planacomorc.objetivo_estrategico', 'pk' => 'obeid'),
-        'meeid'  => array('tabela' => 'planacomorc.meta_estrategica',     'pk' => 'meeid'),
+        'dimeid' => array('tabela' => 'planejamento.dimensao_estrategica', 'pk' => 'dimeid'),
+        'obeid'  => array('tabela' => 'planejamento.objetivo_estrategico', 'pk' => 'obeid'),
+        'meeid'  => array('tabela' => 'planejamento.meta_estrategica',     'pk' => 'meeid'),
     );
 
     /**
@@ -82,8 +82,8 @@ class Planacomorc_Model_MetaUnidade extends Modelo
             SELECT DISTINCT
                 meu.meuid AS codigo,
                 meu.meunome AS descricao
-            FROM planacomorc.subunidade_meta_unidade AS smu
-                LEFT JOIN planacomorc.meta_unidade AS meu ON meu.meuid = smu.meuid
+            FROM planejamento.subunidade_meta_unidade AS smu
+                LEFT JOIN planejamento.meta_unidade AS meu ON meu.meuid = smu.meuid
                 LEFT JOIN public.vw_subunidadeorcamentaria AS suo ON suo.suoid = smu.suoid
             WHERE
                 meu.meustatus = 'A'
@@ -92,8 +92,8 @@ class Planacomorc_Model_MetaUnidade extends Modelo
             SELECT DISTINCT
                 mun.meuid AS codigo,
                 mun.meunome AS descricao
-            FROM planacomorc.meta_unidade AS mun
-                LEFT JOIN planacomorc.subunidade_meta_unidade AS sme ON mun.meuid = sme.meuid
+            FROM planejamento.meta_unidade AS mun
+                LEFT JOIN planejamento.subunidade_meta_unidade AS sme ON mun.meuid = sme.meuid
             WHERE
                 mun.meustatus = 'A'
                 AND sme.suoid IS NULL
@@ -122,10 +122,10 @@ class Planacomorc_Model_MetaUnidade extends Modelo
                 dime.dimenome,
                 mee.meeid,
                 mee.meenome
-            FROM planacomorc.meta_unidade AS meu
-                LEFT JOIN planacomorc.objetivo_estrategico AS obj ON obj.obeid = meu.obeid AND obj.obestatus = 'A'
-                LEFT JOIN planacomorc.dimensao_estrategica AS dime ON dime.dimeid = meu.dimeid AND dime.dimestatus = 'A'
-                LEFT JOIN planacomorc.meta_estrategica AS mee ON mee.meeid = meu.meeid AND mee.meestatus = 'A'
+            FROM planejamento.meta_unidade AS meu
+                LEFT JOIN planejamento.objetivo_estrategico AS obj ON obj.obeid = meu.obeid AND obj.obestatus = 'A'
+                LEFT JOIN planejamento.dimensao_estrategica AS dime ON dime.dimeid = meu.dimeid AND dime.dimestatus = 'A'
+                LEFT JOIN planejamento.meta_estrategica AS mee ON mee.meeid = meu.meeid AND mee.meestatus = 'A'
             WHERE
                 meu.meuid = ". (int)$meuid."
                 AND meu.meustatus = 'A'
@@ -153,19 +153,19 @@ class Planacomorc_Model_MetaUnidade extends Modelo
                 dime.dimenome,
                 mee.meeid,
                 mee.meenome,
-                CASE WHEN (SELECT count(1) FROM planacomorc.subunidade_meta_unidade smu WHERE smu.meuid = meu.meuid) = 0 THEN
+                CASE WHEN (SELECT count(1) FROM planejamento.subunidade_meta_unidade smu WHERE smu.meuid = meu.meuid) = 0 THEN
                     TRUE
-                WHEN (SELECT count(1) FROM planacomorc.subunidade_meta_unidade smu WHERE smu.meuid = meu.meuid) > 2 THEN
+                WHEN (SELECT count(1) FROM planejamento.subunidade_meta_unidade smu WHERE smu.meuid = meu.meuid) > 2 THEN
                     TRUE
                 ELSE
                     FALSE
                 END AS compartilhada,
                 -- Cálculo para verificar quantidade anualizada: (valor previsto dividido por 4 e vezes o ano do monitoramento)
                 meu.meuquantidade / 4 * ((to_char(now(), 'YYYY')::int % 4) + 1) meuquantidadeanualizada
-            FROM planacomorc.meta_unidade meu
-                LEFT JOIN planacomorc.objetivo_estrategico AS obe ON obe.obeid = meu.obeid
-                LEFT JOIN planacomorc.dimensao_estrategica AS dime ON dime.dimeid = meu.dimeid
-                LEFT JOIN planacomorc.meta_estrategica AS mee ON mee.meeid = meu.meeid
+            FROM planejamento.meta_unidade meu
+                LEFT JOIN planejamento.objetivo_estrategico AS obe ON obe.obeid = meu.obeid
+                LEFT JOIN planejamento.dimensao_estrategica AS dime ON dime.dimeid = meu.dimeid
+                LEFT JOIN planejamento.meta_estrategica AS mee ON mee.meeid = meu.meeid
             WHERE
                 meu.meustatus = 'A'
                 AND meu.meuid = ". (int)$this->meuid. "
