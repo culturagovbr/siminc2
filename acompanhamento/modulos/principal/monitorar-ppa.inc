@@ -12,7 +12,11 @@
             $cAcompanhamento->excluir($_REQUEST['acoid']);
         die;
         case 'detalhe-pi':
-            $cAcompanhamento->recuperarPiPorMetaESubunidade($_REQUEST['mppid'], $_REQUEST['suoid']);
+            $params = new stdClass();
+            $params->tipo = 'meta-ppa';
+            $params->mppid = $_REQUEST['mppid'];
+            $params->suoid = $_REQUEST['suoid'];
+            $cAcompanhamento->recuperarPiPorMetaESubunidade($params);
         die;
         case 'ver-historico':
             $cAcompanhamento->recuperarHistorico($_REQUEST['acoid']);
@@ -125,7 +129,8 @@
                         $aMetas = $mAcompanhamento->getMetasPpa($suoid);
                         $aUnidades = (new Public_Model_SubUnidadeOrcamentaria())->recuperarPorUsuario();
                         $infoMeta = (new Public_Model_MetaPpa($mppid))->recuperarInformacoes();
-                        $infoPI = (new Pi_PlanoInterno())->recuperarResumoPorMetaESubunidade($mppid, $suoid);
+                        $dto = ['mppid' => $mppid, 'suoid' => $suoid];
+                        $infoPI = (new Pi_PlanoInterno())->recuperarResumoPorMetaESubunidade((object)$dto);
 
                         $dadosGrafico = [];
                         if(count($infoPI)){

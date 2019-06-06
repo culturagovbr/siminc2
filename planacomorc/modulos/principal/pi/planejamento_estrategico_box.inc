@@ -3,12 +3,11 @@
         <h5>Planejamento Estratégico </h5>
     </div>
     <div class="ibox-content">
-        <?php echo $simec->select('obeid', 'Objetivo Estratégico', $dadosPI['obeid'], (new Planacomorc_Model_ObjetivoEstrategico())->recuperarSqlCombo(['obecod', 'obenome'], null, 'obecod')); ?>
         <div class="div_meeid">
-            <?php echo $simec->select('meeid', 'Meta Estratégica', $dadosPI['meeid'], (new Planacomorc_Model_MetaEstrategica())->recuperarSqlCombo(['meecod', 'meenome'], null, 'meecod')); ?>
+            <?= $simec->select('meuid', 'Meta Unidade', $dadosPI['meuid'], (new Planacomorc_Model_MetaUnidade())->recuperarSqlMeta($dadosPI['ungcod'])); ?>
         </div>
-        <div class="div_dieid">
-            <?php echo $simec->select('dieid', 'Diretriz Estratégica', $dadosPI['dieid'], (new Planacomorc_Model_DiretrizEstrategica())->recuperarSqlCombo(['diecod', 'dienome'], null, 'diecod')); ?>
+        <div id="div_objetivo_dimensao_meta">
+            <?php carregarComboEstrategico($dadosPI['meuid']); ?>
         </div>
     </div>
 </div>

@@ -172,22 +172,8 @@ require_once APPRAIZ . "includes/funcoesspo_componentes.php";
         if ($permissao) { ?>
             <section class="form-group">
                 <label for="cpf" class="control-label col-md-2">CPF:</label>
-                <section class="col-md-6">
+                <section class="col-md-10">
                     <?php echo inputTexto('cpf', '', 'cpf', 14,false, array('masc'=>'###.###.###-##','habil' => 'N', 'evtblur'=>'mostraNomeReceita(this.value);')); ?><!-- cpf não pode ser alterado. -->
-                </section>
-                <section class="col-md-2">
-                    <?php
-                    $sql = "SELECT count(*) as quantidade
-                            FROM siape.tb_siape_cadastro_servidor
-                            WHERE nu_cpf = '" . str_replace( array (".","-"),"",$cpf )."'";
-                    $qtd = $db->pegaUm ($sql);
-
-                    if (simec_trim($qtd) > 0) {?>
-                        <a style="cursor: pointer;" class="btn btn-primary" id="btnConsSiape" onclick="visualizaDadosSiape('<?php echo str_replace(array(".","-"),"",$cpf)?>');">
-                            <span class="glyphicon glyphicon-search"></span>
-                            Consultar dados do SIAPE
-                        </a>
-              <?php } ?>
                 </section>
             </section>
             <section class="form-group">

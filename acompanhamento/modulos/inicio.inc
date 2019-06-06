@@ -15,6 +15,9 @@
         case 'listar-metas-pnc':
             include_once APPRAIZ. 'acompanhamento/modulos/principal/listar-metas-pnc.inc';
             die;
+        case 'listar-metas-estrategicas':
+            $cAcompanhamento->listarMetasPlanejamentoEstrategico($_REQUEST['suoid'], $_REQUEST['janid']);
+            die;
     }
 
     include APPRAIZ. "includes/cabecalho.inc";
@@ -67,6 +70,9 @@
     <div class="row">
         <div class="col-md-12" id="box-metas-ppa">
             <?php $cAcompanhamento->listarMetasPpa($suoid); ?>
+        </div>
+        <div class="col-md-12" id="box_planejamento_estrategico">
+            <?php $cAcompanhamento->listarMetasPlanejamentoEstrategico($suoid); ?>
         </div>
         <div class="col-md-6">
             <div class="ibox float-e-margins">

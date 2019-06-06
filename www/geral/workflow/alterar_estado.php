@@ -252,10 +252,6 @@ switch ( $_SESSION['sisdiretorio'] ){
         include_once APPRAIZ. "monitora/www/_constantes.php";
         include_once APPRAIZ. "monitora/www/_funcoes.php";
     break;
-    case 'elabrev':
-        include_once APPRAIZ. "elabrev/www/_constantes.php";
-        include_once APPRAIZ. "elabrev/www/_funcoes.php";
-    break;
     case 'gestaopessoa':
         include_once APPRAIZ. "www/gestaopessoa/_constantes.php";
         include_once APPRAIZ. "www/gestaopessoa/_funcoes.php";

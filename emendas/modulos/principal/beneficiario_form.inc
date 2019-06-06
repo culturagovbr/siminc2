@@ -216,7 +216,9 @@ include APPRAIZ . "includes/cabecalho.inc";
                                             <input name="emeid" id="emeid" type="hidden" value="<?php echo $mBeneficiario->emeid; ?>">
 
                                             <?php
-                                                $sql = (new Public_Model_SubUnidadeOrcamentaria())->recuperarSqlCombo(['suocod', 'suonome'], ["unoid = ". (int)$mEmenda->unoid], 'suonome');
+                                                $mUnidadeorcamentaria = new Public_Model_UnidadeOrcamentaria($mEmenda->unoid);
+                                                $sql = (new Public_Model_SubUnidadeOrcamentaria())->recuperarSqlCombo(['suocod', 'suonome'], ["unocod = '". (int)$mUnidadeorcamentaria->unocod . "'"], 'descricao');
+//                                                ver($sql, d);
                                                 $options = simec_preparar_array($db->carregar($sql));
                                                 $mBeneficiario->suoid = (!empty($mBeneficiario->suoid) && count($options) == 1) ? key($options) : $mBeneficiario->suoid;
                                                 echo $simec->select('suoid', 'SubUnidade', $mBeneficiario->suoid, $options, ['required'], $configPodeEditar);

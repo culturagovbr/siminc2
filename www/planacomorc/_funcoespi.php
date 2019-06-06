@@ -1214,9 +1214,8 @@ DML;
                     ungcod,
                     pliano,
                     plisituacao,
-                    plicadsiafi,
-                    plirecursosnecessarios
-                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s')
+                    plicadsiafi
+                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')
                 RETURNING
                     pliid;
 DML;
@@ -1262,7 +1261,6 @@ DML;
             UPDATE monitora.pi_planointerno SET
                 plititulo = '%s',
                 plidsc = '%s',
-                plirecursosnecessarios = '%s',
                 mdeid = %s,
                 eqdid = %s,
                 secid = %s,
@@ -1274,7 +1272,6 @@ DML;
         $stmt = sprintf($sql,
             trim($dados['plititulo']),
             trim($dados['plidsc']),
-            trim($dados['plirecursosnecessarios']),
             $dados['mdeid'],
             $dados['eqdid'],
             $dados['secid'],
@@ -1397,6 +1394,7 @@ function salvarPiComplemento($pliid, $dados)
     $modelPiComplemento->masid = $dados['masid'] ? $dados['masid'] : null;
     $modelPiComplemento->pijid = $dados['pijid'] ? $dados['pijid'] : null;
     $modelPiComplemento->ptaid = $dados['ptaid'] ? $dados['ptaid'] : null;
+    $modelPiComplemento->meuid = $dados['meuid'] ? $dados['meuid'] : null;
     $modelPiComplemento->picpublico = str_replace(array("'"), ' ', $dados['picpublico']);
     $modelPiComplemento->picexecucao = $dados['picexecucao']? desformata_valor($dados['picexecucao']): null;
     $modelPiComplemento->picted = $dados['picted'] == 't' ? 't' : 'f';
@@ -1404,9 +1402,7 @@ function salvarPiComplemento($pliid, $dados)
 //ver($modelPiComplemento,d);
     $modelPiComplemento->salvar(NULL, NULL,
         array(
-                'obeid',
-                'meeid',
-                'dieid',
+                'meuid',
                 'esfid',
                 'prgid',
                 'ptaid',
@@ -2171,8 +2167,7 @@ function carregarPI($pliid) {
             sba.sbasigla || ' - ' AS sbasigla,
             sba.sbacod,
             ben.benid,
-            em.emenumero,
-            pli.plirecursosnecessarios
+            em.emenumero
         FROM monitora.pi_planointerno pli
             LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
             LEFT JOIN emendas.emenda em ON(ben.emeid = em.emeid)
@@ -3085,4 +3080,24 @@ function exibirAvisoPedidoAlteracao($pedidoAlteracaoOrcamentaria){
     ';
     
     echo $htmlAviso;
+}
+
+/**
+ * Função para recuperar Combos de Objetivo, Dimensão Estratégica e Meta Estratégica
+ *
+ * @param $meuid
+ * @return bool
+ */
+function carregarComboEstrategico($meuid)
+{
+    if(!$meuid) return false;
+
+    global $simec;
+    $dimensaoEstrategica = (new Planacomorc_Model_MetaUnidade())->recuperarPlanejamentoEstrategico($meuid);
+
+    $simec->setPodeEditar(0);
+    echo $simec->textarea('obeid', 'Objetivo', $dimensaoEstrategica['obenome'], ['cols' => 60, 'rows' => 6]);
+    echo $simec->textarea('dieid', 'Dimensão Estratégica', $dimensaoEstrategica['dimenome'], ['cols' => 60, 'rows' => 6]);
+    echo $simec->textarea('meeid', 'Meta Estratégica', $dimensaoEstrategica['meenome'], ['cols' => 60, 'rows' => 6]);
+    $simec->setPodeEditar(1);
 }
