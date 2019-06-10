@@ -1,12 +1,12 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.ptres.
+ * Classe de mapeamento da entidade planejamento.ptres.
  *
  * $Id: Ptres.php 100401 2015-07-22 21:06:58Z maykelbraz $
  */
 
 /**
- * Mapeamento da entidade monitora.ptres.
+ * Mapeamento da entidade planejamento.ptres.
  *
  * @see Modelo
  */
@@ -17,7 +17,7 @@ class Spo_Model_Ptres extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.ptres';
+    protected $stNomeTabela = 'planejamento.ptres';
 
     /**
      * Chave primaria.
@@ -73,7 +73,7 @@ class Spo_Model_Ptres extends Modelo
             SELECT
                 pt.ptrid AS codigo,
                 '(PTRES:'||pt.ptres||') - '|| aca.unicod ||'.'|| aca.prgcod ||'.'|| aca.acacod AS descricao
-            FROM monitora.ptres pt
+            FROM planejamento.ptres pt
                 JOIN monitora.acao aca USING(acaid)
                 LEFT JOIN spo.ptressubunidade ps USING(ptrid) -- SELECT * FROM spo.ptressubunidade
                 LEFT JOIN public.vw_subunidadeorcamentaria suo USING(suoid) -- SELECT * FROM public.vw_subunidadeorcamentaria
@@ -117,7 +117,7 @@ class Spo_Model_Ptres extends Modelo
                 ptr.ptrdotacaocusteio,
                 ptr.ptrdotacaocapital
                 
-            FROM monitora.ptres ptr
+            FROM planejamento.ptres ptr
                 JOIN public.vw_subunidadeorcamentaria uo ON(
                     uo.suostatus = 'A'
                     AND ptr.unicod = uo.unocod
@@ -128,7 +128,7 @@ class Spo_Model_Ptres extends Modelo
                 ptr.ptrstatus = 'A'
                 AND ptr.ptrano = '". (int)$prsano. "' 
                 and ptr.ptres <> '0'
-                and ptr.plocod not in (select plocod from monitora.ptres where plocod like 'E%')
+                and ptr.plocod not in (select plocod from planejamento.ptres where plocod like 'E%')
             ORDER BY
                 ptr.ptres DESC,
                 uo.unocod,
@@ -156,7 +156,7 @@ class Spo_Model_Ptres extends Modelo
             SELECT
                 eqdid AS codigo,
                 eqddsc AS descricao
-            FROM planejamento.programa
+            FROM planejamento.enquadramento_despesa
             WHERE
                 eqdstatus = 'A'
                 AND eqdano::INTEGER = ". (int)$filtro->exercicio. "
@@ -164,7 +164,7 @@ class Spo_Model_Ptres extends Modelo
                 eqddsc
         ";
     }
-    
+
     public function recuperarPtridSubUnidade(){
         $sql = "select ptrid, suoid from spo.ptressubunidade";
         $arrptrid = $this->carregar($sql);

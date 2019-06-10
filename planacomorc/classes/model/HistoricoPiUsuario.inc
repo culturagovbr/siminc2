@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.historico_pi
+ * Classe de mapeamento da entidade planejamento.historico_pi_usuario
  *
  * @category Class
  * @package  A1
@@ -21,7 +21,7 @@ class Planacomorc_Model_HistoricoPiUsuario extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.historico_pi_usuario';
+    protected $stNomeTabela = 'planejamento.historico_pi_usuario';
 
     /**
      * Chave primaria.
@@ -50,7 +50,6 @@ class Planacomorc_Model_HistoricoPiUsuario extends Modelo
         'pliid' => null,
         'usucpf' => null,
         'hpudata' => null,
-
     );
     
     /**
@@ -70,7 +69,7 @@ class Planacomorc_Model_HistoricoPiUsuario extends Modelo
                 '(' || usu.usufoneddd ||') '|| usu.usufonenum AS telefone,
                 usu.usuemail
             FROM
-                planacomorc.historico_pi_usuario AS hpu
+                planejamento.historico_pi_usuario AS hpu
                 JOIN seguranca.usuario AS usu ON (hpu.usucpf = usu.usucpf)
             WHERE
                 hpu.pliid = '" . (int)$pliid . "'
@@ -80,5 +79,4 @@ class Planacomorc_Model_HistoricoPiUsuario extends Modelo
         return $db->carregar($sql);
     }
 
-}//end Class
-?>
+}

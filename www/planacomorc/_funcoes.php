@@ -280,31 +280,6 @@ function updateEnquadramentoDespesas($rowID) {
  * @param int $rowID
  * @return Void(0)
  */
-function updateModalidadeEnsino($rowID) {
-
-    global $db;
-
-    $strSql = 'SELECT * FROM planejamento.area_cultural WHERE mdeid=' . $rowID;
-    $rs = $db->carregar($strSql);
-    if (!$rs)
-        return false;
-    $rs = $rs[0];
-
-    foreach ($rs as $k => $v) {
-        $rs[$k] = utf8_encode($v);
-    }
-
-    header('Content-Type: application/json; charset=utf-8', true, 200);
-    echo simec_json_encode($rs);
-    exit;
-}
-
-/**
- * Pega os dados do registro e retorna em json
- * @global cls_banco $db
- * @param int $rowID
- * @return Void(0)
- */
 function updateNivelEtapaEnsino($rowID) {
 
     global $db;
@@ -446,46 +421,6 @@ function salvaEnquadramentoDespesas(array $post) {
     ));
 }
 
-/**
- * Salva um registro na base de dados
- * @param array $post
- * @return boolean
- */
-function salvaModalidadeEnsino(array $post) {
-
-    global $db;
-    extract($post);
-
-//insere
-    if (empty($post['mdeid'])) {
-
-        $strSqlBase = "INSERT INTO
-            planejamento.area_cultural(arccod, arcdsc, arcano, arcstatus)
-            VALUES('%s', '%s', '%s', '%s')";
-        $strSql = sprintf($strSqlBase, $arccod, $arcdsc, $arcano, 'A');
-        $mensagem = 'inserido';
-    } else {
-//atualiza
-        $strSql = "UPDATE planejamento.area_cultural SET ";
-        $mdeid = $post['mdeid'];
-        unset($post['mdeid']);
-
-        foreach ($post as $k => $value)
-            $strSql.= "{$k} = '{$value}',";
-
-        $strSql = substr($strSql, 0, -1);
-        $strSql.= " WHERE mdeid=" . $mdeid;
-        $mensagem = 'atualizado';
-    }
-
-    $db->executar($strSql);
-    $db->commit();
-
-    alertlocation(array(
-        'location' => 'planacomorc.php?modulo=sistema/tabelasapoio/cadModalidadesEnsino&acao=A'
-        , 'alert' => "Registro {$mensagem} com sucesso!"
-    ));
-}
 
 /**
  * Salva um registro na base de dados

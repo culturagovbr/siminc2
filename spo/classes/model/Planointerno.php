@@ -1,12 +1,12 @@
 <?php
 /**
- * Classe de mapeamento da entidade monitora.pi_planointerno.
+ * Classe de mapeamento da entidade planejamento.plano_interno.
  *
  * $Id: Planointerno.php 102083 2015-09-03 20:41:08Z maykelbraz $
  */
 
 /**
- * Mapeamento da entidade monitora.pi_planointerno.
+ * Mapeamento da entidade planejamento.plano_interno.
  *
  * @see Modelo
  */
@@ -23,7 +23,7 @@ class Spo_Model_Planointerno extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'monitora.pi_planointerno';
+    protected $stNomeTabela = 'planejamento.plano_interno';
 
     /**
      * Chave primaria.
@@ -41,7 +41,7 @@ class Spo_Model_Planointerno extends Modelo
     protected $arChaveEstrangeira = array(
         'capid' => array('tabela' => 'planejamento.categoria_apropriacao', 'pk' => 'capid'),
         'eqdid' => array('tabela' => 'planejamento.programa', 'pk' => 'eqdid'),
-        'arceid' => array('tabela' => 'planejamento.area_cultural', 'pk' => 'arceid'),
+        'arceid' => array('tabela' => 'public.area_cultural', 'pk' => 'arceid'),
         'secid' => array('tabela' => 'planejamento.segmento_cultural', 'pk' => 'secid'),
         'obrid' => array('tabela' => 'obras.obrainfraestrutura', 'pk' => 'obrid'),
         'usucpf' => array('tabela' => 'usuario', 'pk' => 'usucpf'),
@@ -177,7 +177,7 @@ class Spo_Model_Planointerno extends Modelo
                     ELSE
                         FALSE
                 END AS compartilhada
-            FROM monitora.pi_planointerno pli
+            FROM planejamento.plano_interno pli
                 JOIN planacomorc.pi_complemento pc USING(pliid)
                 JOIN monitora.pi_unidade_medida AS pum ON(
                     pum.pumid = pc.pumid
@@ -270,7 +270,7 @@ class Spo_Model_Planointerno extends Modelo
                 ELSE
                     FALSE
                 END AS compartilhada
-            FROM monitora.pi_planointerno pli
+            FROM planejamento.plano_interno pli
 		        JOIN planacomorc.pi_complemento pc USING(pliid)
                 JOIN public.vw_subunidadeorcamentaria suo ON(
                     suo.suostatus = 'A'
@@ -350,7 +350,7 @@ WITH pli AS (SELECT pli.pliid::varchar AS pliid,
                     SUM(COALESCE(ppt.pipvalor, 0.00)) AS vlrdotacao,
                     SUM(COALESCE(sex.vlrempenhado, 0.00)) AS vlrempenhado,
                     (SUM(COALESCE(sex.vlrdotacaoatual, 0.00) - COALESCE(sex.vlrempenhado, 0.00))) AS vlrnaoempenhado
-               FROM monitora.pi_planointerno pli
+               FROM planejamento.plano_interno pli
                  INNER JOIN public.unidade uni USING(unicod)
                  LEFT JOIN monitora.pi_planointernoptres ppt USING(pliid)
                  LEFT JOIN monitora.ptres ptr ON (ppt.ptrid = ptr.ptrid AND pli.pliano = ptr.ptrano)
@@ -576,7 +576,7 @@ SELECT 'Dotação' AS descricao,
        valor AS valor
   FROM (SELECT SUM(pip.pipvalor) AS valor
           FROM monitora.pi_planointernoptres pip
-            INNER JOIN monitora.pi_planointerno pli using(pliid)
+            INNER JOIN planejamento.plano_interno pli using(pliid)
           WHERE pliano = :exercicio
             AND plicod  = :plicod
             AND unicod = :unicod) foo
@@ -631,7 +631,7 @@ SELECT pli.pliid,
        SUM(ptr.ptrdotacao) AS dotacaoinicial,
        ROUND(SUM(COALESCE(sex.vlrdotacaoatual, 0.00)), 2) AS empenhado,
        pip.pipvalor as detalhadoptres
-  FROM monitora.pi_planointerno pli
+  FROM planejamento.plano_interno pli
     INNER JOIN monitora.pi_planointernoptres pip USING(pliid)
     LEFT JOIN monitora.ptres ptr
       ON (pip.ptrid = ptr.ptrid

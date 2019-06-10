@@ -749,7 +749,7 @@ include APPRAIZ . "includes/cabecalho.inc";
                                     SELECT
                                         MAX(arceid) AS codigo,
                                         upper(public.removeacento(arcdsc)) AS descricao
-                                    FROM planejamento.area_cultural
+                                    FROM public.area_cultural
                                     WHERE
                                         arcstatus = 'A'
                                         AND arcano = '{$_SESSION['exercicio']}' -- Resolver 2014

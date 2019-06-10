@@ -516,7 +516,7 @@ class Emendas_Model_Emenda extends Modelo
                 LEFT JOIN public.vw_subunidadeorcamentaria suoed ON ed.suoid = suoed.suoid
 		LEFT JOIN territorios.esfera esf ON ben.esfid = esf.esfid
 		LEFT JOIN planejamento.categoria_apropriacao pca ON ben.capid = pca.capid
-		LEFT JOIN planejamento.area_cultural mde ON ben.mdeid = mde.mdeid
+		LEFT JOIN public.area_cultural mde ON ben.mdeid = mde.mdeid
 		LEFT JOIN planejamento.segmento_cultural nee ON ben.secid = nee.secid
 		LEFT JOIN emendas.impedimento imp ON ben.impid = imp.impid
 		-- DADOS SICONV

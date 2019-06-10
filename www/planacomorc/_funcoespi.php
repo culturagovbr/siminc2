@@ -222,7 +222,7 @@ SQL;
 /**
  * Monta a combo de UGs filtrando por UO
  */
-function carregarComboUG($unicod, $editavel = 'S', $fnc = 'FALSE') {
+function carregarComboUG($unocod, $editavel = 'S', $fnc = 'FALSE') {
     global $db;
 
     if (in_array(PFL_SUBUNIDADE, pegaPerfilGeral($_SESSION['usucpf']))) {
@@ -239,24 +239,22 @@ DML;
         $filtroPerfilUG = sprintf($filtroPerfilUG, PFL_SUBUNIDADE, $_SESSION['usucpf']);
     }
 
-    $sql = <<<DML
-            SELECT DISTINCT
-                suo.suocod AS codigo,
-                suo.suocod || ' - ' || suonome AS descricao
-            FROM public.vw_subunidadeorcamentaria suo
-            WHERE
-                suo.suostatus = 'A'
-                AND suo.prsano = '{$_SESSION['exercicio']}'
-                AND suo.unocod = '%s' 
-                AND suo.unofundo = {$fnc}
-                {$filtroPerfilUG}
-            ORDER BY
-                descricao
-DML;
+    $sql = "
+        SELECT DISTINCT
+            suo.suocod AS codigo,
+            suo.suocod || ' - ' || suonome AS descricao
+        FROM public.vw_subunidadeorcamentaria AS suo
+        WHERE
+            suo.suostatus = 'A'
+            AND suo.prsano = '{$_SESSION['exercicio']}'
+            AND suo.unocod = '". (int)$unocod ."'
+            AND suo.unofundo = {$fnc}
+            {$filtroPerfilUG}
+        ORDER BY
+            descricao
+    ";
 
-    $stmt = sprintf($sql, $unicod);
-//ver($stmt, d);
-    $dados = $db->carregar($stmt);
+    $dados = $db->carregar($sql);
     if (count($dados) && $dados[0]) {
         $infoCombo = 'Selecione';
     } else {
@@ -264,7 +262,7 @@ DML;
         $infoCombo = 'Selecione uma unidade';
     }
 
-    $db->monta_combo('ungcod', $dados, $editavel, $infoCombo, '', null, null, 240, 'N', 'ungcod', null, (isset($ungcod) ? $ungcod : null), null, 'class="form-control chosen-select" style="width=100%;""', null, null);
+    $db->monta_combo('unocod', $dados, $editavel, $infoCombo, '', null, null, 240, 'N', 'unocod', null, (isset($unocod) ? $unocod : null), null, 'class="form-control chosen-select" style="width=100%;""', null, null);
 }
 
 /**
@@ -1167,25 +1165,23 @@ function salvarPI($dados, $comCommit = true, $criarComoAprovado = false) {
     }
     $plicodC = strtoupper($dados['plicod']);
 
-    $sql = <<<DML
-        SELECT
-            *
-        FROM monitora.pi_planointerno
-        WHERE
-            plicod = '{$plicodC}'
-            AND pliano = '{$_SESSION['exercicio']}'
-            AND unicod = '{$unicod}'
-            AND plistatus = 'A'
-DML;
-    
     # Soma valores preenchidos pelo usuário na parte de Capital e Custeio do PI
     $totalValor = str_replace(array('.', ','), array('', '.'), $dados['picvalorcusteio']) + str_replace(array('.', ','), array('', '.'), $dados['picvalorcapital']);
     $totalValorTemplate = number_format($totalValor, 2, ',', '.');
 
 
     $dados['mdeid'] = $dados['mdeid'] ? $dados['mdeid'] : 'null';
-    $dados['secid'] = $dados['secid'] ? $dados['secid'] : 'null';
     $dados['capid'] = $dados['capid'] ? $dados['capid'] : 'null';
+
+    $sql = "
+        SELECT
+            suoid
+        FROM public.vw_subunidadeorcamentaria
+        WHERE
+            suocod = '" . $dados['ungcod'] ."'
+    ";
+
+    $suoid = $db->pegaUm($sql);
 
     $plicod = null; //$db->PegaUm($sql);
     if (empty($dados['pliid'])) {
@@ -1197,37 +1193,46 @@ DML;
         if (!$plicod) {
             $plicod = strtoupper($dados['plicod']);
             $plicod = str_replace(' ', '', $plicod);
-            $sql = <<<DML
-                INSERT INTO monitora.pi_planointerno(
-                    mdeid,
+
+            $sql = "
+                INSERT INTO planejamento.plano_interno(
+                    suoid,
+                    ptrid,
                     eqdid,
-                    secid,
                     capid,
-                    sbaid,
+                    plisituacao,
                     plititulo,
                     plicodsubacao,
                     plicod,
                     plilivre,
                     plidsc,
                     usucpf,
-                    unicod,
-                    ungcod,
                     pliano,
-                    plisituacao,
                     plicadsiafi
-                ) VALUES (%s, %d, %s, %s, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s')
+                ) VALUES (
+                    " . $suoid . ",
+                    " . ($dados['ptrid'] ? $dados['ptrid'] : 'null') . ",
+                    " . (int)$dados['eqdid'] . ",
+                    " . $dados['capid'] . ",
+                    '" . ($criarComoAprovado ? 'A' : 'H') . "',
+                    '" . str_replace(array("'"), ' ', $dados['plititulo']) . "',
+                    '" . $subacao . "',
+                    '" . $plicod . "',
+                    '" . $dados['plilivre'] . "',
+                    '" . str_replace(array("'"), ' ', $dados['plidsc']) . "',
+                    '" . $_SESSION['usucpf'] . "',
+                    " . $_SESSION['exercicio'] . ",
+                    " . $cadastroSIAF . "
+                )
                 RETURNING
-                    pliid;
-DML;
-            
-            $stmt = sprintf(
-                    $sql, $dados['mdeid'], $dados['eqdid'], $dados['secid'], $dados['capid'], $dados['sbaid'], str_replace(array("'"), ' ', $dados['plititulo']), $subacao, $plicod, $dados['plilivre'], str_replace(array("'"), ' ', $dados['plidsc']), $_SESSION['usucpf'], $unicod, $dados['ungcod'], $_SESSION['exercicio'], ($criarComoAprovado ? 'A' : 'H'), $cadastroSIAF, str_replace(array("'"), ' ', $dados['plirecursosnecessarios']));
+                    pliid
+            ";
 
-            $pliid = $db->pegaUm($stmt);
-            
+            $pliid = $db->pegaUm($sql);
+
             //Grava usuário que salvou por último
             gravarUsuarioAlteracao($pliid);
-            
+
             // Grava informações complementares
             salvarPiComplemento($pliid, $dados);
 
@@ -1258,7 +1263,7 @@ DML;
         if($podeEditar){
 
         $sql = <<<DML
-            UPDATE monitora.pi_planointerno SET
+            UPDATE planejamento.plano_interno SET
                 plititulo = '%s',
                 plidsc = '%s',
                 mdeid = %s,
@@ -1277,6 +1282,8 @@ DML;
             $dados['secid'],
             $dados['capid'],
             $dados['pliid']);
+
+        ver($stmt, d);
         $db->executar($stmt);
 
         /**
@@ -1366,7 +1373,7 @@ function gravarEtapas($pliid){
             $mEtapas->commit();
         }
     }
-    
+
 }
 
 function gravarUsuarioAlteracao($pliid){
@@ -1383,7 +1390,7 @@ function salvarPiComplemento($pliid, $dados)
     # Fix - Corrigindo formato dos dados de valores orçámentários
     $dados['picvalorcusteio'] = $dados['picvalorcusteio']? str_replace(array('.', ','), array('', '.'), $dados['picvalorcusteio']): NULL;
     $dados['picvalorcapital'] = $dados['picvalorcapital']? str_replace(array('.', ','), array('', '.'), $dados['picvalorcapital']): NULL;
-    
+
     $modelPiComplemento = new Pi_Complemento($pliid);
     $modelPiComplemento->popularDadosObjeto($dados);
     $modelPiComplemento->pliid = $pliid;
@@ -1399,11 +1406,13 @@ function salvarPiComplemento($pliid, $dados)
     $modelPiComplemento->picexecucao = $dados['picexecucao']? desformata_valor($dados['picexecucao']): null;
     $modelPiComplemento->picted = $dados['picted'] == 't' ? 't' : 'f';
     $modelPiComplemento->picedital = $dados['picedital'] == 't' ? 't' : 'f';
-//ver($modelPiComplemento,d);
+
     $modelPiComplemento->salvar(NULL, NULL,
         array(
                 'meuid',
                 'esfid',
+                'secid',
+                'arcid',
                 'prgid',
                 'ptaid',
                 'pijid',
@@ -1420,7 +1429,7 @@ function salvarPiComplemento($pliid, $dados)
                 'picvalorcapital'
         )
     );
-    
+
     associarConvenio($pliid, $dados);
     associarSniic($pliid, $dados);
     associarSei($pliid, $dados);
@@ -2111,7 +2120,7 @@ SELECT scp.scpid,
       ON (scp.secid = nee.secid AND scp.scpano = nee.neeano)
     LEFT JOIN planejamento.categoria_apropriacao cap
       ON (scp.capid = cap.capid AND scp.scpano = cap.capano)
-    LEFT JOIN planejamento.area_cultural mde
+    LEFT JOIN public.area_cultural mde
       ON (scp.mdeid = mde.mdeid AND scp.scpano = mde.arcano)
   WHERE scpid = %d
 DML;
@@ -2132,12 +2141,13 @@ function carregarPI($pliid) {
     $sql = <<<DML
         SELECT DISTINCT
             pli.pliid,
-            pli.mdeid,
-            mde.arccod,
             pli.eqdid,
+            suo.suoid,
+            suo.unoid,
+            suo.suocod,
+            suo.unocod,
             eqd.eqdcod,
-            pli.secid,
-            nee.neecod,
+            sec.secid,
             pli.capid,
             cap.capcod,
             pli.sbaid,
@@ -2146,8 +2156,7 @@ function carregarPI($pliid) {
             pli.plicod,
             pli.plilivre,
             pli.plidsc,
-            pli.unicod,
-            pli.ungcod,
+            -- pli.ungcod,
             pli.pliano,
             pli.plicadsiafi,
             pli.docid,
@@ -2168,15 +2177,16 @@ function carregarPI($pliid) {
             sba.sbacod,
             ben.benid,
             em.emenumero
-        FROM monitora.pi_planointerno pli
+        FROM planejamento.plano_interno pli
+            JOIN public.vw_subunidadeorcamentaria AS suo ON pli.suoid = suo.suoid
             LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
             LEFT JOIN emendas.emenda em ON(ben.emeid = em.emeid)
-            LEFT JOIN planacomorc.pi_complemento pc on pc.pliid = pli.pliid
+            LEFT JOIN planejamento.complemento pc on pc.pliid = pli.pliid
             LEFT JOIN monitora.pi_subacao sba ON (pli.sbaid = sba.sbaid AND pli.pliano = sba.sbaano)
             LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
-            LEFT JOIN planejamento.segmento_cultural nee ON (pli.secid = nee.secid AND pli.pliano = nee.neeano)
+            LEFT JOIN public.segmento_cultural sec ON (pc.secid = sec.secid)
             LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
-            LEFT JOIN planejamento.area_cultural mde ON (pli.mdeid = mde.mdeid) --ON (pli.mdeid = mde.mdeid AND pli.pliano = mde.arcano)
+            LEFT JOIN public.area_cultural arc ON (pc.arceid = arc.arceid)
         WHERE
             pli.pliid = %d
 DML;
@@ -2267,7 +2277,7 @@ function carregarPiComDetalhes(stdclass $filtros) {
                 pli.capid = cap.capid
                 AND pli.pliano = cap.capano
             )
-            LEFT JOIN planejamento.area_cultural mde ON(pli.mdeid = mde.mdeid)
+            LEFT JOIN public.area_cultural mde ON(pli.mdeid = mde.mdeid)
             LEFT JOIN public.vw_subunidadeorcamentaria suo ON(
                 pli.unicod = suo.unocod
                 AND suo.suocod = pli.ungcod

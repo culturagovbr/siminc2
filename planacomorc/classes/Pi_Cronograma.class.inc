@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de abstração da tabela monitora.pi_complemento.
+ * Classe de mapeamento da entidade planejamento.cronograma_plano_interno.
  *
  * @version $Id$
  * @see Pi_PlanoInterno
@@ -21,7 +21,7 @@ class Pi_Cronograma extends Modelo{
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = "planacomorc.pi_cronograma";
+    protected $stNomeTabela = "planejamento.cronograma_plano_interno";
 
     /**
      * Chave primaria.

@@ -329,7 +329,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             SELECT DISTINCT
                 pli.pliid,
                 pc.arceid,
-                mde.arccod,
+                arc.arccod,
                 pli.eqdid,
                 ptr.ptrid,
                 eqd.eqdcod,
@@ -366,7 +366,7 @@ class Proposta_Model_PrePlanoInterno extends Modelo
                 LEFT JOIN planejamento.enquadramento_despesa eqd ON (pli.eqdid = eqd.eqdid AND pli.pliano = eqd.eqdano)
                 LEFT JOIN planejamento.segmento_cultural nee ON (pli.secid = nee.secid AND pli.pliano = nee.neeano)
                 LEFT JOIN planejamento.categoria_apropriacao cap ON (pli.capid = cap.capid AND pli.pliano = cap.capano)
-                LEFT JOIN planejamento.area_cultural mde ON (pc.arceid = mde.arceid) --ON (pli.arceid = mde.arceid AND pli.pliano = mde.arcano)
+                LEFT JOIN public.area_cultural arc ON (pc.arceid = arc.arceid) --ON (pli.arceid = mde.arceid AND pli.pliano = mde.arcano)
             WHERE
                 pli.pliid = $pliid
         ";
@@ -723,14 +723,14 @@ class Proposta_Model_PrePlanoInterno extends Modelo
             SELECT
                 MAX(arceid),
                 upper(public.removeacento(arcdsc)) as descricao
-            FROM planejamento.area_cultural
+            FROM public.area_cultural
             WHERE
                 arcstatus = 'A'
                 AND arcano = '{$_SESSION['exercicio']}'
                 AND upper(public.removeacento(arcdsc)) = (
                     SELECT
                         upper(public.removeacento(arcdsc))
-                    FROM planejamento.area_cultural
+                    FROM public.area_cultural
                     WHERE
                         arcstatus = 'A'
                         AND arcano = '{$anoAnterior}'

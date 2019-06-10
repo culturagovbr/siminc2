@@ -182,15 +182,16 @@
 
                     if( count($_REQUEST['filtro']['arceid']) > 0 ) {
 
-                        $stSql = "SELECT
-                                  arceid AS codigo,
-                                  arcdsc AS descricao
-                              FROM planejamento.area_cultural
-                              WHERE
-                                  arcstatus = 'A'
-                                  AND arcano = '" . $_REQUEST['filtro']['prsano'] . "'
-                              ORDER BY
-                                  descricao ASC
+                        $stSql = "
+                            SELECT
+                                arceid AS codigo,
+                                arcdsc AS descricao
+                            FROM public.area_cultural
+                            WHERE
+                                arcstatus = 'A'
+                                AND arcano = '" . $_REQUEST['filtro']['prsano'] . "'
+                            ORDER BY
+                                descricao ASC
                         ";
                         echo $simec->select("filtro[arceid][]", 'Área Cultural', $_REQUEST['filtro']['arceid'], $stSql, null, ['input-size' => 3, 'label-size' => 1]);
                     }

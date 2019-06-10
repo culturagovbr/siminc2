@@ -133,7 +133,7 @@
                 SELECT
                     arceid AS codigo,
                     arcdsc AS descricao
-                FROM planejamento.area_cultural
+                FROM public.area_cultural
                 WHERE
                     arcstatus = 'A'
                     AND arcano = '" . $_REQUEST['filtro']['prsano'] . "'

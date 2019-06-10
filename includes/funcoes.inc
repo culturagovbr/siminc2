@@ -5411,20 +5411,20 @@ function buscarListaCodigoEnquadramentoReduzido($exercicio) {
     $sql = "
         SELECT
             eqdid
-        FROM planejamento.programa
+        FROM planejamento.enquadramento_despesa
         WHERE
             eqdstatus = 'A'
             AND eqdstreduzido = 'S'
             AND eqdano = '". (int)$exercicio. "'
     ";
-    
+
     $listaConsulta = $db->carregar($sql);
     if($listaConsulta){
         foreach($listaConsulta as $interacao => $enquadramento){
             $lista[] = $enquadramento['eqdid'];
         }
     }
-    
+
     return $lista;
 }
 

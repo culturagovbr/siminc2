@@ -1246,7 +1246,7 @@ class Pi_PlanoInterno extends Modelo
         $where .= $dto->picted == 'f'? "\n AND pic.picted IS FALSE": NULL;
         $where .= $dto->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($dto->irpcod, ','). ")": NULL;
         $where .= $dto->oppid? "\n AND pic.oppid IN(".join($dto->oppid, ','). ")": NULL;
-        $where .= $dto->arceid? "\n AND pli.arceid IN(".join($dto->arceid, ','). ")": NULL;
+        $where .= $dto->arceid? "\n AND pic.arceid IN(".join($dto->arceid, ','). ")": NULL;
         $where .= $dto->capid? "\n AND pli.capid IN(".join($dto->capid, ','). ")": NULL;
         $where .= $dto->mescod? "\n AND pic.mescod IN('".join($dto->mescod, "','"). "')": NULL;
         $where .= $dto->claid? "\n AND cl.claid IN(".join($dto->claid, ','). ")": NULL;
@@ -1264,7 +1264,7 @@ class Pi_PlanoInterno extends Modelo
                 (SELECT ARRAY_TO_STRING(ARRAY(
                     SELECT DISTINCT
                         s.unonome
-                    FROM planacomorc.pi_delegacao d
+                    FROM planejamento.delegacao d
                         JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
                     WHERE
                         d.pliid = pli.pliid
@@ -1273,18 +1273,24 @@ class Pi_PlanoInterno extends Modelo
                 (SELECT ARRAY_TO_STRING(ARRAY(
                     SELECT DISTINCT
                         s.suonome
-                    FROM planacomorc.pi_delegacao d
+                    FROM planejamento.delegacao d
                         JOIN public.vw_subunidadeorcamentaria s ON s.suoid = d.suoid
                     WHERE
                         d.pliid = pli.pliid
                 ), '; ')) suodelegada,
 
-                eqd.eqddsc, rp.rpcod || ' - ' || rp.redsc as resultadoprimario, mai.mainome, mas.masnome, ptr.prgcod, ptr.prgdsc, opp.oppcod, opp.oppnome, ipp.ippcod, ipp.ippnome,
-                ptr.acacod, ptr.acatitulo, ptr.loccod, ptr.locdsc, ptr.plocod, plodsc po, ptr.ptres,
-                mde.arcdsc, mpn.mpncod || ' - ' || mpn.mpnnome mpnnome, mpp.mppcod || ' - ' || mpp.mppnome mppnome,
-                pli.plititulo, pli.plidsc, nee.needsc, cap.capdsc,
-                CASE WHEN rp.rpcod = 6 THEN 'Sim' ELSE 'Não' END AS pliemenda,
-                CASE WHEN pic.picedital = TRUE THEN 'Sim' ELSE 'Não' END AS picedital,
+                eqd.eqddsc, rp.rpcod || ' - ' || rp.redsc as resultadoprimario, mai.mainome, mas.masnome, ptr.prgcod,
+                ptr.prgdsc, opp.oppcod, opp.oppnome, ipp.ippcod, ipp.ippnome, ptr.acacod, ptr.acatitulo, ptr.loccod,
+                ptr.locdsc, ptr.plocod, plodsc po, ptr.ptres, arc.arcdsc, mpn.mpncod || ' - ' || mpn.mpnnome mpnnome,
+                mpp.mppcod || ' - ' || mpp.mppnome mppnome, pli.plititulo, pli.plidsc, arc.arcdsc, cap.capdsc,
+                CASE
+                    WHEN rp.rpcod = 6 THEN 'Sim'
+                    ELSE 'Não'
+                END AS pliemenda,
+                CASE
+                    WHEN pic.picedital = TRUE THEN 'Sim'
+                    ELSE 'Não'
+                END AS picedital,
                 esf.esfdsc,
                 CASE WHEN pic.esfid IN(1, 2, 3) THEN
                     'Brasil'
@@ -1294,14 +1300,14 @@ class Pi_PlanoInterno extends Modelo
                 CASE WHEN pic.esfid = 2 THEN
                     (SELECT ARRAY_TO_STRING(array(
                             SELECT DISTINCT e.estdescricao
-                            FROM planacomorc.pi_localizacao l
+                            FROM planejamento.localizacao l
                                     JOIN territorios.estado e ON e.estuf = l.estuf
                             WHERE l.pliid = pli.pliid
                     ), '; '))
                 WHEN pic.esfid = 3 THEN
                     (SELECT ARRAY_TO_STRING(array(
                             SELECT DISTINCT e.estdescricao
-                            FROM planacomorc.pi_localizacao l
+                            FROM planejamento.localizacao l
                                     JOIN territorios.municipio m ON m.muncod = l.muncod
                                     JOIN territorios.estado e ON e.estuf = m.estuf
                             WHERE l.pliid = pli.pliid
@@ -1311,7 +1317,7 @@ class Pi_PlanoInterno extends Modelo
 
                 (SELECT ARRAY_TO_STRING(array(
                         SELECT DISTINCT m.mundescricao
-                        FROM planacomorc.pi_localizacao l
+                        FROM planejamento.localizacao l
                                 JOIN territorios.municipio m ON m.muncod = l.muncod
                                 JOIN territorios.estado e ON e.estuf = m.estuf
                         WHERE l.pliid = pli.pliid
@@ -1326,7 +1332,7 @@ class Pi_PlanoInterno extends Modelo
 
                 (SELECT ARRAY_TO_STRING(array(
                         SELECT DISTINCT usu.usunome || ' - ' || replace(to_char(usu.usucpf::numeric, '000:000:000-00'), ':', '.') || ' (' || usu.usufoneddd || ' ' || usu.usufonenum || ' - ' || usu.usuemail || ')'
-                        FROM planacomorc.pi_responsavel pir
+                        FROM planejamento.responsavel_plano_interno pir
                                 JOIN seguranca.usuario usu ON usu.usucpf = pir.usucpf
                         WHERE pir.pliid = pli.pliid
                 ), '; ')) usuario,
@@ -1336,26 +1342,26 @@ class Pi_PlanoInterno extends Modelo
 
                 (SELECT ARRAY_TO_STRING(array(
                        SELECT DISTINCT pco.pcoconvenio
-                        FROM planacomorc.pi_convenio pco
+                        FROM planejamento.convenio_plano_interno pco
                         WHERE pco.pliid = pli.pliid
                 ), '; ')) convenio,
 
                 (SELECT ARRAY_TO_STRING(array(
                        SELECT DISTINCT pis.pissniic
-                        FROM planacomorc.pi_sniic pis
+                        FROM planejamento.sniic_plano_interno pis
                         WHERE pis.pliid = pli.pliid
                 ), '; ')) sniic,
 
                 (SELECT ARRAY_TO_STRING(array(
                        SELECT DISTINCT pse.psesei
-                        FROM planacomorc.pi_sei pse
+                        FROM planejamento.sei_plano_interno pse
                         WHERE pse.pliid = pli.pliid
                 ), '; ')) sei,
 
 
                 (SELECT ARRAY_TO_STRING(array(
                        SELECT DISTINCT ppr.pprpronac
-                        FROM planacomorc.pi_pronac ppr
+                        FROM planejamento.pi_pronac ppr
                         WHERE ppr.pliid = pli.pliid
                 ), '; ')) pronac,
 
@@ -1366,102 +1372,101 @@ class Pi_PlanoInterno extends Modelo
                 COALESCE(pic.picvalorcapital, 0) AS picvalorcapital,
 
                 -- Cronograma Físico
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '01' AND pcr.pliid = pli.pliid LIMIT 1) fisico_1,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '02' AND pcr.pliid = pli.pliid LIMIT 1) fisico_2,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '03' AND pcr.pliid = pli.pliid LIMIT 1) fisico_3,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '04' AND pcr.pliid = pli.pliid LIMIT 1) fisico_4,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '05' AND pcr.pliid = pli.pliid LIMIT 1) fisico_5,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '06' AND pcr.pliid = pli.pliid LIMIT 1) fisico_6,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '07' AND pcr.pliid = pli.pliid LIMIT 1) fisico_7,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '08' AND pcr.pliid = pli.pliid LIMIT 1) fisico_8,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '09' AND pcr.pliid = pli.pliid LIMIT 1) fisico_9,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '10' AND pcr.pliid = pli.pliid LIMIT 1) fisico_10,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '11' AND pcr.pliid = pli.pliid LIMIT 1) fisico_11,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 1 AND mescod = '12' AND pcr.pliid = pli.pliid LIMIT 1) fisico_12,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '01' AND pcr.pliid = pli.pliid LIMIT 1) fisico_1,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '02' AND pcr.pliid = pli.pliid LIMIT 1) fisico_2,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '03' AND pcr.pliid = pli.pliid LIMIT 1) fisico_3,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '04' AND pcr.pliid = pli.pliid LIMIT 1) fisico_4,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '05' AND pcr.pliid = pli.pliid LIMIT 1) fisico_5,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '06' AND pcr.pliid = pli.pliid LIMIT 1) fisico_6,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '07' AND pcr.pliid = pli.pliid LIMIT 1) fisico_7,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '08' AND pcr.pliid = pli.pliid LIMIT 1) fisico_8,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '09' AND pcr.pliid = pli.pliid LIMIT 1) fisico_9,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '10' AND pcr.pliid = pli.pliid LIMIT 1) fisico_10,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '11' AND pcr.pliid = pli.pliid LIMIT 1) fisico_11,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 1 AND mescod = '12' AND pcr.pliid = pli.pliid LIMIT 1) fisico_12,
 
                 -- Cronograma Financeiro Capital
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '01' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_1,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '02' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_2,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '03' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_3,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '04' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_4,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '05' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_5,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '06' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_6,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '07' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_7,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '08' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_8,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '09' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_9,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '10' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_10,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '11' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_11,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 5 AND mescod = '12' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_12,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '01' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_1,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '02' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_2,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '03' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_3,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '04' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_4,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '05' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_5,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '06' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_6,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '07' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_7,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '08' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_8,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '09' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_9,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '10' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_10,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '11' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_11,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 5 AND mescod = '12' AND pcr.pliid = pli.pliid  LIMIT 1) fin_capital_12,
 
                 -- Cronograma Financeiro Custeio
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '01' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_1,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '02' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_2,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '03' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_3,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '04' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_4,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '05' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_5,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '06' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_6,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '07' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_7,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '08' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_8,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '09' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_9,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '10' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_10,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '11' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_11,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 4 AND mescod = '12' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_12,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '01' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_1,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '02' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_2,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '03' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_3,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '04' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_4,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '05' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_5,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '06' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_6,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '07' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_7,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '08' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_8,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '09' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_9,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '10' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_10,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '11' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_11,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 4 AND mescod = '12' AND pcr.pliid = pli.pliid LIMIT 1) fin_custeio_12,
 
                 -- Cronograma Orçamentário Capital
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '01' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_1,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '02' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_2,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '03' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_3,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '04' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_4,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '05' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_5,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '06' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_6,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '07' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_7,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '08' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_8,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '09' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_9,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '10' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_10,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '11' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_11,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 3 AND mescod = '12' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_12,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '01' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_1,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '02' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_2,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '03' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_3,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '04' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_4,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '05' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_5,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '06' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_6,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '07' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_7,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '08' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_8,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '09' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_9,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '10' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_10,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '11' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_11,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 3 AND mescod = '12' AND pcr.pliid = pli.pliid LIMIT 1) orc_capital_12,
 
                 -- Cronograma Orçamentário Custeio
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '01' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_1,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '02' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_2,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '03' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_3,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '04' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_4,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '05' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_5,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '06' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_6,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '07' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_7,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '08' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_8,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '09' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_9,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '10' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_10,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '11' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_11,
-                (SELECT pcrvalor FROM planacomorc.pi_cronograma pcr WHERE crvid = 2 AND mescod = '12' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_12,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '01' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_1,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '02' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_2,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '03' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_3,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '04' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_4,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '05' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_5,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '06' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_6,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '07' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_7,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '08' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_8,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '09' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_9,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '10' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_10,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '11' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_11,
+                (SELECT pcrvalor FROM planejamento.cronograma_plano_interno pcr WHERE crvid = 2 AND mescod = '12' AND pcr.pliid = pli.pliid LIMIT 1) orc_custeio_12,
 
                 vlrautorizado, vlrempenhado, vlrliquidado, vlrpago,
 
-		-- DADOS DO MONITORAMENTO
-		ac.acoquantidade AS executado,
-		ac.acoanalise AS analise,
-		cl.cladsc AS classificacao,
-		LTRIM(REPLACE(REPLACE(REPLACE(ARRAY(
-                    SELECT DISTINCT
-                        ' ' || meddsc
-                    FROM acompanhamento.medida md
-                        JOIN acompanhamento.acompanhamentomedida amd ON md.medid = amd.medid
-                    WHERE
-                        amd.acoid = ac.acoid
-		)::TEXT, '{', ''), '}', ''), '\"', '')) AS medidas,
-		ac.acoprovidencias AS providencias
-            FROM monitora.pi_planointerno pli
-                JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+                -- DADOS DO MONITORAMENTO
+                ac.acoquantidade AS executado,
+                ac.acoanalise AS analise,
+                cl.cladsc AS classificacao,
+                LTRIM(REPLACE(REPLACE(REPLACE(ARRAY(
+                            SELECT DISTINCT
+                                ' ' || meddsc
+                            FROM acompanhamento.medida md
+                                JOIN acompanhamento.acompanhamentomedida amd ON md.medid = amd.medid
+                            WHERE
+                                amd.acoid = ac.acoid
+                )::TEXT, '{', ''), '}', ''), '\"', '')) AS medidas,
+                ac.acoprovidencias AS providencias
+            FROM planejamento.plano_interno pli
+                JOIN planejamento.complemento pic ON pic.pliid = pli.pliid
                 JOIN public.vw_subunidadeorcamentaria suo ON(
-                    suo.suocod = pli.ungcod 
-                    AND suo.unocod = pli.unicod 
+                    suo.suoid = pli.suoid
                     AND suo.prsano = pli.pliano
                 )
                 JOIN planejamento.enquadramento_despesa eqd ON eqd.eqdid = pli.eqdid
                 LEFT JOIN planejamento.enquadramentorp AS erp ON(eqd.eqdid = erp.eqdid)
-                LEFT JOIN planacomorc.resultadoprimario AS rp ON(erp.irpcod::INTEGER = rp.rpcod)
-                LEFT JOIN planacomorc.manutencaoitem mai ON mai.maiid = pic.maiid
-                LEFT JOIN planacomorc.manutencaosubitem mas ON mas.masid = pic.masid
+                LEFT JOIN planejamento.resultado_primario AS rp ON(erp.irpcod::INTEGER = rp.rpcod)
+                LEFT JOIN planejamento.manutencao_item mai ON mai.maiid = pic.maiid
+                LEFT JOIN planejamento.manutencao_subitem mas ON mas.masid = pic.masid
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.vw_ptres ptr ON(
                     ptr.ptrid = ppt.ptrid
@@ -1469,17 +1474,17 @@ class Pi_PlanoInterno extends Modelo
                 )
                 LEFT JOIN public.objetivoppa opp ON opp.oppid = pic.oppid
                 LEFT JOIN public.iniciativappa ipp ON ipp.ippid = pic.ippid
-                LEFT JOIN planejamento.area_cultural mde ON mde.arceid = pli.arceid
-                LEFT JOIN planejamento.segmento_cultural nee ON nee.secid = pli.secid
+                LEFT JOIN public.area_cultural arc ON arc.arceid = pic.arceid
+                LEFT JOIN public.segmento_cultural sec ON sec.secid = pic.secid
                 LEFT JOIN public.metappa mpp ON mpp.mppid = pic.mppid
                 LEFT JOIN public.metapnc mpn ON mpn.mpnid = pic.mpnid
                 LEFT JOIN planejamento.categoria_apropriacao cap ON cap.capid = pli.capid
-                LEFT JOIN monitora.pi_produto ppr ON ppr.pprid = pic.pprid
-                LEFT JOIN monitora.pi_unidade_medida pum ON pum.pumid = pic.pumid
-                LEFT JOIN planacomorc.meta_unidade meu ON(pic.meuid = meu.meuid)
-                LEFT JOIN planacomorc.objetivo_estrategico obe ON(meu.obeid = obe.obeid)
-                LEFT JOIN planacomorc.dimensao_estrategica dim ON(meu.dimeid = dim.dimeid)
-                LEFT JOIN planacomorc.meta_estrategica mee ON(meu.meeid = mee.meeid)
+                LEFT JOIN public.produto_pi ppr ON ppr.pprid = pic.pprid
+                LEFT JOIN planejamento.unidade_medida pum ON pum.pumid = pic.pumid
+                LEFT JOIN planejamento.meta_unidade meu ON(pic.meuid = meu.meuid)
+                LEFT JOIN planejamento.objetivo_estrategico obe ON(meu.obeid = obe.obeid)
+                LEFT JOIN planejamento.dimensao_estrategica dim ON(meu.dimeid = dim.dimeid)
+                LEFT JOIN planejamento.meta_estrategica mee ON(meu.meeid = mee.meeid)
                 LEFT JOIN workflow.documento doc ON doc.docid = pli.docid
                 LEFT JOIN workflow.estadodocumento esd ON esd.esdid = doc.esdid
                 LEFT JOIN territorios.esfera esf ON esf.esfid = pic.esfid
@@ -1509,7 +1514,7 @@ class Pi_PlanoInterno extends Modelo
                 pli.plistatus = 'A'
                 $where
         ";
-
+ver($sql, d);
         return $sql;
     }
 

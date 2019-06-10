@@ -5,7 +5,7 @@
     
     <div class="form-group">
         <div class="col-md-3 text-right">
-            <label class="control-label" for="unicod">Unidade: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+            <label class="control-label" for="suoid">Unidade: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
         </div>
         <div class="col-lg-9">
             <?php
@@ -19,16 +19,25 @@
             $wherePerfilUO = $filtroPerfilUG = '';
             if (in_array(PFL_SUBUNIDADE, $perfis)) {
 
-                $sql = "SELECT distinct suo.suoid, suo.suocod, suo.unoid, suo.unocod, suo.unofundo
-                        FROM planacomorc.usuarioresponsabilidade ur
-                                inner join public.vw_subunidadeorcamentaria suo on suo.suocod = ur.ungcod
-                        WHERE suo.suostatus = 'A'
-                        and usucpf = '{$_SESSION['usucpf']}'
+                $sql = "
+                    SELECT DISTINCT
+                        suo.suoid,
+                        suo.suocod,
+                        suo.unoid,
+                        suo.unocod,
+                        suo.unofundo
+                    FROM planacomorc.usuarioresponsabilidade AS ur
+                        JOIN public.vw_subunidadeorcamentaria AS suo ON suo.suocod = ur.ungcod
+                    WHERE
+                        suo.suostatus = 'A'
+                        AND usucpf = '{$_SESSION['usucpf']}'
                         AND ur.pflcod = '" . PFL_SUBUNIDADE . "'
-                        and suo.prsano = '{$_SESSION['exercicio']}'
-                        and rpustatus = 'A'
-                        and unofundo = 'f'
-                        ORDER BY suo.unocod";
+                        AND suo.prsano = '{$_SESSION['exercicio']}'
+                        AND rpustatus = 'A'
+                        AND unofundo = 'f'
+                    ORDER BY
+                        suo.unocod
+                ";
                 $dadosUsuario = $db->carregar($sql);
 
                 $unidadeUsuario = [];
@@ -67,24 +76,24 @@
                     descricao
             ";
 
-            $editavelUg = ($dadosPI['unicod'] && $dadosPI['pliid']) ? 'N' : 'S';
-            $db->monta_combo('unicod', $sql, $editavelUg, 'Selecione', null, null, null, null, 'N', 'unicod', null, (isset($dadosPI['unicod']) ? $dadosPI['unicod'] : null), null, 'class="form-control chosen-select" style="width=100%;"', null, null);
+            $editavelUg = ($dadosPI['suoid'] && $dadosPI['pliid']) ? 'N' : 'S';
+            $db->monta_combo('suoid', $sql, $editavelUg, 'Selecione', null, null, null, null, 'N', 'suoid', null, (isset($dadosPI['suoid']) ? $dadosPI['suoid'] : null), null, 'class="form-control chosen-select" style="width=100%;"', null, null);
             ?>
         </div>
     </div>
-    
+
     <div class="form-group">
         <div class="col-md-3 text-right">
-            <label class="control-label" for="ungcod">SubUnidade: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
+            <label class="control-label" for="unocod">SubUnidade: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
         </div>
         <div class="col-lg-9 div_ungcod">
             <?php
-            $ungcod = $dadosPI['ungcod'];
-            carregarComboUG($dadosPI['unicod'], $editavelUg);
+                $unocod = $dadosPI['unocod'];
+                carregarComboUG($dadosPI['unocod'], $editavelUg);
             ?>
         </div>
     </div>
-    
+
     <div class="form-group">
         <div class="col-md-3 text-right">
             <label class="control-label" for="picted">Delegação:</label>
@@ -94,17 +103,17 @@
         </div>
         <div class="col-md-7" id="div_unidades_delegadas" style="margin-left: 15px;">
             <?php
-            $aSubUnidadeOrcamentaria = simec_preparar_array((new Public_Model_SubUnidadeOrcamentaria())->recuperarTodos("suoid as codigo, unosigla || ' - ' || suonome as descricao", ["prsano = '{$_SESSION['exercicio']}'", "suostatus = 'A'"], 'descricao'));
-            echo $simec->select("delegacao[]", '', $listaSubUnidadesDelegadas, $aSubUnidadeOrcamentaria);
+                $aSubUnidadeOrcamentaria = simec_preparar_array((new Public_Model_SubUnidadeOrcamentaria())->recuperarTodos("suoid as codigo, unosigla || ' - ' || suonome as descricao", ["prsano = '{$_SESSION['exercicio']}'", "suostatus = 'A'"], 'descricao'));
+                echo $simec->select("delegacao[]", '', $listaSubUnidadesDelegadas, $aSubUnidadeOrcamentaria);
             ?>
         </div>
     </div>
-    
+
     <?php
         $checked = $dadosPI['eqdid']? $dadosPI['eqdid']: $codigoEnquadramentoNaoOrcamentario;
         echo $simec->select("eqdid", 'Enquadramento da Despesa', $checked, (new Planacomorc_Model_EnquadramentoDespesa())->recuperarSqlCombo('eqdid, eqddsc', null, 'eqddsc'), ['required']);
     ?>
-    
+
     <div class="form-group grupo_manutencao" style="display: none;">
         <div class="col-md-3 text-right">
             <label class="control-label" for="maiid">Item: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>
@@ -113,7 +122,7 @@
             <?php carregarManutencaoItem($dadosPI['eqdid'], $dadosPI['maiid']); ?>
         </div>
     </div>
-    
+
     <div class="form-group grupo_manutencao" style="display: none;">
         <div class="col-md-3 text-right">
             <label class="control-label" for="masid">SubItem: <span title="Campo obrigatório" class="link campo-obrigatorio">*</span></label>

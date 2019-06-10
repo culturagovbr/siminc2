@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de mapeamento da entidade planacomorc.etapas
+ * Classe de mapeamento da entidade planejamento.etapas
  *
  * @category Class
  * @package  A1
@@ -31,7 +31,7 @@ class Planacomorc_Model_Etapas extends Modelo
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = 'planacomorc.etapas';
+    protected $stNomeTabela = 'planejamento.etapas';
 
     /**
      * Chave primaria.
@@ -41,6 +41,7 @@ class Planacomorc_Model_Etapas extends Modelo
     protected $arChavePrimaria = array(
         'etaid',
     );
+
     /**
      * Chaves estrangeiras.
      * @var array
@@ -64,7 +65,7 @@ class Planacomorc_Model_Etapas extends Modelo
     );
 
     public function excluirPorPliid($pliid){
-        $sql = "update ".$this->stNomeTabela." set etastatus = 'I' where pliid = '".$pliid."'";
+        $sql = "UPDATE ".$this->stNomeTabela." SET etastatus = 'I' WHERE pliid = '".$pliid."'";
         $this->executar($sql);
     }
 }

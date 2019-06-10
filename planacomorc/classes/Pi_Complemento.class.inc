@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe de abstração da tabela monitora.pi_complemento.
+ * Classe de mapeamento da entidade planejamento.complemento.
  *
  * @version $Id$
  * @see Pi_PlanoInterno
@@ -21,7 +21,7 @@ class Pi_Complemento extends Modelo{
      * @var string
      * @access protected
      */
-    protected $stNomeTabela = "planacomorc.pi_complemento";
+    protected $stNomeTabela = "planejamento.complemento";
 
     /**
      * Chave primaria.
@@ -101,7 +101,7 @@ class Pi_Complemento extends Modelo{
         }
         return $resultado;
     }
-    
+
     /**
      * Função _inserir
      * Método usado para inserção de um registro do banco
@@ -133,5 +133,5 @@ class Pi_Complemento extends Modelo{
             return $this->executar($sql);
         }
     }
-    
+
 }
