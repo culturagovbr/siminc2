@@ -1794,7 +1794,7 @@ ver($sql, d);
                 JOIN planejamento.enquadramento_despesa AS eqd ON pli.eqdid = eqd.eqdid
             WHERE
                 pli.pliano = '{$filtro['exercicio']}'
-                AND pli.plistatus = 'A'
+                AND (pli.plistatus = 'A' OR (pli.plistatus = 'I' AND doc.esdid = 1772))
                 AND suo.unofundo = " . $unoFundo . "
                 AND doc.esdid = '{$filtro['esdid']}'
             $where

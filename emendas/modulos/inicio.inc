@@ -60,6 +60,22 @@ switch ($requisicao) {
 
         die();
         break;
+    case 'carregarFuncional':
+        $sqlPtres = (new Monitora_Model_Ptres())->recuperarSqlCombo([
+            "'(Ptres: ' || ptres.ptres || ')'",
+            "coalesce(ptres.prgcod, '')",
+            "coalesce(ptres.acacod, '')",
+            "coalesce(ptres.loccod, '')",
+            "coalesce(acaobjetivocod, '')",
+            "coalesce(ptres.plocod, '')",
+            "acatitulo"
+        ],
+            [
+                "plocod = 'EIND'",
+                "suo.suoid = '". (int)$_REQUEST['suoid']. "'"
+            ]);
+        echo $simec->select('ptrid', 'Funcional <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', null, $sqlPtres);
+        die;
 }
 
 include APPRAIZ . "includes/cabecalho.inc";

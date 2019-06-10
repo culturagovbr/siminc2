@@ -17,7 +17,7 @@
             // ******* Ao carregar a listagem de PTRES, sempre filtrar pela UO selecionada, independentemente do Perfil ; *****
 
             $wherePerfilUO = $filtroPerfilUG = '';
-            if (in_array(PFL_SUBUNIDADE, $perfis)) {
+            if(in_array(PFL_SUBUNIDADE, $perfis)){
 
                 $sql = "
                     SELECT DISTINCT
@@ -26,7 +26,7 @@
                         suo.unoid,
                         suo.unocod,
                         suo.unofundo
-                    FROM planacomorc.usuarioresponsabilidade AS ur
+                    FROM planejamento.usuarioresponsabilidade AS ur
                         JOIN public.vw_subunidadeorcamentaria AS suo ON suo.suocod = ur.ungcod
                     WHERE
                         suo.suostatus = 'A'
@@ -34,23 +34,25 @@
                         AND ur.pflcod = '" . PFL_SUBUNIDADE . "'
                         AND suo.prsano = '{$_SESSION['exercicio']}'
                         AND rpustatus = 'A'
-                        AND unofundo = 'f'
+                        AND unofundo IS FALSE
                     ORDER BY
                         suo.unocod
                 ";
                 $dadosUsuario = $db->carregar($sql);
 
                 $unidadeUsuario = [];
-                foreach ($dadosUsuario as $dadoUsuario){
-                    $unidadeUsuario['unidades'][$dadoUsuario['unocod']] = $dadoUsuario['unocod'];
-                    $unidadeUsuario['subunidades'][$dadoUsuario['unocod']] = $dadoUsuario['unocod'];
+                if($dadosUsuario){
+                    foreach ($dadosUsuario as $dadoUsuario){
+                        $unidadeUsuario['unidades'][$dadoUsuario['unocod']] = $dadoUsuario['unocod'];
+                        $unidadeUsuario['subunidades'][$dadoUsuario['unocod']] = $dadoUsuario['unocod'];
 
-                    // Agrupando por FNC
-                    $unidadeUsuario['unocod'][$dadoUsuario['unofundo']][$dadoUsuario['unocod']] = $dadoUsuario['unocod'];
-                    $unidadeUsuario['suocod'][$dadoUsuario['unofundo']][$dadoUsuario['suocod']] = $dadoUsuario['suocod'];
+                        # Agrupando por FNC
+                        $unidadeUsuario['unocod'][$dadoUsuario['unofundo']][$dadoUsuario['unocod']] = $dadoUsuario['unocod'];
+                        $unidadeUsuario['suocod'][$dadoUsuario['unofundo']][$dadoUsuario['suocod']] = $dadoUsuario['suocod'];
+                    }
                 }
 
-                $wherePerfilUO  = " and unocod in ('" . implode("', '", $unidadeUsuario['unidades']) . "')";
+                $wherePerfilUO  = " AND unocod IN('" . ($unidadeUsuario['unidades']? implode("', '", $unidadeUsuario['unidades']): 0) . "')";
 
                 if(empty($dadosPI['unicod'])){
                     $dadosPI['unicod'] = (1 == count($unidadeUsuario['unocod']['f'])) ? current($unidadeUsuario['unocod']['f']) : '';
@@ -63,8 +65,10 @@
             $sql = "
                 SELECT DISTINCT
                     suo.unocod AS codigo,
-                    CASE WHEN suo.unocod='55101' THEN '55101 - MINSTERIO DA CIDADANIA - ADMINISTRAÇÃO DIRETA'
-                         ELSE suo.unocod || ' - ' || suo.unonome
+                    CASE WHEN suo.unocod = '". (int)UNICOD_MC. "' THEN
+                        '". (int)UNICOD_MC. " - MINSTERIO DA CIDADANIA - ADMINISTRAÇÃO DIRETA'
+                    ELSE
+                        suo.unocod || ' - ' || suo.unonome
                     END AS descricao
                 FROM public.vw_subunidadeorcamentaria suo
                 WHERE

@@ -258,7 +258,7 @@ class Planacomorc_Model_Ptres extends Modelo
                 {$descricao} AS descricao
             FROM {$this->stNomeTabela}
                 JOIN monitora.acao ON ptres.acaid = acao.acaid
-                JOIN public.unidadeorcamentaria ON acao.unicod = unidadeorcamentaria.unocod AND acao.prgano = unidadeorcamentaria.prsano
+                JOIN public.vw_subunidadeorcamentaria AS suo ON acao.unicod = suo.unocod AND acao.prgano = suo.prsano
             $where
             ORDER BY
                 $order
