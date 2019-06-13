@@ -29,6 +29,7 @@ class Acompanhamento_Model_Tipo extends Modelo
     const K_TIPO_META_PPA       = 1;
     const K_TIPO_INDICADOR_PNC  = 2;
     const K_TIPO_PI             = 3;
+    const K_TIPO_META_UNIDADE   = 4;
 
     /**
      * Nome da tabela especificada

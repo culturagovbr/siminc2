@@ -60,6 +60,22 @@ switch ($requisicao) {
 
         die();
         break;
+    case 'carregarFuncional':
+        $sqlPtres = (new Monitora_Model_Ptres())->recuperarSqlCombo([
+            "'(Ptres: ' || ptres.ptres || ')'",
+            "coalesce(ptres.prgcod, '')",
+            "coalesce(ptres.acacod, '')",
+            "coalesce(ptres.loccod, '')",
+            "coalesce(acaobjetivocod, '')",
+            "coalesce(ptres.plocod, '')",
+            "acatitulo"
+        ],
+            [
+                "plocod = 'EIND'",
+                "suo.suoid = '". (int)$_REQUEST['suoid']. "'"
+            ]);
+        echo $simec->select('ptrid', 'Funcional <span class="campo-obrigatorio" title="Campo obrigatório">*</span>', null, $sqlPtres);
+        die;
 }
 
 include APPRAIZ . "includes/cabecalho.inc";
@@ -92,10 +108,10 @@ $aEmenda = (new Emendas_Model_Emenda)->recuperarListagem((object)$filtroEmenda);
                         <input name="req" id="req" value="" type="hidden">
 
                         <?php
-                        if(!$listaSubUnidadeUsuario){
+                       /* if(!$listaSubUnidadeUsuario){
                             echo $simec->select('unicod', 'Unidade Emenda', $filtroEmenda['unicod'], Spo_Model_Unidade::queryCombo((object)array(
                                 'prsano::INTEGER = '. (int)$_SESSION['exercicio']) ));
-                        }
+                        }*/
                         echo '<div id=div_ungcod>';
                         echo $simec->select('suoid', 'SubUnidade Beneficiário', $filtroEmenda['suoid'], Public_Model_SubUnidadeOrcamentaria::queryComboChaveSuoid((object)array(
                             'exercicio' => $_SESSION['exercicio'],

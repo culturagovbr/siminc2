@@ -84,5 +84,4 @@ class Territorios_Model_Municipio extends Modelo
         'munpopulacaorural' => null,
     );
 
-}//end Class
-?>
+}

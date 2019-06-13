@@ -768,27 +768,19 @@ function validaUnidadeMedicao(valor) {
 </tr> 
 <tr>
 	<?php 
-		$sql= "SELECT
-                   mtidsc AS descricao,
-                   mtiid AS codigo
-               FROM pde.monitoratipoindicador
-               ORDER BY
-                   descricao
+		$sql= "
+            SELECT
+                mtidsc AS descricao,
+                mtiid AS codigo
+            FROM painel.monitoratipoindicador
+            ORDER BY
+                descricao
         ";
 	?>
     <td align='right' class="SubTituloDireita">Tipo de Indicador:</td>
     <td><?=$db->monta_combo('mtiid',$sql,(($acesso)?'S':'N'),'Selecione...','','','','N','','',$mtiid);?></td>
 </tr>
 <tr>
-	<?php
-		$sql= "SELECT
-                   mtidsc AS descricao,
-                   mtiid AS codigo
-               FROM pde.monitoratipoindicador
-               ORDER BY
-                   descricao
-        ";
-	?>
     <td align='right' class="SubTituloDireita">Peso:</td>
     <td><?= campo_texto('indpeso','S',"S",'',20,'', $formatoinput['mascara'],'');?></td>
 </tr>

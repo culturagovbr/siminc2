@@ -58,5 +58,4 @@ class Territorios_Model_Pais extends Modelo
         'paidescricao' => null,
     );
 
-}//end Class
-?>
+}

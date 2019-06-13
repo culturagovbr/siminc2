@@ -50,7 +50,7 @@
         </table>
     </div>
 <?php else: ?>
-    <div class="alert alert-danger">Nenhum PI vinculado</div>
+    <div class="alert alert-danger">Nenhum PA vinculado</div>
 <?php endif; ?>
 
 <script>

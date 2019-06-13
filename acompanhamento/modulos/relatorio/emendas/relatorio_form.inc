@@ -122,9 +122,9 @@
             SELECT
                 autid AS codigo,
                 a.autcod || ' - ' || a.autnome || ' - ' || aut.atpdsc AS descricao
-            FROM emendas.autor a -- SELECT * FROM emendas.autor a
-                JOIN emendas.autortipo aut ON a.atpid = aut.atpid -- SELECT * FROM emendas.autortipo
-                JOIN emendas.partido p ON a.parid = p.parid -- SELECT * FROM emendas.partido
+            FROM emendas.autor a
+                JOIN emendas.autortipo aut ON a.atpid = aut.atpid
+                JOIN emendas.partido p ON a.parid = p.parid
             WHERE
                 autstatus = 'A'
             ORDER BY
@@ -141,14 +141,14 @@
             ORDER BY
                 descricao
         ";
-        $estuf;   
+        $estuf;
         echo $simec->select("filtro[estuf][]", 'UF Parlamentar', $estuf, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         $stSql = "
             SELECT DISTINCT
                 parid AS codigo,
-                parnome || ' - ' || parsigla AS descricao
-            FROM emenda.partido
+                pardsc || ' - ' || parsigla AS descricao
+            FROM emendas.partido
             WHERE
                 parstatus = 'A'
             ORDER BY
@@ -199,7 +199,7 @@
             ORDER BY
                 descricao
         ";
-        $aloid;  
+        $aloid;
         echo $simec->select("filtro[aloid][]", 'Alterações', $aloid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
 
         # Traz o Todos por default
@@ -223,7 +223,7 @@
             ORDER BY
                 descricao
             ";
-        $impid; 
+        $impid;
         echo $simec->select("filtro[impid][]", 'Impedimento', $impid, $stSql, NULL, ['input-size' => 9, 'label-size' => 2]);
     ?>
 </div>
