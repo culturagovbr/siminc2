@@ -187,7 +187,6 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN(
                     SELECT
                         siopexecucao.unicod,
-                        pi_planointerno.ungcod,
                         siopexecucao.ptres,
                         SUM(COALESCE(siopexecucao.vlrautorizado, 0.00))::NUMERIC AS provisionado,
                         SUM(COALESCE(siopexecucao.vlrempenhado, 0.00))::NUMERIC AS empenhado,
@@ -196,13 +195,14 @@ class Pi_PlanoInterno extends Modelo
                     FROM spo.siopexecucao
                         LEFT JOIN monitora.pi_planointerno ON(siopexecucao.plicod = pi_planointerno.plicod AND siopexecucao.exercicio = pi_planointerno.pliano AND pi_planointerno.plistatus = 'A')
                     WHERE
-                        pi_planointerno.ungcod IS NOT NULL
-                        AND siopexecucao.exercicio = '". (int)$_SESSION['exercicio']. "' -- Inserindo o ano direto na subquery por motivo de performance da consulta.
+			siopexecucao.exercicio = '". (int)$_SESSION['exercicio']. "' -- Inserindo o ano direto na subquery por motivo de performance da consulta.
                     GROUP BY
                         siopexecucao.ptres,
-                        siopexecucao.unicod,
-                        pi_planointerno.ungcod
-		) sec ON(ptr.ptres = sec.ptres AND suo.unocod = sec.unicod AND suo.suocod = sec.ungcod)
+                        siopexecucao.unicod
+		) sec ON(
+                    ptr.ptres = sec.ptres
+                    AND suo.unocod = sec.unicod
+		)
             WHERE
                 {$where}
             GROUP BY
