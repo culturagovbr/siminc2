@@ -3357,6 +3357,7 @@ function montarGraficoVinculadas($colors, $percentualPlanejamento = FALSE){
     $estatistica = $oPlanoInterno->consultarExecucaoOrcamentariaUo((object) array(
         'exercicio' => (int)$_SESSION['exercicio']
     ));
+//ver($estatistica, d);
     $grafico = new Grafico(Grafico::K_TIPO_COLUNA, FALSE);
     $grafico
         ->setFormatoTooltip(Grafico::K_TOOLTIP_DECIMAL_0)
