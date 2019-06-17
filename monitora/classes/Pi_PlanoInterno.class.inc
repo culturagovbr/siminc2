@@ -720,12 +720,13 @@ class Pi_PlanoInterno extends Modelo
                 1 AS ordem,
                 'Dotação' AS descricao,
                 suo.unosigla AS categoria,
-                (sum(COALESCE (psu.ptrdotacaocusteio, 0)::DECIMAL) + sum(COALESCE (psu.ptrdotacaocapital, 0)::DECIMAL)) AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                TRUNC(SUM(COALESCE(psu.ptrdotacaocusteio, 0)::DECIMAL) + SUM(COALESCE(psu.ptrdotacaocapital, 0)::DECIMAL), 0) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
-                LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = psu.ptrid
-                AND ptr.ptrano = suo.prsano
+                LEFT JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = psu.ptrid
+                    AND ptr.ptrano = suo.prsano
+                )
             WHERE
                 $where
                 AND suo.suostatus = 'A'
@@ -739,11 +740,12 @@ class Pi_PlanoInterno extends Modelo
                 2 AS ordem,
                 'Limite' AS descricao,
                 suo.unosigla AS categoria,
-                sum(COALESCE (lmu.lmuvlr, 0)::DECIMAL) AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
-                LEFT JOIN planacomorc.unidadegestora_limite lmu ON suo.suocod = lmu.ungcod
-                AND suo.prsano = lmu.prsano
+                TRUNC(SUM(COALESCE(lmu.lmuvlr, 0)::DECIMAL), 0) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
+                LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
+                    suo.suocod = lmu.ungcod
+                    AND suo.prsano = lmu.prsano
+                )
             WHERE
                 $where
                 AND suo.suostatus = 'A'
@@ -756,14 +758,14 @@ class Pi_PlanoInterno extends Modelo
                 3 AS ordem,
                 'Planejado' AS descricao,
                 suo.unosigla AS categoria,
-                sum(COALESCE (pic.picvalorcapital, 0) + COALESCE (pic.picvalorcusteio, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                TRUNC(SUM(COALESCE(pic.picvalorcapital, 0) + COALESCE(pic.picvalorcusteio, 0))::DECIMAL, 0) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.unicod = suo.unocod
                     AND pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
-                    AND pli.plistatus = 'A')
+                    AND pli.plistatus = 'A'
+                )
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
             WHERE
@@ -780,14 +782,14 @@ class Pi_PlanoInterno extends Modelo
                 3.5 AS ordem,
                 'Provisionado' AS descricao,
                 suo.unosigla AS categoria,
-                sum(COALESCE (sec.vlrautorizado, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                TRUNC(SUM(COALESCE(sec.vlrautorizado, 0))::DECIMAL, 0) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.unicod = suo.unocod
                     AND pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
-                    AND pli.plistatus = 'A')
+                    AND pli.plistatus = 'A'
+                )
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
@@ -809,14 +811,14 @@ class Pi_PlanoInterno extends Modelo
                 4 AS ordem,
                 'Empenhado' AS descricao,
                 suo.unosigla AS categoria,
-                sum(COALESCE (sec.vlrempenhado, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                TRUNC(SUM(COALESCE(sec.vlrempenhado, 0))::DECIMAL, 0) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.unicod = suo.unocod
                     AND pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
-                    AND pli.plistatus = 'A')
+                    AND pli.plistatus = 'A'
+                )
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
@@ -838,9 +840,8 @@ class Pi_PlanoInterno extends Modelo
                 6 AS ordem,
                 'Pago' AS descricao,
                 suo.unosigla AS categoria,
-                sum(COALESCE (sec.vlrpago, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                TRUNC(SUM(COALESCE(sec.vlrpago, 0))::DECIMAL, 0) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(pli.unicod = suo.unocod AND pli.ungcod = suo.suocod AND pli.pliano = suo.prsano AND pli.plistatus = 'A')
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
@@ -863,9 +864,8 @@ class Pi_PlanoInterno extends Modelo
                 5 AS ordem,
                 'Liquidado' AS descricao,
                 suo.unosigla AS categoria,
-                sum(COALESCE (sec.vlrliquidado, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                TRUNC(SUM(COALESCE(sec.vlrliquidado, 0))::DECIMAL, 0) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.unicod = suo.unocod
                     AND pli.ungcod = suo.suocod
@@ -891,7 +891,7 @@ class Pi_PlanoInterno extends Modelo
                 ordem,
                 categoria
         ";
-//ver($sql, d);
+
         $dados = $this->carregar($sql);
         return $dados ? $dados : [];
     }
@@ -927,9 +927,8 @@ class Pi_PlanoInterno extends Modelo
                 1 AS ordem,
                 'Dotação' AS descricao,
                 suo.suosigla AS categoria,
-                (sum(COALESCE (psu.ptrdotacaocusteio, 0)::DECIMAL) + sum(COALESCE (psu.ptrdotacaocapital, 0)::DECIMAL)) AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                (SUM(COALESCE(psu.ptrdotacaocusteio, 0)::DECIMAL) + SUM(COALESCE(psu.ptrdotacaocapital, 0)::DECIMAL)) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
                 LEFT JOIN monitora.vw_ptres ptr ON(
                     ptr.ptrid = psu.ptrid
@@ -948,9 +947,8 @@ class Pi_PlanoInterno extends Modelo
                 2 AS ordem,
                 'Limite' AS descricao,
                 suo.suosigla AS categoria,
-                sum(COALESCE (lmu.lmuvlr, 0)::DECIMAL) AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                SUM(COALESCE (lmu.lmuvlr, 0)::DECIMAL) AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
                     suo.suocod = lmu.ungcod
                     AND suo.prsano = lmu.prsano
@@ -968,9 +966,8 @@ class Pi_PlanoInterno extends Modelo
                 3 AS ordem,
                 'Planejado' AS descricao,
                 suo.suosigla AS categoria,
-                sum(COALESCE (pic.picvalorcapital, 0) + COALESCE (pic.picvalorcusteio, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                SUM(COALESCE(pic.picvalorcapital, 0) + COALESCE(pic.picvalorcusteio, 0))::DECIMAL AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
@@ -991,9 +988,8 @@ class Pi_PlanoInterno extends Modelo
                 3.5 AS ordem,
                 'Provisionado' AS descricao,
                 suo.suosigla AS categoria,
-                sum(COALESCE (sec.vlrautorizado, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                SUM(COALESCE(sec.vlrautorizado, 0))::DECIMAL AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
@@ -1020,9 +1016,8 @@ class Pi_PlanoInterno extends Modelo
                 4 AS ordem,
                 'Empenhado' AS descricao,
                 suo.suosigla AS categoria,
-                sum(COALESCE (sec.vlrempenhado, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                SUM(COALESCE(sec.vlrempenhado, 0))::DECIMAL AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
@@ -1048,13 +1043,13 @@ class Pi_PlanoInterno extends Modelo
                 6 AS ordem,
                 'Pago' AS descricao,
                 suo.suosigla AS categoria,
-                sum(COALESCE (sec.vlrpago, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                SUM(COALESCE(sec.vlrpago, 0))::DECIMAL AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
-                    AND pli.plistatus = 'A')
+                    AND pli.plistatus = 'A'
+                )
                 LEFT JOIN emendas.beneficiario ben ON(pli.pliid = ben.pliid)
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
                 LEFT JOIN monitora.ptres ptr ON ptr.ptrid = ppt.ptrid
@@ -1076,9 +1071,8 @@ class Pi_PlanoInterno extends Modelo
                 5 AS ordem,
                 'Liquidado' AS descricao,
                 suo.suosigla AS categoria,
-                sum(COALESCE (sec.vlrliquidado, 0))::DECIMAL AS valor
-            FROM
-                public.vw_subunidadeorcamentaria suo
+                SUM(COALESCE(sec.vlrliquidado, 0))::DECIMAL AS valor
+            FROM public.vw_subunidadeorcamentaria suo
                 LEFT JOIN monitora.pi_planointerno pli ON(
                     pli.ungcod = suo.suocod
                     AND pli.pliano = suo.prsano
