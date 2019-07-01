@@ -162,14 +162,14 @@ class Pi_PlanoInterno extends Modelo
                 lmu.lmuvlr,
                 lmu.lmuid,
                 psu.psuid,
-                COALESCE(psu.ptrdotacaocapital, 0) ptrdotacao_capital,
-                COALESCE(psu.ptrdotacaocusteio, 0) ptrdotacao_custeio,
-                SUM(COALESCE(pic.picvalorcapital, 0)) picvalorcapital,
-                SUM(COALESCE(pic.picvalorcusteio, 0)) picvalorcusteio,
+                COALESCE(psu.ptrdotacaocapital, 0) AS ptrdotacao_capital,
+                COALESCE(psu.ptrdotacaocusteio, 0) AS ptrdotacao_custeio,
+                SUM(COALESCE(pic.picvalorcapital, 0)) AS picvalorcapital,
+                SUM(COALESCE(pic.picvalorcusteio, 0)) AS picvalorcusteio,
 		COALESCE(sec.provisionado, 0.00) AS provisionado,
 		COALESCE(sec.empenhado, 0.00) AS empenhado,
 		COALESCE(sec.liquidado, 0.00) AS liquidado,
-		COALESCE(sec.pago, 0.00) as pago,
+		COALESCE(sec.pago, 0.00) AS pago,
                 (
                     SELECT
                         COUNT(1)
@@ -178,31 +178,51 @@ class Pi_PlanoInterno extends Modelo
                         ptressubunidade.ptrid = ptr.ptrid
                 ) AS compartilhada
             FROM public.vw_subunidadeorcamentaria suo
-                JOIN spo.ptressubunidade psu on psu.suoid = suo.suoid
-                JOIN monitora.vw_ptres ptr on ptr.ptrid = psu.ptrid AND ptr.ptrano = suo.prsano
-                LEFT JOIN monitora.pi_planointernoptres ppt on ppt.ptrid = ptr.ptrid
-                LEFT JOIN monitora.pi_planointerno pli on(pli.pliid = ppt.pliid AND pli.ungcod = suo.suocod AND pli.unicod = suo.unocod AND plistatus = 'A')
-                LEFT JOIN planacomorc.pi_complemento pic on pic.pliid = pli.pliid
-                LEFT JOIN planacomorc.unidadegestora_limite lmu on lmu.ungcod = suo.suocod AND lmu.lmustatus = 'A' AND lmu.prsano = suo.prsano
+                JOIN spo.ptressubunidade psu ON psu.suoid = suo.suoid
+                JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = psu.ptrid
+                    AND ptr.ptrano = suo.prsano
+                )
+                LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.ptrid = ptr.ptrid
+                LEFT JOIN monitora.pi_planointerno pli ON(
+                    plistatus = 'A'
+                    AND pli.pliid = ppt.pliid
+                    AND pli.ungcod = suo.suocod
+                    AND pli.unicod = suo.unocod
+                )
+                LEFT JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
+                LEFT JOIN planacomorc.unidadegestora_limite lmu ON(
+                    lmu.lmustatus = 'A'
+                    AND lmu.ungcod = suo.suocod
+                    AND lmu.prsano = suo.prsano
+                )
                 LEFT JOIN(
                     SELECT
                         siopexecucao.unicod,
+                        pi_planointerno.ungcod,
                         siopexecucao.ptres,
                         SUM(COALESCE(siopexecucao.vlrautorizado, 0.00))::NUMERIC AS provisionado,
                         SUM(COALESCE(siopexecucao.vlrempenhado, 0.00))::NUMERIC AS empenhado,
                         SUM(COALESCE(siopexecucao.vlrliquidado, 0.00))::NUMERIC AS liquidado,
                         SUM(COALESCE(siopexecucao.vlrpago, 0.00))::NUMERIC AS pago
                     FROM spo.siopexecucao
-                        LEFT JOIN monitora.pi_planointerno ON(siopexecucao.plicod = pi_planointerno.plicod AND siopexecucao.exercicio = pi_planointerno.pliano AND pi_planointerno.plistatus = 'A')
+                        LEFT JOIN monitora.pi_planointerno ON(
+                            siopexecucao.plicod = pi_planointerno.plicod
+                            AND siopexecucao.exercicio = pi_planointerno.pliano
+                            AND pi_planointerno.plistatus = 'A'
+                        )
                     WHERE
-			siopexecucao.exercicio = '". (int)$_SESSION['exercicio']. "' -- Inserindo o ano direto na subquery por motivo de performance da consulta.
+                        pi_planointerno.ungcod IS NOT NULL
+                        AND siopexecucao.exercicio = '". (int)$_SESSION['exercicio']. "' -- Inserindo o ano direto na subquery por motivo de performance da consulta.
                     GROUP BY
                         siopexecucao.ptres,
-                        siopexecucao.unicod
+                        siopexecucao.unicod,
+                        pi_planointerno.ungcod
 		) sec ON(
                     ptr.ptres = sec.ptres
                     AND suo.unocod = sec.unicod
-		)
+                    AND suo.suocod = sec.ungcod
+                )
             WHERE
                 {$where}
             GROUP BY
@@ -237,6 +257,7 @@ class Pi_PlanoInterno extends Modelo
                 suo.suocod,
                 ptr.funcional
         ";
+
         return $sql;
     }
 
