@@ -4,81 +4,81 @@
 
 <https://www.zenhub.com/>
 
-Como ferramenta, utiliza-se o Zenhub, que facilita a comunicaÁ„o
-com o github e torna o processo de desenvolvimento mais f·cil.
+Como ferramenta, utiliza-se o Zenhub, que facilita a comunica√ß√£o
+com o github e torna o processo de desenvolvimento mais f√°cil.
 
 
 ## Entendendo o processo
 
-No projeto SIMINC2, as demandas s„o solicitadas e entregues por Sprints, da
+No projeto SIMINC2, as demandas s√£o solicitadas e entregues por Sprints, da
 metodologia Scrum, geralmente, quinzenalmente.
-<br>Cada Sprint contÈm um pacote de demandas que o demandante faz
+<br>Cada Sprint cont√©m um pacote de demandas que o demandante faz
 para o Time de Desenvolvimento.
 
 
 ## Entendendo as prateleiras
 
-### PrÛxima Sprint
+### Pr√≥xima Sprint
 
-ContÈm apenas as demandas que o demandante solicitar· para a Sprint seguinte.
+Cont√©m apenas as demandas que o demandante solicitar√° para a Sprint seguinte.
 Apenas o demandante move as Issue's(card's) para as outras prateleiras.
 
 
 ### Prateleira
 
-ContÈm todas as demandas que o demandante solicitar· ao Time de Desenvolvimento.
+Cont√©m todas as demandas que foram solicitadas ao Time de Desenvolvimento.
 
 
 ### A Fazer
 
-ContÈm todas as demandas que o Time de Desenvolvimento atender·!<br>
+Cont√©m todas as demandas que o Time de Desenvolvimento atender√°.<br>
 <b>Obs:</b> Quando algum membro do Time de Desenvolvimento for realizar a demanda,
-o mesmo dever· mover o card(Issue) para a prateleira de <b>Fazendo</b>!<br> Vale ressaltar que
-quando houverem <b>observaÁıes a serem feitas na hora da publicaÁ„o</b>, o respons·vel pela demanda dever·
-deixar um coment·rio abaixo do nome da branch especificando as observaÁıes que o publicador dever·
-atender ou tomar precauÁ„o na hora da publicaÁ„o.
+o mesmo dever√° mover o card(Issue) para a prateleira de <b>Fazendo</b>!<br> Vale ressaltar que
+quando houverem <b>observa√ß√µes a serem feitas na hora da publica√ß√£o</b>, o respons√°vel pela demanda dever√°
+deixar um coment√°rio abaixo do nome da branch especificando as observa√ß√µes que o publicador dever√°
+atender ou tomar precau√ß√£o na hora da publica√ß√£o.
 
 
 ### Fazendo
 
-ContÈm todas as demandas que o Time de Desenvolvimento est· atendendo atualmente.<br>
-<b>Obs:</b> Quando a demanda for finalizada, o respons·vel dever· mover o card(Issue) para
+Cont√©m todas as demandas que o Time de Desenvolvimento est√° atendendo atualmente.<br>
+<b>Obs:</b> Quando a demanda for finalizada, o respons√°vel dever√° mover o card(Issue) para
 a prateleira de <b>Teste</b> e solicitar que outro membro do Time de Desenvolvimento possa testar para liberar
 a demanda ao cliente.
 
 
 ### Impedimentos
 
-ContÈm todas as demandas que n„o foram realizadas com Íxito, ou seja, contÈm ressalvas.<br>
+Cont√©m todas as demandas que foram paralizadas porque possuem um empecilho n√£o solucionado.<br>
 <b>Obs:</b> Quando o cliente ou algum membro do Time de Desenvolvimento mover algum card(Issue) para este item da
-prateleira, o mesmo dever· especificar no card(Issue) o motivo do Impedimento, para que o
-respons·vel pelo desenvolvimento possa corrigir a demanda. ApÛs a correÁ„o, pÙr a demanda para
+prateleira, o mesmo dever√° especificar no card(Issue) o motivo do Impedimento, para que o
+respons√°vel pelo desenvolvimento possa corrigir a demanda. Ap√≥s a corre√ß√£o, p√¥r a demanda para
 <b>Teste</b> e seguir com o Fluxo a partir do teste.
 
 
 ### Teste
 
-ContÈm todas as demandas que necessitam de teste para serem liberadas ao cliente.<br>
-<b>Obs:</b> O respons·vel pela verificaÁ„o do teste dever· ser, preferencialmente, algum membro
-que n„o participou do desenvolvimento da demanda.<br>
-ApÛs a correÁ„o, o respons·vel pelo teste dever· mover a demanda para a prateleira <b>Feito</b>
-e exibir a mensagem 'Testado em HomologaÁ„o : ', informando tambÈm a url de onde ele realizou o teste <br>
+Cont√©m todas as demandas que necessitam de teste da equipe de desenvolvimento para serem liberadas para o cliente validar.<br>
+<b>Obs:</b> O respons√°vel pela verifica√ß√£o do teste dever√° ser, preferencialmente, algum membro
+que n√£o participou do desenvolvimento da demanda.<br>
+Ap√≥s a corre√ß√£o, o respons√°vel pelo teste dever√° mover a demanda para a prateleira <b>Feito</b>
+e exibir a mensagem 'Testado em Homologa√ß√£o : ', informando tamb√©m a url de onde ele realizou o teste <br>
 
-<b>Eg:</b> Testado em HomologaÁ„o :http://homologasiminc2.cultura.gov.br/planacomorc/planacomorc.php?modulo=apoio/unidadegestora-limite&acao=A
+<b>Eg:</b> Testado em Homologa√ß√£o :http://homologasiminc2.cultura.gov.br/planacomorc/planacomorc.php?modulo=apoio/unidadegestora-limite&acao=A
 
 
 ### Feito
 
-ContÈm todas as demandas que j· foram feitas.<br>
-<b>Obs:</b> Neste Item de prateleira, o cliente far· o seu teste, onde caso a demanda n„o esteja de acordo
-o mesmo mudar· o card(Issue) para <b>Impedimento</b> e especificar· o motivo do impedimento. Caso esteja tudo
-de acordo, ele fechar· o card(Issue).
+Cont√©m todas as demandas que est√£o prontas e testadas pela equipe de desenvolvimento aguardando o cliente validar.<br>
+<b>Obs:</b> Neste Item de prateleira, o cliente far√° o seu teste, onde caso a demanda n√£o esteja de acordo
+o mesmo mudar√° o card(Issue) para <b>Impedimento</b> e especificar√° o motivo do impedimento. Caso esteja tudo
+de acordo, ele fechar√° o card(Issue).
 
 
 ### Closed
 
-ContÈm todas as demandas que j· foram testadas pelo cliente e est„o prontas para serem publicadas.<br>
+Cont√©m todas as demandas que j√° foram aprovadas pelo cliente e est√£o prontas para serem publicadas.<br>
 <b>Obs:</b> Verificar se o card(Issue) possui a label de <b>PUBLICADA</b>, caso tenha, significa que
-a demanda j· passou pela fase de publicaÁ„o. Caso n„o contenha, dever· ser solicitado o pull request e marcar algum
-membro do Time de Desenvolvimento para revisar e verificar o cÛdigo antes da publicaÁ„o.<br><br>
-<b>ApÛs a publicaÁ„o, adicionar a label de PUBLICADA na demanda, atravÈs da ferramenta Zenhub ou pelo prÛprio GitHub.<b/>
+a demanda j√° passou pela fase de publica√ß√£o. Caso n√£o contenha, dever√° ser solicitado o pull request e marcar algum
+membro do Time de Desenvolvimento para revisar e verificar o c√≥digo antes da publica√ß√£o.<br><br>
+<b>Ap√≥s a publica√ß√£o, adicionar a label de PUBLICADA na demanda, atrav√©s da ferramenta Zenhub ou pelo pr√≥prio GitHub.<b/>
