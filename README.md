@@ -32,6 +32,11 @@ Estes são os documentos de Histórias de Usuários dos principais módulos do S
 * [[HU011]Recebimento de Erros](https://drive.google.com/file/d/1jGYGF0MRF2EH6vecS09O7WTrKJYxQaQw/view?usp=sharing)
 
 #### Módulo Planejamento Orçamentário
+* [[HU012]Listar PA](https://drive.google.com/file/d/1N-BhiuS_h_k_vYfXtL4323ag2ZdRT1Gy/view?usp=sharing)
+* [[HU013]Cadastrar PA](https://drive.google.com/file/d/100wMuu4qtMgwmX-pJWui8b04t3xZTxIc/view?usp=sharing)
+* [[HU014]Tramitar PA](https://drive.google.com/file/d/1x7E5FC8VipGMkfg0tizZTbgoRGjU2-8P/view?usp=sharing)
+* [[HU015]Excluir PA](https://drive.google.com/file/d/1iOjASFFF19eQHDvlvl9Fh8pPM3KgGKDA/view?usp=sharing)
+* [[HU016]Tramitar PA em lote](https://drive.google.com/file/d/1g3qJ3fqWZTLWbntSb5qWX7M4N2gKynak/view?usp=sharing)
 
 #### Módulo Monitoramento
 
