@@ -18,8 +18,12 @@ Estas são documentações sobre o processo de desenvolvimento do SIMINC2, versi
 * [Guia de fluxo de demandas do Kanban](docs/Fluxo_Kanban.md)
 
 Estes são os documentos de Histórias de Usuários dos principais módulos do SIMINC2:
-#### Módulo Planejamento Orçamentário
+#### Módulo SIS
 * [[HU001]Solicitar Acesso](https://drive.google.com/file/d/1aKV2XY5jOnirdWT-2066fEecS6jNvZfw/view?usp=sharing)
+* [[HU002]Acessar Sistema](https://drive.google.com/file/d/1f0ed_Ttl-v1LLmrehS9oNzD5xDLNszZq/view?usp=sharing)
+#### Módulo Planejamento Orçamentário
+
+#### Módulo Monitoramento
 
 Estes são os documentos de Caso de Uso do SIMINC2:
 #### Módulo Planejamento Orçamentário
