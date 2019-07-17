@@ -18,8 +18,28 @@ Estas são documentações sobre o processo de desenvolvimento do SIMINC2, versi
 * [Guia de fluxo de demandas do Kanban](docs/Fluxo_Kanban.md)
 
 Estes são os documentos de Histórias de Usuários dos principais módulos do SIMINC2:
-#### Módulo Planejamento Orçamentário
+#### Módulo SIS
 * [[HU001]Solicitar Acesso](https://drive.google.com/file/d/1aKV2XY5jOnirdWT-2066fEecS6jNvZfw/view?usp=sharing)
+* [[HU002]Acessar Sistema](https://drive.google.com/file/d/1f0ed_Ttl-v1LLmrehS9oNzD5xDLNszZq/view?usp=sharing)
+* [[HU003]Recuperação de Senha de Usuários](https://drive.google.com/file/d/12BdkWuMRouK6ZHGBXee2p5llyI0m3H10/view?usp=sharing)
+* [[HU004]Gerenciar Usuários](https://drive.google.com/file/d/1lT8pyXrWNvXdvtLOvJ8cvdZ1GLsVkUYe/view?usp=sharing)
+* [[HU005]Cadastro de Sistema](https://drive.google.com/file/d/1919q-qTDcBjKVb0yU1RcVIGzLTCgHFvW/view?usp=sharing)
+* [[HU006]Incluir Perfil](https://drive.google.com/file/d/1-v7CElTa9fvlMoI5MmIlQxFSi6HKaK_Z/view?usp=sharing)
+* [[HU007]Administrar Menus](https://drive.google.com/file/d/1MHqiQxFYTdbUkGIoZATMvavSO0JQlvjD/view?usp=sharing)
+* [[HU008]Cadastrar Documento](https://drive.google.com/file/d/1RkI_HpoMlAgVEFu_Wp-CakkOAzjLQN86/view?usp=sharing)
+* [[HU009]Agendamento Scripts](https://drive.google.com/file/d/1ae8ksOnLEwyJoaHe5X-wz2espSYsIENI/view?usp=sharing)
+* [[HU010]Espelhamento de Perfis](https://drive.google.com/file/d/1P8p2ThansBtx2sJUGFiC2wxeRQ1ibRTj/view?usp=sharing)
+* [[HU011]Recebimento de Erros](https://drive.google.com/file/d/1jGYGF0MRF2EH6vecS09O7WTrKJYxQaQw/view?usp=sharing)
+
+#### Módulo Planejamento Orçamentário
+* [[HU012]Listar PA](https://drive.google.com/file/d/1N-BhiuS_h_k_vYfXtL4323ag2ZdRT1Gy/view?usp=sharing)
+* [[HU013]Cadastrar PA](https://drive.google.com/file/d/100wMuu4qtMgwmX-pJWui8b04t3xZTxIc/view?usp=sharing)
+* [[HU014]Tramitar PA](https://drive.google.com/file/d/1x7E5FC8VipGMkfg0tizZTbgoRGjU2-8P/view?usp=sharing)
+* [[HU015]Excluir PA](https://drive.google.com/file/d/1iOjASFFF19eQHDvlvl9Fh8pPM3KgGKDA/view?usp=sharing)
+* [[HU016]Tramitar PA em lote](https://drive.google.com/file/d/1g3qJ3fqWZTLWbntSb5qWX7M4N2gKynak/view?usp=sharing)
+
+#### Módulo Monitoramento
+* [[HU019]Listar Janela](https://drive.google.com/file/d/1gPVVXJbtxw4KyjitfqZQZXBj35MPng-I/view?usp=sharing)
 
 Estes são os documentos de Caso de Uso do SIMINC2:
 #### Módulo Planejamento Orçamentário
