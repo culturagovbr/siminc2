@@ -21,6 +21,16 @@ Estes são os documentos de Histórias de Usuários dos principais módulos do S
 #### Módulo SIS
 * [[HU001]Solicitar Acesso](https://drive.google.com/file/d/1aKV2XY5jOnirdWT-2066fEecS6jNvZfw/view?usp=sharing)
 * [[HU002]Acessar Sistema](https://drive.google.com/file/d/1f0ed_Ttl-v1LLmrehS9oNzD5xDLNszZq/view?usp=sharing)
+* [[HU003]Recuperação de Senha de Usuários](https://drive.google.com/file/d/12BdkWuMRouK6ZHGBXee2p5llyI0m3H10/view?usp=sharing)
+* [[HU004]Gerenciar Usuários](https://drive.google.com/file/d/1lT8pyXrWNvXdvtLOvJ8cvdZ1GLsVkUYe/view?usp=sharing)
+* [[HU005]Cadastro de Sistema](https://drive.google.com/file/d/1919q-qTDcBjKVb0yU1RcVIGzLTCgHFvW/view?usp=sharing)
+* [[HU006]Incluir Perfil](https://drive.google.com/file/d/1-v7CElTa9fvlMoI5MmIlQxFSi6HKaK_Z/view?usp=sharing)
+* [[HU007]Administrar Menus](https://drive.google.com/file/d/1MHqiQxFYTdbUkGIoZATMvavSO0JQlvjD/view?usp=sharing)
+* [[HU008]Cadastrar Documento](https://drive.google.com/file/d/1RkI_HpoMlAgVEFu_Wp-CakkOAzjLQN86/view?usp=sharing)
+* [[HU009]Agendamento Scripts](https://drive.google.com/file/d/1ae8ksOnLEwyJoaHe5X-wz2espSYsIENI/view?usp=sharing)
+* [[HU010]Espelhamento de Perfis](https://drive.google.com/file/d/1P8p2ThansBtx2sJUGFiC2wxeRQ1ibRTj/view?usp=sharing)
+* [[HU011]Recebimento de Erros](https://drive.google.com/file/d/1jGYGF0MRF2EH6vecS09O7WTrKJYxQaQw/view?usp=sharing)
+
 #### Módulo Planejamento Orçamentário
 
 #### Módulo Monitoramento
