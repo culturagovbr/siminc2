@@ -18,7 +18,7 @@ Estas são documentações sobre o processo de desenvolvimento do SIMINC2, versi
 * [Guia de fluxo de demandas do Kanban](docs/Fluxo_Kanban.md)
 
 Estes são os documentos de Histórias de Usuários dos principais módulos do SIMINC2:
-#### Módulo SIS
+#### Módulo SIS(Segurança)
 * [[HU001]Solicitar Acesso](https://drive.google.com/file/d/1aKV2XY5jOnirdWT-2066fEecS6jNvZfw/view?usp=sharing)
 * [[HU002]Acessar Sistema](https://drive.google.com/file/d/1f0ed_Ttl-v1LLmrehS9oNzD5xDLNszZq/view?usp=sharing)
 * [[HU003]Recuperação de Senha de Usuários](https://drive.google.com/file/d/12BdkWuMRouK6ZHGBXee2p5llyI0m3H10/view?usp=sharing)
@@ -31,7 +31,7 @@ Estes são os documentos de Histórias de Usuários dos principais módulos do S
 * [[HU010]Espelhamento de Perfis](https://drive.google.com/file/d/1P8p2ThansBtx2sJUGFiC2wxeRQ1ibRTj/view?usp=sharing)
 * [[HU011]Recebimento de Erros](https://drive.google.com/file/d/1jGYGF0MRF2EH6vecS09O7WTrKJYxQaQw/view?usp=sharing)
 
-#### Módulo Planejamento Orçamentário
+#### Módulo Planejamento
 * [[HU012]Listar PA](https://drive.google.com/file/d/1N-BhiuS_h_k_vYfXtL4323ag2ZdRT1Gy/view?usp=sharing)
 * [[HU013]Cadastrar PA](https://drive.google.com/file/d/100wMuu4qtMgwmX-pJWui8b04t3xZTxIc/view?usp=sharing)
 * [[HU014]Tramitar PA](https://drive.google.com/file/d/1x7E5FC8VipGMkfg0tizZTbgoRGjU2-8P/view?usp=sharing)
@@ -42,7 +42,7 @@ Estes são os documentos de Histórias de Usuários dos principais módulos do S
 * [[HU019]Listar Janela](https://drive.google.com/file/d/1gPVVXJbtxw4KyjitfqZQZXBj35MPng-I/view?usp=sharing)
 
 Estes são os documentos de Caso de Uso do SIMINC2:
-#### Módulo Planejamento Orçamentário
+#### Módulo Planejamento
 * [[UC001]Listar PI](https://docs.google.com/document/d/1C__jUY_Sd2e34Q98I_vRXDoljyNQlJBy8myWyE2HWyE/edit?usp=sharing)
 * [[UC002]Cadastrar PI](https://docs.google.com/document/d/1Tjv5MKW66fER0rpa6S28d94PDYkJCffmr7CB26uW3us/edit?usp=sharing)
 * [[UC003]Tramitar PI](https://docs.google.com/document/d/1R3NiUYxq_WB6mOB7UGw73nzgG1FMUzve0JI5rGv4_1Q/edit?usp=sharing)
