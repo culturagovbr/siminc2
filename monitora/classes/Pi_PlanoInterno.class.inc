@@ -1551,12 +1551,12 @@ class Pi_PlanoInterno extends Modelo
         return '008000';
     }
 
-    public function recuperarPiPorSubunidade($suoid)
+    public function recuperarPiPorSubunidade($suoid, $fnc = FALSE)
     {
-        $dadosPi = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI));
+        $dadosPi = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI, 'fnc' => $fnc));
         $dadosDelegado = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_DELEGADO));
 
-        $dadosPiNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO));
+        $dadosPiNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO, 'fnc' => $fnc));
         $dadosDelegadoNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO));
 
         include_once APPRAIZ . 'planacomorc/modulos/principal/unidade/detalhe-subunidade.inc';
@@ -1564,7 +1564,7 @@ class Pi_PlanoInterno extends Modelo
 
     public function recuperarPiPorFuncional(stdClass $parametros)
     {
-        $dados = $this->recuperarDadosDetalhe((object) array('suoid' => $parametros->suoid, 'ptrid' => $parametros->ptrid, 'tipo' => self::K_TIPO_DETALHE_PTRES));
+        $dados = $this->recuperarDadosDetalhe((object) array('suoid' => $parametros->suoid, 'ptrid' => $parametros->ptrid, 'tipo' => self::K_TIPO_DETALHE_PTRES, 'fnc' => $parametros->fnc));
         $totaisFuncional = $this->buscarTotaisFuncional((object) array('exercicio' => $_SESSION['exercicio'], 'ptrid' => $parametros->ptrid));
         include_once APPRAIZ . 'planacomorc/modulos/principal/unidade/detalhe-ptres.inc';
     }
@@ -1645,26 +1645,28 @@ class Pi_PlanoInterno extends Modelo
         $where = '';
         switch ($parametros->tipo) {
             case self::K_TIPO_DETALHE_PTRES:
-                $where .= $parametros->ptrid? " AND ptr.ptrid = '$parametros->ptrid'": NULL;
-                $where .= $parametros->suoid? " AND suo.suoid = '$parametros->suoid'": NULL;
+                $where .= $parametros->ptrid? "\n AND ptr.ptrid = '$parametros->ptrid'": NULL;
+                $where .= $parametros->suoid? "\n AND suo.suoid = '$parametros->suoid'": NULL;
                 break;
             case self::K_TIPO_DETALHE_PI:
-                $where .= " AND eqd.eqdcod != 'N'";
-                $where .= " AND suo.suoid = '$parametros->suoid'";
+                $where .= "\n AND eqd.eqdcod != 'N'";
+                $where .= "\n AND suo.suoid = '$parametros->suoid'";
                 break;
             case self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO:
-                $where .= " AND eqd.eqdcod = 'N'";
-                $where .= " AND suo.suoid = '$parametros->suoid'";
+                $where .= "\n AND eqd.eqdcod = 'N'";
+                $where .= "\n AND suo.suoid = '$parametros->suoid'";
                 break;
             case self::K_TIPO_DETALHE_DELEGADO:
-                $where .= " AND eqd.eqdcod != 'N'";
-                $where .= " AND pde.suoid = '$parametros->suoid'";
+                $where .= "\n AND eqd.eqdcod != 'N'";
+                $where .= "\n AND pde.suoid = '$parametros->suoid'";
                 break;
             case self::K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO:
-                $where .= " AND eqd.eqdcod = 'N'";
-                $where .= " AND pde.suoid = '$parametros->suoid'";
+                $where .= "\n AND eqd.eqdcod = 'N'";
+                $where .= "\n AND pde.suoid = '$parametros->suoid'";
                 break;
         }
+        
+        $where .= $parametros->fnc !== TRUE? "\n AND (ptr.irpcod <> '6' OR ptr.ptrid IS NULL)": NULL;
 
         $sql = "
             SELECT
@@ -1695,14 +1697,18 @@ class Pi_PlanoInterno extends Modelo
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 LEFT JOIN planacomorc.pi_delegacao pde ON pde.pliid = pli.pliid
-                JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suo.suocod = pli.ungcod
                     AND suo.unocod = pli.unicod
                     AND suo.prsano = pli.pliano
+                )
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
-                LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
+                LEFT JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
+                )
                 LEFT JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
-                LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
+                LEFT JOIN monitora.enquadramentorp AS rp ON eqd.eqdid = rp.eqdid
                 LEFT JOIN spo.siopexecucao ex ON(
                     ex.exercicio = ptr.ptrano
                     AND ex.plicod = pli.plicod
@@ -1710,7 +1716,6 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_produto AS pip ON pic.pprid = pip.pprid
             WHERE
                 pli.plistatus = 'A'
-                AND (ptr.irpcod <> '6' OR ptr.ptrid IS NULL)
                 $where
             GROUP BY
                 pli.pliid,
