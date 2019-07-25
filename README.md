@@ -37,6 +37,8 @@ Estes são os documentos de Histórias de Usuários dos principais módulos do S
 * [[HU014]Tramitar PA](https://drive.google.com/file/d/1x7E5FC8VipGMkfg0tizZTbgoRGjU2-8P/view?usp=sharing)
 * [[HU015]Excluir PA](https://drive.google.com/file/d/1iOjASFFF19eQHDvlvl9Fh8pPM3KgGKDA/view?usp=sharing)
 * [[HU016]Tramitar PA em lote](https://drive.google.com/file/d/1g3qJ3fqWZTLWbntSb5qWX7M4N2gKynak/view?usp=sharing)
+* [[HU017]Atualizar Execução e Dotações SIOP](https://drive.google.com/file/d/1kFA9r0NAYZKsz_DuggOyKFmUyBKul3CT/view?usp=sharing)
+* [[HU018]Regras de Mensagens](https://drive.google.com/file/d/1osDsl556TrnDBJvfgKwup3lJ5jbMrwKY/view?usp=sharing)
 
 #### Módulo Monitoramento
 * [[HU019]Listar Janela](https://drive.google.com/file/d/1gPVVXJbtxw4KyjitfqZQZXBj35MPng-I/view?usp=sharing)
