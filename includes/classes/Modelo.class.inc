@@ -638,10 +638,10 @@ class Modelo extends cls_banco {
     public function montarFiltros($aFiltro = [], $where = FALSE){
         $filtros = '';
         if($where){
-            $filtros = "\n WHERE";
+            $filtros = PHP_EOL. " WHERE";
         }
         $listaFiltros = self::montarListaFiltros($aFiltro);
-        $filtros .= join("\n AND ", $listaFiltros);
+        $filtros .= join(PHP_EOL. " AND ", $listaFiltros);
         
         return $filtros;
     }
