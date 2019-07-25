@@ -396,13 +396,13 @@ class Pi_PlanoInterno extends Modelo
         }
         
         # Filtros
-        $criterio = $params->exercicio? "\n AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
-        $criterio .= $params->suoid? "\n AND suo.suoid = ". (int)$params->suoid: NULL;
-        $criterio .= $params->ptrid? "\n AND ptr.ptrid = ". (int)$params->ptrid: NULL;
+        $criterio = $params->exercicio? PHP_EOL. " AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
+        $criterio .= $params->suoid? PHP_EOL. " AND suo.suoid = ". (int)$params->suoid: NULL;
+        $criterio .= $params->ptrid? PHP_EOL. " AND ptr.ptrid = ". (int)$params->ptrid: NULL;
         if(strtolower($params->gnd) == 'custeio'){
-            $criterio .= "\n AND sec.gndcod IN('0', '1', '2', '3')";
+            $criterio .= PHP_EOL. " AND sec.gndcod IN('0', '1', '2', '3')";
         } else if(strtolower($params->gnd) == 'capital'){
-            $criterio .= "\n AND sec.gndcod IN('4', '5', '6')";
+            $criterio .= PHP_EOL. " AND sec.gndcod IN('4', '5', '6')";
         }
         
         $sql = "
@@ -467,10 +467,10 @@ class Pi_PlanoInterno extends Modelo
         }
         
         # Filtros
-        $criterio = $params->exercicio? "\n AND pli.pliano = '". (int)$params->exercicio. "'": NULL;
-        $criterio .= $params->suoid? "\n AND suo.suoid = ". (int)$params->suoid: NULL;
-        $criterio .= $params->ptrid? "\n AND ptr.ptrid = ". (int)$params->ptrid: NULL;
-        $criterio .= $params->esdid? "\n AND doc.esdid IN(". join(',', $params->esdid). ")": NULL;
+        $criterio = $params->exercicio? PHP_EOL. " AND pli.pliano = '". (int)$params->exercicio. "'": NULL;
+        $criterio .= $params->suoid? PHP_EOL. " AND suo.suoid = ". (int)$params->suoid: NULL;
+        $criterio .= $params->ptrid? PHP_EOL. " AND ptr.ptrid = ". (int)$params->ptrid: NULL;
+        $criterio .= $params->esdid? PHP_EOL. " AND doc.esdid IN(". join(',', $params->esdid). ")": NULL;
         
         $sql = "
             SELECT
@@ -514,7 +514,7 @@ class Pi_PlanoInterno extends Modelo
      */
     public function montarSqlListarSubunidadeFnc(stdClass $params){
         # Filtros
-        $criterio = $params->exercicio? "\n AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
+        $criterio = $params->exercicio? PHP_EOL. " AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
         
         $sql = "
             SELECT DISTINCT
@@ -568,7 +568,7 @@ class Pi_PlanoInterno extends Modelo
         $campo = $params->tipo == 'custeio'? 'ptrdotacaocusteio': 'ptrdotacaocapital';
         
         # Filtros
-        $criterio = $params->exercicio? "\n AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
+        $criterio = $params->exercicio? PHP_EOL. " AND suo.prsano = '". (int)$params->exercicio. "'": NULL;
         
         $sql = "
             SELECT DISTINCT
@@ -620,7 +620,7 @@ class Pi_PlanoInterno extends Modelo
     public function montarSqlListarFuncionaisFnc(stdClass $params){
         $params->tipo = 'custeio';
         $sql = $this->montarSqlListarFuncionaisFncTipo($params).
-            "\n UNION \n";
+            PHP_EOL. " UNION \n";
         $params->tipo = 'capital';
         $sql .= $this->montarSqlListarFuncionaisFncTipo($params).
             "
@@ -704,7 +704,7 @@ class Pi_PlanoInterno extends Modelo
         
         # Caso o exercicio seja superior a 2018(ano da unificação de Òrgãos), o sistema busca todas as vinculadas do MC
         if($filtro->exercicio > 2018){
-            $where .= "\n AND suo.unocod IN(
+            $where .= PHP_EOL. " AND suo.unocod IN(
                 '". UNOCOD_ANCINE. "',
                 '". UNOCOD_FSA. "',
                 '". UNOCOD_FBN. "',
@@ -719,7 +719,7 @@ class Pi_PlanoInterno extends Modelo
             ";
         } else {
             # Caso o exercicio seja anterior a 2019(ano da unificação de Òrgãos), o sistema busca todas as vinculadas do MINC(Cultura)
-            $where .= "\n AND suo.unocod <> '". (int)UNICOD_MINC. "'";
+            $where .= PHP_EOL. " AND suo.unocod <> '". (int)UNICOD_MINC. "'";
         }
         
         return $where;
@@ -923,10 +923,10 @@ class Pi_PlanoInterno extends Modelo
             suo.prsano = '". (int)$filtro->exercicio. "'
             AND suo.unofundo IS FALSE";
         
-        $where .= $filtro->unosigla? "\n AND suo.unocod = '". (int)$filtro->unocod. "'": NULL;
+        $where .= $filtro->unosigla? PHP_EOL. " AND suo.unocod = '". (int)$filtro->unocod. "'": NULL;
 
         if($filtro->listaSubunidade){
-            $where .= "\n AND suo.suocod IN('". join("', '", $filtro->listaSubunidade) ."')";
+            $where .= PHP_EOL. " AND suo.suocod IN('". join("', '", $filtro->listaSubunidade) ."')";
         }
         
         return $where;
@@ -1250,22 +1250,22 @@ class Pi_PlanoInterno extends Modelo
      * @return string
      */
     public function montarSqlRelatorioGeral(stdClass $dto){
-        $where .= $dto->exercicio? "\n AND pli.pliano = '". (int)$dto->exercicio. "'": NULL;
-        $where .= $dto->fundo === TRUE? "\n AND suo.unofundo IS TRUE": NULL;
-        $where .= $dto->fundo === FALSE? "\n AND suo.unofundo IS FALSE": NULL;
-        $where .= $dto->listaSubunidade? "\n AND suo.suocod IN('". join("','", $dto->listaSubunidade). "') ": NULL;
-        $where .= $dto->suoid? "\n AND suo.suoid IN(".join($dto->suoid, ','). ")": NULL;
-        $where .= $dto->esdid? "\n AND doc.esdid IN(".join($dto->esdid, ','). ")": NULL;
-        $where .= $dto->eqdid? "\n AND pli.eqdid IN(".join($dto->eqdid, ','). ")": NULL;
-        $where .= $dto->picted == 't'? "\n AND pic.picted IS TRUE": NULL;
-        $where .= $dto->picted == 'f'? "\n AND pic.picted IS FALSE": NULL;
-        $where .= $dto->irpcod? "\n AND ptr.irpcod::INTEGER IN(".join($dto->irpcod, ','). ")": NULL;
-        $where .= $dto->oppid? "\n AND pic.oppid IN(".join($dto->oppid, ','). ")": NULL;
-        $where .= $dto->mdeid? "\n AND pli.mdeid IN(".join($dto->mdeid, ','). ")": NULL;
-        $where .= $dto->capid? "\n AND pli.capid IN(".join($dto->capid, ','). ")": NULL;
-        $where .= $dto->mescod? "\n AND pic.mescod IN('".join($dto->mescod, "','"). "')": NULL;
-        $where .= $dto->claid? "\n AND cl.claid IN(".join($dto->claid, ','). ")": NULL;
-        $where .= $dto->acaid? "\n AND ptr.acaid IN(".join($dto->acaid, ','). ")": NULL;
+        $where .= $dto->exercicio? PHP_EOL. " AND pli.pliano = '". (int)$dto->exercicio. "'": NULL;
+        $where .= $dto->fundo === TRUE? PHP_EOL. " AND suo.unofundo IS TRUE": NULL;
+        $where .= $dto->fundo === FALSE? PHP_EOL. " AND suo.unofundo IS FALSE": NULL;
+        $where .= $dto->listaSubunidade? PHP_EOL. " AND suo.suocod IN('". join("','", $dto->listaSubunidade). "') ": NULL;
+        $where .= $dto->suoid? PHP_EOL. " AND suo.suoid IN(".join($dto->suoid, ','). ")": NULL;
+        $where .= $dto->esdid? PHP_EOL. " AND doc.esdid IN(".join($dto->esdid, ','). ")": NULL;
+        $where .= $dto->eqdid? PHP_EOL. " AND pli.eqdid IN(".join($dto->eqdid, ','). ")": NULL;
+        $where .= $dto->picted == 't'? PHP_EOL. " AND pic.picted IS TRUE": NULL;
+        $where .= $dto->picted == 'f'? PHP_EOL. " AND pic.picted IS FALSE": NULL;
+        $where .= $dto->irpcod? PHP_EOL. " AND ptr.irpcod::INTEGER IN(".join($dto->irpcod, ','). ")": NULL;
+        $where .= $dto->oppid? PHP_EOL. " AND pic.oppid IN(".join($dto->oppid, ','). ")": NULL;
+        $where .= $dto->mdeid? PHP_EOL. " AND pli.mdeid IN(".join($dto->mdeid, ','). ")": NULL;
+        $where .= $dto->capid? PHP_EOL. " AND pli.capid IN(".join($dto->capid, ','). ")": NULL;
+        $where .= $dto->mescod? PHP_EOL. " AND pic.mescod IN('".join($dto->mescod, "','"). "')": NULL;
+        $where .= $dto->claid? PHP_EOL. " AND cl.claid IN(".join($dto->claid, ','). ")": NULL;
+        $where .= $dto->acaid? PHP_EOL. " AND ptr.acaid IN(".join($dto->acaid, ','). ")": NULL;
 
         $sql = "
             SELECT
@@ -1551,12 +1551,12 @@ class Pi_PlanoInterno extends Modelo
         return '008000';
     }
 
-    public function recuperarPiPorSubunidade($suoid)
+    public function recuperarPiPorSubunidade($suoid, $fnc = FALSE)
     {
-        $dadosPi = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI));
+        $dadosPi = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI, 'fnc' => $fnc));
         $dadosDelegado = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_DELEGADO));
 
-        $dadosPiNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO));
+        $dadosPiNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO, 'fnc' => $fnc));
         $dadosDelegadoNaoOrcamentario = $this->recuperarDadosDetalhe((object) array('suoid' => $suoid, 'tipo' => self::K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO));
 
         include_once APPRAIZ . 'planacomorc/modulos/principal/unidade/detalhe-subunidade.inc';
@@ -1564,7 +1564,7 @@ class Pi_PlanoInterno extends Modelo
 
     public function recuperarPiPorFuncional(stdClass $parametros)
     {
-        $dados = $this->recuperarDadosDetalhe((object) array('suoid' => $parametros->suoid, 'ptrid' => $parametros->ptrid, 'tipo' => self::K_TIPO_DETALHE_PTRES));
+        $dados = $this->recuperarDadosDetalhe((object) array('suoid' => $parametros->suoid, 'ptrid' => $parametros->ptrid, 'tipo' => self::K_TIPO_DETALHE_PTRES, 'fnc' => $parametros->fnc));
         $totaisFuncional = $this->buscarTotaisFuncional((object) array('exercicio' => $_SESSION['exercicio'], 'ptrid' => $parametros->ptrid));
         include_once APPRAIZ . 'planacomorc/modulos/principal/unidade/detalhe-ptres.inc';
     }
@@ -1597,8 +1597,8 @@ class Pi_PlanoInterno extends Modelo
 
     public static function montarSqlGraficoPizzaRp(stdClass $filtro){
         $where = '';
-        $where .= $filtro->suosigla? "\n AND suo.suosigla = '$filtro->suosigla'": NULL;
-        $where .= $filtro->unosigla? "\n AND suo.unosigla = '$filtro->unosigla'": NULL;
+        $where .= $filtro->suosigla? PHP_EOL. " AND suo.suosigla = '$filtro->suosigla'": NULL;
+        $where .= $filtro->unosigla? PHP_EOL. " AND suo.unosigla = '$filtro->unosigla'": NULL;
 
         $sql = "
             SELECT
@@ -1618,8 +1618,8 @@ class Pi_PlanoInterno extends Modelo
 
     public static function montarSqlGraficoPizzaEnquadramento(stdClass $filtro){
         $where = '';
-        $where .= $filtro->suosigla? "\n AND suo.suosigla = '$filtro->suosigla'": NULL;
-        $where .= $filtro->unosigla? "\n AND suo.unosigla = '$filtro->unosigla'": NULL;
+        $where .= $filtro->suosigla? PHP_EOL. " AND suo.suosigla = '$filtro->suosigla'": NULL;
+        $where .= $filtro->unosigla? PHP_EOL. " AND suo.unosigla = '$filtro->unosigla'": NULL;
         $sql = "
             SELECT
                 eqd.eqddsc descricao,
@@ -1645,26 +1645,28 @@ class Pi_PlanoInterno extends Modelo
         $where = '';
         switch ($parametros->tipo) {
             case self::K_TIPO_DETALHE_PTRES:
-                $where .= $parametros->ptrid? " AND ptr.ptrid = '$parametros->ptrid'": NULL;
-                $where .= $parametros->suoid? " AND suo.suoid = '$parametros->suoid'": NULL;
+                $where .= $parametros->ptrid? PHP_EOL. " AND ptr.ptrid = '$parametros->ptrid'": NULL;
+                $where .= $parametros->suoid? PHP_EOL. " AND suo.suoid = '$parametros->suoid'": NULL;
                 break;
             case self::K_TIPO_DETALHE_PI:
-                $where .= " AND eqd.eqdcod != 'N'";
-                $where .= " AND suo.suoid = '$parametros->suoid'";
+                $where .= PHP_EOL. " AND eqd.eqdcod != 'N'";
+                $where .= PHP_EOL. " AND suo.suoid = '$parametros->suoid'";
                 break;
             case self::K_TIPO_DETALHE_PI_NAO_ORCAMENTARIO:
-                $where .= " AND eqd.eqdcod = 'N'";
-                $where .= " AND suo.suoid = '$parametros->suoid'";
+                $where .= PHP_EOL. " AND eqd.eqdcod = 'N'";
+                $where .= PHP_EOL. " AND suo.suoid = '$parametros->suoid'";
                 break;
             case self::K_TIPO_DETALHE_DELEGADO:
-                $where .= " AND eqd.eqdcod != 'N'";
-                $where .= " AND pde.suoid = '$parametros->suoid'";
+                $where .= PHP_EOL. " AND eqd.eqdcod != 'N'";
+                $where .= PHP_EOL. " AND pde.suoid = '$parametros->suoid'";
                 break;
             case self::K_TIPO_DETALHE_DELEGADO_NAO_ORCAMENTARIO:
-                $where .= " AND eqd.eqdcod = 'N'";
-                $where .= " AND pde.suoid = '$parametros->suoid'";
+                $where .= PHP_EOL. " AND eqd.eqdcod = 'N'";
+                $where .= PHP_EOL. " AND pde.suoid = '$parametros->suoid'";
                 break;
         }
+        
+        $where .= $parametros->fnc !== TRUE? PHP_EOL. " AND (ptr.irpcod <> '6' OR ptr.ptrid IS NULL)": NULL;
 
         $sql = "
             SELECT
@@ -1695,14 +1697,18 @@ class Pi_PlanoInterno extends Modelo
             FROM monitora.pi_planointerno pli
                 JOIN planacomorc.pi_complemento pic ON pic.pliid = pli.pliid
                 LEFT JOIN planacomorc.pi_delegacao pde ON pde.pliid = pli.pliid
-                JOIN public.vw_subunidadeorcamentaria suo ON suo.suocod = pli.ungcod
+                JOIN public.vw_subunidadeorcamentaria suo ON(
+                    suo.suocod = pli.ungcod
                     AND suo.unocod = pli.unicod
                     AND suo.prsano = pli.pliano
+                )
                 LEFT JOIN monitora.pi_planointernoptres ppt ON ppt.pliid = pli.pliid
-                LEFT JOIN monitora.vw_ptres ptr ON ptr.ptrid = ppt.ptrid
+                LEFT JOIN monitora.vw_ptres ptr ON(
+                    ptr.ptrid = ppt.ptrid
                     AND ptr.ptrano = pli.pliano
+                )
                 LEFT JOIN monitora.pi_enquadramentodespesa eqd ON eqd.eqdid = pli.eqdid
-                LEFT JOIN monitora.enquadramentorp AS rp ON(eqd.eqdid = rp.eqdid)
+                LEFT JOIN monitora.enquadramentorp AS rp ON eqd.eqdid = rp.eqdid
                 LEFT JOIN spo.siopexecucao ex ON(
                     ex.exercicio = ptr.ptrano
                     AND ex.plicod = pli.plicod
@@ -1710,7 +1716,6 @@ class Pi_PlanoInterno extends Modelo
                 LEFT JOIN monitora.pi_produto AS pip ON pic.pprid = pip.pprid
             WHERE
                 pli.plistatus = 'A'
-                AND (ptr.irpcod <> '6' OR ptr.ptrid IS NULL)
                 $where
             GROUP BY
                 pli.pliid,
@@ -1829,9 +1834,9 @@ class Pi_PlanoInterno extends Modelo
         $exercicio = (int)$_SESSION['exercicio'];
 
         $where = '';
-        $dto->mppid ? $where .= "\n  AND pic.mppid = '" . (int)$dto->mppid . "'" : NULL;
-        $dto->meuid ? $where .= "\n  AND pic.meuid = '" . (int)$dto->meuid . "'" : NULL;
-        $dto->suoid ? $where .= "\n  AND suo.suoid = '" . (int)$dto->suoid . "'" : NULL;
+        $dto->mppid ? $where .= PHP_EOL. "  AND pic.mppid = '" . (int)$dto->mppid . "'" : NULL;
+        $dto->meuid ? $where .= PHP_EOL. "  AND pic.meuid = '" . (int)$dto->meuid . "'" : NULL;
+        $dto->suoid ? $where .= PHP_EOL. "  AND suo.suoid = '" . (int)$dto->suoid . "'" : NULL;
 
         $sql = "
             SELECT
@@ -1928,10 +1933,10 @@ class Pi_PlanoInterno extends Modelo
 
         if ($params->tipo === 'meta-unidade') {
             $params->meuid  = (int)$params->meuid;
-            $where = "\n  AND pic.meuid = '{$params->meuid}'";
+            $where = PHP_EOL. "  AND pic.meuid = '{$params->meuid}'";
         } else if ($params->tipo === 'meta-ppa') {
             $params->mppid  = (int)$params->mppid;
-            $where = "\n  AND pic.mppid = '{$params->mppid}'";
+            $where = PHP_EOL. "  AND pic.mppid = '{$params->mppid}'";
         }
 
         $sql = "
@@ -2076,7 +2081,7 @@ class Pi_PlanoInterno extends Modelo
 
     public function recuperarPorUnidade(stdClass $filtros = NULL)
     {
-        $where = $filtros->naoOrcamentaria === TRUE? "\n AND eqd.eqdcod = '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'": "AND eqd.eqdcod != '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'";
+        $where = $filtros->naoOrcamentaria === TRUE? PHP_EOL. " AND eqd.eqdcod = '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'": "AND eqd.eqdcod != '". Monitora_Model_PiEnquadramentoDespesa::EQDCOD_NAO_ORCAMENTARIA ."'";
 
         $sql = "
             SELECT
@@ -2609,7 +2614,7 @@ class Pi_PlanoInterno extends Modelo
      * @return stdClass
      */
     public function consultarPedidoAlteracaoEfetivado(stdClass $params){
-        $where = $params->pliid? "\n AND plise.pliid = ". (int)$params->pliid: NULL;
+        $where = $params->pliid? PHP_EOL. " AND plise.pliid = ". (int)$params->pliid: NULL;
         $sql = "
             SELECT
                 ped.pedid,
